@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+	<property>
+		<name>dataset_query_timeout</name>
+		<value>30000</value>
+	</property>
+
+</configuration>

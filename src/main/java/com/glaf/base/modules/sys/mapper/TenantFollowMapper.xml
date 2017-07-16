@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.base.modules.sys.mapper.TenantFollowMapper">
+
+	<resultMap id="tenantFollowResultMap" type="com.glaf.base.modules.sys.model.TenantFollow">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="tenantName" column="TENANTNAME_" jdbcType="VARCHAR" />
+		<result property="followTenantId" column="FOLLOWTENANTID_"
+			jdbcType="VARCHAR" />
+		<result property="followTenantName" column="FOLLOWTENANTNAME_"
+			jdbcType="VARCHAR" />
+		<result property="province" column="PROVINCE_" jdbcType="VARCHAR" />
+		<result property="city" column="CITY_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertTenantFollow" parameterType="com.glaf.base.modules.sys.model.TenantFollow">
+		insert into SYS_TENANT_FOLLOW
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="tenantName != null">
+				,TENANTNAME_
+			</if>
+			<if test="followTenantId != null">
+				,FOLLOWTENANTID_
+			</if>
+			<if test="followTenantName != null">
+				,FOLLOWTENANTNAME_
+			</if>
+			<if test="province != null">
+				,PROVINCE_
+			</if>
+			<if test="city != null">
+				,CITY_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="tenantName != null">
+				,#{tenantName, jdbcType=VARCHAR}
+			</if>
+			<if test="followTenantId != null">
+				,#{followTenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="followTenantName != null">
+				,#{followTenantName, jdbcType=VARCHAR}
+			</if>
+			<if test="province != null">
+				,#{province, jdbcType=VARCHAR}
+			</if>
+			<if test="city != null">
+				,#{city, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertTenantFollow" parameterType="java.util.List">
+		insert into SYS_TENANT_FOLLOW (
+		ID_
+		,TENANTID_
+		,TENANTNAME_
+		,FOLLOWTENANTID_
+		,FOLLOWTENANTNAME_
+		,PROVINCE_
+		,CITY_
+		,CREATEBY_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="tenantFollow" index="index"
+			separator=",">
+			(
+			#{tenantFollow.id, jdbcType=BIGINT}
+			,#{tenantFollow.tenantId, jdbcType=VARCHAR}
+			,#{tenantFollow.tenantName, jdbcType=VARCHAR}
+			,#{tenantFollow.followTenantId, jdbcType=VARCHAR}
+			,#{tenantFollow.followTenantName, jdbcType=VARCHAR}
+			,#{tenantFollow.province, jdbcType=VARCHAR}
+			,#{tenantFollow.city,
+			jdbcType=VARCHAR}
+			,#{tenantFollow.createBy, jdbcType=VARCHAR}
+			,#{tenantFollow.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertTenantFollow_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="tenantFollow" index="index">
+			insert
+			into SYS_TENANT_FOLLOW (
+			ID_
+			,TENANTID_
+			,TENANTNAME_
+			,FOLLOWTENANTID_
+			,FOLLOWTENANTNAME_
+			,PROVINCE_
+			,CITY_
+			,CREATEBY_
+			,CREATETIME_
+			) values (
+			#{tenantFollow.id,
+			jdbcType=BIGINT}
+			,#{tenantFollow.tenantId,
+			jdbcType=VARCHAR}
+			,#{tenantFollow.tenantName, jdbcType=VARCHAR}
+			,#{tenantFollow.followTenantId, jdbcType=VARCHAR}
+			,#{tenantFollow.followTenantName, jdbcType=VARCHAR}
+			,#{tenantFollow.province, jdbcType=VARCHAR}
+			,#{tenantFollow.city,
+			jdbcType=VARCHAR}
+			,#{tenantFollow.createBy, jdbcType=VARCHAR}
+			,#{tenantFollow.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<delete id="deleteTenantFollowById" parameterType="long">
+		delete from
+		SYS_TENANT_FOLLOW
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getTenantFollowById" parameterType="long"
+		resultMap="tenantFollowResultMap">
+		select * from SYS_TENANT_FOLLOW where ID_ = #{id}
+	</select>
+
+
+	<select id="getTenantFollows" parameterType="com.glaf.base.modules.sys.query.TenantFollowQuery"
+		resultMap="tenantFollowResultMap">
+		select distinct E.*
+		<include refid="selectTenantFollowsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.CREATETIME_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getTenantFollowCount" parameterType="com.glaf.base.modules.sys.query.TenantFollowQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectTenantFollowsSql" />
+	</select>
+
+
+	<sql id="selectTenantFollowsSql">
+
+		from SYS_TENANT_FOLLOW E
+
+		<where>
+			1 = 1
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="tenantIds != null and tenantIds.size() &gt; 0">
+				and E.TENANTID_ IN
+				<foreach item="x_tenantId" index="index" collection="tenantIds"
+					open="(" separator="," close=")">
+					#{x_tenantId}
+				</foreach>
+			</if>
+
+			<if test="tenantName != null and tenantName != '' ">
+				and E.TENANTNAME_ = #{tenantName}
+			</if>
+
+			<if test="tenantNameLike != null and tenantNameLike != '' ">
+				and E.TENANTNAME_ like #{tenantNameLike}
+			</if>
+
+			<if test="followTenantId != null and followTenantId != '' ">
+				and E.FOLLOWTENANTID_ = #{followTenantId}
+			</if>
+
+			<if test="followTenantIds != null and followTenantIds.size() &gt; 0">
+				and E.FOLLOWTENANTID_ IN
+				<foreach item="x_followTenantId" index="index" collection="followTenantIds"
+					open="(" separator="," close=")">
+					#{x_followTenantId}
+				</foreach>
+			</if>
+
+			<if test="followTenantName != null and followTenantName != '' ">
+				and E.FOLLOWTENANTNAME_ = #{followTenantName}
+			</if>
+
+			<if test="followTenantNameLike != null and followTenantNameLike != '' ">
+				and E.FOLLOWTENANTNAME_ like #{followTenantNameLike}
+			</if>
+
+			<if test="province != null and province != '' ">
+				and E.PROVINCE_ = #{province}
+			</if>
+
+			<if test="city != null and city != '' ">
+				and E.CITY_ = #{city}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

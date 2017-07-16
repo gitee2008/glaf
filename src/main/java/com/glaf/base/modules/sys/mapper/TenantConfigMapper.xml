@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.base.modules.sys.mapper.TenantConfigMapper">
+
+	<resultMap id="tenantConfigResultMap" type="com.glaf.base.modules.sys.model.TenantConfig">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="sysName" column="SYSNAME_" jdbcType="VARCHAR" />
+		<result property="typeId" column="TYPEID_" jdbcType="BIGINT" />
+		<result property="breakfastTime" column="BREAKFASTTIME_"
+			jdbcType="VARCHAR" />
+		<result property="breakfastMidTime" column="BREAKFASMIDTTIME_"
+			jdbcType="VARCHAR" />
+		<result property="lunchTime" column="LUNCHTIME_" jdbcType="VARCHAR" />
+		<result property="snackTime" column="SNACKTIME_" jdbcType="VARCHAR" />
+		<result property="dinnerTime" column="DINNERTIME_" jdbcType="VARCHAR" />
+		<result property="shareFlag" column="SHAREFLAG_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY_" jdbcType="VARCHAR" />
+		<result property="updateTime" column="UPDATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertTenantConfig" parameterType="com.glaf.base.modules.sys.model.TenantConfig">
+		insert into SYS_TENANT_CONFIG
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="sysName != null">
+				,SYSNAME_
+			</if>
+			<if test="typeId != null">
+				,TYPEID_
+			</if>
+			<if test="breakfastTime != null">
+				,BREAKFASTTIME_
+			</if>
+			<if test="breakfastMidTime != null">
+				,BREAKFASMIDTTIME_
+			</if>
+			<if test="lunchTime != null">
+				,LUNCHTIME_
+			</if>
+			<if test="snackTime != null">
+				,SNACKTIME_
+			</if>
+			<if test="dinnerTime != null">
+				,DINNERTIME_
+			</if>
+			<if test="shareFlag != null">
+				,SHAREFLAG_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+			<if test="updateBy != null">
+				,UPDATEBY_
+			</if>
+			<if test="updateTime != null">
+				,UPDATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="sysName != null">
+				,#{sysName, jdbcType=VARCHAR}
+			</if>
+			<if test="typeId != null">
+				,#{typeId, jdbcType=BIGINT}
+			</if>
+			<if test="breakfastTime != null">
+				,#{breakfastTime, jdbcType=VARCHAR}
+			</if>
+			<if test="breakfastMidTime != null">
+				,#{breakfastMidTime, jdbcType=VARCHAR}
+			</if>
+			<if test="lunchTime != null">
+				,#{lunchTime, jdbcType=VARCHAR}
+			</if>
+			<if test="snackTime != null">
+				,#{snackTime, jdbcType=VARCHAR}
+			</if>
+			<if test="dinnerTime != null">
+				,#{dinnerTime, jdbcType=VARCHAR}
+			</if>
+			<if test="shareFlag != null">
+				,#{shareFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy != null">
+				,#{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				,#{updateTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertTenantConfig" parameterType="java.util.List">
+		insert into SYS_TENANT_CONFIG (
+		ID_
+		,TENANTID_
+		,SYSNAME_
+		,TYPEID_
+		,BREAKFASTTIME_
+		,BREAKFASMIDTTIME_
+		,LUNCHTIME_
+		,SNACKTIME_
+		,DINNERTIME_
+		,SHAREFLAG_
+		,CREATEBY_
+		,CREATETIME_
+		,UPDATEBY_
+		,UPDATETIME_
+		) values
+		<foreach collection="list" item="tenantConfig" index="index"
+			separator=",">
+			(
+			#{tenantConfig.id, jdbcType=BIGINT}
+			,#{tenantConfig.tenantId, jdbcType=VARCHAR}
+			,#{tenantConfig.sysName,
+			jdbcType=VARCHAR}
+			,#{tenantConfig.typeId, jdbcType=BIGINT}
+			,#{tenantConfig.breakfastTime, jdbcType=VARCHAR}
+			,#{tenantConfig.breakfastMidTime, jdbcType=VARCHAR}
+			,#{tenantConfig.lunchTime, jdbcType=VARCHAR}
+			,#{tenantConfig.snackTime, jdbcType=VARCHAR}
+			,#{tenantConfig.dinnerTime, jdbcType=VARCHAR}
+			,#{tenantConfig.shareFlag, jdbcType=VARCHAR}
+			,#{tenantConfig.createBy, jdbcType=VARCHAR}
+			,#{tenantConfig.createTime, jdbcType=TIMESTAMP}
+			,#{tenantConfig.updateBy, jdbcType=VARCHAR}
+			,#{tenantConfig.updateTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertTenantConfig_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="tenantConfig" index="index">
+			insert
+			into SYS_TENANT_CONFIG (
+			ID_
+			,TENANTID_
+			,SYSNAME_
+			,TYPEID_
+			,BREAKFASTTIME_
+			,BREAKFASMIDTTIME_
+			,LUNCHTIME_
+			,SNACKTIME_
+			,DINNERTIME_
+			,SHAREFLAG_
+			,CREATEBY_
+			,CREATETIME_
+			,UPDATEBY_
+			,UPDATETIME_
+			) values (
+			#{tenantConfig.id, jdbcType=BIGINT}
+			,#{tenantConfig.tenantId,
+			jdbcType=VARCHAR}
+			,#{tenantConfig.sysName, jdbcType=VARCHAR}
+			,#{tenantConfig.typeId, jdbcType=BIGINT}
+			,#{tenantConfig.breakfastTime, jdbcType=VARCHAR}
+			,#{tenantConfig.breakfastMidTime, jdbcType=VARCHAR}
+			,#{tenantConfig.lunchTime, jdbcType=VARCHAR}
+			,#{tenantConfig.snackTime, jdbcType=VARCHAR}
+			,#{tenantConfig.dinnerTime, jdbcType=VARCHAR}
+			,#{tenantConfig.shareFlag, jdbcType=VARCHAR}
+			,#{tenantConfig.createBy, jdbcType=VARCHAR}
+			,#{tenantConfig.createTime, jdbcType=TIMESTAMP}
+			,#{tenantConfig.updateBy, jdbcType=VARCHAR}
+			,#{tenantConfig.updateTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateTenantConfig" parameterType="com.glaf.base.modules.sys.model.TenantConfig">
+		update SYS_TENANT_CONFIG
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="sysName != null">
+				SYSNAME_ = #{sysName, jdbcType=VARCHAR},
+			</if>
+			<if test="typeId != null">
+				TYPEID_ = #{typeId, jdbcType=BIGINT},
+			</if>
+			<if test="breakfastTime != null">
+				BREAKFASTTIME_ = #{breakfastTime, jdbcType=VARCHAR},
+			</if>
+			<if test="breakfastMidTime != null">
+				BREAKFASMIDTTIME_ = #{breakfastMidTime,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="lunchTime != null">
+				LUNCHTIME_ = #{lunchTime, jdbcType=VARCHAR},
+			</if>
+			<if test="snackTime != null">
+				SNACKTIME_ = #{snackTime, jdbcType=VARCHAR},
+			</if>
+			<if test="dinnerTime != null">
+				DINNERTIME_ = #{dinnerTime, jdbcType=VARCHAR},
+			</if>
+			<if test="shareFlag != null">
+				SHAREFLAG_ = #{shareFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY_ = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATETIME_ = #{updateTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteTenantConfigById" parameterType="long">
+		delete from
+		SYS_TENANT_CONFIG
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deleteTenantConfigs" parameterType="com.glaf.base.modules.sys.query.TenantConfigQuery">
+		delete from SYS_TENANT_CONFIG
+		where (
+		ID_ IN
+		<foreach item="x_id" index="index" collection="ids" open="("
+			separator="," close=")">
+			#{x_id}
+		</foreach>
+		)
+	</delete>
+
+
+	<select id="getTenantConfigById" parameterType="long"
+		resultMap="tenantConfigResultMap">
+		select * from SYS_TENANT_CONFIG where ID_ = #{id}
+	</select>
+
+
+	<select id="getTenantConfigByTenantId" parameterType="string"
+		resultMap="tenantConfigResultMap">
+		select * from SYS_TENANT_CONFIG where TENANTID_ =
+		#{tenantId}
+	</select>
+
+
+	<select id="getTenantConfigs" parameterType="com.glaf.base.modules.sys.query.TenantConfigQuery"
+		resultMap="tenantConfigResultMap">
+		select distinct E.*
+		<include refid="selectTenantConfigsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getTenantConfigCount" parameterType="com.glaf.base.modules.sys.query.TenantConfigQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectTenantConfigsSql" />
+	</select>
+
+
+	<sql id="selectTenantConfigsSql">
+
+		from SYS_TENANT_CONFIG E
+
+		<where>
+			1 = 1
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="tenantIds != null and tenantIds.size() &gt; 0">
+				and E.TENANTID_ IN
+				<foreach item="x_tenantId" index="index" collection="tenantIds"
+					open="(" separator="," close=")">
+					#{x_tenantId}
+				</foreach>
+			</if>
+
+			<if test="sysName != null and sysName != '' ">
+				and E.SYSNAME_ = #{sysName}
+			</if>
+
+			<if test="sysNameLike != null and sysNameLike != '' ">
+				and E.SYSNAME_ like #{sysNameLike}
+			</if>
+
+			<if test="shareFlag != null and shareFlag != '' ">
+				and E.SHAREFLAG_ = #{shareFlag}
+			</if>
+
+			<if test="typeId != null">
+				and E.TYPEID_ = #{typeId}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

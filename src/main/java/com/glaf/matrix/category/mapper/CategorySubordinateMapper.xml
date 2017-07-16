@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.category.mapper.CategorySubordinateMapper">
+
+	<resultMap id="categorySubordinateResultMap"
+		type="com.glaf.matrix.category.domain.CategorySubordinate">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="categoryId" column="PROJECTID_" jdbcType="BIGINT" />
+		<result property="subordinateId" column="SUBORDINATEID_"
+			jdbcType="BIGINT" />
+	</resultMap>
+
+
+	<insert id="insertCategorySubordinate" parameterType="com.glaf.matrix.category.domain.CategorySubordinate">
+
+		insert into
+		SYS_CATEGORY_SUBORDINATE ( ID_,PROJECTID_,SUBORDINATEID_ )
+		values
+		(#{id,jdbcType=BIGINT},
+		#{categoryId, jdbcType=BIGINT},
+		#{subordinateId,jdbcType=VARCHAR}
+		)
+
+	</insert>
+
+
+	<delete id="deleteSubordinate" parameterType="com.glaf.matrix.category.domain.CategorySubordinate">
+		delete from
+		SYS_CATEGORY_SUBORDINATE
+		where PROJECTID_ = #{categoryId}
+		and SUBORDINATEID_ =
+		#{subordinateId}
+	</delete>
+
+
+	<delete id="deleteCategorySubordinateByCategoryId" parameterType="long">
+		delete from SYS_CATEGORY_SUBORDINATE
+		where PROJECTID_ = #{categoryId}
+	</delete>
+
+
+	<select id="getCategorySubordinatesByCategoryId" parameterType="long"
+		resultMap="categorySubordinateResultMap">
+		select * from SYS_CATEGORY_SUBORDINATE
+		where PROJECTID_ =
+		#{categoryId}
+	</select>
+
+
+	<select id="getAllCategorySubordinates" resultMap="categorySubordinateResultMap">
+		select *
+		from
+		SYS_CATEGORY_SUBORDINATE
+	</select>
+
+</mapper>

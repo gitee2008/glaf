@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.base.modules.sys.mapper.SysTenantMapper">
+
+	<resultMap id="sysTenantResultMap" type="com.glaf.base.modules.sys.model.SysTenant">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="code" column="CODE_" jdbcType="VARCHAR" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="tenantType" column="TENANTTYPE_" jdbcType="INTEGER" />
+		<result property="databaseId" column="DATABASEID_" jdbcType="BIGINT" />
+		<result property="level" column="LEVEL_" jdbcType="INTEGER" />
+		<result property="province" column="PROVINCE_" jdbcType="VARCHAR" />
+		<result property="provinceId" column="PROVINCEID_" jdbcType="BIGINT" />
+		<result property="city" column="CITY_" jdbcType="VARCHAR" />
+		<result property="cityId" column="CITYID_" jdbcType="BIGINT" />
+		<result property="area" column="AREA_" jdbcType="VARCHAR" />
+		<result property="areaId" column="AREAID_" jdbcType="BIGINT" />
+		<result property="town" column="TOWN_" jdbcType="VARCHAR" />
+		<result property="townId" column="TOWNID_" jdbcType="BIGINT" />
+		<result property="principal" column="PRINCIPAL_" jdbcType="VARCHAR" />
+		<result property="telephone" column="TELEPHONE_" jdbcType="VARCHAR" />
+		<result property="address" column="ADDRESS_" jdbcType="VARCHAR" />
+		<result property="property" column="PROPERTY_" jdbcType="VARCHAR" />
+		<result property="verify" column="VERIFY_" jdbcType="VARCHAR" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY_" jdbcType="VARCHAR" />
+		<result property="updateTime" column="UPDATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertSysTenant" parameterType="com.glaf.base.modules.sys.model.SysTenant">
+		insert into SYS_TENANT
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="code != null">
+				,CODE_
+			</if>
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="tenantType != null">
+				,TENANTTYPE_
+			</if>
+			<if test="databaseId != null">
+				,DATABASEID_
+			</if>
+			<if test="level != null">
+				,LEVEL_
+			</if>
+			<if test="province != null">
+				,PROVINCE_
+			</if>
+			<if test="provinceId != null">
+				,PROVINCEID_
+			</if>
+			<if test="city != null">
+				,CITY_
+			</if>
+			<if test="cityId != null">
+				,CITYID_
+			</if>
+			<if test="area != null">
+				,AREA_
+			</if>
+			<if test="areaId != null">
+				,AREAID_
+			</if>
+			<if test="town != null">
+				,TOWN_
+			</if>
+			<if test="townId != null">
+				,TOWNID_
+			</if>
+			<if test="principal != null">
+				,PRINCIPAL_
+			</if>
+			<if test="telephone != null">
+				,TELEPHONE_
+			</if>
+			<if test="address != null">
+				,ADDRESS_
+			</if>
+			<if test="property != null">
+				,PROPERTY_
+			</if>
+			<if test="verify != null">
+				,VERIFY_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+			<if test="updateBy != null">
+				,UPDATEBY_
+			</if>
+			<if test="updateTime != null">
+				,UPDATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="code != null">
+				,#{code, jdbcType=VARCHAR}
+			</if>
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="tenantType != null">
+				,#{tenantType, jdbcType=INTEGER}
+			</if>
+			<if test="databaseId != null">
+				,#{databaseId, jdbcType=BIGINT}
+			</if>
+			<if test="level != null">
+				,#{level, jdbcType=INTEGER}
+			</if>
+			<if test="province != null">
+				,#{province, jdbcType=VARCHAR}
+			</if>
+			<if test="provinceId != null">
+				,#{provinceId, jdbcType=BIGINT}
+			</if>
+			<if test="city != null">
+				,#{city, jdbcType=VARCHAR}
+			</if>
+			<if test="cityId != null">
+				,#{cityId, jdbcType=BIGINT}
+			</if>
+			<if test="area != null">
+				,#{area, jdbcType=VARCHAR}
+			</if>
+			<if test="areaId != null">
+				,#{areaId, jdbcType=BIGINT}
+			</if>
+			<if test="town != null">
+				,#{town, jdbcType=VARCHAR}
+			</if>
+			<if test="townId != null">
+				,#{townId, jdbcType=BIGINT}
+			</if>
+			<if test="principal != null">
+				,#{principal, jdbcType=VARCHAR}
+			</if>
+			<if test="telephone != null">
+				,#{telephone, jdbcType=VARCHAR}
+			</if>
+			<if test="address != null">
+				,#{address, jdbcType=VARCHAR}
+			</if>
+			<if test="property != null">
+				,#{property, jdbcType=VARCHAR}
+			</if>
+			<if test="verify != null">
+				,#{verify, jdbcType=VARCHAR}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy != null">
+				,#{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				,#{updateTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertSysTenant" parameterType="java.util.List">
+		insert into SYS_TENANT (
+		ID_
+		,NAME_
+		,CODE_
+		,TENANTID_
+		,TENANTTYPE_
+		,DATABASEID_
+		,LEVEL_
+		,PROVINCE_
+		,PROVINCEID_
+		,CITY_
+		,CITYID_
+		,AREA_
+		,AREAID_
+		,TOWN_
+		,TOWNID_
+		,PRINCIPAL_
+		,TELEPHONE_
+		,ADDRESS_
+		,PROPERTY_
+		,VERIFY_
+		,LOCKED_
+		,CREATEBY_
+		,CREATETIME_
+		,UPDATEBY_
+		,UPDATETIME_
+		)
+		values
+		<foreach collection="list" item="sysTenant" index="index"
+			separator=",">
+			(
+			#{sysTenant.id, jdbcType=BIGINT}
+			,#{sysTenant.name,
+			jdbcType=VARCHAR}
+			,#{sysTenant.code, jdbcType=VARCHAR}
+			,#{sysTenant.tenantId, jdbcType=VARCHAR}
+			,#{sysTenant.tenantType,
+			jdbcType=INTEGER}
+			,#{sysTenant.databaseId, jdbcType=BIGINT}
+			,#{sysTenant.level, jdbcType=INTEGER}
+			,#{sysTenant.province,
+			jdbcType=VARCHAR}
+			,#{sysTenant.provinceId,
+			jdbcType=BIGINT}
+			,#{sysTenant.city, jdbcType=VARCHAR}
+			,#{sysTenant.cityId,
+			jdbcType=BIGINT}
+			,#{sysTenant.area,
+			jdbcType=VARCHAR}
+			,#{sysTenant.areaId, jdbcType=BIGINT}
+			,#{sysTenant.town,
+			jdbcType=VARCHAR}
+			,#{sysTenant.townId,
+			jdbcType=BIGINT}
+			,#{sysTenant.principal, jdbcType=VARCHAR}
+			,#{sysTenant.telephone,
+			jdbcType=VARCHAR}
+			,#{sysTenant.address, jdbcType=VARCHAR}
+			,#{sysTenant.property, jdbcType=VARCHAR}
+			,#{sysTenant.verify,
+			jdbcType=VARCHAR}
+			,#{sysTenant.locked,
+			jdbcType=INTEGER}
+			,#{sysTenant.createBy, jdbcType=VARCHAR}
+			,#{sysTenant.createTime,
+			jdbcType=TIMESTAMP}
+			,#{sysTenant.updateBy,
+			jdbcType=VARCHAR}
+			,#{sysTenant.updateTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertSysTenant_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="sysTenant" index="index">
+			insert into
+			SYS_TENANT (
+			ID_
+			,NAME_
+			,CODE_
+			,TENANTID_
+			,TENANTTYPE_
+			,DATABASEID_
+			,LEVEL_
+			,PROVINCE_
+			,PROVINCEID_
+			,CITY_
+			,CITYID_
+			,AREA_
+			,AREAID_
+			,TOWN_
+			,TOWNID_
+			,PRINCIPAL_
+			,TELEPHONE_
+			,ADDRESS_
+			,PROPERTY_
+			,VERIFY_
+			,LOCKED_
+			,CREATEBY_
+			,CREATETIME_
+			,UPDATEBY_
+			,UPDATETIME_
+			)
+			values (
+			#{sysTenant.id,
+			jdbcType=BIGINT}
+			,#{sysTenant.name,
+			jdbcType=VARCHAR}
+			,#{sysTenant.code,
+			jdbcType=VARCHAR}
+			,#{sysTenant.tenantId,
+			jdbcType=VARCHAR}
+			,#{sysTenant.tenantType,
+			jdbcType=INTEGER}
+			,#{sysTenant.databaseId,
+			jdbcType=BIGINT}
+			,#{sysTenant.level,
+			jdbcType=INTEGER}
+			,#{sysTenant.province, jdbcType=VARCHAR}
+			,#{sysTenant.provinceId,
+			jdbcType=BIGINT}
+			,#{sysTenant.city,
+			jdbcType=VARCHAR}
+			,#{sysTenant.cityId, jdbcType=BIGINT}
+			,#{sysTenant.area,
+			jdbcType=VARCHAR}
+			,#{sysTenant.areaId,
+			jdbcType=BIGINT}
+			,#{sysTenant.town, jdbcType=VARCHAR}
+			,#{sysTenant.townId,
+			jdbcType=BIGINT}
+			,#{sysTenant.principal,
+			jdbcType=VARCHAR}
+			,#{sysTenant.telephone, jdbcType=VARCHAR}
+			,#{sysTenant.address, jdbcType=VARCHAR}
+			,#{sysTenant.property,
+			jdbcType=VARCHAR}
+			,#{sysTenant.verify, jdbcType=VARCHAR}
+			,#{sysTenant.locked,
+			jdbcType=INTEGER}
+			,#{sysTenant.createBy,
+			jdbcType=VARCHAR}
+			,#{sysTenant.createTime,
+			jdbcType=TIMESTAMP}
+			,#{sysTenant.updateBy,
+			jdbcType=VARCHAR}
+			,#{sysTenant.updateTime,
+			jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateSysTenant" parameterType="com.glaf.base.modules.sys.model.SysTenant">
+		update SYS_TENANT
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="name != null">
+				NAME_ = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				CODE_ = #{code, jdbcType=VARCHAR},
+			</if>
+			<if test="tenantType != null">
+				TENANTTYPE_ = #{tenantType, jdbcType=INTEGER},
+			</if>
+			<if test="level != null">
+				LEVEL_ = #{level, jdbcType=INTEGER},
+			</if>
+			<if test="province != null">
+				PROVINCE_ = #{province, jdbcType=VARCHAR},
+			</if>
+			<if test="provinceId != null">
+				PROVINCEID_ = #{provinceId, jdbcType=BIGINT},
+			</if>
+			<if test="city != null">
+				CITY_ = #{city, jdbcType=VARCHAR},
+			</if>
+			<if test="cityId != null">
+				CITYID_ = #{cityId, jdbcType=BIGINT},
+			</if>
+			<if test="area != null">
+				AREA_ = #{area, jdbcType=VARCHAR},
+			</if>
+			<if test="areaId != null">
+				AREAID_ = #{areaId, jdbcType=BIGINT},
+			</if>
+			<if test="town != null">
+				TOWN_ = #{town, jdbcType=VARCHAR},
+			</if>
+			<if test="townId != null">
+				TOWNID_ = #{townId, jdbcType=BIGINT},
+			</if>
+			<if test="principal != null">
+				PRINCIPAL_ = #{principal, jdbcType=VARCHAR},
+			</if>
+			<if test="telephone != null">
+				TELEPHONE_ = #{telephone, jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				ADDRESS_ = #{address, jdbcType=VARCHAR},
+			</if>
+			<if test="property != null">
+				PROPERTY_ = #{property, jdbcType=VARCHAR},
+			</if>
+			<if test="verify != null">
+				VERIFY_ = #{verify, jdbcType=VARCHAR},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY_ = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATETIME_ = #{updateTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteSysTenantById" parameterType="long">
+		delete from
+		SYS_TENANT
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getSysTenantById" parameterType="long" resultMap="sysTenantResultMap">
+		select * from SYS_TENANT where ID_ = #{id}
+	</select>
+
+
+	<select id="getSysTenantByTenantId" parameterType="string"
+		resultMap="sysTenantResultMap">
+		select * from SYS_TENANT where TENANTID_ = #{tenantId}
+	</select>
+
+
+	<select id="getSysTenants" parameterType="com.glaf.base.modules.sys.query.SysTenantQuery"
+		resultMap="sysTenantResultMap">
+		select distinct E.*
+		<include refid="selectSysTenantsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getSysTenantCount" parameterType="com.glaf.base.modules.sys.query.SysTenantQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectSysTenantsSql" />
+	</select>
+
+
+	<sql id="selectSysTenantsSql">
+
+		from SYS_TENANT E
+
+		<where>
+			1 = 1
+
+			<if test="name != null and name != '' ">
+				and E.NAME_ = #{name}
+			</if>
+
+			<if test="nameLike != null and nameLike != '' ">
+				and E.NAME_ like #{nameLike}
+			</if>
+
+			<if test="code != null and code != '' ">
+				and E.CODE_ = #{code}
+			</if>
+
+			<if test="codeLike != null and codeLike != '' ">
+				and E.CODE_ like #{codeLike}
+			</if>
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="tenantIds != null and tenantIds.size() &gt; 0">
+				and E.TENANTID_ IN
+				<foreach item="x_tenantId" index="index" collection="tenantIds"
+					open="(" separator="," close=")">
+					#{x_tenantId}
+				</foreach>
+			</if>
+
+			<if test="tenantType != null">
+				and E.TENANTTYPE_ = #{tenantType}
+			</if>
+
+			<if test="databaseId != null">
+				and E.DATABASEID_ = #{databaseId}
+			</if>
+
+			<if test="databaseIds != null and databaseIds.size() &gt; 0">
+				and E.DATABASEID_ IN
+				<foreach item="x_databaseId" index="index" collection="databaseIds"
+					open="(" separator="," close=")">
+					#{x_databaseId}
+				</foreach>
+			</if>
+
+			<if test="level != null">
+				and E.LEVEL_ = #{level}
+			</if>
+
+			<if test="levelGreaterThanOrEqual != null">
+				and E.LEVEL_ &gt;= #{levelGreaterThanOrEqual}
+			</if>
+
+			<if test="levelLessThanOrEqual != null">
+				and E.LEVEL_ &lt;= #{levelLessThanOrEqual}
+			</if>
+
+			<if test="province != null and province != '' ">
+				and E.PROVINCE_ = #{province}
+			</if>
+
+			<if test="provinceId != null">
+				and E.PROVINCEID_ = #{provinceId}
+			</if>
+
+			<if test="city != null and city != '' ">
+				and E.CITY_ = #{city}
+			</if>
+
+			<if test="cityId != null">
+				and E.CITYID_ = #{cityId}
+			</if>
+
+			<if test="area != null and area != '' ">
+				and E.AREA_ = #{area}
+			</if>
+
+			<if test="areaId != null">
+				and E.AREAID_ = #{areaId}
+			</if>
+
+			<if test="town != null and town != '' ">
+				and E.TOWN_ = #{town}
+			</if>
+
+			<if test="townId != null">
+				and E.TOWNID_ = #{townId}
+			</if>
+
+			<if test="addressLike != null and addressLike != '' ">
+				and E.ADDRESS_ like #{addressLike}
+			</if>
+
+			<if test="property != null and property != '' ">
+				and E.PROPERTY_ = #{property}
+			</if>
+
+			<if test="verify != null and verify != '' ">
+				and E.VERIFY_ = #{verify}
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+			<if test="updateTimeGreaterThanOrEqual != null">
+				and E.UPDATETIME_ &gt;= #{updateTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="updateTimeLessThanOrEqual != null">
+				and E.UPDATETIME_ &lt;= #{updateTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

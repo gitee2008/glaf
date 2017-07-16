@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.core.mapper.SchedulerExecutionMapper">
+
+	<resultMap id="schedulerExecutionResultMap" type="com.glaf.core.domain.SchedulerExecution">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="schedulerId" column="SCHEDULERID_" jdbcType="VARCHAR" />
+		<result property="businessKey" column="BUSINESSKEY_" jdbcType="VARCHAR" />
+		<result property="count" column="COUNT_" jdbcType="INTEGER" />
+		<result property="value" column="VALUE_" jdbcType="DOUBLE" />
+		<result property="runYear" column="RUNYEAR_" jdbcType="INTEGER" />
+		<result property="runMonth" column="RUNMONTH_" jdbcType="INTEGER" />
+		<result property="runWeek" column="RUNWEEK_" jdbcType="INTEGER" />
+		<result property="runQuarter" column="RUNQUARTER_" jdbcType="INTEGER" />
+		<result property="runDay" column="RUNDAY_" jdbcType="INTEGER" />
+		<result property="runTime" column="RUNTIME_" jdbcType="INTEGER" />
+		<result property="jobNo" column="JOBNO_" jdbcType="VARCHAR" />
+		<result property="status" column="STATUS_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertSchedulerExecution" parameterType="com.glaf.core.domain.SchedulerExecution">
+		insert into SYS_SCHEDULER_EXECUTION
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="schedulerId != null">
+				,SCHEDULERID_
+			</if>
+			<if test="businessKey != null">
+				,BUSINESSKEY_
+			</if>
+			<if test="count != null">
+				,COUNT_
+			</if>
+			<if test="value != null">
+				,VALUE_
+			</if>
+			<if test="runYear != null">
+				,RUNYEAR_
+			</if>
+			<if test="runMonth != null">
+				,RUNMONTH_
+			</if>
+			<if test="runWeek != null">
+				,RUNWEEK_
+			</if>
+			<if test="runQuarter != null">
+				,RUNQUARTER_
+			</if>
+			<if test="runDay != null">
+				,RUNDAY_
+			</if>
+			<if test="runTime != null">
+				,RUNTIME_
+			</if>
+			<if test="jobNo != null">
+				,JOBNO_
+			</if>
+			<if test="status != null">
+				,STATUS_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="schedulerId != null">
+				,#{schedulerId, jdbcType=VARCHAR}
+			</if>
+			<if test="businessKey != null">
+				,#{businessKey, jdbcType=VARCHAR}
+			</if>
+			<if test="count != null">
+				,#{count, jdbcType=INTEGER}
+			</if>
+			<if test="value != null">
+				,#{value, jdbcType=DOUBLE}
+			</if>
+			<if test="runYear != null">
+				,#{runYear, jdbcType=INTEGER}
+			</if>
+			<if test="runMonth != null">
+				,#{runMonth, jdbcType=INTEGER}
+			</if>
+			<if test="runWeek != null">
+				,#{runWeek, jdbcType=INTEGER}
+			</if>
+			<if test="runQuarter != null">
+				,#{runQuarter, jdbcType=INTEGER}
+			</if>
+			<if test="runDay != null">
+				,#{runDay, jdbcType=INTEGER}
+			</if>
+			<if test="runTime != null">
+				,#{runTime, jdbcType=INTEGER}
+			</if>
+			<if test="jobNo != null">
+				,#{jobNo, jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				,#{status, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+
+
+
+
+	<select id="getSchedulerExecutionById" parameterType="long"
+		resultMap="schedulerExecutionResultMap">
+		select * from SYS_SCHEDULER_EXECUTION where ID_ = #{id}
+	</select>
+
+
+	<select id="getSchedulerExecutions" parameterType="com.glaf.core.query.SchedulerExecutionQuery"
+		resultMap="schedulerExecutionResultMap">
+		select distinct E.*
+		<include refid="selectSchedulerExecutionsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getSchedulerExecutionCount" parameterType="com.glaf.core.query.SchedulerExecutionQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectSchedulerExecutionsSql" />
+	</select>
+
+
+	<sql id="selectSchedulerExecutionsSql">
+
+		from SYS_SCHEDULER_EXECUTION E
+
+		<where>
+			1 = 1
+
+			<if test="schedulerId != null and schedulerId != '' ">
+				and E.SCHEDULERID_ = #{schedulerId}
+			</if>
+
+			<if test="businessKey != null and businessKey != '' ">
+				and E.BUSINESSKEY_ = #{businessKey}
+			</if>
+
+			<if test="runYear != null">
+				and E.RUNYEAR_ = #{runYear}
+			</if>
+
+			<if test="runMonth != null">
+				and E.RUNMONTH_ = #{runMonth}
+			</if>
+
+			<if test="runWeek != null">
+				and E.RUNWEEK_ = #{runWeek}
+			</if>
+
+			<if test="runQuarter != null">
+				and E.RUNQUARTER_ = #{runQuarter}
+			</if>
+
+			<if test="runDay != null">
+				and E.RUNDAY_ = #{runDay}
+			</if>
+
+			<if test="runDayGreaterThanOrEqual != null">
+				and E.RUNDAY_ &gt;= #{runDayGreaterThanOrEqual}
+			</if>
+
+			<if test="runDayLessThanOrEqual != null">
+				and E.RUNDAY_ &lt;= #{runDayLessThanOrEqual}
+			</if>
+
+			<if test="jobNo != null and jobNo != '' ">
+				and E.JOBNO_ = #{jobNo}
+			</if>
+
+			<if test="status != null">
+				and E.STATUS_ = #{status}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

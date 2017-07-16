@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.data.mapper.SysTableMapper">
+
+	<resultMap id="sysTableResultMap" type="com.glaf.matrix.data.domain.SysTable">
+		<id property="tableId" column="TABLEID_" jdbcType="VARCHAR" />
+		<result property="tableName" column="TABLENAME_" jdbcType="VARCHAR" />
+		<result property="title" column="TITLE_" jdbcType="VARCHAR" />
+		<result property="englishTitle" column="ENGLISHTITLE_"
+			jdbcType="VARCHAR" />
+		<result property="addType" column="ADDTYPE_" jdbcType="INTEGER" />
+		<result property="sysnum" column="SYSNUM_" jdbcType="VARCHAR" />
+		<result property="isSubTable" column="ISSUBTABLE_" jdbcType="VARCHAR" />
+		<result property="topId" column="TOPID_" jdbcType="VARCHAR" />
+		<result property="primaryKey" column="PRIMARYKEY_" jdbcType="VARCHAR" />
+		<result property="sortColumn" column="SORTCOLUMN_" jdbcType="VARCHAR" />
+		<result property="sortOrder" column="SORTORDER_" jdbcType="VARCHAR" />
+		<result property="aggregationKey" column="AGGREGATIONKEY_"
+			jdbcType="VARCHAR" />
+		<result property="attachmentFlag" column="ATTACHMENTFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="attachmentExts" column="ATTACHMENTEXTS_"
+			jdbcType="VARCHAR" />
+		<result property="attachmentSize" column="ATTACHMENTSIZE_"
+			jdbcType="INTEGER" />
+		<result property="auditFlag" column="AUDITFLAG_" jdbcType="VARCHAR" />
+		<result property="privilegeFlag" column="PRIVILEGEFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="treeFlag" column="TREEFLAG_" jdbcType="VARCHAR" />
+		<result property="temporaryFlag" column="TEMPORARYFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="deleteFetch" column="DELETEFETCH_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="description" column="DESCRIPTION_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="insertCascade" column="INSERTCASCADE_"
+			jdbcType="INTEGER" />
+		<result property="updateCascade" column="UPDATECASCADE_"
+			jdbcType="INTEGER" />
+		<result property="deleteCascade" column="DELETECASCADE_"
+			jdbcType="INTEGER" />
+		<result property="sortNo" column="SORTNO_" jdbcType="INTEGER" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="deleteFlag" column="DELETEFLAG_" jdbcType="INTEGER" />
+		<result property="partitionFlag" column="PARTITIONFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="systemFlag" column="SYSTEMFLAG_" jdbcType="VARCHAR" />
+		<result property="revision" column="REVISION_" jdbcType="INTEGER" />
+		<result property="nodeId" column="NODEID_" jdbcType="BIGINT" />
+		<result property="reportId" column="REPORTID_" jdbcType="VARCHAR" />
+		<result property="formReportId" column="FORMREPORTID_"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<resultMap id="sysTableHashMap" type="java.util.HashMap">
+		<id property="tableId" column="TABLEID_" jdbcType="VARCHAR" />
+		<result property="tableName" column="TABLENAME_" jdbcType="VARCHAR" />
+		<result property="title" column="TITLE_" jdbcType="VARCHAR" />
+		<result property="englishTitle" column="ENGLISHTITLE_"
+			jdbcType="VARCHAR" />
+		<result property="addType" column="ADDTYPE_" jdbcType="INTEGER" />
+		<result property="sysnum" column="SYSNUM_" jdbcType="VARCHAR" />
+		<result property="isSubTable" column="ISSUBTABLE_" jdbcType="VARCHAR" />
+		<result property="topId" column="TOPID_" jdbcType="VARCHAR" />
+		<result property="aggregationKey" column="AGGREGATIONKEY_"
+			jdbcType="VARCHAR" />
+		<result property="attachmentFlag" column="ATTACHMENTFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="attachmentExts" column="ATTACHMENTEXTS_"
+			jdbcType="VARCHAR" />
+		<result property="attachmentSize" column="ATTACHMENTSIZE_"
+			jdbcType="INTEGER" />
+		<result property="auditFlag" column="AUDITFLAG_" jdbcType="VARCHAR" />
+		<result property="privilegeFlag" column="PRIVILEGEFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="treeFlag" column="TREEFLAG_" jdbcType="VARCHAR" />
+		<result property="temporaryFlag" column="TEMPORARYFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="deleteFetch" column="DELETEFETCH_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="description" column="DESCRIPTION_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="insertCascade" column="INSERTCASCADE_"
+			jdbcType="INTEGER" />
+		<result property="updateCascade" column="UPDATECASCADE_"
+			jdbcType="INTEGER" />
+		<result property="deleteCascade" column="DELETECASCADE_"
+			jdbcType="INTEGER" />
+		<result property="sortNo" column="SORTNO_" jdbcType="INTEGER" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="deleteFlag" column="DELETEFLAG_" jdbcType="INTEGER" />
+		<result property="partitionFlag" column="PARTITIONFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="systemFlag" column="SYSTEMFLAG_" jdbcType="VARCHAR" />
+		<result property="sortColumn" column="SORTCOLUMN_" jdbcType="VARCHAR" />
+		<result property="sortOrder" column="SORTORDER_" jdbcType="VARCHAR" />
+		<result property="revision" column="REVISION_" jdbcType="INTEGER" />
+		<result property="reportId" column="REPORTID_" jdbcType="VARCHAR" />
+		<result property="formReportId" column="FORMREPORTID_"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<insert id="insertSysTable" parameterType="com.glaf.matrix.data.domain.SysTable">
+		insert into SYS_TABLE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			TABLEID_, TABLENAME_
+			<if test="title != null">
+				,TITLE_
+			</if>
+			<if test="englishTitle != null">
+				,ENGLISHTITLE_
+			</if>
+			<if test="addType != null">
+				,ADDTYPE_
+			</if>
+			<if test="sysnum != null">
+				,SYSNUM_
+			</if>
+			<if test="isSubTable != null">
+				,ISSUBTABLE_
+			</if>
+			<if test="topId != null">
+				,TOPID_
+			</if>
+			<if test="aggregationKey != null">
+				,AGGREGATIONKEY_
+			</if>
+			<if test="primaryKey != null">
+				,PRIMARYKEY_
+			</if>
+			<if test="sortColumn != null">
+				,SORTCOLUMN_
+			</if>
+			<if test="sortOrder != null">
+				,SORTORDER_
+			</if>
+			<if test="attachmentFlag != null">
+				,ATTACHMENTFLAG_
+			</if>
+			<if test="attachmentExts != null">
+				,ATTACHMENTEXTS_
+			</if>
+			<if test="attachmentSize != null">
+				,ATTACHMENTSIZE_
+			</if>
+			<if test="auditFlag != null">
+				,AUDITFLAG_
+			</if>
+			<if test="privilegeFlag != null">
+				,PRIVILEGEFLAG_
+			</if>
+			<if test="treeFlag != null">
+				,TREEFLAG_
+			</if>
+			<if test="temporaryFlag != null">
+				,TEMPORARYFLAG_
+			</if>
+			<if test="deleteFetch != null">
+				,DELETEFETCH_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="description != null">
+				,DESCRIPTION_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="insertCascade != null">
+				,INSERTCASCADE_
+			</if>
+			<if test="updateCascade != null">
+				,UPDATECASCADE_
+			</if>
+			<if test="deleteCascade != null">
+				,DELETECASCADE_
+			</if>
+			<if test="sortNo != null">
+				,SORTNO_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="deleteFlag != null">
+				,DELETEFLAG_
+			</if>
+			<if test="partitionFlag != null">
+				,PARTITIONFLAG_
+			</if>
+			<if test="systemFlag != null">
+				,SYSTEMFLAG_
+			</if>
+			<if test="revision != null">
+				,REVISION_
+			</if>
+			<if test="nodeId != null">
+				,NODEID_
+			</if>
+			<if test="reportId != null">
+				,REPORTID_
+			</if>
+			<if test="formReportId != null">
+				,FORMREPORTID_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{tableId, jdbcType=VARCHAR}
+			,#{tableName, jdbcType=VARCHAR}
+
+			<if test="title != null">
+				,#{title, jdbcType=VARCHAR}
+			</if>
+			<if test="englishTitle != null">
+				,#{englishTitle, jdbcType=VARCHAR}
+			</if>
+			<if test="addType != null">
+				,#{addType, jdbcType=INTEGER}
+			</if>
+			<if test="sysnum != null">
+				,#{sysnum, jdbcType=VARCHAR}
+			</if>
+			<if test="isSubTable != null">
+				,#{isSubTable, jdbcType=VARCHAR}
+			</if>
+			<if test="topId != null">
+				,#{topId, jdbcType=VARCHAR}
+			</if>
+			<if test="aggregationKey != null">
+				,#{aggregationKey, jdbcType=VARCHAR}
+			</if>
+			<if test="primaryKey != null">
+				,#{primaryKey, jdbcType=VARCHAR}
+			</if>
+			<if test="sortColumn != null">
+				,#{sortColumn, jdbcType=VARCHAR}
+			</if>
+			<if test="sortOrder != null">
+				,#{sortOrder, jdbcType=VARCHAR}
+			</if>
+			<if test="attachmentFlag != null">
+				,#{attachmentFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="attachmentExts != null">
+				,#{attachmentExts, jdbcType=VARCHAR}
+			</if>
+			<if test="attachmentSize != null">
+				,#{attachmentSize, jdbcType=INTEGER}
+			</if>
+			<if test="auditFlag != null">
+				,#{auditFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="privilegeFlag != null">
+				,#{privilegeFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="treeFlag != null">
+				,#{treeFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="temporaryFlag != null">
+				,#{temporaryFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="deleteFetch != null">
+				,#{deleteFetch, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="description != null">
+				,#{description, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="insertCascade != null">
+				,#{insertCascade, jdbcType=INTEGER}
+			</if>
+			<if test="updateCascade != null">
+				,#{updateCascade, jdbcType=INTEGER}
+			</if>
+			<if test="deleteCascade != null">
+				,#{deleteCascade, jdbcType=INTEGER}
+			</if>
+			<if test="sortNo != null">
+				,#{sortNo, jdbcType=INTEGER}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="deleteFlag != null">
+				,#{deleteFlag, jdbcType=INTEGER}
+			</if>
+			<if test="partitionFlag != null">
+				,#{partitionFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="systemFlag != null">
+				,#{systemFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="revision != null">
+				,#{revision, jdbcType=INTEGER}
+			</if>
+			<if test="nodeId != null">
+				,#{nodeId, jdbcType=BIGINT}
+			</if>
+			<if test="reportId != null">
+				,#{reportId, jdbcType=VARCHAR}
+			</if>
+			<if test="formReportId != null">
+				,#{formReportId, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateSysTable" parameterType="com.glaf.matrix.data.domain.SysTable">
+		update SYS_TABLE
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="title != null">
+				TITLE_ = #{title, jdbcType=VARCHAR},
+			</if>
+			<if test="englishTitle != null">
+				ENGLISHTITLE_ = #{englishTitle, jdbcType=VARCHAR},
+			</if>
+			<if test="addType != null">
+				ADDTYPE_ = #{addType, jdbcType=INTEGER},
+			</if>
+			<if test="sysnum != null">
+				SYSNUM_ = #{sysnum, jdbcType=VARCHAR},
+			</if>
+			<if test="sortColumn != null">
+				SORTCOLUMN_ = #{sortColumn, jdbcType=VARCHAR},
+			</if>
+			<if test="sortOrder != null">
+				SORTORDER_ = #{sortOrder, jdbcType=VARCHAR},
+			</if>
+			<if test="isSubTable != null">
+				ISSUBTABLE_ = #{isSubTable, jdbcType=VARCHAR},
+			</if>
+			<if test="topId != null">
+				TOPID_ = #{topId, jdbcType=VARCHAR},
+			</if>
+			<if test="aggregationKey != null">
+				AGGREGATIONKEY_ = #{aggregationKey, jdbcType=VARCHAR},
+			</if>
+			<if test="primaryKey != null">
+				PRIMARYKEY_ = #{primaryKey, jdbcType=VARCHAR},
+			</if>
+			<if test="attachmentFlag != null">
+				ATTACHMENTFLAG_ = #{attachmentFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="attachmentExts != null">
+				ATTACHMENTEXTS_ = #{attachmentExts, jdbcType=VARCHAR},
+			</if>
+			<if test="attachmentSize != null">
+				ATTACHMENTSIZE_ = #{attachmentSize, jdbcType=INTEGER},
+			</if>
+			<if test="auditFlag != null">
+				AUDITFLAG_ = #{auditFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="privilegeFlag != null">
+				PRIVILEGEFLAG_ = #{privilegeFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="treeFlag != null">
+				TREEFLAG_ = #{treeFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="temporaryFlag != null">
+				TEMPORARYFLAG_ = #{temporaryFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="deleteFetch != null">
+				DELETEFETCH_ = #{deleteFetch, jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				DESCRIPTION_ = #{description, jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				TYPE_ = #{type, jdbcType=VARCHAR},
+			</if>
+			<if test="insertCascade != null">
+				INSERTCASCADE_ = #{insertCascade, jdbcType=INTEGER},
+			</if>
+			<if test="updateCascade != null">
+				UPDATECASCADE_ = #{updateCascade, jdbcType=INTEGER},
+			</if>
+			<if test="deleteCascade != null">
+				DELETECASCADE_ = #{deleteCascade, jdbcType=INTEGER},
+			</if>
+			<if test="sortNo != null">
+				SORTNO_ = #{sortNo, jdbcType=INTEGER},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+			<if test="deleteFlag != null">
+				DELETEFLAG_ = #{deleteFlag, jdbcType=INTEGER},
+			</if>
+			<if test="partitionFlag != null">
+				PARTITIONFLAG_ = #{partitionFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="systemFlag != null">
+				SYSTEMFLAG_ = #{systemFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="revision != null">
+				REVISION_ = #{revision, jdbcType=INTEGER},
+			</if>
+			<if test="reportId != null">
+				REPORTID_ = #{reportId, jdbcType=VARCHAR},
+			</if>
+			<if test="formReportId != null">
+				FORMREPORTID_ = #{formReportId, jdbcType=VARCHAR},
+			</if>
+		</trim>
+		where
+		TABLEID_ = #{tableId, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<delete id="deleteSysTableById" parameterType="string">
+		delete from
+		SYS_TABLE
+		where TABLEID_ = #{tableId}
+	</delete>
+
+
+	<select id="getSysTableById" parameterType="string" resultMap="sysTableResultMap">
+		select * from SYS_TABLE
+		where TABLEID_ = #{tableId}
+	</select>
+
+
+	<select id="getSysTableByTableName" parameterType="string"
+		resultMap="sysTableResultMap">
+		select * from SYS_TABLE
+		where TABLENAME_ = #{tableName}
+	</select>
+
+
+	<select id="getSysTables" parameterType="com.glaf.matrix.data.query.SysTableQuery"
+		resultMap="sysTableResultMap">
+		select E.*
+		<include refid="selectSysTablesSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.CREATETIME_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getSysTableCount" parameterType="com.glaf.matrix.data.query.SysTableQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectSysTablesSql" />
+	</select>
+
+
+	<sql id="selectTableCountSql">
+
+		<where>
+			1 = 1
+
+			<if test="nodeId != null and nodeId != 0 ">
+				and E.NODEID_ = #{nodeId}
+			</if>
+
+			<if test="titleLike != null and titleLike != '' ">
+				and E.TITLE_ like #{titleLike}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+			<if test="descriptionLike != null and descriptionLike != '' ">
+				and E.DESCRIPTION_ like #{descriptionLike}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+
+			<if test="systemFlag != null and systemFlag != '' ">
+				and E.SYSTEMFLAG_ = #{systemFlag}
+			</if>
+
+			<if test="revision != null">
+				and E.REVISION_ = #{revision}
+			</if>
+
+		</where>
+	</sql>
+
+	<sql id="selectSysTablesSql">
+
+		from SYS_TABLE E
+
+		<where>
+			1 = 1
+
+			<if test="nodeId != null and nodeId != 0 ">
+				and E.NODEID_ = #{nodeId}
+			</if>
+
+			<if test="titleLike != null and titleLike != '' ">
+				and E.TITLE_ like #{titleLike}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+			<if test="descriptionLike != null and descriptionLike != '' ">
+				and E.DESCRIPTION_ like #{descriptionLike}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+
+			<if test="attachmentFlag != null and attachmentFlag != '' ">
+				and E.ATTACHMENTFLAG_ = #{attachmentFlag}
+			</if>
+
+			<if test="privilegeFlag != null and privilegeFlag != '' ">
+				and E.PRIVILEGEFLAG_ = #{privilegeFlag}
+			</if>
+
+			<if test="systemFlag != null and systemFlag != '' ">
+				and E.SYSTEMFLAG_ = #{systemFlag}
+			</if>
+
+			<if test="revision != null">
+				and E.REVISION_ = #{revision}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.base.modules.sys.mapper.DictoryTreeMapper">
+
+	<resultMap id="dictoryTreeResultMap" type="com.glaf.base.modules.sys.model.DictoryTree">
+		<result property="dictoryTreeId" column="DICTORYTREEID"
+			jdbcType="BIGINT" />
+		<result property="parentId" column="PARENT" jdbcType="BIGINT" />
+		<result property="treeName" column="TREENAME" jdbcType="VARCHAR" />
+		<result property="treeDesc" column="NODEDESC" jdbcType="VARCHAR" />
+		<result property="treeId" column="TREEID" jdbcType="VARCHAR" />
+		<result property="sort" column="TREESORT" jdbcType="INTEGER" />
+		<result property="treeCode" column="CODE" jdbcType="VARCHAR" />
+		<result property="icon" column="icon" jdbcType="VARCHAR" />
+		<result property="iconCls" column="iconCls" jdbcType="VARCHAR" />
+		<result property="url" column="url" jdbcType="VARCHAR" />
+		<result property="id" column="ID" jdbcType="BIGINT" />
+		<result property="nodeId" column="TYPEID" jdbcType="BIGINT" />
+		<result property="name" column="NAME" jdbcType="VARCHAR" />
+		<result property="desc" column="DICTDESC" jdbcType="VARCHAR" />
+		<result property="code" column="CODE" jdbcType="VARCHAR" />
+		<result property="value" column="VALUE_" jdbcType="VARCHAR" />
+		<result property="sort" column="SORTNO" jdbcType="INTEGER" />
+		<result property="locked" column="LOCKED" jdbcType="INTEGER" />
+		<result property="createDate" column="CREATEDATE" jdbcType="TIMESTAMP" />
+		<result property="createBy" column="CREATEBY" jdbcType="VARCHAR" />
+		<result property="updateBy" column="UPDATEBY" jdbcType="VARCHAR" />
+		<result property="updateDate" column="UPDATEDATE" jdbcType="TIMESTAMP" />
+		<result property="ext1" column="EXT1" jdbcType="VARCHAR" />
+		<result property="ext2" column="EXT2" jdbcType="VARCHAR" />
+		<result property="ext3" column="EXT3" jdbcType="VARCHAR" />
+		<result property="ext4" column="EXT4" jdbcType="VARCHAR" />
+		<result property="ext5" column="EXT5" jdbcType="TIMESTAMP" />
+		<result property="ext6" column="EXT6" jdbcType="TIMESTAMP" />
+		<result property="ext7" column="ext7" jdbcType="TIMESTAMP" />
+		<result property="ext8" column="ext8" jdbcType="TIMESTAMP" />
+		<result property="ext9" column="ext9" jdbcType="TIMESTAMP" />
+		<result property="ext10" column="ext10" jdbcType="TIMESTAMP" />
+		<result property="ext11" column="ext11" jdbcType="BIGINT" />
+		<result property="ext12" column="ext12" jdbcType="BIGINT" />
+		<result property="ext13" column="ext13" jdbcType="BIGINT" />
+		<result property="ext14" column="ext14" jdbcType="BIGINT" />
+		<result property="ext15" column="ext15" jdbcType="BIGINT" />
+		<result property="ext16" column="ext16" jdbcType="DOUBLE" />
+		<result property="ext17" column="ext17" jdbcType="DOUBLE" />
+		<result property="ext18" column="ext18" jdbcType="DOUBLE" />
+		<result property="ext19" column="ext19" jdbcType="DOUBLE" />
+		<result property="ext20" column="ext20" jdbcType="DOUBLE" />
+		<result property="category" column="category" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="getDictoryTreesByDictoryTreeId" parameterType="long"
+		resultMap="dictoryTreeResultMap">
+		select a.id as DICTORYTREEID,a.code as TREECODE,a.name as
+		TREENAME,a.PARENT,a.TREEID,a.SORTNO as TREESORT,a.icon,a.
+		iconCls,a.url,a.locked,b.* from SYS_TREE a LEFT JOIN SYS_DICTORY b on
+		a.ID=b.TYPEID WHERE TREEID like (SELECT TREEID FROM SYS_TREE WHERE
+		id=#{dictoryTreeId})+'%'
+		and a.ID!=#{dictoryTreeId}
+	</select>
+
+
+	<select id="getDictoryTreesByTreeCode" parameterType="map"
+		resultMap="dictoryTreeResultMap">
+		select a.id as DICTORYTREEID,a.code as TREECODE,a.name as
+		TREENAME,a.PARENT,a.TREEID,a.SORTNO as TREESORT,a.icon,a.
+		iconCls,a.url,a.locked,b.* from SYS_TREE a LEFT JOIN SYS_DICTORY b on
+		a.ID=b.TYPEID
+		<if test="category != null and category=='back'">
+			and b.category like '1%'
+		</if>
+		<if test="category != null and category=='db'">
+			and b.category like '_1%'
+		</if>
+		<if test="category != null and category=='front'">
+			and b.category like '__1%'
+		</if>
+		WHERE TREEID like (SELECT TREEID FROM SYS_TREE WHERE
+		code=#{treeCode})+'%'
+		and a.code!=#{treeCode}
+	</select>
+
+</mapper>

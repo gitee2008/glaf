@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.category.mapper.CategoryViewMapper">
+
+	<resultMap id="categoryViewResultMap" type="com.glaf.matrix.category.domain.CategoryView">
+		<id property="uid" column="_UID_" jdbcType="VARCHAR" />
+		<result property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="parentId" column="PARENTID_" jdbcType="BIGINT" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="code" column="CODE_" jdbcType="VARCHAR" />
+		<result property="description" column="DESC_" jdbcType="VARCHAR" />
+		<result property="discriminator" column="DISCRIMINATOR_"
+			jdbcType="VARCHAR" />
+		<result property="icon" column="ICON_" jdbcType="VARCHAR" />
+		<result property="iconCls" column="ICONCLS_" jdbcType="VARCHAR" />
+		<result property="level" column="LEVEL_" jdbcType="INTEGER" />
+		<result property="treeId" column="TREEID_" jdbcType="VARCHAR" />
+		<result property="title" column="TITLE_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="sort" column="SORTNO_" jdbcType="INTEGER" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="url" column="URL_" jdbcType="VARCHAR" />
+		<result property="userId" column="USERID_" jdbcType="VARCHAR" />
+		<result property="userName" column="USERNAME_" jdbcType="VARCHAR" />
+		<result property="orgName" column="ORGNAME_" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<insert id="insertCategoryView" parameterType="com.glaf.matrix.category.domain.CategoryView">
+		insert into SYS_CATEGORY_VIEW
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			_UID_
+			<if test="id != null">
+				,ID_
+			</if>
+			<if test="parentId != null">
+				,PARENTID_
+			</if>
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="code != null">
+				,CODE_
+			</if>
+			<if test="description != null">
+				,DESC_
+			</if>
+			<if test="discriminator != null">
+				,DISCRIMINATOR_
+			</if>
+			<if test="icon != null">
+				,ICON_
+			</if>
+			<if test="iconCls != null">
+				,ICONCLS_
+			</if>
+			<if test="level != null">
+				,LEVEL_
+			</if>
+			<if test="treeId != null">
+				,TREEID_
+			</if>
+			<if test="title != null">
+				,TITLE_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="sort != null">
+				,SORTNO_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="url != null">
+				,URL_
+			</if>
+			<if test="userId != null">
+				,USERID_
+			</if>
+			<if test="userName != null">
+				,USERNAME_
+			</if>
+			<if test="orgName != null">
+				,ORGNAME_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{uid, jdbcType=VARCHAR}
+
+			<if test="id != null">
+				,#{id, jdbcType=BIGINT}
+			</if>
+			<if test="parentId != null">
+				,#{parentId, jdbcType=BIGINT}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="code != null">
+				,#{code, jdbcType=VARCHAR}
+			</if>
+			<if test="description != null">
+				,#{description, jdbcType=VARCHAR}
+			</if>
+			<if test="discriminator != null">
+				,#{discriminator, jdbcType=VARCHAR}
+			</if>
+			<if test="icon != null">
+				,#{icon, jdbcType=VARCHAR}
+			</if>
+			<if test="iconCls != null">
+				,#{iconCls, jdbcType=VARCHAR}
+			</if>
+			<if test="level != null">
+				,#{level, jdbcType=INTEGER}
+			</if>
+			<if test="treeId != null">
+				,#{treeId, jdbcType=VARCHAR}
+			</if>
+			<if test="title != null">
+				,#{title, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="sort != null">
+				,#{sort, jdbcType=INTEGER}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="url != null">
+				,#{url, jdbcType=VARCHAR}
+			</if>
+			<if test="userId != null">
+				,#{userId, jdbcType=VARCHAR}
+			</if>
+			<if test="userName != null">
+				,#{userName, jdbcType=VARCHAR}
+			</if>
+			<if test="orgName != null">
+				,#{orgName, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<delete id="deleteCategoryViewByUserId" parameterType="string">
+		delete from
+		SYS_CATEGORY_VIEW
+		where USERID_ = #{userId}
+	</delete>
+
+
+</mapper>

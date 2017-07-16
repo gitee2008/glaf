@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.category.mapper.CategoryAccessMapper">
+
+	<resultMap id="categoryAccessResultMap" type="com.glaf.matrix.category.domain.CategoryAccess">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="categoryId" column="PROJECTID_" jdbcType="BIGINT" />
+		<result property="actorId" column="ACTORID_" jdbcType="VARCHAR" />
+		<result property="dynamic" column="DYNAMIC_" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<insert id="insertCategoryAccess" parameterType="com.glaf.matrix.category.domain.CategoryAccess">
+
+		insert into
+		SYS_CATEGORY_ACCESS ( ID_, PROJECTID_, ACTORID_, DYNAMIC_ )
+		values
+		(#{id,jdbcType=BIGINT},
+		#{categoryId, jdbcType=BIGINT},
+		#{actorId,jdbcType=VARCHAR},
+		#{dynamic,jdbcType=VARCHAR}
+		)
+
+	</insert>
+
+
+	<delete id="deleteAccessor" parameterType="com.glaf.matrix.category.domain.CategoryAccess">
+		delete from
+		SYS_CATEGORY_ACCESS
+		where PROJECTID_ = #{categoryId}
+		and ACTORID_ =
+		#{actorId}
+	</delete>
+
+
+	<delete id="deleteCategoryAccessByCategoryId" parameterType="long">
+		delete from SYS_CATEGORY_ACCESS
+		where PROJECTID_ = #{categoryId}
+	</delete>
+
+
+	<delete id="deleteCategoryAccessByActorId" parameterType="string">
+		delete
+		from SYS_CATEGORY_ACCESS
+		where ACTORID_ = #{actorId}
+	</delete>
+
+
+	<select id="getCategoryAccessesByCategoryId" parameterType="long"
+		resultMap="categoryAccessResultMap">
+		select * from SYS_CATEGORY_ACCESS
+		where PROJECTID_ =
+		#{categoryId}
+	</select>
+
+
+	<select id="getCategoryAccessesByActorId" parameterType="string"
+		resultMap="categoryAccessResultMap">
+		select *
+		from SYS_CATEGORY_ACCESS
+		where ACTORID_ = #{actorId}
+	</select>
+
+
+	<select id="getAllCategoryAccesses" resultMap="categoryAccessResultMap">
+		select *
+		from
+		SYS_CATEGORY_ACCESS
+	</select>
+
+</mapper>

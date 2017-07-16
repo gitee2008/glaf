@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.ui.mapper.PanelPermissionMapper">
+
+	<resultMap id="panelPermissionResultMap" type="com.glaf.ui.model.PanelPermission">
+		<id property="id" column="ID_" jdbcType="VARCHAR" />
+		<result property="panelId" column="PANELID_" jdbcType="VARCHAR" />
+		<result property="actorId" column="ACTORID_" jdbcType="VARCHAR" />
+		<result property="roleId" column="ROLEID_" jdbcType="VARCHAR" />
+		<result property="createDate" column="CREATEDATE_" jdbcType="TIMESTAMP" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<insert id="insertPanelPermission" parameterType="com.glaf.ui.model.PanelPermission">
+		insert into UI_PANEL_PERM
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="panelId != null">
+				,PANELID_
+			</if>
+			<if test="actorId != null">
+				,ACTORID_
+			</if>
+			<if test="roleId != null">
+				,ROLEID_
+			</if>
+			<if test="createDate != null">
+				,CREATEDATE_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR}
+
+			<if test="panelId != null">
+				,#{panelId, jdbcType=VARCHAR}
+			</if>
+			<if test="actorId != null">
+				,#{actorId, jdbcType=VARCHAR}
+			</if>
+			<if test="roleId != null">
+				,#{roleId, jdbcType=VARCHAR}
+			</if>
+			<if test="createDate != null">
+				,#{createDate, jdbcType=TIMESTAMP}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</insert>
+
+
+	<delete id="deletePanelPermissionById" parameterType="string">
+		delete from
+		UI_PANEL_PERM
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deletePanelPermissionsByPanelId" parameterType="string">
+		delete from UI_PANEL_PERM
+		where PANELID_ = #{panelId}
+	</delete>
+
+
+	<select id="getPanelPermissionById" parameterType="string"
+		resultMap="panelPermissionResultMap">
+		select * from UI_PANEL_PERM where ID_ = #{id}
+	</select>
+
+
+	<select id="getPanelPermissionByPanelId" parameterType="string"
+		resultMap="panelPermissionResultMap">
+		select * from UI_PANEL_PERM where PANELID_ = #{panelId}
+	</select>
+
+
+	<select id="getPanelPermissions" parameterType="com.glaf.ui.query.PanelPermissionQuery"
+		resultMap="panelPermissionResultMap">
+		select distinct E.*
+		<include refid="selectPanelPermissionsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getPanelPermissionCount" parameterType="com.glaf.ui.query.PanelPermissionQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectPanelPermissionsSql" />
+	</select>
+
+
+	<sql id="selectPanelPermissionsSql">
+
+		from UI_PANEL_PERM E
+
+		<where>
+			1 = 1
+
+			<if test="actorId != null and actorId != '' ">
+				and E.ACTORID_ = #{actorId}
+			</if>
+
+			<if test="actorIds != null and actorIds.size() &gt; 0">
+				and E.ACTORID_ IN
+				<foreach item="x_actorId" index="index" collection="actorIds"
+					open="(" separator="," close=")">
+					#{x_actorId}
+				</foreach>
+			</if>
+
+			<if test="roleId != null and roleId != '' ">
+				and E.ROLEID_ = #{roleId}
+			</if>
+
+			<if test="roleIds != null and roleIds.size() &gt; 0">
+				and E.ROLEID_ IN
+				<foreach item="x_roleId" index="index" collection="roleIds"
+					open="(" separator="," close=")">
+					#{x_roleId}
+				</foreach>
+			</if>
+
+			<if test="panelId != null and panelId != '' ">
+				and E.PANELID_ = #{panelId}
+			</if>
+
+			<if test="createDateGreaterThanOrEqual != null">
+				and E.CREATEDATE_ &gt;= #{createDateGreaterThanOrEqual}
+			</if>
+
+			<if test="createDateLessThanOrEqual != null">
+				and E.CREATEDATE_ &lt;= #{createDateLessThanOrEqual}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.base.modules.sys.mapper.TreePermissionMapper">
+
+	<resultMap id="treePermissionResultMap"
+		type="com.glaf.base.modules.sys.model.TreePermission">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="nodeId" column="NODEID_" jdbcType="BIGINT" />
+		<result property="privilege" column="PRIVILEGE_" jdbcType="VARCHAR" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="userId" column="USERID_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertTreePermission" parameterType="com.glaf.base.modules.sys.model.TreePermission">
+		insert into SYS_TREE_PERMISSION
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="nodeId != null">
+				,NODEID_
+			</if>
+			<if test="privilege != null">
+				,PRIVILEGE_
+			</if>
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="userId != null">
+				,USERID_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="nodeId != null">
+				,#{nodeId, jdbcType=BIGINT}
+			</if>
+			<if test="privilege != null">
+				,#{privilege, jdbcType=VARCHAR}
+			</if>
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="userId != null">
+				,#{userId, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertTreePermission" parameterType="java.util.List">
+		insert into SYS_TREE_PERMISSION (
+		ID_
+		,NODEID_
+		,PRIVILEGE_
+		,TENANTID_
+		,USERID_
+		,CREATEBY_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="treePermission" index="index"
+			separator=",">
+			(
+			#{treePermission.id, jdbcType=BIGINT}
+			,#{treePermission.nodeId, jdbcType=BIGINT}
+			,#{treePermission.privilege, jdbcType=VARCHAR}
+			,#{treePermission.tenantId, jdbcType=VARCHAR}
+			,#{treePermission.userId, jdbcType=VARCHAR}
+			,#{treePermission.createBy, jdbcType=VARCHAR}
+			,#{treePermission.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertTreePermission_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="treePermission" index="index">
+			insert
+			into SYS_TREE_PERMISSION (
+			ID_
+			,NODEID_
+			,PRIVILEGE_
+			,TENANTID_
+			,USERID_
+			,CREATEBY_
+			,CREATETIME_
+			) values (
+			#{treePermission.id, jdbcType=BIGINT}
+			,#{treePermission.nodeId, jdbcType=BIGINT}
+			,#{treePermission.privilege, jdbcType=VARCHAR}
+			,#{treePermission.tenantId, jdbcType=VARCHAR}
+			,#{treePermission.userId, jdbcType=VARCHAR}
+			,#{treePermission.createBy, jdbcType=VARCHAR}
+			,#{treePermission.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+
+	<delete id="deleteTreePermissionById" parameterType="long">
+		delete from
+		SYS_TREE_PERMISSION
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deleteTreePermissions" parameterType="com.glaf.base.modules.sys.query.TreePermissionQuery">
+		delete from SYS_TREE_PERMISSION
+		where (
+		ID_ IN
+		<foreach item="x_id" index="index" collection="ids" open="("
+			separator="," close=")">
+			#{x_id}
+		</foreach>
+		)
+	</delete>
+
+
+	<select id="getTreePermissionById" parameterType="long"
+		resultMap="treePermissionResultMap">
+		select * from SYS_TREE_PERMISSION where ID_ = #{id}
+	</select>
+
+
+	<select id="getTreePermissions" parameterType="com.glaf.base.modules.sys.query.TreePermissionQuery"
+		resultMap="treePermissionResultMap">
+		select distinct E.*
+		<include refid="selectTreePermissionsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getTreePermissionCount" parameterType="com.glaf.base.modules.sys.query.TreePermissionQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectTreePermissionsSql" />
+	</select>
+
+
+	<sql id="selectTreePermissionsSql">
+
+		from SYS_TREE_PERMISSION E
+
+		<where>
+			1 = 1
+
+			<if test="nodeId != null">
+				and E.NODEID_ = #{nodeId}
+			</if>
+
+			<if test="nodeIds != null and nodeIds.size() &gt; 0">
+				and E.NODEID_ IN
+				<foreach item="x_nodeId" index="index" collection="nodeIds"
+					open="(" separator="," close=")">
+					#{x_nodeId}
+				</foreach>
+			</if>
+
+			<if test="privilege != null and privilege != '' ">
+				and E.PRIVILEGE_ = #{privilege}
+			</if>
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="tenantIds != null and tenantIds.size() &gt; 0">
+				and E.TENANTID_ IN
+				<foreach item="x_tenantId" index="index" collection="tenantIds"
+					open="(" separator="," close=")">
+					#{x_tenantId}
+				</foreach>
+			</if>
+
+			<if test="userId != null and userId != '' ">
+				and E.USERID_ = #{userId}
+			</if>
+
+			<if test="userIds != null and userIds.size() &gt; 0">
+				and E.USERID_ IN
+				<foreach item="x_userId" index="index" collection="userIds"
+					open="(" separator="," close=")">
+					#{x_userId}
+				</foreach>
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

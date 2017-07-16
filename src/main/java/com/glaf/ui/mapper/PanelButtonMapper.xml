@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.ui.mapper.PanelButtonMapper">
+
+ 	<resultMap id="panelButtonResultMap"	type="com.glaf.ui.model.PanelButton">
+        <id property="id" column="ID_" jdbcType="VARCHAR"/>
+        <result property="pid" column="PID_" jdbcType="INTEGER"/>
+        <result property="openType" column="OPENTYPE_" jdbcType="INTEGER"/>
+        <result property="imgUrl" column="IMGURL_" jdbcType="VARCHAR"/>
+        <result property="href" column="HREF_" jdbcType="VARCHAR"/>
+        <result property="script" column="SCRIPT_" jdbcType="VARCHAR"/>
+	</resultMap>
+
+ 
+	<insert id="insertPanelButton" parameterType="com.glaf.ui.model.PanelButton">
+		insert into UI_PANEL_BUTTON 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		    ID_
+			<if test="pid != null">
+				,PID_ 
+			</if>
+			<if test="openType != null">
+				,OPENTYPE_ 
+			</if>
+			<if test="imgUrl != null">
+				,IMGURL_ 
+			</if>
+			<if test="href != null">
+				,HREF_ 
+			</if>
+			<if test="script != null">
+				,SCRIPT_ 
+			</if>
+        </trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			  #{id, jdbcType=VARCHAR}
+	     
+			<if test="pid != null">
+				,#{pid, jdbcType=INTEGER}
+			</if>
+			<if test="openType != null">
+				,#{openType, jdbcType=INTEGER}
+			</if>
+			<if test="imgUrl != null">
+				,#{imgUrl, jdbcType=VARCHAR}
+			</if>
+			<if test="href != null">
+				,#{href, jdbcType=VARCHAR}
+			</if>
+			<if test="script != null">
+				,#{script, jdbcType=VARCHAR}
+			</if>
+	    </trim>
+    </insert>
+
+	 
+	<update id="updatePanelButton" parameterType="com.glaf.ui.model.PanelButton">
+		update UI_PANEL_BUTTON
+		set
+        <trim prefix="" suffix="" suffixOverrides=",">		
+			<if test="pid != null">
+				PID_ = #{pid, jdbcType=INTEGER},
+			</if>
+			<if test="openType != null">
+				OPENTYPE_ = #{openType, jdbcType=INTEGER},
+			</if>
+			<if test="imgUrl != null">
+				IMGURL_ = #{imgUrl, jdbcType=VARCHAR},
+			</if>
+			<if test="href != null">
+				HREF_ = #{href, jdbcType=VARCHAR},
+			</if>
+			<if test="script != null">
+				SCRIPT_ = #{script, jdbcType=VARCHAR},
+			</if>
+        </trim>
+		where
+          ID_ = #{id, jdbcType=VARCHAR}
+		
+    </update>
+
+ 
+	<delete id="deletePanelButtonById" parameterType="string"> 
+        delete from UI_PANEL_BUTTON
+        where ID_ =	#{id}
+	</delete>
+
+	
+	<delete id="deletePanelButtons" parameterType="com.glaf.ui.query.PanelButtonQuery">
+		delete from UI_PANEL_BUTTON
+		where ( 
+ 			  ID_ IN
+              <foreach item="x_id" index="index" collection="ids" 
+                     open="(" separator="," close=")">
+                  #{x_id}
+              </foreach>
+		)
+	</delete>
+
+
+	<select id="getPanelButtonById" parameterType="string" resultMap="panelButtonResultMap">
+		select * from UI_PANEL_BUTTON where ID_ = #{id}
+	</select>
+
+	<select id="getPanelButtonByParentId" parameterType="string" resultMap="panelButtonResultMap">
+		select * from UI_PANEL_BUTTON where PID_ = #{pid}
+	</select>
+
+	<select id="getPanelButtons" 
+	    parameterType="com.glaf.ui.query.PanelButtonQuery"
+		resultMap="panelButtonResultMap">
+		select distinct E.*
+		<include refid="selectPanelButtonsSql" />
+		<choose>
+		  <when test="orderBy != null">
+		     order by ${orderBy}
+          </when>
+		  <otherwise>
+		      order by E.ID_ desc
+		  </otherwise>
+        </choose>
+	</select>
+
+
+	<select id="getPanelButtonCount" 
+	    parameterType="com.glaf.ui.query.PanelButtonQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectPanelButtonsSql" />
+	</select>
+
+
+	<sql id="selectPanelButtonsSql">
+
+		from UI_PANEL_BUTTON E
+		
+		<where>
+		       1 = 1  
+			 
+
+			<if test="pid != null">
+				and E.PID_ = #{pid}
+            </if>
+
+			<if test="pidGreaterThanOrEqual != null">
+				and E.PID_ &gt;= #{pidGreaterThanOrEqual}
+            </if>
+
+			<if test="pidLessThanOrEqual != null">
+				and E.PID_ &lt;= #{pidLessThanOrEqual}
+            </if>
+
+			<if test="pids != null and pids.size() &gt; 0">
+			    and E.PID_ IN
+                <foreach item="x_pid" index="index" collection="pids" 
+                     open="(" separator="," close=")">
+                  #{x_pid}
+                </foreach>
+			</if>
+      
+
+			<if test="openType != null">
+				and E.OPENTYPE_ = #{openType}
+            </if>
+
+			<if test="openTypeGreaterThanOrEqual != null">
+				and E.OPENTYPE_ &gt;= #{openTypeGreaterThanOrEqual}
+            </if>
+
+			<if test="openTypeLessThanOrEqual != null">
+				and E.OPENTYPE_ &lt;= #{openTypeLessThanOrEqual}
+            </if>
+
+			<if test="openTypes != null and openTypes.size() &gt; 0">
+			    and E.OPENTYPE_ IN
+                <foreach item="x_openType" index="index" collection="openTypes" 
+                     open="(" separator="," close=")">
+                  #{x_openType}
+                </foreach>
+			</if>
+      
+	        
+			<if test="imgUrl != null and imgUrl != '' ">
+				and E.IMGURL_ = #{imgUrl}
+            </if>
+
+			<if test="imgUrlLike != null and imgUrlLike != '' ">
+				and E.IMGURL_ like #{imgUrlLike}
+            </if>
+
+			<if test="imgUrls != null and imgUrls.size() &gt; 0">
+			    and E.IMGURL_ IN
+                <foreach item="x_imgUrl" index="index" collection="imgUrls" 
+                     open="(" separator="," close=")">
+                  #{x_imgUrl}
+                </foreach>
+			</if>
+	        
+			<if test="href != null and href != '' ">
+				and E.HREF_ = #{href}
+            </if>
+
+			<if test="hrefLike != null and hrefLike != '' ">
+				and E.HREF_ like #{hrefLike}
+            </if>
+
+			<if test="hrefs != null and hrefs.size() &gt; 0">
+			    and E.HREF_ IN
+                <foreach item="x_href" index="index" collection="hrefs" 
+                     open="(" separator="," close=")">
+                  #{x_href}
+                </foreach>
+			</if>
+	        
+			<if test="script != null and script != '' ">
+				and E.SCRIPT_ = #{script}
+            </if>
+
+			<if test="scriptLike != null and scriptLike != '' ">
+				and E.SCRIPT_ like #{scriptLike}
+            </if>
+
+			<if test="scripts != null and scripts.size() &gt; 0">
+			    and E.SCRIPT_ IN
+                <foreach item="x_script" index="index" collection="scripts" 
+                     open="(" separator="," close=")">
+                  #{x_script}
+                </foreach>
+			</if>
+            <if test="dataRequest != null and dataRequest.filter != null ">
+			    <include refid="com.glaf.global.GlobalMapper.dataRequestFilterCondition" />
+			</if>
+			 
+		</where>
+	</sql>
+
+</mapper>

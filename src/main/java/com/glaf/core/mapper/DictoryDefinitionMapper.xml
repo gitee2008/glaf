@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.core.mapper.DictoryDefinitionMapper">
+
+	<resultMap id="dictoryDefinitionResultMap" type="com.glaf.core.domain.DictoryDefinition">
+		<id property="id" column="ID" jdbcType="BIGINT" />
+		<result property="nodeId" column="NODEID" jdbcType="BIGINT" />
+		<result property="name" column="NAME" jdbcType="VARCHAR" />
+		<result property="columnName" column="COLUMNNAME" jdbcType="VARCHAR" />
+		<result property="title" column="TITLE" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE" jdbcType="VARCHAR" />
+		<result property="length" column="LENGTH" jdbcType="INTEGER" />
+		<result property="sort" column="SORTNO" jdbcType="INTEGER" />
+		<result property="required" column="REQUIRED" jdbcType="INTEGER" />
+		<result property="target" column="TARGET" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<insert id="insertDictoryDefinition" parameterType="com.glaf.core.domain.DictoryDefinition">
+		insert into SYS_DICTORY_DEF
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID
+			<if test="nodeId != null">
+				,NODEID
+			</if>
+			<if test="name != null">
+				,NAME
+			</if>
+			<if test="columnName != null">
+				,COLUMNNAME
+			</if>
+			<if test="title != null">
+				,TITLE
+			</if>
+			<if test="type != null">
+				,TYPE
+			</if>
+			<if test="length != null">
+				,LENGTH
+			</if>
+			<if test="sort != null">
+				,SORTNO
+			</if>
+			<if test="required != null">
+				,REQUIRED
+			</if>
+			<if test="target != null">
+				,TARGET
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="nodeId != null">
+				,#{nodeId, jdbcType=BIGINT}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="columnName != null">
+				,#{columnName, jdbcType=VARCHAR}
+			</if>
+			<if test="title != null">
+				,#{title, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="length != null">
+				,#{length, jdbcType=INTEGER}
+			</if>
+			<if test="sort != null">
+				,#{sort, jdbcType=INTEGER}
+			</if>
+			<if test="required != null">
+				,#{required, jdbcType=INTEGER}
+			</if>
+			<if test="target != null">
+				,#{target, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateDictoryDefinition" parameterType="com.glaf.core.domain.DictoryDefinition">
+		update SYS_DICTORY_DEF
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="nodeId != null">
+				NODEID = #{nodeId, jdbcType=BIGINT},
+			</if>
+			<if test="name != null">
+				NAME = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="columnName != null">
+				COLUMNNAME = #{columnName, jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				TITLE = #{title, jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				TYPE = #{type, jdbcType=VARCHAR},
+			</if>
+			<if test="length != null">
+				LENGTH = #{length, jdbcType=INTEGER},
+			</if>
+			<if test="sort != null">
+				SORTNO = #{sort, jdbcType=INTEGER},
+			</if>
+			<if test="required != null">
+				REQUIRED = #{required, jdbcType=INTEGER},
+			</if>
+			<if test="target != null">
+				TARGET = #{target, jdbcType=VARCHAR},
+			</if>
+		</trim>
+		where
+		ID = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteDictoryDefinitionById" parameterType="long">
+		delete
+		from SYS_DICTORY_DEF
+		where ID = #{id}
+	</delete>
+
+
+	<select id="getDictoryDefinitionById" parameterType="long"
+		resultMap="dictoryDefinitionResultMap">
+		select * from SYS_DICTORY_DEF where ID = #{id}
+	</select>
+
+
+	<select id="getDictoryDefinitions" parameterType="com.glaf.core.query.DictoryDefinitionQuery"
+		resultMap="dictoryDefinitionResultMap">
+		select E.*
+		<include refid="selectDictoryDefinitionsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getDictoryDefinitionCount" parameterType="com.glaf.core.query.DictoryDefinitionQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectDictoryDefinitionsSql" />
+	</select>
+
+
+	<sql id="selectDictoryDefinitionsSql">
+
+		from SYS_DICTORY_DEF E
+
+		<where>
+			1 = 1
+
+			<if test="nodeId != null">
+				and E.NODEID = #{nodeId}
+			</if>
+
+			<if test="nodeIds != null and nodeIds.size != 0">
+				and E.NODEID IN
+				<foreach item="x_nodeId" index="index" collection="nodeIds"
+					open="(" separator="," close=")">
+					#{x_nodeId}
+				</foreach>
+			</if>
+
+			<if test="name != null and name != '' ">
+				and E.NAME = #{name}
+			</if>
+
+			<if test="nameLike != null and nameLike != '' ">
+				and E.NAME like #{nameLike}
+			</if>
+
+			<if test="columnName != null and columnName != '' ">
+				and E.COLUMNNAME = #{columnName}
+			</if>
+
+			<if test="columnNameLike != null and columnNameLike != '' ">
+				and E.COLUMNNAME like #{columnNameLike}
+			</if>
+
+			<if test="titleLike != null and titleLike != '' ">
+				and E.TITLE like #{titleLike}
+			</if>
+
+			<if test="target != null and target != '' ">
+				and E.TARGET = #{target}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.core.mapper.SysDataLogMapper">
+
+	<resultMap id="dataLogResultMap" type="com.glaf.core.domain.SysDataLog">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="actorId" column="ACTORID_" jdbcType="VARCHAR" />
+		<result property="serviceKey" column="SERVICEKEY_" jdbcType="VARCHAR" />
+		<result property="businessKey" column="BUSINESSKEY_" jdbcType="VARCHAR" />
+		<result property="ip" column="IP_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="moduleId" column="MODULEID_" jdbcType="VARCHAR" />
+		<result property="operate" column="OPERATE_" jdbcType="VARCHAR" />
+		<result property="content" column="CONTENT_" jdbcType="VARCHAR" />
+		<result property="flag" column="FLAG_" jdbcType="INTEGER" />
+		<result property="timeMS" column="TIMEMS_" jdbcType="INTEGER" />
+	</resultMap>
+
+
+	<insert id="insertSysDataLog" parameterType="com.glaf.core.domain.SysDataLog">
+		insert into LOG${suffix}
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="actorId != null">
+				,ACTORID_
+			</if>
+			<if test="serviceKey != null">
+				,SERVICEKEY_
+			</if>
+			<if test="businessKey != null">
+				,BUSINESSKEY_
+			</if>
+			<if test="ip != null">
+				,IP_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+			<if test="moduleId != null">
+				,MODULEID_
+			</if>
+			<if test="operate != null">
+				,OPERATE_
+			</if>
+			<if test="content != null">
+				,CONTENT_
+			</if>
+			<if test="flag != null">
+				,FLAG_
+			</if>
+			<if test="timeMS != null">
+				,TIMEMS_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+			<if test="actorId != null">
+				,#{actorId, jdbcType=VARCHAR}
+			</if>
+			<if test="serviceKey != null">
+				,#{serviceKey, jdbcType=VARCHAR}
+			</if>
+			<if test="businessKey != null">
+				,#{businessKey, jdbcType=VARCHAR}
+			</if>
+			<if test="ip != null">
+				,#{ip, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="moduleId != null">
+				,#{moduleId, jdbcType=VARCHAR}
+			</if>
+			<if test="operate != null">
+				,#{operate, jdbcType=VARCHAR}
+			</if>
+			<if test="content != null">
+				,#{content, jdbcType=VARCHAR}
+			</if>
+			<if test="flag != null">
+				,#{flag, jdbcType=INTEGER}
+			</if>
+			<if test="timeMS != null">
+				,#{timeMS, jdbcType=INTEGER}
+			</if>
+		</trim>
+	</insert>
+
+
+	<delete id="deleteSysDataLog" parameterType="com.glaf.core.domain.SysDataLog">
+
+		delete from
+		LOG${suffix}
+		where ID_ = #{id}
+
+	</delete>
+
+
+	<delete id="deleteSysDataLogs" parameterType="com.glaf.core.query.SysDataLogQuery">
+		delete from LOG${suffix}
+		where (
+		ID_ IN
+		<foreach item="x_rowId" index="index" collection="rowIds"
+			open="(" separator="," close=")">
+			#{x_rowId}
+		</foreach>
+		)
+	</delete>
+
+
+	<select id="getSysDataLogById" parameterType="long" resultMap="dataLogResultMap">
+
+		select * from LOG${suffix} where ID_ = #{id}
+
+	</select>
+
+
+	<select id="getSysDataLogs" parameterType="com.glaf.core.query.SysDataLogQuery"
+		resultMap="dataLogResultMap">
+		select E.*
+		<include refid="selectSysDataLogsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.CREATETIME_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getSysDataLogCount" parameterType="com.glaf.core.query.SysDataLogQuery"
+		resultType="int">
+		select count(E.ID_)
+		<include refid="selectSysDataLogsSql" />
+	</select>
+
+
+	<sql id="selectSysDataLogsSql">
+
+		from LOG${suffix} E
+
+		<where>
+			1 = 1
+
+			<if test="actorId != null and actorId != '' ">
+				and E.ACTORID_ = #{actorId}
+			</if>
+
+			<if test="actorIds != null and actorIds.size !=0">
+				and E.ACTORID_ IN
+				<foreach item="x_actorId" index="index" collection="actorIds"
+					open="(" separator="," close=")">
+					#{x_actorId}
+				</foreach>
+			</if>
+
+			<if test="serviceKey != null and serviceKey != '' ">
+				and E.SERVICEKEY_ = #{serviceKey}
+			</if>
+
+			<if test="businessKey != null and businessKey != '' ">
+				and E.BUSINESSKEY_ = #{businessKey}
+			</if>
+
+			<if test="ip != null and ip != '' ">
+				and E.IP_ = #{ip}
+			</if>
+
+			<if test="ipLike != null and ipLike != '' ">
+				and E.IP_ like #{ipLike}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+			<if test="moduleId != null and moduleId != '' ">
+				and E.MODULEID_ = #{moduleId}
+			</if>
+
+			<if test="operate != null and operate != '' ">
+				and E.OPERATE_ = #{operate}
+			</if>
+
+			<if test="flag != null">
+				and E.FLAG_ = #{flag}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

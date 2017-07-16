@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.data.mapper.TableCorrelationMapper">
+
+	<resultMap id="tableCorrelationResultMap" type="com.glaf.matrix.data.domain.TableCorrelation">
+		<id property="id" column="ID_" jdbcType="VARCHAR" />
+		<result property="masterTableId" column="MASTERTABLEID_"
+			jdbcType="VARCHAR" />
+		<result property="masterTableName" column="MASTERTABLENAME_"
+			jdbcType="VARCHAR" />
+		<result property="slaveTableId" column="SLAVETABLEID_"
+			jdbcType="VARCHAR" />
+		<result property="slaveTableName" column="SLAVETABLENAME_"
+			jdbcType="VARCHAR" />
+		<result property="insertCascade" column="INSERTCASCADE_"
+			jdbcType="VARCHAR" />
+		<result property="deleteCascade" column="DELETECASCADE_"
+			jdbcType="VARCHAR" />
+		<result property="updateCascade" column="UPDATECASCADE_"
+			jdbcType="VARCHAR" />
+		<result property="relationshipType" column="RELATIONSHIPTYPE_"
+			jdbcType="VARCHAR" />
+		<result property="sortNo" column="SORTNO_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY_" jdbcType="VARCHAR" />
+		<result property="updateTime" column="UPDATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertTableCorrelation" parameterType="com.glaf.matrix.data.domain.TableCorrelation">
+		insert into SYS_TABLE_CORRELATION
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="masterTableId != null">
+				,MASTERTABLEID_
+			</if>
+			<if test="masterTableName != null">
+				,MASTERTABLENAME_
+			</if>
+			<if test="slaveTableId != null">
+				,SLAVETABLEID_
+			</if>
+			<if test="slaveTableName != null">
+				,SLAVETABLENAME_
+			</if>
+			<if test="insertCascade != null">
+				,INSERTCASCADE_
+			</if>
+			<if test="deleteCascade != null">
+				,DELETECASCADE_
+			</if>
+			<if test="updateCascade != null">
+				,UPDATECASCADE_
+			</if>
+			<if test="relationshipType != null">
+				,RELATIONSHIPTYPE_
+			</if>
+			<if test="sortNo != null">
+				,SORTNO_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+			<if test="updateBy != null">
+				,UPDATEBY_
+			</if>
+			<if test="updateTime != null">
+				,UPDATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR}
+
+			<if test="masterTableId != null">
+				,#{masterTableId, jdbcType=VARCHAR}
+			</if>
+			<if test="masterTableName != null">
+				,#{masterTableName, jdbcType=VARCHAR}
+			</if>
+			<if test="slaveTableId != null">
+				,#{slaveTableId, jdbcType=VARCHAR}
+			</if>
+			<if test="slaveTableName != null">
+				,#{slaveTableName, jdbcType=VARCHAR}
+			</if>
+			<if test="insertCascade != null">
+				,#{insertCascade, jdbcType=VARCHAR}
+			</if>
+			<if test="deleteCascade != null">
+				,#{deleteCascade, jdbcType=VARCHAR}
+			</if>
+			<if test="updateCascade != null">
+				,#{updateCascade, jdbcType=VARCHAR}
+			</if>
+			<if test="relationshipType != null">
+				,#{relationshipType, jdbcType=VARCHAR}
+			</if>
+			<if test="sortNo != null">
+				,#{sortNo, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy != null">
+				,#{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				,#{updateTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertTableCorrelation" parameterType="java.util.List">
+		insert into SYS_TABLE_CORRELATION (
+		ID_
+		,MASTERTABLEID_
+		,MASTERTABLENAME_
+		,SLAVETABLEID_
+		,SLAVETABLENAME_
+		,INSERTCASCADE_
+		,DELETECASCADE_
+		,UPDATECASCADE_
+		,RELATIONSHIPTYPE_
+		,SORTNO_
+		,CREATEBY_
+		,CREATETIME_
+		,UPDATEBY_
+		,UPDATETIME_
+		) values
+		<foreach collection="list" item="tableCorrelation" index="index"
+			separator=",">
+			(
+			#{tableCorrelation.id, jdbcType=VARCHAR}
+			,#{tableCorrelation.masterTableId, jdbcType=VARCHAR}
+			,#{tableCorrelation.masterTableName, jdbcType=VARCHAR}
+			,#{tableCorrelation.slaveTableId, jdbcType=VARCHAR}
+			,#{tableCorrelation.slaveTableName, jdbcType=VARCHAR}
+			,#{tableCorrelation.insertCascade, jdbcType=VARCHAR}
+			,#{tableCorrelation.deleteCascade, jdbcType=VARCHAR}
+			,#{tableCorrelation.updateCascade, jdbcType=VARCHAR}
+			,#{tableCorrelation.relationshipType, jdbcType=VARCHAR}
+			,#{tableCorrelation.sortNo, jdbcType=INTEGER}
+			,#{tableCorrelation.createBy, jdbcType=VARCHAR}
+			,#{tableCorrelation.createTime, jdbcType=TIMESTAMP}
+			,#{tableCorrelation.updateBy, jdbcType=VARCHAR}
+			,#{tableCorrelation.updateTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertTableCorrelation_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="tableCorrelation" index="index">
+			insert into SYS_TABLE_CORRELATION (
+			ID_
+			,MASTERTABLEID_
+			,MASTERTABLENAME_
+			,SLAVETABLEID_
+			,SLAVETABLENAME_
+			,INSERTCASCADE_
+			,DELETECASCADE_
+			,UPDATECASCADE_
+			,RELATIONSHIPTYPE_
+			,SORTNO_
+			,CREATEBY_
+			,CREATETIME_
+			,UPDATEBY_
+			,UPDATETIME_
+			) values (
+			#{tableCorrelation.id,
+			jdbcType=VARCHAR}
+			,#{tableCorrelation.masterTableId, jdbcType=VARCHAR}
+			,#{tableCorrelation.masterTableName, jdbcType=VARCHAR}
+			,#{tableCorrelation.slaveTableId, jdbcType=VARCHAR}
+			,#{tableCorrelation.slaveTableName, jdbcType=VARCHAR}
+			,#{tableCorrelation.insertCascade, jdbcType=VARCHAR}
+			,#{tableCorrelation.deleteCascade, jdbcType=VARCHAR}
+			,#{tableCorrelation.updateCascade, jdbcType=VARCHAR}
+			,#{tableCorrelation.relationshipType, jdbcType=VARCHAR}
+			,#{tableCorrelation.sortNo, jdbcType=INTEGER}
+			,#{tableCorrelation.createBy, jdbcType=VARCHAR}
+			,#{tableCorrelation.createTime, jdbcType=TIMESTAMP}
+			,#{tableCorrelation.updateBy, jdbcType=VARCHAR}
+			,#{tableCorrelation.updateTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateTableCorrelation" parameterType="com.glaf.matrix.data.domain.TableCorrelation">
+		update SYS_TABLE_CORRELATION
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="masterTableId != null">
+				MASTERTABLEID_ = #{masterTableId, jdbcType=VARCHAR},
+			</if>
+			<if test="masterTableName != null">
+				MASTERTABLENAME_ = #{masterTableName, jdbcType=VARCHAR},
+			</if>
+			<if test="slaveTableId != null">
+				SLAVETABLEID_ = #{slaveTableId, jdbcType=VARCHAR},
+			</if>
+			<if test="slaveTableName != null">
+				SLAVETABLENAME_ = #{slaveTableName, jdbcType=VARCHAR},
+			</if>
+			<if test="insertCascade != null">
+				INSERTCASCADE_ = #{insertCascade, jdbcType=VARCHAR},
+			</if>
+			<if test="deleteCascade != null">
+				DELETECASCADE_ = #{deleteCascade, jdbcType=VARCHAR},
+			</if>
+			<if test="updateCascade != null">
+				UPDATECASCADE_ = #{updateCascade, jdbcType=VARCHAR},
+			</if>
+			<if test="relationshipType != null">
+				RELATIONSHIPTYPE_ = #{relationshipType,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY_ = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATETIME_ = #{updateTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<delete id="deleteTableCorrelationById" parameterType="string">
+		delete
+		from SYS_TABLE_CORRELATION
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deleteTableCorrelations" parameterType="com.glaf.matrix.data.query.TableCorrelationQuery">
+		delete from SYS_TABLE_CORRELATION
+		where (
+		ID_ IN
+		<foreach item="x_id" index="index" collection="ids" open="("
+			separator="," close=")">
+			#{x_id}
+		</foreach>
+		)
+	</delete>
+
+
+	<select id="getTableCorrelationById" parameterType="string"
+		resultMap="tableCorrelationResultMap">
+		select * from SYS_TABLE_CORRELATION where ID_ = #{id}
+	</select>
+
+
+	<select id="getTableCorrelations" parameterType="com.glaf.matrix.data.query.TableCorrelationQuery"
+		resultMap="tableCorrelationResultMap">
+		select distinct E.*
+		<include refid="selectTableCorrelationsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.SORTNO_ asc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getTableCorrelationCount" parameterType="com.glaf.matrix.data.query.TableCorrelationQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectTableCorrelationsSql" />
+	</select>
+
+
+	<sql id="selectTableCorrelationsSql">
+
+		from SYS_TABLE_CORRELATION E
+
+		<where>
+			1 = 1
+
+
+			<if test="masterTableId != null and masterTableId != '' ">
+				and E.MASTERTABLEID_ = #{masterTableId}
+			</if>
+
+			<if test="masterTableIds != null and masterTableIds.size() &gt; 0">
+				and E.MASTERTABLEID_ IN
+				<foreach item="x_masterTableId" index="index" collection="masterTableIds"
+					open="(" separator="," close=")">
+					#{x_masterTableId}
+				</foreach>
+			</if>
+
+			<if test="masterTableName != null and masterTableName != '' ">
+				and E.MASTERTABLENAME_ = #{masterTableName}
+			</if>
+
+			<if test="masterTableNames != null and masterTableNames.size() &gt; 0">
+				and E.MASTERTABLENAME_ IN
+				<foreach item="x_masterTableName" index="index" collection="masterTableNames"
+					open="(" separator="," close=")">
+					#{x_masterTableName}
+				</foreach>
+			</if>
+
+			<if test="slaveTableId != null and slaveTableId != '' ">
+				and E.SLAVETABLEID_ = #{slaveTableId}
+			</if>
+
+			<if test="slaveTableIds != null and slaveTableIds.size() &gt; 0">
+				and E.SLAVETABLEID_ IN
+				<foreach item="x_slaveTableId" index="index" collection="slaveTableIds"
+					open="(" separator="," close=")">
+					#{x_slaveTableId}
+				</foreach>
+			</if>
+
+			<if test="slaveTableName != null and slaveTableName != '' ">
+				and E.SLAVETABLENAME_ = #{slaveTableName}
+			</if>
+
+			<if test="slaveTableNames != null and slaveTableNames.size() &gt; 0">
+				and E.SLAVETABLENAME_ IN
+				<foreach item="x_slaveTableName" index="index" collection="slaveTableNames"
+					open="(" separator="," close=")">
+					#{x_slaveTableName}
+				</foreach>
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

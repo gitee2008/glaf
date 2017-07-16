@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.base.modules.sys.mapper.TenantGrantMapper">
+
+	<resultMap id="tenantGrantResultMap" type="com.glaf.base.modules.sys.model.TenantGrant">
+		<id property="id" column="ID_" jdbcType="VARCHAR" />
+		<result property="grantee" column="GRANTEE_" jdbcType="VARCHAR" />
+		<result property="privilege" column="PRIVILEGE_" jdbcType="VARCHAR" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertTenantGrant" parameterType="com.glaf.base.modules.sys.model.TenantGrant">
+		insert into SYS_TENANT_GRANT
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="grantee != null">
+				,GRANTEE_
+			</if>
+			<if test="privilege != null">
+				,PRIVILEGE_
+			</if>
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR}
+
+			<if test="grantee != null">
+				,#{grantee, jdbcType=VARCHAR}
+			</if>
+			<if test="privilege != null">
+				,#{privilege, jdbcType=VARCHAR}
+			</if>
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertTenantGrant" parameterType="java.util.List">
+		insert into SYS_TENANT_GRANT (
+		ID_
+		,GRANTEE_
+		,PRIVILEGE_
+		,TENANTID_
+		,TYPE_
+		,CREATEBY_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="tenantGrant" index="index"
+			separator=",">
+			(
+			#{tenantGrant.id, jdbcType=VARCHAR}
+			,#{tenantGrant.grantee, jdbcType=VARCHAR}
+			,#{tenantGrant.privilege,
+			jdbcType=VARCHAR}
+			,#{tenantGrant.tenantId, jdbcType=VARCHAR}
+			,#{tenantGrant.type, jdbcType=VARCHAR}
+			,#{tenantGrant.createBy,
+			jdbcType=VARCHAR}
+			,#{tenantGrant.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertTenantGrant_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="tenantGrant" index="index">
+			insert
+			into SYS_TENANT_GRANT (
+			ID_
+			,GRANTEE_
+			,PRIVILEGE_
+			,TENANTID_
+			,TYPE_
+			,CREATEBY_
+			,CREATETIME_
+			) values (
+			#{tenantGrant.id, jdbcType=VARCHAR}
+			,#{tenantGrant.grantee, jdbcType=VARCHAR}
+			,#{tenantGrant.privilege,
+			jdbcType=VARCHAR}
+			,#{tenantGrant.tenantId, jdbcType=VARCHAR}
+			,#{tenantGrant.type, jdbcType=VARCHAR}
+			,#{tenantGrant.createBy,
+			jdbcType=VARCHAR}
+			,#{tenantGrant.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateTenantGrant" parameterType="com.glaf.base.modules.sys.model.TenantGrant">
+		update SYS_TENANT_GRANT
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="grantee != null">
+				GRANTEE_ = #{grantee, jdbcType=VARCHAR},
+			</if>
+			<if test="privilege != null">
+				PRIVILEGE_ = #{privilege, jdbcType=VARCHAR},
+			</if>
+			<if test="tenantId != null">
+				TENANTID_ = #{tenantId, jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				TYPE_ = #{type, jdbcType=VARCHAR},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<delete id="deleteTenantGrantById" parameterType="string">
+		delete from
+		SYS_TENANT_GRANT
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getTenantGrantById" parameterType="string"
+		resultMap="tenantGrantResultMap">
+		select * from SYS_TENANT_GRANT where ID_ = #{id}
+	</select>
+
+
+	<select id="getTenantGrants" parameterType="com.glaf.base.modules.sys.query.TenantGrantQuery"
+		resultMap="tenantGrantResultMap">
+		select distinct E.*
+		<include refid="selectTenantGrantsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.CREATETIME_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getTenantGrantCount" parameterType="com.glaf.base.modules.sys.query.TenantGrantQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectTenantGrantsSql" />
+	</select>
+
+
+	<sql id="selectTenantGrantsSql">
+
+		from SYS_TENANT_GRANT E
+
+		<where>
+			1 = 1
+
+			<if test="grantee != null and grantee != '' ">
+				and E.GRANTEE_ = #{grantee}
+			</if>
+
+			<if test="granteeLike != null and granteeLike != '' ">
+				and E.GRANTEE_ like #{granteeLike}
+			</if>
+
+			<if test="privilege != null and privilege != '' ">
+				and E.PRIVILEGE_ = #{privilege}
+			</if>
+
+			<if test="privilegeLike != null and privilegeLike != '' ">
+				and E.PRIVILEGE_ like #{privilegeLike}
+			</if>
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="tenantIds != null and tenantIds.size() &gt; 0">
+				and E.TENANTID_ IN
+				<foreach item="x_tenantId" index="index" collection="tenantIds"
+					open="(" separator="," close=")">
+					#{x_tenantId}
+				</foreach>
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

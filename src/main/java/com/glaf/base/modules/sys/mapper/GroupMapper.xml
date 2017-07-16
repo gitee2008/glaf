@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.base.modules.sys.mapper.GroupMapper">
+
+	<resultMap id="groupResultMap" type="com.glaf.base.modules.sys.model.Group">
+		<id property="groupId" column="GROUPID" jdbcType="VARCHAR" />
+		<result property="name" column="NAME" jdbcType="VARCHAR" />
+		<result property="code" column="CODE" jdbcType="VARCHAR" />
+		<result property="desc" column="GROUPDESC" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE" jdbcType="VARCHAR" />
+		<result property="sort" column="SORTNO" jdbcType="INTEGER" />
+		<result property="tenantId" column="TENANTID" jdbcType="VARCHAR" />
+		<result property="createDate" column="CREATEDATE" jdbcType="TIMESTAMP" />
+		<result property="createBy" column="CREATEBY" jdbcType="VARCHAR" />
+		<result property="updateBy" column="UPDATEBY" jdbcType="VARCHAR" />
+		<result property="updateDate" column="UPDATEDATE" jdbcType="TIMESTAMP" />
+		<result property="manageUsers" column="MANAGEUSERS" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<insert id="insertGroup" parameterType="com.glaf.base.modules.sys.model.Group">
+		insert into SYS_GROUP
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			GROUPID
+			<if test="name != null">
+				,NAME
+			</if>
+			<if test="code != null">
+				CODE,
+			</if>
+			<if test="desc != null">
+				,GROUPDESC
+			</if>
+			<if test="type != null">
+				,TYPE
+			</if>
+			<if test="sort != null">
+				,SORTNO
+			</if>
+			<if test="tenantId != null">
+				,TENANTID
+			</if>
+			<if test="createDate != null">
+				,CREATEDATE
+			</if>
+			<if test="createBy != null">
+				,CREATEBY
+			</if>
+			<if test="updateBy != null">
+				,UPDATEBY
+			</if>
+			<if test="updateDate != null">
+				,UPDATEDATE
+			</if>
+			<if test="manageUsers != null">
+				,MANAGEUSERS
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{groupId, jdbcType=VARCHAR}
+
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="code != null">
+				#{code, jdbcType=VARCHAR},
+			</if>
+			<if test="desc != null">
+				,#{desc, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="sort != null">
+				,#{sort, jdbcType=INTEGER}
+			</if>
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="createDate != null">
+				,#{createDate, jdbcType=TIMESTAMP}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				,#{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateDate != null">
+				,#{updateDate, jdbcType=TIMESTAMP}
+			</if>
+			<if test="manageUsers != null">
+				,#{manageUsers, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateGroup" parameterType="com.glaf.base.modules.sys.model.Group">
+		update SYS_GROUP
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="name != null">
+				NAME = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				CODE = #{code, jdbcType=VARCHAR},
+			</if>
+			<if test="desc != null">
+				GROUPDESC = #{desc, jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null">
+				SORTNO = #{sort, jdbcType=INTEGER},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateDate != null">
+				UPDATEDATE = #{updateDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="manageUsers != null">
+				MANAGEUSERS = #{manageUsers, jdbcType=VARCHAR},
+			</if>
+		</trim>
+		where
+		GROUPID = #{groupId, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<delete id="deleteGroupById" parameterType="string">
+		delete from SYS_GROUP
+		where GROUPID = #{id}
+	</delete>
+
+
+	<delete id="deleteGroups" parameterType="com.glaf.base.modules.sys.query.GroupQuery">
+		delete from SYS_GROUP
+		where (
+		GROUPID IN
+		<foreach item="x_rowId" index="index" collection="rowIds"
+			open="(" separator="," close=")">
+			#{x_rowId}
+		</foreach>
+		)
+	</delete>
+
+
+	<select id="getGroupById" parameterType="string" resultMap="groupResultMap">
+		select * from SYS_GROUP where GROUPID = #{id}
+	</select>
+
+
+	<select id="getGroupsByUserId" parameterType="string" resultMap="groupResultMap">
+		select g.*
+		from SYS_GROUP g, SYS_GROUP_USER membership
+		where g.GROUPID =
+		membership.GROUPID
+		and membership.USERID = #{userId}
+	</select>
+
+
+	<select id="getGroupsByUserIdAndType" parameterType="com.glaf.base.modules.sys.query.GroupQuery"
+		resultMap="groupResultMap">
+		select g.*
+		from SYS_GROUP g, SYS_GROUP_USER gu
+		where g.GROUPID =
+		gu.GROUPID
+		and gu.USERID = #{userId}
+		<if test="type != null and type !='' ">
+			and g.TYPE = #{type}
+		</if>
+	</select>
+
+
+	<select id="getGroups" parameterType="com.glaf.base.modules.sys.query.GroupQuery"
+		resultMap="groupResultMap">
+		select E.*
+		<include refid="selectGroupsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.CREATEDATE desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getGroupCount" parameterType="com.glaf.base.modules.sys.query.GroupQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectGroupsSql" />
+	</select>
+
+
+	<sql id="selectGroupsSql">
+
+		from SYS_GROUP E
+
+		<where>
+			1 = 1
+
+			<if test="name != null and name != '' ">
+				and E.NAME = #{name}
+			</if>
+
+			<if test="nameLike != null and nameLike != '' ">
+				and E.NAME like #{nameLike}
+			</if>
+
+			<if test="codeLike != null and codeLike != '' ">
+				and E.CODE like #{codeLike}
+			</if>
+
+			<if test="descLike != null and descLike != '' ">
+				and E.GROUPDESC like #{descLike}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE = #{type}
+			</if>
+
+			<if test="typeLike != null and typeLike != '' ">
+				and E.TYPE like #{typeLike}
+			</if>
+
+			<if test="types != null and types.size != 0">
+				and E.TYPE IN
+				<foreach item="x_type" index="index" collection="types"
+					open="(" separator="," close=")">
+					#{x_type}
+				</foreach>
+			</if>
+
+			<if test="tenantId != null  ">
+				and E.TENANTID = #{tenantId}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY = #{createBy}
+			</if>
+
+			<if test="sortGreaterThanOrEqual != null">
+				and E.SORTNO &gt;= #{sortGreaterThanOrEqual}
+			</if>
+
+			<if test="sortGreaterThan  != null">
+				and E.SORTNO &gt; #{sortGreaterThan}
+			</if>
+
+			<if test="sortLessThanOrEqual != null">
+				and E.SORTNO &lt;= #{sortLessThanOrEqual}
+			</if>
+
+			<if test="sortLessThan != null">
+				and E.SORTNO &lt; #{sortLessThan}
+			</if>
+
+			<if test="manageUsersLike != null and manageUsersLike != '' ">
+				and E.MANAGEUSERS like #{manageUsersLike}
+			</if>
+
+		</where>
+	</sql>
+
+
+	<select id="getGroupUsersByGroupId" parameterType="com.glaf.base.modules.sys.query.GroupQuery"
+		resultMap="groupResultMap">
+		select g.groupid,gu.userid,g.name,u.USERNAME as uname,d.NAME as
+		dname,d.id
+		as deptId
+		from SYS_GROUP_USER gu
+		left join SYS_GROUP g on
+		g.GROUPID=gu.GROUPID
+		left join SYS_USER u on gu.USERID=u.USERID
+		left
+		join SYS_DEPARTMENT d on d.ID=u.DEPTID
+		where g.GROUPID = #{groupId}
+
+		<if test="unameLike != null and unameLike != '' ">
+			and u.USERNAME like #{unameLike}
+		</if>
+		<if test="dnameLike != null and dnameLike != '' ">
+			and d.NAME like #{dnameLike}
+		</if>
+		<if test="userIdLike != null and userIdLike != '' ">
+			and gu.USERID like #{userIdLike}
+		</if>
+		order by d.NAME,u.USERNAME
+	</select>
+
+
+	<select id="getGroupLeadersByGroupId" parameterType="com.glaf.base.modules.sys.query.GroupQuery"
+		resultMap="groupResultMap">
+		select g.GROUPID,gu.USERID,g.NAME,u.USERNAME as uname,d.NAME as
+		dname,d.ID
+		as deptId
+		from SYS_GROUP_LEADER gu
+		left join SYS_GROUP g on
+		g.GROUPID=gu.GROUPID
+		left join SYS_USER u on gu.USERID=u.USERID
+		left
+		join SYS_DEPARTMENT d on d.ID=u.DEPTID
+		where g.GROUPID = #{groupId}
+
+		<if test="unameLike != null and unameLike != '' ">
+			and u.USERNAME like #{unameLike}
+		</if>
+		<if test="dnameLike != null and dnameLike != '' ">
+			and d.NAME like #{dnameLike}
+		</if>
+		<if test="userIdLike != null and userIdLike != '' ">
+			and gu.USERID like #{userIdLike}
+		</if>
+		order by d.NAME, u.USERNAME
+	</select>
+
+</mapper>

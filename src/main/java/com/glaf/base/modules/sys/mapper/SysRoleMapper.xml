@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.base.modules.sys.mapper.SysRoleMapper">
+
+	<resultMap id="sysRoleResultMap" type="com.glaf.base.modules.sys.model.SysRole">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="name" column="ROLENAME" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE" jdbcType="VARCHAR" />
+		<result property="content" column="CONTENT" jdbcType="VARCHAR" />
+		<result property="code" column="CODE" jdbcType="VARCHAR" />
+		<result property="sort" column="SORTNO" jdbcType="INTEGER" />
+		<result property="indexUrl" column="INDEXURL" jdbcType="VARCHAR" />
+		<result property="isUseBranch" column="ISUSEBRANCH" jdbcType="VARCHAR" />
+		<result property="isUseOrganization" column="ISUSEORGANIZATION" jdbcType="VARCHAR" />
+		<result property="createDate" column="CREATEDATE" jdbcType="TIMESTAMP" />
+		<result property="createBy" column="CREATEBY" jdbcType="VARCHAR" />
+		<result property="updateBy" column="UPDATEBY" jdbcType="VARCHAR" />
+		<result property="updateDate" column="UPDATEDATE" jdbcType="TIMESTAMP" />
+		<result property="deleteFlag" column="DELETEFLAG" jdbcType="INTEGER" />
+		<result property="deleteTime" column="DELETETIME" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertSysRole" parameterType="com.glaf.base.modules.sys.model.SysRole">
+		insert into SYS_ROLE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID,
+			<if test="name != null">
+				ROLENAME,
+			</if>
+			<if test="type != null">
+				TYPE,
+			</if>
+			<if test="content != null">
+				CONTENT,
+			</if>
+			<if test="code != null">
+				CODE,
+			</if>
+			<if test="sort != null">
+				SORTNO,
+			</if>
+			<if test="indexUrl != null">
+				INDEXURL,
+			</if>
+			<if test="isUseBranch != null">
+				ISUSEBRANCH,
+			</if>
+			<if test="isUseOrganization != null">
+				ISUSEORGANIZATION,
+			</if>
+			<if test="createDate != null">
+				CREATEDATE,
+			</if>
+			<if test="createBy != null">
+				CREATEBY,
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY,
+			</if>
+			<if test="updateDate != null">
+				UPDATEDATE,
+			</if>
+			<if test="deleteFlag != null">
+				DELETEFLAG,
+			</if>
+			<if test="deleteTime != null">
+				DELETETIME
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR},
+			<if test="name != null">
+				#{name, jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type, jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				#{content, jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				#{code, jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null">
+				#{sort, jdbcType=INTEGER},
+			</if>
+			<if test="indexUrl != null">
+				#{indexUrl, jdbcType=VARCHAR},
+			</if>
+			<if test="isUseBranch != null">
+				#{isUseBranch, jdbcType=VARCHAR},
+			</if>
+			<if test="isUseOrganization != null">
+				#{isUseOrganization, jdbcType=VARCHAR},
+			</if>
+			<if test="createDate != null">
+				#{createDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateDate != null">
+				#{updateDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteFlag != null">
+				#{deleteFlag, jdbcType=INTEGER},
+			</if>
+			<if test="deleteTime != null">
+				#{deleteTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateSysRole" parameterType="com.glaf.base.modules.sys.model.SysRole">
+		update SYS_ROLE
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="name != null">
+				ROLENAME = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				CONTENT = #{content, jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				CODE = #{code, jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null">
+				SORTNO = #{sort, jdbcType=INTEGER},
+			</if>
+			<if test="indexUrl != null">
+				INDEXURL = #{indexUrl, jdbcType=VARCHAR},
+			</if>
+			<if test="isUseBranch != null">
+				ISUSEBRANCH = #{isUseBranch, jdbcType=VARCHAR},
+			</if>
+			<if test="isUseOrganization != null">
+				ISUSEORGANIZATION = #{isUseOrganization, jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateDate != null">
+				UPDATEDATE = #{updateDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteFlag != null">
+				DELETEFLAG = #{deleteFlag, jdbcType=INTEGER},
+			</if>
+			<if test="deleteTime != null">
+				DELETETIME = #{deleteTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID = #{id, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<delete id="deleteSysRoleById" parameterType="string">
+		delete from
+		SYS_ROLE
+		where ID = #{id}
+	</delete>
+
+
+	<delete id="deleteSysRoleByStringId" parameterType="string">
+		delete from
+		SYS_ROLE
+		where ID = #{id}
+	</delete>
+
+
+	<delete id="deleteSysRoles" parameterType="com.glaf.base.modules.sys.query.SysRoleQuery">
+		delete from SYS_ROLE
+		where (
+		ID IN
+		<foreach item="x_rowId" index="index" collection="rowIds"
+			open="(" separator="," close=")">
+			#{x_rowId}
+		</foreach>
+		)
+	</delete>
+
+
+	<select id="getSysRoleById" parameterType="string" resultMap="sysRoleResultMap">
+		select * from SYS_ROLE where ID = #{id}
+	</select>
+
+
+	<select id="getSysRoleByStringId" parameterType="string"
+		resultMap="sysRoleResultMap">
+		select * from SYS_ROLE where ID = #{id}
+	</select>
+
+
+	<select id="getSysRolesOfUser" parameterType="string" resultMap="sysRoleResultMap">
+
+		select R.* from SYS_ROLE R
+		inner join SYS_USER_ROLE UR
+		on R.ID =
+		UR.ROLEID
+		where UR.USERID = #{userId}
+
+	</select>
+
+
+	<select id="getSysRoles" parameterType="com.glaf.base.modules.sys.query.SysRoleQuery"
+		resultMap="sysRoleResultMap">
+		select E.*
+		<include refid="selectSysRolesSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.SORTNO asc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getSysRoleCount" parameterType="com.glaf.base.modules.sys.query.SysRoleQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectSysRolesSql" />
+	</select>
+
+
+	<sql id="selectSysRolesSql">
+
+		from SYS_ROLE E
+
+		<where>
+			1 = 1
+
+			<if test="name != null and name != '' ">
+				and E.ROLENAME = #{name}
+			</if>
+
+			<if test="nameLike != null and nameLike != '' ">
+				and E.ROLENAME like #{nameLike}
+			</if>
+
+			<if test="names != null and names.size != 0">
+				and E.ROLENAME IN
+				<foreach item="x_name" index="index" collection="names"
+					open="(" separator="," close=")">
+					#{x_name}
+				</foreach>
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY = #{createBy}
+			</if>
+
+			<if test="code != null and code != '' ">
+				and E.CODE = #{code}
+			</if>
+
+			<if test="codeLike != null and codeLike != '' ">
+				and E.CODE like #{codeLike}
+			</if>
+
+			<if test="codes != null and codes.size != 0">
+				and E.CODE IN
+				<foreach item="x_code" index="index" collection="codes"
+					open="(" separator="," close=")">
+					#{x_code}
+				</foreach>
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE = #{type}
+			</if>
+
+			<if test="isUseBranch != null and isUseBranch != '' ">
+				and E.ISUSEBRANCH = #{isUseBranch}
+			</if>
+
+			<if test="isUseOrganization != null and isUseOrganization != '' ">
+				and E.ISUSEORGANIZATION = #{isUseOrganization}
+			</if>
+
+			<if test="sortGreaterThanOrEqual != null">
+				and E.SORTNO &gt;= #{sortGreaterThanOrEqual}
+			</if>
+
+			<if test="sortGreaterThan  != null">
+				and E.SORTNO &gt; #{sortGreaterThan}
+			</if>
+
+			<if test="sortLessThanOrEqual != null">
+				and E.SORTNO &lt;= #{sortLessThanOrEqual}
+			</if>
+
+			<if test="sortLessThan != null">
+				and E.SORTNO &lt; #{sortLessThan}
+			</if>
+
+			<if test="deleteFlag != null">
+				and E.DELETEFLAG = #{deleteFlag}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

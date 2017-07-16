@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.data.mapper.TableDataItemMapper">
+
+	<resultMap id="tableDataItemResultMap" type="com.glaf.matrix.data.domain.TableDataItem">
+		<id property="id" column="ID_" jdbcType="VARCHAR" />
+		<result property="title" column="TITLE_" jdbcType="VARCHAR" />
+		<result property="description" column="DESCRIPTION_" jdbcType="VARCHAR" />
+		<result property="tableName" column="TABLENAME_" jdbcType="VARCHAR" />
+		<result property="nameColumn" column="NAMECOLUMN_" jdbcType="VARCHAR" />
+		<result property="valueColumn" column="VALUECOLUMN_" jdbcType="VARCHAR" />
+		<result property="sortColumn" column="SORTCOLUMN_" jdbcType="VARCHAR" />
+		<result property="filterFlag" column="FILTERFLAG_" jdbcType="VARCHAR" />
+		<result property="sqlCriteria" column="SQLCRITERIA_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY_" jdbcType="VARCHAR" />
+		<result property="updateTime" column="UPDATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertTableDataItem" parameterType="com.glaf.matrix.data.domain.TableDataItem">
+		insert into SYS_TABLE_DATA_ITEM
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="title != null">
+				,TITLE_
+			</if>
+			<if test="description != null">
+				,DESCRIPTION_
+			</if>
+			<if test="tableName != null">
+				,TABLENAME_
+			</if>
+			<if test="nameColumn != null">
+				,NAMECOLUMN_
+			</if>
+			<if test="valueColumn != null">
+				,VALUECOLUMN_
+			</if>
+			<if test="sortColumn != null">
+				,SORTCOLUMN_
+			</if>
+			<if test="filterFlag != null">
+				,FILTERFLAG_
+			</if>
+			<if test="sqlCriteria != null">
+				,SQLCRITERIA_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+			<if test="updateBy != null">
+				,UPDATEBY_
+			</if>
+			<if test="updateTime != null">
+				,UPDATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR}
+
+			<if test="title != null">
+				,#{title, jdbcType=VARCHAR}
+			</if>
+			<if test="description != null">
+				,#{description, jdbcType=VARCHAR}
+			</if>
+			<if test="tableName != null">
+				,#{tableName, jdbcType=VARCHAR}
+			</if>
+			<if test="nameColumn != null">
+				,#{nameColumn, jdbcType=VARCHAR}
+			</if>
+			<if test="valueColumn != null">
+				,#{valueColumn, jdbcType=VARCHAR}
+			</if>
+			<if test="sortColumn != null">
+				,#{sortColumn, jdbcType=VARCHAR}
+			</if>
+			<if test="filterFlag != null">
+				,#{filterFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="sqlCriteria != null">
+				,#{sqlCriteria, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy != null">
+				,#{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				,#{updateTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertTableDataItem" parameterType="java.util.List">
+		insert into SYS_TABLE_DATA_ITEM (
+		ID_
+		,TITLE_
+		,DESCRIPTION_
+		,TABLENAME_
+		,NAMECOLUMN_
+		,VALUECOLUMN_
+		,SORTCOLUMN_
+		,FILTERFLAG_
+		,SQLCRITERIA_
+		,TYPE_
+		,LOCKED_
+		,CREATEBY_
+		,CREATETIME_
+		,UPDATEBY_
+		,UPDATETIME_
+		) values
+		<foreach collection="list" item="tableDataItem" index="index"
+			separator=",">
+			(
+			#{tableDataItem.id, jdbcType=VARCHAR}
+			,#{tableDataItem.title, jdbcType=VARCHAR}
+			,#{tableDataItem.description, jdbcType=VARCHAR}
+			,#{tableDataItem.tableName, jdbcType=VARCHAR}
+			,#{tableDataItem.nameColumn, jdbcType=VARCHAR}
+			,#{tableDataItem.valueColumn, jdbcType=VARCHAR}
+			,#{tableDataItem.sortColumn, jdbcType=VARCHAR}
+			,#{tableDataItem.filterFlag, jdbcType=VARCHAR}
+			,#{tableDataItem.sqlCriteria, jdbcType=VARCHAR}
+			,#{tableDataItem.type,
+			jdbcType=VARCHAR}
+			,#{tableDataItem.locked,
+			jdbcType=INTEGER}
+			,#{tableDataItem.createBy,
+			jdbcType=VARCHAR}
+			,#{tableDataItem.createTime, jdbcType=TIMESTAMP}
+			,#{tableDataItem.updateBy, jdbcType=VARCHAR}
+			,#{tableDataItem.updateTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertTableDataItem_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="tableDataItem" index="index">
+			insert
+			into SYS_TABLE_DATA_ITEM (
+			ID_
+			,TITLE_
+			,DESCRIPTION_
+			,TABLENAME_
+			,NAMECOLUMN_
+			,VALUECOLUMN_
+			,SORTCOLUMN_
+			,FILTERFLAG_
+			,SQLCRITERIA_
+			,TYPE_
+			,LOCKED_
+			,CREATEBY_
+			,CREATETIME_
+			,UPDATEBY_
+			,UPDATETIME_
+			) values (
+			#{tableDataItem.id, jdbcType=VARCHAR}
+			,#{tableDataItem.title,
+			jdbcType=VARCHAR}
+			,#{tableDataItem.description, jdbcType=VARCHAR}
+			,#{tableDataItem.tableName, jdbcType=VARCHAR}
+			,#{tableDataItem.nameColumn, jdbcType=VARCHAR}
+			,#{tableDataItem.valueColumn, jdbcType=VARCHAR}
+			,#{tableDataItem.sortColumn, jdbcType=VARCHAR}
+			,#{tableDataItem.filterFlag, jdbcType=VARCHAR}
+			,#{tableDataItem.sqlCriteria, jdbcType=VARCHAR}
+			,#{tableDataItem.type,
+			jdbcType=VARCHAR}
+			,#{tableDataItem.locked,
+			jdbcType=INTEGER}
+			,#{tableDataItem.createBy,
+			jdbcType=VARCHAR}
+			,#{tableDataItem.createTime, jdbcType=TIMESTAMP}
+			,#{tableDataItem.updateBy, jdbcType=VARCHAR}
+			,#{tableDataItem.updateTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateTableDataItem" parameterType="com.glaf.matrix.data.domain.TableDataItem">
+		update SYS_TABLE_DATA_ITEM
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="title != null">
+				TITLE_ = #{title, jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				DESCRIPTION_ = #{description, jdbcType=VARCHAR},
+			</if>
+			<if test="tableName != null">
+				TABLENAME_ = #{tableName, jdbcType=VARCHAR},
+			</if>
+			<if test="nameColumn != null">
+				NAMECOLUMN_ = #{nameColumn, jdbcType=VARCHAR},
+			</if>
+			<if test="valueColumn != null">
+				VALUECOLUMN_ = #{valueColumn, jdbcType=VARCHAR},
+			</if>
+			<if test="sortColumn != null">
+				SORTCOLUMN_ = #{sortColumn, jdbcType=VARCHAR},
+			</if>
+			<if test="filterFlag != null">
+				FILTERFLAG_ = #{filterFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="sqlCriteria != null">
+				SQLCRITERIA_ = #{sqlCriteria, jdbcType=VARCHAR},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY_ = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATETIME_ = #{updateTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<delete id="deleteTableDataItemById" parameterType="string">
+		delete from
+		SYS_TABLE_DATA_ITEM
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deleteTableDataItems" parameterType="com.glaf.matrix.data.query.TableDataItemQuery">
+		delete from SYS_TABLE_DATA_ITEM
+		where (
+		ID_ IN
+		<foreach item="x_id" index="index" collection="ids" open="("
+			separator="," close=")">
+			#{x_id}
+		</foreach>
+		)
+	</delete>
+
+
+	<select id="getTableDataItemById" parameterType="string"
+		resultMap="tableDataItemResultMap">
+		select * from SYS_TABLE_DATA_ITEM where ID_ = #{id}
+	</select>
+
+
+	<select id="getTableDataItems" parameterType="com.glaf.matrix.data.query.TableDataItemQuery"
+		resultMap="tableDataItemResultMap">
+		select distinct E.*
+		<include refid="selectTableDataItemsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.CREATETIME_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getTableDataItemCount" parameterType="com.glaf.matrix.data.query.TableDataItemQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectTableDataItemsSql" />
+	</select>
+
+
+	<sql id="selectTableDataItemsSql">
+
+		from SYS_TABLE_DATA_ITEM E
+
+		<where>
+			1 = 1
+
+			<if test="titleLike != null and titleLike != '' ">
+				and E.TITLE_ like #{titleLike}
+			</if>
+
+			<if test="descriptionLike != null and descriptionLike != '' ">
+				and E.DESCRIPTION_ like #{descriptionLike}
+			</if>
+
+			<if test="tableName != null and tableName != '' ">
+				and E.TABLENAME_ = #{tableName}
+			</if>
+
+			<if test="tableNameLike != null and tableNameLike != '' ">
+				and E.TABLENAME_ like #{tableNameLike}
+			</if>
+
+			<if test="nameColumn != null and nameColumn != '' ">
+				and E.NAMECOLUMN_ = #{nameColumn}
+			</if>
+
+			<if test="nameColumnLike != null and nameColumnLike != '' ">
+				and E.NAMECOLUMN_ like #{nameColumnLike}
+			</if>
+
+			<if test="valueColumn != null and valueColumn != '' ">
+				and E.VALUECOLUMN_ = #{valueColumn}
+			</if>
+
+			<if test="valueColumnLike != null and valueColumnLike != '' ">
+				and E.VALUECOLUMN_ like #{valueColumnLike}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

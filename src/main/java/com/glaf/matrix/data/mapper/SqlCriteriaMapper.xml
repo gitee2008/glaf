@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.data.mapper.SqlCriteriaMapper">
+
+	<resultMap id="sqlCriteriaResultMap" type="com.glaf.matrix.data.domain.SqlCriteria">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="parentId" column="PARENTID_" jdbcType="BIGINT" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="moduleId" column="MODULEID_" jdbcType="VARCHAR" />
+		<result property="businessKey" column="BUSINESSKEY_" jdbcType="VARCHAR" />
+		<result property="columnName" column="COLUMNNAME_" jdbcType="VARCHAR" />
+		<result property="columnType" column="COLUMNTYPE_" jdbcType="VARCHAR" />
+		<result property="tableName" column="TABLENAME_" jdbcType="VARCHAR" />
+		<result property="tableAlias" column="TABLEALIAS_" jdbcType="VARCHAR" />
+		<result property="paramName" column="PARAMNAME_" jdbcType="VARCHAR" />
+		<result property="paramTitle" column="PARAMTITLE_" jdbcType="VARCHAR" />
+		<result property="collectionFlag" column="COLLECTIONFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="condition" column="CONDITION_" jdbcType="VARCHAR" />
+		<result property="operator" column="OPERATOR_" jdbcType="VARCHAR" />
+		<result property="separator" column="SEPARATOR_" jdbcType="VARCHAR" />
+		<result property="requiredFlag" column="REQUIREDFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="sql" column="SQL_" jdbcType="VARCHAR" />
+		<result property="treeId" column="TREEID_" jdbcType="VARCHAR" />
+		<result property="level" column="LEVEL_" jdbcType="INTEGER" />
+		<result property="sortNo" column="SORTNO_" jdbcType="INTEGER" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY_" jdbcType="VARCHAR" />
+		<result property="updateTime" column="UPDATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertSqlCriteria" parameterType="com.glaf.matrix.data.domain.SqlCriteria">
+		insert into SYS_SQL_CRITERIA
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="parentId != null">
+				,PARENTID_
+			</if>
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="moduleId != null">
+				,MODULEID_
+			</if>
+			<if test="businessKey != null">
+				,BUSINESSKEY_
+			</if>
+			<if test="columnName != null">
+				,COLUMNNAME_
+			</if>
+			<if test="columnType != null">
+				,COLUMNTYPE_
+			</if>
+			<if test="tableName != null">
+				,TABLENAME_
+			</if>
+			<if test="tableAlias != null">
+				,TABLEALIAS_
+			</if>
+			<if test="paramName != null">
+				,PARAMNAME_
+			</if>
+			<if test="paramTitle != null">
+				,PARAMTITLE_
+			</if>
+			<if test="collectionFlag != null">
+				,COLLECTIONFLAG_
+			</if>
+			<if test="condition != null">
+				,CONDITION_
+			</if>
+			<if test="operator != null">
+				,OPERATOR_
+			</if>
+			<if test="separator != null">
+				,SEPARATOR_
+			</if>
+			<if test="requiredFlag != null">
+				,REQUIREDFLAG_
+			</if>
+			<if test="sql != null">
+				,SQL_
+			</if>
+			<if test="treeId != null">
+				,TREEID_
+			</if>
+			<if test="level != null">
+				,LEVEL_
+			</if>
+			<if test="sortNo != null">
+				,SORTNO_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+			<if test="updateBy != null">
+				,UPDATEBY_
+			</if>
+			<if test="updateTime != null">
+				,UPDATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="parentId != null">
+				,#{parentId, jdbcType=BIGINT}
+			</if>
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="moduleId != null">
+				,#{moduleId, jdbcType=VARCHAR}
+			</if>
+			<if test="businessKey != null">
+				,#{businessKey, jdbcType=VARCHAR}
+			</if>
+			<if test="columnName != null">
+				,#{columnName, jdbcType=VARCHAR}
+			</if>
+			<if test="columnType != null">
+				,#{columnType, jdbcType=VARCHAR}
+			</if>
+			<if test="tableName != null">
+				,#{tableName, jdbcType=VARCHAR}
+			</if>
+			<if test="tableAlias != null">
+				,#{tableAlias, jdbcType=VARCHAR}
+			</if>
+			<if test="paramName != null">
+				,#{paramName, jdbcType=VARCHAR}
+			</if>
+			<if test="paramTitle != null">
+				,#{paramTitle, jdbcType=VARCHAR}
+			</if>
+			<if test="collectionFlag != null">
+				,#{collectionFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="condition != null">
+				,#{condition, jdbcType=VARCHAR}
+			</if>
+			<if test="operator != null">
+				,#{operator, jdbcType=VARCHAR}
+			</if>
+			<if test="separator != null">
+				,#{separator, jdbcType=VARCHAR}
+			</if>
+			<if test="requiredFlag != null">
+				,#{requiredFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="sql != null">
+				,#{sql, jdbcType=VARCHAR}
+			</if>
+			<if test="treeId != null">
+				,#{treeId, jdbcType=VARCHAR}
+			</if>
+			<if test="level != null">
+				,#{level, jdbcType=INTEGER}
+			</if>
+			<if test="sortNo != null">
+				,#{sortNo, jdbcType=INTEGER}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy != null">
+				,#{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				,#{updateTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertSqlCriteria" parameterType="java.util.List">
+		insert into SYS_SQL_CRITERIA (
+		ID_
+		,PARENTID_
+		,TENANTID_
+		,NAME_
+		,MODULEID_
+		,BUSINESSKEY_
+		,COLUMNNAME_
+		,COLUMNTYPE_
+		,TABLENAME_
+		,TABLEALIAS_
+		,PARAMNAME_
+		,PARAMTITLE_
+		,COLLECTIONFLAG_
+		,CONDITION_
+		,OPERATOR_
+		,SEPARATOR_
+		,REQUIREDFLAG_
+		,SQL_
+		,TREEID_
+		,LEVEL_
+		,SORTNO_
+		,LOCKED_
+		,CREATEBY_
+		,CREATETIME_
+		,UPDATEBY_
+		,UPDATETIME_
+		) values
+		<foreach collection="list" item="sqlCriteria" index="index"
+			separator=",">
+			(
+			#{sqlCriteria.id, jdbcType=BIGINT}
+			,#{sqlCriteria.parentId, jdbcType=BIGINT}
+			,#{sqlCriteria.tenantId,
+			jdbcType=VARCHAR}
+			,#{sqlCriteria.name,
+			jdbcType=VARCHAR}
+			,#{sqlCriteria.moduleId, jdbcType=VARCHAR}
+			,#{sqlCriteria.businessKey, jdbcType=VARCHAR}
+			,#{sqlCriteria.columnName, jdbcType=VARCHAR}
+			,#{sqlCriteria.columnType, jdbcType=VARCHAR}
+			,#{sqlCriteria.tableName, jdbcType=VARCHAR}
+			,#{sqlCriteria.tableAlias, jdbcType=VARCHAR}
+			,#{sqlCriteria.paramName, jdbcType=VARCHAR}
+			,#{sqlCriteria.paramTitle, jdbcType=VARCHAR}
+			,#{sqlCriteria.collectionFlag, jdbcType=VARCHAR}
+			,#{sqlCriteria.condition, jdbcType=VARCHAR}
+			,#{sqlCriteria.operator,
+			jdbcType=VARCHAR}
+			,#{sqlCriteria.separator, jdbcType=VARCHAR}
+			,#{sqlCriteria.requiredFlag, jdbcType=VARCHAR}
+			,#{sqlCriteria.sql,
+			jdbcType=VARCHAR}
+			,#{sqlCriteria.treeId,
+			jdbcType=VARCHAR}
+			,#{sqlCriteria.level, jdbcType=INTEGER}
+			,#{sqlCriteria.sortNo,
+			jdbcType=INTEGER}
+			,#{sqlCriteria.locked,
+			jdbcType=INTEGER}
+			,#{sqlCriteria.createBy, jdbcType=VARCHAR}
+			,#{sqlCriteria.createTime,
+			jdbcType=TIMESTAMP}
+			,#{sqlCriteria.updateBy, jdbcType=VARCHAR}
+			,#{sqlCriteria.updateTime,
+			jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertSqlCriteria_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="sqlCriteria" index="index">
+			insert
+			into SYS_SQL_CRITERIA (
+			ID_
+			,PARENTID_
+			,TENANTID_
+			,NAME_
+			,MODULEID_
+			,BUSINESSKEY_
+			,COLUMNNAME_
+			,COLUMNTYPE_
+			,TABLENAME_
+			,TABLEALIAS_
+			,PARAMNAME_
+			,PARAMTITLE_
+			,COLLECTIONFLAG_
+			,CONDITION_
+			,OPERATOR_
+			,SEPARATOR_
+			,REQUIREDFLAG_
+			,SQL_
+			,TREEID_
+			,LEVEL_
+			,SORTNO_
+			,LOCKED_
+			,CREATEBY_
+			,CREATETIME_
+			,UPDATEBY_
+			,UPDATETIME_
+			) values (
+			#{sqlCriteria.id,
+			jdbcType=BIGINT}
+			,#{sqlCriteria.parentId,
+			jdbcType=BIGINT}
+			,#{sqlCriteria.tenantId, jdbcType=VARCHAR}
+			,#{sqlCriteria.name,
+			jdbcType=VARCHAR}
+			,#{sqlCriteria.moduleId,
+			jdbcType=VARCHAR}
+			,#{sqlCriteria.businessKey, jdbcType=VARCHAR}
+			,#{sqlCriteria.columnName, jdbcType=VARCHAR}
+			,#{sqlCriteria.columnType, jdbcType=VARCHAR}
+			,#{sqlCriteria.tableName, jdbcType=VARCHAR}
+			,#{sqlCriteria.tableAlias, jdbcType=VARCHAR}
+			,#{sqlCriteria.paramName, jdbcType=VARCHAR}
+			,#{sqlCriteria.paramTitle, jdbcType=VARCHAR}
+			,#{sqlCriteria.collectionFlag, jdbcType=VARCHAR}
+			,#{sqlCriteria.condition, jdbcType=VARCHAR}
+			,#{sqlCriteria.operator,
+			jdbcType=VARCHAR}
+			,#{sqlCriteria.separator, jdbcType=VARCHAR}
+			,#{sqlCriteria.requiredFlag, jdbcType=VARCHAR}
+			,#{sqlCriteria.sql,
+			jdbcType=VARCHAR}
+			,#{sqlCriteria.treeId,
+			jdbcType=VARCHAR}
+			,#{sqlCriteria.level, jdbcType=INTEGER}
+			,#{sqlCriteria.sortNo,
+			jdbcType=INTEGER}
+			,#{sqlCriteria.locked,
+			jdbcType=INTEGER}
+			,#{sqlCriteria.createBy, jdbcType=VARCHAR}
+			,#{sqlCriteria.createTime,
+			jdbcType=TIMESTAMP}
+			,#{sqlCriteria.updateBy, jdbcType=VARCHAR}
+			,#{sqlCriteria.updateTime,
+			jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateSqlCriteria" parameterType="com.glaf.matrix.data.domain.SqlCriteria">
+		update SYS_SQL_CRITERIA
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="parentId != null">
+				PARENTID_ = #{parentId, jdbcType=BIGINT},
+			</if>
+			<if test="name != null">
+				NAME_ = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="columnName != null">
+				COLUMNNAME_ = #{columnName, jdbcType=VARCHAR},
+			</if>
+			<if test="columnType != null">
+				COLUMNTYPE_ = #{columnType, jdbcType=VARCHAR},
+			</if>
+			<if test="tableName != null">
+				TABLENAME_ = #{tableName, jdbcType=VARCHAR},
+			</if>
+			<if test="tableAlias != null">
+				TABLEALIAS_ = #{tableAlias, jdbcType=VARCHAR},
+			</if>
+			<if test="paramName != null">
+				PARAMNAME_ = #{paramName, jdbcType=VARCHAR},
+			</if>
+			<if test="paramTitle != null">
+				PARAMTITLE_ = #{paramTitle, jdbcType=VARCHAR},
+			</if>
+			<if test="collectionFlag != null">
+				COLLECTIONFLAG_ = #{collectionFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="condition != null">
+				CONDITION_ = #{condition, jdbcType=VARCHAR},
+			</if>
+			<if test="operator != null">
+				OPERATOR_ = #{operator, jdbcType=VARCHAR},
+			</if>
+			<if test="separator != null">
+				SEPARATOR_ = #{separator, jdbcType=VARCHAR},
+			</if>
+			<if test="requiredFlag != null">
+				REQUIREDFLAG_ = #{requiredFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="sql != null">
+				SQL_ = #{sql, jdbcType=VARCHAR},
+			</if>
+			<if test="treeId != null">
+				TREEID_ = #{treeId, jdbcType=VARCHAR},
+			</if>
+			<if test="level != null">
+				LEVEL_ = #{level, jdbcType=INTEGER},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY_ = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATETIME_ = #{updateTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteSqlCriteriaById" parameterType="long">
+		delete from
+		SYS_SQL_CRITERIA
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deleteSqlCriterias" parameterType="com.glaf.matrix.data.query.SqlCriteriaQuery">
+		delete from SYS_SQL_CRITERIA
+		where (
+		ID_ IN
+		<foreach item="x_id" index="index" collection="ids" open="("
+			separator="," close=")">
+			#{x_id}
+		</foreach>
+		)
+	</delete>
+
+
+	<select id="getSqlCriteriaById" parameterType="long"
+		resultMap="sqlCriteriaResultMap">
+		select * from SYS_SQL_CRITERIA where ID_ = #{id}
+	</select>
+
+
+	<select id="getSqlCriterias" parameterType="com.glaf.matrix.data.query.SqlCriteriaQuery"
+		resultMap="sqlCriteriaResultMap">
+		select distinct E.*
+		<include refid="selectSqlCriteriasSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.SORTNO_ asc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getSqlCriteriaCount" parameterType="com.glaf.matrix.data.query.SqlCriteriaQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectSqlCriteriasSql" />
+	</select>
+
+
+	<sql id="selectSqlCriteriasSql">
+
+		from SYS_SQL_CRITERIA E
+
+		<where>
+			1 = 1
+
+			<if test="parentId != null">
+				and E.PARENTID_ = #{parentId}
+			</if>
+
+			<if test="parentIds != null and parentIds.size() &gt; 0">
+				and E.PARENTID_ IN
+				<foreach item="x_parentId" index="index" collection="parentIds"
+					open="(" separator="," close=")">
+					#{x_parentId}
+				</foreach>
+			</if>
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="name != null and name != '' ">
+				and E.NAME_ = #{name}
+			</if>
+
+			<if test="nameLike != null and nameLike != '' ">
+				and E.NAME_ like #{nameLike}
+			</if>
+
+			<if test="moduleId != null and moduleId != '' ">
+				and E.MODULEID_ = #{moduleId}
+			</if>
+
+			<if test="businessKey != null and businessKey != '' ">
+				and E.BUSINESSKEY_ = #{businessKey}
+			</if>
+
+			<if test="treeIdLike != null and treeIdLike != '' ">
+				and E.TREEID_ like #{treeIdLike}
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

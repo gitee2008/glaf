@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.base.modules.sys.mapper.SysOrganizationMapper">
+
+	<resultMap id="sysOrganizationResultMap"
+		type="com.glaf.base.modules.sys.model.SysOrganization">
+		<id property="id" column="ID" jdbcType="BIGINT" />
+		<result property="name" column="NAME" jdbcType="VARCHAR" />
+		<result property="description" column="ORG_DESC" jdbcType="VARCHAR" />
+		<result property="sort" column="SORTNO" jdbcType="INTEGER" />
+		<result property="no" column="ORG_NO" jdbcType="VARCHAR" />
+		<result property="code" column="CODE" jdbcType="VARCHAR" />
+		<result property="code2" column="CODE2" jdbcType="VARCHAR" />
+		<result property="discriminator" column="DISCRIMINATOR"
+			jdbcType="VARCHAR" />
+		<result property="icon" column="ICON" jdbcType="VARCHAR" />
+		<result property="iconCls" column="ICONCLS" jdbcType="VARCHAR" />
+		<result property="level" column="LEVEL" jdbcType="INTEGER" />
+		<result property="fincode" column="FINCODE" jdbcType="VARCHAR" />
+		<result property="address" column="ADDRESS" jdbcType="VARCHAR" />
+		<result property="telphone" column="TELPHONE" jdbcType="VARCHAR" />
+		<result property="principal" column="PRINCIPAL" jdbcType="VARCHAR" />
+		<result property="parentId" column="PARENTID" jdbcType="BIGINT" />
+		<result property="tenantId" column="TENANTID" jdbcType="VARCHAR" />
+		<result property="treeId" column="TREEID" jdbcType="VARCHAR" />
+		<result property="locked" column="LOCKED" jdbcType="INTEGER" />
+		<result property="type" column="TYPE" jdbcType="VARCHAR" />
+		<result property="url" column="URL" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME" jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY" jdbcType="VARCHAR" />
+		<result property="updateDate" column="UPDATEDATE" jdbcType="TIMESTAMP" />
+		<result property="deleteFlag" column="DELETEFLAG" jdbcType="INTEGER" />
+		<result property="deleteTime" column="DELETETIME" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertSysOrganization" parameterType="com.glaf.base.modules.sys.model.SysOrganization">
+		insert into SYS_ORGANIZATION
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID
+			<if test="name != null">
+				,NAME
+			</if>
+			<if test="description != null">
+				,ORG_DESC
+			</if>
+			<if test="sort != null">
+				,SORTNO
+			</if>
+			<if test="no != null">
+				,ORG_NO
+			</if>
+			<if test="code != null">
+				,CODE
+			</if>
+			<if test="code2 != null">
+				,CODE2
+			</if>
+			<if test="level != null">
+				,LEVEL
+			</if>
+			<if test="discriminator != null">
+				,DISCRIMINATOR
+			</if>
+			<if test="locked != null">
+				,LOCKED
+			</if>
+			<if test="fincode != null">
+				,FINCODE
+			</if>
+			<if test="address != null">
+				,ADDRESS
+			</if>
+			<if test="telphone != null">
+				,TELPHONE
+			</if>
+			<if test="principal != null">
+				,PRINCIPAL
+			</if>
+			<if test="parentId != null">
+				,PARENTID
+			</if>
+			<if test="tenantId != null">
+				,TENANTID
+			</if>
+			<if test="treeId != null">
+				,TREEID
+			</if>
+			<if test="icon != null">
+				,ICON
+			</if>
+			<if test="iconCls != null">
+				,ICONCLS
+			</if>
+			<if test="url != null">
+				,URL
+			</if>
+			<if test="type != null">
+				,TYPE
+			</if>
+			<if test="createBy != null">
+				,CREATEBY
+			</if>
+			<if test="createTime != null">
+				,CREATETIME
+			</if>
+			<if test="updateBy != null">
+				,UPDATEBY
+			</if>
+			<if test="updateDate != null">
+				,UPDATEDATE
+			</if>
+			<if test="deleteFlag != null">
+				,DELETEFLAG
+			</if>
+			<if test="deleteTime != null">
+				,DELETETIME
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="description != null">
+				,#{description, jdbcType=VARCHAR}
+			</if>
+			<if test="sort != null">
+				,#{sort, jdbcType=INTEGER}
+			</if>
+			<if test="no != null">
+				,#{no, jdbcType=VARCHAR}
+			</if>
+			<if test="code != null">
+				,#{code, jdbcType=VARCHAR}
+			</if>
+			<if test="code2 != null">
+				,#{code2, jdbcType=VARCHAR}
+			</if>
+			<if test="level != null">
+				,#{level, jdbcType=INTEGER}
+			</if>
+			<if test="discriminator != null">
+				,#{discriminator, jdbcType=VARCHAR}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="fincode != null">
+				,#{fincode, jdbcType=VARCHAR}
+			</if>
+			<if test="address != null">
+				,#{address, jdbcType=VARCHAR}
+			</if>
+			<if test="telphone != null">
+				,#{telphone, jdbcType=VARCHAR}
+			</if>
+			<if test="principal != null">
+				,#{principal, jdbcType=VARCHAR}
+			</if>
+			<if test="parentId != null">
+				,#{parentId, jdbcType=BIGINT}
+			</if>
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="treeId != null">
+				,#{treeId, jdbcType=VARCHAR}
+			</if>
+			<if test="icon != null">
+				,#{icon, jdbcType=VARCHAR}
+			</if>
+			<if test="iconCls != null">
+				,#{iconCls, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="url != null">
+				,#{url, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy != null">
+				,#{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateDate != null">
+				,#{updateDate, jdbcType=TIMESTAMP}
+			</if>
+			<if test="deleteFlag != null">
+				,#{deleteFlag, jdbcType=INTEGER}
+			</if>
+			<if test="deleteTime != null">
+				,#{deleteTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateSysOrganization" parameterType="com.glaf.base.modules.sys.model.SysOrganization">
+		update SYS_ORGANIZATION
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="name != null">
+				NAME = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				ORG_DESC = #{description, jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				CREATETIME = #{createTime, jdbcType=TIMESTAMP},
+			</if>
+			<if test="sort != null">
+				SORTNO = #{sort, jdbcType=INTEGER},
+			</if>
+			<if test="no != null">
+				ORG_NO = #{no, jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				CODE = #{code, jdbcType=VARCHAR},
+			</if>
+			<if test="code2 != null">
+				CODE2 = #{code2, jdbcType=VARCHAR},
+			</if>
+			<if test="level != null">
+				LEVEL = #{level, jdbcType=INTEGER},
+			</if>
+			<if test="locked != null">
+				LOCKED = #{locked, jdbcType=INTEGER},
+			</if>
+			<if test="discriminator != null">
+				DISCRIMINATOR = #{discriminator, jdbcType=VARCHAR},
+			</if>
+			<if test="icon != null">
+				ICON = #{icon, jdbcType=VARCHAR},
+			</if>
+			<if test="iconCls != null">
+				ICONCLS = #{iconCls, jdbcType=VARCHAR},
+			</if>
+			<if test="treeId != null">
+				TREEID = #{treeId, jdbcType=VARCHAR},
+			</if>
+			<if test="fincode != null">
+				FINCODE = #{fincode, jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				ADDRESS = #{address, jdbcType=VARCHAR},
+			</if>
+			<if test="telphone != null">
+				TELPHONE = #{telphone, jdbcType=VARCHAR},
+			</if>
+			<if test="principal != null">
+				PRINCIPAL = #{principal, jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				PARENTID = #{parentId, jdbcType=BIGINT},
+			</if>
+			<if test="type != null">
+				TYPE = #{type, jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				URL = #{url, jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateDate != null">
+				UPDATEDATE = #{updateDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteFlag != null">
+				DELETEFLAG = #{deleteFlag, jdbcType=INTEGER},
+			</if>
+			<if test="deleteTime != null">
+				DELETETIME = #{deleteTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteSysOrganizationById" parameterType="long">
+		delete from
+		SYS_ORGANIZATION
+		where ID = #{id}
+	</delete>
+
+
+	<delete id="deleteSysOrganizations"
+		parameterType="com.glaf.base.modules.sys.query.SysOrganizationQuery">
+		delete from SYS_ORGANIZATION
+		where (
+		ID IN
+		<foreach item="x_rowId" index="index" collection="rowIds"
+			open="(" separator="," close=")">
+			#{x_rowId}
+		</foreach>
+		)
+	</delete>
+
+
+	<select id="getSysOrganizationById" parameterType="long"
+		resultMap="sysOrganizationResultMap">
+		select * from SYS_ORGANIZATION where ID = #{id}
+	</select>
+
+
+	<select id="getSysOrganizations"
+		parameterType="com.glaf.base.modules.sys.query.SysOrganizationQuery"
+		resultMap="sysOrganizationResultMap">
+		select E.*
+		<include refid="selectSysOrganizationsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.LOCKED asc, E.PARENTID, E.SORTNO asc, E.TREEID
+				asc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getSysOrganizationCount"
+		parameterType="com.glaf.base.modules.sys.query.SysOrganizationQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectSysOrganizationsSql" />
+	</select>
+
+
+	<sql id="selectSysOrganizationsSql">
+
+		from SYS_ORGANIZATION E
+
+		<where>
+			1 = 1
+
+			<if test=" parentId != null  ">
+				and E.PARENTID = #{parentId}
+			</if>
+
+			<if test="parentIds != null and parentIds.size != 0">
+				and E.PARENTID IN
+				<foreach item="x_parentId" index="index" collection="parentIds"
+					open="(" separator="," close=")">
+					#{x_parentId}
+				</foreach>
+			</if>
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID = #{tenantId}
+			</if>
+
+			<if test="name != null and name != '' ">
+				and E.NAME = #{name}
+			</if>
+
+			<if test="nameLike != null and nameLike != '' ">
+				and E.NAME like #{nameLike}
+			</if>
+
+			<if test="descriptionLike != null and descriptionLike != '' ">
+				and E.ORG_DESC like #{descriptionLike}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+			<if test="sortGreaterThanOrEqual != null">
+				and E.SORTNO &gt;= #{sortGreaterThanOrEqual}
+			</if>
+
+			<if test="sortLessThanOrEqual != null">
+				and E.SORTNO &lt;= #{sortLessThanOrEqual}
+			</if>
+
+			<if test="no != null and no != '' ">
+				and E.ORG_NO = #{no}
+			</if>
+
+			<if test="noLike != null and noLike != '' ">
+				and E.ORG_NO like #{noLike}
+			</if>
+
+			<if test="noLeftLike != null and noLeftLike != '' ">
+				and E.ORG_NO like #{noLeftLike}
+			</if>
+
+			<if test="noRightLike != null and noRightLike != '' ">
+				and E.ORG_NO like #{noRightLike}
+			</if>
+
+			<if test="code != null and code != '' ">
+				and E.CODE = #{code}
+			</if>
+
+			<if test="codeLike != null and codeLike != '' ">
+				and E.CODE like #{codeLike}
+			</if>
+
+			<if test="codeLeftLike != null and codeLeftLike != '' ">
+				and E.CODE like #{codeLeftLike}
+			</if>
+
+			<if test="codeRightLike != null and codeRightLike != '' ">
+				and E.CODE like #{codeRightLike}
+			</if>
+
+			<if test="code2 != null and code2 != '' ">
+				and E.CODE2 = #{code2}
+			</if>
+
+			<if test="code2Like != null and code2Like != '' ">
+				and E.CODE like #{code2Like}
+			</if>
+
+			<if test="code2LeftLike != null and code2LeftLike != '' ">
+				and E.CODE like #{code2LeftLike}
+			</if>
+
+			<if test="code2RightLike != null and code2RightLike != '' ">
+				and E.CODE like #{code2RightLike}
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED = #{locked}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE = #{type}
+			</if>
+
+			<if test="deleteFlag != null">
+				and E.DELETEFLAG = #{deleteFlag}
+			</if>
+
+			<if test="fincode != null and fincode != '' ">
+				and E.FINCODE = #{fincode}
+			</if>
+
+			<if test="fincodeLike != null and fincodeLike != '' ">
+				and E.FINCODE like #{fincodeLike}
+			</if>
+
+			<if test="fincodeLeftLike != null and fincodeLeftLike != '' ">
+				and E.FINCODE like #{fincodeLeftLike}
+			</if>
+
+			<if test="fincodeRightLike != null and fincodeRightLike != '' ">
+				and E.FINCODE like #{fincodeRightLike}
+			</if>
+
+			<if test="treeIdLeftLike != null and treeIdLeftLike != '' ">
+				and E.TREEID like #{treeIdLeftLike}
+			</if>
+
+			<if test="treeIdLike != null and treeIdLike != '' ">
+				and E.TREEID like #{treeIdLike}
+			</if>
+
+			<if test="treeIdRightLike != null and treeIdRightLike != '' ">
+				and E.TREEID like #{treeIdRightLike}
+			</if>
+
+			<if test="organizationIds != null and organizationIds.size != 0">
+				and E.ID IN
+				<foreach item="x_organizationId" index="index" collection="organizationIds"
+					open="(" separator="," close=")">
+					#{x_organizationId}
+				</foreach>
+			</if>
+
+			<if test="level != null">
+				and E.LEVEL = #{level}
+			</if>
+
+			<if test="levelGreaterThanOrEqual != null">
+				and E.LEVEL &gt;= #{levelGreaterThanOrEqual}
+			</if>
+
+			<if test="levelLessThanOrEqual != null">
+				and E.LEVEL &lt;= #{levelLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

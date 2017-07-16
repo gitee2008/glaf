@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.base.modules.sys.mapper.GroupUserMapper">
+
+	<insert id="insertGroupUser" parameterType="com.glaf.base.modules.sys.model.GroupUser">
+		insert into
+		SYS_GROUP_USER (ID, USERID, GROUPID, TENANTID)
+		values (
+		#{id
+		,jdbcType=BIGINT},
+		#{userId ,jdbcType=VARCHAR},
+		#{groupId
+		,jdbcType=VARCHAR},
+		#{tenantId ,jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+	<delete id="deleteGroupUsersByUserId" parameterType="string">
+		delete from
+		SYS_GROUP_USER
+		where USERID = #{userId}
+	</delete>
+
+
+	<delete id="deleteGroupUsersByGroupId" parameterType="string">
+		delete from
+		SYS_GROUP_USER
+		where GROUPID = #{groupId}
+	</delete>
+
+
+	<delete id="deleteGroupUsersByQuery" parameterType="com.glaf.base.modules.sys.query.GroupQuery">
+		delete from
+		SYS_GROUP_USER
+		where GROUPID = #{groupId}
+		<if test="userIds != null and userIds.size != 0">
+			and USERID IN
+			<foreach item="x_userId" index="index" collection="userIds"
+				open="(" separator="," close=")">
+				#{x_userId}
+			</foreach>
+		</if>
+		<if test="tenantId != null  ">
+			and E.TENANTID = #{tenantId}
+		</if>
+	</delete>
+
+
+	<select id="getUserIdsByGroupId" parameterType="string"
+		resultType="string">
+
+		select USERID from SYS_GROUP_USER
+		where GROUPID = #{groupId}
+
+	</select>
+
+
+	<select id="getGroupUserCount" parameterType="com.glaf.base.modules.sys.query.GroupQuery"
+		resultType="int">
+		select count(*) from SYS_GROUP_USER
+		where GROUPID =
+		#{groupId} and
+		USERID = #{userId}
+		<if test="tenantId != null  ">
+			and E.TENANTID = #{tenantId}
+		</if>
+	</select>
+
+</mapper>

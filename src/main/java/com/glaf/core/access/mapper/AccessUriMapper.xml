@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.core.access.mapper.AccessUriMapper">
+
+	<resultMap id="accessUriResultMap" type="com.glaf.core.access.domain.AccessUri">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="uri" column="URI_" jdbcType="VARCHAR" />
+		<result property="limit" column="LIMIT_" jdbcType="INTEGER" />
+		<result property="total" column="TOTAL_" jdbcType="INTEGER" />
+		<result property="title" column="TITLE_" jdbcType="VARCHAR" />
+		<result property="description" column="DESCRIPTION_" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<insert id="insertAccessUri" parameterType="com.glaf.core.access.domain.AccessUri">
+		insert into SYS_ACCESS_URI
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="uri != null">
+				,URI_
+			</if>
+			<if test="limit != null">
+				,LIMIT_
+			</if>
+			<if test="total != null">
+				,TOTAL_
+			</if>
+			<if test="title != null">
+				,TITLE_
+			</if>
+			<if test="description != null">
+				,DESCRIPTION_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="uri != null">
+				,#{uri, jdbcType=VARCHAR}
+			</if>
+			<if test="limit != null">
+				,#{limit, jdbcType=INTEGER}
+			</if>
+			<if test="total != null">
+				,#{total, jdbcType=INTEGER}
+			</if>
+			<if test="title != null">
+				,#{title, jdbcType=VARCHAR}
+			</if>
+			<if test="description != null">
+				,#{description, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertAccessUri" parameterType="java.util.List">
+		insert into SYS_ACCESS_URI (
+		ID_
+		,URI_
+		,LIMIT_
+		,TOTAL_
+		,TITLE_
+		,DESCRIPTION_
+		) values
+		<foreach collection="list" item="accessUri" index="index"
+			separator=",">
+			(
+			#{accessUri.id, jdbcType=BIGINT}
+			,#{accessUri.uri,
+			jdbcType=VARCHAR}
+			,#{accessUri.limit, jdbcType=INTEGER}
+			,#{accessUri.total, jdbcType=INTEGER}
+			,#{accessUri.title,
+			jdbcType=VARCHAR}
+			,#{accessUri.description, jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertAccessUri_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="accessUri" index="index">
+			insert into
+			SYS_ACCESS_URI (
+			ID_
+			,URI_
+			,LIMIT_
+			,TOTAL_
+			,TITLE_
+			,DESCRIPTION_
+			) values (
+			#{accessUri.id, jdbcType=BIGINT}
+			,#{accessUri.uri, jdbcType=VARCHAR}
+			,#{accessUri.limit, jdbcType=INTEGER}
+			,#{accessUri.total,
+			jdbcType=INTEGER}
+			,#{accessUri.title, jdbcType=VARCHAR}
+			,#{accessUri.description, jdbcType=VARCHAR}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateAccessUri" parameterType="com.glaf.core.access.domain.AccessUri">
+		update SYS_ACCESS_URI
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="limit != null">
+				LIMIT_ = #{limit, jdbcType=INTEGER},
+			</if>
+			<if test="total != null">
+				TOTAL_ = #{total, jdbcType=INTEGER},
+			</if>
+			<if test="title != null">
+				TITLE_ = #{title, jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				DESCRIPTION_ = #{description, jdbcType=VARCHAR},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteAccessUriById" parameterType="long">
+		delete from
+		SYS_ACCESS_URI
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deleteAccessUris" parameterType="com.glaf.core.access.query.AccessUriQuery">
+		delete from SYS_ACCESS_URI
+		where (
+		ID_ IN
+		<foreach item="x_id" index="index" collection="ids" open="("
+			separator="," close=")">
+			#{x_id}
+		</foreach>
+		)
+	</delete>
+
+
+	<select id="getAccessUriById" parameterType="long" resultMap="accessUriResultMap">
+		select * from SYS_ACCESS_URI where ID_ = #{id}
+	</select>
+
+
+	<select id="getAccessUriByUri" parameterType="string"
+		resultMap="accessUriResultMap">
+		select * from SYS_ACCESS_URI E where E.ID_ = (
+		    select min(F.ID_) from SYS_ACCESS_URI F where F.URI_ = #{uri}
+		)
+	</select>
+
+
+	<select id="getAccessUris" parameterType="com.glaf.core.access.query.AccessUriQuery"
+		resultMap="accessUriResultMap">
+		select distinct E.*
+		<include refid="selectAccessUrisSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getAccessUriCount" parameterType="com.glaf.core.access.query.AccessUriQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectAccessUrisSql" />
+	</select>
+
+
+	<sql id="selectAccessUrisSql">
+
+		from SYS_ACCESS_URI E
+
+		<where>
+			1 = 1
+
+			<if test="uri != null and uri != '' ">
+				and E.URI_ = #{uri}
+			</if>
+
+			<if test="uriLike != null and uriLike != '' ">
+				and E.URI_ like #{uriLike}
+			</if>
+
+			<if test="titleLike != null and titleLike != '' ">
+				and E.TITLE_ like #{titleLike}
+			</if>
+
+			<if test="descriptionLike != null and descriptionLike != '' ">
+				and E.DESCRIPTION_ like #{descriptionLike}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

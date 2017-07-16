@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.data.mapper.SqlDefinitionMapper">
+
+	<resultMap id="sqlDefinitionResultMap" type="com.glaf.matrix.data.domain.SqlDefinition">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="parentId" column="PARENTID_" jdbcType="BIGINT" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="code" column="CODE_" jdbcType="VARCHAR" />
+		<result property="uuid" column="UUID_" jdbcType="VARCHAR" />
+		<result property="title" column="TITLE_" jdbcType="VARCHAR" />
+		<result property="sql" column="SQL_" jdbcType="VARCHAR" />
+		<result property="countSql" column="COUNTSQL_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="operation" column="OPERATION_" jdbcType="VARCHAR" />
+		<result property="rowKey" column="ROWKEY_" jdbcType="VARCHAR" />
+		<result property="cacheFlag" column="CACHEFLAG_" jdbcType="VARCHAR" />
+		<result property="fetchFlag" column="FETCHFLAG_" jdbcType="VARCHAR" />
+		<result property="deleteFetch" column="DELETEFETCH_" jdbcType="VARCHAR" />
+		<result property="exportFlag" column="EXPORTFLAG_" jdbcType="VARCHAR" />
+		<result property="exportTableName" column="EXPORTTABLENAME_"
+			jdbcType="VARCHAR" />
+		<result property="exportTemplate" column="EXPORTTEMPLATE_"
+			jdbcType="VARCHAR" />
+		<result property="targetTableName" column="TARGETTABLENAME_"
+			jdbcType="VARCHAR" />
+		<result property="scheduleFlag" column="SCHEDULEFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="shareFlag" column="SHAREFLAG_" jdbcType="VARCHAR" />
+		<result property="publicFlag" column="PUBLICFLAG_" jdbcType="VARCHAR" />
+		<result property="saveFlag" column="SAVEFLAG_" jdbcType="VARCHAR" />
+		<result property="aggregationFlag" column="AGGREGATIONFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="ordinal" column="ORDINAL_" jdbcType="INTEGER" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY_" jdbcType="VARCHAR" />
+		<result property="updateTime" column="UPDATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertSqlDefinition" parameterType="com.glaf.matrix.data.domain.SqlDefinition">
+		insert into SYS_SQL
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="parentId != null">
+				,PARENTID_
+			</if>
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="code != null">
+				,CODE_
+			</if>
+			<if test="uuid != null">
+				,UUID_
+			</if>
+			<if test="title != null">
+				,TITLE_
+			</if>
+			<if test="sql != null">
+				,SQL_
+			</if>
+			<if test="countSql != null">
+				,COUNTSQL_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="operation != null">
+				,OPERATION_
+			</if>
+			<if test="rowKey != null">
+				,ROWKEY_
+			</if>
+			<if test="scheduleFlag != null">
+				,SCHEDULEFLAG_
+			</if>
+			<if test="cacheFlag != null">
+				,CACHEFLAG_
+			</if>
+			<if test="fetchFlag != null">
+				,FETCHFLAG_
+			</if>
+			<if test="deleteFetch != null">
+				,DELETEFETCH_
+			</if>
+			<if test="exportFlag != null">
+				,EXPORTFLAG_
+			</if>
+			<if test="exportTableName != null">
+				,EXPORTTABLENAME_
+			</if>
+			<if test="exportTemplate != null">
+				,EXPORTTEMPLATE_
+			</if>
+			<if test="targetTableName != null">
+				,TARGETTABLENAME_
+			</if>
+			<if test="shareFlag != null">
+				,SHAREFLAG_
+			</if>
+			<if test="publicFlag != null">
+				,PUBLICFLAG_
+			</if>
+			<if test="saveFlag != null">
+				,SAVEFLAG_
+			</if>
+			<if test="aggregationFlag != null">
+				,AGGREGATIONFLAG_
+			</if>
+			<if test="ordinal != null">
+				,ORDINAL_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+			<if test="updateBy != null">
+				,UPDATEBY_
+			</if>
+			<if test="updateTime != null">
+				,UPDATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="parentId != null">
+				,#{parentId, jdbcType=BIGINT}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="code != null">
+				,#{code, jdbcType=VARCHAR}
+			</if>
+			<if test="uuid != null">
+				,#{uuid, jdbcType=VARCHAR}
+			</if>
+			<if test="title != null">
+				,#{title, jdbcType=VARCHAR}
+			</if>
+			<if test="sql != null">
+				,#{sql, jdbcType=VARCHAR}
+			</if>
+			<if test="countSql != null">
+				,#{countSql, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="operation != null">
+				,#{operation, jdbcType=VARCHAR}
+			</if>
+			<if test="rowKey != null">
+				,#{rowKey, jdbcType=VARCHAR}
+			</if>
+			<if test="scheduleFlag != null">
+				,#{scheduleFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="cacheFlag != null">
+				,#{cacheFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="fetchFlag != null">
+				,#{fetchFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="deleteFetch != null">
+				,#{deleteFetch, jdbcType=VARCHAR}
+			</if>
+			<if test="exportFlag != null">
+				,#{exportFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="exportTableName != null">
+				,#{exportTableName, jdbcType=VARCHAR}
+			</if>
+			<if test="exportTemplate != null">
+				,#{exportTemplate, jdbcType=VARCHAR}
+			</if>
+			<if test="targetTableName != null">
+				,#{targetTableName, jdbcType=VARCHAR}
+			</if>
+			<if test="shareFlag != null">
+				,#{shareFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="publicFlag != null">
+				,#{publicFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="saveFlag != null">
+				,#{saveFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="aggregationFlag != null">
+				,#{aggregationFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="ordinal != null">
+				,#{ordinal, jdbcType=INTEGER}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy != null">
+				,#{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				,#{updateTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateSqlDefinition" parameterType="com.glaf.matrix.data.domain.SqlDefinition">
+		update SYS_SQL
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="parentId != null">
+				PARENTID_ = #{parentId, jdbcType=BIGINT},
+			</if>
+			<if test="name != null">
+				NAME_ = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				CODE_ = #{code, jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				TITLE_ = #{title, jdbcType=VARCHAR},
+			</if>
+			<if test="sql != null">
+				SQL_ = #{sql, jdbcType=VARCHAR},
+			</if>
+			<if test="countSql != null">
+				COUNTSQL_ = #{countSql, jdbcType=VARCHAR},
+			</if>
+			<if test="operation != null">
+				OPERATION_ = #{operation, jdbcType=VARCHAR},
+			</if>
+			<if test="rowKey != null">
+				ROWKEY_ = #{rowKey, jdbcType=VARCHAR},
+			</if>
+			<if test="scheduleFlag != null">
+				SCHEDULEFLAG_ = #{scheduleFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="cacheFlag != null">
+				CACHEFLAG_ = #{cacheFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="fetchFlag != null">
+				FETCHFLAG_ = #{fetchFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="deleteFetch != null">
+				DELETEFETCH_ = #{deleteFetch, jdbcType=VARCHAR},
+			</if>
+			<if test="exportFlag != null">
+				EXPORTFLAG_ = #{exportFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="exportTableName != null">
+				EXPORTTABLENAME_ = #{exportTableName, jdbcType=VARCHAR},
+			</if>
+			<if test="exportTemplate != null">
+				EXPORTTEMPLATE_ = #{exportTemplate, jdbcType=VARCHAR},
+			</if>
+			<if test="targetTableName != null">
+				TARGETTABLENAME_ = #{targetTableName, jdbcType=VARCHAR},
+			</if>
+			<if test="shareFlag != null">
+				SHAREFLAG_ = #{shareFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="publicFlag != null">
+				PUBLICFLAG_ = #{publicFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="saveFlag != null">
+				SAVEFLAG_ = #{saveFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="aggregationFlag != null">
+				AGGREGATIONFLAG_ = #{aggregationFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="ordinal != null">
+				ORDINAL_ = #{ordinal, jdbcType=INTEGER},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY_ = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATETIME_ = #{updateTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteSqlDefinitionById" parameterType="long">
+		delete from
+		SYS_SQL
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getSqlDefinitionById" parameterType="long"
+		resultMap="sqlDefinitionResultMap">
+		select * from SYS_SQL where ID_ = #{id}
+	</select>
+
+
+	<select id="getSqlDefinitionByCode" parameterType="string"
+		resultMap="sqlDefinitionResultMap">
+		select * from SYS_SQL where CODE_ = #{code}
+	</select>
+
+
+	<select id="getSqlDefinitionByUUID" parameterType="string"
+		resultMap="sqlDefinitionResultMap">
+		select * from SYS_SQL where UUID_ = #{uuid}
+	</select>
+
+
+	<select id="getSqlDefinitions" parameterType="com.glaf.matrix.data.query.SqlDefinitionQuery"
+		resultMap="sqlDefinitionResultMap">
+		select distinct E.*
+		<include refid="selectSqlDefinitionsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.CREATETIME_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getSqlDefinitionCount" parameterType="com.glaf.matrix.data.query.SqlDefinitionQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectSqlDefinitionsSql" />
+	</select>
+
+
+	<sql id="selectSqlDefinitionsSql">
+
+		from SYS_SQL E
+
+		<where>
+			1 = 1
+
+			<if test="parentId != null">
+				and E.PARENTID_ = #{parentId}
+			</if>
+
+			<if test="parentIds != null and parentIds.size() &gt; 0">
+				and E.PARENTID_ IN
+				<foreach item="x_parentId" index="index" collection="parentIds"
+					open="(" separator="," close=")">
+					#{x_parentId}
+				</foreach>
+			</if>
+
+			<if test="ids != null and ids.size()  &gt; 0">
+				and E.ID_ IN
+				<foreach item="x_id" index="index" collection="ids" open="("
+					separator="," close=")">
+					#{x_id}
+				</foreach>
+			</if>
+
+			<if test="name != null and name != '' ">
+				and E.NAME_ = #{name}
+			</if>
+
+			<if test="titleLike != null and titleLike != '' ">
+				and E.TITLE_ like #{titleLike}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="exportFlag != null and exportFlag != '' ">
+				and E.EXPORTFLAG_ = #{exportFlag}
+			</if>
+
+			<if test="fetchFlag != null and fetchFlag != '' ">
+				and E.FETCHFLAG_ = #{fetchFlag}
+			</if>
+
+			<if test="publicFlag != null and publicFlag != '' ">
+				and E.PUBLICFLAG_ = #{publicFlag}
+			</if>
+
+			<if test="scheduleFlag != null and scheduleFlag != '' ">
+				and E.SCHEDULEFLAG_ = #{scheduleFlag}
+			</if>
+
+			<if test="shareFlag != null and shareFlag != '' ">
+				and E.SHAREFLAG_ = #{shareFlag}
+			</if>
+
+			<if test="showShare != null and showShare = 'Y' ">
+				or E.SHAREFLAG_ = #{showShare}
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+			<if test="operation != null and operation != '' ">
+				and E.OPERATION_ = #{operation}
+			</if>
+
+			<if test="code != null and code != ''">
+				and E.CODE_ = #{code}
+			</if>
+
+			<if test="codes != null and codes.size() &gt; 0">
+				and E.CODE_ IN
+				<foreach item="x_code" index="index" collection="codes"
+					open="(" separator="," close=")">
+					#{x_code}
+				</foreach>
+			</if>
+
+			<if test="dataRequest != null and dataRequest.filter != null ">
+				<include refid="com.glaf.global.GlobalMapper.dataRequestFilterCondition" />
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

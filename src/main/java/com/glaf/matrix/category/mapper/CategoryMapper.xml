@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.category.mapper.CategoryMapper">
+
+	<resultMap id="categoryResultMap" type="com.glaf.matrix.category.domain.Category">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="parentId" column="PARENTID_" jdbcType="BIGINT" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="code" column="CODE_" jdbcType="VARCHAR" />
+		<result property="description" column="DESC_" jdbcType="VARCHAR" />
+		<result property="discriminator" column="DISCRIMINATOR_"
+			jdbcType="VARCHAR" />
+		<result property="icon" column="ICON_" jdbcType="VARCHAR" />
+		<result property="iconCls" column="ICONCLS_" jdbcType="VARCHAR" />
+		<result property="level" column="LEVEL_" jdbcType="INTEGER" />
+		<result property="treeId" column="TREEID_" jdbcType="VARCHAR" />
+		<result property="title" column="TITLE_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="sort" column="SORTNO_" jdbcType="INTEGER" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="subIds" column="SUBIDS_" jdbcType="VARCHAR" />
+		<result property="url" column="URL_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY_" jdbcType="VARCHAR" />
+		<result property="updateTime" column="UPDATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertCategory" parameterType="com.glaf.matrix.category.domain.Category">
+		insert into SYS_CATEGORY
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="parentId != null">
+				,PARENTID_
+			</if>
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="code != null">
+				,CODE_
+			</if>
+			<if test="description != null">
+				,DESC_
+			</if>
+			<if test="discriminator != null">
+				,DISCRIMINATOR_
+			</if>
+			<if test="icon != null">
+				,ICON_
+			</if>
+			<if test="iconCls != null">
+				,ICONCLS_
+			</if>
+			<if test="level != null">
+				,LEVEL_
+			</if>
+			<if test="treeId != null">
+				,TREEID_
+			</if>
+			<if test="title != null">
+				,TITLE_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="sort != null">
+				,SORTNO_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="subIds != null">
+				,SUBIDS_
+			</if>
+			<if test="url != null">
+				,URL_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="parentId != null">
+				,#{parentId, jdbcType=BIGINT}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="code != null">
+				,#{code, jdbcType=VARCHAR}
+			</if>
+			<if test="description != null">
+				,#{description, jdbcType=VARCHAR}
+			</if>
+			<if test="discriminator != null">
+				,#{discriminator, jdbcType=VARCHAR}
+			</if>
+			<if test="icon != null">
+				,#{icon, jdbcType=VARCHAR}
+			</if>
+			<if test="iconCls != null">
+				,#{iconCls, jdbcType=VARCHAR}
+			</if>
+			<if test="level != null">
+				,#{level, jdbcType=INTEGER}
+			</if>
+			<if test="treeId != null">
+				,#{treeId, jdbcType=VARCHAR}
+			</if>
+			<if test="title != null">
+				,#{title, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="sort != null">
+				,#{sort, jdbcType=INTEGER}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="subIds != null">
+				,#{subIds, jdbcType=VARCHAR}
+			</if>
+			<if test="url != null">
+				,#{url, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertCategory" parameterType="java.util.List">
+		insert into SYS_CATEGORY (
+		ID_
+		,PARENTID_
+		,NAME_
+		,CODE_
+		,DESC_
+		,DISCRIMINATOR_
+		,ICON_
+		,ICONCLS_
+		,LEVEL_
+		,TREEID_
+		,TITLE_
+		,TYPE_
+		,SORTNO_
+		,LOCKED_
+		,SUBIDS_
+		,URL_
+		,CREATEBY_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="category" index="index"
+			separator=",">
+			(
+			#{category.id, jdbcType=BIGINT}
+			,#{category.parentId,
+			jdbcType=BIGINT}
+			,#{category.name, jdbcType=VARCHAR}
+			,#{category.code,
+			jdbcType=VARCHAR}
+			,#{category.description, jdbcType=VARCHAR}
+			,#{category.discriminator, jdbcType=VARCHAR}
+			,#{category.icon, jdbcType=VARCHAR}
+			,#{category.iconCls,
+			jdbcType=VARCHAR}
+			,#{category.level, jdbcType=INTEGER}
+			,#{category.treeId, jdbcType=VARCHAR}
+			,#{category.title,
+			jdbcType=VARCHAR}
+			,#{category.type, jdbcType=VARCHAR}
+			,#{category.sort,
+			jdbcType=INTEGER}
+			,#{category.locked,
+			jdbcType=INTEGER}
+			,#{category.subIds, jdbcType=VARCHAR}
+			,#{category.url, jdbcType=VARCHAR}
+			,#{category.createBy,
+			jdbcType=VARCHAR}
+			,#{category.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertCategory_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="category" index="index">
+			insert into
+			SYS_CATEGORY (
+			ID_
+			,PARENTID_
+			,NAME_
+			,CODE_
+			,DESC_
+			,DISCRIMINATOR_
+			,ICON_
+			,ICONCLS_
+			,LEVEL_
+			,TREEID_
+			,TITLE_
+			,TYPE_
+			,SORTNO_
+			,LOCKED_
+			,SUBIDS_
+			,URL_
+			,CREATEBY_
+			,CREATETIME_
+			) values (
+			#{category.id,
+			jdbcType=BIGINT}
+			,#{category.parentId, jdbcType=BIGINT}
+			,#{category.name,
+			jdbcType=VARCHAR}
+			,#{category.code, jdbcType=VARCHAR}
+			,#{category.description, jdbcType=VARCHAR}
+			,#{category.discriminator, jdbcType=VARCHAR}
+			,#{category.icon,
+			jdbcType=VARCHAR}
+			,#{category.iconCls, jdbcType=VARCHAR}
+			,#{category.level, jdbcType=INTEGER}
+			,#{category.treeId,
+			jdbcType=VARCHAR}
+			,#{category.title, jdbcType=VARCHAR}
+			,#{category.type,
+			jdbcType=VARCHAR}
+			,#{category.sort, jdbcType=INTEGER}
+			,#{category.locked, jdbcType=INTEGER}
+			,#{category.subIds, jdbcType=VARCHAR}
+			,#{category.url,
+			jdbcType=VARCHAR}
+			,#{category.createBy, jdbcType=VARCHAR}
+			,#{category.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateCategory" parameterType="com.glaf.matrix.category.domain.Category">
+		update SYS_CATEGORY
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="parentId != null">
+				PARENTID_ = #{parentId, jdbcType=BIGINT},
+			</if>
+			<if test="name != null">
+				NAME_ = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				CODE_ = #{code, jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				DESC_ = #{description, jdbcType=VARCHAR},
+			</if>
+			<if test="discriminator != null">
+				DISCRIMINATOR_ = #{discriminator, jdbcType=VARCHAR},
+			</if>
+			<if test="icon != null">
+				ICON_ = #{icon, jdbcType=VARCHAR},
+			</if>
+			<if test="iconCls != null">
+				ICONCLS_ = #{iconCls, jdbcType=VARCHAR},
+			</if>
+			<if test="level != null">
+				LEVEL_ = #{level, jdbcType=INTEGER},
+			</if>
+			<if test="treeId != null">
+				TREEID_ = #{treeId, jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				TITLE_ = #{title, jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				TYPE_ = #{type, jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null">
+				SORTNO_ = #{sort, jdbcType=INTEGER},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+			<if test="subIds != null">
+				SUBIDS_ = #{subIds, jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				URL_ = #{url, jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY_ = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATETIME_ = #{updateTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteCategoryById" parameterType="long">
+		delete from
+		SYS_CATEGORY
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getCategoryById" parameterType="long" resultMap="categoryResultMap">
+		select * from SYS_CATEGORY where ID_ = #{id}
+	</select>
+
+
+	<select id="getCategoryByCode" parameterType="string" resultMap="categoryResultMap">
+		select * from SYS_CATEGORY where CODE_ = #{code}
+	</select>
+
+
+	<select id="getCategories" parameterType="com.glaf.matrix.category.query.CategoryQuery"
+		resultMap="categoryResultMap">
+		select distinct E.*
+		<include refid="selectCategoriesSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.PARENTID_ asc, E.LOCKED_ asc, E.SORTNO_ asc, E.URL_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getCategoryCount" parameterType="com.glaf.matrix.category.query.CategoryQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectCategoriesSql" />
+	</select>
+
+
+	<sql id="selectCategoriesSql">
+
+		from SYS_CATEGORY E
+
+		<where>
+			1 = 1
+
+			<if test="parentId != null">
+				and E.PARENTID_ = #{parentId}
+			</if>
+
+			<if test="parentIds != null and parentIds.size() &gt; 0">
+				and E.PARENTID_ IN
+				<foreach item="x_parentId" index="index" collection="parentIds"
+					open="(" separator="," close=")">
+					#{x_parentId}
+				</foreach>
+			</if>
+
+			<if test="categoryIds != null and categoryIds.size() &gt; 0">
+				and E.ID_ IN
+				<foreach item="x_categoryId" index="index" collection="categoryIds"
+					open="(" separator="," close=")">
+					#{x_categoryId}
+				</foreach>
+			</if>
+
+			<if test="name != null and name != '' ">
+				and E.NAME_ = #{name}
+			</if>
+
+			<if test="nameLike != null and nameLike != '' ">
+				and E.NAME_ like #{nameLike}
+			</if>
+
+			<if test="code != null and code != '' ">
+				and E.CODE_ = #{code}
+			</if>
+
+			<if test="codeLike != null and codeLike != '' ">
+				and E.CODE_ like #{codeLike}
+			</if>
+
+			<if test="discriminator != null and discriminator != '' ">
+				and E.DISCRIMINATOR_ = #{discriminator}
+			</if>
+
+			<if test="level != null">
+				and E.LEVEL_ = #{level}
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+
+			<if test="treeId != null and treeId != '' ">
+				and E.TREEID_ = #{treeId}
+			</if>
+
+			<if test="treeIdLike != null and treeIdLike != '' ">
+				and E.TREEID_ like #{treeIdLike}
+			</if>
+
+			<if test="titleLike != null and titleLike != '' ">
+				and E.TITLE_ like #{titleLike}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="url != null and url != '' ">
+				and E.URL_ = #{url}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+			<if test="updateBy != null and updateBy != '' ">
+				and E.UPDATEBY_ = #{updateBy}
+			</if>
+
+			<if test="updateTimeGreaterThanOrEqual != null">
+				and E.UPDATETIME_ &gt;= #{updateTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="updateTimeLessThanOrEqual != null">
+				and E.UPDATETIME_ &lt;= #{updateTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

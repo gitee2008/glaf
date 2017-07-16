@@ -1,0 +1,356 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.glaf.base.modules.sys.service.impl;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.ibatis.session.RowBounds;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.glaf.base.modules.sys.SysConstants;
+import com.glaf.base.modules.sys.mapper.SysRoleMapper;
+import com.glaf.base.modules.sys.model.SysRole;
+import com.glaf.base.modules.sys.query.SysRoleQuery;
+import com.glaf.base.modules.sys.service.SysRoleService;
+import com.glaf.base.modules.sys.util.SysRoleJsonFactory;
+import com.glaf.core.cache.CacheFactory;
+import com.glaf.core.config.SystemConfig;
+import com.glaf.core.id.IdGenerator;
+import com.glaf.core.jdbc.DBConnectionFactory;
+import com.glaf.core.util.DBUtils;
+import com.glaf.core.util.PageResult;
+import com.glaf.core.util.UUID32;
+
+@Service("sysRoleService")
+@Transactional(readOnly = true)
+public class SysRoleServiceImpl implements SysRoleService {
+	protected final static Log logger = LogFactory.getLog(SysRoleServiceImpl.class);
+
+	protected IdGenerator idGenerator;
+
+	protected SqlSessionTemplate sqlSessionTemplate;
+
+	protected SysRoleMapper sysRoleMapper;
+
+	public SysRoleServiceImpl() {
+
+	}
+
+	public int count(SysRoleQuery query) {
+		return sysRoleMapper.getSysRoleCount(query);
+	}
+
+	@Transactional
+	public boolean create(SysRole bean) {
+		if (bean.getId() == null) {
+			bean.setId(UUID32.getUUID());
+		}
+		bean.setCreateDate(new Date());
+		bean.setSort(0);
+		if (StringUtils.isEmpty(bean.getCode())) {
+			bean.setCode("role_" + String.valueOf(bean.getId()));
+		}
+		sysRoleMapper.insertSysRole(bean);
+		return true;
+	}
+
+	@Transactional
+	public boolean delete(String id) {
+		this.deleteById(id);
+		return true;
+	}
+
+	@Transactional
+	public boolean delete(SysRole bean) {
+		this.deleteById(bean.getId());
+		return true;
+	}
+
+	@Transactional
+	public boolean deleteAll(String[] ids) {
+		if (ids != null && ids.length > 0) {
+			for (String id : ids) {
+				this.deleteById(id);
+			}
+		}
+		return true;
+	}
+
+	@Transactional
+	public void deleteById(String id) {
+		if (id != null) {
+			SysRole role = sysRoleMapper.getSysRoleById(id);
+			if (role != null && StringUtils.equals(role.getType(), "SYS")) {
+				throw new RuntimeException("Can't delete sys role");
+			} else {
+				if (StringUtils.equals(DBUtils.POSTGRESQL, DBConnectionFactory.getDatabaseType())) {
+					sysRoleMapper.deleteSysRoleByStringId(String.valueOf(id));
+				} else {
+					sysRoleMapper.deleteSysRoleById(id);
+				}
+			}
+		}
+	}
+
+	@Transactional
+	public void deleteByIds(List<String> rowIds) {
+		if (rowIds != null && !rowIds.isEmpty()) {
+			SysRoleQuery query = new SysRoleQuery();
+			query.rowIds(rowIds);
+			sysRoleMapper.deleteSysRoles(query);
+		}
+	}
+
+	public SysRole findByCode(String code) {
+		SysRoleQuery query = new SysRoleQuery();
+		query.code(code);
+		query.setOrderBy(" E.CODE asc ");
+
+		List<SysRole> list = this.list(query);
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	public SysRole findById(String id) {
+		String cacheKey = "sys_role_" + id;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("role", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONObject json = JSON.parseObject(text);
+					return SysRoleJsonFactory.jsonToObject(json);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
+
+		SysRole sysRole = null;
+		if (StringUtils.equals(DBUtils.POSTGRESQL, DBConnectionFactory.getDatabaseType())) {
+			sysRole = sysRoleMapper.getSysRoleByStringId(String.valueOf(id));
+		} else {
+			sysRole = sysRoleMapper.getSysRoleById(id);
+		}
+		if (sysRole != null && SystemConfig.getBoolean("use_query_cache")) {
+			JSONObject json = sysRole.toJsonObject();
+			CacheFactory.put("role", cacheKey, json.toJSONString());
+		}
+		return sysRole;
+	}
+
+	public SysRole findByName(String name) {
+		SysRoleQuery query = new SysRoleQuery();
+		query.name(name);
+		query.setOrderBy(" E.ROLENAME asc ");
+
+		List<SysRole> list = this.list(query);
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	public SysRole getSysRole(String id) {
+		if (id == null) {
+			return null;
+		}
+		return this.findById(id);
+	}
+
+	public int getSysRoleCountByQueryCriteria(SysRoleQuery query) {
+		return sysRoleMapper.getSysRoleCount(query);
+	}
+
+	public List<SysRole> getSysRoleList() {
+		SysRoleQuery query = new SysRoleQuery();
+		query.setDeleteFlag(0);
+		query.setOrderBy(" E.SORTNO asc ");
+
+		List<SysRole> list = this.list(query);
+		return list;
+	}
+
+	public PageResult getSysRoleList(int pageNo, int pageSize) {
+		// 计算总数
+		PageResult pager = new PageResult();
+		SysRoleQuery query = new SysRoleQuery();
+		query.setDeleteFlag(0);
+
+		int count = this.count(query);
+		if (count == 0) {// 结果集为空
+			pager.setPageSize(pageSize);
+			return pager;
+		}
+
+		query.setOrderBy(" E.SORTNO asc");
+
+		int start = pageSize * (pageNo - 1);
+		List<SysRole> list = this.getSysRolesByQueryCriteria(start, pageSize, query);
+		pager.setResults(list);
+		pager.setPageSize(pageSize);
+		pager.setCurrentPageNo(pageNo);
+		pager.setTotalRecordCount(count);
+
+		return pager;
+	}
+
+	public PageResult getSysRoleList(int pageNo, int pageSize, SysRoleQuery query) {
+		// 计算总数
+		PageResult pager = new PageResult();
+
+		int count = this.count(query);
+		if (count == 0) {// 结果集为空
+			pager.setPageSize(pageSize);
+			return pager;
+		}
+
+		query.setOrderBy(" E.SORTNO asc ");
+
+		int start = pageSize * (pageNo - 1);
+		List<SysRole> list = this.getSysRolesByQueryCriteria(start, pageSize, query);
+		pager.setResults(list);
+		pager.setPageSize(pageSize);
+		pager.setCurrentPageNo(pageNo);
+		pager.setTotalRecordCount(count);
+
+		return pager;
+	}
+
+	public List<SysRole> getSysRolesByQueryCriteria(int start, int pageSize, SysRoleQuery query) {
+		RowBounds rowBounds = new RowBounds(start, pageSize);
+		List<SysRole> rows = sqlSessionTemplate.selectList("getSysRoles", query, rowBounds);
+		return rows;
+	}
+
+	public List<SysRole> list(SysRoleQuery query) {
+		List<SysRole> list = sysRoleMapper.getSysRoles(query);
+		return list;
+	}
+
+	@Transactional
+	public void save(SysRole sysRole) {
+		if (sysRole.getId() == null) {
+			sysRole.setId(idGenerator.getNextId());
+			sysRole.setCreateDate(new Date());
+			sysRoleMapper.insertSysRole(sysRole);
+		} else {
+			sysRole.setUpdateDate(new Date());
+			sysRoleMapper.updateSysRole(sysRole);
+		}
+	}
+
+	@Resource
+	public void setIdGenerator(IdGenerator idGenerator) {
+		this.idGenerator = idGenerator;
+	}
+
+	@Resource
+	public void setSqlSessionTemplate(SqlSessionTemplate sqlSessionTemplate) {
+		this.sqlSessionTemplate = sqlSessionTemplate;
+	}
+
+	@Resource
+	public void setSysRoleMapper(SysRoleMapper sysRoleMapper) {
+		this.sysRoleMapper = sysRoleMapper;
+	}
+
+	/**
+	 * 排序
+	 * 
+	 * @param bean
+	 *            SysRole
+	 * @param operate
+	 *            int 操作
+	 */
+	@Transactional
+	public void sort(SysRole bean, int operate) {
+		if (bean == null)
+			return;
+		if (operate == SysConstants.SORT_PREVIOUS) {// 前移
+			sortByPrevious(bean);
+		} else if (operate == SysConstants.SORT_FORWARD) {// 后移
+			sortByForward(bean);
+		}
+	}
+
+	/**
+	 * 向后移动排序
+	 * 
+	 * @param bean
+	 */
+	private void sortByForward(SysRole bean) {
+		SysRoleQuery query = new SysRoleQuery();
+		query.setSortLessThan(bean.getSort());
+		query.setOrderBy(" E.SORTNO desc ");
+		List<SysRole> list = this.list(query);
+		if (list != null && list.size() > 0) {// 有记录
+			SysRole temp = (SysRole) list.get(0);
+			int i = bean.getSort();
+			bean.setSort(temp.getSort());
+			this.update(bean);// 更新bean
+
+			temp.setSort(i);
+			this.update(temp);// 更新temp
+		}
+	}
+
+	/**
+	 * 向前移动排序
+	 * 
+	 * @param bean
+	 */
+	private void sortByPrevious(SysRole bean) {
+		SysRoleQuery query = new SysRoleQuery();
+		query.setSortGreaterThan(bean.getSort());
+
+		List<SysRole> list = this.list(query);
+		if (list != null && list.size() > 0) {// 有记录
+			SysRole temp = (SysRole) list.get(0);
+			int i = bean.getSort();
+			bean.setSort(temp.getSort());
+			this.update(bean);// 更新bean
+
+			temp.setSort(i);
+			this.update(temp);// 更新temp
+		}
+	}
+
+	@Transactional
+	public boolean update(SysRole bean) {
+		bean.setUpdateDate(new Date());
+		sysRoleMapper.updateSysRole(bean);
+		String cacheKey = "sys_role_" + bean.getId();
+		CacheFactory.remove("role", cacheKey);
+		return true;
+	}
+}

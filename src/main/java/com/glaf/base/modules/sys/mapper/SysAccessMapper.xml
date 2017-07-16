@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.base.modules.sys.mapper.SysAccessMapper">
+
+	<insert id="insertSysAccess" parameterType="com.glaf.base.modules.sys.model.SysAccess">
+
+		insert into
+		SYS_APP_ACCESS (ID, APPID, ROLEID)
+		values (#{id, jdbcType=BIGINT},
+		#{appId, jdbcType=BIGINT},
+		#{roleId, jdbcType=VARCHAR})
+
+	</insert>
+
+
+	<delete id="deleteSysAccessByAppId" parameterType="long">
+		delete
+		from
+		SYS_APP_ACCESS where APPID = #{appId}
+	</delete>
+
+
+	<delete id="deleteSysAccessByRoleId" parameterType="string">
+		delete from
+		SYS_APP_ACCESS where ROLEID = #{roleId}
+	</delete>
+
+
+	<select id="getSysAccessByAppId" parameterType="long"
+		resultType="com.glaf.base.modules.sys.model.SysAccess">
+
+		select E.APPID as appId, E.ROLEID as roleId
+		from
+		SYS_APP_ACCESS
+		E
+		where E.APPID = #{appId}
+
+	</select>
+
+
+	<select id="getSysAccessByRoleId" parameterType="string"
+		resultType="com.glaf.base.modules.sys.model.SysAccess">
+
+		select E.APPID as appId, E.ROLEID as roleId
+		from
+		SYS_APP_ACCESS
+		E
+		where E.ROLEID = #{roleId}
+
+	</select>
+
+
+</mapper>

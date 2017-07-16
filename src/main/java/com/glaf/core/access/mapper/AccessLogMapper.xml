@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.core.access.mapper.AccessLogMapper">
+
+	<resultMap id="accessLogResultMap" type="com.glaf.core.access.domain.AccessLog">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="ip" column="IP_" jdbcType="VARCHAR" />
+		<result property="method" column="METHOD_" jdbcType="VARCHAR" />
+		<result property="content" column="CONTENT_" jdbcType="VARCHAR" />
+		<result property="uri" column="URI_" jdbcType="VARCHAR" />
+		<result property="uriRefId" column="URIREFID_" jdbcType="BIGINT" />
+		<result property="status" column="STATUS_" jdbcType="INTEGER" />
+		<result property="day" column="DAY_" jdbcType="INTEGER" />
+		<result property="hour" column="HOUR_" jdbcType="INTEGER" />
+		<result property="minute" column="MINUTE_" jdbcType="INTEGER" />
+		<result property="timeMillis" column="TIMEMILLIS_" jdbcType="INTEGER" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="userId" column="USERID_" jdbcType="VARCHAR" />
+		<result property="accessTime" column="ACCESSTIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertAccessLog" parameterType="com.glaf.core.access.domain.AccessLog">
+		insert into SYS_ACCESS_LOG
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="ip != null">
+				,IP_
+			</if>
+			<if test="method != null">
+				,METHOD_
+			</if>
+			<if test="content != null">
+				,CONTENT_
+			</if>
+			<if test="uri != null">
+				,URI_
+			</if>
+			<if test="uriRefId != null">
+				,URIREFID_
+			</if>
+			<if test="status != null">
+				,STATUS_
+			</if>
+			<if test="day != null">
+				,DAY_
+			</if>
+			<if test="hour != null">
+				,HOUR_
+			</if>
+			<if test="minute != null">
+				,MINUTE_
+			</if>
+			<if test="timeMillis != null">
+				,TIMEMILLIS_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="userId != null">
+				,USERID_
+			</if>
+			<if test="accessTime != null">
+				,ACCESSTIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="ip != null">
+				,#{ip, jdbcType=VARCHAR}
+			</if>
+			<if test="method != null">
+				,#{method, jdbcType=VARCHAR}
+			</if>
+			<if test="content != null">
+				,#{content, jdbcType=VARCHAR}
+			</if>
+			<if test="uri != null">
+				,#{uri, jdbcType=VARCHAR}
+			</if>
+			<if test="uriRefId != null">
+				,#{uriRefId, jdbcType=BIGINT}
+			</if>
+			<if test="status != null">
+				,#{status, jdbcType=INTEGER}
+			</if>
+			<if test="day != null">
+				,#{day, jdbcType=INTEGER}
+			</if>
+			<if test="hour != null">
+				,#{hour, jdbcType=INTEGER}
+			</if>
+			<if test="minute != null">
+				,#{minute, jdbcType=INTEGER}
+			</if>
+			<if test="timeMillis != null">
+				,#{timeMillis, jdbcType=INTEGER}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="userId != null">
+				,#{userId, jdbcType=VARCHAR}
+			</if>
+			<if test="accessTime != null">
+				,#{accessTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertAccessLog" parameterType="java.util.List">
+		insert into SYS_ACCESS_LOG (
+		ID_
+		,IP_
+		,METHOD_
+		,CONTENT_
+		,URI_
+		,URIREFID_
+		,STATUS_
+		,DAY_
+		,HOUR_
+		,MINUTE_
+		,TIMEMILLIS_
+		,TYPE_
+		,USERID_
+		,ACCESSTIME_
+		)
+		values
+		<foreach collection="list" item="accessLog" index="index"
+			separator=",">
+			(
+			#{accessLog.id, jdbcType=BIGINT}
+			,#{accessLog.ip,
+			jdbcType=VARCHAR}
+			,#{accessLog.method, jdbcType=VARCHAR}
+			,#{accessLog.content, jdbcType=VARCHAR}
+			,#{accessLog.uri,
+			jdbcType=VARCHAR}
+			,#{accessLog.uriRefId,
+			jdbcType=BIGINT}
+			,#{accessLog.status, jdbcType=INTEGER}
+			,#{accessLog.day,
+			jdbcType=INTEGER}
+			,#{accessLog.hour,
+			jdbcType=INTEGER}
+			,#{accessLog.minute,
+			jdbcType=INTEGER}
+			,#{accessLog.timeMillis,
+			jdbcType=INTEGER}
+			,#{accessLog.type,
+			jdbcType=VARCHAR}
+			,#{accessLog.userId,
+			jdbcType=VARCHAR}
+			,#{accessLog.accessTime,
+			jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertAccessLog_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="accessLog" index="index">
+			insert into
+			SYS_ACCESS_LOG (
+			ID_
+			,IP_
+			,METHOD_
+			,CONTENT_
+			,URI_
+			,URIREFID_
+			,STATUS_
+			,DAY_
+			,HOUR_
+			,MINUTE_
+			,TIMEMILLIS_
+			,TYPE_
+			,USERID_
+			,ACCESSTIME_
+			) values (
+			#{accessLog.id,
+			jdbcType=BIGINT}
+			,#{accessLog.ip,
+			jdbcType=VARCHAR}
+			,#{accessLog.method,
+			jdbcType=VARCHAR}
+			,#{accessLog.content,
+			jdbcType=VARCHAR}
+			,#{accessLog.uri,
+			jdbcType=VARCHAR}
+			,#{accessLog.uriRefId,
+			jdbcType=BIGINT}
+			,#{accessLog.status,
+			jdbcType=INTEGER}
+			,#{accessLog.day,
+			jdbcType=INTEGER}
+			,#{accessLog.hour,
+			jdbcType=INTEGER}
+			,#{accessLog.minute,
+			jdbcType=INTEGER}
+			,#{accessLog.timeMillis,
+			jdbcType=INTEGER}
+			,#{accessLog.type,
+			jdbcType=VARCHAR}
+			,#{accessLog.userId,
+			jdbcType=VARCHAR}
+			,#{accessLog.accessTime,
+			jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<delete id="deleteAccessLogById" parameterType="long">
+		delete from
+		SYS_ACCESS_LOG
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deleteAccessLogs" parameterType="java.util.Date">
+		delete from
+		SYS_ACCESS_LOG
+		where ACCESSTIME_ &lt; = #{dateBefore}
+	</delete>
+
+
+	<select id="getAccessLogById" parameterType="long" resultMap="accessLogResultMap">
+		select * from SYS_ACCESS_LOG where ID_ = #{id}
+	</select>
+
+
+	<select id="getHourAccessTotal" parameterType="int"
+		resultType="com.glaf.core.access.domain.AccessTotal">
+		select count(ID_) as quantity, USERID_ as userId, DAY_ as
+		day, HOUR_ as hour
+		from SYS_ACCESS_LOG
+		where DAY_ = #{day}
+		group by
+		USERID_,
+		DAY_, HOUR_
+	</select>
+
+
+	<select id="getMinuteAccessTotal" parameterType="int"
+		resultType="com.glaf.core.access.domain.AccessTotal">
+		select count(ID_) as quantity, USERID_ as userId, DAY_ as
+		day, HOUR_ as
+		hour, MINUTE_ as minute
+		from SYS_ACCESS_LOG
+		where DAY_ =
+		#{day}
+		group by USERID_, DAY_, HOUR_, MINUTE_
+	</select>
+
+
+	<select id="getAccessTotal" parameterType="com.glaf.core.access.query.AccessLogQuery"
+		resultType="com.glaf.core.access.domain.AccessTotal">
+
+		select count(ID_) as quantity, USERID_ as userId, DAY_ as day, HOUR_
+		as hour, MINUTE_ as minute
+		from SYS_ACCESS_LOG
+		where DAY_ = #{day}
+
+		<if test="userId != null and userId != '' ">
+			and USERID_ = #{userId}
+		</if>
+
+		<if test="hour != null">
+			and HOUR_ = #{hour}
+		</if>
+
+		<if test="hourGreaterThanOrEqual != null">
+			and HOUR_ &gt;= #{hourGreaterThanOrEqual}
+		</if>
+
+		<if test="minute != null">
+			and MINUTE_ = #{minute}
+		</if>
+
+		group by USERID_, DAY_, HOUR_, MINUTE_
+	</select>
+
+
+	<select id="getAccessLogs" parameterType="com.glaf.core.access.query.AccessLogQuery"
+		resultMap="accessLogResultMap">
+		select distinct E.*
+		<include refid="selectAccessLogsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ACCESSTIME_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getAccessLogCount" parameterType="com.glaf.core.access.query.AccessLogQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectAccessLogsSql" />
+	</select>
+
+
+	<sql id="selectAccessLogsSql">
+
+		from SYS_ACCESS_LOG E
+
+		<where>
+			1 = 1
+
+			<if test="ip != null and ip != '' ">
+				and E.IP_ = #{ip}
+			</if>
+
+			<if test="uri != null and uri != '' ">
+				and E.URI_ = #{uri}
+			</if>
+
+			<if test="uriLike != null and uriLike != '' ">
+				and E.URI_ like #{uriLike}
+			</if>
+
+			<if test="uriRefId != null">
+				and E.URIREFID_ = #{uriRefId}
+			</if>
+
+			<if test="status != null">
+				and E.STATUS_ = #{status}
+			</if>
+
+			<if test="day != null">
+				and E.DAY_ = #{day}
+			</if>
+
+			<if test="hour != null">
+				and E.HOUR_ = #{hour}
+			</if>
+
+			<if test="minute != null">
+				and E.MINUTE_ = #{minute}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="userId != null and userId != '' ">
+				and E.USERID_ = #{userId}
+			</if>
+
+			<if test="accessTimeGreaterThanOrEqual != null">
+				and E.ACCESSTIME_ &gt;= #{accessTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="accessTimeLessThanOrEqual != null">
+				and E.ACCESSTIME_ &lt;= #{accessTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

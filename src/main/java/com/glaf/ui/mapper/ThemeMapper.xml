@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.ui.mapper.ThemeMapper">
+
+	<resultMap id="themeResultMap" type="com.glaf.ui.model.Theme">
+		<id property="id" column="ID_" jdbcType="INTEGER" />
+		<result property="themeStyle" column="THEMESTYLE_" jdbcType="VARCHAR" />
+		<result property="layoutModel" column="LAYOUTMODEL_" jdbcType="VARCHAR" />
+		<result property="background" column="BACKGROUND_" jdbcType="VARCHAR" />
+		<result property="backgroundType" column="BACKGROUNDTYPE_"
+			jdbcType="VARCHAR" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createDate" column="CREATEDATE_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertTheme" parameterType="com.glaf.ui.model.Theme">
+		insert into UI_THEME
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="themeStyle != null">
+				,THEMESTYLE_
+			</if>
+			<if test="layoutModel != null">
+				,LAYOUTMODEL_
+			</if>
+			<if test="background != null">
+				,BACKGROUND_
+			</if>
+			<if test="backgroundType != null">
+				,BACKGROUNDTYPE_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createDate != null">
+				,CREATEDATE_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=INTEGER}
+
+			<if test="themeStyle != null">
+				,#{themeStyle, jdbcType=VARCHAR}
+			</if>
+			<if test="layoutModel != null">
+				,#{layoutModel, jdbcType=VARCHAR}
+			</if>
+			<if test="background != null">
+				,#{background, jdbcType=VARCHAR}
+			</if>
+			<if test="backgroundType != null">
+				,#{backgroundType, jdbcType=VARCHAR}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createDate != null">
+				,#{createDate, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateTheme" parameterType="com.glaf.ui.model.Theme">
+		update UI_THEME
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="themeStyle != null">
+				THEMESTYLE_ = #{themeStyle, jdbcType=VARCHAR},
+			</if>
+			<if test="layoutModel != null">
+				LAYOUTMODEL_ = #{layoutModel, jdbcType=VARCHAR},
+			</if>
+			<if test="background != null">
+				BACKGROUND_ = #{background, jdbcType=VARCHAR},
+			</if>
+			<if test="backgroundType != null">
+				BACKGROUNDTYPE_ = #{backgroundType, jdbcType=VARCHAR},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=INTEGER}
+
+	</update>
+
+
+	<delete id="deleteThemeById" parameterType="integer">
+		delete from UI_THEME
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deleteThemes" parameterType="com.glaf.ui.query.ThemeQuery">
+		delete from UI_THEME
+		where (
+		ID_ IN
+		<foreach item="x_id" index="index" collection="ids" open="("
+			separator="," close=")">
+			#{x_id}
+		</foreach>
+		)
+	</delete>
+
+
+	<select id="getThemeById" parameterType="integer" resultMap="themeResultMap">
+		select * from UI_THEME where ID_ = #{id}
+	</select>
+
+
+	<select id="getThemes" parameterType="com.glaf.ui.query.ThemeQuery"
+		resultMap="themeResultMap">
+		select distinct E.*
+		<include refid="selectThemesSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getThemeCount" parameterType="com.glaf.ui.query.ThemeQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectThemesSql" />
+	</select>
+
+
+	<sql id="selectThemesSql">
+
+		from UI_THEME E
+
+		<where>
+			1 = 1
+
+
+			<if test="themeStyle != null and themeStyle != '' ">
+				and E.THEMESTYLE_ = #{themeStyle}
+			</if>
+
+			<if test="themeStyleLike != null and themeStyleLike != '' ">
+				and E.THEMESTYLE_ like #{themeStyleLike}
+			</if>
+
+			<if test="themeStyles != null and themeStyles.size() &gt; 0">
+				and E.THEMESTYLE_ IN
+				<foreach item="x_themeStyle" index="index" collection="themeStyles"
+					open="(" separator="," close=")">
+					#{x_themeStyle}
+				</foreach>
+			</if>
+
+			<if test="layoutModel != null and layoutModel != '' ">
+				and E.LAYOUTMODEL_ = #{layoutModel}
+			</if>
+
+			<if test="layoutModelLike != null and layoutModelLike != '' ">
+				and E.LAYOUTMODEL_ like #{layoutModelLike}
+			</if>
+
+			<if test="layoutModels != null and layoutModels.size() &gt; 0">
+				and E.LAYOUTMODEL_ IN
+				<foreach item="x_layoutModel" index="index" collection="layoutModels"
+					open="(" separator="," close=")">
+					#{x_layoutModel}
+				</foreach>
+			</if>
+
+			<if test="background != null and background != '' ">
+				and E.BACKGROUND_ = #{background}
+			</if>
+
+			<if test="backgroundLike != null and backgroundLike != '' ">
+				and E.BACKGROUND_ like #{backgroundLike}
+			</if>
+
+			<if test="backgrounds != null and backgrounds.size() &gt; 0">
+				and E.BACKGROUND_ IN
+				<foreach item="x_background" index="index" collection="backgrounds"
+					open="(" separator="," close=")">
+					#{x_background}
+				</foreach>
+			</if>
+
+			<if test="backgroundType != null and backgroundType != '' ">
+				and E.BACKGROUNDTYPE_ = #{backgroundType}
+			</if>
+
+			<if test="backgroundTypeLike != null and backgroundTypeLike != '' ">
+				and E.BACKGROUNDTYPE_ like #{backgroundTypeLike}
+			</if>
+
+			<if test="backgroundTypes != null and backgroundTypes.size() &gt; 0">
+				and E.BACKGROUNDTYPE_ IN
+				<foreach item="x_backgroundType" index="index" collection="backgroundTypes"
+					open="(" separator="," close=")">
+					#{x_backgroundType}
+				</foreach>
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+
+			<if test="lockedGreaterThanOrEqual != null">
+				and E.LOCKED_ &gt;= #{lockedGreaterThanOrEqual}
+			</if>
+
+			<if test="lockedLessThanOrEqual != null">
+				and E.LOCKED_ &lt;= #{lockedLessThanOrEqual}
+			</if>
+
+			<if test="lockeds != null and lockeds.size() &gt; 0">
+				and E.LOCKED_ IN
+				<foreach item="x_locked" index="index" collection="lockeds"
+					open="(" separator="," close=")">
+					#{x_locked}
+				</foreach>
+			</if>
+
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createByLike != null and createByLike != '' ">
+				and E.CREATEBY_ like #{createByLike}
+			</if>
+
+			<if test="createBys != null and createBys.size() &gt; 0">
+				and E.CREATEBY_ IN
+				<foreach item="x_createBy" index="index" collection="createBys"
+					open="(" separator="," close=")">
+					#{x_createBy}
+				</foreach>
+			</if>
+
+			<if test="createDateGreaterThanOrEqual != null">
+				and E.CREATEDATE_ &gt;= #{createDateGreaterThanOrEqual}
+			</if>
+
+			<if test="createDateLessThanOrEqual != null">
+				and E.CREATEDATE_ &lt;= #{createDateLessThanOrEqual}
+			</if>
+
+			<if test="dataRequest != null and dataRequest.filter != null ">
+				<include refid="com.glaf.global.GlobalMapper.dataRequestFilterCondition" />
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

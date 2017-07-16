@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.category.mapper.CategoryOwnerMapper">
+
+	<resultMap id="categoryOwnerResultMap" type="com.glaf.matrix.category.domain.CategoryOwner">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="categoryId" column="PROJECTID_" jdbcType="BIGINT" />
+		<result property="actorId" column="ACTORID_" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<insert id="insertCategoryOwner" parameterType="com.glaf.matrix.category.domain.CategoryOwner">
+
+		insert into
+		SYS_CATEGORY_OWNER ( ID_,PROJECTID_,ACTORID_ )
+		values
+		(#{id,jdbcType=BIGINT},
+		#{categoryId, jdbcType=BIGINT},
+		#{actorId,jdbcType=VARCHAR}
+		)
+
+	</insert>
+
+
+	<delete id="deleteAccessor" parameterType="com.glaf.matrix.category.domain.CategoryOwner">
+		delete from
+		SYS_CATEGORY_OWNER
+		where PROJECTID_ = #{categoryId}
+		and ACTORID_ =
+		#{actorId}
+	</delete>
+
+
+	<delete id="deleteCategoryOwnerByCategoryId" parameterType="long">
+		delete from SYS_CATEGORY_OWNER
+		where PROJECTID_ = #{categoryId}
+	</delete>
+
+
+	<delete id="deleteCategoryOwnerByActorId" parameterType="string">
+		delete
+		from SYS_CATEGORY_OWNER
+		where ACTORID_ = #{actorId}
+	</delete>
+
+
+	<select id="getCategoryOwneresByCategoryId" parameterType="long"
+		resultMap="categoryOwnerResultMap">
+		select * from SYS_CATEGORY_OWNER
+		where PROJECTID_ =
+		#{categoryId}
+	</select>
+
+
+	<select id="getCategoryOwneresByActorId" parameterType="string"
+		resultMap="categoryOwnerResultMap">
+		select *
+		from SYS_CATEGORY_OWNER
+		where ACTORID_ = #{actorId}
+	</select>
+	
+
+	<select id="getAllCategoryOwneres" resultMap="categoryOwnerResultMap">
+		select *
+		from
+		SYS_CATEGORY_OWNER
+	</select>
+
+</mapper>
