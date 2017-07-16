@@ -1,0 +1,6 @@
+<#include "/inc/include.ftl"/>
+<script type="text/javascript" src="${contextPath}/static/plugins/highcharts/highcharts.js"></script>
+<script type="text/javascript" src="${contextPath}/static/plugins/highcharts/highcharts-3d.js"></script>
+<script type="text/javascript" src="${contextPath}/static/plugins/highcharts/highcharts-more.js"></script>
+<script type="text/javascript" src="${contextPath}/static/plugins/highcharts/modules/funnel.js"></script>
+<script type="text/javascript" src="${contextPath}/static/plugins/highcharts/themes/grid-light.js"></script>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:annotation-config />
+
+	<context:component-scan base-package="com.glaf.**.springmvc" />
+
+	<mvc:annotation-driven conversion-service="conversionService" />
+
+	<bean id="conversionService"
+		class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
+
+
+	<!--权限拦截器 -->
+	<!-- <bean id="autoProxyCreator"
+		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="interceptorNames">
+			<list>
+				<value>authorizeInterceptor</value>
+			</list>
+		</property>
+		<property name="beanNames">
+			<list>
+				<value>/*</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="authorizeInterceptor"
+		class="com.glaf.base.modules.sys.interceptor.AuthorizeInterceptor" /> -->
+
+	<!-- i18n -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>conf/i18n/ApplicationStrings</value>
+				<value>conf/i18n/messages</value>
+				<value>conf/i18n/content</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.CookieLocaleResolver"
+		p:cookieName="clientLanguage" p:cookieMaxAge="100000" p:cookiePath="/"
+		p:defaultLocale="zh_CN" />
+
+	<mvc:interceptors>
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+	</mvc:interceptors>
+
+
+	<bean id="jsonHttpMessageConverter"
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="webBindingInitializer">
+			<bean class="com.glaf.core.web.DateBindingInitializer" />
+		</property>
+		<property name="messageConverters">
+			<list>
+				<ref bean="jsonHttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+
+
+	<bean id="multipartResolver"
+		class="com.glaf.core.web.fileupload.resolver.FileUploadResolver">
+		<property name="maxUploadSize">
+			<value>20480000</value>
+		</property>
+		<property name="maxInMemorySize">
+			<value>8192</value>
+		</property>
+		<property name="defaultEncoding">
+			<value>UTF-8</value>
+		</property>
+	</bean>
+
+
+	<!-- 地址映射 -->
+	<bean id="handlerMapping"
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+	</bean>
+
+	<!-- 配置freeMarker视图解析器 -->
+	<!-- FreeMarker视图解析 如返回student,在这里配置后缀名ftl和视图解析器 -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.freemarker.FreeMarkerView" />
+		<property name="cache" value="true" />
+		<property name="suffix" value=".ftl" />
+		<property name="contentType" value="text/html;charset=UTF-8" />
+		<property name="requestContextAttribute" value="request" />
+		<!-- 将请求和会话属性作为变量暴露给FreeMarker模板使用。要做到这一点，可以设置exposeRequestAttributes或者exposeSessionAttributes为true -->
+		<property name="exposeRequestAttributes" value="true" />
+		<property name="exposeSessionAttributes" value="true" />
+		<!-- 使用这些宏，必须设置FreeMarkerViewResolver的exposeMacroHelpers属性为true -->
+		<property name="exposeSpringMacroHelpers" value="true" />
+	</bean>
+
+	<mvc:resources mapping="/static/**" location="/static/"
+		cache-period="31556926" />
+	<mvc:resources mapping="/html/**" location="/html/"
+		cache-period="31556926" />
+	<mvc:resources mapping="/quartz.html" location="/quartz.html"/>
+	<mvc:resources mapping="/unauthorized.html" location="/unauthorized.html"/>
+	
+</beans>

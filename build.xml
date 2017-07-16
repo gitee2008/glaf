@@ -52,10 +52,6 @@
 		    <fileset dir="jar-conf" includes="**/*.xml,**/*.properties"/>
         </jar>
 
-		<jar jarfile="TomcatRedisSessionManager.jar">
-		    <fileset dir="bin" includes="com/r/**/*.class" excludes="**/test/**"/>
-        </jar>
-
 	</target>
 
 	<target name="web_jar" description="Create java jar file">
