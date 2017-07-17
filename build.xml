@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="heathcare" basedir="." default="jar">
+<project name="saas" basedir="." default="jar">
 	<!-- Project settings -->
-	<property name="project.title" value="GLAF Wechat System" />
-	<property name="project.distname" value="glaf-heathcare" />
+	<property name="project.title" value="GLAF saas System" />
+	<property name="project.distname" value="glaf-saas" />
 
 	<!-- 路径设置 -->
 	<property name="src.dir" value="./src" />
