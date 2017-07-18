@@ -99,7 +99,7 @@
 <div class="easyui-layout" data-options="fit:true">  
   <div data-options="region:'north',split:true,border:false" style="height:38px" > 
     <div class="toolbar-backgroud"> 
-		&nbsp;&nbsp;<span class="x_content_title">编辑记录</span>
+		&nbsp;&nbsp;<span class="x_content_title">&nbsp;编辑记录</span>
 		<#if canEdit == true>
 		 <#if canUpdate == true>
 		 <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'" 
@@ -108,8 +108,12 @@
 		   onclick="javascript:saveData(true);" >保存并关闭</a>
 		 </#if>
 		</#if>
+		<#if dataModel.businessStatus == 9>
+		&nbsp;<span style="font:bold 13px 宋体; color:#ff0000;">已审核</span>&nbsp;
+		<#else>
 		<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'" 
 		   onclick="javascript:saveAsData(false);" >另存</a>
+		</#if>
     </div> 
   </div>
 

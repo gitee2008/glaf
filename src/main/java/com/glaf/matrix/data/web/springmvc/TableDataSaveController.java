@@ -49,6 +49,7 @@ import com.glaf.core.util.ParamUtils;
 import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.ResponseUtils;
 import com.glaf.matrix.data.bean.TableDataBean;
+import com.glaf.matrix.data.domain.DataModel;
 import com.glaf.matrix.data.domain.SysTable;
 import com.glaf.matrix.data.domain.TableColumn;
 import com.glaf.matrix.data.service.ITableService;
@@ -230,13 +231,14 @@ public class TableDataSaveController {
 							}
 						}
 					} else {
-						Map<String, Object> rowMap = null;
+						DataModel dataModel = null;
 						String uuid = request.getParameter("uuid");
 						if (StringUtils.isNotEmpty(uuid)) {
-							rowMap = tableDataBean.getRowMap(loginContext, sysTable, uuid);
+							dataModel = tableDataBean.getDataModel(loginContext, sysTable, uuid);
 						}
-						if (rowMap != null && !rowMap.isEmpty()) {
-							dataMap.put("id_", rowMap.get("id_"));
+						if (dataModel != null) {
+							dataMap.putAll(dataModel.getDataMap());
+							dataMap.put("id_", dataModel.getId());
 							dataMap.put("uuid_", uuid);
 						} else {
 							isInsert = true;
@@ -265,9 +267,6 @@ public class TableDataSaveController {
 						if (loginContext.getRoles() != null && loginContext.getRoles().contains("TenantAdmin")) {
 							if (StringUtils.equals(loginContext.getUser().getTenantId(),
 									ParamUtils.getString(dataMap, "tenantid_"))) {
-								hasUpdatePermission = true;
-							} else if (loginContext.getUser().getOrganizationId() == ParamUtils.getLong(dataMap,
-									"organizationid_")) {
 								hasUpdatePermission = true;
 							}
 						}

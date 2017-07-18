@@ -58,13 +58,13 @@ import com.glaf.core.service.ITablePageService;
 import com.glaf.core.util.Constants;
 import com.glaf.core.util.DateUtils;
 import com.glaf.core.util.LowerLinkedMap;
-import com.glaf.core.util.ParamUtils;
 import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.ResponseUtils;
 
 import com.glaf.matrix.data.bean.TableDataBean;
 import com.glaf.matrix.data.bean.TableExcelExportBean;
 import com.glaf.matrix.data.domain.Comment;
+import com.glaf.matrix.data.domain.DataModel;
 import com.glaf.matrix.data.domain.SqlCriteria;
 import com.glaf.matrix.data.domain.SysTable;
 import com.glaf.matrix.data.domain.TableColumn;
@@ -112,16 +112,17 @@ public class TableDataController {
 				if (tableDataBean.hasPermission(loginContext, tableDefinition, Constants.PRIVILEGE_READ)) {
 					List<TableColumn> columns = tableService.getTableColumnsByTableId(tableId);
 					if (columns != null && !columns.isEmpty()) {
-						Map<String, Object> rowMap = null;
+						DataModel dataModel = null;
 						String uuid = request.getParameter("uuid");
 						if (StringUtils.isNotEmpty(uuid)) {
-							rowMap = tableDataBean.getRowMap(loginContext, tableDefinition, uuid);
-							if (rowMap != null && !rowMap.isEmpty()) {
+							dataModel = tableDataBean.getDataModel(loginContext, tableDefinition, uuid);
+							if (dataModel != null) {
 								boolean canUpdate = tableDataBean.canUpdate(loginContext, tableDefinition, uuid);
+								request.setAttribute("dataModel", dataModel);
 								request.setAttribute("canUpdate", canUpdate);
 								request.setAttribute("status", 1);
 
-								int status = ParamUtils.getInt(rowMap, "business_status_");
+								int status = dataModel.getBusinessStatus();
 								request.setAttribute("status_enc", RSAUtils.encryptString(String.valueOf(status)));
 							}
 							/**
@@ -133,8 +134,8 @@ public class TableDataController {
 						}
 
 						LowerLinkedMap dataMap = new LowerLinkedMap();
-						if (rowMap != null && !rowMap.isEmpty()) {
-							dataMap.putAll(rowMap);
+						if (dataModel != null && dataModel.getDataMap() != null && !dataModel.getDataMap().isEmpty()) {
+							dataMap.putAll(dataModel.getDataMap());
 						}
 
 						logger.debug("dataMap:" + dataMap);
@@ -311,11 +312,11 @@ public class TableDataController {
 					long topId = RequestUtils.getLong(request, "topId");
 					if (topId > 0) {
 						TableDataBean tableDataBean = new TableDataBean();
-						Map<String, Object> rowMap = tableDataBean.getRowMapById(loginContext, masterTable, topId);
-						if (rowMap != null && !rowMap.isEmpty()) {
+						DataModel dataModel = tableDataBean.getDataModelById(loginContext, masterTable, topId);
+						if (dataModel != null) {
 							LowerLinkedMap dataMap = new LowerLinkedMap();
-							dataMap.putAll(rowMap);
-							int business_status = ParamUtils.getInt(dataMap, "business_status_");
+							dataMap.putAll(dataModel.getDataMap());
+							int business_status = dataModel.getBusinessStatus();
 							if (business_status == 9) {
 								request.setAttribute("canEdit", false);
 							}
@@ -367,18 +368,18 @@ public class TableDataController {
 				if (tableDataBean.hasPermission(loginContext, sysTable, Constants.PRIVILEGE_READ)) {
 					List<TableColumn> columns = tableService.getTableColumnsByTableId(tableId);
 					if (columns != null && !columns.isEmpty()) {
-						Map<String, Object> rowMap = null;
+						DataModel dataModel = null;
 						String uuid = request.getParameter("uuid");
 						if (StringUtils.isNotEmpty(uuid)) {
 							/**
 							 * 入口处加密
 							 */
 							request.setAttribute("businessKey_enc", RSAUtils.encryptString(uuid));
-							rowMap = tableDataBean.getRowMap(loginContext, sysTable, uuid);
-							if (rowMap != null && !rowMap.isEmpty()) {
-								logger.debug("rowMap:" + rowMap);
+							dataModel = tableDataBean.getDataModel(loginContext, sysTable, uuid);
+							if (dataModel != null) {
+								request.setAttribute("dataModel", dataModel);
 								boolean canUpdate = false;
-								int status = ParamUtils.getInt(rowMap, "business_status_");
+								int status = dataModel.getBusinessStatus();
 								request.setAttribute("status_enc", RSAUtils.encryptString(String.valueOf(status)));
 								if (status == 9) {
 									canUpdate = false;// 审核通过的不允许修改
@@ -386,24 +387,20 @@ public class TableDataController {
 
 									boolean hasUpdatePermission = false;
 
-									Date createDate = ParamUtils.getDate(rowMap, "createtime_");
+									Date createDate = dataModel.getCreateTime();
 
 									if (loginContext.isSystemAdministrator()) {
 										hasUpdatePermission = true;
 									} else {
-										if (StringUtils.equals(loginContext.getActorId(),
-												ParamUtils.getString(rowMap, "createby_"))) {
+										if (StringUtils.equals(loginContext.getActorId(), dataModel.getCreateBy())) {
 											hasUpdatePermission = true;
 										}
 										if (loginContext.getRoles() != null
 												&& loginContext.getRoles().contains("TenantAdmin")) {
 											if (StringUtils.equals(loginContext.getUser().getTenantId(),
-													ParamUtils.getString(rowMap, "tenantid_"))) {
+													dataModel.getTenantId())) {
 												hasUpdatePermission = true;
-											} else if (loginContext.getUser().getOrganizationId() == ParamUtils
-													.getLong(rowMap, "organizationid_")) {
-												hasUpdatePermission = true;
-											}
+											} 
 										}
 									}
 
@@ -450,8 +447,8 @@ public class TableDataController {
 									request.setAttribute("status_enc", RSAUtils.encryptString(String.valueOf("0")));
 								}
 
-								if (rowMap.get("topid_") != null) {
-									topId = ParamUtils.getInt(rowMap, "topid_");
+								if (dataModel.getTopId() > 0) {
+									topId = dataModel.getTopId();
 									logger.debug("topId:" + topId);
 								}
 							}
@@ -468,11 +465,9 @@ public class TableDataController {
 							if (list != null && !list.isEmpty()) {
 								TableCorrelation tc = list.get(0);
 								SysTable masterTable = tableService.getSysTableById(tc.getMasterTableId());
-								Map<String, Object> rowMap2 = tableDataBean.getRowMapById(loginContext, masterTable,
-										topId);
-								if (rowMap2 != null && !rowMap2.isEmpty()) {
-									// logger.debug("master data:" + rowMap2);
-									int business_status = ParamUtils.getInt(rowMap2, "business_status_");
+								DataModel dataModel2 = tableDataBean.getDataModelById(loginContext, masterTable, topId);
+								if (dataModel2 != null) {
+									int business_status = dataModel2.getBusinessStatus();
 									if (business_status == 9) {
 										request.setAttribute("canEdit", false);
 										request.setAttribute("canUpdate", false);
@@ -482,8 +477,8 @@ public class TableDataController {
 						}
 
 						LowerLinkedMap dataMap = new LowerLinkedMap();
-						if (rowMap != null && !rowMap.isEmpty()) {
-							dataMap.putAll(rowMap);
+						if (dataModel != null && dataModel.getDataMap() != null && !dataModel.getDataMap().isEmpty()) {
+							dataMap.putAll(dataModel.getDataMap());
 						}
 
 						logger.debug("dataMap:" + dataMap);

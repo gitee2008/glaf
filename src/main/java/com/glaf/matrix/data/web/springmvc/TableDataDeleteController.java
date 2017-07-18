@@ -43,12 +43,11 @@ import com.glaf.core.service.ITableDataService;
 import com.glaf.core.service.ITablePageService;
 import com.glaf.core.util.Constants;
 import com.glaf.core.util.DateUtils;
-import com.glaf.core.util.LowerLinkedMap;
-import com.glaf.core.util.ParamUtils;
 import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.ResponseUtils;
 
 import com.glaf.matrix.data.bean.TableDataBean;
+import com.glaf.matrix.data.domain.DataModel;
 import com.glaf.matrix.data.domain.SysTable;
 import com.glaf.matrix.data.domain.TableColumn;
 import com.glaf.matrix.data.domain.TableCorrelation;
@@ -94,34 +93,35 @@ public class TableDataDeleteController {
 				List<TableCorrelation> list = tableCorrelationService.list(query);
 				List<TableColumn> columns = tableService.getTableColumnsByTableId(tableId);
 				if (columns != null && !columns.isEmpty()) {
-					Map<String, Object> rowMap = null;
+					DataModel dataModel = null;
 					Date createDate = null;
 					String uuid = request.getParameter("uuid");
 					if (StringUtils.isNotEmpty(uuid)) {
-						rowMap = tableDataBean.getRowMap(loginContext, sysTable, uuid);
+						dataModel = tableDataBean.getDataModel(loginContext, sysTable, uuid);
 					}
 
-					LowerLinkedMap dataMap = new LowerLinkedMap();
-					if (rowMap != null && !rowMap.isEmpty()) {
-						dataMap.putAll(rowMap);
+					if (dataModel != null && dataModel.getBusinessStatus() == 9) {
+						return ResponseUtils.responseJsonResult(false, "审核通过的数据不能删除。");
+					}
+
+					if (dataModel != null && dataModel.getBusinessStatus() != 9) {
+
 						boolean canDelete = false;
 						boolean hasDeletePermission = false;
 
-						createDate = ParamUtils.getDate(dataMap, "createtime_");
+						createDate = dataModel.getCreateTime();
 
 						if (loginContext.isSystemAdministrator()) {
 							hasDeletePermission = true;
 						} else {
-							if (StringUtils.equals(loginContext.getActorId(),
-									ParamUtils.getString(dataMap, "createby_"))) {
+							if (StringUtils.equals(loginContext.getActorId(), dataModel.getCreateBy())) {
 								hasDeletePermission = true;
 							}
 							if (loginContext.getRoles() != null && loginContext.getRoles().contains("TenantAdmin")) {
-								if (StringUtils.equals(loginContext.getUser().getTenantId(),
-										ParamUtils.getString(dataMap, "tenantid_"))) {
+								if (StringUtils.equals(loginContext.getUser().getTenantId(), dataModel.getTenantId())) {
 									hasDeletePermission = true;
-								} else if (loginContext.getUser().getOrganizationId() == ParamUtils.getLong(dataMap,
-										"organizationid_")) {
+								} else if (loginContext.getUser().getOrganizationId() == dataModel
+										.getOrganizationId()) {
 									hasDeletePermission = true;
 								}
 							}
@@ -180,12 +180,12 @@ public class TableDataDeleteController {
 									}
 									StringBuilder sqlBuffer = new StringBuilder();
 									params = new HashMap<String, Object>();
-									params.put("topId", ParamUtils.getLong(dataMap, "id_"));
+									params.put("topId", dataModel.getId());
 									sqlBuffer.append(" select E.* from ").append(slaveTable.getTableName())
 											.append(" E ");
 									sqlBuffer.append(" where 1=1 ");
 									sqlBuffer.append(" and E.TOPID_ = #{topId} ");
-									rowMap = tablePageService.getOne(sqlBuffer.toString(), params);
+									Map<String, Object> rowMap = tablePageService.getOne(sqlBuffer.toString(), params);
 									if (rowMap == null || rowMap.isEmpty()) {
 										canDelete = true;
 									} else {
@@ -222,7 +222,7 @@ public class TableDataDeleteController {
 											tableModel.setTableName(slaveTable.getTableName());
 											ColumnModel topIdColumn = new ColumnModel();
 											topIdColumn.setColumnName("TOPID_");
-											topIdColumn.setValue(ParamUtils.getLong(dataMap, "id_"));
+											topIdColumn.setValue(dataModel.getId());
 											tableModel.setIdColumn(topIdColumn);
 											tableModel.addColumn(topIdColumn);
 											rows.add(tableModel);
@@ -240,7 +240,7 @@ public class TableDataDeleteController {
 								tableModel.setTableName(sysTable.getTableName());
 								ColumnModel idColumn = new ColumnModel();
 								idColumn.setColumnName("ID_");
-								idColumn.setValue(ParamUtils.getLong(dataMap, "id_"));
+								idColumn.setValue(dataModel.getId());
 								tableModel.setIdColumn(idColumn);
 								tableModel.addColumn(idColumn);
 								rows.add(tableModel);
@@ -271,7 +271,7 @@ public class TableDataDeleteController {
 											tableModel.setTableName(slaveTable.getTableName());
 											ColumnModel topIdColumn = new ColumnModel();
 											topIdColumn.setColumnName("TOPID_");
-											topIdColumn.setValue(ParamUtils.getLong(dataMap, "id_"));
+											topIdColumn.setValue(dataModel.getId());
 											topIdColumn.setJavaType("Long");
 											tableModel.setIdColumn(topIdColumn);
 
@@ -301,7 +301,7 @@ public class TableDataDeleteController {
 								tableModel.setTableName(sysTable.getTableName());
 								ColumnModel idColumn = new ColumnModel();
 								idColumn.setColumnName("ID_");
-								idColumn.setValue(ParamUtils.getLong(dataMap, "id_"));
+								idColumn.setValue(dataModel.getId());
 								idColumn.setJavaType("Long");
 								tableModel.setIdColumn(idColumn);
 

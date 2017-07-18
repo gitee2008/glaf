@@ -30,13 +30,9 @@
 					   } else {
 						   alert('操作成功完成！');
 					   }
-					   if(data.statusCode == 200){
-						   if(refresh){
-						       window.parent.location.reload();
-					           window.close();
-						   } else { 
-							   window.parent.reloadGrid();
-						   }
+					   if(data.statusCode == 200){					  
+						    window.parent.location.reload();
+					        window.close();
 					   }  
 				   }
 			 });
@@ -47,13 +43,17 @@
 
 <body> 
 <div class="easyui-layout" data-options="fit:true">  
-  <div data-options="region:'north',split:true,border:true" style="height:40px"> 
+  <div data-options="region:'north',split:true,border:true" style="height:38px"> 
     <div class="toolbar-backgroud" > 
-		<span class="x_content_title">审核记录</span>
+		<span class="x_content_title">&nbsp;审核记录</span>
+		<#if dataModel.businessStatus == 9>
+		&nbsp;<span style="font:bold 13px 宋体; color:#ff0000;">已审核</span>&nbsp;
+		<#else>
 		<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-ok'" 
 		   onclick="javascript:saveData(true);" >审核通过</a>
 		<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-no'" 
 		   onclick="javascript:saveData(false);" >审核不通过</a>
+		</#if>
     </div> 
   </div>
 

@@ -55,6 +55,7 @@ import com.glaf.core.util.ResponseUtils;
 import com.glaf.core.util.UUID32;
 import com.glaf.matrix.data.bean.TableDataBean;
 import com.glaf.matrix.data.domain.DataFileEntity;
+import com.glaf.matrix.data.domain.DataModel;
 import com.glaf.matrix.data.domain.SysTable;
 import com.glaf.matrix.data.factory.DataFileFactory;
 import com.glaf.matrix.data.query.DataFileQuery;
@@ -364,17 +365,17 @@ public class DataFileController {
 				request.setAttribute("table", sysTable);
 				request.setAttribute("tableDefinition", sysTable);
 
-				Map<String, Object> rowMap = null;
+				DataModel dataModel = null;
 
 				boolean canUpdate = false;
 
 				if (StringUtils.isNotEmpty(businessKey)) {
 					TableDataBean tableDataBean = new TableDataBean();
-					rowMap = tableDataBean.getRowMap(loginContext, sysTable, businessKey);
-					if (rowMap != null && !rowMap.isEmpty()) {
+					dataModel = tableDataBean.getDataModel(loginContext, sysTable, businessKey);
+					if (dataModel != null) {
 						canUpdate = tableDataBean.canUpdate(loginContext, sysTable, businessKey);
 						logger.debug(loginContext.getActorId() + " canUpdate:" + canUpdate);
-						int bstatus = ParamUtils.getInt(rowMap, "business_status_");
+						int bstatus = dataModel.getBusinessStatus();
 						if (bstatus == 9) {
 							canUpdate = false;
 						}

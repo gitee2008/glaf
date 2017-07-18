@@ -108,7 +108,7 @@
 				]],
 				rownumbers: false,
 				pagination: true,
-				pageSize: 10,
+				pageSize: 20,
 				pageList: [10,15,20,25,30,40,50,100,500,1000],
 				pagePosition: 'both'
 			});

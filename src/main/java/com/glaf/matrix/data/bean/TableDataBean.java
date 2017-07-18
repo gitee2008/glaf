@@ -53,13 +53,13 @@ import com.glaf.core.util.Constants;
 import com.glaf.core.util.DateUtils;
 import com.glaf.core.util.JdbcUtils;
 import com.glaf.core.util.LowerLinkedMap;
-import com.glaf.core.util.Paging;
 import com.glaf.core.util.ParamUtils;
 import com.glaf.core.util.QueryUtils;
 import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.UUID32;
 
 import com.glaf.matrix.data.domain.Comment;
+import com.glaf.matrix.data.domain.DataModel;
 import com.glaf.matrix.data.domain.SqlCriteria;
 import com.glaf.matrix.data.domain.SysTable;
 import com.glaf.matrix.data.domain.TableColumn;
@@ -110,7 +110,7 @@ public class TableDataBean {
 
 				dataMap.put("approvaldate_", new Date());
 				dataMap.put("approver_", loginContext.getActorId());
-				dataMap.put("tenantid_", loginContext.getTenantId());
+				// dataMap.put("tenantid_", loginContext.getTenantId());
 				dataMap.put("content_", comment);
 				dataList.add(dataMap);
 
@@ -229,8 +229,8 @@ public class TableDataBean {
 					dataMap.clear();
 					dataMap.putAll(rowMap);
 					Comment c = new Comment();
-					c.setId(ParamUtils.getLong(dataMap, "topid_"));
-					c.setTopId(ParamUtils.getLong(dataMap, "id_"));
+					c.setId(ParamUtils.getLong(dataMap, "id_"));
+					c.setTopId(ParamUtils.getLong(dataMap, "topid_"));
 					c.setApproval(ParamUtils.getInt(dataMap, "approval_"));
 					c.setApprovalDate(ParamUtils.getDate(dataMap, "approvaldate_"));
 					c.setContent(ParamUtils.getString(dataMap, "content_"));
@@ -255,14 +255,7 @@ public class TableDataBean {
 		return databaseService;
 	}
 
-	public EntityService getEntityService() {
-		if (entityService == null) {
-			entityService = ContextFactory.getBean("entityService");
-		}
-		return entityService;
-	}
-
-	public Map<String, Object> getRowMap(LoginContext loginContext, SysTable sysTable, String uuid) {
+	public DataModel getDataModel(LoginContext loginContext, SysTable sysTable, String uuid) {
 		Map<String, Object> rowMap = null;
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("tenantId", loginContext.getTenantId());
@@ -289,12 +282,57 @@ public class TableDataBean {
 		if (rowMap != null && !rowMap.isEmpty()) {
 			LowerLinkedMap dataMap = new LowerLinkedMap();
 			dataMap.putAll(rowMap);
-			return dataMap;
+			DataModel dataModel = new DataModel();
+			dataModel.setDataMap(rowMap);
+			this.populate(rowMap, dataModel);
+			return dataModel;
 		}
 		return null;
 	}
 
-	public Map<String, Object> getRowMapById(LoginContext loginContext, SysTable sysTable, long id) {
+	public DataModel getDataModelById(LoginContext loginContext, SysTable sysTable, long id) {
+		Map<String, Object> rowMap = null;
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("tenantId", loginContext.getTenantId());
+		params.put("id", id);
+		if (id > 0) {
+			String tableName = sysTable.getTableName();
+			if (StringUtils.equals(sysTable.getPartitionFlag(), "Y")
+					&& StringUtils.isNotEmpty(loginContext.getTenantId())) {
+				int hash = IdentityFactory.getTenantHash(loginContext.getTenantId());
+				tableName = sysTable.getTableName() + hash;
+			}
+			StringBuilder sqlBuffer = new StringBuilder();
+			sqlBuffer.append(" select E.*  from ").append(tableName).append(" E ");
+			sqlBuffer.append(" where 1=1 ");
+			sqlBuffer.append(" and E.ID_ = #{id} ");
+			if (loginContext.getOrganizationId() > 0) {
+				sqlBuffer.append(" and E.ORGANIZATIONID_ = ").append(loginContext.getOrganizationId());
+			}
+			if (StringUtils.isNotEmpty(loginContext.getTenantId())) {
+				sqlBuffer.append(" and E.TENANTID_ = #{tenantId} ");
+			}
+			rowMap = getTablePageService().getOne(sqlBuffer.toString(), params);
+		}
+		if (rowMap != null && !rowMap.isEmpty()) {
+			LowerLinkedMap dataMap = new LowerLinkedMap();
+			dataMap.putAll(rowMap);
+			DataModel dataModel = new DataModel();
+			dataModel.setDataMap(rowMap);
+			this.populate(rowMap, dataModel);
+			return dataModel;
+		}
+		return null;
+	}
+
+	public EntityService getEntityService() {
+		if (entityService == null) {
+			entityService = ContextFactory.getBean("entityService");
+		}
+		return entityService;
+	}
+
+	private Map<String, Object> getRowMapById(LoginContext loginContext, SysTable sysTable, long id) {
 		Map<String, Object> rowMap = null;
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("tenantId", loginContext.getTenantId());
@@ -412,11 +450,6 @@ public class TableDataBean {
 		if (list != null && !list.isEmpty()) {
 			for (TableSysPermission p : list) {
 				switch (p.getGranteeType()) {
-				case "user":
-					if (StringUtils.equals(loginContext.getActorId(), p.getGrantee())) {
-						return true;
-					}
-					break;
 				case "role":
 					if (loginContext.getRoles().contains(p.getGrantee())) {
 						return true;
@@ -431,6 +464,35 @@ public class TableDataBean {
 		}
 
 		return false;
+	}
+
+	public void populate(Map<String, Object> dataMap, DataModel dataModel) {
+		dataModel.setId(ParamUtils.getLong(dataMap, "id_"));
+		dataModel.setTopId(ParamUtils.getLong(dataMap, "topid_"));
+		dataModel.setParentId(ParamUtils.getLong(dataMap, "parentid_"));
+		dataModel.setApprover(ParamUtils.getString(dataMap, "approver_"));
+		dataModel.setApprovalDate(ParamUtils.getDate(dataMap, "approvaldate_"));
+		dataModel.setName(ParamUtils.getString(dataMap, "name_"));
+		dataModel.setCode(ParamUtils.getString(dataMap, "code_"));
+		dataModel.setDesc(ParamUtils.getString(dataMap, "desc_"));
+		dataModel.setDiscriminator(ParamUtils.getString(dataMap, "discriminator_"));
+		dataModel.setTitle(ParamUtils.getString(dataMap, "title_"));
+		dataModel.setType(ParamUtils.getString(dataMap, "type_"));
+		dataModel.setTreeId(ParamUtils.getString(dataMap, "treeid_"));
+		dataModel.setGradeId(ParamUtils.getString(dataMap, "gradeid_"));
+		dataModel.setOrganizationId(ParamUtils.getLong(dataMap, "organizationid_"));
+		dataModel.setTenantId(ParamUtils.getString(dataMap, "tenantid_"));
+		dataModel.setIcon(ParamUtils.getString(dataMap, "icon_"));
+		dataModel.setIconCls(ParamUtils.getString(dataMap, "iconcls_"));
+		dataModel.setLevel(ParamUtils.getInt(dataMap, "level_"));
+		dataModel.setSortNo(ParamUtils.getInt(dataMap, "sortno_"));
+		dataModel.setBusinessStatus(ParamUtils.getInt(dataMap, "business_status_"));
+		dataModel.setCreateBy(ParamUtils.getString(dataMap, "createby_"));
+		dataModel.setCreateTime(ParamUtils.getDate(dataMap, "createtime_"));
+		dataModel.setUpdateBy(ParamUtils.getString(dataMap, "updateby_"));
+		dataModel.setUpdateTime(ParamUtils.getDate(dataMap, "updatetime_"));
+		dataModel.setDeleteFlag(ParamUtils.getInt(dataMap, "deleteflag_"));
+		dataModel.setDeleteTime(ParamUtils.getDate(dataMap, "deletetime_"));
 	}
 
 	public void saveOrUpdate(LoginContext loginContext, SysTable sysTable, Map<String, Object> dataMap) {
@@ -496,6 +558,16 @@ public class TableDataBean {
 					JdbcUtils.close(psmt);
 					conn.commit();
 					JdbcUtils.close(conn);
+
+					conn = DBConnectionFactory.getConnection();
+					conn.setAutoCommit(false);
+					psmt = conn.prepareStatement(sql);
+					psmt.setString(1, sysTable.getTableId());
+					psmt.setString(2, loginContext.getActorId());
+					psmt.executeUpdate();
+					JdbcUtils.close(psmt);
+					conn.commit();
+					JdbcUtils.close(conn);
 				}
 			} else {
 				dataMap.put("id_", getEntityService().nextId(sysTable.getTableName()));
@@ -530,6 +602,17 @@ public class TableDataBean {
 							+ " set STATUS_ = 1, BUSINESSKEY_ = ? where SERVICEKEY_ = ? and CREATEBY_ = ? and STATUS_ = 0 ";
 					Database database = getDatabaseService().getDatabaseByMapping("file_storage_db");
 					conn = DBConnectionFactory.getConnection(database.getName());
+					conn.setAutoCommit(false);
+					psmt = conn.prepareStatement(sql);
+					psmt.setString(1, ParamUtils.getString(dataMap, "uuid_"));
+					psmt.setString(2, sysTable.getTableId());
+					psmt.setString(3, loginContext.getActorId());
+					psmt.executeUpdate();
+					JdbcUtils.close(psmt);
+					conn.commit();
+					JdbcUtils.close(conn);
+
+					conn = DBConnectionFactory.getConnection();
 					conn.setAutoCommit(false);
 					psmt = conn.prepareStatement(sql);
 					psmt.setString(1, ParamUtils.getString(dataMap, "uuid_"));
@@ -627,7 +710,7 @@ public class TableDataBean {
 					}
 
 					int start = 0;
-					int limit = 10;
+					int limit = 20;
 					String orderName = null;
 					String order = null;
 
@@ -642,7 +725,7 @@ public class TableDataBean {
 					}
 
 					if (limit <= 0) {
-						limit = Paging.DEFAULT_PAGE_SIZE;
+						limit = 20;
 					}
 
 					if (request.getAttribute("exportXls") != null) {
