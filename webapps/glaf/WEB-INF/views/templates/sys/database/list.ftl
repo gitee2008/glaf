@@ -441,11 +441,10 @@
 <body style="margin:1px;">  
 <div style="margin:0;"></div>  
 <div class="easyui-layout" data-options="fit:true">  
-   <div data-options="region:'north',split:true,border:true" style="height:38px"> 
-    <div class="toolbar-backgroud" style="background:#fafafa;"  > 
-	<form id="iForm" name="iForm" method="post" 
-          action="${contextPath}/sys/database">
-	<img src="${contextPath}/static/images/window.png">
+   <div data-options="region:'north',split:true,border:true" style="height:40px;"> 
+    <div class="toolbar-backgroud" style="margin-top:5px;"> 
+	<form id="iForm" name="iForm" method="post" action="${contextPath}/sys/database">
+	&nbsp;<img src="${contextPath}/static/images/window.png">
 	&nbsp;<span class="x_content_title">数据库列表</span>
     <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-add'" 
 	   onclick="javascript:addNew();">新增</a>  

@@ -64,18 +64,21 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 				/**
 				 * 当登录重试次数大于系统默认的重试次数并且登录时间间隔没有达到系统默认的时间间隔，登录失败
 				 */
-				if (bean.getLoginRetry() > conf.getInt("login.retryCount", 5)) {
+				if (bean.getLoginRetry() > conf.getInt("login.retryCount", 10)) {
 					if (bean.getLockLoginTime() != null) {
 						if (System.currentTimeMillis() - bean.getLockLoginTime().getTime() < 60 * 1000
 								* conf.getInt("login.retryMinutes", 30)) {
 							sysUserService.loginFailure(account);
 							return null;
 						}
+					} else {
+						return null;
 					}
 				}
 			}
 			boolean success = sysUserService.checkPassword(account, pwd);
 			if (!success) {// 密码不匹配
+				logger.debug(account + "密码不匹配!");
 				sysUserService.loginFailure(account);
 				bean = null;
 			}
@@ -107,7 +110,7 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 				/**
 				 * 当登录重试次数大于系统默认的重试次数并且登录时间间隔没有达到系统默认的时间间隔，登录失败
 				 */
-				if (bean.getLoginRetry() > conf.getInt("login.retryCount", 5)) {
+				if (bean.getLoginRetry() > conf.getInt("login.retryCount", 10)) {
 					if (bean.getLockLoginTime() != null) {
 						if (System.currentTimeMillis() - bean.getLockLoginTime().getTime() < 60 * 1000
 								* conf.getInt("login.retryMinutes", 30)) {
@@ -115,6 +118,8 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 							logger.warn(account + " login locked!");
 							return null;
 						}
+					} else {
+						return null;
 					}
 				}
 			}

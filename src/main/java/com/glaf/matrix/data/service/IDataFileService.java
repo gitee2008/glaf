@@ -33,6 +33,8 @@ import com.glaf.matrix.data.query.DataFileQuery;
  */
 @Transactional(readOnly = true)
 public interface IDataFileService {
+	
+	int getDataFileCountByQueryCriteria(DataFileQuery query);
 
 	/**
 	 * 复制字节流
@@ -106,6 +108,14 @@ public interface IDataFileService {
 	 * @return
 	 */
 	List<DataFile> getDataFileList(DataFileQuery query);
+	
+	/**
+	 * 根据参数获取数据(不包含字节流)
+	 * 
+	 * @param paramMap
+	 * @return
+	 */
+	List<DataFile> getDataFileList(int start, int limit, DataFileQuery query);
 
 	/**
 	 * 根据资源编号获取数据(不包含字节流)

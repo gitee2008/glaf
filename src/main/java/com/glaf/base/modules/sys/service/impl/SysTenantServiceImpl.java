@@ -209,7 +209,7 @@ public class SysTenantServiceImpl implements SysTenantService {
 			SysUser bean = new SysUser();
 			bean.setActorId(userId);
 			bean.setPasswordHash(userId);
-			bean.setName("机构管理员");
+			bean.setName("租户管理员");
 			bean.setAccountType(10000);
 			bean.setUserType(8);
 			bean.setEvection(0);

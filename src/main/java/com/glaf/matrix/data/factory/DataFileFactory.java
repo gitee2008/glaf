@@ -117,108 +117,6 @@ public class DataFileFactory {
 		}
 	}
 
-	public void insertDataFile(String tenantId, DataFile dataFile, byte[] data) {
-		String currentSystemName = Environment.getCurrentSystemName();
-		try {
-			if (dataFile != null) {
-				Environment.setCurrentSystemName(Environment.DEFAULT_SYSTEM_NAME);
-				dataFile.setData(null);// 主库不写入附件字节流
-				getDataFileService().insertDataFile(tenantId, dataFile);
-				if (systemName != null && !StringUtils.equals(Environment.DEFAULT_SYSTEM_NAME, systemName)) {
-					logger.debug("file save system: " + systemName);
-					Environment.setCurrentSystemName(systemName);
-					dataFile.setData(data);// 附件库写入字节流
-					getDataFileService().insertDataFile(tenantId, dataFile);
-				}
-			}
-		} catch (Exception ex) {
-			//ex.printStackTrace();
-			logger.error(ex);
-			throw new RuntimeException(ex);
-		} finally {
-			Environment.setCurrentSystemName(currentSystemName);
-		}
-	}
-
-	public List<DataFile> getDataFileList(DataFileQuery query) {
-		return getDataFileService().getDataFileList(query);
-	}
-
-	public DataFile getDataFileByFileId(String tenantId, String fileId) {
-		return getDataFileService().getDataFileByFileId(tenantId, fileId);
-	}
-
-	public void deleteDataFileByFileId(String tenantId, String fileId) {
-		String currentSystemName = Environment.getCurrentSystemName();
-		try {
-			DataFile dataFile = getDataFileService().getDataFileByFileId(tenantId, fileId);
-			if (dataFile != null) {
-				if (systemName != null && !StringUtils.equals(Environment.DEFAULT_SYSTEM_NAME, systemName)) {
-					Environment.setCurrentSystemName(systemName);
-					getDataFileService().deleteById(tenantId, dataFile.getId());// 先删除附件库
-				}
-				Environment.setCurrentSystemName(Environment.DEFAULT_SYSTEM_NAME);
-				getDataFileService().deleteById(tenantId, dataFile.getId());// 再删除主库
-			}
-		} catch (Exception ex) {
-			logger.error(ex);
-			throw new RuntimeException(ex);
-		} finally {
-			Environment.setCurrentSystemName(currentSystemName);
-		}
-	}
-
-	public void deleteByServiceKey(String tenantId, String serviceKey, String actorId, String filename, int status) {
-		DataFileQuery query = new DataFileQuery();
-		query.tenantId(tenantId);
-		query.serviceKey(serviceKey);
-		query.setCreateBy(actorId);
-		query.status(status);
-		query.filename(filename);
-		List<DataFile> list = getDataFileService().getDataFileList(query);
-		if (list != null && !list.isEmpty()) {
-			if (list.size() == 1) {
-				DataFile dataFile = list.get(0);
-				String currentSystemName = Environment.getCurrentSystemName();
-				try {
-					if (systemName != null && !StringUtils.equals(Environment.DEFAULT_SYSTEM_NAME, systemName)) {
-						Environment.setCurrentSystemName(systemName);
-						getDataFileService().deleteById(tenantId, dataFile.getId());// 先删除附件库
-					}
-					Environment.setCurrentSystemName(Environment.DEFAULT_SYSTEM_NAME);
-					getDataFileService().deleteById(tenantId, dataFile.getId());// 再删除主库
-				} catch (Exception ex) {
-					logger.error(ex);
-					throw new RuntimeException(ex);
-				} finally {
-					Environment.setCurrentSystemName(currentSystemName);
-				}
-			}
-		}
-	}
-
-	public InputStream getInputStreamById(String tenantId, String id) {
-		DataFile dataFile = getDataFileService().getDataFileById(tenantId, id);
-		if (dataFile != null) {
-			String currentSystemName = Environment.getCurrentSystemName();
-			try {
-				if (systemName != null) {
-					Environment.setCurrentSystemName(systemName);
-					return getDataFileService().getInputStreamById(tenantId, dataFile.getId());
-				} else {
-					Environment.setCurrentSystemName(Environment.DEFAULT_SYSTEM_NAME);
-					return getDataFileService().getInputStreamById(tenantId, dataFile.getId());
-				}
-			} catch (Exception ex) {
-				logger.error(ex);
-				throw new RuntimeException(ex);
-			} finally {
-				Environment.setCurrentSystemName(currentSystemName);
-			}
-		}
-		return null;
-	}
-
 	public void checkAndCreateFileDB() {
 		IDatabaseService databaseService = (IDatabaseService) ContextFactory.getBean("databaseService");
 		Database database = databaseService.getDatabaseByMapping("file_storage_db");
@@ -298,6 +196,179 @@ public class DataFileFactory {
 				} finally {
 					JdbcUtils.close(stmt);
 					JdbcUtils.close(conn);
+				}
+			}
+		}
+	}
+
+	public void deleteByBusinessKey(String tenantId, String serviceKey, String businessKey) {
+		DataFileQuery query = new DataFileQuery();
+		query.tenantId(tenantId);
+		query.serviceKey(serviceKey);
+		query.businessKey(businessKey);
+		List<DataFile> list = getDataFileService().getDataFileList(query);
+		if (list != null && !list.isEmpty()) {
+			for (DataFile dataFile : list) {
+				String currentSystemName = Environment.getCurrentSystemName();
+				try {
+					if (systemName != null && !StringUtils.equals(Environment.DEFAULT_SYSTEM_NAME, systemName)) {
+						Environment.setCurrentSystemName(systemName);
+						getDataFileService().deleteById(tenantId, dataFile.getId());// 先删除附件库
+					}
+					Environment.setCurrentSystemName(Environment.DEFAULT_SYSTEM_NAME);
+					getDataFileService().deleteById(tenantId, dataFile.getId());// 再删除主库
+				} catch (Exception ex) {
+					logger.error(ex);
+					throw new RuntimeException(ex);
+				} finally {
+					Environment.setCurrentSystemName(currentSystemName);
+				}
+			}
+		}
+	}
+
+	public void deleteByServiceKey(String tenantId, String serviceKey, String actorId, String filename, int status) {
+		DataFileQuery query = new DataFileQuery();
+		query.tenantId(tenantId);
+		query.serviceKey(serviceKey);
+		query.setCreateBy(actorId);
+		query.status(status);
+		query.filename(filename);
+		List<DataFile> list = getDataFileService().getDataFileList(query);
+		if (list != null && !list.isEmpty()) {
+			if (list.size() == 1) {
+				DataFile dataFile = list.get(0);
+				String currentSystemName = Environment.getCurrentSystemName();
+				try {
+					if (systemName != null && !StringUtils.equals(Environment.DEFAULT_SYSTEM_NAME, systemName)) {
+						Environment.setCurrentSystemName(systemName);
+						getDataFileService().deleteById(tenantId, dataFile.getId());// 先删除附件库
+					}
+					Environment.setCurrentSystemName(Environment.DEFAULT_SYSTEM_NAME);
+					getDataFileService().deleteById(tenantId, dataFile.getId());// 再删除主库
+				} catch (Exception ex) {
+					logger.error(ex);
+					throw new RuntimeException(ex);
+				} finally {
+					Environment.setCurrentSystemName(currentSystemName);
+				}
+			}
+		}
+	}
+
+	public void deleteDataFileByFileId(String tenantId, String fileId) {
+		String currentSystemName = Environment.getCurrentSystemName();
+		try {
+			DataFile dataFile = getDataFileService().getDataFileByFileId(tenantId, fileId);
+			if (dataFile != null) {
+				if (systemName != null && !StringUtils.equals(Environment.DEFAULT_SYSTEM_NAME, systemName)) {
+					Environment.setCurrentSystemName(systemName);
+					getDataFileService().deleteById(tenantId, dataFile.getId());// 先删除附件库
+				}
+				Environment.setCurrentSystemName(Environment.DEFAULT_SYSTEM_NAME);
+				getDataFileService().deleteById(tenantId, dataFile.getId());// 再删除主库
+			}
+		} catch (Exception ex) {
+			logger.error(ex);
+			throw new RuntimeException(ex);
+		} finally {
+			Environment.setCurrentSystemName(currentSystemName);
+		}
+	}
+
+	public DataFile getDataFileByFileId(String tenantId, String fileId) {
+		return getDataFileService().getDataFileByFileId(tenantId, fileId);
+	}
+
+	public DataFile getDataFileByPath(String tenantId, String path) {
+		DataFileQuery query = new DataFileQuery();
+		query.path(path);
+		query.tenantId(tenantId);
+		List<DataFile> list = getDataFileService().getDataFileList(query);
+		if (list != null && !list.isEmpty()) {
+			DataFile file = list.get(0);
+			InputStream inputStream = getInputStreamById(file.getTenantId(), file.getId());
+			file.setInputStream(inputStream);
+			return file;
+		}
+		return null;
+	}
+
+	public List<DataFile> getDataFileList(DataFileQuery query) {
+		return getDataFileService().getDataFileList(query);
+	}
+
+	public InputStream getInputStreamById(String tenantId, String id) {
+		DataFile dataFile = getDataFileService().getDataFileById(tenantId, id);
+		if (dataFile != null) {
+			String currentSystemName = Environment.getCurrentSystemName();
+			try {
+				if (systemName != null) {
+					Environment.setCurrentSystemName(systemName);
+					return getDataFileService().getInputStreamById(tenantId, dataFile.getId());
+				} else {
+					Environment.setCurrentSystemName(Environment.DEFAULT_SYSTEM_NAME);
+					return getDataFileService().getInputStreamById(tenantId, dataFile.getId());
+				}
+			} catch (Exception ex) {
+				logger.error(ex);
+				throw new RuntimeException(ex);
+			} finally {
+				Environment.setCurrentSystemName(currentSystemName);
+			}
+		}
+		return null;
+	}
+
+	public void insertDataFile(String tenantId, DataFile dataFile, byte[] data) {
+		String currentSystemName = Environment.getCurrentSystemName();
+		try {
+			if (dataFile != null) {
+				if (systemName != null && !StringUtils.equals(Environment.DEFAULT_SYSTEM_NAME, systemName)) {
+					logger.debug("file save system: " + systemName);
+					Environment.setCurrentSystemName(systemName);
+					dataFile.setData(data);// 附件库写入字节流
+					getDataFileService().insertDataFile(tenantId, dataFile);
+				} else {
+					if (systemName == null) {
+						dataFile.setData(data);// 不存在附件库，流数据要写到主库
+					}
+				}
+				Environment.setCurrentSystemName(Environment.DEFAULT_SYSTEM_NAME);
+				getDataFileService().insertDataFile(tenantId, dataFile);
+			}
+		} catch (Exception ex) {
+			// ex.printStackTrace();
+			logger.error(ex);
+			throw new RuntimeException(ex);
+		} finally {
+			Environment.setCurrentSystemName(currentSystemName);
+		}
+	}
+
+	public void updateStatus(String tenantId, String serviceKey, String businessKey, int status) {
+		DataFileQuery query = new DataFileQuery();
+		query.tenantId(tenantId);
+		query.serviceKey(serviceKey);
+		query.businessKey(businessKey);
+		List<DataFile> list = getDataFileService().getDataFileList(query);
+		if (list != null && !list.isEmpty()) {
+			for (DataFile dataFile : list) {
+				String currentSystemName = Environment.getCurrentSystemName();
+				try {
+					if (systemName != null && !StringUtils.equals(Environment.DEFAULT_SYSTEM_NAME, systemName)) {
+						Environment.setCurrentSystemName(systemName);
+						dataFile.setStatus(status);
+						getDataFileService().updateDataFile(tenantId, dataFile);
+					}
+					Environment.setCurrentSystemName(Environment.DEFAULT_SYSTEM_NAME);
+					dataFile.setStatus(status);
+					getDataFileService().updateDataFile(tenantId, dataFile);
+				} catch (Exception ex) {
+					logger.error(ex);
+					throw new RuntimeException(ex);
+				} finally {
+					Environment.setCurrentSystemName(currentSystemName);
 				}
 			}
 		}

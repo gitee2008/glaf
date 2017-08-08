@@ -87,6 +87,10 @@ public class MyMainController {
 		String layoutTheme = themeInfo != null ? themeInfo.getExt1() : RequestUtils.getLayoutTheme(request);
 		request.setAttribute("layoutTheme", layoutTheme);
 		String indexUrl = LoginContextUtil.getIndexUrl(request);
+		if (!(StringUtils.startsWithIgnoreCase(indexUrl, "http://")
+				|| StringUtils.startsWithIgnoreCase(indexUrl, "https://"))) {
+			indexUrl = request.getContextPath() + indexUrl;
+		}
 		request.setAttribute("indexUrl", indexUrl);
 		request.setAttribute("tabmax", SystemConfig.getString("tabmax"));
 

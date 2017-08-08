@@ -34,6 +34,7 @@ import com.glaf.base.utils.ParamUtil;
 import com.glaf.core.config.Configuration;
 import com.glaf.core.config.Environment;
 import com.glaf.core.context.ContextFactory;
+import com.glaf.core.security.RSAUtils;
 import com.glaf.core.util.StringTools;
 
 public class PasswordLoginHandler implements LoginHandler {
@@ -47,9 +48,15 @@ public class PasswordLoginHandler implements LoginHandler {
 		String account = ParamUtil.getParameter(request, "x");
 		String password = ParamUtil.getParameter(request, "y");
 
+		password = RSAUtils.decryptBase64String(password);
+		// logger.debug("----pwd:" + password);
+
 		HttpSession session = request.getSession(false);
 		String rand = (String) session.getAttribute("x_y");
 		String rand2 = (String) session.getAttribute("x_z");
+
+		// logger.debug("----rand:" + rand);
+		// logger.debug("----rand2:" + rand2);
 
 		SysUser bean = null;
 
@@ -62,19 +69,23 @@ public class PasswordLoginHandler implements LoginHandler {
 				password = StringTools.replace(password, rand2, "");
 			}
 
+			// logger.debug("->password:" + password);
+
 			logger.debug(account + " start login........................");
 			logger.debug("currentSystemName:" + Environment.getCurrentSystemName());
 
 			// 用户登陆，返回系统用户对象
 			AuthorizeService authorizeService = ContextFactory.getBean("authorizeService");
 			bean = authorizeService.authorize(account, password);
-			logger.debug("current authorize User--->"+account);
-			UserOnlineLogService userOnlineLogService = ContextFactory.getBean("userOnlineLogService");
-			// 如果每天登录次数超过设置值，设置用户对象为空，防止恶意操作
-			if (userOnlineLogService.getLoginCount(account) > conf.getInt("limit.loginCount", 1000)) {
-				bean = null;
+			if (bean != null) {
+				logger.debug("current authorize User--->" + account);
+				UserOnlineLogService userOnlineLogService = ContextFactory.getBean("userOnlineLogService");
+				// 如果每天登录次数超过设置值，设置用户对象为空，防止恶意操作
+				if (userOnlineLogService.getLoginCount(account) > conf.getInt("limit.loginCount", 1000)) {
+					bean = null;
+				}
 			}
-			logger.debug("sysuser is null --->"+(bean == null));
+			logger.debug("sysuser is null --->" + (bean == null));
 		}
 
 		return bean;

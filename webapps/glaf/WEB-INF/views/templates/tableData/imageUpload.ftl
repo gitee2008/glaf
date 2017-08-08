@@ -120,7 +120,7 @@ jQuery(function () {
     jQuery('#fileupload').fileupload({
         url: url,
         dataType: 'json',
-		acceptFileTypes: /(\.|\/)(jpg|jpeg|png|gif)$/i,
+		acceptFileTypes: /(\.|\/)(jpg|jpeg|png|gif|bmp)$/i,
 		maxNumberOfFiles: 10,
 		maxFileSize: 999000,
         done: function (e, data) {

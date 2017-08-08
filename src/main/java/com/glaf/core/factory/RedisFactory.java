@@ -897,18 +897,22 @@ public class RedisFactory {
 						config.setBlockWhenExhausted(PropertiesUtils.getBoolean(props, "blockWhenExhausted", true));
 						config.setLifo(PropertiesUtils.getBoolean(props, "lifo", false));
 
+						String password = props.getProperty("redis.password");
+
 						List<JedisShardInfo> servers = new ArrayList<JedisShardInfo>();
 						if (props.getProperty("redis.master.host") != null
 								&& props.getProperty("redis.master.port") != null) {
 							JedisShardInfo master = new JedisShardInfo(props.getProperty("redis.master.host").trim(),
-									Integer.parseInt(props.getProperty("redis.master.port").trim()));
+									Integer.parseInt(props.getProperty("redis.master.port").trim()),
+									((password == null || password == "" || password.isEmpty()) ? null : password));
 							servers.add(master);
 						}
 
 						if (props.getProperty("redis.slave.host") != null
 								&& props.getProperty("redis.slave.port") != null) {
 							JedisShardInfo slave = new JedisShardInfo(props.getProperty("redis.slave.host").trim(),
-									Integer.parseInt(props.getProperty("redis.slave.port").trim()));
+									Integer.parseInt(props.getProperty("redis.slave.port").trim()),
+									((password == null || password == "" || password.isEmpty()) ? null : password));
 							servers.add(slave);
 						}
 
@@ -919,11 +923,15 @@ public class RedisFactory {
 								if (StringUtils.contains(item, ":")) {
 									String h = item.substring(0, item.indexOf(":"));
 									int p = Integer.parseInt(item.substring(item.indexOf(":") + 1, item.length()));
-									JedisShardInfo slave = new JedisShardInfo(h, p);
+									JedisShardInfo slave = new JedisShardInfo(h, p,
+											((password == null || password == "" || password.isEmpty()) ? null
+													: password));
 									servers.add(slave);
 									logger.info("add redis slave " + h + ":" + p);
 								} else {
-									JedisShardInfo slave = new JedisShardInfo(item, 6379);
+									JedisShardInfo slave = new JedisShardInfo(item, 6379,
+											((password == null || password == "" || password.isEmpty()) ? null
+													: password));
 									servers.add(slave);
 									logger.info("add redis slave " + item + ":6379");
 								}

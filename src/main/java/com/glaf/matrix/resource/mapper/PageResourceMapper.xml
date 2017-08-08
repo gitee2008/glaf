@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.resource.mapper.PageResourceMapper">
+
+	<resultMap id="pageResourceResultMap" type="com.glaf.matrix.resource.domain.PageResource">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="resFileId" column="FILEID_" jdbcType="VARCHAR" />
+		<result property="resFileName" column="FILENAME_" jdbcType="VARCHAR" />
+		<result property="resName" column="NAME_" jdbcType="VARCHAR" />
+		<result property="resPath" column="PATH_" jdbcType="VARCHAR" />
+		<result property="resType" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="resContentType" column="CONTENTTYPE_"
+			jdbcType="VARCHAR" />
+		<result property="resContent" column="CONTENT_" jdbcType="VARBINARY"
+			typeHandler="org.apache.ibatis.type.BlobTypeHandler" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertPageResource" parameterType="com.glaf.matrix.resource.domain.PageResource">
+		insert into PAGE_RESOURCE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="resFileId != null">
+				,FILEID_
+			</if>
+			<if test="resFileName != null">
+				,FILENAME_
+			</if>
+			<if test="resName != null">
+				,NAME_
+			</if>
+			<if test="resPath != null">
+				,PATH_
+			</if>
+			<if test="resType != null">
+				,TYPE_
+			</if>
+			<if test="resContentType != null">
+				,CONTENTTYPE_
+			</if>
+			<if test="resContent != null">
+				,CONTENT_
+			</if>
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="resFileId != null">
+				,#{resFileId, jdbcType=VARCHAR}
+			</if>
+			<if test="resFileName != null">
+				,#{resFileName, jdbcType=VARCHAR}
+			</if>
+			<if test="resName != null">
+				,#{resName, jdbcType=VARCHAR}
+			</if>
+			<if test="resPath != null">
+				,#{resPath, jdbcType=VARCHAR}
+			</if>
+			<if test="resType != null">
+				,#{resType, jdbcType=VARCHAR}
+			</if>
+			<if test="resContentType != null">
+				,#{resContentType, jdbcType=VARCHAR}
+			</if>
+			<if test="resContent != null">
+				,#{resContent, jdbcType=VARBINARY}
+			</if>
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updatePageResource" parameterType="com.glaf.matrix.resource.domain.PageResource">
+		update PAGE_RESOURCE
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="resFileName != null">
+				FILENAME_ = #{resFileName, jdbcType=VARCHAR},
+			</if>
+			<if test="resName != null">
+				NAME_ = #{resName, jdbcType=VARCHAR},
+			</if>
+			<if test="resPath != null">
+				PATH_ = #{resPath, jdbcType=VARCHAR},
+			</if>
+			<if test="resType != null">
+				TYPE_ = #{resType, jdbcType=VARCHAR},
+			</if>
+			<if test="resContentType != null">
+				CONTENTTYPE_ = #{resContentType, jdbcType=VARCHAR},
+			</if>
+			<if test="resContent != null">
+				CONTENT_ = #{resContent, jdbcType=VARBINARY},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deletePageResourceById" parameterType="long">
+		delete from
+		PAGE_RESOURCE
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getPageResourceById" parameterType="long"
+		resultMap="pageResourceResultMap">
+		select * from PAGE_RESOURCE where ID_ = #{id}
+	</select>
+
+
+	<select id="getPageResourceByFileId" parameterType="string"
+		resultMap="pageResourceResultMap">
+		select * from PAGE_RESOURCE where FILEID_ = #{fileId}
+	</select>
+
+
+	<select id="getPageResourceByPath" parameterType="string"
+		resultMap="pageResourceResultMap">
+		select * from PAGE_RESOURCE where PATH_ = #{path}
+	</select>
+
+
+	<select id="getPageResources" parameterType="com.glaf.matrix.resource.query.PageResourceQuery"
+		resultMap="pageResourceResultMap">
+
+		select E.ID_
+		,E.FILEID_
+		,E.FILENAME_
+		,E.NAME_
+		,E.PATH_
+		,E.TYPE_
+		,E.CONTENTTYPE_
+		,E.TENANTID_
+		,E.CREATEBY_
+		,E.CREATETIME_
+
+		<include refid="selectPageResourcesSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getPageResourceCount" parameterType="com.glaf.matrix.resource.query.PageResourceQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectPageResourcesSql" />
+	</select>
+
+
+	<sql id="selectPageResourcesSql">
+
+		from PAGE_RESOURCE E
+
+		<where>
+			1 = 1
+
+			<if test="resFileName != null and resFileName != '' ">
+				and E.FILENAME_ = #{resFileName}
+			</if>
+
+			<if test="resFileNameLike != null and resFileNameLike != '' ">
+				and E.FILENAME_ like #{resFileNameLike}
+			</if>
+
+			<if test="resName != null and resName != '' ">
+				and E.NAME_ = #{resName}
+			</if>
+
+			<if test="resNameLike != null and resNameLike != '' ">
+				and E.NAME_ like #{resNameLike}
+			</if>
+
+			<if test="resPath != null and resPath != '' ">
+				and E.PATH_ = #{resPath}
+			</if>
+
+			<if test="resPathLike != null and resPathLike != '' ">
+				and E.PATH_ like #{resPathLike}
+			</if>
+
+			<if test="resType != null and resType != '' ">
+				and E.TYPE_ = #{resType}
+			</if>
+
+			<if test="resTypeLike != null and resTypeLike != '' ">
+				and E.TYPE_ like #{resTypeLike}
+			</if>
+
+			<if test="resContentType != null and resContentType != '' ">
+				and E.CONTENTTYPE_ = #{resContentType}
+			</if>
+
+			<if test="resContentTypeLike != null and resContentTypeLike != '' ">
+				and E.CONTENTTYPE_ like #{resContentTypeLike}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;=
+				#{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;=
+				#{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

@@ -58,6 +58,7 @@ import com.glaf.core.config.SystemConfig;
 import com.glaf.core.domain.SystemProperty;
 import com.glaf.core.security.IdentityFactory;
 import com.glaf.core.security.LoginContext;
+import com.glaf.core.security.RSAUtils;
 import com.glaf.core.util.ClassUtils;
 import com.glaf.core.util.Constants;
 import com.glaf.core.util.IOUtils;
@@ -105,10 +106,10 @@ public class LoginController {
 
 		// 获取参数
 		String account = ParamUtil.getParameter(request, "x");
-		String password = ParamUtil.getParameter(request, "y");
+		String password2 = ParamUtil.getParameter(request, "y");
 
 		SysUser bean = null;
-		if (StringUtils.isNotEmpty(account) && StringUtils.isNotEmpty(password)) {
+		if (StringUtils.isNotEmpty(account) && StringUtils.isNotEmpty(password2)) {
 			if (session == null) {
 				if (StringUtils.isNotEmpty(responseDataType) && StringUtils.equals(responseDataType, "json")) {
 					OutputStream output = null;
@@ -342,7 +343,7 @@ public class LoginController {
 
 	public String getRandomString(int length) {
 		StringBuilder buffer = new StringBuilder(
-				"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$^*()_-=&%+?/\\.<>|{}[]");
+				"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()[]");
 		buffer.append(UUID32.getUUID());
 		StringBuilder sb = new StringBuilder();
 		Random random = new Random();
@@ -361,19 +362,14 @@ public class LoginController {
 		try {
 			HttpSession session = request.getSession(true);
 			java.util.Random random = new java.util.Random();
-			String rand = UUID32.getUUID() + this.getRandomString(random.nextInt(10))
-					+ this.getRandomString(random.nextInt(199)) + Math.abs(random.nextInt(99999999))
-					+ this.getRandomString(random.nextInt(10)) + this.getRandomString(random.nextInt(999))
-					+ Math.abs(random.nextInt(99999999)) + UUID32.getUUID();
-			String rand2 = UUID32.getUUID() + this.getRandomString(random.nextInt(10))
-					+ this.getRandomString(random.nextInt(199)) + Math.abs(random.nextInt(99999999))
-					+ this.getRandomString(random.nextInt(10)) + this.getRandomString(random.nextInt(999))
-					+ Math.abs(random.nextInt(99999999)) + UUID32.getUUID();
+			String rand = this.getRandomString(random.nextInt(50));
+			String rand2 = this.getRandomString(random.nextInt(50));
 			if (session != null) {
 				session.setAttribute("x_y", rand);
 				session.setAttribute("x_z", rand2);
 				json.put("x_y", rand);
 				json.put("x_z", rand2);
+				json.put("public_key", RSAUtils.getDefaultRSAPublicKey());
 			}
 
 			request.setCharacterEncoding("UTF-8");
@@ -382,7 +378,8 @@ public class LoginController {
 			output = response.getOutputStream();
 			output.write(json.toJSONString().getBytes("UTF-8"));
 			output.flush();
-			logger.debug(json.toJSONString());
+			// logger.debug("----------------------------getLoginSecurityKey--------------");
+			// logger.debug(json.toJSONString());
 			return;
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);

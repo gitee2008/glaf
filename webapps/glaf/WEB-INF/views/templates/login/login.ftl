@@ -149,6 +149,8 @@
 	</a>
   <script type="text/javascript" src="${request.contextPath}/static/scripts/jquery.min.js"></script>
   <script type="text/javascript" src="${request.contextPath}/static/scripts/jquery.form.js"></script>
+  <script type="text/javascript" src="${request.contextPath}/static/scripts/jsencrypt.min.js"></script>
+  <script type="text/javascript" src="${request.contextPath}/static/scripts/RSA.min.js"></script>
   <script type="text/javascript" src="${request.contextPath}/static/scripts/map.js"></script>
   <script type="text/javascript" src="${request.contextPath}/static/html/login/spread.js"></script>
   <script type="text/javascript">

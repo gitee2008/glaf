@@ -31,6 +31,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,7 +109,7 @@ public class DataFileServiceImpl implements IDataFileService {
 			dataFileMapper.deleteDataFileById(query);
 			if (SystemConfig.getBoolean("use_query_cache")) {
 				String cacheKey = "datafile_" + id;
-				CacheFactory.remove("blob", cacheKey);
+				CacheFactory.remove("datafile", cacheKey);
 			}
 		}
 	}
@@ -137,7 +138,7 @@ public class DataFileServiceImpl implements IDataFileService {
 			dataFileMapper.deleteDataFilesByFileId(query);
 			if (SystemConfig.getBoolean("use_query_cache")) {
 				String cacheKey = "datafile_" + fileId;
-				CacheFactory.remove("blob", cacheKey);
+				CacheFactory.remove("datafile", cacheKey);
 			}
 		}
 	}
@@ -147,7 +148,7 @@ public class DataFileServiceImpl implements IDataFileService {
 		String cacheKey = "datafile_" + fileId;
 
 		if (SystemConfig.getBoolean("use_file_cache")) {
-			byte[] data = ResourceFactory.getData("mx_blob", cacheKey);
+			byte[] data = ResourceFactory.getData("data_file", cacheKey);
 			if (data != null) {
 				logger.debug("fetch byte[] data from cache.");
 				return data;
@@ -168,8 +169,8 @@ public class DataFileServiceImpl implements IDataFileService {
 		}
 		if (dataFile != null && dataFile.getData() != null) {
 			if (SystemConfig.getBoolean("use_file_cache")
-					&& dataFile.getData().length < conf.getInt("cache_file_size", 500) * FileUtils.KB_SIZE) {
-				ResourceFactory.put("mx_blob", cacheKey, dataFile.getData());
+					&& dataFile.getData().length < conf.getInt("cache_file_size", 800) * FileUtils.KB_SIZE) {
+				ResourceFactory.put("data_file", cacheKey, dataFile.getData());
 				logger.debug("put byte[] data into cache.");
 			}
 			return dataFile.getData();
@@ -182,7 +183,7 @@ public class DataFileServiceImpl implements IDataFileService {
 		String cacheKey = "datafile_" + id;
 
 		if (SystemConfig.getBoolean("use_file_cache")) {
-			byte[] data = ResourceFactory.getData("mx_blob", cacheKey);
+			byte[] data = ResourceFactory.getData("data_file", cacheKey);
 			if (data != null) {
 				logger.debug("fetch byte[] data from cache.");
 				return data;
@@ -203,8 +204,8 @@ public class DataFileServiceImpl implements IDataFileService {
 		}
 		if (dataFile != null && dataFile.getData() != null) {
 			if (SystemConfig.getBoolean("use_file_cache")
-					&& dataFile.getData().length < conf.getInt("cache_file_size", 500) * FileUtils.KB_SIZE) {
-				ResourceFactory.put("mx_blob", cacheKey, dataFile.getData());
+					&& dataFile.getData().length < conf.getInt("cache_file_size", 800) * FileUtils.KB_SIZE) {
+				ResourceFactory.put("data_file", cacheKey, dataFile.getData());
 				logger.debug("put byte[] data into cache.");
 			}
 			return dataFile.getData();
@@ -215,7 +216,7 @@ public class DataFileServiceImpl implements IDataFileService {
 	public DataFile getDataFileByFileId(String tenantId, String fileId) {
 		String cacheKey = "datafile_" + fileId;
 		if (SystemConfig.getBoolean("use_query_cache")) {
-			String text = CacheFactory.getString("blob", cacheKey);
+			String text = CacheFactory.getString("datafile", cacheKey);
 			if (StringUtils.isNotEmpty(text)) {
 				try {
 					JSONObject jsonObject = JSON.parseObject(text);
@@ -236,7 +237,7 @@ public class DataFileServiceImpl implements IDataFileService {
 			dataFile = list.get(0);
 			if (dataFile != null) {
 				if (SystemConfig.getBoolean("use_query_cache")) {
-					CacheFactory.put("blob", cacheKey, dataFile.toJsonObject().toJSONString());
+					CacheFactory.put("datafile", cacheKey, dataFile.toJsonObject().toJSONString());
 				}
 			}
 		}
@@ -267,7 +268,7 @@ public class DataFileServiceImpl implements IDataFileService {
 	public DataFile getDataFileById(String tenantId, String id) {
 		String cacheKey = "datafile_" + id;
 		if (SystemConfig.getBoolean("use_query_cache")) {
-			String text = CacheFactory.getString("blob", cacheKey);
+			String text = CacheFactory.getString("datafile", cacheKey);
 			if (StringUtils.isNotEmpty(text)) {
 				try {
 					JSONObject jsonObject = JSON.parseObject(text);
@@ -285,10 +286,17 @@ public class DataFileServiceImpl implements IDataFileService {
 		DataFile dataFile = dataFileMapper.getDataFileById(query);
 		if (dataFile != null) {
 			if (SystemConfig.getBoolean("use_query_cache")) {
-				CacheFactory.put("blob", cacheKey, dataFile.toJsonObject().toJSONString());
+				CacheFactory.put("datafile", cacheKey, dataFile.toJsonObject().toJSONString());
 			}
 		}
 		return dataFile;
+	}
+
+	public int getDataFileCountByQueryCriteria(DataFileQuery query) {
+		if (StringUtils.isNotEmpty(query.getTenantId())) {
+			query.setTableSuffix(String.valueOf(IdentityFactory.getTenantHash(query.getTenantId())));
+		}
+		return dataFileMapper.getDataFileCount(query);
 	}
 
 	public List<DataFile> getDataFileList(DataFileQuery query) {
@@ -301,6 +309,21 @@ public class DataFileServiceImpl implements IDataFileService {
 			rows.add(dataFile);
 		}
 		return rows;
+	}
+
+	/**
+	 * 根据参数获取数据(不包含字节流)
+	 * 
+	 * @param paramMap
+	 * @return
+	 */
+	public List<DataFile> getDataFileList(int start, int limit, DataFileQuery query) {
+		if (StringUtils.isNotEmpty(query.getTenantId())) {
+			query.setTableSuffix(String.valueOf(IdentityFactory.getTenantHash(query.getTenantId())));
+		}
+		RowBounds rowBounds = new RowBounds(start, limit);
+		List<DataFile> list = sqlSession.selectList("getDataFiles", query, rowBounds);
+		return list;
 	}
 
 	public List<DataFile> getDataFileList(String tenantId, String serviceKey, String businessKey) {
@@ -438,6 +461,14 @@ public class DataFileServiceImpl implements IDataFileService {
 			dataFile.setFileId(dataFile.getId());
 		}
 
+		String filePath = dataFile.getPath();
+		if (filePath != null && filePath.length() > 0) {
+			if (filePath.startsWith("//")) {
+				filePath = filePath.substring(1, filePath.length());
+				dataFile.setPath(filePath);
+			}
+		}
+
 		if (StringUtils.equals(DBUtils.POSTGRESQL, DBConnectionFactory.getDatabaseType())) {
 			dataFileMapper.insertDataFile_postgres(dataFile);
 		} else {
@@ -463,7 +494,7 @@ public class DataFileServiceImpl implements IDataFileService {
 		query.createBy(createBy);
 		query.status(0);
 
-		if (StringUtils.isNotEmpty(query.getTenantId())) {
+		if (StringUtils.isNotEmpty(tenantId)) {
 			query.setTenantId(tenantId);
 			query.setTableSuffix(String.valueOf(IdentityFactory.getTenantHash(query.getTenantId())));
 		}
@@ -476,6 +507,15 @@ public class DataFileServiceImpl implements IDataFileService {
 				if (StringUtils.isNotEmpty(businessKey)) {
 					model.setBusinessKey(businessKey);
 					model.setStatus(1);
+
+					String filePath = model.getPath();
+					if (filePath != null && filePath.length() > 0) {
+						if (filePath.startsWith("//")) {
+							filePath = filePath.substring(1, filePath.length());
+							model.setPath(filePath);
+						}
+					}
+
 					this.updateDataFile(tenantId, model);
 				}
 			}
@@ -489,7 +529,7 @@ public class DataFileServiceImpl implements IDataFileService {
 		query.createBy(createBy);
 		query.status(0);
 
-		if (StringUtils.isNotEmpty(query.getTenantId())) {
+		if (StringUtils.isNotEmpty(tenantId)) {
 			query.tenantId(tenantId);
 			query.setTableSuffix(String.valueOf(IdentityFactory.getTenantHash(query.getTenantId())));
 		}
@@ -502,6 +542,14 @@ public class DataFileServiceImpl implements IDataFileService {
 				if (StringUtils.isNotEmpty(businessKey)) {
 					model.setBusinessKey(businessKey);
 					model.setStatus(status);
+
+					String filePath = model.getPath();
+					if (filePath != null && filePath.length() > 0) {
+						if (filePath.startsWith("//")) {
+							filePath = filePath.substring(1, filePath.length());
+							model.setPath(filePath);
+						}
+					}
 					this.updateDataFile(tenantId, model);
 				}
 			}
@@ -521,6 +569,15 @@ public class DataFileServiceImpl implements IDataFileService {
 				if (dataFile.getSize() <= 0) {
 					dataFile.setSize(dataFile.getData().length);
 				}
+
+				String filePath = dataFile.getPath();
+				if (filePath != null && filePath.length() > 0) {
+					if (filePath.startsWith("//")) {
+						filePath = filePath.substring(1, filePath.length());
+						dataFile.setPath(filePath);
+					}
+				}
+
 				this.insertDataFile(tenantId, dataFile);
 			}
 		}
@@ -561,11 +618,27 @@ public class DataFileServiceImpl implements IDataFileService {
 						model.setFilename(dataFile.getFilename());
 						model.setData(dataFile.getData());
 						model.setSize(dataFile.getData().length);
+
+						String filePath = model.getPath();
+						if (filePath != null && filePath.length() > 0) {
+							if (filePath.startsWith("//")) {
+								filePath = filePath.substring(1, filePath.length());
+								model.setPath(filePath);
+							}
+						}
 						this.updateDataFileInfo(tenantId, model);
 					}
 				} else {
 					if (dataFile.getSize() <= 0) {
 						dataFile.setSize(dataFile.getData().length);
+					}
+
+					String filePath = dataFile.getPath();
+					if (filePath != null && filePath.length() > 0) {
+						if (filePath.startsWith("//")) {
+							filePath = filePath.substring(1, filePath.length());
+							dataFile.setPath(filePath);
+						}
 					}
 					this.insertDataFile(tenantId, dataFile);
 				}

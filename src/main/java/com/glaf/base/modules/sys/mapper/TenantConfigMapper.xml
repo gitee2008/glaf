@@ -245,18 +245,6 @@
 	</delete>
 
 
-	<delete id="deleteTenantConfigs" parameterType="com.glaf.base.modules.sys.query.TenantConfigQuery">
-		delete from SYS_TENANT_CONFIG
-		where (
-		ID_ IN
-		<foreach item="x_id" index="index" collection="ids" open="("
-			separator="," close=")">
-			#{x_id}
-		</foreach>
-		)
-	</delete>
-
-
 	<select id="getTenantConfigById" parameterType="long"
 		resultMap="tenantConfigResultMap">
 		select * from SYS_TENANT_CONFIG where ID_ = #{id}

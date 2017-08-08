@@ -77,6 +77,14 @@
 			</td>
 		  </tr>
 		  <tr>
+			<td width="20%" align="left" class="input-box2" valign="top">首页链接</td>
+			<td>
+			  <textarea id="indexUrl" name="indexUrl" cols="68" rows="5" class="x-textarea"
+			            style="width:350px;height:90px" datatype="string" nullable="yes"
+			            maxsize="500" chname="首页链接">${role.indexUrl}</textarea>        
+			</td>
+		  </tr>
+		  <tr>
 			<td colspan="2" align="center" valign="bottom" height="30">&nbsp;
 				<button type="button" class="btnGray" onclick="javascript:saveData()">保存</button>
 			</td>

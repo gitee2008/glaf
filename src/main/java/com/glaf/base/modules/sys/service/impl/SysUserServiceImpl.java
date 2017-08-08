@@ -99,7 +99,7 @@ public class SysUserServiceImpl implements SysUserService {
 	 * @param password
 	 */
 	public void changePassword(String account, String password) {
-		if (!StringUtils.equals(password, "88888888") && password.length() < 32) {
+		if (!StringUtils.equals(password, "88888888") && password.length() < 64) {
 			String pwd_hash = DigestUtils.sha512Hex(account + ":" + password);
 			SysUser bean = new SysUser();
 			bean.setUserId(account);
@@ -135,6 +135,7 @@ public class SysUserServiceImpl implements SysUserService {
 		boolean result = false;
 		String pwd_hash = DigestUtils.sha512Hex(account + ":" + password);
 		String pwd = sysUserMapper.getPasswordHashByAccount(account);
+		logger.debug(pwd_hash + "><" + pwd);
 		if (StringUtils.isNotEmpty(password) && StringUtils.equals(pwd_hash, pwd)) {
 			result = true;
 		}
@@ -664,7 +665,9 @@ public class SysUserServiceImpl implements SysUserService {
 	public void loginFailure(String actorId) {
 		SysUser user = sysUserMapper.getSysUserByAccount(actorId);
 		if (user != null) {
-			user.setLockLoginTime(new Date());
+			if (user.getLoginRetry() >= 5) {
+				user.setLockLoginTime(new Date());
+			}
 			user.setLoginRetry(user.getLoginRetry() + 1);
 			sysUserMapper.updateUserLoginRetry(user);
 		}
