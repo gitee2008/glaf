@@ -82,7 +82,8 @@ public final class ConnectionProviderFactory {
 
 	protected static void closeAndCreate(Properties properties) {
 		String jdbcUrl = properties.getProperty(DBConfiguration.JDBC_URL);
-		String cacheKey = DigestUtils.md5Hex(jdbcUrl);
+		String user = properties.getProperty(DBConfiguration.JDBC_USER);
+		String cacheKey = DigestUtils.md5Hex(jdbcUrl + user);
 		ConnectionProvider provider = null;
 		if (providerCache.get(cacheKey) != null) {
 			provider = providerCache.get(cacheKey);
@@ -121,7 +122,8 @@ public final class ConnectionProviderFactory {
 			return null;
 		}
 		String jdbcUrl = properties.getProperty(DBConfiguration.JDBC_URL);
-		String cacheKey = DigestUtils.md5Hex(jdbcUrl);
+		String user = properties.getProperty(DBConfiguration.JDBC_USER);
+		String cacheKey = DigestUtils.md5Hex(jdbcUrl + user);
 		if (providerCache.get(cacheKey) != null) {
 			return providerCache.get(cacheKey);
 		}
