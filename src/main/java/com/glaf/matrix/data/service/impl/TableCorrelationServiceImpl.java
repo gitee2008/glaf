@@ -31,6 +31,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.glaf.core.cache.CacheFactory;
+import com.glaf.core.config.SystemConfig;
 import com.glaf.core.dao.EntityDAO;
 import com.glaf.core.id.IdGenerator;
 import com.glaf.core.jdbc.DBConnectionFactory;
@@ -39,6 +43,7 @@ import com.glaf.matrix.data.domain.TableCorrelation;
 import com.glaf.matrix.data.mapper.TableCorrelationMapper;
 import com.glaf.matrix.data.query.TableCorrelationQuery;
 import com.glaf.matrix.data.service.TableCorrelationService;
+import com.glaf.matrix.data.util.TableCorrelationJsonFactory;
 
 @Service("tableCorrelationService")
 @Transactional(readOnly = true)
@@ -120,7 +125,25 @@ public class TableCorrelationServiceImpl implements TableCorrelationService {
 		if (id == null) {
 			return null;
 		}
+		String cacheKey = "sys_table_correlation_" + id;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("sys_table_correlation", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					com.alibaba.fastjson.JSONObject json = JSON.parseObject(text);
+					TableCorrelation model = TableCorrelationJsonFactory.jsonToObject(json);
+					if (model != null) {
+						return model;
+					}
+				} catch (Exception ex) {
+				}
+			}
+		}
+
 		TableCorrelation tableCorrelation = tableCorrelationMapper.getTableCorrelationById(id);
+		if (tableCorrelation != null) {
+			CacheFactory.put("sys_table_correlation", cacheKey, tableCorrelation.toJsonObject().toJSONString());
+		}
 		return tableCorrelation;
 	}
 
@@ -131,6 +154,32 @@ public class TableCorrelationServiceImpl implements TableCorrelationService {
 	 */
 	public int getTableCorrelationCountByQueryCriteria(TableCorrelationQuery query) {
 		return tableCorrelationMapper.getTableCorrelationCount(query);
+	}
+
+	public List<TableCorrelation> getTableCorrelationsByMasterTableId(String masterTableId) {
+		String cacheKey = "sys_table_correlationx_" + masterTableId;
+		cacheKey = cacheKey.toLowerCase();
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("sys_table_correlation", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONArray array = JSON.parseArray(text);
+					return TableCorrelationJsonFactory.arrayToList(array);
+				} catch (Exception ex) {
+				}
+			}
+		}
+
+		TableCorrelationQuery query = new TableCorrelationQuery();
+		query.masterTableId(masterTableId);
+		List<TableCorrelation> list = this.list(query);
+		if (list != null && !list.isEmpty()) {
+			JSONArray array = TableCorrelationJsonFactory.listToArray(list);
+			CacheFactory.put("sys_table_correlation", cacheKey, array.toJSONString());
+		} else {
+			CacheFactory.put("sys_table_correlation", cacheKey, "[]");
+		}
+		return list;
 	}
 
 	/**
@@ -145,6 +194,32 @@ public class TableCorrelationServiceImpl implements TableCorrelationService {
 		return rows;
 	}
 
+	public List<TableCorrelation> getTableCorrelationsBySlaveTableId(String slaveTableId) {
+		String cacheKey = "sys_table_correlationy_" + slaveTableId;
+		cacheKey = cacheKey.toLowerCase();
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("sys_table_correlation", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONArray array = JSON.parseArray(text);
+					return TableCorrelationJsonFactory.arrayToList(array);
+				} catch (Exception ex) {
+				}
+			}
+		}
+
+		TableCorrelationQuery query = new TableCorrelationQuery();
+		query.slaveTableId(slaveTableId);
+		List<TableCorrelation> list = this.list(query);
+		if (list != null && !list.isEmpty()) {
+			JSONArray array = TableCorrelationJsonFactory.listToArray(list);
+			CacheFactory.put("sys_table_correlation", cacheKey, array.toJSONString());
+		} else {
+			CacheFactory.put("sys_table_correlation", cacheKey, "[]");
+		}
+		return list;
+	}
+
 	public List<TableCorrelation> list(TableCorrelationQuery query) {
 		List<TableCorrelation> list = tableCorrelationMapper.getTableCorrelations(query);
 		return list;
@@ -152,6 +227,7 @@ public class TableCorrelationServiceImpl implements TableCorrelationService {
 
 	@Transactional
 	public void save(TableCorrelation tableCorrelation) {
+		CacheFactory.clear("sys_table_correlation");
 		if (StringUtils.isEmpty(tableCorrelation.getId())) {
 			tableCorrelation.setId(idGenerator.getNextId("SYS_TABLE_CORRELATION"));
 			tableCorrelation.setCreateTime(new Date());

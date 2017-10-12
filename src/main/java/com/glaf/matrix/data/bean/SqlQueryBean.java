@@ -20,7 +20,6 @@ package com.glaf.matrix.data.bean;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -43,13 +42,13 @@ import com.glaf.core.util.DateUtils;
 import com.glaf.core.util.LowerLinkedMap;
 import com.glaf.core.util.Paging;
 import com.glaf.core.util.ParamUtils;
+import com.glaf.core.util.QueryUtils;
 import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.StringTools;
 
 import com.glaf.matrix.data.domain.SqlCriteria;
 import com.glaf.matrix.data.domain.SqlDefinition;
 import com.glaf.matrix.data.helper.SqlCriteriaHelper;
-import com.glaf.matrix.data.query.SqlCriteriaQuery;
 import com.glaf.matrix.data.service.SqlCriteriaService;
 
 public class SqlQueryBean {
@@ -76,83 +75,6 @@ public class SqlQueryBean {
 			tablePageService = ContextFactory.getBean("tablePageService");
 		}
 		return tablePageService;
-	}
-
-	public SqlExecutor replaceInSQLParas(String str, Map<String, Object> params) {
-		SqlExecutor sqlExecutor = new SqlExecutor();
-		sqlExecutor.setSql(str);
-		if (str == null || params == null) {
-			return sqlExecutor;
-		}
-		Map<String, Object> parameter = new HashMap<String, Object>();
-		Map<String, Object> dataMap = new LowerLinkedMap();
-		dataMap.putAll(params);
-		StringBuilder sb = new StringBuilder();
-		int begin = 0;
-		int left = 0;
-		int end = 0;
-		boolean flag = false; // 匹配标志
-		for (int i = 0; i < str.length(); i++) {
-			if (str.charAt(i) == '(') {
-				sb.append(str.substring(end, i));
-				left = i;
-				end = i;
-			}
-			if (str.charAt(i) == '#' && str.charAt(i + 1) == '{') {
-				begin = i + 2;
-				flag = true;
-			}
-			if (flag && str.charAt(i) == '}') {
-				String temp = str.substring(begin, i);
-				temp = temp.toLowerCase();
-				String name = temp;
-				String type = "";
-				if (temp.indexOf(":") != -1) {
-					name = temp.substring(0, temp.lastIndexOf(":"));
-					type = temp.substring(temp.lastIndexOf(":") + 1, temp.length());
-				}
-				name = name.toLowerCase();
-				if (dataMap.get(name) != null) {
-					Object val = dataMap.get(name);
-					String sx = val.toString();
-					if (StringUtils.equalsIgnoreCase(type, "int")) {
-						parameter.put(name, Integer.parseInt(sx));
-					} else if (StringUtils.equalsIgnoreCase(type, "long")) {
-						parameter.put(name, Long.parseLong(sx));
-					} else if (StringUtils.equalsIgnoreCase(type, "double")) {
-						parameter.put(name, Double.parseDouble(sx));
-					} else if (StringUtils.equalsIgnoreCase(type, "date")) {
-						if (val instanceof Date) {
-							parameter.put(name, val);
-						} else {
-							parameter.put(name, DateUtils.toDate(sx));
-						}
-					} else {
-						parameter.put(name, val);
-					}
-
-					sb.append(str.substring(left, begin - 2));
-					sb.append("#{").append(name).append("}");
-
-					// String value = dataMap.get(temp).toString();
-					// sb.append(str.substring(left, begin - 2));
-					// sb.append(value);
-					end = i + 1;
-					flag = false;
-				} else {
-					sb.append(str.charAt(left));
-					sb.append(" 1=1 ");
-					end = str.indexOf(")", i);
-				}
-			}
-			if (i == str.length() - 1) {
-				sb.append(str.substring(end, i + 1));
-			}
-		}
-		String newString = sb.toString();
-		sqlExecutor.setSql(newString);
-		sqlExecutor.setParameter(parameter);
-		return sqlExecutor;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -183,10 +105,10 @@ public class SqlQueryBean {
 			limit = 50000;
 		}
 
-		SqlCriteriaQuery query = new SqlCriteriaQuery();
-		query.businessKey(sqlDefinition.getUuid());
-		query.moduleId("sys_sql");
-		List<SqlCriteria> sqlCriterias = getSqlCriteriaService().list(query);
+		//SqlCriteriaQuery query = new SqlCriteriaQuery();
+		//query.businessKey(sqlDefinition.getUuid());
+		//query.moduleId("sys_sql");
+		List<SqlCriteria> sqlCriterias = getSqlCriteriaService().getSqlCriterias(sqlDefinition.getUuid(), "sys_sql");
 		if (sqlCriterias != null && !sqlCriterias.isEmpty()) {
 			for (SqlCriteria col : sqlCriterias) {
 				if (StringUtils.equals(col.getColumnType(), "String")) {
@@ -207,11 +129,11 @@ public class SqlQueryBean {
 				String.valueOf(IdentityFactory.getTenantHash(loginContext.getTenantId()))));
 		sqlDefinition.setCountSql(StringTools.replace(sqlDefinition.getCountSql(), "${tableSuffix}",
 				String.valueOf(IdentityFactory.getTenantHash(loginContext.getTenantId()))));
-		sqlExecutor = this.replaceInSQLParas(sqlDefinition.getSql(), params);
+		sqlExecutor = QueryUtils.replaceMyBatisInSQLParas(sqlDefinition.getSql(), params);
 		sqlBuffer.append(sqlExecutor.getSql());
 		params.putAll((Map<String, Object>) sqlExecutor.getParameter());
 
-		sqlExecutor = this.replaceInSQLParas(sqlDefinition.getCountSql(), params);
+		sqlExecutor = QueryUtils.replaceMyBatisInSQLParas(sqlDefinition.getCountSql(), params);
 		sqlCountBuffer.append(sqlExecutor.getSql());
 
 		SqlCriteriaHelper helper = new SqlCriteriaHelper();

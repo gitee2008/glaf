@@ -48,7 +48,7 @@ public class PasswordLoginHandler implements LoginHandler {
 		String account = ParamUtil.getParameter(request, "x");
 		String password = ParamUtil.getParameter(request, "y");
 
-		password = RSAUtils.decryptBase64String(password);
+		password = RSAUtils.decryptBase64String(password, "RSA/None/PKCS1Padding");
 		// logger.debug("----pwd:" + password);
 
 		HttpSession session = request.getSession(false);

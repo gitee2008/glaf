@@ -29,6 +29,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
+import com.glaf.core.cache.CacheFactory;
+import com.glaf.core.config.SystemConfig;
 import com.glaf.core.dao.EntityDAO;
 import com.glaf.core.id.IdGenerator;
 import com.glaf.core.util.UUID32;
@@ -39,6 +42,7 @@ import com.glaf.matrix.data.mapper.TableColumnMapper;
 import com.glaf.matrix.data.query.SysTableQuery;
 import com.glaf.matrix.data.query.TableColumnQuery;
 import com.glaf.matrix.data.service.ITableService;
+import com.glaf.matrix.data.util.SysTableJsonFactory;
 
 @Service("tableService")
 @Transactional(readOnly = true)
@@ -51,9 +55,9 @@ public class TableServiceImpl implements ITableService {
 
 	protected SqlSession sqlSession;
 
-	protected TableColumnMapper columnDefinitionMapper;
+	protected TableColumnMapper tableColumnMapper;
 
-	protected SysTableMapper tableDefinitionMapper;
+	protected SysTableMapper sysTableMapper;
 
 	public TableServiceImpl() {
 
@@ -63,12 +67,13 @@ public class TableServiceImpl implements ITableService {
 		if (StringUtils.isEmpty(query.getType())) {
 			throw new RuntimeException(" type is null ");
 		}
-		return tableDefinitionMapper.getSysTableCount(query);
+		return sysTableMapper.getSysTableCount(query);
 	}
 
 	@Transactional
 	public void deleteColumn(String columnId) {
-		columnDefinitionMapper.deleteTableColumnById(columnId);
+		CacheFactory.clear("sys_table");
+		tableColumnMapper.deleteTableColumnById(columnId);
 	}
 
 	/**
@@ -78,60 +83,93 @@ public class TableServiceImpl implements ITableService {
 	 */
 	@Transactional
 	public void deleteTable(String tableId) {
-		columnDefinitionMapper.deleteTableColumnByTableId(tableId);
-		tableDefinitionMapper.deleteSysTableById(tableId);
+		CacheFactory.clear("sys_table");
+		tableColumnMapper.deleteTableColumnByTableId(tableId);
+		sysTableMapper.deleteSysTableById(tableId);
 	}
 
 	public List<SysTable> getAllSysTables() {
 		SysTableQuery query = new SysTableQuery();
 		query.systemFlag("U");
-		return tableDefinitionMapper.getSysTables(query);
+		return sysTableMapper.getSysTables(query);
 	}
 
 	public SysTable getSysTableById(String tableId) {
 		if (tableId == null) {
 			return null;
 		}
-		SysTable tableDefinition = tableDefinitionMapper.getSysTableById(tableId);
-		if (tableDefinition != null) {
-			List<TableColumn> columns = columnDefinitionMapper.getTableColumnsByTableId(tableId);
+		String cacheKey = "sys_table_" + tableId;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("sys_table", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					com.alibaba.fastjson.JSONObject json = JSON.parseObject(text);
+					SysTable model = SysTableJsonFactory.jsonToObject(json);
+					if (model != null) {
+						return model;
+					}
+				} catch (Exception ex) {
+				}
+			}
+		}
+
+		SysTable sysTable = sysTableMapper.getSysTableById(tableId);
+		if (sysTable != null) {
+			List<TableColumn> columns = tableColumnMapper.getTableColumnsByTableId(tableId);
 			if (columns != null && !columns.isEmpty()) {
-				tableDefinition.setColumns(columns);
+				sysTable.setColumns(columns);
 				for (TableColumn column : columns) {
 					if (column.isPrimaryKey()) {
 						logger.debug("##PrimaryKey:" + column.toJsonObject().toJSONString());
-						tableDefinition.setIdColumn(column);
+						sysTable.setIdColumn(column);
 						columns.remove(column);
 						break;
 					}
 				}
 			}
+			CacheFactory.put("sys_table", cacheKey, sysTable.toJsonObject().toJSONString());
 		}
 
-		return tableDefinition;
+		return sysTable;
 	}
 
 	public SysTable getSysTableByTableName(String tableName) {
 		if (tableName == null) {
 			return null;
 		}
-		SysTable tableDefinition = tableDefinitionMapper.getSysTableByTableName(tableName);
-		if (tableDefinition != null) {
-			List<TableColumn> columns = columnDefinitionMapper.getTableColumnsByTableId(tableDefinition.getTableId());
+		String cacheKey = "sys_table_" + tableName;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("sys_table", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					com.alibaba.fastjson.JSONObject json = JSON.parseObject(text);
+					SysTable model = SysTableJsonFactory.jsonToObject(json);
+					if (model != null) {
+						return model;
+					}
+				} catch (Exception ex) {
+				}
+			}
+		}
+
+		SysTable sysTable = sysTableMapper.getSysTableByTableName(tableName);
+		if (sysTable != null) {
+			List<TableColumn> columns = tableColumnMapper.getTableColumnsByTableId(sysTable.getTableId());
 			if (columns != null && !columns.isEmpty()) {
-				tableDefinition.setColumns(columns);
+				sysTable.setColumns(columns);
 				for (TableColumn column : columns) {
 					if (column.isPrimaryKey()) {
 						logger.debug("##PrimaryKey:" + column.toJsonObject().toJSONString());
-						tableDefinition.setIdColumn(column);
+						sysTable.setIdColumn(column);
 						columns.remove(column);
 						break;
 					}
 				}
 			}
+			CacheFactory.put("sys_table", cacheKey, sysTable.toJsonObject().toJSONString());
 		}
 
-		return tableDefinition;
+		return sysTable;
 	}
 
 	/**
@@ -143,7 +181,7 @@ public class TableServiceImpl implements ITableService {
 		if (StringUtils.isEmpty(query.getType())) {
 			throw new RuntimeException(" type is null ");
 		}
-		return tableDefinitionMapper.getSysTableCount(query);
+		return sysTableMapper.getSysTableCount(query);
 	}
 
 	/**
@@ -161,47 +199,52 @@ public class TableServiceImpl implements ITableService {
 	}
 
 	public TableColumn getTableColumn(String columnId) {
-		return columnDefinitionMapper.getTableColumnById(columnId);
+		return tableColumnMapper.getTableColumnById(columnId);
 	}
 
 	public int getTableColumnCount(TableColumnQuery query) {
-		return columnDefinitionMapper.getTableColumnCount(query);
+		return tableColumnMapper.getTableColumnCount(query);
 	}
 
 	public List<SysTable> getTableColumns(SysTableQuery query) {
-		List<SysTable> list = tableDefinitionMapper.getTableColumns(query);
+		List<SysTable> list = sysTableMapper.getTableColumns(query);
 		return list;
 	}
 
 	public List<TableColumn> getTableColumnsByTableId(String tableId) {
-		SysTable tableDefinition = this.getSysTableById(tableId);
-		if (tableDefinition != null) {
-			return tableDefinition.getColumns();
+		SysTable sysTable = this.getSysTableById(tableId);
+		if (sysTable != null) {
+			return sysTable.getColumns();
 		}
 		return null;
 	}
 
 	public List<TableColumn> getTableColumnsByTableName(String tableName) {
-		return columnDefinitionMapper.getTableColumnsByTableName(tableName);
+		return tableColumnMapper.getTableColumnsByTableName(tableName);
 	}
 
 	public List<TableColumn> getTableColumnsByTargetId(String targetId) {
-		return columnDefinitionMapper.getTableColumnsByTargetId(targetId);
+		return tableColumnMapper.getTableColumnsByTargetId(targetId);
 	}
 
 	@Transactional
 	public void insertColumns(String tableName, List<TableColumn> columns) {
 		tableName = tableName.toUpperCase();
-		SysTable table = tableDefinitionMapper.getSysTableByTableName(tableName);
-		if (table != null) {
+		SysTable sysTable = sysTableMapper.getSysTableByTableName(tableName);
+		if (sysTable != null) {
+			String cacheKey = "sys_table_" + sysTable.getTableId();
+			CacheFactory.remove("sys_table", cacheKey);
+			cacheKey = "sys_table_" + tableName;
+			CacheFactory.remove("sys_table", cacheKey);
+
 			for (TableColumn column : columns) {
 				String id = column.getId();
-				if (id == null || columnDefinitionMapper.getTableColumnById(id) == null) {
+				if (id == null || tableColumnMapper.getTableColumnById(id) == null) {
 					column.setId(UUID32.getUUID());
 					column.setSystemFlag("1");
 					column.setTableName(tableName);
-					column.setTableId(table.getTableId());
-					columnDefinitionMapper.insertTableColumn(column);
+					column.setTableId(sysTable.getTableId());
+					tableColumnMapper.insertTableColumn(column);
 				}
 			}
 		}
@@ -211,7 +254,7 @@ public class TableServiceImpl implements ITableService {
 		if (StringUtils.isEmpty(query.getType())) {
 			throw new RuntimeException(" type is null ");
 		}
-		List<SysTable> list = tableDefinitionMapper.getSysTables(query);
+		List<SysTable> list = sysTableMapper.getSysTables(query);
 		return list;
 	}
 
@@ -228,37 +271,42 @@ public class TableServiceImpl implements ITableService {
 	}
 
 	@Transactional
-	public void save(SysTable tableDefinition) {
-		if (StringUtils.isEmpty(tableDefinition.getType())) {
+	public void save(SysTable sysTable) {
+		if (StringUtils.isEmpty(sysTable.getType())) {
 			throw new RuntimeException(" type is null ");
 		}
-		String tableName = tableDefinition.getTableName();
+		String tableName = sysTable.getTableName();
 		tableName = tableName.toUpperCase();
-		tableDefinition.setTableName(tableName);
-		SysTable table = tableDefinitionMapper.getSysTableByTableName(tableDefinition.getTableName());
+		sysTable.setTableName(tableName);
+		SysTable table = sysTableMapper.getSysTableByTableName(sysTable.getTableName());
 		if (table == null) {
-			tableDefinition.setTableId(UUID32.getUUID());
-			tableDefinition.setCreateTime(new Date());
-			tableDefinition.setRevision(1);
-			tableDefinitionMapper.insertSysTable(tableDefinition);
+			sysTable.setTableId(UUID32.getUUID());
+			sysTable.setCreateTime(new Date());
+			sysTable.setRevision(1);
+			sysTableMapper.insertSysTable(sysTable);
 		} else {
-			tableDefinition.setRevision(tableDefinition.getRevision() + 1);
-			tableDefinitionMapper.updateSysTable(tableDefinition);
+			String cacheKey = "sys_table_" + sysTable.getTableId();
+			CacheFactory.remove("sys_table", cacheKey);
+			cacheKey = "sys_table_" + tableName;
+			CacheFactory.remove("sys_table", cacheKey);
+
+			sysTable.setRevision(sysTable.getRevision() + 1);
+			sysTableMapper.updateSysTable(sysTable);
 		}
 
-		if (tableDefinition.getColumns() != null && !tableDefinition.getColumns().isEmpty()) {
-			for (TableColumn column : tableDefinition.getColumns()) {
+		if (sysTable.getColumns() != null && !sysTable.getColumns().isEmpty()) {
+			for (TableColumn column : sysTable.getColumns()) {
 				String id = column.getId();
-				if (id == null || columnDefinitionMapper.getTableColumnById(id) == null) {
+				if (id == null || tableColumnMapper.getTableColumnById(id) == null) {
 					column.setId(UUID32.getUUID());
 					column.setTableName(tableName);
-					column.setTableId(tableDefinition.getTableId());
-					if ("SYS".equals(tableDefinition.getType())) {
+					column.setTableId(sysTable.getTableId());
+					if ("SYS".equals(sysTable.getType())) {
 						column.setSystemFlag("1");
 					}
-					columnDefinitionMapper.insertTableColumn(column);
+					tableColumnMapper.insertTableColumn(column);
 				} else {
-					columnDefinitionMapper.updateTableColumn(column);
+					tableColumnMapper.updateTableColumn(column);
 				}
 			}
 		}
@@ -270,26 +318,31 @@ public class TableServiceImpl implements ITableService {
 	 * @return
 	 */
 	@Transactional
-	public void saveAs(SysTable table, List<TableColumn> columns) {
-		table.setTableId(UUID32.getUUID());
-		tableDefinitionMapper.insertSysTable(table);
+	public void saveAs(SysTable sysTable, List<TableColumn> columns) {
+		sysTable.setTableId(UUID32.getUUID());
+		sysTableMapper.insertSysTable(sysTable);
 		for (TableColumn column : columns) {
 			column.setId(UUID32.getUUID());
 			column.setSystemFlag("Y");
-			column.setTableName(table.getTableName());
-			column.setTableId(table.getTableId());
+			column.setTableName(sysTable.getTableName());
+			column.setTableId(sysTable.getTableId());
 			column.setColumnName(
-					(table.getTableName() + "_user" + idGenerator.getNextId(table.getTableName())).toLowerCase());
-			columnDefinitionMapper.insertTableColumn(column);
+					(sysTable.getTableName() + "_user" + idGenerator.getNextId(sysTable.getTableName())).toLowerCase());
+			tableColumnMapper.insertTableColumn(column);
 		}
 	}
 
 	@Transactional
 	public void saveColumn(String tableName, TableColumn columnDefinition) {
 		tableName = tableName.toUpperCase();
-		SysTable tableDefinition = getSysTableByTableName(tableName);
-		if (tableDefinition != null) {
-			List<TableColumn> columns = tableDefinition.getColumns();
+		SysTable sysTable = getSysTableByTableName(tableName);
+		if (sysTable != null) {
+			String cacheKey = "sys_table_" + sysTable.getTableId();
+			CacheFactory.remove("sys_table", cacheKey);
+			cacheKey = "sys_table_" + tableName;
+			CacheFactory.remove("sys_table", cacheKey);
+
+			List<TableColumn> columns = sysTable.getColumns();
 			boolean exists = false;
 			int sortNo = 1;
 			if (columns != null && !columns.isEmpty()) {
@@ -317,7 +370,7 @@ public class TableServiceImpl implements ITableService {
 						column.setSummaryExpr(columnDefinition.getSummaryExpr());
 						column.setSummaryType(columnDefinition.getSummaryType());
 						column.setExportFlag(columnDefinition.getExportFlag());
-						columnDefinitionMapper.updateTableColumn(column);
+						tableColumnMapper.updateTableColumn(column);
 						exists = true;
 						break;
 					}
@@ -331,23 +384,24 @@ public class TableServiceImpl implements ITableService {
 				}
 				columnDefinition.setId(UUID32.getUUID());
 				columnDefinition.setTableName(tableName);
-				columnDefinition.setTableId(tableDefinition.getTableId());
+				columnDefinition.setTableId(sysTable.getTableId());
 				columnDefinition.setOrdinal(++sortNo);
-				columnDefinitionMapper.insertTableColumn(columnDefinition);
+				tableColumnMapper.insertTableColumn(columnDefinition);
 			}
 		}
 	}
 
 	@Transactional
 	public void saveColumns(String targetId, List<TableColumn> columns) {
-		columnDefinitionMapper.deleteTableColumnByTargetId(targetId);
+		CacheFactory.clear("sys_table");
+		tableColumnMapper.deleteTableColumnByTargetId(targetId);
 		if (columns != null && !columns.isEmpty()) {
 			for (TableColumn col : columns) {
 				if (StringUtils.isEmpty(col.getId())) {
 					col.setId(UUID32.getUUID());
 				}
 				col.setTargetId(targetId);
-				columnDefinitionMapper.insertTableColumn(col);
+				tableColumnMapper.insertTableColumn(col);
 			}
 		}
 	}
@@ -355,7 +409,7 @@ public class TableServiceImpl implements ITableService {
 	@Transactional
 	public void saveSystemTable(String tableName, List<TableColumn> columns) {
 		tableName = tableName.toUpperCase();
-		SysTable table = tableDefinitionMapper.getSysTableByTableName(tableName);
+		SysTable table = sysTableMapper.getSysTableByTableName(tableName);
 		if (table == null) {
 			table = new SysTable();
 			table.setType("SYS");
@@ -368,17 +422,23 @@ public class TableServiceImpl implements ITableService {
 			table.setCreateBy("system");
 			table.setCreateTime(new Date());
 			table.setTableId(UUID32.getUUID());
-			tableDefinitionMapper.insertSysTable(table);
+			sysTableMapper.insertSysTable(table);
 		} else {
-			tableDefinitionMapper.updateSysTable(table);
+
+			String cacheKey = "sys_table_" + table.getTableId();
+			CacheFactory.remove("sys_table", cacheKey);
+			cacheKey = "sys_table_" + tableName;
+			CacheFactory.remove("sys_table", cacheKey);
+
+			sysTableMapper.updateSysTable(table);
 		}
-		columnDefinitionMapper.deleteTableColumnByTableId(table.getTableId());
+		tableColumnMapper.deleteTableColumnByTableId(table.getTableId());
 		for (TableColumn column : columns) {
 			column.setId(UUID32.getUUID());
 			column.setSystemFlag("Y");
 			column.setTableName(tableName);
 			column.setTableId(table.getTableId());
-			columnDefinitionMapper.insertTableColumn(column);
+			tableColumnMapper.insertTableColumn(column);
 		}
 	}
 
@@ -398,13 +458,13 @@ public class TableServiceImpl implements ITableService {
 	}
 
 	@javax.annotation.Resource
-	public void setSysTableMapper(SysTableMapper tableDefinitionMapper) {
-		this.tableDefinitionMapper = tableDefinitionMapper;
+	public void setSysTableMapper(SysTableMapper sysTableMapper) {
+		this.sysTableMapper = sysTableMapper;
 	}
 
 	@javax.annotation.Resource
-	public void setTableColumnMapper(TableColumnMapper columnDefinitionMapper) {
-		this.columnDefinitionMapper = columnDefinitionMapper;
+	public void setTableColumnMapper(TableColumnMapper tableColumnMapper) {
+		this.tableColumnMapper = tableColumnMapper;
 	}
 
 	/**
@@ -414,7 +474,8 @@ public class TableServiceImpl implements ITableService {
 	 */
 	@Transactional
 	public void updateColumn(TableColumn column) {
-		columnDefinitionMapper.updateTableColumn(column);
+		CacheFactory.clear("sys_table");
+		tableColumnMapper.updateTableColumn(column);
 	}
 
 }

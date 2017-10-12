@@ -21,6 +21,7 @@ package com.glaf.matrix.data.web.springmvc;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +53,7 @@ import com.glaf.core.util.Paging;
 import com.glaf.core.util.ParamUtils;
 import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.ResponseUtils;
+import com.glaf.core.util.StringTools;
 import com.glaf.core.util.Tools;
 
 import com.glaf.matrix.data.domain.SqlDefinition;
@@ -69,6 +71,38 @@ public class SqlDefinitionController {
 
 	public SqlDefinitionController() {
 
+	}
+
+	@RequestMapping("/choose")
+	public ModelAndView choose(HttpServletRequest request, ModelMap modelMap) {
+		RequestUtils.setRequestParameterToAttribute(request);
+
+		SqlDefinitionQuery query = new SqlDefinitionQuery();
+		List<SqlDefinition> list = sqlDefinitionService.list(query);
+		request.setAttribute("list", list);
+
+		String selected = request.getParameter("selected");
+		if (StringUtils.isNotEmpty(selected)) {
+			List<Long> ids = StringTools.splitToLong(selected);
+			List<SqlDefinition> selectedList = new ArrayList<SqlDefinition>();
+			List<SqlDefinition> unselectedList = new ArrayList<SqlDefinition>();
+			for (SqlDefinition def : list) {
+				if (ids.contains(def.getId())) {
+					selectedList.add(def);
+				} else {
+					unselectedList.add(def);
+				}
+			}
+			request.setAttribute("selectedList", selectedList);
+			request.setAttribute("list", unselectedList);
+		}
+
+		String x_view = ViewProperties.getString("sqlDefinition.choose");
+		if (StringUtils.isNotEmpty(x_view)) {
+			return new ModelAndView(x_view, modelMap);
+		}
+
+		return new ModelAndView("/sys/sqlDefinition/choose", modelMap);
 	}
 
 	@ResponseBody

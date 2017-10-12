@@ -53,6 +53,7 @@ import com.glaf.core.service.IDatabaseService;
 import com.glaf.core.service.ITablePageService;
 import com.glaf.core.util.Constants;
 import com.glaf.core.util.ParamUtils;
+import com.glaf.core.util.StringTools;
 import com.glaf.core.util.hash.JenkinsHash;
 
 public class IdentityFactory {
@@ -161,18 +162,30 @@ public class IdentityFactory {
 	}
 
 	public static List<String> getGradeIds(String userId, String tenantId) {
+		StringBuilder buffer = new StringBuilder();
+		buffer.append("cache_gradeids_").append(tenantId).append("_").append(userId);
+
+		String cacheKey = buffer.toString();
+		String text = CacheFactory.getString("cache_gradeids", cacheKey);
+		if (text != null) {
+			return StringTools.split(text);
+		}
+
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("userId", userId);
 		params.put("tenantId", tenantId);
 		List<String> gradeIds = new ArrayList<String>();
 		List<Map<String, Object>> datalist = getTablePageService().getListData(
-				" select E.GRADEID_ as \"gradeId\" from HEALTH_GRADE_PRIVILEGE E where E.USERID_ = #{userId} and E.TENANTID_ = #{tenantId}  ",
+				" select E.GRADEID_ as \"gradeId\" from HEALTH_GRADE_PRIVILEGE E where ( E.USERID_ = #{userId} ) and ( E.TENANTID_ = #{tenantId} ) ",
 				params);
+		buffer.delete(0, buffer.length());
 		if (datalist != null && !datalist.isEmpty()) {
 			for (Map<String, Object> dataMap : datalist) {
 				gradeIds.add(ParamUtils.getString(dataMap, "gradeId"));
+				buffer.append(ParamUtils.getString(dataMap, "gradeId")).append(",");
 			}
 		}
+		CacheFactory.put("cache_gradeids", cacheKey, buffer.toString());
 		return gradeIds;
 	}
 
@@ -317,15 +330,26 @@ public class IdentityFactory {
 	 * @return
 	 */
 	public static List<String> getManagedTenantIds(String grantee) {
+		StringBuilder buffer = new StringBuilder();
+		buffer.append("cache_managed_tenant_").append(grantee);
+
+		String cacheKey = buffer.toString();
+		String text = CacheFactory.getString("cache_managed_tenant", cacheKey);
+		if (text != null) {
+			return StringTools.split(text);
+		}
 		List<String> managedTenantIds = new java.util.ArrayList<String>();
 		List<Object> list = getEntityService().getList("getManagedTenantIds", grantee);
+		buffer.delete(0, buffer.length());
 		if (list != null && !list.isEmpty()) {
 			for (Object object : list) {
 				if (object instanceof String) {
 					managedTenantIds.add(object.toString());
+					buffer.append(object.toString()).append(",");
 				}
 			}
 		}
+		CacheFactory.put("cache_managed_tenant", cacheKey, buffer.toString());
 		return managedTenantIds;
 	}
 
@@ -591,17 +615,29 @@ public class IdentityFactory {
 	}
 
 	public static List<String> getUserRoleCodes(String actorId) {
+		StringBuilder buffer = new StringBuilder();
+		buffer.append("cache_userrolecode_").append(actorId);
+
+		String cacheKey = buffer.toString();
+		String text = CacheFactory.getString("cache_userrolecode", cacheKey);
+		if (text != null) {
+			return StringTools.split(text);
+		}
+
 		UserQuery query = new UserQuery();
 		query.actorId(actorId);
 		String statementId = "getUserRoleCodes";
 
 		List<Object> list = getEntityService().getList(statementId, query);
 		List<String> roles = new ArrayList<String>();
+		buffer.delete(0, buffer.length());
 		if (list != null && !list.isEmpty()) {
 			for (Object object : list) {
 				roles.add(object.toString());
+				buffer.append(object.toString()).append(",");
 			}
 		}
+		CacheFactory.put("cache_userrolecode", cacheKey, buffer.toString());
 		return roles;
 	}
 

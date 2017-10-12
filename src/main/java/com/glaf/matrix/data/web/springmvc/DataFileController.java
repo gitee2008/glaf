@@ -213,6 +213,7 @@ public class DataFileController {
 								}
 
 								DataFile dataFile = new DataFileEntity();
+								dataFile.setId(fileId);
 								dataFile.setLastModified(System.currentTimeMillis());
 								dataFile.setCreateBy(loginContext.getActorId());
 								dataFile.setFileId(fileId);

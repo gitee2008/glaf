@@ -58,7 +58,7 @@ public class StartupListener extends ContextLoaderListener implements ServletCon
 			}
 
 			try {
-				
+
 				SysLogFactory.getInstance().checkAndCreateLogDB();
 
 				SysLogFactory.getInstance().startScheduler();
@@ -107,6 +107,7 @@ public class StartupListener extends ContextLoaderListener implements ServletCon
 		System.setProperty(Constants.APP_PATH, SystemProperties.getAppPath());
 		System.setProperty(Constants.WEBAPP_PATH, SystemProperties.getAppPath());
 		System.setProperty(Constants.CONFIG_PATH, SystemProperties.getAppPath() + "/WEB-INF");
+		System.setProperty("glaf.webapp.root", SystemProperties.getAppPath());
 		if (DBConnectionFactory.checkConnection()) {
 			DatabaseFactory.getInstance().reload();
 			this.beforeContextInitialized(context);

@@ -134,7 +134,6 @@ public class ServerProperties {
 					}
 				}
 			} catch (IOException ex) {
-				
 				throw new RuntimeException(ex);
 			} finally {
 				loading.set(false);

@@ -160,40 +160,42 @@ public class ImageController {
 					if (mFile.getOriginalFilename() != null && mFile.getSize() > 0
 							&& mFile.getSize() <= FileUtils.MB_SIZE * 20) {
 						String filename = mFile.getOriginalFilename();
-						logger.debug("upload file:" + filename);
+						if (filename != null) {
+							logger.debug("upload file:" + filename);
 
-						String fileId = UUID32.getUUID();
-						if (filename.indexOf("/") != -1) {
-							filename = filename.substring(filename.lastIndexOf("/") + 1, filename.length());
-						} else if (filename.indexOf("\\") != -1) {
-							filename = filename.substring(filename.lastIndexOf("\\") + 1, filename.length());
+							String fileId = UUID32.getUUID();
+							if (filename.indexOf("/") != -1) {
+								filename = filename.substring(filename.lastIndexOf("/") + 1, filename.length());
+							} else if (filename.indexOf("\\") != -1) {
+								filename = filename.substring(filename.lastIndexOf("\\") + 1, filename.length());
+							}
+
+							DataFile dataFile = new DataFileEntity();
+							dataFile.setId(fileId);
+							dataFile.setLastModified(System.currentTimeMillis());
+							dataFile.setCreateBy(loginContext.getActorId());
+							dataFile.setFileId(fileId);
+							dataFile.setFilename(filename);
+							dataFile.setName(mFile.getName());
+							dataFile.setContentType(mFile.getContentType());
+							dataFile.setSize((int) mFile.getSize());
+							dataFile.setType(type);
+							dataFile.setStatus(status);
+							if (StringUtils.isNotEmpty(businessKey)) {
+								dataFile.setBusinessKey(businessKey);
+							} else {
+								dataFile.setBusinessKey(null);
+							}
+							dataFile.setServiceKey(serviceKey);
+							DataFileFactory.getInstance().insertDataFile(loginContext.getTenantId(), dataFile,
+									mFile.getBytes());
+
+							JSONObject json = new JSONObject();
+							json.put("name", dataFile.getFilename());
+							json.put("id", dataFile.getFileId());
+							json.put("fileId", dataFile.getFileId());
+							rowsJSON.add(json);
 						}
-
-						DataFile dataFile = new DataFileEntity();
-						dataFile.setLastModified(System.currentTimeMillis());
-						dataFile.setCreateBy(loginContext.getActorId());
-						dataFile.setFileId(fileId);
-						dataFile.setFilename(filename);
-						dataFile.setName(mFile.getName());
-						dataFile.setContentType(mFile.getContentType());
-						dataFile.setSize((int) mFile.getSize());
-						dataFile.setType(type);
-						dataFile.setStatus(status);
-						if (StringUtils.isNotEmpty(businessKey)) {
-							dataFile.setBusinessKey(businessKey);
-						} else {
-							dataFile.setBusinessKey(null);
-						}
-						dataFile.setServiceKey(serviceKey);
-						DataFileFactory.getInstance().insertDataFile(loginContext.getTenantId(), dataFile,
-								mFile.getBytes());
-
-						JSONObject json = new JSONObject();
-						json.put("name", dataFile.getFilename());
-						json.put("id", dataFile.getFileId());
-						json.put("fileId", dataFile.getFileId());
-						rowsJSON.add(json);
-
 					}
 				}
 

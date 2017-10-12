@@ -186,9 +186,7 @@ public class ReportFileResource {
 					query.setSortOrder("desc");
 				}
 			}
-
-			// Map<String, UserProfile> userMap =
-			// MxIdentityFactory.getUserProfileMap();
+			
 			List<ReportFile> list = reportFileService.getReportFilesByQueryCriteria(start, limit, query);
 
 			if (list != null && !list.isEmpty()) {
@@ -263,8 +261,6 @@ public class ReportFileResource {
 		}
 		ObjectNode responseJSON = new ObjectMapper().createObjectNode();
 		if (reportFile != null) {
-			// Map<String, UserProfile> userMap =
-			// MxIdentityFactory.getUserProfileMap();
 			responseJSON = reportFile.toObjectNode();
 		}
 		try {

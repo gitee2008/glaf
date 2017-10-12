@@ -24,7 +24,6 @@ import java.util.StringTokenizer;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -73,7 +72,7 @@ public class MergeXlsProcessor implements XlsProcessor {
 		Row row = sheet.getRow(rowIndex);
 		if (row != null) {
 			Cell cell = row.getCell(colIndex);
-			if (cell != null && cell.getCellType() == HSSFCell.CELL_TYPE_STRING) {
+			if (cell != null) {
 				return cell.getStringCellValue();
 			}
 		}

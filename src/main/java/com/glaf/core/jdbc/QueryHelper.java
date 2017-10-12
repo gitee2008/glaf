@@ -51,6 +51,7 @@ import com.glaf.core.util.DBUtils;
 import com.glaf.core.util.DateUtils;
 import com.glaf.core.util.FieldType;
 import com.glaf.core.util.JdbcUtils;
+import com.glaf.core.util.QueryUtils;
 import com.glaf.core.util.StringTools;
 
 public class QueryHelper {
@@ -77,7 +78,7 @@ public class QueryHelper {
 			throw new RuntimeException(" SQL statement illegal ");
 		}
 		long ts = 0;
-		SqlExecutor sqlExecutor = DBUtils.replaceSQL(sql, params);
+		SqlExecutor sqlExecutor = QueryUtils.replaceSQL(sql, params);
 		Connection conn = null;
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
@@ -142,7 +143,7 @@ public class QueryHelper {
 		try {
 			List<Object> values = null;
 			if (paramMap != null) {
-				SqlExecutor sqlExecutor = DBUtils.replaceSQL(sql, paramMap);
+				SqlExecutor sqlExecutor = QueryUtils.replaceSQL(sql, paramMap);
 				sql = sqlExecutor.getSql();
 				values = (List<Object>) sqlExecutor.getParameter();
 			}
@@ -195,7 +196,7 @@ public class QueryHelper {
 		if (!DBUtils.isAllowedSql(sql)) {
 			throw new RuntimeException(" SQL statement illegal ");
 		}
-		SqlExecutor sqlExecutor = DBUtils.replaceSQL(sql, params);
+		SqlExecutor sqlExecutor = QueryUtils.replaceSQL(sql, params);
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
 		try {
@@ -217,6 +218,60 @@ public class QueryHelper {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public int getInt(String systemName, String sql, Map<String, Object> paramMap) {
+		if (!DBUtils.isLegalQuerySql(sql)) {
+			throw new RuntimeException(" SQL statement illegal ");
+		}
+		if (!DBUtils.isAllowedSql(sql)) {
+			throw new RuntimeException(" SQL statement illegal ");
+		}
+		int ret = 0;
+		long ts = 0;
+		Connection conn = null;
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		try {
+			conn = DBConnectionFactory.getConnection(systemName);
+			ts = System.currentTimeMillis();
+			QueryConnectionFactory.getInstance().register(ts, conn);
+			List<Object> values = null;
+			if (paramMap != null) {
+				SqlExecutor sqlExecutor = QueryUtils.replaceSQL(sql, paramMap);
+				sql = sqlExecutor.getSql();
+				values = (List<Object>) sqlExecutor.getParameter();
+			}
+
+			sql = DBUtils.removeOrders(sql);
+
+			logger.debug("sql:\n" + sql);
+			logger.debug("values:" + values);
+
+			psmt = conn.prepareStatement(sql);
+
+			if (values != null && !values.isEmpty()) {
+				JdbcUtils.fillStatement(psmt, values);
+			}
+
+			rs = psmt.executeQuery();
+			if (rs.next()) {
+				ret = rs.getInt(1);
+			}
+		} catch (Exception ex) {
+			logger.error(ex);
+			throw new RuntimeException(ex);
+		} finally {
+			if (conn != null) {
+				QueryConnectionFactory.getInstance().unregister(ts, conn);
+			}
+			JdbcUtils.close(rs);
+			JdbcUtils.close(psmt);
+			JdbcUtils.close(conn);
+		}
+
+		return ret;
+	}
+
 	/**
 	 * @param conn
 	 *            数据库连接对象
@@ -225,14 +280,14 @@ public class QueryHelper {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> getResultList(Connection conn, SqlExecutor sqlExecutor) {
+	public List<Map<String, Object>> getResultList(Connection conn, SqlExecutor sqlExecutor, int limit) {
 		if (!DBUtils.isLegalQuerySql(sqlExecutor.getSql())) {
 			throw new RuntimeException(" SQL statement illegal ");
 		}
 		if (!DBUtils.isAllowedSql(sqlExecutor.getSql())) {
 			throw new RuntimeException(" SQL statement illegal ");
 		}
-		logger.debug("sql:"+sqlExecutor.getSql());
+		logger.debug("sql:" + sqlExecutor.getSql());
 		List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
@@ -249,7 +304,7 @@ public class QueryHelper {
 
 			if (conf.getBoolean("useMyBatisResultHandler", false)) {
 
-				resultList = this.getResults(rs, 50000);
+				resultList = this.getResults(rs, limit);
 
 			} else {
 
@@ -274,7 +329,7 @@ public class QueryHelper {
 					columns.add(column);
 				}
 				int startIndex = 0;
-				while (rs.next() && startIndex < 50000) {
+				while (rs.next() && startIndex < limit) {
 					int index = 0;
 					startIndex++;
 					Map<String, Object> rowMap = new LinkedHashMap<String, Object>();
@@ -468,8 +523,20 @@ public class QueryHelper {
 		if (!DBUtils.isAllowedSql(sql)) {
 			throw new RuntimeException(" SQL statement illegal ");
 		}
-		SqlExecutor sqlExecutor = DBUtils.replaceSQL(sql, paramMap);
-		return this.getResultList(conn, sqlExecutor);
+		SqlExecutor sqlExecutor = QueryUtils.replaceSQL(sql, paramMap);
+		return this.getResultList(conn, sqlExecutor, 50000);
+	}
+
+	public List<Map<String, Object>> getResultList(Connection conn, String sql, Map<String, Object> paramMap,
+			int limit) {
+		if (!DBUtils.isLegalQuerySql(sql)) {
+			throw new RuntimeException(" SQL statement illegal ");
+		}
+		if (!DBUtils.isAllowedSql(sql)) {
+			throw new RuntimeException(" SQL statement illegal ");
+		}
+		SqlExecutor sqlExecutor = QueryUtils.replaceSQL(sql, paramMap);
+		return this.getResultList(conn, sqlExecutor, limit);
 	}
 
 	public List<Map<String, Object>> getResultList(SqlExecutor sqlExecutor, int start, int pageSize) {
@@ -541,7 +608,7 @@ public class QueryHelper {
 			throw new RuntimeException(" SQL statement illegal ");
 		}
 		long ts = 0;
-		SqlExecutor sqlExecutor = DBUtils.replaceSQL(sql, paramMap);
+		SqlExecutor sqlExecutor = QueryUtils.replaceSQL(sql, paramMap);
 		Connection conn = null;
 		try {
 			conn = DBConnectionFactory.getConnection();
@@ -573,7 +640,7 @@ public class QueryHelper {
 			conn = DBConnectionFactory.getConnection(systemName);
 			ts = System.currentTimeMillis();
 			QueryConnectionFactory.getInstance().register(ts, conn);
-			return this.getResultList(conn, sqlExecutor);
+			return this.getResultList(conn, sqlExecutor, 50000);
 		} catch (Exception ex) {
 
 			throw new RuntimeException(ex);
@@ -638,7 +705,7 @@ public class QueryHelper {
 		if (!DBUtils.isAllowedSql(sql)) {
 			throw new RuntimeException(" SQL statement illegal ");
 		}
-		SqlExecutor sqlExecutor = DBUtils.replaceSQL(sql, paramMap);
+		SqlExecutor sqlExecutor = QueryUtils.replaceSQL(sql, paramMap);
 		long ts = 0;
 		Connection conn = null;
 		try {
@@ -775,7 +842,7 @@ public class QueryHelper {
 		try {
 			List<Object> values = null;
 			if (paramMap != null) {
-				SqlExecutor sqlExecutor = DBUtils.replaceSQL(sql, paramMap);
+				SqlExecutor sqlExecutor = QueryUtils.replaceSQL(sql, paramMap);
 				sql = sqlExecutor.getSql();
 				values = (List<Object>) sqlExecutor.getParameter();
 			}
@@ -817,7 +884,6 @@ public class QueryHelper {
 			}
 		} catch (Exception ex) {
 			logger.error(ex);
-
 			throw new RuntimeException(ex);
 		} finally {
 			JdbcUtils.close(psmt);
@@ -836,7 +902,6 @@ public class QueryHelper {
 			QueryConnectionFactory.getInstance().register(ts, conn);
 			return this.getTotal(conn, sqlExecutor);
 		} catch (Exception ex) {
-
 			throw new RuntimeException(ex);
 		} finally {
 			if (conn != null) {
@@ -848,7 +913,7 @@ public class QueryHelper {
 
 	public int getTotal(String sql, Map<String, Object> paramMap) {
 		long ts = 0;
-		SqlExecutor sqlExecutor = DBUtils.replaceSQL(sql, paramMap);
+		SqlExecutor sqlExecutor = QueryUtils.replaceSQL(sql, paramMap);
 		Connection conn = null;
 		try {
 			conn = DBConnectionFactory.getConnection();
@@ -856,7 +921,6 @@ public class QueryHelper {
 			QueryConnectionFactory.getInstance().register(ts, conn);
 			return this.getTotal(conn, sqlExecutor);
 		} catch (Exception ex) {
-
 			throw new RuntimeException(ex);
 		} finally {
 			if (conn != null) {
@@ -875,7 +939,6 @@ public class QueryHelper {
 			QueryConnectionFactory.getInstance().register(ts, conn);
 			return this.getTotal(conn, sqlExecutor);
 		} catch (Exception ex) {
-
 			throw new RuntimeException(ex);
 		} finally {
 			if (conn != null) {
@@ -887,7 +950,7 @@ public class QueryHelper {
 
 	public int getTotal(String systemName, String sql, Map<String, Object> paramMap) {
 		long ts = 0;
-		SqlExecutor sqlExecutor = DBUtils.replaceSQL(sql, paramMap);
+		SqlExecutor sqlExecutor = QueryUtils.replaceSQL(sql, paramMap);
 		Connection conn = null;
 		try {
 			conn = DBConnectionFactory.getConnection(systemName);
@@ -895,7 +958,6 @@ public class QueryHelper {
 			QueryConnectionFactory.getInstance().register(ts, conn);
 			return this.getTotal(conn, sqlExecutor);
 		} catch (Exception ex) {
-
 			throw new RuntimeException(ex);
 		} finally {
 			if (conn != null) {
@@ -919,7 +981,7 @@ public class QueryHelper {
 		try {
 			List<Object> values = null;
 			if (paramMap != null) {
-				SqlExecutor sqlExecutor = DBUtils.replaceSQL(sql, paramMap);
+				SqlExecutor sqlExecutor = QueryUtils.replaceSQL(sql, paramMap);
 				sql = sqlExecutor.getSql();
 				values = (List<Object>) sqlExecutor.getParameter();
 			}
@@ -941,7 +1003,6 @@ public class QueryHelper {
 			}
 		} catch (Exception ex) {
 			logger.error(ex);
-
 			throw new RuntimeException(ex);
 		} finally {
 			JdbcUtils.close(psmt);
@@ -970,7 +1031,7 @@ public class QueryHelper {
 			QueryConnectionFactory.getInstance().register(ts, conn);
 			List<Object> values = null;
 			if (paramMap != null) {
-				SqlExecutor sqlExecutor = DBUtils.replaceSQL(sql, paramMap);
+				SqlExecutor sqlExecutor = QueryUtils.replaceSQL(sql, paramMap);
 				sql = sqlExecutor.getSql();
 				values = (List<Object>) sqlExecutor.getParameter();
 			}
@@ -992,7 +1053,6 @@ public class QueryHelper {
 			}
 		} catch (Exception ex) {
 			logger.error(ex);
-
 			throw new RuntimeException(ex);
 		} finally {
 			if (conn != null) {
@@ -1007,7 +1067,7 @@ public class QueryHelper {
 	}
 
 	public Map<String, Object> selectOne(Connection conn, SqlExecutor sqlExecutor) {
-		List<Map<String, Object>> results = getResultList(conn, sqlExecutor);
+		List<Map<String, Object>> results = getResultList(conn, sqlExecutor, 1);
 		if (results != null && results.size() > 0) {
 			return results.get(0);
 		}
@@ -1028,7 +1088,7 @@ public class QueryHelper {
 		if (!DBUtils.isAllowedSql(sql)) {
 			throw new RuntimeException(" SQL statement illegal ");
 		}
-		SqlExecutor sqlExecutor = DBUtils.replaceSQL(sql, paramMap);
+		SqlExecutor sqlExecutor = QueryUtils.replaceSQL(sql, paramMap);
 		long ts = 0;
 		Connection conn = null;
 		try {
@@ -1054,7 +1114,7 @@ public class QueryHelper {
 			conn = DBConnectionFactory.getConnection(systemName);
 			ts = System.currentTimeMillis();
 			QueryConnectionFactory.getInstance().register(ts, conn);
-			List<Map<String, Object>> results = getResultList(conn, sqlExecutor);
+			List<Map<String, Object>> results = getResultList(conn, sqlExecutor, 1);
 			if (results != null && results.size() > 0) {
 				return results.get(0);
 			}
@@ -1078,7 +1138,7 @@ public class QueryHelper {
 	 * @return
 	 */
 	public Map<String, Object> selectOne(String systemName, String sql, Map<String, Object> paramMap) {
-		SqlExecutor sqlExecutor = DBUtils.replaceSQL(sql, paramMap);
+		SqlExecutor sqlExecutor = QueryUtils.replaceSQL(sql, paramMap);
 		long ts = 0;
 		Connection conn = null;
 		try {

@@ -7,22 +7,18 @@
 
 	<bean id="dataSource" class="com.glaf.core.jdbc.datasource.MultiRoutingDataSource" />
 
-	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-		<property name="dataSource">
-			<ref bean="dataSource" />
-		</property>
+	<bean id="hibernateSessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="packagesToScan" value="com.glaf" />
+		<property name="annotatedPackages" value="com.glaf" />
+		<property name="dataSource" ref="dataSource" />
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.format_sql">true</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.auto_quote_keyword">true</prop>
 			</props>
-		</property>
-		<property name="packagesToScan">
-			<list>
-				<value>com.glaf</value>
-			</list>
 		</property>
 	</bean>
 

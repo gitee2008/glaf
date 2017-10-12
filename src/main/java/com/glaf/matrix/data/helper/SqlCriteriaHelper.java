@@ -33,8 +33,8 @@ import com.glaf.core.entity.SqlExecutor;
 import com.glaf.core.util.DateUtils;
 import com.glaf.core.util.LowerLinkedMap;
 import com.glaf.core.util.QueryUtils;
+
 import com.glaf.matrix.data.domain.SqlCriteria;
-import com.glaf.matrix.data.query.SqlCriteriaQuery;
 import com.glaf.matrix.data.service.SqlCriteriaService;
 
 public class SqlCriteriaHelper {
@@ -50,10 +50,10 @@ public class SqlCriteriaHelper {
 		SqlExecutor sqlExecutor = new SqlExecutor();
 		sqlExecutor.setSql("");
 		if (params != null && !params.isEmpty()) {
-			SqlCriteriaQuery query = new SqlCriteriaQuery();
-			query.moduleId(moduleId);
-			query.businessKey(businessKey);
-			List<SqlCriteria> list = getSqlCriteriaService().list(query);
+			// SqlCriteriaQuery query = new SqlCriteriaQuery();
+			// query.moduleId(moduleId);
+			// query.businessKey(businessKey);
+			List<SqlCriteria> list = getSqlCriteriaService().getSqlCriterias(businessKey, moduleId);
 			if (list != null && !list.isEmpty()) {
 				String tmp = null;
 				Object value = null;
@@ -207,10 +207,10 @@ public class SqlCriteriaHelper {
 		SqlExecutor sqlExecutor = new SqlExecutor();
 		sqlExecutor.setSql("");
 		if (params != null && !params.isEmpty()) {
-			SqlCriteriaQuery query = new SqlCriteriaQuery();
-			query.moduleId(moduleId);
-			query.businessKey(businessKey);
-			List<SqlCriteria> list = getSqlCriteriaService().list(query);
+			// SqlCriteriaQuery query = new SqlCriteriaQuery();
+			// query.moduleId(moduleId);
+			// query.businessKey(businessKey);
+			List<SqlCriteria> list = getSqlCriteriaService().getSqlCriterias(businessKey, moduleId);
 			if (list != null && !list.isEmpty()) {
 				String tmp = null;
 				Object value = null;
@@ -362,10 +362,10 @@ public class SqlCriteriaHelper {
 		SqlExecutor sqlExecutor = new SqlExecutor();
 		sqlExecutor.setSql("");
 		if (params != null && !params.isEmpty()) {
-			SqlCriteriaQuery query = new SqlCriteriaQuery();
-			query.moduleId(moduleId);
-			query.businessKey(businessKey);
-			List<SqlCriteria> list = getSqlCriteriaService().list(query);
+			// SqlCriteriaQuery query = new SqlCriteriaQuery();
+			// query.moduleId(moduleId);
+			// query.businessKey(businessKey);
+			List<SqlCriteria> list = getSqlCriteriaService().getSqlCriterias(businessKey, moduleId);
 			if (list != null && !list.isEmpty()) {
 				String tmp = null;
 				Object value = null;

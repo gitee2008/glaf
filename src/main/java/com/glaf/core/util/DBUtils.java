@@ -27,13 +27,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,7 +41,6 @@ import org.apache.commons.logging.LogFactory;
 import com.glaf.core.domain.ColumnDefinition;
 import com.glaf.core.domain.TableDefinition;
 import com.glaf.core.el.ExpressionTools;
-import com.glaf.core.entity.SqlExecutor;
 import com.glaf.core.jdbc.DBConnectionFactory;
 
 public class DBUtils {
@@ -2321,18 +2316,6 @@ public class DBUtils {
 		return false;
 	}
 
-	private static Map<String, Object> lowerKeyMap(Map<String, Object> params) {
-		Map<String, Object> dataMap = new java.util.HashMap<String, Object>();
-		Set<Entry<String, Object>> entrySet = params.entrySet();
-		for (Entry<String, Object> entry : entrySet) {
-			String key = entry.getKey();
-			Object value = entry.getValue();
-			dataMap.put(key, value);
-			dataMap.put(key.toLowerCase(), value);
-		}
-		return dataMap;
-	}
-
 	public static void main(String[] args) {
 		System.out.println(DBUtils.isAllowedSql(" select * from  userinfo"));
 		List<ColumnDefinition> columns = new java.util.ArrayList<ColumnDefinition>();
@@ -2407,108 +2390,6 @@ public class DBUtils {
 		} finally {
 			JdbcUtils.close(connection);
 		}
-	}
-
-	public static SqlExecutor replaceSQL(String sql, Map<String, Object> params) {
-		SqlExecutor sqlExecutor = new SqlExecutor();
-		sqlExecutor.setSql(sql);
-		if (sql == null || params == null) {
-			return sqlExecutor;
-		}
-
-		List<Object> values = new java.util.ArrayList<Object>();
-		Map<String, Object> dataMap = lowerKeyMap(params);
-		StringBuilder sb = new StringBuilder();
-		int begin = 0;
-		int end = 0;
-		boolean flag = false;
-		for (int i = 0; i < sql.length(); i++) {
-			if (sql.charAt(i) == '#' && sql.charAt(i + 1) == '{') {
-				sb.append(sql.substring(end, i));
-				begin = i + 2;
-				flag = true;
-			}
-			if (flag && sql.charAt(i) == '}') {
-				String temp = sql.substring(begin, i);
-				temp = temp.toLowerCase();
-				if (dataMap.get(temp) != null) {
-					Object value = dataMap.get(temp);
-					/**
-					 * 如果是Collection参数，必须至少有一个值
-					 */
-					if (value != null && value instanceof Collection) {
-						Collection<?> coll = (Collection<?>) value;
-						if (coll != null && !coll.isEmpty()) {
-							Iterator<?> iter = coll.iterator();
-							while (iter.hasNext()) {
-								values.add(iter.next());
-								sb.append(" ? ");
-								if (iter.hasNext()) {
-									sb.append(", ");
-								}
-							}
-						}
-					} else {
-						sb.append(" ? ");
-						values.add(value);
-					}
-					end = i + 1;
-					flag = false;
-				} else {
-					sb.append(" ? ");
-					end = i + 1;
-					flag = false;
-					values.add(null);
-				}
-			}
-			if (i == sql.length() - 1) {
-				sb.append(sql.substring(end, i + 1));
-			}
-		}
-		sqlExecutor.setParameter(values);
-		sqlExecutor.setSql(sb.toString());
-		return sqlExecutor;
-	}
-
-	public static String replaceTextParas(String str, Map<String, Object> params) {
-		if (str == null || params == null) {
-			return str;
-		}
-		Map<String, Object> dataMap = lowerKeyMap(params);
-		StringBuilder sb = new StringBuilder();
-		int begin = 0;
-		int end = 0;
-		boolean flag = false;
-		for (int i = 0; i < str.length(); i++) {
-			if (str.charAt(i) == '#' && str.charAt(i + 1) == '{') {
-				sb.append(str.substring(end, i));
-				begin = i + 2;
-				flag = true;
-			}
-			if (flag && str.charAt(i) == '}') {
-				String temp = str.substring(begin, i);
-				temp = temp.toLowerCase();
-				if (dataMap.get(temp) != null) {
-					Object value = dataMap.get(temp);
-					if (value instanceof Date) {
-						String s = DateUtils.getDate((Date) value);
-						sb.append(s);
-					} else {
-						sb.append(value.toString());
-					}
-					end = i + 1;
-					flag = false;
-				} else {
-					sb.append("#{").append(temp).append('}');
-					end = i + 1;
-					flag = false;
-				}
-			}
-			if (i == str.length() - 1) {
-				sb.append(str.substring(end, i + 1));
-			}
-		}
-		return sb.toString();
 	}
 
 	public static boolean tableExists(Connection connection, String tableName) {

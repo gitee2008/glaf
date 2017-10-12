@@ -48,7 +48,7 @@ import com.glaf.core.domain.Database;
 import com.glaf.matrix.data.domain.SqlDefinition;
 import com.glaf.matrix.data.query.SqlDefinitionQuery;
 import com.glaf.core.query.DatabaseQuery;
- 
+
 import com.glaf.core.security.LoginContext;
 import com.glaf.core.service.IDatabaseService;
 import com.glaf.matrix.data.service.SqlDefinitionService;
@@ -65,8 +65,7 @@ import com.glaf.core.util.Tools;
 @Controller("/chart")
 @RequestMapping("/chart")
 public class ChartController {
-	protected static final Log logger = LogFactory
-			.getLog(ChartController.class);
+	protected static final Log logger = LogFactory.getLog(ChartController.class);
 
 	protected IChartService chartService;
 
@@ -108,8 +107,7 @@ public class ChartController {
 				chartType = chart.getChartType();
 			}
 			ChartDataBean manager = new ChartDataBean();
-			chart = manager.getChartAndFetchDataById(chart.getId(), params,
-					RequestUtils.getActorId(request));
+			chart = manager.getChartAndFetchDataById(chart.getId(), params, RequestUtils.getActorId(request));
 			logger.debug("chart rows size:" + chart.getColumns().size());
 			ChartGen chartGen = JFreeChartFactory.getChartGen(chartType);
 			if (chartGen != null) {
@@ -134,26 +132,26 @@ public class ChartController {
 	}
 
 	@RequestMapping("/chooseQuery")
-	public ModelAndView chooseQuery(HttpServletRequest request,
-			ModelMap modelMap) {
+	public ModelAndView chooseQuery(HttpServletRequest request, ModelMap modelMap) {
 		RequestUtils.setRequestParameterToAttribute(request);
 		request.removeAttribute("canSubmit");
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
-		String rowId = ParamUtils.getString(params, "chartId");
+		String chartId = ParamUtils.getString(params, "chartId");
 		SqlDefinitionQuery query = new SqlDefinitionQuery();
 		List<SqlDefinition> list = sqlDefinitionService.list(query);
 		request.setAttribute("unselecteds", list);
 		Chart chart = null;
-		if (StringUtils.isNotEmpty(rowId)) {
-			chart = chartService.getChart(rowId);
+		if (StringUtils.isNotEmpty(chartId)) {
+			chart = chartService.getChart(chartId);
 			request.setAttribute("chart", chart);
 			if (StringUtils.isNotEmpty(chart.getQueryIds())) {
 				StringBuffer sb01 = new StringBuffer();
 				StringBuffer sb02 = new StringBuffer();
-				List<String> selecteds = new java.util.ArrayList<String>();
+				List<Long> ids = StringTools.splitToLong(chart.getQueryIds());
+				List<Long> selecteds = new java.util.ArrayList<Long>();
 				for (SqlDefinition q : list) {
-					if (StringUtils.contains(chart.getQueryIds(), q.getUuid())) {
-						selecteds.add(q.getUuid());
+					if (ids.contains(q.getId())) {
+						selecteds.add(q.getId());
 						sb01.append(q.getId()).append(",");
 						sb02.append(q.getName()).append(",");
 					}
@@ -195,9 +193,7 @@ public class ChartController {
 			}
 		} else if (StringUtils.isNotEmpty(rowId)) {
 			Chart chart = chartService.getChart(rowId);
-			if (chart != null
-					&& StringUtils.equals(chart.getCreateBy(),
-							securityContext.getActorId())) {
+			if (chart != null && StringUtils.equals(chart.getCreateBy(), securityContext.getActorId())) {
 				chartService.deleteById(chart.getId());
 			}
 		}
@@ -207,8 +203,7 @@ public class ChartController {
 
 	@ResponseBody
 	@RequestMapping("/download")
-	public void download(HttpServletRequest request,
-			HttpServletResponse response) {
+	public void download(HttpServletRequest request, HttpServletResponse response) {
 		RequestUtils.setRequestParameterToAttribute(request);
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
 		String chartId = ParamUtils.getString(params, "chartId");
@@ -235,15 +230,13 @@ public class ChartController {
 			String x_complex_query = request.getParameter("x_complex_query");
 			if (StringUtils.isNotEmpty(x_complex_query)) {
 				x_complex_query = RequestUtils.decodeString(x_complex_query);
-				Map<String, Object> paramMap = JsonUtils
-						.decode(x_complex_query);
+				Map<String, Object> paramMap = JsonUtils.decode(x_complex_query);
 				logger.debug("paramMap:" + paramMap);
 				params.putAll(paramMap);
 			}
 
 			ChartDataBean manager = new ChartDataBean();
-			chart = manager.getChartAndFetchDataById(chart.getId(), params,
-					RequestUtils.getActorId(request));
+			chart = manager.getChartAndFetchDataById(chart.getId(), params, RequestUtils.getActorId(request));
 			logger.debug("chart rows size:" + chart.getColumns().size());
 			String filename = "chart.png";
 			String contentType = "image/png";
@@ -260,8 +253,7 @@ public class ChartController {
 				JFreeChart jchart = chartGen.createChart(chart);
 				byte[] bytes = ChartUtils.createChart(chart, jchart);
 				try {
-					ResponseUtils.output(request, response, bytes, filename,
-							contentType);
+					ResponseUtils.output(request, response, bytes, filename, contentType);
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
@@ -291,8 +283,7 @@ public class ChartController {
 					DatabaseConnectionConfig config = new DatabaseConnectionConfig();
 					if (config.checkConfig(database)) {
 						activeDatabases.add(database);
-						logger.debug(database.getName()
-								+ " check connection ok.");
+						logger.debug(database.getName() + " check connection ok.");
 					}
 				}
 			}
@@ -313,12 +304,10 @@ public class ChartController {
 				StringBuffer sb01 = new StringBuffer();
 				StringBuffer sb02 = new StringBuffer();
 				for (String queryId : queryIds) {
-					SqlDefinition sqlDefinition = sqlDefinitionService
-							.getSqlDefinitionByUUID(queryId);
+					SqlDefinition sqlDefinition = sqlDefinitionService.getSqlDefinition(Long.parseLong(queryId));
 					if (sqlDefinition != null) {
 						sb01.append(sqlDefinition.getId()).append(",");
-						sb02.append(sqlDefinition.getTitle()).append("[")
-								.append(sqlDefinition.getId()).append("],");
+						sb02.append(sqlDefinition.getTitle()).append("[").append(sqlDefinition.getId()).append("],");
 					}
 				}
 				if (sb01.toString().endsWith(",")) {
@@ -332,6 +321,13 @@ public class ChartController {
 			}
 		}
 
+		List<Integer> scales = new ArrayList<Integer>();
+		for (int i = 1; i <= 30; i++) {
+			scales.add(30 * i);
+		}
+
+		request.setAttribute("scales", scales);
+
 		String x_view = ViewProperties.getString("chart.edit");
 		if (StringUtils.isNotEmpty(x_view)) {
 			return new ModelAndView(x_view, modelMap);
@@ -342,8 +338,7 @@ public class ChartController {
 
 	@RequestMapping("/json")
 	@ResponseBody
-	public byte[] json(HttpServletRequest request, ModelMap modelMap)
-			throws IOException {
+	public byte[] json(HttpServletRequest request, ModelMap modelMap) throws IOException {
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
 		ChartQuery query = new ChartQuery();
 		Tools.populate(query, params);
@@ -394,8 +389,7 @@ public class ChartController {
 				}
 			}
 
-			List<Chart> list = chartService.getChartsByQueryCriteria(start,
-					limit, query);
+			List<Chart> list = chartService.getChartsByQueryCriteria(start, limit, query);
 
 			if (list != null && !list.isEmpty()) {
 				JSONArray rowsJSON = new JSONArray();
@@ -422,8 +416,7 @@ public class ChartController {
 		RequestUtils.setRequestParameterToAttribute(request);
 		String x_query = request.getParameter("x_query");
 		if (StringUtils.equals(x_query, "true")) {
-			Map<String, Object> paramMap = RequestUtils
-					.getParameterMap(request);
+			Map<String, Object> paramMap = RequestUtils.getParameterMap(request);
 			String x_complex_query = JsonUtils.encode(paramMap);
 			x_complex_query = RequestUtils.encodeString(x_complex_query);
 			request.setAttribute("x_complex_query", x_complex_query);
@@ -488,8 +481,7 @@ public class ChartController {
 	}
 
 	@javax.annotation.Resource
-	public void setSqlDefinitionService(
-			SqlDefinitionService sqlDefinitionService) {
+	public void setSqlDefinitionService(SqlDefinitionService sqlDefinitionService) {
 		this.sqlDefinitionService = sqlDefinitionService;
 	}
 
@@ -506,8 +498,7 @@ public class ChartController {
 
 		String x_query = request.getParameter("x_query");
 		if (StringUtils.equals(x_query, "true")) {
-			Map<String, Object> paramMap = RequestUtils
-					.getParameterMap(request);
+			Map<String, Object> paramMap = RequestUtils.getParameterMap(request);
 			String x_complex_query = JsonUtils.encode(paramMap);
 			x_complex_query = RequestUtils.encodeString(x_complex_query);
 			request.setAttribute("x_complex_query", x_complex_query);

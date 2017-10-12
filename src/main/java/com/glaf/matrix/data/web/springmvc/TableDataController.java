@@ -70,8 +70,6 @@ import com.glaf.matrix.data.domain.SysTable;
 import com.glaf.matrix.data.domain.TableColumn;
 import com.glaf.matrix.data.domain.TableCorrelation;
 import com.glaf.matrix.data.factory.DataItemFactory;
-import com.glaf.matrix.data.query.SqlCriteriaQuery;
-import com.glaf.matrix.data.query.TableCorrelationQuery;
 import com.glaf.matrix.data.service.ITableService;
 import com.glaf.matrix.data.service.SqlCriteriaService;
 import com.glaf.matrix.data.service.TableCorrelationService;
@@ -197,9 +195,9 @@ public class TableDataController {
 					request.setAttribute("tableDefinition", sysTable);
 				}
 
-				TableCorrelationQuery query = new TableCorrelationQuery();
-				query.masterTableId(tableId);
-				List<TableCorrelation> list = tableCorrelationService.list(query);
+				//TableCorrelationQuery query = new TableCorrelationQuery();
+				//query.masterTableId(tableId);
+				List<TableCorrelation> list = tableCorrelationService.getTableCorrelationsByMasterTableId(tableId);
 				if (list != null && !list.isEmpty()) {
 					List<SysTable> correlations = new ArrayList<SysTable>();
 					for (TableCorrelation t : list) {
@@ -210,10 +208,10 @@ public class TableDataController {
 					request.setAttribute("correlations", correlations);
 				}
 
-				SqlCriteriaQuery query2 = new SqlCriteriaQuery();
-				query2.businessKey(sysTable.getTableName());
-				query2.moduleId(tableId);
-				List<SqlCriteria> sqlCriterias = sqlCriteriaService.list(query2);
+				// SqlCriteriaQuery query2 = new SqlCriteriaQuery();
+				// query2.businessKey(sysTable.getTableName());
+				// query2.moduleId(tableId);
+				List<SqlCriteria> sqlCriterias = sqlCriteriaService.getSqlCriterias(sysTable.getTableName(), tableId);
 				if (sqlCriterias != null && !sqlCriterias.isEmpty()) {
 					for (SqlCriteria col : sqlCriterias) {
 						if (StringUtils.isNotEmpty(request.getParameter(col.getParamName()))) {
@@ -289,11 +287,11 @@ public class TableDataController {
 					}
 					request.setAttribute("columns", columns);
 					request.setAttribute("table", sysTable);
+					request.setAttribute("sysTable", sysTable);
 					request.setAttribute("tableDefinition", sysTable);
 				}
-				TableCorrelationQuery query = new TableCorrelationQuery();
-				query.masterTableId(tableId);
-				List<TableCorrelation> list = tableCorrelationService.list(query);
+
+				List<TableCorrelation> list = tableCorrelationService.getTableCorrelationsByMasterTableId(tableId);
 				if (list != null && !list.isEmpty()) {
 					List<SysTable> correlations = new ArrayList<SysTable>();
 					for (TableCorrelation t : list) {
@@ -303,9 +301,8 @@ public class TableDataController {
 					}
 					request.setAttribute("correlations", correlations);
 				}
-				query = new TableCorrelationQuery();
-				query.slaveTableId(tableId);
-				list = tableCorrelationService.list(query);
+
+				list = tableCorrelationService.getTableCorrelationsBySlaveTableId(tableId);
 				if (list != null && !list.isEmpty()) {
 					TableCorrelation tc = list.get(0);
 					SysTable masterTable = tableService.getSysTableById(tc.getMasterTableId());
@@ -324,10 +321,10 @@ public class TableDataController {
 					}
 				}
 
-				SqlCriteriaQuery query2 = new SqlCriteriaQuery();
-				query2.businessKey(sysTable.getTableName());
-				query2.moduleId(tableId);
-				List<SqlCriteria> sqlCriterias = sqlCriteriaService.list(query2);
+				// SqlCriteriaQuery query2 = new SqlCriteriaQuery();
+				// query2.businessKey(sysTable.getTableName());
+				// query2.moduleId(tableId);
+				List<SqlCriteria> sqlCriterias = sqlCriteriaService.getSqlCriterias(sysTable.getTableName(), tableId);
 				if (sqlCriterias != null && !sqlCriterias.isEmpty()) {
 					for (SqlCriteria col : sqlCriterias) {
 						if (StringUtils.isNotEmpty(request.getParameter(col.getParamName()))) {
@@ -400,7 +397,7 @@ public class TableDataController {
 											if (StringUtils.equals(loginContext.getUser().getTenantId(),
 													dataModel.getTenantId())) {
 												hasUpdatePermission = true;
-											} 
+											}
 										}
 									}
 
@@ -458,9 +455,9 @@ public class TableDataController {
 						}
 
 						if (topId > 0) {
-							TableCorrelationQuery query = new TableCorrelationQuery();
-							query.slaveTableId(tableId);
-							List<TableCorrelation> list = tableCorrelationService.list(query);
+							//TableCorrelationQuery query = new TableCorrelationQuery();
+							//query.slaveTableId(tableId);
+							List<TableCorrelation> list = tableCorrelationService.getTableCorrelationsBySlaveTableId(tableId);
 							// logger.debug("list:" + list);
 							if (list != null && !list.isEmpty()) {
 								TableCorrelation tc = list.get(0);

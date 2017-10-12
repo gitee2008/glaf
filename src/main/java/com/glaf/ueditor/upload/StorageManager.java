@@ -76,6 +76,7 @@ public class StorageManager {
 			String contentType, String path, String fileName, String name, String type, long maxSize) {
 		State state = null;
 		DataFile dataFile = new DataFileEntity();
+		dataFile.setId(fileId);
 		dataFile.setServiceKey("ueditor");
 		dataFile.setCreateBy(createBy);
 		dataFile.setLastModified(System.currentTimeMillis());

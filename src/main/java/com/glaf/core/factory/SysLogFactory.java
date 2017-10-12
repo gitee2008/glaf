@@ -130,7 +130,7 @@ public class SysLogFactory {
 	private SysLogFactory() {
 		try {
 			IDatabaseService databaseService = (IDatabaseService) ContextFactory.getBean("databaseService");
-			Database database = databaseService.getDatabaseByMapping("log_storage_db");
+			Database database = databaseService.getDatabaseByMapping("log");
 			if (database != null) {
 				DatabaseConnectionConfig cfg = new DatabaseConnectionConfig();
 				if (cfg.checkConnectionImmediately(database)) {
@@ -169,13 +169,13 @@ public class SysLogFactory {
 
 	public void checkAndCreateLogDB() {
 		IDatabaseService databaseService = (IDatabaseService) ContextFactory.getBean("databaseService");
-		Database database = databaseService.getDatabaseByMapping("log_storage_db");
+		Database database = databaseService.getDatabaseByMapping("log");
 		if (database == null) {// 不存在日志库
 			Database master = databaseService.getDatabaseByMapping("master");
 			if (master != null && "Y".equals(master.getVerify())) {
 				Database logDB = master.clone();
 
-				logDB.setMapping("log_storage_db");
+				logDB.setMapping("log");
 				logDB.setSection("LOG");
 				logDB.setActive("1");
 				logDB.setInitFlag("Y");

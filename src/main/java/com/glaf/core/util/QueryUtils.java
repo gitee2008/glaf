@@ -20,9 +20,11 @@ package com.glaf.core.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -444,6 +446,201 @@ public class QueryUtils {
 		}
 		String newString = sb.toString();
 		return newString;
+	}
+
+	public static SqlExecutor replaceMyBatisInSQLParas(String str, Map<String, Object> params) {
+		SqlExecutor sqlExecutor = new SqlExecutor();
+		sqlExecutor.setSql(str);
+		if (str == null || params == null) {
+			return sqlExecutor;
+		}
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.putAll(params);
+		Map<String, Object> dataMap = new LowerLinkedMap();
+		dataMap.putAll(params);
+		// logger.debug("->dataMap:" + dataMap);
+		StringBuilder sb = new StringBuilder();
+		int begin = 0;
+		int left = 0;
+		int end = 0;
+		boolean flag = false; // 匹配标志
+
+		for (int i = 0; i < str.length(); i++) {
+			if (str.charAt(i) == '(') {
+				sb.append(str.substring(end, i));
+				left = i;
+				end = i;
+			}
+			if (str.charAt(i) == '#' && str.charAt(i + 1) == '{') {
+				begin = i + 2;
+				flag = true;
+			}
+			if (flag && str.charAt(i) == '}') {
+				String temp = str.substring(begin, i);
+				temp = temp.toLowerCase();
+				String name = temp;
+				String type = "";
+				if (temp.indexOf(":") > 0) {
+					name = temp.substring(0, temp.lastIndexOf(":"));
+					type = temp.substring(temp.lastIndexOf(":") + 1, temp.length());
+				}
+				name = name.trim().toLowerCase();
+				type = type.trim().toLowerCase();
+				// logger.debug("name:" + name + "\t type:" + type);
+				if (dataMap.get(name) != null) {
+					Object val = dataMap.get(name);
+					String sx = val.toString();
+					if (StringUtils.equalsIgnoreCase(type, "int")) {
+						parameter.put(name, Integer.parseInt(sx));
+					} else if (StringUtils.equalsIgnoreCase(type, "long")) {
+						parameter.put(name, Long.parseLong(sx));
+					} else if (StringUtils.equalsIgnoreCase(type, "double")) {
+						parameter.put(name, Double.parseDouble(sx));
+					} else if (StringUtils.equalsIgnoreCase(type, "date")) {
+						if (val instanceof Date) {
+							parameter.put(name, val);
+						} else {
+							parameter.put(name, DateUtils.toDate(sx));
+						}
+					} else {
+						parameter.put(name, val);
+					}
+
+					sb.append(str.substring(left, begin - 2));
+					sb.append("#{").append(name).append("}");
+
+					end = i + 1;
+					flag = false;
+				} else {
+					sb.append(str.charAt(left));
+					sb.append(" 1=1 ");
+					end = str.indexOf(")", i);
+				}
+			}
+			if (i == str.length() - 1) {
+				sb.append(str.substring(end, i + 1));
+			}
+		}
+
+		String newString = sb.toString();
+		sqlExecutor.setSql(newString);
+		sqlExecutor.setParameter(parameter);
+		logger.debug("#sql:" + newString);
+		logger.debug("#parameter:" + parameter);
+		return sqlExecutor;
+	}
+
+	public static String replaceMyTextParas(String str, Map<String, Object> params) {
+		if (str == null || params == null) {
+			return str;
+		}
+		Map<String, Object> dataMap = lowerKeyMap(params);
+		StringBuilder sb = new StringBuilder();
+		int begin = 0;
+		int end = 0;
+		boolean flag = false;
+		for (int i = 0; i < str.length(); i++) {
+			if (str.charAt(i) == '#' && str.charAt(i + 1) == '{') {
+				sb.append(str.substring(end, i));
+				begin = i + 2;
+				flag = true;
+			}
+			if (flag && str.charAt(i) == '}') {
+				String temp = str.substring(begin, i);
+				temp = temp.toLowerCase();
+				if (dataMap.get(temp) != null) {
+					Object value = dataMap.get(temp);
+					if (value instanceof Date) {
+						String s = DateUtils.getDate((Date) value);
+						sb.append(s);
+					} else {
+						sb.append(value.toString());
+					}
+					end = i + 1;
+					flag = false;
+				} else {
+					sb.append("#{").append(temp).append('}');
+					end = i + 1;
+					flag = false;
+				}
+			}
+			if (i == str.length() - 1) {
+				sb.append(str.substring(end, i + 1));
+			}
+		}
+		return sb.toString();
+	}
+
+	public static SqlExecutor replaceSQL(String sql, Map<String, Object> params) {
+		SqlExecutor sqlExecutor = new SqlExecutor();
+		sqlExecutor.setSql(sql);
+		if (sql == null || params == null) {
+			return sqlExecutor;
+		}
+
+		List<Object> values = new java.util.ArrayList<Object>();
+		Map<String, Object> dataMap = lowerKeyMap(params);
+		StringBuilder sb = new StringBuilder();
+		int begin = 0;
+		int end = 0;
+		boolean flag = false;
+		for (int i = 0; i < sql.length(); i++) {
+			if (sql.charAt(i) == '#' && sql.charAt(i + 1) == '{') {
+				sb.append(sql.substring(end, i));
+				begin = i + 2;
+				flag = true;
+			}
+			if (flag && sql.charAt(i) == '}') {
+				String temp = sql.substring(begin, i);
+				temp = temp.toLowerCase();
+				if (dataMap.get(temp) != null) {
+					Object value = null;
+					if (StringUtils.endsWith(temp, "_integer") || StringUtils.endsWith(temp, "_int")) {
+						value = ParamUtils.getIntValue(dataMap, temp);
+					} else if (StringUtils.endsWith(temp, "_double") || StringUtils.endsWith(temp, "_float")) {
+						value = ParamUtils.getDoubleValue(dataMap, temp);
+					} else if (StringUtils.endsWith(temp, "_long")) {
+						value = ParamUtils.getLongValue(dataMap, temp);
+					} else if (StringUtils.endsWith(temp, "_date")) {
+						value = ParamUtils.getDate(dataMap, temp);
+					} else {
+						value = dataMap.get(temp);
+					}
+					/**
+					 * 如果是Collection参数，必须至少有一个值
+					 */
+					if (value != null && value instanceof Collection) {
+						Collection<?> coll = (Collection<?>) value;
+						if (coll != null && !coll.isEmpty()) {
+							Iterator<?> iter = coll.iterator();
+							while (iter.hasNext()) {
+								values.add(iter.next());
+								sb.append(" ? ");
+								if (iter.hasNext()) {
+									sb.append(", ");
+								}
+							}
+						}
+					} else {
+						sb.append(" ? ");
+						values.add(value);
+					}
+					end = i + 1;
+					flag = false;
+				} else {
+					sb.append(" ? ");
+					end = i + 1;
+					flag = false;
+					values.add(null);
+				}
+			}
+			if (i == sql.length() - 1) {
+				sb.append(sql.substring(end, i + 1));
+			}
+		}
+		sqlExecutor.setParameter(values);
+		sqlExecutor.setSql(sb.toString());
+		return sqlExecutor;
 	}
 
 	public static String replaceSQLParas(String str, Map<String, Object> params) {

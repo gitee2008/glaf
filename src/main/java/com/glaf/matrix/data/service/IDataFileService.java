@@ -33,7 +33,7 @@ import com.glaf.matrix.data.query.DataFileQuery;
  */
 @Transactional(readOnly = true)
 public interface IDataFileService {
-	
+
 	int getDataFileCountByQueryCriteria(DataFileQuery query);
 
 	/**
@@ -108,7 +108,7 @@ public interface IDataFileService {
 	 * @return
 	 */
 	List<DataFile> getDataFileList(DataFileQuery query);
-	
+
 	/**
 	 * 根据参数获取数据(不包含字节流)
 	 * 
@@ -180,7 +180,7 @@ public interface IDataFileService {
 	 * @param dataFile
 	 */
 	@Transactional
-	void insertDataFile(String tenantId, DataFile dataFile);
+	String insertDataFile(String tenantId, DataFile dataFile);
 
 	/**
 	 * 将记录标记为正式

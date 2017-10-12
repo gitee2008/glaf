@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.data.mapper.StorageAppMapper">
+
+	<resultMap id="storageAppResultMap" type="com.glaf.matrix.data.domain.StorageApp">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="nodeId" column="NODEID_" jdbcType="BIGINT" />
+		<result property="deploymentId" column="DEPLOYMENTID_"
+			jdbcType="VARCHAR" />
+		<result property="databaseId" column="DATABASEID_" jdbcType="BIGINT" />
+		<result property="title" column="TITLE_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="tableNames" column="TABLENAMES_" jdbcType="VARCHAR" />
+		<result property="path" column="PATH_" jdbcType="VARCHAR" />
+		<result property="restoreFlag" column="RESTOREFLAG_" jdbcType="VARCHAR" />
+		<result property="autoSaveFlag" column="AUTOSAVEFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="interval" column="INTERVAL_" jdbcType="INTEGER" />
+		<result property="version" column="VERSION_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY_" jdbcType="VARCHAR" />
+		<result property="updateTime" column="UPDATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertStorageApp" parameterType="com.glaf.matrix.data.domain.StorageApp">
+		insert into SYS_STORAGE_APP
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="nodeId != null">
+				,NODEID_
+			</if>
+			<if test="deploymentId != null">
+				,DEPLOYMENTID_
+			</if>
+			<if test="databaseId != null">
+				,DATABASEID_
+			</if>
+			<if test="title != null">
+				,TITLE_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="tableNames != null">
+				,TABLENAMES_
+			</if>
+			<if test="path != null">
+				,PATH_
+			</if>
+			<if test="restoreFlag != null">
+				,RESTOREFLAG_
+			</if>
+			<if test="autoSaveFlag != null">
+				,AUTOSAVEFLAG_
+			</if>
+			<if test="interval != null">
+				,INTERVAL_
+			</if>
+			<if test="version != null">
+				,VERSION_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+			<if test="updateBy != null">
+				,UPDATEBY_
+			</if>
+			<if test="updateTime != null">
+				,UPDATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="nodeId != null">
+				,#{nodeId, jdbcType=BIGINT}
+			</if>
+			<if test="deploymentId != null">
+				,#{deploymentId, jdbcType=VARCHAR}
+			</if>
+			<if test="databaseId != null">
+				,#{databaseId, jdbcType=BIGINT}
+			</if>
+			<if test="title != null">
+				,#{title, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="tableNames != null">
+				,#{tableNames, jdbcType=VARCHAR}
+			</if>
+			<if test="path != null">
+				,#{path, jdbcType=VARCHAR}
+			</if>
+			<if test="restoreFlag != null">
+				,#{restoreFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="autoSaveFlag != null">
+				,#{autoSaveFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="interval != null">
+				,#{interval, jdbcType=INTEGER}
+			</if>
+			<if test="version != null">
+				,#{version, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy != null">
+				,#{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				,#{updateTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateStorageApp" parameterType="com.glaf.matrix.data.domain.StorageApp">
+		update SYS_STORAGE_APP
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="nodeId != null">
+				NODEID_ = #{nodeId, jdbcType=BIGINT},
+			</if>
+			<if test="databaseId != null">
+				DATABASEID_ = #{databaseId, jdbcType=BIGINT},
+			</if>
+			<if test="title != null">
+				TITLE_ = #{title, jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				TYPE_ = #{type, jdbcType=VARCHAR},
+			</if>
+			<if test="tableNames != null">
+				TABLENAMES_ = #{tableNames, jdbcType=VARCHAR},
+			</if>
+			<if test="path != null">
+				PATH_ = #{path, jdbcType=VARCHAR},
+			</if>
+			<if test="restoreFlag != null">
+				RESTOREFLAG_ = #{restoreFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="autoSaveFlag != null">
+				AUTOSAVEFLAG_ = #{autoSaveFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="interval != null">
+				INTERVAL_ = #{interval, jdbcType=INTEGER},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY_ = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATETIME_ = #{updateTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<update id="incrementVersion" parameterType="com.glaf.matrix.data.domain.StorageApp">
+
+		update
+		SYS_STORAGE_APP
+		set VERSION_ = #{version, jdbcType=INTEGER}
+		where ID_ =
+		#{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteStorageAppById" parameterType="long">
+		delete from
+		SYS_STORAGE_APP
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getStorageAppById" parameterType="long"
+		resultMap="storageAppResultMap">
+		select * from SYS_STORAGE_APP where ID_ = #{id}
+	</select>
+
+
+	<select id="getStorageApps" parameterType="com.glaf.matrix.data.query.StorageAppQuery"
+		resultMap="storageAppResultMap">
+		select distinct E.*
+		<include refid="selectStorageAppsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getStorageAppCount" parameterType="com.glaf.matrix.data.query.StorageAppQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectStorageAppsSql" />
+	</select>
+
+
+	<sql id="selectStorageAppsSql">
+
+		from SYS_STORAGE_APP E
+
+		<where>
+			1 = 1
+
+			<if test="nodeId != null">
+				and E.NODEID_ = #{nodeId}
+			</if>
+
+			<if test="nodeIds != null and nodeIds.size() &gt; 0">
+				and E.NODEID_ IN
+				<foreach item="x_nodeId" index="index" collection="nodeIds"
+					open="(" separator="," close=")">
+					#{x_nodeId}
+				</foreach>
+			</if>
+
+			<if test="deploymentId != null and deploymentId != '' ">
+				and E.DEPLOYMENTID_ = #{deploymentId}
+			</if>
+
+			<if test="deploymentIds != null and deploymentIds.size() &gt; 0">
+				and E.DEPLOYMENTID_ IN
+				<foreach item="x_deploymentId" index="index" collection="deploymentIds"
+					open="(" separator="," close=")">
+					#{x_deploymentId}
+				</foreach>
+			</if>
+
+			<if test="databaseId != null">
+				and E.DATABASEID_ = #{databaseId}
+			</if>
+
+			<if test="databaseIds != null and databaseIds.size() &gt; 0">
+				and E.DATABASEID_ IN
+				<foreach item="x_databaseId" index="index" collection="databaseIds"
+					open="(" separator="," close=")">
+					#{x_databaseId}
+				</foreach>
+			</if>
+
+			<if test="titleLike != null and titleLike != '' ">
+				and E.TITLE_ like #{titleLike}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="tableNamesLike != null and tableNamesLike != '' ">
+				and E.TABLENAMES_ like #{tableNamesLike}
+			</if>
+
+			<if test="pathLike != null and pathLike != '' ">
+				and E.PATH_ like #{pathLike}
+			</if>
+
+			<if test="autoSaveFlag != null and autoSaveFlag != '' ">
+				and E.AUTOSAVEFLAG_ = #{autoSaveFlag}
+			</if>
+
+			<if test="version != null">
+				and E.VERSION_ = #{version}
+			</if>
+
+			<if test="versionGreaterThanOrEqual != null">
+				and E.VERSION_ &gt;= #{versionGreaterThanOrEqual}
+			</if>
+
+			<if test="versionLessThanOrEqual != null">
+				and E.VERSION_ &lt;= #{versionLessThanOrEqual}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+			<if test="updateBy != null and updateBy != '' ">
+				and E.UPDATEBY_ = #{updateBy}
+			</if>
+
+			<if test="updateTimeGreaterThanOrEqual != null">
+				and E.UPDATETIME_ &gt;= #{updateTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="updateTimeLessThanOrEqual != null">
+				and E.UPDATETIME_ &lt;= #{updateTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

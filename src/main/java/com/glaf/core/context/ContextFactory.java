@@ -42,8 +42,7 @@ public final class ContextFactory {
 	@SuppressWarnings("unchecked")
 	public static <T> T getBean(Class<?> clazz) {
 		if (ctx == null) {
-			throw new RuntimeException(
-					" Spring context is null, please check your spring config.");
+			throw new RuntimeException(" Spring context is null, please check your spring config.");
 		}
 		String name = clazz.getSimpleName();
 		name = name.substring(0, 1).toLowerCase() + name.substring(1);
@@ -56,8 +55,7 @@ public final class ContextFactory {
 			init();
 		}
 		if (ctx == null) {
-			throw new RuntimeException(
-					" Spring context is null, please check your spring config.");
+			throw new RuntimeException(" Spring context is null, please check your spring config.");
 		}
 		return (T) ctx.getBean(name);
 	}
@@ -67,8 +65,7 @@ public final class ContextFactory {
 			init();
 		}
 		if (ctx == null) {
-			throw new RuntimeException(
-					" Spring context is null, please check your spring config.");
+			throw new RuntimeException(" Spring context is null, please check your spring config.");
 		}
 		return ctx.containsBean(name);
 	}
@@ -82,44 +79,40 @@ public final class ContextFactory {
 		if (ctx == null) {
 			try {
 				if (StringUtils.isNotEmpty(conf.get("spring-config"))) {
-					String filename = SystemProperties.getConfigRootPath()
-							+ conf.get("spring-config");
+					String filename = SystemProperties.getConfigRootPath() + conf.get("spring-config");
 					logger.info("load custom spring config:" + filename);
 					if (filename.startsWith("/")) {
 						filename = "/" + filename;// For linux
 					}
 					ctx = new FileSystemXmlApplicationContext(filename);
-				} else if (StringUtils.isNotEmpty(conf
-						.get("spring-config-file"))) {
+				} else if (StringUtils.isNotEmpty(conf.get("spring-config-file"))) {
 					String filename = conf.get("spring-config-file");
 					logger.info("load custom spring config:" + filename);
 					if (filename.startsWith("/")) {
 						filename = "/" + filename;// For linux
 					}
 					ctx = new FileSystemXmlApplicationContext(filename);
-				} else if (StringUtils.isNotEmpty(System
-						.getProperty("spring-config-file"))) {
+				} else if (StringUtils.isNotEmpty(System.getProperty("spring-config-file"))) {
 					String filename = System.getProperty("spring-config-file");
 					logger.info("load custom spring config:" + filename);
 					if (filename.startsWith("/")) {
 						filename = "/" + filename;// For linux
 					}
 					ctx = new FileSystemXmlApplicationContext(filename);
-				} else {
-					String filename = SystemProperties.getConfigRootPath()
-							+ Constants.SPRING_APPLICATION_CONTEXT;
-					logger.info("load default spring config:" + filename);
-					ctx = new FileSystemXmlApplicationContext(filename);
 				}
 			} catch (Exception ex) {
-				
 				logger.error(ex);
 			}
 		}
+
+		if (ctx == null) {
+			String filename = SystemProperties.getConfigRootPath() + Constants.SPRING_APPLICATION_CONTEXT;
+			logger.info("load default spring config:" + filename);
+			ctx = new FileSystemXmlApplicationContext(filename);
+		}
 	}
 
-	public static void setContext(
-			org.springframework.context.ApplicationContext context) {
+	public static void setContext(org.springframework.context.ApplicationContext context) {
 		if (context != null) {
 			ctx = context;
 		}

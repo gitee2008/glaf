@@ -23,13 +23,11 @@ import java.io.OutputStream;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
-import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -51,6 +49,7 @@ import com.glaf.base.online.domain.UserOnline;
 import com.glaf.base.online.service.UserOnlineService;
 import com.glaf.base.utils.ContextUtil;
 import com.glaf.base.utils.ParamUtil;
+
 import com.glaf.core.cache.CacheFactory;
 import com.glaf.core.config.Configuration;
 import com.glaf.core.config.Environment;
@@ -64,7 +63,7 @@ import com.glaf.core.util.Constants;
 import com.glaf.core.util.IOUtils;
 import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.ResponseUtils;
-import com.glaf.core.util.UUID32;
+import com.glaf.core.util.StringTools;
 import com.glaf.core.web.callback.CallbackProperties;
 import com.glaf.core.web.callback.LoginCallback;
 
@@ -341,19 +340,6 @@ public class LoginController {
 		}
 	}
 
-	public String getRandomString(int length) {
-		StringBuilder buffer = new StringBuilder(
-				"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()[]");
-		buffer.append(UUID32.getUUID());
-		StringBuilder sb = new StringBuilder();
-		Random random = new Random();
-		int range = buffer.length();
-		for (int i = 0; i < length; i++) {
-			sb.append(buffer.charAt(random.nextInt(range)));
-		}
-		return sb.toString();
-	}
-
 	@ResponseBody
 	@RequestMapping("/getLoginSecurityKey")
 	public void getLoginSecurityKey(HttpServletRequest request, HttpServletResponse response) {
@@ -362,8 +348,8 @@ public class LoginController {
 		try {
 			HttpSession session = request.getSession(true);
 			java.util.Random random = new java.util.Random();
-			String rand = this.getRandomString(random.nextInt(50));
-			String rand2 = this.getRandomString(random.nextInt(50));
+			String rand = StringTools.getRandomString(random.nextInt(50));
+			String rand2 = StringTools.getRandomString(random.nextInt(50));
 			if (session != null) {
 				session.setAttribute("x_y", rand);
 				session.setAttribute("x_z", rand2);
@@ -407,14 +393,10 @@ public class LoginController {
 			String password = request.getParameter("y");
 			HttpSession session = request.getSession(true);
 			java.util.Random random = new java.util.Random();
-			String rand = Math.abs(random.nextInt(999999)) + com.glaf.core.util.UUID32.getUUID()
-					+ Math.abs(random.nextInt(999999));
-			String rand2 = Math.abs(random.nextInt(999999)) + com.glaf.core.util.UUID32.getUUID()
-					+ Math.abs(random.nextInt(999999));
+			String rand = StringTools.getRandomString(random.nextInt(50));
+			String rand2 = StringTools.getRandomString(random.nextInt(50));
 			session = request.getSession(true);
 			if (session != null) {
-				rand = Base64.encodeBase64String(rand.getBytes()) + com.glaf.core.util.UUID32.getUUID();
-				rand2 = Base64.encodeBase64String(rand2.getBytes()) + com.glaf.core.util.UUID32.getUUID();
 				session.setAttribute("x_y", rand);
 				session.setAttribute("x_z", rand2);
 			}
@@ -523,13 +505,9 @@ public class LoginController {
 
 		HttpSession session = request.getSession(true);
 		java.util.Random random = new java.util.Random();
-		String rand = Math.abs(random.nextInt(9999)) + com.glaf.core.util.UUID32.getUUID()
-				+ Math.abs(random.nextInt(9999));
-		String rand2 = Math.abs(random.nextInt(9999)) + com.glaf.core.util.UUID32.getUUID()
-				+ Math.abs(random.nextInt(9999));
+		String rand = StringTools.getRandomString(random.nextInt(50));
+		String rand2 = StringTools.getRandomString(random.nextInt(50));
 		if (session != null) {
-			rand = Base64.encodeBase64String(rand.getBytes()) + com.glaf.core.util.UUID32.getUUID();
-			rand2 = Base64.encodeBase64String(rand2.getBytes()) + com.glaf.core.util.UUID32.getUUID();
 			session.setAttribute("x_y", rand);
 			session.setAttribute("x_z", rand2);
 		}

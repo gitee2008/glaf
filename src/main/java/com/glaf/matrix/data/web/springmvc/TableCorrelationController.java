@@ -410,9 +410,9 @@ public class TableCorrelationController {
 			}
 		}
 
-		TableCorrelationQuery query = new TableCorrelationQuery();
-		query.masterTableId(masterTableId);
-		List<TableCorrelation> list = tableCorrelationService.list(query);
+		//TableCorrelationQuery query = new TableCorrelationQuery();
+		//query.masterTableId(masterTableId);
+		List<TableCorrelation> list = tableCorrelationService.getTableCorrelationsByMasterTableId(masterTableId);
 		if (list != null && !list.isEmpty()) {
 			for (TableCorrelation t : list) {
 				t.setMasterTableTitle(tableMap.get(t.getMasterTableId()));

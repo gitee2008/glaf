@@ -67,8 +67,6 @@ import com.glaf.matrix.data.domain.TableCorrelation;
 import com.glaf.matrix.data.domain.TableSysPermission;
 import com.glaf.matrix.data.factory.DataItemFactory;
 import com.glaf.matrix.data.helper.SqlCriteriaHelper;
-import com.glaf.matrix.data.query.SqlCriteriaQuery;
-import com.glaf.matrix.data.query.TableCorrelationQuery;
 import com.glaf.matrix.data.query.TableSysPermissionQuery;
 import com.glaf.matrix.data.service.ITableService;
 import com.glaf.matrix.data.service.SqlCriteriaService;
@@ -505,9 +503,9 @@ public class TableDataBean {
 			if (dataMap.get("id_") != null && dataMap.get("uuid_") != null) {
 				int topId = ParamUtils.getInt(dataMap, "topid_");
 				if (topId > 0) {
-					TableCorrelationQuery query = new TableCorrelationQuery();
-					query.slaveTableId(sysTable.getTableId());
-					List<TableCorrelation> list = getTableCorrelationService().list(query);
+					//TableCorrelationQuery query = new TableCorrelationQuery();
+					//query.slaveTableId(sysTable.getTableId());
+					List<TableCorrelation> list = getTableCorrelationService().getTableCorrelationsBySlaveTableId(sysTable.getTableId());
 					// logger.debug("list:" + list);
 					if (list != null && !list.isEmpty()) {
 						TableCorrelation tc = list.get(0);
@@ -776,10 +774,11 @@ public class TableDataBean {
 						sqlBuffer.append(" and E.TOPID_ = ").append(topId);
 					}
 
-					SqlCriteriaQuery query = new SqlCriteriaQuery();
-					query.businessKey(sysTable.getTableName());
-					query.moduleId(tableId);
-					List<SqlCriteria> sqlCriterias = getSqlCriteriaService().list(query);
+					// SqlCriteriaQuery query = new SqlCriteriaQuery();
+					// query.businessKey(sysTable.getTableName());
+					// query.moduleId(tableId);
+					List<SqlCriteria> sqlCriterias = getSqlCriteriaService().getSqlCriterias(sysTable.getTableName(),
+							tableId);
 					if (sqlCriterias != null && !sqlCriterias.isEmpty()) {
 						for (SqlCriteria col : sqlCriterias) {
 							if (StringUtils.equals(col.getColumnType(), "String")) {

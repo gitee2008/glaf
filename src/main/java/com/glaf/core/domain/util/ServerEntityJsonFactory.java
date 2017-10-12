@@ -252,6 +252,14 @@ public class ServerEntityJsonFactory {
 		if (model.getPerms() != null) {
 			jsonObject.put("perms", model.getPerms());
 		}
+		
+		if (model.getKey() != null) {
+			jsonObject.put("key", model.getKey());
+		}
+		
+		if (model.getPassword() != null) {
+			jsonObject.put("password", model.getPassword());
+		}
 
 		if (model.getAttribute() != null) {
 			jsonObject.put("attribute", model.getAttribute());

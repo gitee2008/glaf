@@ -31,8 +31,7 @@ public class HibernateBeanFactory {
 
 	private final static String DEFAULT_CONFIG = "com/glaf/core/entity/hibernate/hibernate-context.xml";
 
-	protected static final Log logger = LogFactory
-			.getLog(HibernateBeanFactory.class);
+	protected static final Log logger = LogFactory.getLog(HibernateBeanFactory.class);
 
 	public static Object getBean(Object key) {
 		if (ctx == null) {
@@ -42,7 +41,7 @@ public class HibernateBeanFactory {
 	}
 
 	public static SessionFactory getSessionFactory() {
-		SessionFactory sessionFactory = (SessionFactory) getBean("sessionFactory");
+		SessionFactory sessionFactory = (SessionFactory) getBean("hibernateSessionFactory");
 		return sessionFactory;
 	}
 

@@ -150,6 +150,11 @@ public class SysTableJsonFactory {
 			model.setFormReportId(jsonObject.getString("formReportId"));
 		}
 
+		if (jsonObject.containsKey("idColumn")) {
+			TableColumn idColumn = TableColumnJsonFactory.jsonToObject(jsonObject.getJSONObject("idColumn"));
+			model.setIdColumn(idColumn);
+		}
+
 		if (jsonObject.containsKey("columns")) {
 			JSONArray array = jsonObject.getJSONArray("columns");
 			List<TableColumn> columns = TableColumnJsonFactory.arrayToList(array);
@@ -266,6 +271,11 @@ public class SysTableJsonFactory {
 			jsonObject.put("formReportId", model.getFormReportId());
 		}
 
+		if (model.getIdColumn() != null) {
+			JSONObject json = TableColumnJsonFactory.toJsonObject(model.getIdColumn());
+			jsonObject.put("idColumn", json);
+		}
+
 		if (model.getColumns() != null && !model.getColumns().isEmpty()) {
 			JSONArray array = new JSONArray();
 			for (TableColumn col : model.getColumns()) {
@@ -373,6 +383,11 @@ public class SysTableJsonFactory {
 		}
 		if (model.getFormReportId() != null) {
 			jsonObject.put("formReportId", model.getFormReportId());
+		}
+
+		if (model.getIdColumn() != null) {
+			ObjectNode json = TableColumnJsonFactory.toObjectNode(model.getIdColumn());
+			jsonObject.set("idColumn", json);
 		}
 
 		if (model.getColumns() != null && !model.getColumns().isEmpty()) {

@@ -461,6 +461,10 @@
 			<if test="initFlag != null and initFlag != '' ">
 				and E.INITFLAG_ = #{initFlag}
 			</if>
+			
+			<if test="verify != null and verify != '' ">
+				and E.VERIFY_ = #{verify}
+			</if>
 
 			<if test="createBy != null and createBy != '' ">
 				and E.CREATEBY_ = #{createBy}

@@ -18,6 +18,8 @@
 
 package com.glaf.matrix.data.factory;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.Statement;
@@ -34,11 +36,13 @@ import com.glaf.core.config.BaseConfiguration;
 import com.glaf.core.config.Configuration;
 import com.glaf.core.config.DatabaseConnectionConfig;
 import com.glaf.core.config.Environment;
+import com.glaf.core.config.SystemConfig;
 import com.glaf.core.context.ContextFactory;
 import com.glaf.core.domain.Database;
 import com.glaf.core.domain.TableDefinition;
 import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.service.IDatabaseService;
+import com.glaf.core.service.IServerEntityService;
 import com.glaf.core.util.DBUtils;
 import com.glaf.core.util.JdbcUtils;
 
@@ -60,6 +64,8 @@ public class DataFileFactory {
 
 	protected static volatile IDataFileService dataFileService;
 
+	protected static volatile IServerEntityService serverEntityService;
+
 	protected static volatile String systemName = null;
 
 	public static IDataFileService getDataFileService() {
@@ -67,6 +73,13 @@ public class DataFileFactory {
 			dataFileService = ContextFactory.getBean("dataFileService");
 		}
 		return dataFileService;
+	}
+
+	public static IServerEntityService getServerEntityService() {
+		if (serverEntityService == null) {
+			serverEntityService = ContextFactory.getBean("serverEntityService");
+		}
+		return serverEntityService;
 	}
 
 	public static DataFileFactory getInstance() {
@@ -89,7 +102,7 @@ public class DataFileFactory {
 	private DataFileFactory() {
 		try {
 			IDatabaseService databaseService = (IDatabaseService) ContextFactory.getBean("databaseService");
-			Database database = databaseService.getDatabaseByMapping("file_storage_db");
+			Database database = databaseService.getDatabaseByMapping("file");
 			if (database != null) {
 				DatabaseConnectionConfig cfg = new DatabaseConnectionConfig();
 				if (cfg.checkConnectionImmediately(database)) {
@@ -97,7 +110,7 @@ public class DataFileFactory {
 				}
 			} else {
 				this.checkAndCreateFileDB();
-				database = databaseService.getDatabaseByMapping("file_storage_db");
+				database = databaseService.getDatabaseByMapping("file");
 				if (database != null) {
 					DatabaseConnectionConfig cfg = new DatabaseConnectionConfig();
 					if (cfg.checkConnectionImmediately(database)) {
@@ -119,13 +132,13 @@ public class DataFileFactory {
 
 	public void checkAndCreateFileDB() {
 		IDatabaseService databaseService = (IDatabaseService) ContextFactory.getBean("databaseService");
-		Database database = databaseService.getDatabaseByMapping("file_storage_db");
+		Database database = databaseService.getDatabaseByMapping("file");
 		if (database == null) {// 不存在文件库，创建默认的文件库
 			Database master = databaseService.getDatabaseByMapping("master");
 			if (master != null && "Y".equals(master.getVerify())) {
 				Database fileDB = master.clone();
 
-				fileDB.setMapping("file_storage_db");
+				fileDB.setMapping("file");
 				fileDB.setSection("FILE");
 				fileDB.setActive("1");
 				fileDB.setInitFlag("Y");
@@ -302,13 +315,28 @@ public class DataFileFactory {
 		DataFile dataFile = getDataFileService().getDataFileById(tenantId, id);
 		if (dataFile != null) {
 			String currentSystemName = Environment.getCurrentSystemName();
+			byte[] data = null;
 			try {
+				String fileId = tenantId + "_" + id;
+				if (SystemConfig.getBoolean("use_file_cache")) {
+					data = RedisFileStorageFactory.getInstance().getData(fileId);
+				}
+				if (data != null) {
+					logger.debug("get data from redis.");
+					return new BufferedInputStream(new ByteArrayInputStream(data));
+				}
 				if (systemName != null) {
 					Environment.setCurrentSystemName(systemName);
-					return getDataFileService().getInputStreamById(tenantId, dataFile.getId());
+					data = getDataFileService().getBytesByFileId(tenantId, dataFile.getId());
 				} else {
 					Environment.setCurrentSystemName(Environment.DEFAULT_SYSTEM_NAME);
-					return getDataFileService().getInputStreamById(tenantId, dataFile.getId());
+					data = getDataFileService().getBytesByFileId(tenantId, dataFile.getId());
+				}
+				if (data != null) {
+					if (SystemConfig.getBoolean("use_file_cache")) {
+						RedisFileStorageFactory.getInstance().saveData(fileId, data);
+					}
+					return new BufferedInputStream(new ByteArrayInputStream(data));
 				}
 			} catch (Exception ex) {
 				logger.error(ex);
@@ -324,17 +352,20 @@ public class DataFileFactory {
 		String currentSystemName = Environment.getCurrentSystemName();
 		try {
 			if (dataFile != null) {
+				String fileId = null;
+				dataFile.setData(data);
 				if (systemName != null && !StringUtils.equals(Environment.DEFAULT_SYSTEM_NAME, systemName)) {
 					logger.debug("file save system: " + systemName);
 					Environment.setCurrentSystemName(systemName);
 					dataFile.setData(data);// 附件库写入字节流
-					getDataFileService().insertDataFile(tenantId, dataFile);
-				} else {
-					if (systemName == null) {
-						dataFile.setData(data);// 不存在附件库，流数据要写到主库
-					}
+					fileId = getDataFileService().insertDataFile(tenantId, dataFile);
+					dataFile.setData(null);// 附件库写入字节流后就不写主控库了
 				}
 				Environment.setCurrentSystemName(Environment.DEFAULT_SYSTEM_NAME);
+				if (fileId != null) {
+					dataFile.setId(fileId);
+					dataFile.setFileId(fileId);
+				}
 				getDataFileService().insertDataFile(tenantId, dataFile);
 			}
 		} catch (Exception ex) {

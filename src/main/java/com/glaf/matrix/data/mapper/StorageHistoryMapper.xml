@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.data.mapper.StorageHistoryMapper">
+
+	<resultMap id="storageHistoryResultMap" type="com.glaf.matrix.data.domain.StorageHistory">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="storageId" column="STORAGEID_" jdbcType="BIGINT" />
+		<result property="deploymentId" column="DEPLOYMENTID_"
+			jdbcType="VARCHAR" />
+		<result property="path" column="PATH_" jdbcType="VARCHAR" />
+		<result property="sysFlag" column="SYSFLAG_" jdbcType="VARCHAR" />
+		<result property="version" column="VERSION_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertStorageHistory" parameterType="com.glaf.matrix.data.domain.StorageHistory">
+		insert into SYS_STORAGE_HISTORY
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="storageId != null">
+				,STORAGEID_
+			</if>
+			<if test="deploymentId != null">
+				,DEPLOYMENTID_
+			</if>
+			<if test="path != null">
+				,PATH_
+			</if>
+			<if test="sysFlag != null">
+				,SYSFLAG_
+			</if>
+			<if test="version != null">
+				,VERSION_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="storageId != null">
+				,#{storageId, jdbcType=BIGINT}
+			</if>
+			<if test="deploymentId != null">
+				,#{deploymentId, jdbcType=VARCHAR}
+			</if>
+			<if test="path != null">
+				,#{path, jdbcType=VARCHAR}
+			</if>
+			<if test="sysFlag != null">
+				,#{sysFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="version != null">
+				,#{version, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<delete id="deleteStorageHistoryById" parameterType="long">
+		delete from
+		SYS_STORAGE_HISTORY
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getStorageHistoryById" parameterType="long"
+		resultMap="storageHistoryResultMap">
+		select * from SYS_STORAGE_HISTORY where ID_ = #{id}
+	</select>
+
+
+	<select id="getLatestStorageHistoryByStorageId" parameterType="long"
+		resultMap="storageHistoryResultMap">
+		select *
+		from SYS_STORAGE_HISTORY
+		where STORAGEID_= #{storageId} and
+		VERSION_ = (select max(VERSION_) from SYS_STORAGE_HISTORY where STORAGEID_ =
+		#{storageId} )
+	</select>
+
+
+	<select id="getStorageHistorys" parameterType="com.glaf.matrix.data.query.StorageHistoryQuery"
+		resultMap="storageHistoryResultMap">
+		select distinct E.*
+		<include refid="selectStorageHistorysSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getStorageHistoryCount" parameterType="com.glaf.matrix.data.query.StorageHistoryQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectStorageHistorysSql" />
+	</select>
+
+
+	<sql id="selectStorageHistorysSql">
+
+		from SYS_STORAGE_HISTORY E
+
+		<where>
+			1 = 1
+
+			and E.STORAGEID_ = #{storageId}
+
+			<if test="storageIds != null and storageIds.size() &gt; 0">
+				and E.STORAGEID_ IN
+				<foreach item="x_storageId" index="index" collection="storageIds"
+					open="(" separator="," close=")">
+					#{x_storageId}
+				</foreach>
+			</if>
+
+			<if test="deploymentId != null and deploymentId != '' ">
+				and E.DEPLOYMENTID_ = #{deploymentId}
+			</if>
+
+			<if test="deploymentIds != null and deploymentIds.size() &gt; 0">
+				and E.DEPLOYMENTID_ IN
+				<foreach item="x_deploymentId" index="index" collection="deploymentIds"
+					open="(" separator="," close=")">
+					#{x_deploymentId}
+				</foreach>
+			</if>
+
+			<if test="sysFlag != null and sysFlag != '' ">
+				and E.SYSFLAG_ = #{sysFlag}
+			</if>
+
+			<if test="version != null">
+				and E.VERSION_ = #{version}
+			</if>
+
+			<if test="versionGreaterThanOrEqual != null">
+				and E.VERSION_ &gt;= #{versionGreaterThanOrEqual}
+			</if>
+
+			<if test="versionLessThanOrEqual != null">
+				and E.VERSION_ &lt;= #{versionLessThanOrEqual}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

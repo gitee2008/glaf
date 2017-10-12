@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.session.RowBounds;
@@ -55,6 +56,7 @@ public class TablePageServiceImpl implements ITablePageService {
 
 	protected TablePageMapper tablePageMapper;
 
+	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> getListData(String sql, Map<String, Object> params) {
 		if (!DBUtils.isLegalQuerySql(sql)) {
 			throw new RuntimeException(" SQL statement illegal ");
@@ -62,14 +64,24 @@ public class TablePageServiceImpl implements ITablePageService {
 		if (!DBUtils.isAllowedSql(sql)) {
 			throw new RuntimeException(" SQL statement illegal ");
 		}
+
 		Map<String, Object> queryMap = new HashMap<String, Object>();
-		if (params != null && !params.isEmpty()) {
+
+		if (StringUtils.containsAny(sql, "(")) {
+			SqlExecutor sqlExecutor = QueryUtils.replaceMyBatisInSQLParas(sql, params);
+			if (sqlExecutor.getParameter() != null) {
+				queryMap.putAll((Map<String, Object>) sqlExecutor.getParameter());
+			}
+			queryMap.put("queryString", sqlExecutor.getSql());
+		} else {
 			queryMap.putAll(params);
+			queryMap.put("queryString", sql);
 		}
-		queryMap.put("queryString", sql);
+
 		return tablePageMapper.getSqlQueryList(queryMap);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> getListData(String sql, Map<String, Object> params, int begin, int limit) {
 		if (!DBUtils.isLegalQuerySql(sql)) {
 			throw new RuntimeException(" SQL statement illegal ");
@@ -77,19 +89,26 @@ public class TablePageServiceImpl implements ITablePageService {
 		if (!DBUtils.isAllowedSql(sql)) {
 			throw new RuntimeException(" SQL statement illegal ");
 		}
+
 		Map<String, Object> queryMap = new HashMap<String, Object>();
-		if (params != null && !params.isEmpty()) {
+
+		if (StringUtils.containsAny(sql, "(")) {
+			SqlExecutor sqlExecutor = QueryUtils.replaceMyBatisInSQLParas(sql, params);
+			if (sqlExecutor.getParameter() != null) {
+				queryMap.putAll((Map<String, Object>) sqlExecutor.getParameter());
+			}
+			queryMap.put("queryString", sqlExecutor.getSql());
+		} else {
 			queryMap.putAll(params);
+			queryMap.put("queryString", sql);
 		}
 
-		sql = QueryUtils.replaceDollarSQLParas(sql, params);
-
-		queryMap.put("queryString", sql);
 		RowBounds rowBounds = new RowBounds(begin, limit);
 		List<Map<String, Object>> dataList = sqlSession.selectList("getSqlQueryList", queryMap, rowBounds);
 		return dataList;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<String, Object> getOne(String sql, Map<String, Object> params) {
 		if (!DBUtils.isLegalQuerySql(sql)) {
 			throw new RuntimeException(" SQL statement illegal ");
@@ -97,11 +116,20 @@ public class TablePageServiceImpl implements ITablePageService {
 		if (!DBUtils.isAllowedSql(sql)) {
 			throw new RuntimeException(" SQL statement illegal ");
 		}
+
 		Map<String, Object> queryMap = new HashMap<String, Object>();
-		if (params != null && !params.isEmpty()) {
+
+		if (StringUtils.containsAny(sql, "(")) {
+			SqlExecutor sqlExecutor = QueryUtils.replaceMyBatisInSQLParas(sql, params);
+			if (sqlExecutor.getParameter() != null) {
+				queryMap.putAll((Map<String, Object>) sqlExecutor.getParameter());
+			}
+			queryMap.put("queryString", sqlExecutor.getSql());
+		} else {
 			queryMap.putAll(params);
+			queryMap.put("queryString", sql);
 		}
-		queryMap.put("queryString", sql);
+
 		List<Map<String, Object>> dataList = sqlSession.selectList("getSqlQueryList", queryMap);
 		if (dataList != null && !dataList.isEmpty()) {
 			return dataList.get(0);
@@ -109,6 +137,7 @@ public class TablePageServiceImpl implements ITablePageService {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	public int getQueryCount(String sql, Map<String, Object> params) {
 		if (!DBUtils.isLegalQuerySql(sql)) {
 			throw new RuntimeException(" SQL statement illegal ");
@@ -116,8 +145,21 @@ public class TablePageServiceImpl implements ITablePageService {
 		if (!DBUtils.isAllowedSql(sql)) {
 			throw new RuntimeException(" SQL statement illegal ");
 		}
-		params.put("queryString", sql);
-		int total = tablePageMapper.getSqlQueryCount(params);
+
+		Map<String, Object> queryMap = new HashMap<String, Object>();
+
+		if (StringUtils.containsAny(sql, "(")) {
+			SqlExecutor sqlExecutor = QueryUtils.replaceMyBatisInSQLParas(sql, params);
+			if (sqlExecutor.getParameter() != null) {
+				queryMap.putAll((Map<String, Object>) sqlExecutor.getParameter());
+			}
+			queryMap.put("queryString", sqlExecutor.getSql());
+		} else {
+			queryMap.putAll(params);
+			queryMap.put("queryString", sql);
+		}
+
+		int total = tablePageMapper.getSqlQueryCount(queryMap);
 		return total;
 	}
 

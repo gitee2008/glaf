@@ -35,20 +35,33 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
+import java.util.zip.DataFormatException;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.Zip64Mode;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.glaf.core.config.BaseConfiguration;
 import com.glaf.core.config.Configuration;
 
 public class ZipUtils {
+	private static final Logger logger = LoggerFactory.getLogger(ZipUtils.class);
+
 	protected static Configuration conf = BaseConfiguration.create();
+
+	private static String sp = System.getProperty("file.separator");
 
 	private static byte buf[] = new byte[256];
 
@@ -56,9 +69,50 @@ public class ZipUtils {
 
 	private static int BUFFER = 8192;
 
-	private static String sp = System.getProperty("file.separator");
+	public static byte[] compress(byte[] data) throws IOException {
+		long startTime = System.currentTimeMillis();
+		Deflater deflater = new Deflater(1);
+		deflater.setInput(data);
 
-	 
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
+
+		deflater.finish();
+		byte[] buffer = new byte[1024];
+		while (!deflater.finished()) {
+			int count = deflater.deflate(buffer); // returns the generated code... index
+			outputStream.write(buffer, 0, count);
+		}
+		outputStream.close();
+		byte[] output = outputStream.toByteArray();
+
+		logger.debug("Original: " + data.length + " bytes. " + "Compressed: " + output.length + " byte. Time: "
+				+ (System.currentTimeMillis() - startTime));
+		return output;
+	}
+
+	private static void compressDirectoryToZipfile(String rootDir, String sourceDir, ZipOutputStream out)
+			throws IOException {
+		File[] files = new File(sourceDir).listFiles();
+		if (files == null)
+			return;
+		for (File sourceFile : files) {
+			if (sourceFile.isDirectory()) {
+				compressDirectoryToZipfile(rootDir, sourceDir + normDir(sourceFile.getName()), out);
+			} else {
+				ZipEntry entry = new ZipEntry(
+						normDir(StringUtils.isEmpty(rootDir) ? sourceDir : sourceDir.replace(rootDir, ""))
+								+ sourceFile.getName());
+				entry.setTime(sourceFile.lastModified());
+				out.putNextEntry(entry);
+				FileInputStream in = new FileInputStream(sourceDir + sourceFile.getName());
+				try {
+					IOUtils.copy(in, out);
+				} finally {
+					IOUtils.closeQuietly(in);
+				}
+			}
+		}
+	}
 
 	/**
 	 * 
@@ -84,13 +138,11 @@ public class ZipUtils {
 
 					for (File file : files) {
 						if (file != null) {
-							ZipArchiveEntry zipArchiveEntry = new ZipArchiveEntry(
-									file, file.getName());
+							ZipArchiveEntry zipArchiveEntry = new ZipArchiveEntry(file, file.getName());
 							zaos.putArchiveEntry(zipArchiveEntry);
 							InputStream is = null;
 							try {
-								is = new BufferedInputStream(
-										new FileInputStream(file));
+								is = new BufferedInputStream(new FileInputStream(file));
 								byte[] buffer = new byte[BUFFER];
 								int len = -1;
 								while ((len = is.read(buffer)) != -1) {
@@ -102,7 +154,7 @@ public class ZipUtils {
 							} catch (Exception e) {
 								throw new RuntimeException(e);
 							} finally {
-								IOUtils.closeStream(is);
+								IOUtils.closeQuietly(is);
 							}
 						}
 					}
@@ -110,9 +162,22 @@ public class ZipUtils {
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				} finally {
-					IOUtils.closeStream(zaos);
+					IOUtils.closeQuietly(zaos);
 				}
 			}
+		}
+	}
+
+	public static void compressZipFile(String sourceDir, String zipFilename) throws IOException {
+		if (!validateZipFilename(zipFilename)) {
+			throw new RuntimeException("Zipfile must end with .zip");
+		}
+		ZipOutputStream zipFile = null;
+		try {
+			zipFile = new ZipOutputStream(new FileOutputStream(zipFilename));
+			compressDirectoryToZipfile(normDir(new File(sourceDir).getParent()), normDir(sourceDir), zipFile);
+		} finally {
+			IOUtils.closeQuietly(zipFile);
 		}
 	}
 
@@ -123,6 +188,25 @@ public class ZipUtils {
 		} catch (Exception exception) {
 		}
 		return s1;
+	}
+
+	public static byte[] decompress(byte[] data) throws IOException, DataFormatException {
+		long startTime = System.currentTimeMillis();
+		Inflater inflater = new Inflater();
+		inflater.setInput(data);
+
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
+		byte[] buffer = new byte[1024];
+		while (!inflater.finished()) {
+			int count = inflater.inflate(buffer);
+			outputStream.write(buffer, 0, count);
+		}
+		outputStream.close();
+		byte[] output = outputStream.toByteArray();
+
+		logger.debug("Original: " + data.length + " bytes. " + "Decompressed: " + output.length + " bytes. Time: "
+				+ (System.currentTimeMillis() - startTime));
+		return output;
 	}
 
 	/**
@@ -153,22 +237,50 @@ public class ZipUtils {
 						OutputStream os = null;
 						try {
 							File entryFile = new File(entryFilePath);
-							os = new BufferedOutputStream(new FileOutputStream(
-									entryFile));
+							os = new BufferedOutputStream(new FileOutputStream(entryFile));
 							os.write(content);
 						} catch (IOException e) {
 							throw new IOException(e);
 						} finally {
-							IOUtils.closeStream(os);
+							IOUtils.closeQuietly(os);
 						}
 					}
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				} finally {
-					IOUtils.closeStream(zais);
-					IOUtils.closeStream(inputStream);
+					IOUtils.closeQuietly(zais);
+					IOUtils.closeQuietly(inputStream);
 				}
 			}
+		}
+	}
+
+	public static void decompressZipfileToDirectory(String zipFileName, File outputFolder) throws IOException {
+		ZipInputStream zipInputStream = null;
+		try {
+			zipInputStream = new ZipInputStream(new FileInputStream(zipFileName));
+			ZipEntry zipEntry = null;
+			while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+				logger.info("decompressing " + zipEntry.getName() + " is directory:" + zipEntry.isDirectory()
+						+ " available: " + zipInputStream.available());
+
+				File temp = new File(outputFolder, zipEntry.getName());
+				if (zipEntry.isDirectory()) {
+					temp.mkdirs();
+				} else {
+					temp.getParentFile().mkdirs();
+					temp.createNewFile();
+					temp.setLastModified(zipEntry.getTime());
+					FileOutputStream outputStream = new FileOutputStream(temp);
+					try {
+						IOUtils.copy(zipInputStream, outputStream);
+					} finally {
+						IOUtils.closeQuietly(outputStream);
+					}
+				}
+			}
+		} finally {
+			IOUtils.closeQuietly(zipInputStream);
 		}
 	}
 
@@ -180,12 +292,7 @@ public class ZipUtils {
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			try {
-				if (inputStream != null) {
-					inputStream.close();
-				}
-			} catch (java.io.IOException ex) {
-			}
+			IOUtils.closeQuietly(inputStream);
 		}
 	}
 
@@ -209,7 +316,7 @@ public class ZipUtils {
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeStream(zipInputStream);
+			IOUtils.closeQuietly(zipInputStream);
 		}
 	}
 
@@ -235,18 +342,20 @@ public class ZipUtils {
 
 	public static byte[] getZipBytes(Map<String, InputStream> dataMap) {
 		byte[] bytes = null;
+		ByteArrayOutputStream baos = null;
+		BufferedOutputStream bos = null;
+		JarOutputStream jos = null;
 		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			BufferedOutputStream bos = new BufferedOutputStream(baos);
-			JarOutputStream jos = new JarOutputStream(bos);
+			baos = new ByteArrayOutputStream();
+			bos = new BufferedOutputStream(baos);
+			jos = new JarOutputStream(bos);
 			if (dataMap != null) {
 				Set<Entry<String, InputStream>> entrySet = dataMap.entrySet();
 				for (Entry<String, InputStream> entry : entrySet) {
 					String name = entry.getKey();
 					InputStream inputStream = entry.getValue();
 					if (name != null && inputStream != null) {
-						BufferedInputStream bis = new BufferedInputStream(
-								inputStream);
+						BufferedInputStream bis = new BufferedInputStream(inputStream);
 						JarEntry jarEntry = new JarEntry(name);
 						jos.putNextEntry(jarEntry);
 
@@ -260,19 +369,22 @@ public class ZipUtils {
 				}
 			}
 			jos.flush();
-			jos.close();
+			IOUtils.closeQuietly(jos);
 			bos.flush();
-			bos.close();
+			IOUtils.closeQuietly(bos);
 			bytes = baos.toByteArray();
-			baos.close();
+			IOUtils.closeQuietly(baos);
 			return bytes;
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
+		} finally {
+			IOUtils.closeQuietly(jos);
+			IOUtils.closeQuietly(bos);
+			IOUtils.closeQuietly(baos);
 		}
 	}
 
-	public static Map<String, byte[]> getZipBytesMap(
-			ZipInputStream zipInputStream) {
+	public static Map<String, byte[]> getZipBytesMap(ZipInputStream zipInputStream) {
 		Map<String, byte[]> zipMap = new java.util.HashMap<String, byte[]>();
 		java.util.zip.ZipEntry zipEntry = null;
 		ByteArrayOutputStream baos = null;
@@ -289,21 +401,20 @@ public class ZipUtils {
 				}
 				bos.flush();
 				byte[] bytes = baos.toByteArray();
-				IOUtils.closeStream(baos);
-				IOUtils.closeStream(baos);
+				IOUtils.closeQuietly(baos);
+				IOUtils.closeQuietly(baos);
 				zipMap.put(zipEntry.getName(), bytes);
 			}
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeStream(baos);
-			IOUtils.closeStream(baos);
+			IOUtils.closeQuietly(baos);
+			IOUtils.closeQuietly(baos);
 		}
 		return zipMap;
 	}
 
-	public static Map<String, byte[]> getZipBytesMap(
-			ZipInputStream zipInputStream, List<String> includes) {
+	public static Map<String, byte[]> getZipBytesMap(ZipInputStream zipInputStream, List<String> includes) {
 		Map<String, byte[]> zipMap = new java.util.HashMap<String, byte[]>();
 		java.util.zip.ZipEntry zipEntry = null;
 		ByteArrayOutputStream baos = null;
@@ -313,8 +424,7 @@ public class ZipUtils {
 			while ((zipEntry = zipInputStream.getNextEntry()) != null) {
 				String name = zipEntry.getName();
 				String ext = FileUtils.getFileExt(name);
-				if (includes.contains(ext)
-						|| includes.contains(ext.toLowerCase())) {
+				if (includes.contains(ext) || includes.contains(ext.toLowerCase())) {
 					tmpByte = new byte[BUFFER];
 					baos = new ByteArrayOutputStream();
 					bos = new BufferedOutputStream(baos, BUFFER);
@@ -324,16 +434,16 @@ public class ZipUtils {
 					}
 					bos.flush();
 					byte[] bytes = baos.toByteArray();
-					IOUtils.closeStream(baos);
-					IOUtils.closeStream(baos);
+					IOUtils.closeQuietly(baos);
+					IOUtils.closeQuietly(baos);
 					zipMap.put(zipEntry.getName(), bytes);
 				}
 			}
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeStream(baos);
-			IOUtils.closeStream(baos);
+			IOUtils.closeQuietly(baos);
+			IOUtils.closeQuietly(baos);
 		}
 		return zipMap;
 	}
@@ -358,8 +468,7 @@ public class ZipUtils {
 		return flag;
 	}
 
-	public static void makeZip(File dir, File zipFile) throws IOException,
-			FileNotFoundException {
+	public static void makeZip(File dir, File zipFile) throws IOException, FileNotFoundException {
 		JarOutputStream jos = new JarOutputStream(new FileOutputStream(zipFile));
 		String as[] = dir.list();
 		if (as != null) {
@@ -367,6 +476,13 @@ public class ZipUtils {
 				recurseFiles(jos, new File(dir, as[i]), "");
 		}
 		jos.close();
+	}
+
+	private static String normDir(String dirName) {
+		if (!StringUtils.isEmpty(dirName) && !dirName.endsWith(File.separator)) {
+			dirName = dirName + File.separator;
+		}
+		return dirName;
 	}
 
 	private static void recurseFiles(JarOutputStream jos, File file, String s)
@@ -381,14 +497,12 @@ public class ZipUtils {
 					recurseFiles(jos, new File(file, as[i]), s);
 			}
 		} else {
-			if (file.getName().endsWith("MANIFEST.MF")
-					|| file.getName().endsWith("META-INF/MANIFEST.MF")) {
+			if (file.getName().endsWith("MANIFEST.MF") || file.getName().endsWith("META-INF/MANIFEST.MF")) {
 				return;
 			}
 			JarEntry jarentry = new JarEntry(s + file.getName());
 			FileInputStream fileinputstream = new FileInputStream(file);
-			BufferedInputStream bufferedinputstream = new BufferedInputStream(
-					fileinputstream);
+			BufferedInputStream bufferedinputstream = new BufferedInputStream(fileinputstream);
 			jos.putNextEntry(jarentry);
 			while ((len = bufferedinputstream.read(buf)) >= 0) {
 				jos.write(buf, 0, len);
@@ -422,25 +536,25 @@ public class ZipUtils {
 						while ((len = bis.read(buf)) >= 0) {
 							jos.write(buf, 0, len);
 						}
-						IOUtils.closeStream(bis);
+						IOUtils.closeQuietly(bis);
 						jos.closeEntry();
 					}
-					IOUtils.closeStream(inputStream);
+					IOUtils.closeQuietly(inputStream);
 				}
 			}
 			jos.flush();
 			jos.close();
 
 			bytes = baos.toByteArray();
-			IOUtils.closeStream(baos);
-			IOUtils.closeStream(bos);
+			IOUtils.closeQuietly(baos);
+			IOUtils.closeQuietly(bos);
 			return bytes;
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeStream(inputStream);
-			IOUtils.closeStream(baos);
-			IOUtils.closeStream(bos);
+			IOUtils.closeQuietly(inputStream);
+			IOUtils.closeQuietly(baos);
+			IOUtils.closeQuietly(bos);
 		}
 	}
 
@@ -456,23 +570,22 @@ public class ZipUtils {
 			while ((zipEntry = zipInputStream.getNextEntry()) != null) {
 				byte abyte0[] = new byte[BUFFER];
 				fileoutputstream = new FileOutputStream(zipEntry.getName());
-				bufferedoutputstream = new BufferedOutputStream(
-						fileoutputstream, BUFFER);
+				bufferedoutputstream = new BufferedOutputStream(fileoutputstream, BUFFER);
 				int i;
 				while ((i = zipInputStream.read(abyte0, 0, BUFFER)) != -1) {
 					bufferedoutputstream.write(abyte0, 0, i);
 				}
 				bufferedoutputstream.flush();
-				IOUtils.closeStream(fileoutputstream);
-				IOUtils.closeStream(bufferedoutputstream);
+				IOUtils.closeQuietly(fileoutputstream);
+				IOUtils.closeQuietly(bufferedoutputstream);
 			}
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeStream(fileInputStream);
-			IOUtils.closeStream(zipInputStream);
-			IOUtils.closeStream(fileoutputstream);
-			IOUtils.closeStream(bufferedoutputstream);
+			IOUtils.closeQuietly(fileInputStream);
+			IOUtils.closeQuietly(zipInputStream);
+			IOUtils.closeQuietly(fileoutputstream);
+			IOUtils.closeQuietly(bufferedoutputstream);
 		}
 	}
 
@@ -509,29 +622,27 @@ public class ZipUtils {
 				}
 
 				fileoutputstream = new FileOutputStream(s2);
-				bufferedoutputstream = new BufferedOutputStream(
-						fileoutputstream, BUFFER);
+				bufferedoutputstream = new BufferedOutputStream(fileoutputstream, BUFFER);
 				int i = 0;
 				while ((i = zipInputStream.read(abyte0, 0, BUFFER)) != -1) {
 					bufferedoutputstream.write(abyte0, 0, i);
 				}
 				bufferedoutputstream.flush();
-				IOUtils.closeStream(fileoutputstream);
-				IOUtils.closeStream(bufferedoutputstream);
+				IOUtils.closeQuietly(fileoutputstream);
+				IOUtils.closeQuietly(bufferedoutputstream);
 			}
 
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeStream(fileInputStream);
-			IOUtils.closeStream(zipInputStream);
-			IOUtils.closeStream(fileoutputstream);
-			IOUtils.closeStream(bufferedoutputstream);
+			IOUtils.closeQuietly(fileInputStream);
+			IOUtils.closeQuietly(zipInputStream);
+			IOUtils.closeQuietly(fileoutputstream);
+			IOUtils.closeQuietly(bufferedoutputstream);
 		}
 	}
 
-	public static void unzip(java.io.InputStream inputStream, String dir)
-			throws Exception {
+	public static void unzip(java.io.InputStream inputStream, String dir) throws Exception {
 		File file = new File(dir);
 		FileUtils.mkdirsWithExistsCheck(file);
 		ZipInputStream zipInputStream = null;
@@ -560,28 +671,26 @@ public class ZipUtils {
 					continue;
 				}
 				fileoutputstream = new FileOutputStream(s2);
-				bufferedoutputstream = new BufferedOutputStream(
-						fileoutputstream, BUFFER);
+				bufferedoutputstream = new BufferedOutputStream(fileoutputstream, BUFFER);
 				int i = 0;
 				while ((i = zipInputStream.read(abyte0, 0, BUFFER)) != -1) {
 					bufferedoutputstream.write(abyte0, 0, i);
 				}
 				bufferedoutputstream.flush();
-				IOUtils.closeStream(fileoutputstream);
-				IOUtils.closeStream(bufferedoutputstream);
+				IOUtils.closeQuietly(fileoutputstream);
+				IOUtils.closeQuietly(bufferedoutputstream);
 			}
 
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeStream(zipInputStream);
-			IOUtils.closeStream(fileoutputstream);
-			IOUtils.closeStream(bufferedoutputstream);
+			IOUtils.closeQuietly(zipInputStream);
+			IOUtils.closeQuietly(fileoutputstream);
+			IOUtils.closeQuietly(bufferedoutputstream);
 		}
 	}
 
-	public static void unzip(java.io.InputStream inputStream, String path,
-			List<String> excludes) throws Exception {
+	public static void unzip(java.io.InputStream inputStream, String path, List<String> excludes) throws Exception {
 		File file = new File(path);
 		FileUtils.mkdirsWithExistsCheck(file);
 		ZipInputStream zipInputStream = null;
@@ -595,8 +704,7 @@ public class ZipUtils {
 				byte abyte0[] = new byte[BUFFER];
 				String s1 = zipEntry.getName();
 				String ext = FileUtils.getFileExt(s1);
-				if (excludes.contains(ext)
-						|| excludes.contains(ext.toLowerCase())) {
+				if (excludes.contains(ext) || excludes.contains(ext.toLowerCase())) {
 					continue;
 				}
 
@@ -614,24 +722,31 @@ public class ZipUtils {
 					continue;
 				}
 				fileoutputstream = new FileOutputStream(s2);
-				bufferedoutputstream = new BufferedOutputStream(
-						fileoutputstream, BUFFER);
+				bufferedoutputstream = new BufferedOutputStream(fileoutputstream, BUFFER);
 				int i = 0;
 				while ((i = zipInputStream.read(abyte0, 0, BUFFER)) != -1) {
 					bufferedoutputstream.write(abyte0, 0, i);
 				}
 				bufferedoutputstream.flush();
-				IOUtils.closeStream(fileoutputstream);
-				IOUtils.closeStream(bufferedoutputstream);
+				IOUtils.closeQuietly(fileoutputstream);
+				IOUtils.closeQuietly(bufferedoutputstream);
 			}
 
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeStream(zipInputStream);
-			IOUtils.closeStream(fileoutputstream);
-			IOUtils.closeStream(bufferedoutputstream);
+			IOUtils.closeQuietly(zipInputStream);
+			IOUtils.closeQuietly(fileoutputstream);
+			IOUtils.closeQuietly(bufferedoutputstream);
 		}
+	}
+
+	private static boolean validateZipFilename(String filename) {
+		if (!StringUtils.isEmpty(filename) && filename.trim().toLowerCase().endsWith(".zip")) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private ZipUtils() {

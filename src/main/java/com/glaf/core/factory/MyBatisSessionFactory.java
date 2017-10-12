@@ -100,7 +100,7 @@ public class MyBatisSessionFactory {
 					if (StringUtils.endsWithIgnoreCase(contents[i].getName(), "-resource.jar")) {
 						continue;
 					}
-					//logger.debug("prepare load:" + contents[i].getAbsolutePath());
+					// logger.debug("prepare load:" + contents[i].getAbsolutePath());
 					try {
 						inputStream = FileUtils.getInputStream(contents[i].getAbsolutePath());
 						zipInputStream = new ZipInputStream(inputStream);
@@ -114,7 +114,7 @@ public class MyBatisSessionFactory {
 						IOUtils.closeStream(inputStream);
 						IOUtils.closeStream(zipInputStream);
 					}
-					//logger.debug("load " + contents[i].getAbsolutePath() + " finished.");
+					// logger.debug("load " + contents[i].getAbsolutePath() + " finished.");
 				}
 			}
 		}
@@ -163,7 +163,7 @@ public class MyBatisSessionFactory {
 
 	private static void loadMappers(List<String> list, File dir) {
 		if (dir.isDirectory()) {
-			//logger.debug("scan:" + dir.getAbsolutePath());
+			// logger.debug("scan:" + dir.getAbsolutePath());
 			File contents[] = dir.listFiles();
 			if (contents != null) {
 				for (int i = 0; i < contents.length; i++) {
@@ -182,7 +182,9 @@ public class MyBatisSessionFactory {
 	protected static void reloadSessionFactory() {
 		long start = System.currentTimeMillis();
 		if (!loading.get()) {
-			properties.clear();
+			if (properties != null) {
+				properties.clear();
+			}
 			Set<String> mappers = new HashSet<String>();
 			Configuration configuration = new Configuration();
 			String path = SystemProperties.getConfigRootPath() + "/conf/mapper";
@@ -208,7 +210,7 @@ public class MyBatisSessionFactory {
 					String filename = path + "/" + key;
 					try {
 						FileUtils.save(filename, bytes);
-						//logger.debug(filename + " save ok");
+						// logger.debug(filename + " save ok");
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
@@ -222,9 +224,15 @@ public class MyBatisSessionFactory {
 						XMLMapperBuilder xmlMapperBuilder = new XMLMapperBuilder(mapperLocation.getInputStream(),
 								configuration, mapperLocation.toString(), configuration.getSqlFragments());
 						xmlMapperBuilder.parse();
-						//logger.info("parse " + mapperLocation.getFilename());
-						mappers.add(mapperLocation.getFilename());
-						properties.put(mapperLocation.getFilename(), mapperLocation.getFile().getAbsolutePath());
+						// logger.info("parse " + mapperLocation.getFilename());
+						if (mapperLocation != null && mapperLocation.getFilename() != null
+								&& mapperLocation.getFile() != null) {
+							mappers.add(mapperLocation.getFilename());
+							if (properties != null) {
+								properties.put(mapperLocation.getFilename(),
+										mapperLocation.getFile().getAbsolutePath());
+							}
+						}
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						throw new NestedIOException("Failed to parse mapping resource: '" + mapperLocation + "'", ex);
@@ -249,7 +257,7 @@ public class MyBatisSessionFactory {
 											mapperLocation.getInputStream(), configuration, mapperLocation.toString(),
 											configuration.getSqlFragments());
 									xmlMapperBuilder.parse();
-									//logger.info("parse " + mapperLocation.getFilename());
+									// logger.info("parse " + mapperLocation.getFilename());
 								} catch (Exception ex) {
 									ex.printStackTrace();
 									throw new NestedIOException(

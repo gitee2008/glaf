@@ -61,6 +61,8 @@ public interface TableCorrelationService {
 	 */
 	int getTableCorrelationCountByQueryCriteria(TableCorrelationQuery query);
 
+	List<TableCorrelation> getTableCorrelationsByMasterTableId(String masterTableId);
+
 	/**
 	 * 根据查询参数获取一页的数据
 	 * 
@@ -68,12 +70,14 @@ public interface TableCorrelationService {
 	 */
 	List<TableCorrelation> getTableCorrelationsByQueryCriteria(int start, int pageSize, TableCorrelationQuery query);
 
+	List<TableCorrelation> getTableCorrelationsBySlaveTableId(String slaveTableId);
+
 	/**
 	 * 根据查询参数获取记录列表
 	 * 
 	 * @return
 	 */
-	List<TableCorrelation> list(TableCorrelationQuery query);
+	//List<TableCorrelation> list(TableCorrelationQuery query);
 
 	/**
 	 * 保存一条记录

@@ -37,6 +37,7 @@ public class ServerEntityQuery extends DataQuery {
 	protected String active;
 	protected String detectionFlag;
 	protected String initFlag;
+	protected String verify;
 	protected Date createTimeGreaterThanOrEqual;
 	protected Date createTimeLessThanOrEqual;
 
@@ -191,6 +192,10 @@ public class ServerEntityQuery extends DataQuery {
 		return types;
 	}
 
+	public String getVerify() {
+		return verify;
+	}
+
 	public ServerEntityQuery host(String host) {
 		if (host == null) {
 			throw new RuntimeException("host is null");
@@ -306,6 +311,10 @@ public class ServerEntityQuery extends DataQuery {
 		this.types = types;
 	}
 
+	public void setVerify(String verify) {
+		this.verify = verify;
+	}
+
 	public ServerEntityQuery type(String type) {
 		if (type == null) {
 			throw new RuntimeException("type is null");
@@ -319,6 +328,14 @@ public class ServerEntityQuery extends DataQuery {
 			throw new RuntimeException("types is empty ");
 		}
 		this.types = types;
+		return this;
+	}
+
+	public ServerEntityQuery verify(String verify) {
+		if (verify == null) {
+			throw new RuntimeException("verify is null");
+		}
+		this.verify = verify;
 		return this;
 	}
 

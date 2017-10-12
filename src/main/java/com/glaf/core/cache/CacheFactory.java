@@ -27,6 +27,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
@@ -149,7 +150,9 @@ public class CacheFactory {
 						if (value != null) {
 							// logger.debug(_region + " get object'" + key + "'
 							// from cache.");
-							return value.toString();
+							String val = value.toString();
+							val = new String(Base64.decodeBase64(val), "UTF-8");
+							return val;
 						}
 					}
 				} catch (Throwable ex) {
@@ -183,12 +186,14 @@ public class CacheFactory {
 		try {
 			Cache cache = getCache();
 			if (cache != null && key != null && value != null) {
+				remove(region, key);
 				String _region = SystemConfig.getRegionName(region);
 				String cacheKey = _region + "_" + key;
 				cacheKey = DigestUtils.md5Hex(cacheKey.getBytes());
 				int limitSize = conf.getInt("cache.limitSize", 1024000);// 1024KB
 				if (value.length() < limitSize) {
-					cache.put(_region, cacheKey, value);
+					String val = Base64.encodeBase64String(value.getBytes("UTF-8"));
+					cache.put(_region, cacheKey, val);
 					if (!regions.contains(_region)) {
 						regions.add(_region);
 					}

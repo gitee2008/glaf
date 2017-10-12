@@ -255,10 +255,10 @@ public class RequestUtils {
 			// logger.debug("session login_info value --->" + (session ==
 			// null));
 			Map<String, String> cookieMap = decodeValues(ip, value);
-			if (StringUtils.equals(cookieMap.get(Constants.LOGIN_IP), ip)) {
-				actorId = cookieMap.get(Constants.LOGIN_ACTORID);
-				logger.debug("#actorId=" + actorId);
-			}
+			// if (StringUtils.equals(cookieMap.get(Constants.LOGIN_IP), ip)) {
+			actorId = cookieMap.get(Constants.LOGIN_ACTORID);
+			logger.debug("#actorId=" + actorId);
+			// }
 		}
 
 		if (actorId == null) {
@@ -270,15 +270,15 @@ public class RequestUtils {
 						// logger.debug("cookie's value --->" + value);
 						Map<String, String> cookieMap = decodeValues(ip, value);
 						// logger.debug("#cookieMap=" + cookieMap);
-						if (StringUtils.equals(cookieMap.get(Constants.LOGIN_IP), ip)) {
-							String time = cookieMap.get(Constants.TS);
-							long now = System.currentTimeMillis();
-							if (StringUtils.isNumeric(time)
-									&& (now - Long.parseLong(time)) < COOKIE_LIVING_SECONDS * 1000) {
-								actorId = cookieMap.get(Constants.LOGIN_ACTORID);
-								break;
-							}
+						// if (StringUtils.equals(cookieMap.get(Constants.LOGIN_IP), ip)) {
+						String time = cookieMap.get(Constants.TS);
+						long now = System.currentTimeMillis();
+						if (StringUtils.isNumeric(time)
+								&& (now - Long.parseLong(time)) < COOKIE_LIVING_SECONDS * 1000) {
+							actorId = cookieMap.get(Constants.LOGIN_ACTORID);
+							break;
 						}
+						// }
 					}
 				}
 			}
@@ -367,9 +367,9 @@ public class RequestUtils {
 		if (session != null) {
 			String value = (String) session.getAttribute(Constants.LOGIN_INFO);
 			Map<String, String> cookieMap = decodeValues(ip, value);
-			if (StringUtils.equals(cookieMap.get(Constants.LOGIN_IP), ip)) {
-				currentSystem = cookieMap.get(Constants.SYSTEM_NAME);
-			}
+			// if (StringUtils.equals(cookieMap.get(Constants.LOGIN_IP), ip)) {
+			currentSystem = cookieMap.get(Constants.SYSTEM_NAME);
+			// }
 		}
 
 		if (currentSystem == null) {
@@ -379,15 +379,15 @@ public class RequestUtils {
 					if (StringUtils.equals(cookie.getName(), Constants.COOKIE_NAME)) {
 						String value = cookie.getValue();
 						Map<String, String> cookieMap = decodeValues(ip, value);
-						if (StringUtils.equals(cookieMap.get(Constants.LOGIN_IP), ip)) {
-							String time = cookieMap.get(Constants.TS);
-							long now = System.currentTimeMillis();
-							if (StringUtils.isNumeric(time)
-									&& (now - Long.parseLong(time)) < COOKIE_LIVING_SECONDS * 1000) {
-								currentSystem = cookieMap.get(Constants.SYSTEM_NAME);
-								break;
-							}
+						// if (StringUtils.equals(cookieMap.get(Constants.LOGIN_IP), ip)) {
+						String time = cookieMap.get(Constants.TS);
+						long now = System.currentTimeMillis();
+						if (StringUtils.isNumeric(time)
+								&& (now - Long.parseLong(time)) < COOKIE_LIVING_SECONDS * 1000) {
+							currentSystem = cookieMap.get(Constants.SYSTEM_NAME);
+							break;
 						}
+						// }
 					}
 				}
 			}
@@ -1126,9 +1126,9 @@ public class RequestUtils {
 		if (session != null) {
 			String value = (String) session.getAttribute(Constants.LOGIN_INFO);
 			Map<String, String> cookieMap = decodeValues(ip, value);
-			if (StringUtils.equals(cookieMap.get(Constants.LOGIN_IP), ip)) {
-				actorId = cookieMap.get(Constants.LOGIN_ACTORID);
-			}
+			// if (StringUtils.equals(cookieMap.get(Constants.LOGIN_IP), ip)) {
+			actorId = cookieMap.get(Constants.LOGIN_ACTORID);
+			// }
 		}
 
 		if (StringUtils.isNotEmpty(actorId)) {

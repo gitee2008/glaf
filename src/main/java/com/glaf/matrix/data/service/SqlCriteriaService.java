@@ -60,6 +60,8 @@ public interface SqlCriteriaService {
 	 */
 	int getSqlCriteriaCountByQueryCriteria(SqlCriteriaQuery query);
 
+	List<SqlCriteria> getSqlCriterias(String businessKey, String moduleId);
+
 	/**
 	 * 根据查询参数获取一页的数据
 	 * 

@@ -47,6 +47,7 @@ public class ServerValidatorFactory {
 	 * @return
 	 */
 	public boolean verify(ServerEntity serverEntity) {
+		//ServerProperties.reload();
 		String verifyClass = ServerProperties.getString(serverEntity.getType() + ".verifyClass");
 		logger.debug("verifyClass:"+verifyClass);
 		if (StringUtils.isNotEmpty(verifyClass)) {

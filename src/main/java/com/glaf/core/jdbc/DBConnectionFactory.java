@@ -41,8 +41,7 @@ import com.glaf.core.util.JdbcUtils;
 
 public class DBConnectionFactory {
 
-	protected final static Log logger = LogFactory
-			.getLog(DBConnectionFactory.class);
+	protected final static Log logger = LogFactory.getLog(DBConnectionFactory.class);
 
 	protected static Configuration conf = BaseConfiguration.create();
 
@@ -63,7 +62,6 @@ public class DBConnectionFactory {
 				return true;
 			}
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 		} finally {
 			JdbcUtils.close(connection);
@@ -74,15 +72,12 @@ public class DBConnectionFactory {
 	public static boolean checkConnection(java.util.Properties props) {
 		Connection connection = null;
 		try {
-			if (StringUtils.isNotEmpty(props
-					.getProperty(DBConfiguration.JDBC_DATASOURCE))) {
+			if (StringUtils.isNotEmpty(props.getProperty(DBConfiguration.JDBC_DATASOURCE))) {
 				InitialContext ctx = new InitialContext();
-				DataSource ds = (DataSource) ctx.lookup(props
-						.getProperty(DBConfiguration.JDBC_DATASOURCE));
+				DataSource ds = (DataSource) ctx.lookup(props.getProperty(DBConfiguration.JDBC_DATASOURCE));
 				connection = ds.getConnection();
 			} else {
-				ConnectionProvider provider = ConnectionProviderFactory
-						.createProvider(props);
+				ConnectionProvider provider = ConnectionProviderFactory.createProvider(props);
 				if (provider != null) {
 					connection = provider.getConnection();
 				}
@@ -92,7 +87,6 @@ public class DBConnectionFactory {
 			}
 		} catch (Exception ex) {
 			logger.error(ex);
-			
 		} finally {
 			JdbcUtils.close(connection);
 		}
@@ -106,19 +100,15 @@ public class DBConnectionFactory {
 		logger.debug("systemName:" + systemName);
 		Connection connection = null;
 		try {
-			Properties props = DBConfiguration
-					.getDataSourcePropertiesByName(systemName);
+			Properties props = DBConfiguration.getDataSourcePropertiesByName(systemName);
 			logger.debug("props:" + props);
 			if (props != null) {
-				if (StringUtils.isNotEmpty(props
-						.getProperty(DBConfiguration.JDBC_DATASOURCE))) {
+				if (StringUtils.isNotEmpty(props.getProperty(DBConfiguration.JDBC_DATASOURCE))) {
 					InitialContext ctx = new InitialContext();
-					DataSource ds = (DataSource) ctx.lookup(props
-							.getProperty(DBConfiguration.JDBC_DATASOURCE));
+					DataSource ds = (DataSource) ctx.lookup(props.getProperty(DBConfiguration.JDBC_DATASOURCE));
 					connection = ds.getConnection();
 				} else {
-					ConnectionProvider provider = ConnectionProviderFactory
-							.createProvider(systemName);
+					ConnectionProvider provider = ConnectionProviderFactory.createProvider(systemName);
 					if (provider != null) {
 						connection = provider.getConnection();
 					}
@@ -133,10 +123,8 @@ public class DBConnectionFactory {
 			if (connection != null) {
 				return true;
 			}
-
 		} catch (Exception ex) {
 			logger.error(ex);
-			
 		} finally {
 			JdbcUtils.close(connection);
 		}
@@ -151,24 +139,19 @@ public class DBConnectionFactory {
 		Connection connection = null;
 		try {
 			if (props != null) {
-				if (StringUtils.isNotEmpty(props
-						.getProperty(DBConfiguration.JDBC_DATASOURCE))) {
+				if (StringUtils.isNotEmpty(props.getProperty(DBConfiguration.JDBC_DATASOURCE))) {
 					InitialContext ctx = new InitialContext();
-					DataSource ds = (DataSource) ctx.lookup(props
-							.getProperty(DBConfiguration.JDBC_DATASOURCE));
+					DataSource ds = (DataSource) ctx.lookup(props.getProperty(DBConfiguration.JDBC_DATASOURCE));
 					connection = ds.getConnection();
 				} else {
-					String systemName = props
-							.getProperty(DBConfiguration.JDBC_NAME);
+					String systemName = props.getProperty(DBConfiguration.JDBC_NAME);
 					if (StringUtils.isNotEmpty(systemName)) {
-						ConnectionProvider provider = ConnectionProviderFactory
-								.createProvider(systemName);
+						ConnectionProvider provider = ConnectionProviderFactory.createProvider(systemName);
 						if (provider != null) {
 							connection = provider.getConnection();
 						}
 					} else {
-						ConnectionProvider provider = ConnectionProviderFactory
-								.createProvider(props);
+						ConnectionProvider provider = ConnectionProviderFactory.createProvider(props);
 						if (provider != null) {
 							connection = provider.getConnection();
 						}
@@ -181,7 +164,6 @@ public class DBConnectionFactory {
 			return connection;
 		} catch (Exception ex) {
 			logger.error(ex);
-			
 			throw new RuntimeException(ex);
 		}
 	}
@@ -193,18 +175,14 @@ public class DBConnectionFactory {
 		logger.debug("systemName:" + systemName);
 		Connection connection = null;
 		try {
-			Properties props = DBConfiguration
-					.getDataSourcePropertiesByName(systemName);
+			Properties props = DBConfiguration.getDataSourcePropertiesByName(systemName);
 			if (props != null) {
-				if (StringUtils.isNotEmpty(props
-						.getProperty(DBConfiguration.JDBC_DATASOURCE))) {
+				if (StringUtils.isNotEmpty(props.getProperty(DBConfiguration.JDBC_DATASOURCE))) {
 					InitialContext ctx = new InitialContext();
-					DataSource ds = (DataSource) ctx.lookup(props
-							.getProperty(DBConfiguration.JDBC_DATASOURCE));
+					DataSource ds = (DataSource) ctx.lookup(props.getProperty(DBConfiguration.JDBC_DATASOURCE));
 					connection = ds.getConnection();
 				} else {
-					ConnectionProvider provider = ConnectionProviderFactory
-							.createProvider(systemName);
+					ConnectionProvider provider = ConnectionProviderFactory.createProvider(systemName);
 					if (provider != null) {
 						connection = provider.getConnection();
 					}
@@ -219,7 +197,6 @@ public class DBConnectionFactory {
 			return connection;
 		} catch (Exception ex) {
 			logger.error(ex);
-			
 			throw new RuntimeException(ex);
 		}
 	}
@@ -235,17 +212,15 @@ public class DBConnectionFactory {
 			try {
 				DatabaseMetaData databaseMetaData = connection.getMetaData();
 				databaseProductName = databaseMetaData.getDatabaseProductName();
-				logger.debug("databaseProductName:"+databaseProductName);
+				logger.debug("databaseProductName:" + databaseProductName);
 			} catch (SQLException ex) {
-				
+
 				throw new RuntimeException(ex);
 			}
-			String dbType = databaseTypeMappings
-					.getProperty(databaseProductName);
+			String dbType = databaseTypeMappings.getProperty(databaseProductName);
 			if (dbType == null) {
 				throw new RuntimeException(
-						"couldn't deduct database type from database product name '"
-								+ databaseProductName + "'");
+						"couldn't deduct database type from database product name '" + databaseProductName + "'");
 			}
 			return dbType;
 		}
@@ -295,6 +270,36 @@ public class DBConnectionFactory {
 		databaseTypeMappings.setProperty("DB2/2", "db2");
 
 		return databaseTypeMappings;
+	}
+
+	public static DataSource getDataSource() {
+		return getDataSource(Environment.DEFAULT_SYSTEM_NAME);
+	}
+
+	public static DataSource getDataSource(String systemName) {
+		if (systemName == null) {
+			throw new RuntimeException("systemName is required.");
+		}
+		logger.debug("systemName:" + systemName);
+		DataSource dataSource = null;
+		try {
+			Properties props = DBConfiguration.getDataSourcePropertiesByName(systemName);
+			if (props != null) {
+				if (StringUtils.isNotEmpty(props.getProperty(DBConfiguration.JDBC_DATASOURCE))) {
+					InitialContext ctx = new InitialContext();
+					dataSource = (DataSource) ctx.lookup(props.getProperty(DBConfiguration.JDBC_DATASOURCE));
+				} else {
+					ConnectionProvider provider = ConnectionProviderFactory.createProvider(systemName);
+					if (provider != null) {
+						dataSource = provider.getDataSource();
+					}
+				}
+			}
+			return dataSource;
+		} catch (Exception ex) {
+			logger.error(ex);
+			throw new RuntimeException(ex);
+		}
 	}
 
 	private DBConnectionFactory() {

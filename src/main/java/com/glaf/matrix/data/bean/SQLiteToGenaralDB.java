@@ -41,11 +41,15 @@ public class SQLiteToGenaralDB {
 	protected static AtomicBoolean running = new AtomicBoolean(false);
 
 	public boolean importData(String systemName, String sqliteDB) {
+		List<String> tables = DBUtils.getTables(systemName);
+		return this.importData(systemName, sqliteDB, tables);
+	}
+
+	public boolean importData(String systemName, String sqliteDB, List<String> tables) {
 		List<ColumnDefinition> columns = null;
 		SQLiteToTable tableDB = new SQLiteToTable();
-		List<String> tables = DBUtils.getTables(systemName);
-		//List<String> tables = new ArrayList<String>();
-		//tables.add("SYS_TEMPLATE");
+		// List<String> tables = new ArrayList<String>();
+		// tables.add("SYS_TEMPLATE");
 		Map<String, String> tableErrMap = new HashMap<String, String>();
 		List<String> errorTables = new ArrayList<String>();
 		SQLiteHelper sqliteHelper = new SQLiteHelper();
@@ -57,14 +61,10 @@ public class SQLiteToGenaralDB {
 				sourceDataSource = sqliteHelper.getDataSource(sqliteDB);
 				conn = sourceDataSource.getConnection();
 				List<String> tbls = DBUtils.getTables(conn);
-				//List<String> tbls = new ArrayList<String>();
-				//tbls.add("SYS_TEMPLATE");
+				// List<String> tbls = new ArrayList<String>();
+				// tbls.add("SYS_TEMPLATE");
 				if (tbls != null && !tbls.isEmpty()) {
 					for (String tableName : tables) {
-						if (StringUtils.equalsIgnoreCase(tableName, "sys_user")
-								|| StringUtils.equalsIgnoreCase(tableName, "userinfo")) {
-							continue;
-						}
 						if (StringUtils.endsWithIgnoreCase(tableName, "_log")) {
 							continue;
 						}

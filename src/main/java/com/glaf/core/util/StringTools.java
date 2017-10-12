@@ -52,32 +52,11 @@ public final class StringTools {
 	private static final char SEPARATOR = '_';
 	private static String[] _emptyStringArray = new String[0];
 
-	public static byte[] getBucketId(byte[] key, Integer bit) {
-		MessageDigest mdInst = null;
-		try {
-			mdInst = MessageDigest.getInstance("MD5");
-		} catch (NoSuchAlgorithmException ex) {
-			throw new RuntimeException(ex);
-		}
-		mdInst.update(key);
-		byte[] md = mdInst.digest();
-		byte[] r = new byte[(bit - 1) / 7 + 1];// 因为一个字节中只有7位能够表示成单字符
-		int a = (int) Math.pow(2, bit % 7) - 2;
-		md[r.length - 1] = (byte) (md[r.length - 1] & a);
-		System.arraycopy(md, 0, r, 0, r.length);
-		for (int i = 0; i < r.length; i++) {
-			if (r[i] < 0) {
-				r[i] &= 127;
-			}
-		}
-		return r;
-	}
-
 	public static String arrayToString(String[] strs) {
 		if (strs.length == 0) {
 			return "";
 		}
-		StringBuilder sbuf = new StringBuilder();
+		StringBuffer sbuf = new StringBuffer();
 		sbuf.append(strs[0]);
 		for (int idx = 1; idx < strs.length; idx++) {
 			sbuf.append(",");
@@ -109,7 +88,7 @@ public final class StringTools {
 		if (str == null || str.indexOf("_") == -1) {
 			return str;
 		}
-		StringBuilder buffer = new StringBuilder(str.length() + 100);
+		StringBuffer buffer = new StringBuffer(str.length() + 100);
 		int index = 0;
 		StringTokenizer tokenizer = new StringTokenizer(str, "_");
 		while (tokenizer.hasMoreTokens()) {
@@ -232,7 +211,7 @@ public final class StringTools {
 		}
 		int length = text.length();
 		if (text != null && length > 0) {
-			StringBuilder ret = new StringBuilder(length * 12 / 10);
+			StringBuffer ret = new StringBuffer(length * 12 / 10);
 
 			boolean isEncodeSpace = true;
 			int last = 0;
@@ -429,8 +408,7 @@ public final class StringTools {
 	}
 
 	/**************************************************************************
-	 * Find index of search character in str. This ignores content in () and
-	 * 'texts'
+	 * Find index of search character in str. This ignores content in () and 'texts'
 	 * 
 	 * @param str
 	 *            string
@@ -479,8 +457,7 @@ public final class StringTools {
 	}
 
 	/**
-	 * Find index of search character in str. This ignores content in () and
-	 * 'texts'
+	 * Find index of search character in str. This ignores content in () and 'texts'
 	 * 
 	 * @param str
 	 *            string
@@ -518,7 +495,7 @@ public final class StringTools {
 			return "";
 		}
 		if (sourceString.length() <= length) {
-			StringBuilder buffer = new StringBuilder(sourceString.length() + 10);
+			StringBuffer buffer = new StringBuffer(sourceString.length() + 10);
 			int k = length - sourceString.length();
 			for (int j = 0; j < k; j++) {
 				buffer.append(sourceString).append("&nbsp;");
@@ -549,7 +526,7 @@ public final class StringTools {
 			throw new RuntimeException("Error deserializing string.");
 		}
 		int len = s.length();
-		StringBuilder sb = new StringBuilder(len - 1);
+		StringBuffer sb = new StringBuffer(len - 1);
 		for (int i = 1; i < len; i++) {
 			char c = s.charAt(i);
 			if (c == '%') {
@@ -576,6 +553,27 @@ public final class StringTools {
 			}
 		}
 		return sb.toString();
+	}
+
+	public static byte[] getBucketId(byte[] key, Integer bit) {
+		MessageDigest mdInst = null;
+		try {
+			mdInst = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException ex) {
+			throw new RuntimeException(ex);
+		}
+		mdInst.update(key);
+		byte[] md = mdInst.digest();
+		byte[] r = new byte[(bit - 1) / 7 + 1];// 因为一个字节中只有7位能够表示成单字符
+		int a = (int) Math.pow(2, bit % 7) - 2;
+		md[r.length - 1] = (byte) (md[r.length - 1] & a);
+		System.arraycopy(md, 0, r, 0, r.length);
+		for (int i = 0; i < r.length; i++) {
+			if (r[i] < 0) {
+				r[i] &= 127;
+			}
+		}
+		return r;
 	}
 
 	public static String getDigit4Id(int id) {
@@ -698,6 +696,18 @@ public final class StringTools {
 		return value;
 	}
 
+	public static String getRandomString(int length) {
+		StringBuilder buffer = new StringBuilder(
+				"1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()[]|");
+		StringBuilder sb = new StringBuilder();
+		Random random = new Random();
+		int range = buffer.length();
+		for (int i = 0; i < length; i++) {
+			sb.append(buffer.charAt(random.nextInt(range)));
+		}
+		return sb.toString();
+	}
+
 	public static Collection<String> getStringCollection(String str) {
 		List<String> values = new java.util.ArrayList<String>();
 		if (str == null)
@@ -774,6 +784,16 @@ public final class StringTools {
 		return INT_PATTERN.matcher(str).matches();
 	}
 
+	public static boolean isLegalUserName(String str) {
+		String regex = "^[a-zA-Z]\\w{2,19}$";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(str);
+		if (matcher.matches()) {
+			return true;
+		}
+		return false;
+	}
+
 	public static String listToString(List<String> strs) {
 		return listToString(strs, ",");
 	}
@@ -782,7 +802,7 @@ public final class StringTools {
 		if (strs == null || strs.size() == 0) {
 			return "";
 		}
-		StringBuilder sbuf = new StringBuilder();
+		StringBuffer sbuf = new StringBuffer();
 		sbuf.append(strs.get(0));
 		for (int idx = 1; idx < strs.size(); idx++) {
 			sbuf.append(separator);
@@ -793,16 +813,6 @@ public final class StringTools {
 
 	public static String lower(String name) {
 		return name.substring(0, 1).toLowerCase() + name.substring(1);
-	}
-
-	public static boolean isLegalUserName(String str) {
-		String regex = "^[a-zA-Z]\\w{2,19}$";
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(str);
-		if (matcher.matches()) {
-			return true;
-		}
-		return false;
 	}
 
 	public static void main(String[] args) {
@@ -1059,17 +1069,11 @@ public final class StringTools {
 			return Collections.EMPTY_LIST;
 		}
 		List<String> pieces = new java.util.ArrayList<String>();
-		int start = 0;
-		int end = text.indexOf(delimiter);
-		while (end != -1) {
-			pieces.add(text.substring(start, end));
-			start = end + delimiter.length();
-			end = text.indexOf(delimiter, start);
-		}
-		if (start < text.length()) {
-			String temp = text.substring(start);
-			if (temp != null && temp.trim().length() > 0) {
-				pieces.add(temp);
+		StringTokenizer token = new StringTokenizer(text, delimiter);
+		while (token.hasMoreTokens()) {
+			String temp = token.nextToken();
+			if (StringUtils.isNotEmpty(temp)) {
+				pieces.add(temp.trim());
 			}
 		}
 		return pieces;
@@ -1162,17 +1166,11 @@ public final class StringTools {
 			return Collections.EMPTY_LIST;
 		}
 		List<String> pieces = new java.util.ArrayList<String>();
-		int start = 0;
-		int end = text.indexOf(delimiter);
-		while (end != -1) {
-			pieces.add(text.substring(start, end).toLowerCase());
-			start = end + delimiter.length();
-			end = text.indexOf(delimiter, start);
-		}
-		if (start < text.length()) {
-			String temp = text.substring(start);
-			if (temp != null && temp.trim().length() > 0) {
-				pieces.add(temp.toLowerCase());
+		StringTokenizer token = new StringTokenizer(text, delimiter);
+		while (token.hasMoreTokens()) {
+			String temp = token.nextToken();
+			if (StringUtils.isNotEmpty(temp.trim())) {
+				pieces.add(temp.trim().toLowerCase());
 			}
 		}
 		return pieces;
@@ -1196,24 +1194,15 @@ public final class StringTools {
 			return Collections.EMPTY_LIST;
 		}
 		List<Integer> pieces = new java.util.ArrayList<Integer>();
-		int start = 0;
-		int end = text.indexOf(delimiter);
-		while (end != -1) {
-			String tmp = text.substring(start, end);
-			if (StringUtils.isNotEmpty(tmp) && StringUtils.isNumeric(tmp)) {
-				pieces.add(Integer.parseInt(tmp));
-			}
-			start = end + delimiter.length();
-			end = text.indexOf(delimiter, start);
-		}
-		if (start < text.length()) {
-			String tmp = text.substring(start);
-			if (tmp != null && tmp.trim().length() > 0) {
-				if (StringUtils.isNumeric(tmp)) {
-					pieces.add(Integer.parseInt(tmp));
-				}
+
+		StringTokenizer token = new StringTokenizer(text, delimiter);
+		while (token.hasMoreTokens()) {
+			String temp = token.nextToken();
+			if (StringUtils.isNotEmpty(temp.trim())) {
+				pieces.add(Integer.parseInt(temp.trim()));
 			}
 		}
+
 		return pieces;
 	}
 
@@ -1230,24 +1219,14 @@ public final class StringTools {
 			return Collections.EMPTY_LIST;
 		}
 		List<Long> pieces = new java.util.ArrayList<Long>();
-		int start = 0;
-		int end = text.indexOf(delimiter);
-		while (end != -1) {
-			String tmp = text.substring(start, end);
-			if (StringUtils.isNotEmpty(tmp) && StringUtils.isNumeric(tmp)) {
-				pieces.add(Long.parseLong(tmp));
-			}
-			start = end + delimiter.length();
-			end = text.indexOf(delimiter, start);
-		}
-		if (start < text.length()) {
-			String tmp = text.substring(start);
-			if (tmp != null && tmp.trim().length() > 0) {
-				if (StringUtils.isNumeric(tmp)) {
-					pieces.add(Long.parseLong(tmp));
-				}
+		StringTokenizer token = new StringTokenizer(text, delimiter);
+		while (token.hasMoreTokens()) {
+			String temp = token.nextToken();
+			if (StringUtils.isNotEmpty(temp.trim())) {
+				pieces.add(Long.parseLong(temp.trim()));
 			}
 		}
+
 		return pieces;
 	}
 
@@ -1349,7 +1328,7 @@ public final class StringTools {
 	}
 
 	public static String toCSVString(String s) {
-		StringBuilder sb = new StringBuilder(s.length() + 1);
+		StringBuffer sb = new StringBuffer(s.length() + 1);
 		sb.append('\'');
 		int len = s.length();
 		for (int i = 0; i < len; i++) {

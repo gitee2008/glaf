@@ -56,7 +56,6 @@ public class UploadUtils {
 			}
 		} catch (Exception ex) {
 			logger.error(ex.getMessage());
-			
 		}
 		return bytes;
 	}
@@ -68,8 +67,7 @@ public class UploadUtils {
 	 * @param fileParam
 	 * @return
 	 */
-	public static InputStream getInputStream(HttpServletRequest request,
-			String fileParam) {
+	public static InputStream getInputStream(HttpServletRequest request, String fileParam) {
 		MultipartFile mFile = getMultipartFile(request, fileParam);
 		InputStream inputStream = null;
 		try {
@@ -78,7 +76,6 @@ public class UploadUtils {
 			}
 		} catch (Exception ex) {
 			logger.error(ex.getMessage());
-			
 		}
 		return inputStream;
 	}
@@ -91,8 +88,7 @@ public class UploadUtils {
 	 * @param uploadDir
 	 * @return
 	 */
-	public static MultipartFile getMultipartFile(HttpServletRequest request,
-			String fileParam) {
+	public static MultipartFile getMultipartFile(HttpServletRequest request, String fileParam) {
 		MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
 		return mRequest.getFile(fileParam);
 	}
@@ -126,8 +122,7 @@ public class UploadUtils {
 	/**
 	 * 判断上传文件格式是否符合要求
 	 */
-	public static int getUploadStatus(HttpServletRequest request,
-			String fileParam, String fileType) {
+	public static int getUploadStatus(HttpServletRequest request, String fileParam, String fileType) {
 		return getUploadStatus(request, fileParam, fileType, -1);
 	}
 
@@ -144,8 +139,7 @@ public class UploadUtils {
 	 *         status=1 文件类型错误<br/>
 	 *         status=2 文件超过最大限制<br/>
 	 */
-	public static int getUploadStatus(HttpServletRequest request,
-			String fileParam, String fileType, long fileSize) {
+	public static int getUploadStatus(HttpServletRequest request, String fileParam, String fileType, long fileSize) {
 		int status = 0;
 		MultipartFile mFile = getMultipartFile(request, fileParam);
 		if (!mFile.isEmpty()) {
@@ -171,7 +165,6 @@ public class UploadUtils {
 			try {
 				FileUtils.mkdirs(path);
 			} catch (IOException ex) {
-				
 			}
 		}
 		return path;
@@ -184,12 +177,10 @@ public class UploadUtils {
 	 * @return
 	 */
 	public static String rename(String name) {
-		Long now = Long.parseLong(new SimpleDateFormat("yyyyMMddHHmmss")
-				.format(new Date()));
+		Long now = Long.parseLong(new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
 		String fileName = name;
 		if (name.indexOf(".") != -1) {
-			fileName = name.substring(0, name.lastIndexOf(".")) + "_" + now
-					+ name.substring(name.lastIndexOf("."));
+			fileName = name.substring(0, name.lastIndexOf(".")) + "_" + now + name.substring(name.lastIndexOf("."));
 		}
 		return fileName;
 	}
@@ -210,23 +201,21 @@ public class UploadUtils {
 	 *            自定义上传文件保存路径
 	 * @return 返回相对路径
 	 */
-	public static String upload(HttpServletRequest request, String fileParam,
-			String uploadDir) {
+	public static String upload(HttpServletRequest request, String fileParam, String uploadDir) {
 		MultipartFile mFile = getMultipartFile(request, fileParam);
 		String filePath = "";
 		try {
 			String pathDir = mkdirs(getUploadAbsolutePath(uploadDir));
 			if (!mFile.isEmpty()) {
 				String fileName = mFile.getOriginalFilename();
-				String saveName = rename(fileName);
-				mFile.transferTo(new File(getUploadAbsolutePath(uploadDir)
-						+ pathDir + saveName));
-				filePath = getUploadRelativePath(uploadDir) + pathDir
-						+ saveName;
+				if (fileName != null) {
+					String saveName = rename(fileName);
+					mFile.transferTo(new File(getUploadAbsolutePath(uploadDir) + pathDir + saveName));
+					filePath = getUploadRelativePath(uploadDir) + pathDir + saveName;
+				}
 			}
 		} catch (Exception ex) {
 			logger.error(ex.getMessage());
-			
 		}
 		return filePath;
 	}
@@ -240,8 +229,7 @@ public class UploadUtils {
 	 *            上传文件保存相对路径
 	 * @return 返回相对路径
 	 */
-	public static String upload(HttpServletRequest request, String fileParam,
-			String uploadDir, String fileNameParam) {
+	public static String upload(HttpServletRequest request, String fileParam, String uploadDir, String fileNameParam) {
 		MultipartFile mFile = getMultipartFile(request, fileParam);
 		String filePath = "";
 		if (StringUtils.isEmpty(uploadDir)) {
@@ -251,19 +239,19 @@ public class UploadUtils {
 			FileUtils.mkdirs(getUploadAbsolutePath(uploadDir));
 			if (!mFile.isEmpty()) {
 				String fileName = mFile.getOriginalFilename();
-				String saveName = "";
-				if (StringUtils.isEmpty(fileNameParam)) {
-					saveName = fileNameParam + getSuffix(fileName);
-				} else {
-					saveName = rename(fileName);
+				if (fileName != null) {
+					String saveName = "";
+					if (StringUtils.isEmpty(fileNameParam)) {
+						saveName = fileNameParam + getSuffix(fileName);
+					} else {
+						saveName = rename(fileName);
+					}
+					mFile.transferTo(new File(getUploadAbsolutePath(uploadDir) + saveName));
+					filePath = uploadDir + saveName;
 				}
-				mFile.transferTo(new File(getUploadAbsolutePath(uploadDir)
-						+ saveName));
-				filePath = uploadDir + saveName;
 			}
 		} catch (Exception ex) {
 			logger.error(ex.getMessage());
-			
 		}
 		return filePath;
 	}

@@ -106,25 +106,20 @@ public class ReflectUtils {
 
 	public static final String JAVA_IDENT_REGEX = "(?:[_$a-zA-Z][_$a-zA-Z0-9]*)";
 
-	public static final String JAVA_NAME_REGEX = "(?:" + JAVA_IDENT_REGEX
-			+ "(?:\\." + JAVA_IDENT_REGEX + ")*)";
+	public static final String JAVA_NAME_REGEX = "(?:" + JAVA_IDENT_REGEX + "(?:\\." + JAVA_IDENT_REGEX + ")*)";
 
-	public static final String CLASS_DESC = "(?:L" + JAVA_IDENT_REGEX
-			+ "(?:\\/" + JAVA_IDENT_REGEX + ")*;)";
+	public static final String CLASS_DESC = "(?:L" + JAVA_IDENT_REGEX + "(?:\\/" + JAVA_IDENT_REGEX + ")*;)";
 
-	public static final String ARRAY_DESC = "(?:\\[+(?:(?:[VZBCDFIJS])|"
-			+ CLASS_DESC + "))";
+	public static final String ARRAY_DESC = "(?:\\[+(?:(?:[VZBCDFIJS])|" + CLASS_DESC + "))";
 
-	public static final String DESC_REGEX = "(?:(?:[VZBCDFIJS])|" + CLASS_DESC
-			+ "|" + ARRAY_DESC + ")";
+	public static final String DESC_REGEX = "(?:(?:[VZBCDFIJS])|" + CLASS_DESC + "|" + ARRAY_DESC + ")";
 
 	public static final Pattern DESC_PATTERN = Pattern.compile(DESC_REGEX);
 
-	public static final String METHOD_DESC_REGEX = "(?:(" + JAVA_IDENT_REGEX
-			+ ")?\\((" + DESC_REGEX + "*)\\)(" + DESC_REGEX + ")?)";
+	public static final String METHOD_DESC_REGEX = "(?:(" + JAVA_IDENT_REGEX + ")?\\((" + DESC_REGEX + "*)\\)("
+			+ DESC_REGEX + ")?)";
 
-	public static final Pattern METHOD_DESC_PATTERN = Pattern
-			.compile(METHOD_DESC_REGEX);
+	public static final Pattern METHOD_DESC_PATTERN = Pattern.compile(METHOD_DESC_REGEX);
 
 	public static final Pattern GETTER_METHOD_DESC_PATTERN = Pattern
 			.compile("get([A-Z][_a-zA-Z0-9]*)\\(\\)(" + DESC_REGEX + ")");
@@ -189,28 +184,23 @@ public class ReflectUtils {
 				throw new RuntimeException();
 			}
 		} else {
-			sb.append(desc.substring(c + 1, desc.length() - 1)
-					.replace('/', '.'));
+			sb.append(desc.substring(c + 1, desc.length() - 1).replace('/', '.'));
 		}
 		while (c-- > 0)
 			sb.append("[]");
 		return sb.toString();
 	}
 
-	public static Constructor<?> findConstructor(Class<?> clazz,
-			Class<?> paramType) throws NoSuchMethodException {
+	public static Constructor<?> findConstructor(Class<?> clazz, Class<?> paramType) throws NoSuchMethodException {
 		Constructor<?> targetConstructor;
 		try {
-			targetConstructor = clazz
-					.getConstructor(new Class<?>[] { paramType });
+			targetConstructor = clazz.getConstructor(new Class<?>[] { paramType });
 		} catch (NoSuchMethodException e) {
 			targetConstructor = null;
 			Constructor<?>[] constructors = clazz.getConstructors();
 			for (Constructor<?> constructor : constructors) {
-				if (Modifier.isPublic(constructor.getModifiers())
-						&& constructor.getParameterTypes().length == 1
-						&& constructor.getParameterTypes()[0]
-								.isAssignableFrom(paramType)) {
+				if (Modifier.isPublic(constructor.getModifiers()) && constructor.getParameterTypes().length == 1
+						&& constructor.getParameterTypes()[0].isAssignableFrom(paramType)) {
 					targetConstructor = constructor;
 					break;
 				}
@@ -223,8 +213,7 @@ public class ReflectUtils {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static <T> Constructor<T> findMatchingConstructor(Class<T> clazz,
-			Object[] args) {
+	private static <T> Constructor<T> findMatchingConstructor(Class<T> clazz, Object[] args) {
 		for (Constructor constructor : clazz.getDeclaredConstructors()) {
 			if (matches(constructor.getParameterTypes(), args)) {
 				return constructor;
@@ -233,11 +222,9 @@ public class ReflectUtils {
 		return null;
 	}
 
-	private static Method findMethod(Class<? extends Object> clazz,
-			String methodName, Object[] args) {
+	private static Method findMethod(Class<? extends Object> clazz, String methodName, Object[] args) {
 		for (Method method : clazz.getDeclaredMethods()) {
-			if (method.getName().equals(methodName)
-					&& matches(method.getParameterTypes(), args)) {
+			if (method.getName().equals(methodName) && matches(method.getParameterTypes(), args)) {
 				return method;
 			}
 		}
@@ -296,8 +283,7 @@ public class ReflectUtils {
 	}
 
 	/**
-	 * get class desc. boolean[].class => "[Z" Object.class =>
-	 * "Ljava/lang/Object;"
+	 * get class desc. boolean[].class => "[Z" Object.class => "Ljava/lang/Object;"
 	 * 
 	 * @param c
 	 *            class.
@@ -376,8 +362,7 @@ public class ReflectUtils {
 	}
 
 	/**
-	 * get class desc. Object.class => "Ljava/lang/Object;" boolean[].class =>
-	 * "[Z"
+	 * get class desc. Object.class => "Ljava/lang/Object;" boolean[].class => "[Z"
 	 * 
 	 * @param c
 	 *            class.
@@ -424,8 +409,7 @@ public class ReflectUtils {
 	 *            constructor.
 	 * @return desc
 	 */
-	public static String getDesc(final CtConstructor c)
-			throws NotFoundException {
+	public static String getDesc(final CtConstructor c) throws NotFoundException {
 		StringBuilder ret = new StringBuilder("(");
 		CtClass[] parameterTypes = c.getParameterTypes();
 		for (int i = 0; i < parameterTypes.length; i++)
@@ -474,8 +458,7 @@ public class ReflectUtils {
 	 *            method.
 	 * @return desc.
 	 */
-	public static String getDescWithoutMethodName(final CtMethod m)
-			throws NotFoundException {
+	public static String getDescWithoutMethodName(final CtMethod m) throws NotFoundException {
 		StringBuilder ret = new StringBuilder();
 		ret.append('(');
 		CtClass[] parameterTypes = m.getParameterTypes();
@@ -503,13 +486,10 @@ public class ReflectUtils {
 	}
 
 	public static Object getEmptyObject(Class<?> returnType) {
-		return getEmptyObject(returnType,
-				new java.util.concurrent.ConcurrentHashMap<Class<?>, Object>(),
-				0);
+		return getEmptyObject(returnType, new java.util.concurrent.ConcurrentHashMap<Class<?>, Object>(), 0);
 	}
 
-	private static Object getEmptyObject(Class<?> returnType,
-			Map<Class<?>, Object> emptyInstances, int level) {
+	private static Object getEmptyObject(Class<?> returnType, Map<Class<?>, Object> emptyInstances, int level) {
 		if (level > 2)
 			return null;
 		if (returnType == null) {
@@ -551,8 +531,7 @@ public class ReflectUtils {
 				while (cls != null && cls != Object.class) {
 					Field[] fields = cls.getDeclaredFields();
 					for (Field field : fields) {
-						Object property = getEmptyObject(field.getType(),
-								emptyInstances, level + 1);
+						Object property = getEmptyObject(field.getType(), emptyInstances, level + 1);
 						if (property != null) {
 							try {
 								if (!field.isAccessible()) {
@@ -582,8 +561,8 @@ public class ReflectUtils {
 		try {
 			field = clazz.getDeclaredField(fieldName);
 		} catch (SecurityException e) {
-			throw new RuntimeException("not allowed to access field " + field
-					+ " on class " + clazz.getCanonicalName());
+			throw new RuntimeException(
+					"not allowed to access field " + field + " on class " + clazz.getCanonicalName());
 		} catch (NoSuchFieldException e) {
 			// for some reason getDeclaredFields doesnt search superclasses
 			// (which getFields() does ... but that gives only public fields)
@@ -604,12 +583,13 @@ public class ReflectUtils {
 
 	public static Object getFieldValue(Object object, String fieldName) {
 		try {
-			Field field = ReflectionUtils.findField(object.getClass(),
-					fieldName);
-			if (!Modifier.isPublic(field.getModifiers())) {
-				field.setAccessible(true);
+			Field field = ReflectionUtils.findField(object.getClass(), fieldName);
+			if (field != null) {
+				if (!Modifier.isPublic(field.getModifiers())) {
+					field.setAccessible(true);
+				}
+				return ReflectionUtils.getField(field, object);
 			}
-			return ReflectionUtils.getField(field, object);
 		} catch (Exception ex) {
 			try {
 				return BeanUtils.getProperty(object, fieldName);
@@ -625,21 +605,17 @@ public class ReflectUtils {
 
 	public static Class<?> getGenericClass(Class<?> cls, int i) {
 		try {
-			ParameterizedType parameterizedType = ((ParameterizedType) cls
-					.getGenericInterfaces()[0]);
+			ParameterizedType parameterizedType = ((ParameterizedType) cls.getGenericInterfaces()[0]);
 			Object genericClass = parameterizedType.getActualTypeArguments()[i];
 			if (genericClass instanceof ParameterizedType) { // 处理多级泛型
-				return (Class<?>) ((ParameterizedType) genericClass)
-						.getRawType();
+				return (Class<?>) ((ParameterizedType) genericClass).getRawType();
 			} else if (genericClass instanceof GenericArrayType) { // 处理数组泛型
-				return (Class<?>) ((GenericArrayType) genericClass)
-						.getGenericComponentType();
+				return (Class<?>) ((GenericArrayType) genericClass).getGenericComponentType();
 			} else {
 				return (Class<?>) genericClass;
 			}
 		} catch (Throwable e) {
-			throw new IllegalArgumentException(cls.getName()
-					+ " generic type undefined!", e);
+			throw new IllegalArgumentException(cls.getName() + " generic type undefined!", e);
 		}
 	}
 
@@ -683,8 +659,8 @@ public class ReflectUtils {
 	}
 
 	/**
-	 * get method name. "void do(int)", "void do()",
-	 * "int do(java.lang.String,boolean)"
+	 * get method name. "void do(int)", "void do()", "int
+	 * do(java.lang.String,boolean)"
 	 * 
 	 * @param m
 	 *            method.
@@ -707,12 +683,10 @@ public class ReflectUtils {
 	public static String getPropertyNameFromBeanReadMethod(Method method) {
 		if (isBeanPropertyReadMethod(method)) {
 			if (method.getName().startsWith("get")) {
-				return method.getName().substring(3, 4).toLowerCase()
-						+ method.getName().substring(4);
+				return method.getName().substring(3, 4).toLowerCase() + method.getName().substring(4);
 			}
 			if (method.getName().startsWith("is")) {
-				return method.getName().substring(2, 3).toLowerCase()
-						+ method.getName().substring(3);
+				return method.getName().substring(2, 3).toLowerCase() + method.getName().substring(3);
 			}
 		}
 		return null;
@@ -720,8 +694,7 @@ public class ReflectUtils {
 
 	public static String getPropertyNameFromBeanWriteMethod(Method method) {
 		if (isBeanPropertyWriteMethod(method)) {
-			return method.getName().substring(3, 4).toLowerCase()
-					+ method.getName().substring(4);
+			return method.getName().substring(3, 4).toLowerCase() + method.getName().substring(4);
 		}
 		return null;
 	}
@@ -770,8 +743,7 @@ public class ReflectUtils {
 	 * Returns the setter-method for the given field name or null if no setter
 	 * exists.
 	 */
-	public static Method getSetter(String fieldName, Class<?> clazz,
-			Class<?> fieldType) {
+	public static Method getSetter(String fieldName, Class<?> clazz, Class<?> fieldType) {
 		String setterName = "set" + Character.toTitleCase(fieldName.charAt(0))
 				+ fieldName.substring(1, fieldName.length());
 		try {
@@ -781,21 +753,19 @@ public class ReflectUtils {
 			for (Method method : methods) {
 				if (method.getName().equals(setterName)) {
 					Class<?>[] paramTypes = method.getParameterTypes();
-					if (paramTypes != null && paramTypes.length == 1
-							&& paramTypes[0].isAssignableFrom(fieldType)) {
+					if (paramTypes != null && paramTypes.length == 1 && paramTypes[0].isAssignableFrom(fieldType)) {
 						return method;
 					}
 				}
 			}
 			return null;
 		} catch (SecurityException e) {
-			throw new RuntimeException("Not allowed to access method "
-					+ setterName + " on class " + clazz.getCanonicalName());
+			throw new RuntimeException(
+					"Not allowed to access method " + setterName + " on class " + clazz.getCanonicalName());
 		}
 	}
 
-	public static String getSignature(String methodName,
-			Class<?>[] parameterTypes) {
+	public static String getSignature(String methodName, Class<?>[] parameterTypes) {
 		StringBuilder sb = new StringBuilder(methodName);
 		sb.append("(");
 		if (parameterTypes != null && parameterTypes.length > 0) {
@@ -818,8 +788,7 @@ public class ReflectUtils {
 			Class<?> clazz = loadClass(className);
 			return clazz.newInstance();
 		} catch (Exception e) {
-			throw new RuntimeException("couldn't instantiate class "
-					+ className, e);
+			throw new RuntimeException("couldn't instantiate class " + className, e);
 		}
 	}
 
@@ -827,25 +796,27 @@ public class ReflectUtils {
 		Class<?> clazz = loadClass(className);
 		Constructor<?> constructor = findMatchingConstructor(clazz, args);
 		if (constructor == null) {
-			throw new RuntimeException("couldn't find constructor for "
-					+ className + " with args " + Arrays.asList(args));
+			throw new RuntimeException(
+					"couldn't find constructor for " + className + " with args " + Arrays.asList(args));
 		}
 		try {
 			return constructor.newInstance(args);
 		} catch (Exception e) {
-			throw new RuntimeException("couldn't find constructor for "
-					+ className + " with args " + Arrays.asList(args), e);
+			throw new RuntimeException(
+					"couldn't find constructor for " + className + " with args " + Arrays.asList(args), e);
 		}
 	}
 
 	public static Object invoke(Object object, String methodName) {
 		try {
-			Method method = ReflectionUtils.findMethod(object.getClass(),
-					methodName);
-			if (!Modifier.isPublic(method.getModifiers())) {
-				method.setAccessible(true);
+			Method method = ReflectionUtils.findMethod(object.getClass(), methodName);
+			if (method != null) {
+				if (!Modifier.isPublic(method.getModifiers())) {
+					method.setAccessible(true);
+				}
+				return ReflectionUtils.invokeMethod(method, object);
 			}
-			return ReflectionUtils.invokeMethod(method, object);
+			return null;
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
@@ -858,30 +829,22 @@ public class ReflectUtils {
 			method.setAccessible(true);
 			return method.invoke(target, args);
 		} catch (Exception e) {
-			throw new RuntimeException("couldn't invoke " + methodName + " on "
-					+ target, e);
+			throw new RuntimeException("couldn't invoke " + methodName + " on " + target, e);
 		}
 	}
 
 	public static boolean isBeanPropertyReadMethod(Method method) {
-		return method != null
-				&& Modifier.isPublic(method.getModifiers())
-				&& !Modifier.isStatic(method.getModifiers())
-				&& method.getReturnType() != void.class
-				&& method.getDeclaringClass() != Object.class
+		return method != null && Modifier.isPublic(method.getModifiers()) && !Modifier.isStatic(method.getModifiers())
+				&& method.getReturnType() != void.class && method.getDeclaringClass() != Object.class
 				&& method.getParameterTypes().length == 0
-				&& ((method.getName().startsWith("get") && method.getName()
-						.length() > 3) || (method.getName().startsWith("is") && method
-						.getName().length() > 2));
+				&& ((method.getName().startsWith("get") && method.getName().length() > 3)
+						|| (method.getName().startsWith("is") && method.getName().length() > 2));
 	}
 
 	public static boolean isBeanPropertyWriteMethod(Method method) {
-		return method != null && Modifier.isPublic(method.getModifiers())
-				&& !Modifier.isStatic(method.getModifiers())
-				&& method.getDeclaringClass() != Object.class
-				&& method.getParameterTypes().length == 1
-				&& method.getName().startsWith("set")
-				&& method.getName().length() > 3;
+		return method != null && Modifier.isPublic(method.getModifiers()) && !Modifier.isStatic(method.getModifiers())
+				&& method.getDeclaringClass() != Object.class && method.getParameterTypes().length == 1
+				&& method.getName().startsWith("set") && method.getName().length() > 3;
 	}
 
 	/**
@@ -967,9 +930,8 @@ public class ReflectUtils {
 	}
 
 	public static boolean isPrimitive(Class<?> cls) {
-		return cls.isPrimitive() || cls == String.class || cls == Boolean.class
-				|| cls == Character.class || Number.class.isAssignableFrom(cls)
-				|| Date.class.isAssignableFrom(cls);
+		return cls.isPrimitive() || cls == String.class || cls == Boolean.class || cls == Character.class
+				|| Number.class.isAssignableFrom(cls) || Date.class.isAssignableFrom(cls);
 	}
 
 	public static boolean isPrimitives(Class<?> cls) {
@@ -980,10 +942,8 @@ public class ReflectUtils {
 	}
 
 	public static boolean isPublicInstanceField(Field field) {
-		return Modifier.isPublic(field.getModifiers())
-				&& !Modifier.isStatic(field.getModifiers())
-				&& !Modifier.isFinal(field.getModifiers())
-				&& !field.isSynthetic();
+		return Modifier.isPublic(field.getModifiers()) && !Modifier.isStatic(field.getModifiers())
+				&& !Modifier.isFinal(field.getModifiers()) && !field.isSynthetic();
 	}
 
 	public static Class<?> loadClass(String className) {
@@ -996,8 +956,7 @@ public class ReflectUtils {
 
 		if (classLoader != null) {
 			try {
-				logger.debug("Trying to load class with custom classloader: "
-						+ className);
+				logger.debug("Trying to load class with custom classloader: " + className);
 				clazz = Class.forName(className, true, classLoader);
 			} catch (Throwable t) {
 				throwable = t;
@@ -1005,10 +964,8 @@ public class ReflectUtils {
 		}
 		if (clazz == null) {
 			try {
-				logger.debug("Trying to load class with current thread context classloader: "
-						+ className);
-				clazz = Class.forName(className, true, Thread.currentThread()
-						.getContextClassLoader());
+				logger.debug("Trying to load class with current thread context classloader: " + className);
+				clazz = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
 			} catch (Throwable t) {
 				if (throwable == null) {
 					throwable = t;
@@ -1016,10 +973,8 @@ public class ReflectUtils {
 			}
 			if (clazz == null) {
 				try {
-					logger.debug("Trying to load class with local classloader: "
-							+ className);
-					clazz = Class.forName(className, true,
-							ReflectUtils.class.getClassLoader());
+					logger.debug("Trying to load class with local classloader: " + className);
+					clazz = Class.forName(className, true, ReflectUtils.class.getClassLoader());
 				} catch (Throwable t) {
 					if (throwable == null) {
 						throwable = t;
@@ -1042,8 +997,7 @@ public class ReflectUtils {
 			return false;
 		}
 		for (int i = 0; i < parameterTypes.length; i++) {
-			if ((args[i] != null)
-					&& (!parameterTypes[i].isAssignableFrom(args[i].getClass()))) {
+			if ((args[i] != null) && (!parameterTypes[i].isAssignableFrom(args[i].getClass()))) {
 				return false;
 			}
 		}
@@ -1093,8 +1047,7 @@ public class ReflectUtils {
 	public static <T> T newInstance(Class<T> theClass, Configuration conf) {
 		T result;
 		try {
-			Constructor<T> meth = (Constructor<T>) CONSTRUCTOR_CACHE
-					.get(theClass);
+			Constructor<T> meth = (Constructor<T>) CONSTRUCTOR_CACHE.get(theClass);
 			if (meth == null) {
 				meth = theClass.getDeclaredConstructor(EMPTY_ARRAY);
 				meth.setAccessible(true);
@@ -1112,25 +1065,21 @@ public class ReflectUtils {
 			field.setAccessible(true);
 			field.set(object, value);
 		} catch (IllegalArgumentException e) {
-			throw new RuntimeException("Could not set field "
-					+ field.toString(), e);
+			throw new RuntimeException("Could not set field " + field.toString(), e);
 		} catch (IllegalAccessException e) {
-			throw new RuntimeException("Could not set field "
-					+ field.toString(), e);
+			throw new RuntimeException("Could not set field " + field.toString(), e);
 		}
 	}
 
-	public static void setFieldValue(Object target, String name, Class<?> type,
-			Object value) {
+	public static void setFieldValue(Object target, String name, Class<?> type, Object value) {
 		if (target == null || StringUtils.isEmpty(name)
 				|| (value != null && !type.isAssignableFrom(value.getClass()))) {
 			return;
 		}
 		Class<?> clazz = target.getClass();
 		try {
-			Method method = clazz.getDeclaredMethod(
-					"set" + Character.toUpperCase(name.charAt(0))
-							+ name.substring(1), type);
+			Method method = clazz.getDeclaredMethod("set" + Character.toUpperCase(name.charAt(0)) + name.substring(1),
+					type);
 			if (!Modifier.isPublic(method.getModifiers())) {
 				method.setAccessible(true);
 			}
@@ -1153,11 +1102,9 @@ public class ReflectUtils {
 		}
 	}
 
-	public static Constructor<?> getConstructor(Class<?> type,
-			Class<?>[] parameterTypes) {
+	public static Constructor<?> getConstructor(Class<?> type, Class<?>[] parameterTypes) {
 		try {
-			Constructor<?> constructor = type
-					.getDeclaredConstructor(parameterTypes);
+			Constructor<?> constructor = type.getDeclaredConstructor(parameterTypes);
 			constructor.setAccessible(true);
 			return constructor;
 		} catch (NoSuchMethodException e) {
@@ -1169,13 +1116,11 @@ public class ReflectUtils {
 		return newInstance(type, EMPTY_CLASS_ARRAY, null);
 	}
 
-	public static Object newInstance(Class<?> type, Class<?>[] parameterTypes,
-			Object[] args) {
+	public static Object newInstance(Class<?> type, Class<?>[] parameterTypes, Object[] args) {
 		return newInstance(getConstructor(type, parameterTypes), args);
 	}
 
-	public static Object newInstance(final Constructor<?> cstruct,
-			final Object[] args) {
+	public static Object newInstance(final Constructor<?> cstruct, final Object[] args) {
 		boolean flag = cstruct.isAccessible();
 		try {
 			cstruct.setAccessible(true);
@@ -1188,15 +1133,15 @@ public class ReflectUtils {
 		}
 	}
 
-	public static void setFieldValue(Object target, String fieldName,
-			Object fieldValue) {
+	public static void setFieldValue(Object target, String fieldName, Object fieldValue) {
 		try {
-			Field field = ReflectionUtils.findField(target.getClass(),
-					fieldName);
-			if (field != null && !Modifier.isPublic(field.getModifiers())) {
-				field.setAccessible(true);
+			Field field = ReflectionUtils.findField(target.getClass(), fieldName);
+			if (field != null) {
+				if (!Modifier.isPublic(field.getModifiers())) {
+					field.setAccessible(true);
+				}
+				ReflectionUtils.setField(field, target, fieldValue);
 			}
-			ReflectionUtils.setField(field, target, fieldValue);
 		} catch (Exception ex) {
 			try {
 				BeanUtils.setProperty(target, fieldName, fieldValue);

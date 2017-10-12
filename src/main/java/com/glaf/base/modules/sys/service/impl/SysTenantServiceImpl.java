@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
@@ -30,6 +31,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
 import com.glaf.base.modules.sys.mapper.SysTenantMapper;
 import com.glaf.base.modules.sys.model.SysOrganization;
 import com.glaf.base.modules.sys.model.SysTenant;
@@ -38,6 +40,9 @@ import com.glaf.base.modules.sys.query.SysTenantQuery;
 import com.glaf.base.modules.sys.service.SysOrganizationService;
 import com.glaf.base.modules.sys.service.SysTenantService;
 import com.glaf.base.modules.sys.service.SysUserService;
+import com.glaf.base.modules.sys.util.SysTenantJsonFactory;
+import com.glaf.core.cache.CacheFactory;
+import com.glaf.core.config.SystemConfig;
 import com.glaf.core.dao.EntityDAO;
 import com.glaf.core.id.IdGenerator;
 import com.glaf.core.security.Authentication;
@@ -90,7 +95,25 @@ public class SysTenantServiceImpl implements SysTenantService {
 		if (id == 0) {
 			return null;
 		}
+		String cacheKey = "sys_tenant_" + id;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("sys_tenant", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					com.alibaba.fastjson.JSONObject json = JSON.parseObject(text);
+					SysTenant model = SysTenantJsonFactory.jsonToObject(json);
+					if (model != null) {
+						return model;
+					}
+				} catch (Exception ex) {
+				}
+			}
+		}
+
 		SysTenant sysTenant = sysTenantMapper.getSysTenantById(id);
+		if (sysTenant != null) {
+			CacheFactory.put("sys_tenant", cacheKey, sysTenant.toJsonObject().toJSONString());
+		}
 		return sysTenant;
 	}
 
@@ -100,17 +123,51 @@ public class SysTenantServiceImpl implements SysTenantService {
 	 * @return
 	 */
 	public SysTenant getSysTenantByName(String name) {
+		String cacheKey = "sys_tenant_" + name;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("sys_tenant", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					com.alibaba.fastjson.JSONObject json = JSON.parseObject(text);
+					SysTenant model = SysTenantJsonFactory.jsonToObject(json);
+					if (model != null) {
+						return model;
+					}
+				} catch (Exception ex) {
+				}
+			}
+		}
+
 		SysTenantQuery query = new SysTenantQuery();
 		query.name(name);
 		List<SysTenant> list = sysTenantMapper.getSysTenants(query);
 		if (list != null && !list.isEmpty()) {
-			return list.get(0);
+			SysTenant sysTenant = list.get(0);
+			CacheFactory.put("sys_tenant", cacheKey, sysTenant.toJsonObject().toJSONString());
 		}
 		return null;
 	}
 
 	public SysTenant getSysTenantByTenantId(String tenantId) {
-		return sysTenantMapper.getSysTenantByTenantId(tenantId);
+		String cacheKey = "sys_tenantx_" + tenantId;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("sys_tenant", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					com.alibaba.fastjson.JSONObject json = JSON.parseObject(text);
+					SysTenant model = SysTenantJsonFactory.jsonToObject(json);
+					if (model != null) {
+						return model;
+					}
+				} catch (Exception ex) {
+				}
+			}
+		}
+		SysTenant sysTenant = sysTenantMapper.getSysTenantByTenantId(tenantId);
+		if (sysTenant != null) {
+			CacheFactory.put("sys_tenant", cacheKey, sysTenant.toJsonObject().toJSONString());
+		}
+		return sysTenant;
 	}
 
 	/**
@@ -148,6 +205,13 @@ public class SysTenantServiceImpl implements SysTenantService {
 			sysTenant.setTelephone(user.getMobile());
 			sysTenantMapper.insertSysTenant(sysTenant);
 		} else {
+			String cacheKey = "sys_tenant_" + sysTenant.getId();
+			CacheFactory.remove("sys_tenant", cacheKey);
+			cacheKey = "sys_tenant_" + sysTenant.getName();
+			CacheFactory.remove("sys_tenant", cacheKey);
+			cacheKey = "sys_tenantx_" + sysTenant.getTenantId();
+			CacheFactory.remove("sys_tenant", cacheKey);
+
 			sysTenantMapper.updateSysTenant(sysTenant);
 		}
 
@@ -189,6 +253,14 @@ public class SysTenantServiceImpl implements SysTenantService {
 			sysTenant.setCreateTime(new Date());
 			sysTenantMapper.insertSysTenant(sysTenant);
 		} else {
+
+			String cacheKey = "sys_tenant_" + sysTenant.getId();
+			CacheFactory.remove("sys_tenant", cacheKey);
+			cacheKey = "sys_tenant_" + sysTenant.getName();
+			CacheFactory.remove("sys_tenant", cacheKey);
+			cacheKey = "sys_tenantx_" + sysTenant.getTenantId();
+			CacheFactory.remove("sys_tenant", cacheKey);
+
 			sysTenantMapper.updateSysTenant(sysTenant);
 		}
 		SysOrganization organization = sysOrganizationService.getTopOrganizationByTenantId(sysTenant.getTenantId());

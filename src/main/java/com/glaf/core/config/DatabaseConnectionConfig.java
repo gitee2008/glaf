@@ -22,6 +22,7 @@ import java.sql.Connection;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -137,6 +139,7 @@ public class DatabaseConnectionConfig implements ConnectionConfig {
 		String user = connectionDefinition.getUser();
 		Connection connection = null;
 		HikariDataSource ds = null;
+		BasicDataSource bds = null;
 		try {
 			String password = connectionDefinition.getPassword();
 			Properties props = DBConfiguration.getTemplateProperties(dbType);
@@ -155,30 +158,44 @@ public class DatabaseConnectionConfig implements ConnectionConfig {
 				logger.debug("driver:" + driver);
 				logger.debug("url:" + url);
 
-				HikariConfig config = new HikariConfig();
-				config.setDriverClassName(driver);
-				config.setJdbcUrl(url);
-				config.setMaximumPoolSize(2);
-				// config.setMaxLifetime(1000L * 30);
-				// config.setConnectionTimeout(5000L);
-				// config.setIdleTimeout(1000L * 20);
-
-				if (StringUtils.isNotEmpty(user)) {
-					config.setUsername(user);
-					if (password != null) {
-						config.setPassword(password);
-						ds = new HikariDataSource(config);
+				boolean isSQLite = false;
+				if (StringUtils.startsWith(driver.trim(), "org.sqlite")) {
+					isSQLite = true;
+				}
+				if (isSQLite || "hikari".equals(System.getProperty("jdbc_pool_type"))) {
+					HikariConfig config = new HikariConfig();
+					config.setDriverClassName(driver);
+					config.setJdbcUrl(url);
+					config.setMaximumPoolSize(2);
+					// config.setMaxLifetime(1000L * 30);
+					// config.setConnectionTimeout(5000L);
+					// config.setIdleTimeout(1000L * 20);
+					if (StringUtils.isNotEmpty(user)) {
+						config.setUsername(user);
+						if (password != null) {
+							config.setPassword(password);
+							ds = new HikariDataSource(config);
+						} else {
+							ds = new HikariDataSource(config);
+						}
 					} else {
 						ds = new HikariDataSource(config);
 					}
+					if (ds != null) {
+						connection = ds.getConnection();
+					}
 				} else {
-					ds = new HikariDataSource(config);
+					bds = new BasicDataSource();
+					bds.setInitialSize(1);
+					bds.setMaxActive(2);
+					bds.setDriverClassName(driver);
+					bds.setUrl(url);
+					bds.setUsername(user);
+					bds.setPassword(password);
+					connection = bds.getConnection();
 				}
 			}
 
-			if (ds != null) {
-				connection = ds.getConnection();
-			}
 			if (connection != null) {
 				return true;
 			}
@@ -190,6 +207,13 @@ public class DatabaseConnectionConfig implements ConnectionConfig {
 			if (ds != null) {
 				ds.close();
 				ds = null;
+			}
+			if (bds != null) {
+				try {
+					bds.close();
+				} catch (SQLException e) {
+				}
+				bds = null;
 			}
 		}
 		return false;
@@ -203,6 +227,7 @@ public class DatabaseConnectionConfig implements ConnectionConfig {
 		String user = database.getUser();
 		Connection connection = null;
 		HikariDataSource ds = null;
+		BasicDataSource bds = null;
 		try {
 			String password = SecurityUtils.decode(database.getKey(), database.getPassword());
 			Properties props = DBConfiguration.getTemplateProperties(dbType);
@@ -221,30 +246,44 @@ public class DatabaseConnectionConfig implements ConnectionConfig {
 				logger.debug("driver:" + driver);
 				logger.debug("url:" + url);
 
-				HikariConfig config = new HikariConfig();
-				config.setDriverClassName(driver);
-				config.setJdbcUrl(url);
-				config.setMaximumPoolSize(2);
-				// config.setMaxLifetime(1000L * 30);
-				// config.setConnectionTimeout(5000L);
-				// config.setIdleTimeout(1000L * 20);
-
-				if (StringUtils.isNotEmpty(user)) {
-					config.setUsername(user);
-					if (password != null) {
-						config.setPassword(password);
-						ds = new HikariDataSource(config);
+				boolean isSQLite = false;
+				if (StringUtils.startsWith(driver.trim(), "org.sqlite")) {
+					isSQLite = true;
+				}
+				if (isSQLite || "hikari".equals(System.getProperty("jdbc_pool_type"))) {
+					HikariConfig config = new HikariConfig();
+					config.setDriverClassName(driver);
+					config.setJdbcUrl(url);
+					config.setMaximumPoolSize(2);
+					// config.setMaxLifetime(1000L * 30);
+					// config.setConnectionTimeout(5000L);
+					// config.setIdleTimeout(1000L * 20);
+					if (StringUtils.isNotEmpty(user)) {
+						config.setUsername(user);
+						if (password != null) {
+							config.setPassword(password);
+							ds = new HikariDataSource(config);
+						} else {
+							ds = new HikariDataSource(config);
+						}
 					} else {
 						ds = new HikariDataSource(config);
 					}
+					if (ds != null) {
+						connection = ds.getConnection();
+					}
 				} else {
-					ds = new HikariDataSource(config);
+					bds = new BasicDataSource();
+					bds.setInitialSize(1);
+					bds.setMaxActive(2);
+					bds.setDriverClassName(driver);
+					bds.setUrl(url);
+					bds.setUsername(user);
+					bds.setPassword(password);
+					connection = bds.getConnection();
 				}
 			}
 
-			if (ds != null) {
-				connection = ds.getConnection();
-			}
 			if (connection != null) {
 				return true;
 			}
@@ -256,6 +295,13 @@ public class DatabaseConnectionConfig implements ConnectionConfig {
 			if (ds != null) {
 				ds.close();
 				ds = null;
+			}
+			if (bds != null) {
+				try {
+					bds.close();
+				} catch (SQLException e) {
+				}
+				bds = null;
 			}
 		}
 		return false;
@@ -295,6 +341,7 @@ public class DatabaseConnectionConfig implements ConnectionConfig {
 		String user = database.getUser();
 		Connection connection = null;
 		HikariDataSource ds = null;
+		BasicDataSource bds = null;
 		try {
 			String password = SecurityUtils.decode(database.getKey(), database.getPassword());
 			Properties props = DBConfiguration.getTemplateProperties(dbType);
@@ -312,40 +359,51 @@ public class DatabaseConnectionConfig implements ConnectionConfig {
 				url = com.glaf.core.el.ExpressionTools.evaluate(url, context);
 				logger.debug("driver:" + driver);
 				logger.debug("url:" + url);
-				HikariConfig config = new HikariConfig();
-				config.setDriverClassName(driver);
-				config.setJdbcUrl(url);
-				config.setMaximumPoolSize(2);
-				// config.setMaxLifetime(1000L * 30);
-				// config.setConnectionTimeout(5000L);
-				// config.setIdleTimeout(1000L * 20);
 
-				if (StringUtils.isNotEmpty(user)) {
-					config.setUsername(user);
-					if (password != null) {
-						config.setPassword(password);
-						ds = new HikariDataSource(config);
+				boolean isSQLite = false;
+				if (StringUtils.startsWith(driver.trim(), "org.sqlite")) {
+					isSQLite = true;
+				}
+				if (isSQLite || "hikari".equals(System.getProperty("jdbc_pool_type"))) {
+					HikariConfig config = new HikariConfig();
+					config.setDriverClassName(driver);
+					config.setJdbcUrl(url);
+					config.setMaximumPoolSize(2);
+					// config.setMaxLifetime(1000L * 30);
+					// config.setConnectionTimeout(5000L);
+					// config.setIdleTimeout(1000L * 20);
+					if (StringUtils.isNotEmpty(user)) {
+						config.setUsername(user);
+						if (password != null) {
+							config.setPassword(password);
+							ds = new HikariDataSource(config);
+						} else {
+							ds = new HikariDataSource(config);
+						}
 					} else {
 						ds = new HikariDataSource(config);
 					}
+					if (ds != null) {
+						connection = ds.getConnection();
+					}
 				} else {
-					ds = new HikariDataSource(config);
+					bds = new BasicDataSource();
+					bds.setInitialSize(1);
+					bds.setMaxActive(2);
+					bds.setDriverClassName(driver);
+					bds.setUrl(url);
+					bds.setUsername(user);
+					bds.setPassword(password);
+					connection = bds.getConnection();
 				}
+
 			}
 
-			if (ds != null) {
-				connection = ds.getConnection();
-			}
 			if (connection != null) {
 				return connection;
 			}
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
-		} finally {
-			if (ds != null) {
-				ds.close();
-				ds = null;
-			}
 		}
 		return null;
 	}

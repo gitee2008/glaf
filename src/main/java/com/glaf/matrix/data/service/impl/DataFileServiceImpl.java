@@ -445,7 +445,7 @@ public class DataFileServiceImpl implements IDataFileService {
 	}
 
 	@Transactional
-	public void insertDataFile(String tenantId, DataFile dataFile) {
+	public String insertDataFile(String tenantId, DataFile dataFile) {
 		if (StringUtils.isEmpty(dataFile.getId())) {
 			dataFile.setId(UUID32.getUUID());
 		}
@@ -475,6 +475,7 @@ public class DataFileServiceImpl implements IDataFileService {
 			dataFileMapper.insertDataFile(dataFile);
 		}
 
+		return dataFile.getId();
 	}
 
 	public List<DataFile> list(DataFileQuery query) {

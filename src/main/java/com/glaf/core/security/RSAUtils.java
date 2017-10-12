@@ -101,7 +101,22 @@ public final class RSAUtils {
 	 * @return 原数据。
 	 */
 	public static byte[] decrypt(PrivateKey privateKey, byte[] data) throws Exception {
-		Cipher ci = Cipher.getInstance("RSA/None/PKCS1Padding", DEFAULT_PROVIDER);
+		Cipher ci = Cipher.getInstance(ALGORITHOM, DEFAULT_PROVIDER);
+		ci.init(Cipher.DECRYPT_MODE, privateKey);
+		return ci.doFinal(data);
+	}
+
+	/**
+	 * 使用指定的私钥解密数据。
+	 * 
+	 * @param privateKey
+	 *            给定的私钥。
+	 * @param data
+	 *            要解密的数据。
+	 * @return 原数据。
+	 */
+	public static byte[] decrypt(PrivateKey privateKey, String algorithom, byte[] data) throws Exception {
+		Cipher ci = Cipher.getInstance(algorithom, DEFAULT_PROVIDER);
 		ci.init(Cipher.DECRYPT_MODE, privateKey);
 		return ci.doFinal(data);
 	}
@@ -175,8 +190,36 @@ public final class RSAUtils {
 		try {
 			// LOGGER.debug("encrypttext:" + encrypttext);
 			byte[] en_data = Base64.decodeBase64(encrypttext);
-			//LOGGER.debug("encrypttext:" + new String(en_data));
+			// LOGGER.debug("encrypttext:" + new String(en_data));
 			byte[] data = decrypt((RSAPrivateKey) keyPair.getPrivate(), en_data);
+			return new String(data, "UTF-8");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			LOGGER.error(String.format("\"%s\" Decryption failed. Cause: %s", encrypttext, ex.getMessage()));
+		}
+		return null;
+	}
+
+	/**
+	 * 使用默认的私钥解密给定的字符串。
+	 * <p />
+	 * 若{@code encrypttext} 为 {@code null}或空字符串则返回 {@code null}。 私钥不匹配时，返回
+	 * {@code null}。
+	 * 
+	 * @param encrypttext
+	 *            密文。
+	 * @return 原文字符串。
+	 */
+	public static String decryptBase64String(String encrypttext, String algorithom) {
+		if (StringUtils.isEmpty(encrypttext)) {
+			return null;
+		}
+		KeyPair keyPair = getKeyPair();
+		try {
+			// LOGGER.debug("encrypttext:" + encrypttext);
+			byte[] en_data = Base64.decodeBase64(encrypttext);
+			// LOGGER.debug("encrypttext:" + new String(en_data));
+			byte[] data = decrypt((RSAPrivateKey) keyPair.getPrivate(), algorithom, en_data);
 			return new String(data, "UTF-8");
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -282,6 +325,7 @@ public final class RSAUtils {
 			byte[] en_data = encrypt((RSAPublicKey) keyPair.getPublic(), data);
 			return new String(Hex.encodeHex(en_data));
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			LOGGER.error(ex.getCause().getMessage());
 		}
 		return null;

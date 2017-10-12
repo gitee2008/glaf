@@ -71,37 +71,40 @@ public class BinaryUploader {
 			String savePath = (String) conf.get("savePath");
 			String originFileName = file.getOriginalFilename();
 			String fileRelName = file.getOriginalFilename();
-			String fileType = FileType.getSuffixByFilename(originFileName);
-			String contentType = file.getContentType();
-			originFileName = originFileName.substring(0, originFileName.length() - fileType.length());
-			savePath = savePath + fileType;
+			if (originFileName != null) {
+				String fileType = FileType.getSuffixByFilename(originFileName);
+				String contentType = file.getContentType();
+				originFileName = originFileName.substring(0, originFileName.length() - fileType.length());
+				savePath = savePath + fileType;
 
-			long maxSize = ((Long) conf.get("maxSize")).longValue();
+				long maxSize = ((Long) conf.get("maxSize")).longValue();
 
-			if (!validType(fileType, (String[]) conf.get("allowFiles"))) {
-				return new BaseState(false, AppInfo.NOT_ALLOW_FILE_TYPE);
+				if (!validType(fileType, (String[]) conf.get("allowFiles"))) {
+					return new BaseState(false, AppInfo.NOT_ALLOW_FILE_TYPE);
+				}
+
+				savePath = PathFormat.parse(savePath, originFileName);
+
+				LoginContext loginContext = RequestUtils.getLoginContext(request);
+				String fileId = UUID32.getUUID();
+
+				State storageState = StorageManager.saveFile(loginContext.getTenantId(), loginContext.getActorId(),
+						fileId, file.getBytes(), contentType, savePath, originFileName + fileType, fileRelName,
+						"ueditor", maxSize);
+
+				if (storageState.isSuccess()) {
+					storageState.putInfo("url", PathFormat.format(savePath));
+					storageState.putInfo("type", fileType);
+					storageState.putInfo("original", originFileName + fileType);
+				}
+
+				return storageState;
 			}
-
-			savePath = PathFormat.parse(savePath, originFileName);
-
-			LoginContext loginContext = RequestUtils.getLoginContext(request);
-			String fileId = UUID32.getUUID();
-
-			State storageState = StorageManager.saveFile(loginContext.getTenantId(), loginContext.getActorId(), fileId,
-					file.getBytes(), contentType, savePath, originFileName + fileType, fileRelName, "ueditor", maxSize);
-
-			if (storageState.isSuccess()) {
-				storageState.putInfo("url", PathFormat.format(savePath));
-				storageState.putInfo("type", fileType);
-				storageState.putInfo("original", originFileName + fileType);
-			}
-
-			return storageState;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			return new BaseState(false, AppInfo.PARSE_REQUEST_ERROR);
 		}
-
+		return new BaseState(false, AppInfo.NOTFOUND_UPLOAD_DATA);
 	}
 
 	private static boolean validType(String type, String[] allowTypes) {

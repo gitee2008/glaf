@@ -51,7 +51,6 @@ import com.glaf.matrix.data.domain.DataModel;
 import com.glaf.matrix.data.domain.SysTable;
 import com.glaf.matrix.data.domain.TableColumn;
 import com.glaf.matrix.data.domain.TableCorrelation;
-import com.glaf.matrix.data.query.TableCorrelationQuery;
 import com.glaf.matrix.data.service.ITableService;
 import com.glaf.matrix.data.service.TableCorrelationService;
 
@@ -88,9 +87,9 @@ public class TableDataDeleteController {
 
 				SysTable slaveTable = null;
 
-				TableCorrelationQuery query = new TableCorrelationQuery();
-				query.masterTableId(tableId);
-				List<TableCorrelation> list = tableCorrelationService.list(query);
+				// TableCorrelationQuery query = new TableCorrelationQuery();
+				// query.masterTableId(tableId);
+				List<TableCorrelation> list = tableCorrelationService.getTableCorrelationsByMasterTableId(tableId);
 				List<TableColumn> columns = tableService.getTableColumnsByTableId(tableId);
 				if (columns != null && !columns.isEmpty()) {
 					DataModel dataModel = null;

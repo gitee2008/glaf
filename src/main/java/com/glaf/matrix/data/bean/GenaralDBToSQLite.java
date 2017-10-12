@@ -53,9 +53,7 @@ public class GenaralDBToSQLite {
 				targetDataSource = sqliteHelper.getDataSource(sqliteDB);
 				List<String> errorTables = new ArrayList<String>();
 				for (String tableName : tables) {
-					if (StringUtils.equalsIgnoreCase(tableName, "sys_user")
-							|| StringUtils.equalsIgnoreCase(tableName, "sys_scheduler_execution")
-							|| StringUtils.equalsIgnoreCase(tableName, "userinfo")) {
+					if (StringUtils.equalsIgnoreCase(tableName, "sys_scheduler_execution")) {
 						continue;
 					}
 					if (StringUtils.endsWithIgnoreCase(tableName, "_log")) {

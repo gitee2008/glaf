@@ -29,6 +29,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.glaf.core.id.*;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.glaf.core.cache.CacheFactory;
+import com.glaf.core.config.SystemConfig;
 import com.glaf.core.dao.*;
 import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.util.*;
@@ -37,6 +41,7 @@ import com.glaf.matrix.data.mapper.*;
 import com.glaf.matrix.data.domain.*;
 import com.glaf.matrix.data.query.*;
 import com.glaf.matrix.data.service.SqlCriteriaService;
+import com.glaf.matrix.data.util.SqlCriteriaJsonFactory;
 
 @Service("sqlCriteriaService")
 @Transactional(readOnly = true)
@@ -128,6 +133,34 @@ public class SqlCriteriaServiceImpl implements SqlCriteriaService {
 		return sqlCriteriaMapper.getSqlCriteriaCount(query);
 	}
 
+	public List<SqlCriteria> getSqlCriterias(String businessKey, String moduleId) {
+		String cacheKey = "sys_sql_criteria_" + businessKey + "_" + moduleId;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("sys_sql_criteria", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONArray array = JSON.parseArray(text);
+					List<SqlCriteria> list = SqlCriteriaJsonFactory.arrayToList(array);
+					return list;
+				} catch (Exception ex) {
+					// ex.printStackTrace();
+				}
+			}
+		}
+
+		SqlCriteriaQuery query = new SqlCriteriaQuery();
+		query.businessKey(businessKey);
+		query.moduleId(moduleId);
+		List<SqlCriteria> sqlCriterias = this.list(query);
+		if (sqlCriterias != null && !sqlCriterias.isEmpty()) {
+			JSONArray array = SqlCriteriaJsonFactory.listToArray(sqlCriterias);
+			CacheFactory.put("sys_sql_criteria", cacheKey, array.toJSONString());
+		} else {
+			CacheFactory.put("sys_sql_criteria", cacheKey, "[]");
+		}
+		return sqlCriterias;
+	}
+
 	/**
 	 * 根据查询参数获取一页的数据
 	 * 
@@ -180,6 +213,8 @@ public class SqlCriteriaServiceImpl implements SqlCriteriaService {
 			sqlCriteria.setUpdateTime(new Date());
 			sqlCriteriaMapper.updateSqlCriteria(sqlCriteria);
 		}
+
+		CacheFactory.clear("sys_sql_criteria");
 	}
 
 	@javax.annotation.Resource

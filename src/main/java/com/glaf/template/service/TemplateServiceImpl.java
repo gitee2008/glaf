@@ -135,6 +135,8 @@ public class TemplateServiceImpl implements ITemplateService {
 						CacheFactory.put("template", cacheKey, template.toJsonObject().toJSONString());
 					}
 				}
+			} else {
+				CacheFactory.put("template", cacheKey, template.toJsonObject().toJSONString());
 			}
 		}
 		return template;
@@ -230,7 +232,6 @@ public class TemplateServiceImpl implements ITemplateService {
 			}
 		} catch (Exception ex) {
 			if (LogUtils.isDebug()) {
-
 				logger.debug(ex);
 			}
 			throw new RuntimeException(" load templates error:" + ex);
@@ -238,7 +239,6 @@ public class TemplateServiceImpl implements ITemplateService {
 	}
 
 	public List<Template> list(TemplateQuery query) {
-
 		List<Template> list = templateMapper.getTemplates(query);
 		return list;
 	}

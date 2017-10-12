@@ -51,8 +51,7 @@ import com.glaf.core.util.RequestUtils;
 @Controller("/chart/highcharts")
 @RequestMapping("/chart/highcharts")
 public class HighChartsController {
-	protected static final Log logger = LogFactory
-			.getLog(HighChartsController.class);
+	protected static final Log logger = LogFactory.getLog(HighChartsController.class);
 
 	protected IChartService chartService;
 
@@ -92,9 +91,9 @@ public class HighChartsController {
 				chartType = chart.getChartType();
 			}
 			ChartDataBean manager = new ChartDataBean();
-			chart = manager.getChartAndFetchDataById(chart.getId(), params,
-					RequestUtils.getActorId(request));
+			chart = manager.getChartAndFetchDataById(chart.getId(), params, RequestUtils.getActorId(request));
 			logger.debug("chart rows size:" + chart.getColumns().size());
+			logger.debug("chart type:" + chartType);
 			request.setAttribute("chart", chart);
 			request.setAttribute("chartId", chart.getId());
 			request.setAttribute("name", chart.getChartName());
@@ -109,6 +108,20 @@ public class HighChartsController {
 					JSONArray array = new JSONArray();
 					for (ColumnModel cm : columns) {
 						if (cm.getDoubleValue() != null) {
+							JSONObject json = new JSONObject();
+							json.put("name", cm.getCategory());
+							json.put("y", cm.getDoubleValue());
+							array.add(json);
+						}
+					}
+					request.setAttribute("pie_data", array.toJSONString());
+				}
+
+				if (StringUtils.equalsIgnoreCase(chartType, "piex")
+						|| StringUtils.equalsIgnoreCase(chartType, "donutx")) {
+					JSONArray array = new JSONArray();
+					for (ColumnModel cm : columns) {
+						if (cm.getDoubleValue() != null) {
 							List<Object> rows = new ArrayList<Object>();
 							total += cm.getDoubleValue();
 							rows.add(cm.getCategory());
@@ -120,16 +133,13 @@ public class HighChartsController {
 				}
 
 				for (ColumnModel cm : columns) {
-					if (cm.getCategory() != null
-							&& !categories.contains("'" + cm.getCategory()
-									+ "'")) {
+					if (cm.getCategory() != null && !categories.contains("'" + cm.getCategory() + "'")) {
 						categories.add("'" + cm.getCategory() + "'");
 					}
 				}
 
 				request.setAttribute("categories", categories);
-				request.setAttribute("categories_scripts",
-						categories.toString());
+				request.setAttribute("categories_scripts", categories.toString());
 				logger.debug("categories=" + categories);
 
 				Map<String, List<Double>> seriesMap = new HashMap<String, List<Double>>();
@@ -153,8 +163,7 @@ public class HighChartsController {
 				request.setAttribute("seriesMap", seriesMap);
 				if (!seriesMap.isEmpty()) {
 					JSONArray array = new JSONArray();
-					Set<Entry<String, List<Double>>> entrySet = seriesMap
-							.entrySet();
+					Set<Entry<String, List<Double>>> entrySet = seriesMap.entrySet();
 					for (Entry<String, List<Double>> entry : entrySet) {
 						String key = entry.getKey();
 						List<Double> valueList = entry.getValue();
@@ -175,9 +184,7 @@ public class HighChartsController {
 					if (StringUtils.equalsIgnoreCase(chartType, "pie")
 							|| StringUtils.equalsIgnoreCase(chartType, "donut")) {
 						json.put("category", cm.getCategory());
-						json.put(
-								"value",
-								Math.round(cm.getDoubleValue() / total * 10000) / 100.0D);
+						json.put("value", Math.round(cm.getDoubleValue() / total * 10000) / 100.0D);
 					}
 					result.add(json);
 				}
@@ -190,8 +197,7 @@ public class HighChartsController {
 			} else if (StringUtils.equalsIgnoreCase(chartType, "line")) {
 				return new ModelAndView("/chart/highcharts/line", modelMap);
 			} else if (StringUtils.equalsIgnoreCase(chartType, "radarLine")) {
-				return new ModelAndView("/chart/highcharts/radarLine",
-						modelMap);
+				return new ModelAndView("/chart/highcharts/radarLine", modelMap);
 			} else if (StringUtils.equalsIgnoreCase(chartType, "area")) {
 				return new ModelAndView("/chart/highcharts/area", modelMap);
 			} else if (StringUtils.equalsIgnoreCase(chartType, "bar")) {
@@ -199,11 +205,9 @@ public class HighChartsController {
 			} else if (StringUtils.equalsIgnoreCase(chartType, "column")) {
 				return new ModelAndView("/chart/highcharts/column", modelMap);
 			} else if (StringUtils.equalsIgnoreCase(chartType, "stacked_area")) {
-				return new ModelAndView("/chart/highcharts/stacked_area",
-						modelMap);
+				return new ModelAndView("/chart/highcharts/stacked_area", modelMap);
 			} else if (StringUtils.equalsIgnoreCase(chartType, "stackedbar")) {
-				return new ModelAndView("/chart/highcharts/stackedbar",
-						modelMap);
+				return new ModelAndView("/chart/highcharts/stackedbar", modelMap);
 			}
 		}
 		String x_view = ViewProperties.getString("highcharts.chart");
@@ -216,8 +220,7 @@ public class HighChartsController {
 
 	@ResponseBody
 	@RequestMapping("/json")
-	public byte[] json(HttpServletRequest request, ModelMap modelMap)
-			throws IOException {
+	public byte[] json(HttpServletRequest request, ModelMap modelMap) throws IOException {
 		RequestUtils.setRequestParameterToAttribute(request);
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
 		String chartId = ParamUtils.getString(params, "chartId");
@@ -246,8 +249,7 @@ public class HighChartsController {
 				chartType = chart.getChartType();
 			}
 			ChartDataBean manager = new ChartDataBean();
-			chart = manager.getChartAndFetchDataById(chart.getId(), params,
-					RequestUtils.getActorId(request));
+			chart = manager.getChartAndFetchDataById(chart.getId(), params, RequestUtils.getActorId(request));
 			logger.debug("chart rows size:" + chart.getColumns().size());
 			request.setAttribute("chart", chart);
 			List<ColumnModel> columns = chart.getColumns();
@@ -267,9 +269,7 @@ public class HighChartsController {
 					if (StringUtils.equalsIgnoreCase(chartType, "pie")
 							|| StringUtils.equalsIgnoreCase(chartType, "donut")) {
 						json.put("category", cm.getCategory());
-						json.put(
-								"value",
-								Math.round(cm.getDoubleValue() / total * 10000) / 100.0D);
+						json.put("value", Math.round(cm.getDoubleValue() / total * 10000) / 100.0D);
 					}
 					result.add(json);
 				}
@@ -285,8 +285,7 @@ public class HighChartsController {
 	}
 
 	@javax.annotation.Resource
-	public void setSqlDefinitionService(
-			SqlDefinitionService sqlDefinitionService) {
+	public void setSqlDefinitionService(SqlDefinitionService sqlDefinitionService) {
 		this.sqlDefinitionService = sqlDefinitionService;
 	}
 

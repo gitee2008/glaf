@@ -102,28 +102,30 @@ public class PageResourceController {
 					if (mFile.getOriginalFilename() != null && mFile.getSize() > 0
 							&& mFile.getSize() <= FileUtils.MB_SIZE * 5) {
 						String filename = mFile.getOriginalFilename();
-						logger.debug("upload file:" + filename);
-						String fileId = UUID32.getUUID();
-						if (filename.indexOf("/") != -1) {
-							filename = filename.substring(filename.lastIndexOf("/") + 1, filename.length());
-						} else if (filename.indexOf("\\") != -1) {
-							filename = filename.substring(filename.lastIndexOf("\\") + 1, filename.length());
-						}
-						PageResource resource = new PageResource();
-						resource.setCreateBy(loginContext.getActorId());
-						resource.setResFileId(fileId);
-						resource.setResFileName(filename);
-						resource.setResName(mFile.getName());
-						resource.setResContentType(mFile.getContentType());
-						resource.setResContent(mFile.getBytes());
-						resource.setResType(type);
-						pageResourceService.save(resource);
+						if (filename != null) {
+							logger.debug("upload file:" + filename);
+							String fileId = UUID32.getUUID();
+							if (filename.indexOf("/") != -1) {
+								filename = filename.substring(filename.lastIndexOf("/") + 1, filename.length());
+							} else if (filename.indexOf("\\") != -1) {
+								filename = filename.substring(filename.lastIndexOf("\\") + 1, filename.length());
+							}
+							PageResource resource = new PageResource();
+							resource.setCreateBy(loginContext.getActorId());
+							resource.setResFileId(fileId);
+							resource.setResFileName(filename);
+							resource.setResName(mFile.getName());
+							resource.setResContentType(mFile.getContentType());
+							resource.setResContent(mFile.getBytes());
+							resource.setResType(type);
+							pageResourceService.save(resource);
 
-						JSONObject json = new JSONObject();
-						json.put("name", resource.getResFileName());
-						json.put("id", resource.getId());
-						json.put("fileId", resource.getResFileId());
-						rowsJSON.add(json);
+							JSONObject json = new JSONObject();
+							json.put("name", resource.getResFileName());
+							json.put("id", resource.getId());
+							json.put("fileId", resource.getResFileId());
+							rowsJSON.add(json);
+						}
 					}
 				}
 				result.put("files", rowsJSON);

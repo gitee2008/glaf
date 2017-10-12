@@ -139,7 +139,7 @@ public class DataFileDomainFactory {
 		ColumnDefinition idColumn = new ColumnDefinition();
 		idColumn.setColumnName("ID_");
 		idColumn.setJavaType("String");
-		idColumn.setLength(50);
+		idColumn.setLength(80);
 		tableDefinition.setIdColumn(idColumn);
 
 		ColumnDefinition tenantId = new ColumnDefinition();
@@ -158,32 +158,32 @@ public class DataFileDomainFactory {
 		ColumnDefinition fileId = new ColumnDefinition();
 		fileId.setColumnName("FILEID_");
 		fileId.setJavaType("String");
-		fileId.setLength(50);
+		fileId.setLength(80);
 		tableDefinition.addColumn(fileId);
 
 		ColumnDefinition businessKey = new ColumnDefinition();
 		businessKey.setColumnName("BUSINESSKEY_");
 		businessKey.setJavaType("String");
-		businessKey.setLength(50);
+		businessKey.setLength(200);
 		tableDefinition.addColumn(businessKey);
 
 		ColumnDefinition serviceKey = new ColumnDefinition();
 		serviceKey.setColumnName("SERVICEKEY_");
 		serviceKey.setJavaType("String");
-		serviceKey.setLength(50);
+		serviceKey.setLength(80);
 		tableDefinition.addColumn(serviceKey);
 
 		ColumnDefinition masterDataId = new ColumnDefinition();
 		masterDataId.setName("masterDataId");
 		masterDataId.setColumnName("MASTERDATAID_");
 		masterDataId.setJavaType("String");
-		masterDataId.setLength(50);
+		masterDataId.setLength(80);
 		tableDefinition.addColumn(masterDataId);
 
 		ColumnDefinition deviceId = new ColumnDefinition();
 		deviceId.setColumnName("DEVICEID_");
 		deviceId.setJavaType("String");
-		deviceId.setLength(20);
+		deviceId.setLength(50);
 		tableDefinition.addColumn(deviceId);
 
 		ColumnDefinition name = new ColumnDefinition();

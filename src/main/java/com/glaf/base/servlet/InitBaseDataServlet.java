@@ -75,7 +75,7 @@ public class InitBaseDataServlet extends HttpServlet {
 				bean.setDeleteFlag(0);
 				bean.setAccountType(1);
 				bean.setUserType(1);
-				String password = "888888";
+				String password = "111111";
 				// FileUtils.save("/password.txt", password.getBytes());
 				bean.setPasswordHash(password);
 				sysUserService.create(bean);

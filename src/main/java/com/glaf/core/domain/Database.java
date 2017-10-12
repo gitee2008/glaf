@@ -307,6 +307,9 @@ public class Database implements java.lang.Comparable<Database>, Cloneable, Seri
 	protected Date updateTime;
 
 	@javax.persistence.Transient
+	protected String selected;
+
+	@javax.persistence.Transient
 	protected String connectionString;
 
 	@javax.persistence.Transient
@@ -496,12 +499,12 @@ public class Database implements java.lang.Comparable<Database>, Cloneable, Seri
 		return name;
 	}
 
-	public long getParentId() {
-		return this.parentId;
-	}
-
 	public int getOperation() {
 		return operation;
+	}
+
+	public long getParentId() {
+		return this.parentId;
 	}
 
 	public String getPassword() {
@@ -530,11 +533,12 @@ public class Database implements java.lang.Comparable<Database>, Cloneable, Seri
 
 	public String getQueueName() {
 		if (queueName == null) {
-			/*if (this.getHost() != null && this.getDbname() != null) {
-				queueName = this.getHost() + "_" + this.getDbname();
-				queueName = StringTools.replace(queueName, ".", "_");
-				queueName = queueName.toLowerCase();
-			}*/
+			/*
+			 * if (this.getHost() != null && this.getDbname() != null) { queueName =
+			 * this.getHost() + "_" + this.getDbname(); queueName =
+			 * StringTools.replace(queueName, ".", "_"); queueName =
+			 * queueName.toLowerCase(); }
+			 */
 			queueName = this.getSysId();
 		}
 		return queueName;
@@ -554,6 +558,10 @@ public class Database implements java.lang.Comparable<Database>, Cloneable, Seri
 
 	public String getSection() {
 		return section;
+	}
+
+	public String getSelected() {
+		return selected;
 	}
 
 	public long getServerId() {
@@ -708,12 +716,12 @@ public class Database implements java.lang.Comparable<Database>, Cloneable, Seri
 		this.name = name;
 	}
 
-	public void setParentId(long parentId) {
-		this.parentId = parentId;
-	}
-
 	public void setOperation(int operation) {
 		this.operation = operation;
+	}
+
+	public void setParentId(long parentId) {
+		this.parentId = parentId;
 	}
 
 	public void setPassword(String password) {
@@ -758,6 +766,10 @@ public class Database implements java.lang.Comparable<Database>, Cloneable, Seri
 
 	public void setSection(String section) {
 		this.section = section;
+	}
+
+	public void setSelected(String selected) {
+		this.selected = selected;
 	}
 
 	public void setServerId(long serverId) {

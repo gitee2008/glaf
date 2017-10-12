@@ -146,7 +146,7 @@ public class ChartDataBean {
 			if (StringUtils.isNotEmpty(chart.getQueryIds())) {
 				List<String> queryIds = StringTools.split(chart.getQueryIds());
 				for (String queryId : queryIds) {
-					SqlDefinition sqlDefinition = getSqlDefinitionService().getSqlDefinitionByUUID(queryId);
+					SqlDefinition sqlDefinition = getSqlDefinitionService().getSqlDefinition(Long.parseLong(queryId));
 					if (sqlDefinition != null && StringUtils.isNotEmpty(sqlDefinition.getSql())) {
 						logger.debug("query title=" + sqlDefinition.getTitle());
 						querySQL = sqlDefinition.getSql();

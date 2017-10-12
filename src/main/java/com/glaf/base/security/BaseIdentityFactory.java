@@ -35,13 +35,14 @@ import com.glaf.core.context.ContextFactory;
 import com.glaf.core.identity.Agent;
 import com.glaf.core.identity.User;
 import com.glaf.core.service.EntityService;
-
+import com.glaf.core.util.StringTools;
 import com.glaf.base.modules.sys.model.SysRole;
 import com.glaf.base.modules.sys.model.SysUser;
 import com.glaf.base.modules.sys.service.SysApplicationService;
 import com.glaf.base.modules.sys.service.SysRoleService;
 import com.glaf.base.modules.sys.service.SysTreeService;
 import com.glaf.base.modules.sys.service.SysUserService;
+import com.glaf.base.modules.sys.util.SysRoleJsonFactory;
 import com.glaf.base.modules.sys.util.SysUserJsonFactory;
 import com.glaf.base.utils.ContextUtil;
 
@@ -223,7 +224,7 @@ public class BaseIdentityFactory {
 	 * @return
 	 */
 	public static User getUser(String actorId) {
-		String cacheKey = "cache_SYS_USER_" + actorId;
+		String cacheKey = "cache_sys_user_" + actorId;
 		String text = CacheFactory.getString("user", cacheKey);
 		if (text != null) {
 			try {
@@ -262,20 +263,63 @@ public class BaseIdentityFactory {
 	 * @return
 	 */
 	public static List<String> getUserRoleCodes(List<String> actorIds) {
+		if (actorIds == null || actorIds.isEmpty()) {
+			return new ArrayList<String>();
+		}
+		StringBuilder buffer = new StringBuilder();
+		buffer.append("cache_userrole");
+		for (String actorId : actorIds) {
+			buffer.append("_").append(actorId);
+		}
+
+		String cacheKey = buffer.toString();
+		String text = CacheFactory.getString("userrole", cacheKey);
+		if (text != null) {
+			return StringTools.split(text);
+		}
+
 		List<String> codes = new ArrayList<String>();
 		List<SysRole> list = getUserRoles(actorIds);
+		buffer.delete(0, buffer.length());
 		if (list != null && !list.isEmpty()) {
 			for (SysRole role : list) {
 				if (!codes.contains(role.getCode())) {
 					codes.add(role.getCode());
+					buffer.append(role.getCode()).append(",");
 				}
 			}
 		}
+		CacheFactory.put("userrole", cacheKey, buffer.toString());
 		return codes;
 	}
 
 	public static List<SysRole> getUserRoles(List<String> actorIds) {
-		return getSysUserService().getUserRoles(actorIds);
+		if (actorIds == null || actorIds.isEmpty()) {
+			return new ArrayList<SysRole>();
+		}
+
+		StringBuilder buffer = new StringBuilder();
+		buffer.append("cache_userrole");
+		for (String actorId : actorIds) {
+			buffer.append("_").append(actorId);
+		}
+
+		String cacheKey = buffer.toString();
+		String text = CacheFactory.getString("userrole", cacheKey);
+		if (text != null) {
+			try {
+				com.alibaba.fastjson.JSONArray array = JSON.parseArray(text);
+				return SysRoleJsonFactory.arrayToList(array);
+			} catch (Exception ex) {
+			}
+		}
+
+		List<SysRole> roles = getSysUserService().getUserRoles(actorIds);
+		if (roles != null && !roles.isEmpty()) {
+			com.alibaba.fastjson.JSONArray array = SysRoleJsonFactory.listToArray(roles);
+			CacheFactory.put("userrole", cacheKey, array.toJSONString());
+		}
+		return roles;
 	}
 
 	/**

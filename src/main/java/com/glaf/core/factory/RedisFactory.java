@@ -904,7 +904,7 @@ public class RedisFactory {
 								&& props.getProperty("redis.master.port") != null) {
 							JedisShardInfo master = new JedisShardInfo(props.getProperty("redis.master.host").trim(),
 									Integer.parseInt(props.getProperty("redis.master.port").trim()),
-									((password == null || password == "" || password.isEmpty()) ? null : password));
+									(StringUtils.isEmpty(password) ? null : password));
 							servers.add(master);
 						}
 
@@ -912,7 +912,7 @@ public class RedisFactory {
 								&& props.getProperty("redis.slave.port") != null) {
 							JedisShardInfo slave = new JedisShardInfo(props.getProperty("redis.slave.host").trim(),
 									Integer.parseInt(props.getProperty("redis.slave.port").trim()),
-									((password == null || password == "" || password.isEmpty()) ? null : password));
+									(StringUtils.isEmpty(password) ? null : password));
 							servers.add(slave);
 						}
 
@@ -924,14 +924,12 @@ public class RedisFactory {
 									String h = item.substring(0, item.indexOf(":"));
 									int p = Integer.parseInt(item.substring(item.indexOf(":") + 1, item.length()));
 									JedisShardInfo slave = new JedisShardInfo(h, p,
-											((password == null || password == "" || password.isEmpty()) ? null
-													: password));
+											(StringUtils.isEmpty(password) ? null : password));
 									servers.add(slave);
 									logger.info("add redis slave " + h + ":" + p);
 								} else {
 									JedisShardInfo slave = new JedisShardInfo(item, 6379,
-											((password == null || password == "" || password.isEmpty()) ? null
-													: password));
+											(StringUtils.isEmpty(password) ? null : password));
 									servers.add(slave);
 									logger.info("add redis slave " + item + ":6379");
 								}

@@ -185,7 +185,6 @@ public class SystemTemplateController {
 	public ModelAndView list(HttpServletRequest request, ModelMap modelMap) {
 		RequestUtils.setRequestParameterToAttribute(request);
 		Map<String, Object> paramMap = RequestUtils.getParameterMap(request);
-		
 
 		String nodeCode = request.getParameter("nodeCode");
 		if (StringUtils.isEmpty(nodeCode)) {
@@ -275,14 +274,7 @@ public class SystemTemplateController {
 				if (mFile.getSize() > 0) {
 					template.setFileSize(mFile.getSize());
 					int fileType = 0;
-
-					if (filename.endsWith(".java")) {
-						fileType = 50;
-						template.setContent(new String(mFile.getBytes()));
-					} else if (filename.endsWith(".jsp")) {
-						fileType = 51;
-						template.setContent(new String(mFile.getBytes()));
-					} else if (filename.endsWith(".ftl")) {
+					if (filename.endsWith(".ftl")) {
 						fileType = 52;
 						template.setLanguage("freemarker");
 						template.setContent(new String(mFile.getBytes()));

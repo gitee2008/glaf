@@ -41,7 +41,10 @@ public class SystemConfig {
 	protected static final Log logger = LogFactory.getLog(SystemConfig.class);
 
 	protected static Cache<String, SystemProperty> concurrentMap = CacheBuilder.newBuilder().maximumSize(10000)
-			.expireAfterAccess(5, TimeUnit.MINUTES).build();
+			.expireAfterAccess(30, TimeUnit.MINUTES).build();
+
+	protected static Cache<String, Long> concurrentTimeMap = CacheBuilder.newBuilder().maximumSize(10000)
+			.expireAfterAccess(30, TimeUnit.MINUTES).build();
 
 	protected static AtomicBoolean loading = new AtomicBoolean(false);
 
@@ -93,10 +96,17 @@ public class SystemConfig {
 		boolean ret = defaultValue;
 		SystemProperty property = concurrentMap.getIfPresent(key);
 		if (property == null) {
-			PropertyHelper propertyHelper = new PropertyHelper();
-			property = propertyHelper.getSystemPropertyByKey(key);
-			if (property != null) {
-				concurrentMap.put(key, property);
+			/**
+			 * 判断是否需要从数据库获取配置
+			 */
+			Long ts = concurrentTimeMap.getIfPresent(key);
+			if (ts == null || ((System.currentTimeMillis() - ts.longValue()) > DateUtils.MINUTE * 5)) {
+				PropertyHelper propertyHelper = new PropertyHelper();
+				property = propertyHelper.getSystemPropertyByKey(key);
+				if (property != null) {
+					concurrentMap.put(key, property);
+				}
+				concurrentTimeMap.put(key, System.currentTimeMillis());
 			}
 		}
 		if (property != null) {
@@ -189,7 +199,7 @@ public class SystemConfig {
 			month = month + 1;
 			logger.debug(year + "-" + month);
 
-			StringBuilder sb = new StringBuilder(50);
+			StringBuffer sb = new StringBuffer(50);
 			sb.append(year);
 
 			if (month <= 9) {
@@ -223,7 +233,7 @@ public class SystemConfig {
 
 			logger.debug(year + "-" + month + "-" + day);
 
-			StringBuilder sb = new StringBuilder(50);
+			StringBuffer sb = new StringBuffer(50);
 			sb.append(year);
 
 			if (month <= 9) {
@@ -307,20 +317,25 @@ public class SystemConfig {
 
 	public static SystemProperty getProperty(String key) {
 		SystemProperty property = null;
-
-		if (concurrentMap.asMap().isEmpty()) {
+		if (concurrentMap.size() == 0) {
 			reload();
 		}
-		String complexKey = Environment.getCurrentSystemName() + "_" + key;
-		property = concurrentMap.getIfPresent(complexKey);
+		property = concurrentMap.getIfPresent(key);
 		if (property == null) {
-			PropertyHelper propertyHelper = new PropertyHelper();
-			property = propertyHelper.getSystemPropertyById(key);
-			if (property == null) {
-				property = propertyHelper.getSystemPropertyByKey(key);
+			/**
+			 * 判断是否需要从数据库获取配置
+			 */
+			Long ts = concurrentTimeMap.getIfPresent(key);
+			if (ts == null || ((System.currentTimeMillis() - ts.longValue()) > DateUtils.MINUTE * 5)) {
+				PropertyHelper propertyHelper = new PropertyHelper();
+				property = propertyHelper.getSystemPropertyById(key);
+				if (property == null) {
+					property = propertyHelper.getSystemPropertyByKey(key);
+				}
+				concurrentTimeMap.put(key, System.currentTimeMillis());
 			}
 			if (property != null) {
-				concurrentMap.put(complexKey, property);
+				concurrentMap.put(key, property);
 			}
 		}
 		if (property != null) {
@@ -331,7 +346,7 @@ public class SystemConfig {
 	}
 
 	public static String getRegionName(String name) {
-		StringBuilder buffer = new StringBuilder();
+		StringBuffer buffer = new StringBuffer();
 		if (Environment.getCurrentSystemName() != null
 				&& !StringUtils.equals(Environment.DEFAULT_SYSTEM_NAME, Environment.getCurrentSystemName())) {
 			buffer.append(Environment.getCurrentSystemName()).append("_");
@@ -399,10 +414,17 @@ public class SystemConfig {
 		String ret = defaultValue;
 		SystemProperty property = concurrentMap.getIfPresent(key);
 		if (property == null) {
-			PropertyHelper propertyHelper = new PropertyHelper();
-			property = propertyHelper.getSystemPropertyByKey(key);
-			if (property != null) {
-				concurrentMap.put(key, property);
+			/**
+			 * 判断是否需要从数据库获取配置
+			 */
+			Long ts = concurrentTimeMap.getIfPresent(key);
+			if (ts == null || ((System.currentTimeMillis() - ts.longValue()) > DateUtils.MINUTE * 5)) {
+				PropertyHelper propertyHelper = new PropertyHelper();
+				property = propertyHelper.getSystemPropertyByKey(key);
+				if (property != null) {
+					concurrentMap.put(key, property);
+				}
+				concurrentTimeMap.put(key, System.currentTimeMillis());
 			}
 		}
 		if (property != null) {
@@ -500,12 +522,17 @@ public class SystemConfig {
 				List<SystemProperty> list = systemPropertyService.getAllSystemProperties();
 				if (list != null && !list.isEmpty()) {
 					for (SystemProperty p : list) {
-						String complexKey = Environment.getCurrentSystemName() + "_" + p.getName();
-						concurrentMap.put(complexKey, p);
 						concurrentMap.put(p.getName(), p);
-						conf.set(p.getName(), p.getValue());
-						ConfigFactory.put(SystemConfig.class.getSimpleName(), p.getName(),
-								SystemPropertyJsonFactory.toJsonObject(p).toJSONString());
+						if (p.getValue() != null) {
+							conf.set(p.getName(), p.getValue());
+						}
+						// if
+						// (SystemConfig.getBoolean("distributed.config.enabled"))
+						// {
+						// ConfigFactory.put(SystemConfig.class.getSimpleName(),
+						// p.getName(),
+						// SystemPropertyJsonFactory.toJsonObject(p).toJSONString());
+						// }
 					}
 				}
 
@@ -516,7 +543,7 @@ public class SystemConfig {
 				concurrentAccessLimit = null;
 				logger.info("reload system config end.");
 			} catch (Exception ex) {
-				
+				ex.printStackTrace();
 				throw new RuntimeException(ex);
 			} finally {
 				loading.set(false);
@@ -526,7 +553,7 @@ public class SystemConfig {
 
 	public static void setProperty(SystemProperty p) {
 		if (p != null && p.getName() != null) {
-			String complexKey = Environment.getCurrentSystemName() + "_" + p.getName();
+			String complexKey = p.getName();
 			concurrentMap.put(complexKey, p);
 			ConfigFactory.put(SystemConfig.class.getSimpleName(), p.getName(),
 					SystemPropertyJsonFactory.toJsonObject(p).toJSONString());

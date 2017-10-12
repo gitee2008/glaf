@@ -20,12 +20,10 @@ package com.glaf.base.web.springmvc;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.glaf.core.security.LoginContext;
@@ -37,14 +35,8 @@ public class IndexController {
 	protected static final Log logger = LogFactory.getLog(IndexController.class);
 
 	@RequestMapping
-	public void indexPage(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap)
-			throws Exception {
+	public void indexPage(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		logger.debug("-----------------------index page-------------------------");
-		HttpSession session = request.getSession(false);
-		if (session == null) {
-			response.sendRedirect(request.getContextPath() + "/login");
-			return;
-		}
 
 		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		if (loginContext == null) {

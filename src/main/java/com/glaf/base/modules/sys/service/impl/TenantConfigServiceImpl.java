@@ -29,14 +29,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.glaf.core.id.*;
+import com.glaf.core.cache.CacheFactory;
+import com.glaf.core.config.SystemConfig;
 import com.glaf.core.dao.*;
 import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.util.*;
-
+import com.alibaba.fastjson.JSON;
 import com.glaf.base.modules.sys.mapper.*;
 import com.glaf.base.modules.sys.model.*;
 import com.glaf.base.modules.sys.query.*;
 import com.glaf.base.modules.sys.service.TenantConfigService;
+import com.glaf.base.modules.sys.util.TenantConfigJsonFactory;
 
 @Service("tenantConfigService")
 @Transactional(readOnly = true)
@@ -114,12 +117,49 @@ public class TenantConfigServiceImpl implements TenantConfigService {
 		if (id == null) {
 			return null;
 		}
-		TenantConfig tenantConfig = tenantConfigMapper.getTenantConfigById(id);
-		return tenantConfig;
+		String cacheKey = "sys_tenant_cfg_" + id;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("tenant_cfg", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					com.alibaba.fastjson.JSONObject json = JSON.parseObject(text);
+					TenantConfig cfg = TenantConfigJsonFactory.jsonToObject(json);
+					if (cfg != null) {
+						return cfg;
+					}
+				} catch (Exception ex) {
+				}
+			}
+		}
+
+		TenantConfig cfg = tenantConfigMapper.getTenantConfigById(id);
+		if (cfg != null) {
+			CacheFactory.put("tenant_cfg", cacheKey, cfg.toJsonObject().toJSONString());
+		}
+		return cfg;
 	}
 
 	public TenantConfig getTenantConfigByTenantId(String tenantId) {
-		return tenantConfigMapper.getTenantConfigByTenantId(tenantId);
+		String cacheKey = "sys_tenant_cfg_" + tenantId;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("tenant_cfg", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					com.alibaba.fastjson.JSONObject json = JSON.parseObject(text);
+					TenantConfig cfg = TenantConfigJsonFactory.jsonToObject(json);
+					if (cfg != null) {
+						return cfg;
+					}
+				} catch (Exception ex) {
+				}
+			}
+		}
+
+		TenantConfig cfg = tenantConfigMapper.getTenantConfigByTenantId(tenantId);
+		if (cfg != null) {
+			CacheFactory.put("tenant_cfg", cacheKey, cfg.toJsonObject().toJSONString());
+		}
+		return cfg;
 	}
 
 	/**
@@ -154,9 +194,14 @@ public class TenantConfigServiceImpl implements TenantConfigService {
 			tenantConfig.setCreateTime(new Date());
 			tenantConfigMapper.insertTenantConfig(tenantConfig);
 		} else {
+			String cacheKey = "sys_tenant_cfg_" + tenantConfig.getId();
+			CacheFactory.remove("tenant_cfg", cacheKey);
+
+			cacheKey = "sys_tenant_cfg_" + tenantConfig.getTenantId();
+			CacheFactory.remove("tenant_cfg", cacheKey);
+
 			tenantConfigMapper.updateTenantConfig(tenantConfig);
 		}
-
 	}
 
 	@javax.annotation.Resource
