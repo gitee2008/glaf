@@ -103,7 +103,6 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jackson-module-jaxb-annotations.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/java-property-utils.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/java-uuid-generator.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/javaGeom.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/javassist.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/javax.activation.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/javax.batch.jar"/>
@@ -199,7 +198,6 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jxl.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/commons-digester3.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/sqlite-jdbc.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/alipay-sdk-java.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/highcharts-export-convert.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jasperreports.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jcommon.jar"/>
