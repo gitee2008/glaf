@@ -82,7 +82,6 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/guava.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/hibernate-commons-annotations.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/hibernate-validator.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/hibernate.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/HikariCP.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/htmlparser.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/httpasyncclient-cache.jar"/>
@@ -118,7 +117,6 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jboss-logging-annotations.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jboss-logging.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jboss-transaction.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jbpm-jpdl.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jedis.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jetty-util.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jgraphx.jar"/>
@@ -207,5 +205,9 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jcommon.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jfreechart.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/ehcache3.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/hibernate-core.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jandex.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/spring-jcl.RELEASE.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/spring-messaging.RELEASE.jar"/>
 	<classpathentry kind="output" path="webapps/glaf/WEB-INF/classes"/>
 </classpath>

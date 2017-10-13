@@ -333,10 +333,10 @@
             <textarea id="x_roles_name" name="x_roles_name" rows="6" cols="36" class="x-textarea" style="width:425px;"
 			          readonly>${x_role_names}</textarea>
 			&nbsp;
-			<input type="button" name="button" value="添加" class="button" 
+			<input type="button" name="button" value="添加" class="btnGray" 
 			       onclick="javascript:selectRole('iForm', 'perms','x_roles_name');"> 
 			&nbsp;
-			<input type="button" name="button" value="清空" class="button" 
+			<input type="button" name="button" value="清空" class="btnGray" 
 			       onclick="javascript:clearSelected('perms','x_roles_name');">
 		</td>
 	</tr>
@@ -377,8 +377,8 @@
 	<tr>
 		<td width="25%" align="left">是否启用</td>
 		<td align="left">
-		<input type="radio" name="active" value="1" <c:if test="${serverEntity.active == '1'}">checked</c:if>>启用&nbsp;&nbsp;
-	    <input type="radio" name="active" value="0" <c:if test="${serverEntity.active == '0'}">checked</c:if>>禁用
+		<input type="radio" name="active" value="1" <#if serverEntity.active == '1'>checked</#if>>启用&nbsp;&nbsp;
+	    <input type="radio" name="active" value="0" <#if serverEntity.active == '0'>checked</#if>>禁用
 		</td>
 	</tr>
 

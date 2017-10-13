@@ -4,38 +4,22 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <title>登录</title>
-<link rel="shortcut icon" href="${request.contextPath}/static/html/login/img/jadp.ico">
 <link rel="stylesheet" href="${request.contextPath}/static/html/login/css/style.css">
 <script type="text/javascript">
-	
 </script>
 </head>
-<body class="p-login p-login-vip188" id="pagebody">
-	<div class="g-hd">
-		<div class="m-hd">
-			<span class="u-logo" style="overflow:hidden;background: url('${contextPath}/static/images/logo.png') no-repeat;"></span>
-			<p class="nav">
-				 <a href="#">产品中心</a> 
-				 <a href="#">科技研发</a> 
-				 <a href="${request.contextPath}/register" class="serviceIcon">新用户注册</a>
-			</p>
-		</div>
-	</div>
+<body class="p-login p-login-3" id="pagebody">
 	<div class="g-scroll">
 		<div class="g-loginbox">
 			<div class="g-bd">
 				<div class="m-loginbg">
 					<img id="bg" draggable="false"
 						src="${request.contextPath}/static/html/login/img/bg4.jpg"
-						style="margin-left: 0px; margin-top: -50px;"  width="100%">
+						style="margin-left: 0px; margin-top: -50px;" width="100%">
 				</div>
 				<div class="m-bgwrap"></div>
 				<div class="m-loginboxbg"></div>
 				<div class="m-loginbox">
-					<div id="pervent" class="m-photoframe" title="更换防伪图片" hidefocus=""
-						style="display: none;">
-						<img class="perImg" src="about:blank" alt="">
-					</div>
 					<div class="lbinner" id="mailbox">
 						<form  id="iForm" name="iForm" method="post" action="">
 						    <input type="hidden" id="y" name="y">
@@ -64,11 +48,12 @@
 									style="display:none;">
 							</div>
 							<div class="line3 f-cb">
-								 
+								 <a class="u-loginbtn" id="loginBt" href="#"
+									onclick="return false;">登 录</a>
 							</div>
 							<div class="line4">
-								<a class="u-loginbtn" id="loginBt" href="#"
-									onclick="return false;">登 录</a>
+								<a class="u-loginbtn" id="regBt" href="#"
+									onclick="return false;">注 册</a>
 							</div>
 						</form>
 					</div>
@@ -77,23 +62,7 @@
 							<div class="tt">
 								<span class="u-ico u-ico-warn"></span>帐号或密码错误
 							</div>
-							<div class="ct">
-								<p>提示：</p>
-								<p>1. 请检查帐号拼写，是否输入有误</p>
-								<p>
-									2. 若帐号长期未登录，可能已被注销，请<a 
-										href="#"
-										id="reglink">重新注册</a>
-								</p>
-								<p>
-									3. 若您忘记密码，请<a 
-										href="#">找回密码</a>
-								</p>
-								<p>
-									4. 若您需要锁定此帐号，请<a 
-										href="#">点击这里</a>
-								</p>
-							</div>
+							
 						</div>
 						<div class="arrow"></div>
 					</div>
@@ -115,38 +84,10 @@
 					</div>
 				</div>
 			</div>
-			<a href=".g-more" class="u-jumpNext J_jump" data-jump="1" style="display:none">
-				 
-			</a>
 		</div>
-			</div>
-			
-			<div class="g-ft1" style="position: absolute; bottom: 0px;z-index: 9999;width: 100%;">
-				<div class="m-bd">
-				   
-					<div class="m-flink" style="margin-bottom: -30px;">
-						<a  href="#"></a>&nbsp;&nbsp;
-						<a  href="#"></a>&nbsp;&nbsp;
-						<a  href="#"></a>&nbsp;&nbsp;
-						<a 
-							href="#"></a>&nbsp;&nbsp;
-						<a  href="#"
-							style="position: relative;display:inline-block"><i
-							class="u-new"
-							style="position: absolute;display;block;width:20px;height:13px;top:-12px;right:-13px;background:url(${request.contextPath}/static/html/login/img/new.png) no-repeat;"></i></a><br>
-						<a  href="#"></a>&nbsp;&nbsp;
-						 
-					</div>
-				</div>
-			</div>
-		</div>
-	<!--</div>-->
-      
-	<a href=".g-scroll" class="J_jump J_top u-top" style="display: none;">
-		<img src="${request.contextPath}/static/html/login/img/nav.png" class="J_lazy"> <i
-		class="cover">返 回<br>登 录
-	</i>
-	</a>
+	</div>
+  </div>	
+
   <script type="text/javascript" src="${request.contextPath}/static/scripts/jquery.min.js"></script>
   <script type="text/javascript" src="${request.contextPath}/static/scripts/jquery.form.js"></script>
   <script type="text/javascript" src="${request.contextPath}/static/scripts/jsencrypt.min.js"></script>

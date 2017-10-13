@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script type="text/javascript" src="../internal.js"></script>
+    <link rel="stylesheet" type="text/css" href="video.css" />
+	<style >
+		.panel{
+		
+		}
+	</style>
+</head>
+<body>
+<div class="wrapper">
+    <div id="videoTab">
+        <div id="tabHeads" class="tabhead">
+            <span tabSrc="video" class="focus" data-content-id="video"><var id="lang_tab_insertV"></var></span>
+            <span tabSrc="upload" data-content-id="upload"><var id="lang_tab_uploadV"></var></span>
+        </div>
+        <div id="tabBodys" class="tabbody">
+            <div id="video" class="panel focus">
+               <table>
+					<tr><td><label for="videoUrl" class="url"><var id="lang_video_url"></var></label></td><td><input id="videoUrl" type="text" onKeydown="savePos(this)" onKeyup="savePos(this)" onmousedown="savePos(this)" onmouseup="savePos(this)"></td></tr>
+					<tr><td><label for="localUrl" class="url">本地视频</label></td><td><input id="localUrl" type="checkbox"></td></tr>
+			   </table>
+			   <div style="width:200px;height:330px;text-align:left;overflow: auto;border:1px solid #B4B4B4;float:left;">
+					<ul id="tree" class="ztree"></ul>
+			   </div>
+               <div id="preview"></div>
+               <div id="videoInfo">
+                   <fieldset>
+                       <legend><var id="lang_video_size"></var></legend>
+                       <table>
+                           <tr><td><label for="videoWidth"><var id="lang_videoW"></var></label></td><td><input class="txt" id="videoWidth" type="text"/></td></tr>
+                           <tr><td><label for="videoHeight"><var id="lang_videoH"></var></label></td><td><input class="txt" id="videoHeight" type="text"/></td></tr>
+                       </table>
+                   </fieldset>
+                   <fieldset>
+                      <legend><var id="lang_alignment"></var></legend>
+                      <div id="videoFloat"></div>
+                  </fieldset>
+               </div>
+            </div>
+            <div id="upload" class="panel">
+                <div id="upload_left">
+                    <div id="queueList" class="queueList">
+                        <div class="statusBar element-invisible">
+                            <div class="progress">
+                                <span class="text">0%</span>
+                                <span class="percentage"></span>
+                            </div><div class="info"></div>
+                            <div class="btns">
+                                <div id="filePickerBtn"></div>
+                                <div class="uploadBtn"><var id="lang_start_upload"></var></div>
+                            </div>
+                        </div>
+                        <div id="dndArea" class="placeholder">
+                            <div class="filePickerContainer">
+                                <div id="filePickerReady"></div>
+                            </div>
+                        </div>
+                        <ul class="filelist element-invisible">
+                            <li id="filePickerBlock" class="filePickerBlock"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="uploadVideoInfo">
+                    <fieldset>
+                        <legend><var id="lang_upload_size"></var></legend>
+                        <table>
+                            <tr><td><label><var id="lang_upload_width"></var></label></td><td><input class="txt" id="upload_width" type="text"/></td></tr>
+                            <tr><td><label><var id="lang_upload_height"></var></label></td><td><input class="txt" id="upload_height" type="text"/></td></tr>
+                        </table>
+                    </fieldset>
+                    <fieldset>
+                        <legend><var id="lang_upload_alignment"></var></legend>
+                        <div id="upload_alignment"></div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jquery -->
+<script type="text/javascript" src="../../third-party/jquery-1.10.2.min.js"></script>
+
+<!-- webuploader -->
+<script type="text/javascript" src="../../third-party/webuploader/webuploader.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../third-party/webuploader/webuploader.css">
+
+<!-- video -->
+<script type="text/javascript" src="video.js"></script>
+
+<!-- ztree -->
+<link rel="stylesheet" href="../../../../../scripts/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="../../../../../scripts/ztree/js/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="../../../../../scripts/map.js"></script>
+<script type="text/javascript" src="../../../../../scripts/expression.js"></script>
+
+<script type="text/javascript" > 
+	//获取父页面值初始化下拉列表
+	//获取参数
+	var paramData = window.parent.paramzNodes;
+	//获取字段
+	var fieldData = window.parent.fieldzNodes;
+	//获取变量
+	var varData = window.parent.varzNodes;
+	var setting = {
+		data : {
+			key : {
+				title : "t"
+			},
+			simpleData : {
+				enable : true
+			}
+		},
+		callback : {
+			//声明单击回调事件
+			beforeClick : beforeClick
+		}
+	};
+	var nodes = [ {
+		id : 1,
+		pId : 0,
+		name : "变量",
+		open : true,
+		isParent : true
+	}, {
+		id : 2,
+		pId : 0,
+		name : "参数",
+		open : true,
+		isParent : true
+	}, {
+		id : 3,
+		pId : 0,
+		name : "字段",
+		open : true,
+		isParent : true
+	}, ];
+	//用于记录选中的对象
+	var map = new Map();
+	//单击回调事件
+	function beforeClick(treeId, treeNode) {
+		var zTree = $.fn.zTree.getZTreeObj(treeId);
+		//如果是父节点单击则展开，如果是叶子节点单击则在输入框中插入相应的表达式
+		if (treeNode.isParent) {
+			zTree.expandNode(treeNode);
+			return false;
+		} else {		
+			
+			map.put(treeNode.value, treeNode);
+			if(cursorObj){
+				insertAtCursor(cursorObj,treeNode.value);
+				cursorObj = null ;
+			}
+		   // $('#url').val(treeNode.value);
+			
+			//调用父页面
+			parent.map.put(treeNode.value, treeNode);
+			return true;
+		}
+	}
+	$.fn.zTree.init($("#tree"), setting, nodes);
+	var zTree = $.fn.zTree.getZTreeObj("tree");
+	zTree.addNodes(zTree.getNodeByTId("1"), varData);
+	zTree.addNodes(zTree.getNodeByTId("2"), paramData);
+	zTree.addNodes(zTree.getNodeByTId("3"), fieldData);
+</script>
+</body>
+</html>

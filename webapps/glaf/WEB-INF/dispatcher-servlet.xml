@@ -61,18 +61,6 @@
 	<bean id="jsonHttpMessageConverter"
 		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
 
-	<bean
-		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-		<property name="webBindingInitializer">
-			<bean class="com.glaf.core.web.DateBindingInitializer" />
-		</property>
-		<property name="messageConverters">
-			<list>
-				<ref bean="jsonHttpMessageConverter" />
-			</list>
-		</property>
-	</bean>
-
 
 	<bean id="multipartResolver"
 		class="com.glaf.core.web.fileupload.resolver.FileUploadResolver">

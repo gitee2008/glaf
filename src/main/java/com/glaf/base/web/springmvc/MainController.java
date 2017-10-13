@@ -37,8 +37,7 @@ public class MainController {
 	protected static final Log logger = LogFactory.getLog(MainController.class);
 
 	@RequestMapping
-	public void mainPage(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap)
-			throws Exception {
+	public void mainPage(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) throws Exception {
 		logger.debug("-----------------------main page-------------------------");
 		HttpSession session = request.getSession(false);
 		if (session == null) {

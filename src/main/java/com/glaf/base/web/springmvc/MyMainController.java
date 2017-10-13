@@ -315,7 +315,7 @@ public class MyMainController {
 					userTheme.getHomeThemeStyle());
 			return ResponseUtils.responseJsonResult(true);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			//ex.printStackTrace();
 			logger.error("设置主题错误:" + ex.getMessage());
 		}
 		return ResponseUtils.responseJsonResult(false);

@@ -37,11 +37,20 @@ $(document)
 										success : function(dataxy) {
 											if (dataxy != null
 													&& dataxy.x_y != null
-													&& dataxy.x_z != null) {
+													&& dataxy.x_z != null
+												    && dataxy.public_key != null) {
 												var px = dataxy.x_y + y
 														+ dataxy.x_z;
-												document.getElementById("y").value = px;
-												document.getElementById("yy").value = px;
+												var crypt2 = new JSEncrypt();
+												//alert(dataxy.public_key);
+												//alert(px);
+		                                        crypt2.setKey(dataxy.public_key);
+		                                        var str = crypt2.encrypt(px);
+												//var str = encryptedString(dataxy.public_key, str, 'NoPadding', 'UTF-8');
+												//alert(str);
+												document.getElementById("y").value = str;
+												document.getElementById("yy").value = str;
+
 												var link = contextPath
 														+ "/login/doLogin?x="
 														+ x
@@ -104,6 +113,9 @@ $(document)
 					$("#loginBt").click(function() {
 						doAxy();
 					});
+					$("#regBt").click(function() {
+						regUser();
+					});
 					document.onkeydown = function(event) {
 						var e = event || window.event
 								|| arguments.callee.caller.arguments[0];
@@ -112,6 +124,10 @@ $(document)
 						}
 					};
 				});
+
+function regUser(){
+	location.href = contextPath + "/register";
+}
 
 function delay() {
 	window.setTimeout(function() {

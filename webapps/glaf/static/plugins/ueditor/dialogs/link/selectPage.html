@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>页面选择</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet"
+	href="../../../ztree/css/zTreeStyle/zTreeStyle.css"
+	type="text/css">
+<script type="text/javascript"
+	src="../../../jquery.min.js"></script>
+<script type="text/javascript"
+	src="../../../ztree/js/jquery.ztree.core.min.js"></script>
+<style type="text/css">
+* {
+	margin: 0;
+	padding: 0;
+	color: #838383;
+}
+</style>
+</head>
+<body>
+	<div
+		style="width:295px;height:495px;text-align:left;overflow: auto;border:1px solid #B4B4B4">
+		<ul id=selectPageTree class="ztree"></ul>
+	</div>
+	<script type="text/javascript">
+		//初始化树
+		var setting = {
+			view : {
+				showIcon : true,
+				showLine : true,
+				showTitle : false,
+				selectedMulti : false,
+				dblClickExpand : false
+			},
+			async : {
+				enable : true,
+				url : "/glaf/mx/form/defined/getFormPageTree"
+			},
+			data : {
+				simpleData : {
+					enable : true,
+					idKey : "id",
+					pIdKey : "parentId"
+				}
+			},
+			callback : {
+				//onClick : zTreeOnClick
+				beforeClick : beforeClick,
+				beforeDblClick : beforeDblClick
+			}
+		};
+		zTree = jQuery.fn.zTree.init(jQuery("#selectPageTree"), setting);
+		//单击回调事件
+		function beforeDblClick(treeId, treeNode) {
+			var zTree = $.fn.zTree.getZTreeObj(treeId);
+			if (!treeNode.isParent) {
+				if (window.parent.location != undefined
+						&& window.parent.location != window.location) {
+					window.returnValue = treeNode;
+					window.close();
+				} else if (window.opener && window.opener.location != null
+						&& window.opener.location != undefined) {
+					var retfunc = getQueryString("retFn");
+					if (retfunc != null) {
+						window.opener[retfunc](treeNode);
+						window.close();
+					}
+				}
+				return true;
+			}
+		}
+		function beforeClick(treeId, treeNode) {
+			var zTree = $.fn.zTree.getZTreeObj(treeId);
+			//如果是父节点单击则展开
+			if (treeNode.isParent) {
+				zTree.expandNode(treeNode);
+				return false;
+			}
+		}
+        //获取url参数值
+		function getQueryString(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null)
+				return unescape(r[2]);
+			return null;
+		}
+	</script>
+</body>
+</html>

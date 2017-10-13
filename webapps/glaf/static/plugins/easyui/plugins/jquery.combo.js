@@ -1,5 +1,5 @@
 /**
- * jQuery EasyUI 1.5.2
+ * EasyUI for jQuery 1.5.3
  * 
  * Copyright (c) 2009-2017 www.jeasyui.com. All rights reserved.
  *
@@ -301,7 +301,11 @@ _4e.options.originalValue=_4b.value;
 }
 }else{
 _4e=$.data(this,"combo",{options:$.extend({},$.fn.combo.defaults,$.fn.combo.parseOptions(this),_4b),previousText:""});
+if(_4e.options.multiple&&_4e.options.value==""){
+_4e.options.originalValue=[];
+}else{
 _4e.options.originalValue=_4e.options.value;
+}
 }
 _2(this);
 _47(this);

@@ -1,5 +1,5 @@
 /**
- * jQuery EasyUI 1.5.2
+ * EasyUI for jQuery 1.5.3
  * 
  * Copyright (c) 2009-2017 www.jeasyui.com. All rights reserved.
  *
@@ -443,27 +443,32 @@ _7a.bind(_7b+".datagrid",_79.headerEvents[_7b]);
 var _7c=_7a.find("div.datagrid-cell");
 var _7d=_79.resizeHandle=="right"?"e":(_79.resizeHandle=="left"?"w":"e,w");
 _7c.each(function(){
-$(this).resizable({handles:_7d,disabled:($(this).attr("resizable")?$(this).attr("resizable")=="false":false),minWidth:25,onStartResize:function(e){
+$(this).resizable({handles:_7d,edge:_79.resizeEdge,disabled:($(this).attr("resizable")?$(this).attr("resizable")=="false":false),minWidth:25,onStartResize:function(e){
 _77.resizing=true;
 _7a.css("cursor",$("body").css("cursor"));
 if(!_77.proxy){
 _77.proxy=$("<div class=\"datagrid-resize-proxy\"></div>").appendTo(dc.view);
 }
-_77.proxy.css({left:e.pageX-$(_78).offset().left-1,display:"none"});
+if(e.data.dir=="e"){
+e.data.deltaEdge=$(this)._outerWidth()-(e.pageX-$(this).offset().left);
+}else{
+e.data.deltaEdge=$(this).offset().left-e.pageX-1;
+}
+_77.proxy.css({left:e.pageX-$(_78).offset().left-1+e.data.deltaEdge,display:"none"});
 setTimeout(function(){
 if(_77.proxy){
 _77.proxy.show();
 }
 },500);
 },onResize:function(e){
-_77.proxy.css({left:e.pageX-$(_78).offset().left-1,display:"block"});
+_77.proxy.css({left:e.pageX-$(_78).offset().left-1+e.data.deltaEdge,display:"block"});
 return false;
 },onStopResize:function(e){
 _7a.css("cursor","");
 $(this).css("height","");
 var _7e=$(this).parent().attr("field");
 var col=_74(_76,_7e);
-col.width=$(this)._outerWidth();
+col.width=$(this)._outerWidth()+1;
 col.boxWidth=col.width-col.deltaWidth;
 col.auto=undefined;
 $(this).css("width","");
@@ -1116,7 +1121,7 @@ var _112=$(_10d).datagrid("getPager");
 if(_112.length){
 var _113=_112.pagination("options");
 if(_113.total!=data.total){
-_112.pagination("refresh",{total:data.total});
+_112.pagination("refresh",{pageNumber:opts.pageNumber,total:data.total});
 if(opts.pageNumber!=_113.pageNumber&&_113.pageNumber>0){
 opts.pageNumber=_113.pageNumber;
 _bf(_10d);
@@ -1717,6 +1722,7 @@ if(opts.sortName){
 $.extend(_1ab,{sort:opts.sortName,order:opts.sortOrder});
 }
 if(opts.onBeforeLoad.call(_1a9,_1ab)==false){
+opts.view.setEmptyMsg(_1a9);
 return;
 }
 $(_1a9).datagrid("loading");
@@ -1732,6 +1738,7 @@ opts.onLoadError.apply(_1a9,arguments);
 });
 if(_1ac==false){
 $(_1a9).datagrid("loaded");
+opts.view.setEmptyMsg(_1a9);
 }
 };
 function _1ad(_1ae,_1af){
@@ -1801,7 +1808,6 @@ var data=$.fn.datagrid.parseData(this);
 if(data.total>0){
 $(this).datagrid("loadData",data);
 }else{
-opts.view.setEmptyMsg(this);
 $(this).datagrid("autoSizeColumn");
 }
 }
@@ -2215,7 +2221,7 @@ return data;
 };
 var _20d={render:function(_20e,_20f,_210){
 var rows=$(_20e).datagrid("getRows");
-$(_20f).html(this.renderTable(_20e,0,rows,_210));
+$(_20f).empty().html(this.renderTable(_20e,0,rows,_210));
 },renderFooter:function(_211,_212,_213){
 var opts=$.data(_211,"datagrid").options;
 var rows=$.data(_211,"datagrid").footer||[];
@@ -2471,7 +2477,7 @@ col.styler=col.styler1;
 col.formatter1=col.styler1=undefined;
 });
 }};
-$.fn.datagrid.defaults=$.extend({},$.fn.panel.defaults,{sharedStyleSheet:false,frozenColumns:undefined,columns:undefined,fitColumns:false,resizeHandle:"right",autoRowHeight:true,toolbar:null,striped:false,method:"post",nowrap:true,idField:null,url:null,data:null,loadMsg:"Processing, please wait ...",emptyMsg:"",rownumbers:false,singleSelect:false,ctrlSelect:false,selectOnCheck:true,checkOnSelect:true,pagination:false,pagePosition:"bottom",pageNumber:1,pageSize:10,pageList:[10,20,30,40,50],queryParams:{},sortName:null,sortOrder:"asc",multiSort:false,remoteSort:true,showHeader:true,showFooter:false,scrollOnSelect:true,scrollbarSize:18,rownumberWidth:30,editorHeight:24,headerEvents:{mouseover:_82(true),mouseout:_82(false),click:_86,dblclick:_8d,contextmenu:_93},rowEvents:{mouseover:_96(true),mouseout:_96(false),click:_9e,dblclick:_a9,contextmenu:_ae},rowStyler:function(_253,_254){
+$.fn.datagrid.defaults=$.extend({},$.fn.panel.defaults,{sharedStyleSheet:false,frozenColumns:undefined,columns:undefined,fitColumns:false,resizeHandle:"right",resizeEdge:5,autoRowHeight:true,toolbar:null,striped:false,method:"post",nowrap:true,idField:null,url:null,data:null,loadMsg:"Processing, please wait ...",emptyMsg:"",rownumbers:false,singleSelect:false,ctrlSelect:false,selectOnCheck:true,checkOnSelect:true,pagination:false,pagePosition:"bottom",pageNumber:1,pageSize:10,pageList:[10,20,30,40,50],queryParams:{},sortName:null,sortOrder:"asc",multiSort:false,remoteSort:true,showHeader:true,showFooter:false,scrollOnSelect:true,scrollbarSize:18,rownumberWidth:30,editorHeight:24,headerEvents:{mouseover:_82(true),mouseout:_82(false),click:_86,dblclick:_8d,contextmenu:_93},rowEvents:{mouseover:_96(true),mouseout:_96(false),click:_9e,dblclick:_a9,contextmenu:_ae},rowStyler:function(_253,_254){
 },loader:function(_255,_256,_257){
 var opts=$(this).datagrid("options");
 if(!opts.url){

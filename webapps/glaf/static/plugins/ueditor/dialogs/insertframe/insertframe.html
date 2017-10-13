@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script type="text/javascript" src="../internal.js"></script>
+	<link rel="stylesheet"
+		href="../../../ztree/css/zTreeStyle/zTreeStyle.css"
+		type="text/css">
+	<script type="text/javascript"
+		src="../../../jquery.min.js"></script>
+	<script type="text/javascript"
+		src="../../../ztree/js/jquery.ztree.core.min.js"></script>
+	<script type="text/javascript" src="../../../map.js"></script>
+	<script type="text/javascript" src="../../../expression.js"></script>
+    <style type="text/css">
+        .warp {width: 320px;height: 153px;margin-left:5px;padding: 20px 0 0 15px;position: relative;}
+        #url {width: 290px; margin-bottom: 2px; margin-left: -6px; margin-left: -2px\9;*margin-left:0;_margin-left:0; }
+        .format span{display: inline-block; width: 58px;text-align: center; zoom:1;}
+        table td{padding:5px 0;}
+        #align{width: 65px;height: 23px;line-height: 22px;}
+
+* {
+	margin: 0;
+	padding: 0;
+	color: #838383;
+}
+
+
+
+.txt {
+	width: 300px;
+	height: 21px;
+	line-height: 21px;
+	border: 1px solid #d7d7d7;
+}
+.table_border {
+	border: solid 1px #B4B4B4;
+	border-collapse: collapse;
+	-
+	-折叠样式
+	.
+}
+
+.table_border tr th {
+	background-color: #d7d7d7;
+	padding-left: 4px;
+	height: 27px;
+	border: solid 1px #B4B4B4;
+}
+
+.table_border tr td {
+	height: 25px;
+	padding: 4px;
+	border: solid 1px #B4B4B4;
+}
+    </style>
+</head>
+<body>
+<div class="warp">
+        <table width="700" cellpadding="0" cellspacing="0">
+            <tr>
+                <td colspan="2" class="format">
+                    <span><var id="lang_input_address"></var></span>
+                    <input style="width:200px" id="url" type="text" value=""/><button name="selectPgBt" style="width: 80px;height: 23px;margin-left:5px;" onclick="selectPage()">选择</button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="format"><span><var id="lang_input_width"></var></span><input style="width:200px" type="text" id="width"/> px</td>
+
+            </tr>
+            <tr>
+                <td colspan="2" class="format"><span><var id="lang_input_height"></var></span><input style="width:200px" type="text" id="height"/> px</td>
+            </tr>
+            <tr>
+                <td><span><var id="lang_input_isScroll"></var></span><input type="checkbox" id="scroll"/> </td>
+                <td><span><var id="lang_input_frameborder"></var></span><input type="checkbox" id="frameborder"/> </td>
+            </tr>
+
+            <tr>
+                <td colspan="2"><span><var id="lang_input_alignMode"></var></span>
+                    <select id="align">
+                        <option value=""></option>
+                        <option value="left"></option>
+                        <option value="right"></option>
+                    </select>
+                </td>
+            </tr>
+
+			<tr>
+				<td colspan="2">
+					<table>
+						<tr>
+							<td style="height:350px;width:200px;vertical-align: top;">
+								<div
+									style="width:200px;height:330px;text-align:left;overflow: auto;border:1px solid #B4B4B4">
+									<ul id="tree" class="ztree"></ul>
+								</div>
+							</td>
+							<td style="vertical-align: top;">
+								<div
+									style="height:330px;text-align:left;overflow: auto;border:1px solid #B4B4B4">
+									<table id="paramTb" class="table_border" border="0"
+										cellpadding="0" cellspacing="0">
+										<tr>
+											<th style="text-align:center;width:180px;height:30px;">参数名</th>
+											<th style="text-align:center;width:180px;">参数值</th>
+											<th style="text-align:center;width:180px;">操作
+												&nbsp;&nbsp;<a href="#" onclick="addCustomParamRow()">新增</a>
+											</th>
+										</tr>
+									</table>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" id="msg"></td>
+			</tr>
+        </table>
+</div>
+<script type="text/javascript">
+    /*var iframe = editor._iframe;
+    if(iframe){
+        $G("url").value = iframe.getAttribute("src")||"";
+        $G("width").value = iframe.getAttribute("width")||iframe.style.width.replace("px","")||"";
+        $G("height").value = iframe.getAttribute("height") || iframe.style.height.replace("px","") ||"";
+        $G("scroll").checked = (iframe.getAttribute("scrolling") == "yes") ? true : false;
+        $G("frameborder").checked = (iframe.getAttribute("frameborder") == "1") ? true : false;
+        $G("align").value = iframe.align ? iframe.align : "";
+    }
+    function queding(){
+        var  url = $G("url").value.replace(/^\s*|\s*$/ig,""),
+                width = $G("width").value,
+                height = $G("height").value,
+                scroll = $G("scroll"),
+                frameborder = $G("frameborder"),
+                float = $G("align").value,
+                newIframe = editor.document.createElement("iframe"),
+                div;
+        if(!url){
+            alert(lang.enterAddress);
+            return false;
+        }
+        newIframe.setAttribute("src",/http:\/\/|https:\/\//ig.test(url) ? url : "http://"+url);
+        /^[1-9]+[.]?\d*$/g.test( width ) ? newIframe.setAttribute("width",width) : "";
+        /^[1-9]+[.]?\d*$/g.test( height ) ? newIframe.setAttribute("height",height) : "";
+        scroll.checked ?  newIframe.setAttribute("scrolling","yes") : newIframe.setAttribute("scrolling","no");
+        frameborder.checked ?  newIframe.setAttribute("frameborder","1",0) : newIframe.setAttribute("frameborder","0",0);
+        float ? newIframe.setAttribute("align",float) :  newIframe.setAttribute("align","");
+        if(iframe){
+            iframe.parentNode.insertBefore(newIframe,iframe);
+            domUtils.remove(iframe);
+        }else{
+            div = editor.document.createElement("div");
+            div.appendChild(newIframe);
+            editor.execCommand("inserthtml",div.innerHTML);
+        }
+        editor._iframe = null;
+        dialog.close();
+    }
+    dialog.onok = queding;
+    $G("url").onkeydown = function(evt){
+        evt = evt || event;
+        if(evt.keyCode == 13){
+            queding();
+        }
+    };
+    $focus($G( "url" ));
+*/
+</script>
+<script type="text/javascript">
+		//获取父页面值初始化下拉列表
+		//获取参数
+		var paramData = window.parent.paramzNodes;
+		//获取字段
+		var fieldData = window.parent.fieldzNodes;
+		//获取变量
+		var varData = window.parent.varzNodes;
+		var setting = {
+			data : {
+				key : {
+					title : "t"
+				},
+				simpleData : {
+					enable : true
+				}
+			},
+			callback : {
+				//声明单击回调事件
+				beforeClick : beforeClick
+			}
+		};
+		var nodes = [ {
+			id : 1,
+			pId : 0,
+			name : "变量",
+			open : true,
+			isParent : true
+		}, {
+			id : 2,
+			pId : 0,
+			name : "参数",
+			open : true,
+			isParent : true
+		}, {
+			id : 3,
+			pId : 0,
+			name : "字段",
+			open : true,
+			isParent : true
+		}, ];
+		//用于记录选中的对象
+		var map = new Map();
+		//单击回调事件
+		function beforeClick(treeId, treeNode) {
+			var zTree = $.fn.zTree.getZTreeObj(treeId);
+			//如果是父节点单击则展开，如果是叶子节点单击则在输入框中插入相应的表达式
+			if (treeNode.isParent) {
+				zTree.expandNode(treeNode);
+				return false;
+			} else {		
+				//检测光标所处位置
+			    if(cursorObj)
+				{
+				 insertAtCursor(cursorObj,treeNode.value);
+				 //调用父页面方法记录
+				 parent.map.put(treeNode.value, treeNode);
+				 cursorObj=null;
+				}
+				else
+				{
+				 addParamRow(treeNode);
+				}
+				//ue.execCommand('insertHtml', treeNode.value);
+				map.put(treeNode.value, treeNode);
+                
+				return true;
+			}
+		}
+		$.fn.zTree.init($("#tree"), setting, nodes);
+		var zTree = $.fn.zTree.getZTreeObj("tree");
+		zTree.addNodes(zTree.getNodeByTId("1"), varData);
+		zTree.addNodes(zTree.getNodeByTId("2"), paramData);
+		zTree.addNodes(zTree.getNodeByTId("3"), fieldData);
+
+		function initParamRow(param) {
+			var paramName = param.paramName;
+			var paramValue = param.paramValue;
+			var paramActValue = param.paramActValue;
+			var paramType=param.paramType;
+			var newRow;
+			if (paramActValue != '' && paramValue != '') {
+				newRow = "<tr id=\""+"\"><td style=\"text-align:center;width:200px;height:30px;\">"
+						+ "<input class=\"param txt\" type=\"text\" id=\"param\" style=\"width:150px;\" value=\""+paramName+"\"/></td>"
+						+ "<td style=\"text-align:center;width:200px;height:30px;\">"
+						+ "<input class=\"val txt\" type=\"text\" id=\"val\" style=\"width:180px;\" "+(paramType=="select"?"disabled":"")+" value=\""+paramValue+"\"/>"
+						+ "<input class=\"actval txt\" type=\"hidden\" id=\"actval\" value=\""+paramActValue+"\"/><input class=\"type txt\" type=\"hidden\" id=\"type\" value=\""+paramType+"\" />"
+						+ "</td><td><a href=\"#\" onclick=\"removeRow()\">删除</a>&nbsp;&nbsp;<a href=\"#\" onclick=\"addCustomParamRow()\">新增</a></td></tr>";
+			} else {
+				newRow = "<tr id=\""+"\"><td style=\"text-align:center;width:200px;height:30px;\">"
+						+ "<input class=\"param txt\" type=\"text\" id=\"param\" "+(paramType=="page"?"disabled":"")+" style=\"width:150px;\" value=\""+paramName+"\"/></td>"
+						+ "<td style=\"text-align:center;width:200px;height:30px;\">"
+						+ "<input class=\"actval txt\" type=\"text\" id=\"actval\" "+(paramType=="select"?"disabled":"")+" value=\""+paramActValue+"\" style=\"width:180px;\"/>"
+						+ "<input class=\"val txt\" type=\"hidden\" id=\"val\" /><input class=\"type txt\" type=\"hidden\" id=\"type\" value=\""+paramType+"\" />"
+						+ "</td><td><a href=\"#\" onclick=\"removeRow()\">删除</a>&nbsp;&nbsp;<a href=\"#\" onclick=\"addCustomParamRow()\">新增</a></td></tr>";
+			}
+			$("#paramTb tr:last").after(newRow);
+
+		}
+
+		function addParamRow(treeNode) {
+			var rows = $("#paramTb tr").length;
+			var rowNumber = rows + 1;
+			var newRow = "<tr><td style=\"text-align:center;width:200px;height:30px;\">"
+					+ "<input class=\"param txt\" type=\"text\" id=\"param\" style=\"width:150px;\"/></td>"
+					+ "<td style=\"text-align:center;width:200px;height:30px;\">"
+					+ "<input class=\"val txt\" type=\"text\" id=\"val\" style=\"width:180px;\" disabled value=\""+treeNode.value+"\"/>"
+					+ "<input class=\"actval txt\" type=\"hidden\" id=\"actval\" value=\""+treeNode.code+"\"/><input class=\"type txt\" type=\"hidden\" id=\"type\" value=\"select\" />"
+					+ "</td><td><a href=\"#\" onclick=\"removeRow()\">删除</a>&nbsp;&nbsp;<a href=\"#\" onclick=\"addCustomParamRow()\">新增</a></td></tr>";
+			$("#paramTb tr:last").after(newRow);
+		}
+
+		function addCustomParamRow() {
+			var newRow = "<tr><td style=\"text-align:center;width:200px;height:30px;\">"
+					+ "<input class=\"param txt\" type=\"text\" id=\"param\" style=\"width:150px;\"/></td>"
+					+ "<td style=\"text-align:center;width:200px;height:30px;\">"
+					+ "<input class=\"actval txt\" type=\"text\" id=\"actval\" style=\"width:180px;\"/>"
+					+ "<input class=\"val txt\" type=\"hidden\" id=\"val\" /><input class=\"type txt\" type=\"hidden\" id=\"type\" value=\"\" />"
+					+ "</td><td><a href=\"#\" onclick=\"removeRow()\">删除</a>&nbsp;&nbsp;<a href=\"#\" onclick=\"addCustomParamRow()\">新增</a></td></tr>";
+			$("#paramTb tr:last").after(newRow);
+		}
+		//增加选择页面参数
+		function addPageParamRow(name,value) {
+			var newRow = "<tr><td style=\"text-align:center;width:200px;height:30px;\">"
+					+ "<input class=\"param txt\" type=\"text\" id=\"param\" style=\"width:150px;\"  disabled value=\""+name+"\"/></td>"
+					+ "<td style=\"text-align:center;width:200px;height:30px;\">"
+					+ "<input class=\"actval txt\" type=\"text\" id=\"actval\" style=\"width:180px;\" value=\""+value+"\"/>"
+					+ "<input class=\"val txt\" type=\"hidden\" id=\"val\" /><input class=\"type txt\" type=\"hidden\" id=\"type\" value=\"page\" />"
+					+ "</td><td><a href=\"#\" onclick=\"removeRow()\">删除</a>&nbsp;&nbsp;<a href=\"#\" onclick=\"addCustomParamRow()\">新增</a></td></tr>";
+			$("#paramTb tr:last").after(newRow);
+		}
+		function removeRow() {
+			//获取当前行号
+			var trSeq = $(this).parent().parent().find("tr").index(
+					$(this).parent()[0]);
+			$("#paramTb tr:eq(" + trSeq + ")").remove();
+		}
+
+		
+		var iframe = editor._iframe;
+		if(iframe){
+			var src = iframe.getAttribute("src")||"" ;
+			if (src && src.lastIndexOf('?') > -1) {
+				src = src.substring(0, src.lastIndexOf('?'));
+			}
+			$G("url").value = src;
+			$G("width").value = iframe.getAttribute("width")||iframe.style.width.replace("px","")||"";
+			$G("height").value = iframe.getAttribute("height") || iframe.style.height.replace("px","") ||"";
+			$G("scroll").checked = (iframe.getAttribute("scrolling") == "yes") ? true : false;
+			$G("frameborder").checked = (iframe.getAttribute("frameborder") == "1") ? true : false;
+			$G("align").value = iframe.align ? iframe.align : "";
+			var paramsVal = iframe.getAttribute("params");
+			if (paramsVal != '') {
+				initParam(paramsVal);
+			}
+		}
+		
+		$focus($G("url"));
+	
+
+		function initParam(paramsVal) {
+			var paramJson = eval(paramsVal);
+			$.each(paramJson, function(i, obj) {
+				initParamRow(obj);
+			});
+
+		}
+		function getParamSetting() {
+			var paramNameArr = $(".param");
+			var paramValueArr = $(".val");
+			var paramActValueArr = $(".actval");
+			var paramTypeArr = $(".type");
+			var paramArr = new Array();
+			$.each(paramNameArr, function(i, obj) {
+				paramArr.push(new param(obj.value, paramValueArr[i].value,
+						paramActValueArr[i].value,paramTypeArr[i].value));
+			});
+			return JSON.stringify(paramArr);
+		}
+		function param(paramName, paramValue, paramActValue,paramType) {
+			this.paramName = paramName;
+			this.paramValue = paramValue;
+			this.paramActValue = paramActValue;
+			this.paramType=paramType;
+		}
+		function handleDialogOk() {
+			var href = $G("url").value.replace(/^\s*|\s*$/ig,"");
+			var params = getParamSetting();
+			if (href) {
+				//if (!hrefStartWith(href, [ "http", "/", "ftp://", '#' ])) {
+				//href = "http://" + href;
+				//}
+				if (!hrefStartWith(href, [ "/", "./", "../", "#", "http",
+						"ftp://" ])) {
+					href = "http://" + href;
+				}
+				//拼接参数
+				var paramJson = eval(params);
+				$.each(paramJson, function(i, obj) {
+					if (i == 0) {
+						href += "?" + obj.paramName + "=" + obj.paramActValue;
+					} else {
+						href += "&amp;" + obj.paramName + "="
+								+ obj.paramActValue;
+					}
+				});
+
+				var url = $G("url").value.replace(/^\s*|\s*$/ig,""),
+					width = $G("width").value,
+					height = $G("height").value,
+					scroll = $G("scroll"),
+					frameborder = $G("frameborder"),
+					float = $G("align").value,
+					newIframe = editor.document.createElement("iframe"),
+					div;
+				//if(!url){
+				//	alert(lang.enterAddress);
+				//	return false;
+				//}
+
+				//newIframe.setAttribute("src",/http:\/\/|https:\/\//ig.test(url) ? url : "http://"+url);'
+				newIframe.setAttribute("src",href);
+				newIframe.setAttribute("params",params);
+				/^[1-9]+[.]?\d*$/g.test( width ) ? newIframe.setAttribute("width",width) : "";
+				/^[1-9]+[.]?\d*$/g.test( height ) ? newIframe.setAttribute("height",height) : "";
+				scroll.checked ?  newIframe.setAttribute("scrolling","yes") : newIframe.setAttribute("scrolling","no");
+				frameborder.checked ?  newIframe.setAttribute("frameborder","1",0) : newIframe.setAttribute("frameborder","0",0);
+				float ? newIframe.setAttribute("align",float) :  newIframe.setAttribute("align","");
+				if(iframe){
+					iframe.parentNode.insertBefore(newIframe,iframe);
+					domUtils.remove(iframe);
+				}else{
+					div = editor.document.createElement("div");
+					div.appendChild(newIframe);
+					editor.execCommand("inserthtml",div.innerHTML);
+				}
+				editor._iframe = null;
+
+				dialog.close();
+			}
+		}
+		dialog.onok = handleDialogOk;
+		$G('url').onkeydown = function(evt) {
+			evt = evt || window.event;
+			if (evt.keyCode == 13) {
+				handleDialogOk();
+				return false;
+			}
+		};
+		$G('url').onblur = function() {
+			if (!hrefStartWith(this.value,
+					[ "/", "./", "../", "#", "http", "ftp://" ])) {
+				$G("msg").innerHTML = "<span style='color: red'>"
+						+ lang.httpPrompt + "</span>";
+			} else {
+				$G("msg").innerHTML = "";
+			}
+		};
+
+		function hrefStartWith(href, arr) {
+		if (href != null) {
+				href = href.replace(/^\s+|\s+$/g, '');
+				for (var i = 0, ai; ai = arr[i++];) {
+					if (href.indexOf(ai) == 0) {
+						return true;
+					}
+				}
+				}
+			return false;
+		}
+		function selectPage()
+		{
+		    var dialogHeight=500;
+		    var dialogWidth=300;
+		    var url='../link/selectPage.html?retFn=getSelectPage';
+		    var title="页面选择";
+		    var iTop = (window.screen.availHeight-30-dialogHeight)/2; //获得窗口的垂直位置;
+			var iLeft = (window.screen.availWidth-10-dialogWidth)/2; //获得窗口的水平位置;
+		    var option="height="+dialogHeight+",width="+dialogWidth+",top="+iTop+",left="+iLeft+",toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no";
+		    window.open(url,title,option);
+		}
+		//回调返回选中页面
+		function getSelectPage(treeNode)
+		{
+		    $("#url").val('/glaf/mx/form/page/viewPage');
+		    var pageTr=$(".type").parent().parent();
+		    if(pageTr!=null)
+		    {
+		    $.each(pageTr,function(i,obj){
+		    obj.remove();
+		    });
+		    }
+		    //异步获取页面参数
+			$
+			 .ajax({
+				url : "/glaf/rs/form/formRuleProperty/viewPgComPrRule/"+treeNode.id+"/page/pageParameters",
+				type : "post",
+				async : false,
+				dataType : "json",
+				success : function(data) {
+					if (data) {
+						var ruleJson=eval(data);
+						var paramJson=eval(ruleJson.value);
+						addPageParamRow('id',treeNode.id);
+						//循环
+						if(paramJson!=null){
+						$.each(paramJson, function(i,obj) {
+						 if(obj!=null)
+						 {
+					     obj.text || (obj.text = obj.param);
+						 addPageParamRow(obj.text,obj.name); 
+						 var newNode = {name:obj.text,value:obj.text,code:obj.id};
+						 map.put(obj.text, newNode);
+						 }
+						});
+						} 
+					}
+				},
+				error : function() {
+					
+				}
+
+			});
+
+		}
+	</script>
+</body>
+</html>

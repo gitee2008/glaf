@@ -4,14 +4,19 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>${sys_title}</title>
 </head>
-<frameset rows="55,*,31" cols="*" frameborder="no" border="0" framespacing="0">
-  <frame src="${contextPath}/my/main/top?menu=true" name="topFrame" scrolling="no" noresize="noresize" id="topFrame" title="topFrame" />
+<frameset rows="62,*,30" cols="*" frameborder="no" border="0" framespacing="0">
+  <frame src="${contextPath}/my/main/top?menu=true" name="topFrame" scrolling="no" noresize="noresize" 
+         id="topFrame" title="topFrame" />
   <frameset cols="187,*" frameborder="no" border="0" framespacing="0">
-    <frame src="${contextPath}/my/main/left" name="leftFrame" scrolling="no" noresize="noresize" id="leftFrame" title="leftFrame" />
+    <frame src="${contextPath}/my/main/left" name="leftFrame" scrolling="no" noresize="noresize" 
+	       id="leftFrame" title="leftFrame" />
     <frame src="${contextPath}/my/main/content?menu=true" name="rightFrame" id="rightFrame" title="rightFrame" />
   </frameset>
-  <frame src="${contextPath}/my/main/footer" name="bottomFrame" scrolling="no" noresize="noresize" id="bottomFrame" title="bottomFrame" />
+  <frame src="${contextPath}/my/main/footer" name="bottomFrame" scrolling="no" noresize="noresize" 
+         id="bottomFrame" title="bottomFrame" />
 </frameset>
-<noframes><body>
-</body></noframes>
+<noframes>
+<body>
+</body>
+</noframes>
 </html>

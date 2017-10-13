@@ -25,7 +25,7 @@
 						{title:'标题',field:'title', width:180},
 						{title:'是否启用',field:'locked', width:90, formatter:formatterLock},
 						{title:'创建人',field:'createBy', width:120},
-						{title:'创建时间',field:'createTime', width:120},
+						{title:'创建时间',field:'createTime_datetime', width:120},
 						{field:'functionKey',title:'功能键',width:120, formatter:formatterKeys}
 				]],
 				rownumbers: false,

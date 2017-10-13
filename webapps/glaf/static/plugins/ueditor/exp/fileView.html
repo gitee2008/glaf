@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<script type="text/javascript" src="../third-party/jquery-1.10.2.min.js"></script>
+	<!--internal.js默认是放到dialogs目录下的-->
+	<!--页面中一定要引入internal.js为了能直接使用当前打开dialog的实例变量-->
+	<script type="text/javascript" src="../dialogs/internal.js"></script>
+	<script type="text/javascript" src="fileView.js"></script>
+	<!-- ztree  -->
+	<link rel="stylesheet" href="../../ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+	<script type="text/javascript" src="../../ztree/js/jquery.ztree.core.min.js"></script>
+	<script type="text/javascript" src="../../map.js"></script>
+	<script type="text/javascript" src="../../expression.js"></script>
+	<style>
+		.row{
+			height: 25px;
+		}
+		.rowName{
+			width : 88px;
+			display:inline-block
+		}
+	</style>
+</head>
+<body>
+	<div class="content">
+	    <h1>文件预览配置</h1>
+	</div>
+	<div class="treediv" style="float:left;width:260px;" ><ul id="tree" class="ztree" style=""></ul></div>
+	<div style="float:left;">
+		<div class="row" ><span class="rowName">显示名称:</span><input id="field" onKeydown="savePos(this)" onKeyup="savePos(this)" onmousedown="savePos(this)" onmouseup="savePos(this)"></div>
+		<div class="row" ><span class="rowName">字段值:</span><input id="value" onKeydown="savePos(this)" onKeyup="savePos(this)" onmousedown="savePos(this)" onmouseup="savePos(this)"></div>
+		<div class="row">
+			<span class="rowName">模式选择:</span><select id="model" onchange="changefunc(this)"> 
+				<option value="FTP">FTP</option>
+				<option value="SOA">SOA服务</option>
+				<option value="ATTA">附件表</option>
+				<option value="General">常规</option>
+				<option value="multi">多文件显示</option>
+				</select>
+		</div>
+		<div class="row ftprow">
+			<span class="rowName">FTP服务器：</span><input id="ftpserver" type="text" onclick="window.open('/glaf/mx/form/defined/ex/FTPServer?nameElementId=ftpserver&objelementId=ftpserverhidden');">
+			<input id="ftpserverhidden" type="hidden" >
+		</div>
+		<div class="row soarow" style="display:none;">
+			<span class="rowName">SOA服务器：</span><input id="soaserver" type="text" onclick="window.open('/glaf/mx/form/defined/ex/SOAServer?nameElementId=soaserver&objelementId=soaserverhidden');">
+			<input id="soaserverhidden" type="hidden" >
+		</div>
+		<div class="row keyrow" ><span class="rowName">主键字段:</span><input id="keyField" onKeydown="savePos(this)" onKeyup="savePos(this)" onmousedown="savePos(this)" onmouseup="savePos(this)"></div>
+		<div class="row urlrow"><span class="rowName">路径保存字段:</span><input id="urlField" onKeydown="savePos(this)" onKeyup="savePos(this)" onmousedown="savePos(this)" onmouseup="savePos(this)"></div>
+		<div class="row splitrow"><span class="rowName">分隔符:</span><input id="splitField"></div>
+		<div class="row soaFilePathRow" style="display:none;"><span class="rowName">SOA文件路径:</span><input id="soaFilePath" onKeydown="savePos(this)" onKeyup="savePos(this)" onmousedown="savePos(this)" onmouseup="savePos(this)"></div>
+	</div>
+<script type="text/javascript" > 
+		function changefunc(e){
+			var $this = $(e),selectVal = $this.val();
+			if(selectVal=="FTP"){
+				$('.keyrow').show();
+				$('.ftprow').show();
+				$('.soarow').hide();
+				$('.soaFilePathRow').hide();
+				$('.urlrow').show();
+				$('#splitrow').hide();
+				$('#splitField').val("");
+			}else if(selectVal=="SOA"){
+				$('.keyrow').hide();
+				$('.ftprow').hide();
+				$('.soarow').show();
+				$('.soaFilePathRow').show();
+				$('.urlrow').hide();
+				$('#splitrow').hide();
+				$('#splitField').val("");
+			}else if(selectVal=="ATTA"){
+				$('.keyrow').hide();
+				$('#keyField').val('');
+				$('.ftprow').hide();
+				$('.soarow').hide();
+				$('.soaFilePathRow').hide();
+				$('#ftpserver').val('');
+				$('#ftpserverhidden').val('');
+				$('.urlrow').hide();
+				$('#urlField').val('');
+				$('#splitrow').hide();
+				$('#splitField').val("");
+			}else if(selectVal=="General"){
+				$('.keyrow').show();
+				$('#keyField').val('');
+				$('.ftprow').hide();
+				$('.soarow').hide();
+				$('.soaFilePathRow').hide();
+				$('#ftpserver').val('');
+				$('#ftpserverhidden').val('');
+				$('.urlrow').show();
+				$('#urlField').val('');
+				$('#splitrow').hide();
+				$('#splitField').val("");
+			}else if(selectVal == "multi"){
+				$('.keyrow').show();
+				$('#keyField').val('');
+				$('.ftprow').show();
+				$('.soarow').hide();
+				$('.soaFilePathRow').hide();
+				$('#ftpserver').val('');
+				$('#ftpserverhidden').val('');
+				$('.urlrow').show();
+				$('#urlField').val('');
+				
+				$('#splitrow').show();
+				$('#splitField').val("");
+			}
+		}
+		//获取父页面值初始化下拉列表
+		//获取参数
+		var paramData = window.parent.paramzNodes;
+		//获取字段
+		var fieldData = window.parent.fieldzNodes;
+		//获取变量
+		var varData = window.parent.varzNodes;
+		var setting = {
+			data : {
+				key : {
+					title : "t"
+				},
+				simpleData : {
+					enable : true
+				}
+			},
+			callback : {
+				//声明单击回调事件
+				beforeClick : beforeClick
+			}
+		};
+		var nodes = [ {
+			id : 1,
+			pId : 0,
+			name : "变量",
+			open : true,
+			isParent : true
+		}, {
+			id : 2,
+			pId : 0,
+			name : "参数",
+			open : true,
+			isParent : true
+		}, {
+			id : 3,
+			pId : 0,
+			name : "字段",
+			open : true,
+			isParent : true
+		}, ];
+		//用于记录选中的对象
+		var map = new Map();
+		//单击回调事件
+		function beforeClick(treeId, treeNode) {
+			var zTree = $.fn.zTree.getZTreeObj(treeId);
+			//如果是父节点单击则展开，如果是叶子节点单击则在输入框中插入相应的表达式
+			if (treeNode.isParent) {
+				zTree.expandNode(treeNode);
+				return false;
+			} else {		
+				
+				map.put(treeNode.value, treeNode);
+				if(cursorObj){
+					insertAtCursor(cursorObj,treeNode.value);
+					cursorObj = null ;
+				}
+               // $('#url').val(treeNode.value);
+				
+				//调用父页面
+				parent.map.put(treeNode.value, treeNode);
+				return true;
+			}
+		}
+		$.fn.zTree.init($("#tree"), setting, nodes);
+		var zTree = $.fn.zTree.getZTreeObj("tree");
+		zTree.addNodes(zTree.getNodeByTId("1"), varData);
+		zTree.addNodes(zTree.getNodeByTId("2"), paramData);
+		zTree.addNodes(zTree.getNodeByTId("3"), fieldData);
+	</script>
+</body>
+</html>

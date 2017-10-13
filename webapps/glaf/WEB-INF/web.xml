@@ -22,10 +22,6 @@
 	</context-param>
 
 	<listener>
-		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
-	</listener>
-
-	<listener>
 		<listener-class>com.glaf.core.context.StartupListener</listener-class>
 	</listener>
 
@@ -38,7 +34,7 @@
 	</listener>
 
 	<!-- delegatingFilterProxy -->
-	<filter>
+	<!-- <filter>
 		<filter-name>springSessionRepositoryFilter</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
@@ -46,7 +42,7 @@
 	<filter-mapping>
 		<filter-name>springSessionRepositoryFilter</filter-name>
 		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+	</filter-mapping> -->
 
 
 	<filter>
@@ -147,6 +143,16 @@
 		<servlet-class>com.glaf.base.servlet.InitBaseDataServlet</servlet-class>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
+
+	<servlet>
+		<servlet-name>imageResource</servlet-name>
+		<servlet-class>com.glaf.matrix.data.web.servlet.ImageDispatcherServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>imageResource</servlet-name>
+		<url-pattern>/ueditor/upload/*</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
        <servlet-name>DruidStatView</servlet-name>
