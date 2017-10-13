@@ -1,0 +1,52 @@
+
+<mapping>
+    <entity name="Database" package="com.glaf.core" moduleName="apps" table="SYS_DATABASE" title="Database" englishTitle="Database">
+        <id name="id" column="ID_" type="Long" title="Id" englishTitle="Id" length="255"/>
+        <property name="nodeId" column="NODEID_" type="Long" title="NodeId" englishTitle="NodeId" editable="true"/>
+        <property name="name" column="NAME_" type="String" title="Name" englishTitle="Name" length="200" editable="true"/>
+        <property name="code" column="CODE_" type="String" title="Code" englishTitle="Code" length="50" editable="true"/>
+        <property name="discriminator" column="DISCRIMINATOR_" type="String" title="Discriminator" englishTitle="Discriminator" length="10" editable="true"/>
+        <property name="mapping" column="MAPPING_" type="String" title="Mapping" englishTitle="Mapping" length="50" editable="true"/>
+        <property name="section" column="SECTION_" type="String" title="Section" englishTitle="Section" length="50" editable="true"/>
+        <property name="title" column="TITLE_" type="String" title="Title" englishTitle="Title" length="100" editable="true"/>
+        <property name="host" column="HOST_" type="String" title="Host" englishTitle="Host" length="100" editable="true"/>
+        <property name="port" column="PORT_" type="Integer" title="Port" englishTitle="Port" editable="true"/>
+        <property name="user" column="USER_" type="String" title="User" englishTitle="User" length="50" editable="true"/>
+        <property name="password" column="PASSWORD_" type="String" title="Password" englishTitle="Password" length="100" editable="true"/>
+        <property name="key" column="KEY_" type="String" title="Key" englishTitle="Key" length="1024" editable="true"/>
+		<property name="intToken" column="INTTOKEN_" type="Integer" title="IntToken" englishTitle="IntToken" editable="true"/>
+        <property name="type" column="TYPE_" type="String" title="Type" englishTitle="Type" length="50" editable="true"/>
+        <property name="runType" column="RUNTYPE_" type="String" title="RunType" englishTitle="RunType" length="50" editable="true"/>
+        <property name="level" column="LEVEL_" type="Integer" title="Level" englishTitle="Level" editable="true"/>
+        <property name="priority" column="PRIORITY_" type="Integer" title="Priority" englishTitle="Priority" editable="true"/>
+        <property name="operation" column="OPERATION_" type="Integer" title="Operation" englishTitle="Operation" editable="true"/>
+		<property name="catalog" column="CATALOG_" type="String" title="Catalog" englishTitle="Catalog" length="50" editable="true"/>
+		<property name="infoServer" column="INFOSERVER_" type="String" title="InfoServer" englishTitle="InfoServer" length="50" editable="true"/>
+		<property name="loginAs" column="LOGINAS_" type="String" title="LoginAs" englishTitle="LoginAs" length="50" editable="true"/>
+		<property name="loginUrl" column="LOGINURL_" type="String" title="LoginUrl" englishTitle="LoginUrl" length="250" editable="true"/>
+		<property name="ticket" column="TICKET_" type="String" title="Ticket" englishTitle="Ticket" length="100" 
+		          editable="true"/>
+		<property name="programId" column="PROGRAMID_" type="String" title="ProgramId" englishTitle="ProgramId" 
+		          length="250" editable="true"/>
+		<property name="programName" column="PROGRAMNAME_" type="String" title="ProgramName" englishTitle="ProgramName" 
+		          length="250" editable="true"/>
+		<property name="userNameKey" column="USERNAMEKEY_" type="String" title="UserNameKey" englishTitle="UserNameKey" 
+		          length="100" editable="true"/>
+        <property name="dbname" column="DBNAME_" type="String" title="Dbname" englishTitle="Dbname" length="50" editable="true"/>
+        <property name="active" column="ACTIVE_" type="String" title="Active" englishTitle="Active" length="10" editable="true"/>
+        <property name="verify" column="VERIFY_" type="String" title="Verify" englishTitle="Verify" length="10" editable="true"/>
+        <property name="initFlag" column="INITFLAG_" type="String" title="InitFlag" englishTitle="InitFlag" length="10" editable="true"/>
+        <property name="providerClass" column="PROVIDERCLASS_" type="String" title="ProviderClass" englishTitle="ProviderClass" length="100" editable="true"/>
+        <property name="remoteUrl" column="REMOTEURL_" type="String" title="RemoteUrl" englishTitle="RemoteUrl" length="500" editable="true"/>
+		<property name="token" column="TOKEN_" type="String" title="Token" englishTitle="Token" length="200" editable="true"/>
+		<property name="serverId" column="SERVERID_" type="Long" title="ServerId" englishTitle="ServerId" editable="true"/>
+		<property name="sysId" column="SYSID_" type="String" title="SysId" englishTitle="SysId" length="50" editable="true"/>
+		<property name="queueName" column="QUEUENAME_" type="String" title="QueueName" englishTitle="QueueName" length="200"
+		          editable="true"/>
+	    <property name="sort" column="SORT_" type="Integer" englishTitle="Sort" editable="true" title="Sort" />
+        <property name="createBy" column="CREATEBY_" type="String" title="CreateBy" englishTitle="CreateBy" length="50" editable="true"/>
+        <property name="createTime" column="CREATETIME_" type="Date" title="CreateTime" englishTitle="CreateTime" editable="true"/>
+        <property name="updateBy" column="UPDATEBY_" type="String" title="UpdateBy" englishTitle="UpdateBy" length="50" editable="true"/>
+        <property name="updateTime" column="UPDATETIME_" type="Date" title="UpdateTime" englishTitle="UpdateTime" editable="true"/>
+    </entity>
+</mapping>
