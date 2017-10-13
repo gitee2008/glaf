@@ -31,7 +31,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.codec.binary.Base64;
@@ -248,17 +247,15 @@ public class RequestUtils {
 		String actorId = null;
 		String ip = getIPAddress(request);
 		ip = DigestUtils.md5Hex(ip + SystemConfig.getIntToken());
-		HttpSession session = request.getSession(false);
-		// logger.debug("session is null --->" + (session == null));
-		if (session != null) {
-			String value = (String) session.getAttribute(Constants.LOGIN_INFO);
-			// logger.debug("session login_info value --->" + (session ==
-			// null));
-			Map<String, String> cookieMap = decodeValues(ip, value);
-			// if (StringUtils.equals(cookieMap.get(Constants.LOGIN_IP), ip)) {
-			actorId = cookieMap.get(Constants.LOGIN_ACTORID);
-			logger.debug("#actorId=" + actorId);
-			// }
+
+		String authString = request.getHeader(Constants.AUTH_NAME);
+		if (StringUtils.isNotEmpty(authString)) {
+			Map<String, String> dataMap = decodeValues(ip, authString);
+			String time = dataMap.get(Constants.TS);
+			long now = System.currentTimeMillis();
+			if (StringUtils.isNumeric(time) && (now - Long.parseLong(time)) < COOKIE_LIVING_SECONDS * 1000) {
+				actorId = dataMap.get(Constants.LOGIN_ACTORID);
+			}
 		}
 
 		if (actorId == null) {
@@ -363,13 +360,15 @@ public class RequestUtils {
 		}
 		String ip = getIPAddress(request);
 		ip = DigestUtils.md5Hex(ip + SystemConfig.getIntToken());
-		HttpSession session = request.getSession(false);
-		if (session != null) {
-			String value = (String) session.getAttribute(Constants.LOGIN_INFO);
-			Map<String, String> cookieMap = decodeValues(ip, value);
-			// if (StringUtils.equals(cookieMap.get(Constants.LOGIN_IP), ip)) {
-			currentSystem = cookieMap.get(Constants.SYSTEM_NAME);
-			// }
+
+		String authString = request.getHeader(Constants.AUTH_NAME);
+		if (StringUtils.isNotEmpty(authString)) {
+			Map<String, String> dataMap = decodeValues(ip, authString);
+			String time = dataMap.get(Constants.TS);
+			long now = System.currentTimeMillis();
+			if (StringUtils.isNumeric(time) && (now - Long.parseLong(time)) < COOKIE_LIVING_SECONDS * 1000) {
+				currentSystem = dataMap.get(Constants.SYSTEM_NAME);
+			}
 		}
 
 		if (currentSystem == null) {
@@ -1122,14 +1121,6 @@ public class RequestUtils {
 		String actorId = null;
 		String ip = getIPAddress(request);
 		ip = DigestUtils.md5Hex(ip + SystemConfig.getIntToken());
-		HttpSession session = request.getSession(false);
-		if (session != null) {
-			String value = (String) session.getAttribute(Constants.LOGIN_INFO);
-			Map<String, String> cookieMap = decodeValues(ip, value);
-			// if (StringUtils.equals(cookieMap.get(Constants.LOGIN_IP), ip)) {
-			actorId = cookieMap.get(Constants.LOGIN_ACTORID);
-			// }
-		}
 
 		if (StringUtils.isNotEmpty(actorId)) {
 			return IdentityFactory.getLoginContext(actorId);
@@ -1258,11 +1249,18 @@ public class RequestUtils {
 				}
 			}
 		}
+	}
 
-		HttpSession session = request.getSession(false);
-		if (session != null) {
-			session.removeAttribute(Constants.LOGIN_INFO);
-			session.invalidate();
+	public static void setCurrentUser(HttpServletRequest request, HttpServletResponse response, String systemName,
+			String actorId) {
+		String ip = getIPAddress(request);
+		ip = DigestUtils.md5Hex(ip + SystemConfig.getIntToken());
+		String value = encodeValues(ip, systemName, actorId);
+		logger.debug("value->" + value);
+		try {
+			response.addHeader(Constants.AUTH_NAME, value);
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 
@@ -1272,10 +1270,6 @@ public class RequestUtils {
 		ip = DigestUtils.md5Hex(ip + SystemConfig.getIntToken());
 		String value = encodeValues(ip, systemName, actorId);
 		logger.debug("value->" + value);
-		HttpSession session = request.getSession(false);
-		if (session != null) {
-			session.setAttribute(Constants.LOGIN_INFO, value);
-		}
 		try {
 			Cookie cookie = new Cookie(Constants.COOKIE_NAME, value);
 			cookie.setPath("/");

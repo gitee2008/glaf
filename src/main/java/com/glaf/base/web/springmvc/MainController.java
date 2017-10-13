@@ -20,7 +20,6 @@ package com.glaf.base.web.springmvc;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,11 +38,6 @@ public class MainController {
 	@RequestMapping
 	public void mainPage(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) throws Exception {
 		logger.debug("-----------------------main page-------------------------");
-		HttpSession session = request.getSession(false);
-		if (session == null) {
-			response.sendRedirect(request.getContextPath() + "/login");
-			return;
-		}
 
 		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		if (loginContext == null) {

@@ -30,6 +30,8 @@ public class ContextUtil {
 
 	protected static ConcurrentMap<String, AtomicInteger> accessCounter = new ConcurrentHashMap<String, AtomicInteger>();
 
+	protected static ConcurrentMap<String, AtomicInteger> loginCounter = new ConcurrentHashMap<String, AtomicInteger>();
+
 	private static volatile ConcurrentMap<Object, Object> dataMap = new ConcurrentHashMap<Object, Object>();
 
 	public static void clear() {
@@ -64,6 +66,23 @@ public class ContextUtil {
 			AtomicInteger total = accessCounter.get(key);
 			total.incrementAndGet();
 			accessCounter.put(key, total);
+			return total.get();
+		}
+	}
+
+	public static int increaseUser(String userId) {
+		if ((StringUtils.equalsIgnoreCase(userId, "admin") || StringUtils.startsWithIgnoreCase(userId, "test"))) {
+			return 0;
+		}
+		String key = userId;
+		if (loginCounter.get(key) == null) {
+			AtomicInteger total = new AtomicInteger(1);
+			loginCounter.put(key, total);
+			return total.get();
+		} else {
+			AtomicInteger total = loginCounter.get(key);
+			total.incrementAndGet();
+			loginCounter.put(key, total);
 			return total.get();
 		}
 	}

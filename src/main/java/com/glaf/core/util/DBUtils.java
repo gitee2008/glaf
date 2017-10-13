@@ -2123,13 +2123,16 @@ public class DBUtils {
 		if (sql.indexOf("sys_user") != -1) {
 			isLegal = false;
 		}
-		if (sql.indexOf("SYS_KEY") != -1) {
+		if (sql.indexOf("sys_key") != -1) {
 			isLegal = false;
 		}
-		if (sql.indexOf("SYS_SERVER") != -1) {
+		if (sql.indexOf("sys_server") != -1) {
 			isLegal = false;
 		}
-		if (sql.indexOf("SYS_PROPERTY") != -1) {
+		if (sql.indexOf("sys_property") != -1) {
+			isLegal = false;
+		}
+		if (sql.indexOf("sys_identity_token") != -1) {
 			isLegal = false;
 		}
 
@@ -2146,6 +2149,8 @@ public class DBUtils {
 		} else if (StringUtils.equalsIgnoreCase(tableName, "SYS_SERVER")) {
 			return false;
 		} else if (StringUtils.equalsIgnoreCase(tableName, "SYS_KEY")) {
+			return false;
+		} else if (StringUtils.equalsIgnoreCase(tableName, "SYS_IDENTITY_TOKEN")) {
 			return false;
 		}
 		return true;

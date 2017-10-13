@@ -143,6 +143,7 @@ public class SpringDispatcherServlet extends DispatcherServlet {
 				request.setCharacterEncoding("UTF-8");
 				response.setCharacterEncoding("UTF-8");
 			}
+			RequestUtils.setCurrentUser(request, response, Environment.getCurrentSystemName(), actorId);
 			super.doService(request, response);
 		} finally {
 			if (!StringUtils.startsWith(ipAddr, "192.168.")) {

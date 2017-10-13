@@ -697,8 +697,7 @@ public final class StringTools {
 	}
 
 	public static String getRandomString(int length) {
-		StringBuilder buffer = new StringBuilder(
-				"1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()[]|");
+		StringBuilder buffer = new StringBuilder("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 		StringBuilder sb = new StringBuilder();
 		Random random = new Random();
 		int range = buffer.length();

@@ -20,13 +20,13 @@ package com.glaf.base.handler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.glaf.base.config.BaseConfiguration;
+import com.glaf.base.modules.sys.model.IdentityToken;
 import com.glaf.base.modules.sys.model.SysUser;
 import com.glaf.base.modules.sys.service.AuthorizeService;
 import com.glaf.base.online.service.UserOnlineLogService;
@@ -43,7 +43,7 @@ public class PasswordLoginHandler implements LoginHandler {
 	private static Configuration conf = BaseConfiguration.create();
 
 	@Override
-	public SysUser doLogin(HttpServletRequest request, HttpServletResponse response) {
+	public SysUser doLogin(HttpServletRequest request, HttpServletResponse response, IdentityToken token) {
 		logger.debug("----------------------PasswordLoginHandler--------------------");
 		String account = ParamUtil.getParameter(request, "x");
 		String password = ParamUtil.getParameter(request, "y");
@@ -51,9 +51,8 @@ public class PasswordLoginHandler implements LoginHandler {
 		password = RSAUtils.decryptBase64String(password, "RSA/None/PKCS1Padding");
 		// logger.debug("----pwd:" + password);
 
-		HttpSession session = request.getSession(false);
-		String rand = (String) session.getAttribute("x_y");
-		String rand2 = (String) session.getAttribute("x_z");
+		String rand = token.getRand1();
+		String rand2 = token.getRand2();
 
 		// logger.debug("----rand:" + rand);
 		// logger.debug("----rand2:" + rand2);

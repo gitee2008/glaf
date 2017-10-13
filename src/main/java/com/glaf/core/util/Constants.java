@@ -37,6 +37,8 @@ public final class Constants {
 	public static final String USER_CACHE = "cache_user_";
 
 	public final static String COOKIE_NAME = "GLAF_COOKIE";
+	
+	public final static String AUTH_NAME = "GLAF_AUTH";
 
 	public final static String LOGIN_INFO = "LOGIN_INFO";
 

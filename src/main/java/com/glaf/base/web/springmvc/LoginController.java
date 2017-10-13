@@ -26,7 +26,6 @@ import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -39,11 +38,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.glaf.base.callback.LoginCallbackThread;
-import com.glaf.base.config.BaseConfiguration;
 import com.glaf.base.handler.LoginHandler;
 import com.glaf.base.handler.PasswordLoginHandler;
 import com.glaf.base.modules.sys.SysConstants;
+import com.glaf.base.modules.sys.model.IdentityToken;
 import com.glaf.base.modules.sys.model.SysUser;
+import com.glaf.base.modules.sys.service.IdentityTokenService;
 import com.glaf.base.modules.sys.service.SysUserService;
 import com.glaf.base.online.domain.UserOnline;
 import com.glaf.base.online.service.UserOnlineService;
@@ -51,19 +51,21 @@ import com.glaf.base.utils.ContextUtil;
 import com.glaf.base.utils.ParamUtil;
 
 import com.glaf.core.cache.CacheFactory;
-import com.glaf.core.config.Configuration;
 import com.glaf.core.config.Environment;
 import com.glaf.core.config.SystemConfig;
 import com.glaf.core.domain.SystemProperty;
+import com.glaf.core.identity.User;
 import com.glaf.core.security.IdentityFactory;
 import com.glaf.core.security.LoginContext;
 import com.glaf.core.security.RSAUtils;
 import com.glaf.core.util.ClassUtils;
 import com.glaf.core.util.Constants;
+import com.glaf.core.util.DateUtils;
 import com.glaf.core.util.IOUtils;
 import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.ResponseUtils;
 import com.glaf.core.util.StringTools;
+import com.glaf.core.util.UUID32;
 import com.glaf.core.web.callback.CallbackProperties;
 import com.glaf.core.web.callback.LoginCallback;
 
@@ -72,11 +74,11 @@ import com.glaf.core.web.callback.LoginCallback;
 public class LoginController {
 	private static final Log logger = LogFactory.getLog(LoginController.class);
 
-	private static Configuration conf = BaseConfiguration.create();
+	protected SysUserService sysUserService;
 
-	private SysUserService sysUserService;
+	protected UserOnlineService userOnlineService;
 
-	private UserOnlineService userOnlineService;
+	protected IdentityTokenService identityTokenService;
 
 	/**
 	 * 登录
@@ -88,7 +90,7 @@ public class LoginController {
 	@RequestMapping("/doLogin")
 	public ModelAndView doLogin(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) {
 		logger.debug("---------------------doLogin--------------------");
-		HttpSession session = request.getSession(false);
+
 		RequestUtils.setRequestParameterToAttribute(request);
 
 		String systemName = ParamUtil.getParameter(request, Constants.SYSTEM_NAME);
@@ -107,9 +109,12 @@ public class LoginController {
 		String account = ParamUtil.getParameter(request, "x");
 		String password2 = ParamUtil.getParameter(request, "y");
 
+		String tk = request.getParameter("token");
+		IdentityToken token = identityTokenService.getIdentityTokenByToken(tk);
+
 		SysUser bean = null;
 		if (StringUtils.isNotEmpty(account) && StringUtils.isNotEmpty(password2)) {
-			if (session == null) {
+			if (token == null) {
 				if (StringUtils.isNotEmpty(responseDataType) && StringUtils.equals(responseDataType, "json")) {
 					OutputStream output = null;
 					try {
@@ -129,8 +134,8 @@ public class LoginController {
 				return new ModelAndView("/login/login", modelMap);
 			}
 
-			String rand = (String) session.getAttribute("x_y");
-			String rand2 = (String) session.getAttribute("x_z");
+			String rand = token.getRand1();
+			String rand2 = token.getRand2();
 
 			if (StringUtils.isEmpty(rand) && StringUtils.isEmpty(rand2)) {
 				if (StringUtils.isNotEmpty(responseDataType) && StringUtils.equals(responseDataType, "json")) {
@@ -152,9 +157,9 @@ public class LoginController {
 				return new ModelAndView("/login/login", modelMap);
 			}
 			LoginHandler handler = new PasswordLoginHandler();
-			bean = handler.doLogin(request, response);
-			session.removeAttribute("x_y");// 一次性失效，用一次即过期
-			session.removeAttribute("x_z");
+			bean = handler.doLogin(request, response, token);
+
+			identityTokenService.deleteById(token.getId());// 一次性令牌，登录成功即删除
 		}
 
 		if (bean == null) {
@@ -243,8 +248,6 @@ public class LoginController {
 				}
 			}
 
-			session = request.getSession(true);// 重写Session
-
 			// 登录成功，修改最近一次登录时间
 			bean.setLastLoginDate(new Date());
 			bean.setLastLoginIP(ipAddr);
@@ -269,7 +272,6 @@ public class LoginController {
 				online.setCheckDate(new Date());
 				online.setLoginDate(new Date());
 				online.setLoginIP(ipAddr);
-				online.setSessionId(session.getId());
 				userOnlineService.login(online);
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -344,94 +346,49 @@ public class LoginController {
 	@RequestMapping("/getLoginSecurityKey")
 	public void getLoginSecurityKey(HttpServletRequest request, HttpServletResponse response) {
 		JSONObject json = new JSONObject();
-		OutputStream output = null;
-		try {
-			HttpSession session = request.getSession(true);
-			java.util.Random random = new java.util.Random();
-			String rand = StringTools.getRandomString(random.nextInt(50));
-			String rand2 = StringTools.getRandomString(random.nextInt(50));
-			if (session != null) {
-				session.setAttribute("x_y", rand);
-				session.setAttribute("x_z", rand2);
-				json.put("x_y", rand);
-				json.put("x_z", rand2);
-				json.put("public_key", RSAUtils.getDefaultRSAPublicKey());
-			}
-
-			request.setCharacterEncoding("UTF-8");
-			response.setCharacterEncoding("UTF-8");
-			response.setContentType("application/json; charset=UTF-8");
-			output = response.getOutputStream();
-			output.write(json.toJSONString().getBytes("UTF-8"));
-			output.flush();
-			// logger.debug("----------------------------getLoginSecurityKey--------------");
-			// logger.debug(json.toJSONString());
-			return;
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		} finally {
-			IOUtils.closeStream(output);
-		}
-	}
-
-	/**
-	 * 登录
-	 * 
-	 * @param request
-	 * @param modelMap
-	 * @return
-	 */
-	@RequestMapping("/login")
-	public ModelAndView login(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) {
-		String ip = RequestUtils.getIPAddress(request);
-		/**
-		 * 允许从指定的机器上通过用户名密码登录
-		 */
-		if (StringUtils.contains(conf.get("login.allow.ip", "127.0.0.1"), ip)
-				|| StringUtils.contains(SystemConfig.getString("login.allow.ip", "127.0.0.1"), ip)) {
-			String actorId = request.getParameter("x");
-			String password = request.getParameter("y");
-			HttpSession session = request.getSession(true);
-			java.util.Random random = new java.util.Random();
-			String rand = StringTools.getRandomString(random.nextInt(50));
-			String rand2 = StringTools.getRandomString(random.nextInt(50));
-			session = request.getSession(true);
-			if (session != null) {
-				session.setAttribute("x_y", rand);
-				session.setAttribute("x_z", rand2);
-			}
-			String url = request.getContextPath() + "/login/doLogin?x=" + actorId + "&y=" + rand + password + rand2;
+		String userId = request.getParameter("userId");
+		logger.debug("userId:" + userId);
+		if (StringUtils.isNotEmpty(userId)) {
+			OutputStream output = null;
 			try {
-				response.sendRedirect(url);
-				return null;
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-		}
+				User user = IdentityFactory.getUser(userId);
+				if (user != null && ContextUtil.increaseUser(userId) < 500) {
+					IdentityToken identityToken = new IdentityToken();
+					java.util.Random random = new java.util.Random();
+					String rand1 = StringTools.getRandomString(random.nextInt(50));
+					String rand2 = StringTools.getRandomString(random.nextInt(50));
+					String ip = RequestUtils.getIPAddress(request);
+					identityToken.setId(DateUtils.getNowYearMonthDay() + "_" + userId + "_" + ip);
+					identityToken.setClientIP(ip);
+					identityToken.setNonce(UUID32.getUUID());
+					identityToken.setRand1(rand1);
+					identityToken.setRand2(rand2);
+					identityToken.setTimeLive(30);// 30秒
+					identityToken.setToken(StringTools.getRandomString(random.nextInt(100)));
+					identityToken.setType("Login");
+					this.identityTokenService.save(identityToken);
 
-		String userId = ParamUtil.getParameter(request, "userId");
-		String token = ParamUtil.getParameter(request, "token");
+					json.put("x_y", rand1);
+					json.put("x_z", rand2);
+					json.put("token", identityToken.getToken());
+					json.put("public_key", RSAUtils.getDefaultRSAPublicKey());
 
-		if (StringUtils.isNotEmpty(userId) && StringUtils.isNotEmpty(token)) {
-			return this.doLogin(request, response, modelMap);
-		}
-
-		String login_html = SystemConfig.getString("login_html");
-		if (StringUtils.isNotEmpty(login_html) && (StringUtils.endsWithIgnoreCase(login_html, ".html")
-				|| StringUtils.endsWithIgnoreCase(login_html, ".htm"))) {
-			try {
-				if (StringUtils.startsWith(login_html, request.getContextPath())) {
-					response.sendRedirect(login_html);
-				} else {
-					response.sendRedirect(request.getContextPath() + login_html);
+					request.setCharacterEncoding("UTF-8");
+					response.setCharacterEncoding("UTF-8");
+					response.setContentType("application/json; charset=UTF-8");
+					output = response.getOutputStream();
+					output.write(json.toJSONString().getBytes("UTF-8"));
+					output.flush();
+					// logger.debug("----------------------------getLoginSecurityKey--------------");
+					// logger.debug(json.toJSONString());
+					return;
 				}
-				return null;
-			} catch (IOException ex) {
-				ex.printStackTrace();
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			} finally {
+				IOUtils.closeStream(output);
 			}
 		}
-
-		return new ModelAndView("/login/login");
 	}
 
 	/**
@@ -503,15 +460,6 @@ public class LoginController {
 			}
 		}
 
-		HttpSession session = request.getSession(true);
-		java.util.Random random = new java.util.Random();
-		String rand = StringTools.getRandomString(random.nextInt(50));
-		String rand2 = StringTools.getRandomString(random.nextInt(50));
-		if (session != null) {
-			session.setAttribute("x_y", rand);
-			session.setAttribute("x_z", rand2);
-		}
-
 		String view = "/login/login";
 
 		if (StringUtils.isNotEmpty(SystemConfig.getString("login_view"))) {
@@ -530,6 +478,11 @@ public class LoginController {
 	@javax.annotation.Resource
 	public void setUserOnlineService(UserOnlineService userOnlineService) {
 		this.userOnlineService = userOnlineService;
+	}
+
+	@javax.annotation.Resource(name = "com.glaf.base.modules.sys.service.identityTokenService")
+	public void setIdentityTokenService(IdentityTokenService identityTokenService) {
+		this.identityTokenService = identityTokenService;
 	}
 
 }

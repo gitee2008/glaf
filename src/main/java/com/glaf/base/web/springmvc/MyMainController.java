@@ -27,7 +27,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -39,7 +38,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.glaf.base.modules.sys.model.BaseDataInfo;
 import com.glaf.base.modules.sys.model.SysApplication;
 import com.glaf.base.modules.sys.model.TenantConfig;
 import com.glaf.base.modules.sys.service.SysApplicationService;
@@ -73,19 +71,12 @@ public class MyMainController {
 
 	@RequestMapping("/content")
 	public ModelAndView content(HttpServletRequest request, ModelMap modelMap) {
-		HttpSession session = request.getSession(false);
 		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		String actorId = loginContext.getActorId();
 		String context = request.getContextPath();
 		request.setAttribute("contextPath", context);
-		BaseDataInfo themeInfo = session.getAttribute("theme") != null ? (BaseDataInfo) session.getAttribute("theme")
-				: null;
-		String theme = themeInfo != null ? themeInfo.getExt3() : RequestUtils.getTheme(request);
-		String homeTheme = themeInfo != null ? themeInfo.getExt2() : RequestUtils.getHomeTheme(request);
-		request.setAttribute("theme", theme);
-		request.setAttribute("homeTheme", homeTheme);
-		String layoutTheme = themeInfo != null ? themeInfo.getExt1() : RequestUtils.getLayoutTheme(request);
-		request.setAttribute("layoutTheme", layoutTheme);
+		request.setAttribute("homeTheme", "default");
+
 		String indexUrl = LoginContextUtil.getIndexUrl(request);
 		if (!(StringUtils.startsWithIgnoreCase(indexUrl, "http://")
 				|| StringUtils.startsWithIgnoreCase(indexUrl, "https://"))) {
@@ -162,18 +153,9 @@ public class MyMainController {
 
 	@RequestMapping("/footer")
 	public ModelAndView foot(HttpServletRequest request, ModelMap modelMap) {
-		HttpSession session = request.getSession(false);
 		String context = request.getContextPath();
 		request.setAttribute("contextPath", context);
-		BaseDataInfo themeInfo = session.getAttribute("theme") != null ? (BaseDataInfo) session.getAttribute("theme")
-				: null;
-		String theme = themeInfo != null ? themeInfo.getExt3() : RequestUtils.getTheme(request);
-		String homeTheme = themeInfo != null ? themeInfo.getExt2() : RequestUtils.getHomeTheme(request);
-		request.setAttribute("theme", theme);
-		request.setAttribute("homeTheme", homeTheme);
-		String layoutTheme = themeInfo != null ? themeInfo.getExt1() : RequestUtils.getLayoutTheme(request);
-		request.setAttribute("layoutTheme", layoutTheme);
-
+		request.setAttribute("homeTheme", "default");
 		request.setAttribute("res_copyright", SystemConfig.getString("res_copyright"));
 		request.setAttribute("curr_date", new SimpleDateFormat(" yyyy-MM-dd EEEE  ").format(new Date()));
 
@@ -187,17 +169,9 @@ public class MyMainController {
 
 	@RequestMapping("/header")
 	public ModelAndView header(HttpServletRequest request, ModelMap modelMap) {
-		HttpSession session = request.getSession(false);
 		String context = request.getContextPath();
 		request.setAttribute("contextPath", context);
-		BaseDataInfo themeInfo = session.getAttribute("theme") != null ? (BaseDataInfo) session.getAttribute("theme")
-				: null;
-		String theme = themeInfo != null ? themeInfo.getExt3() : RequestUtils.getTheme(request);
-		String homeTheme = themeInfo != null ? themeInfo.getExt2() : RequestUtils.getHomeTheme(request);
-		request.setAttribute("theme", theme);
-		request.setAttribute("homeTheme", homeTheme);
-		String layoutTheme = themeInfo != null ? themeInfo.getExt1() : RequestUtils.getLayoutTheme(request);
-		request.setAttribute("layoutTheme", layoutTheme);
+		request.setAttribute("homeTheme", "default");
 
 		String style = request.getParameter("style");
 		String url = "/my/portal/default/header";
@@ -209,17 +183,9 @@ public class MyMainController {
 
 	@RequestMapping("/left")
 	public ModelAndView left(HttpServletRequest request, ModelMap modelMap) {
-		HttpSession session = request.getSession(false);
 		String context = request.getContextPath();
 		request.setAttribute("contextPath", context);
-		BaseDataInfo themeInfo = session.getAttribute("theme") != null ? (BaseDataInfo) session.getAttribute("theme")
-				: null;
-		String theme = themeInfo != null ? themeInfo.getExt3() : RequestUtils.getTheme(request);
-		String homeTheme = themeInfo != null ? themeInfo.getExt2() : RequestUtils.getHomeTheme(request);
-		request.setAttribute("theme", theme);
-		request.setAttribute("homeTheme", homeTheme);
-		String layoutTheme = themeInfo != null ? themeInfo.getExt1() : RequestUtils.getLayoutTheme(request);
-		request.setAttribute("layoutTheme", layoutTheme);
+		request.setAttribute("homeTheme", "default");
 
 		String style = request.getParameter("style");
 		String url = "/my/portal/default/left";
@@ -233,11 +199,6 @@ public class MyMainController {
 	public ModelAndView mainPage(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap)
 			throws Exception {
 		logger.debug("-----------------------main page-------------------------");
-		HttpSession session = request.getSession(false);
-		if (session == null) {
-			response.sendRedirect(request.getContextPath() + "/login");
-			return null;
-		}
 
 		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		if (loginContext == null) {
@@ -315,7 +276,7 @@ public class MyMainController {
 					userTheme.getHomeThemeStyle());
 			return ResponseUtils.responseJsonResult(true);
 		} catch (Exception ex) {
-			//ex.printStackTrace();
+			// ex.printStackTrace();
 			logger.error("设置主题错误:" + ex.getMessage());
 		}
 		return ResponseUtils.responseJsonResult(false);
@@ -334,27 +295,10 @@ public class MyMainController {
 	@RequestMapping("/top")
 	public ModelAndView top(HttpServletRequest request, ModelMap modelMap) {
 		LoginContext loginContext = RequestUtils.getLoginContext(request);
-		HttpSession session = request.getSession(false);
+
 		String context = request.getContextPath();
 		request.setAttribute("contextPath", context);
-		BaseDataInfo themeInfo = session.getAttribute("theme") != null ? (BaseDataInfo) session.getAttribute("theme")
-				: null;
-		String theme = themeInfo != null ? themeInfo.getExt3() : RequestUtils.getTheme(request);
-		String homeTheme = themeInfo != null ? themeInfo.getExt2() : RequestUtils.getHomeTheme(request);
-		request.setAttribute("theme", theme);
-		request.setAttribute("homeTheme", homeTheme);
-		String layoutTheme = themeInfo != null ? themeInfo.getExt1() : RequestUtils.getLayoutTheme(request);
-		request.setAttribute("layoutTheme", layoutTheme);
-		String hideSysName = themeInfo != null ? themeInfo.getExt4() : "0";
-		request.setAttribute("hideSysName", hideSysName);
-		// 获取logo图片路径
-		String logoPicPath = themeInfo != null ? themeInfo.getDesc() : "";
-		if (StringUtils.isEmpty(logoPicPath)) {
-			logoPicPath = "static/scripts/home/" + homeTheme + "/images/logo.png";
-		} else {
-			logoPicPath = logoPicPath.trim();
-		}
-		request.setAttribute("logoPicPath", logoPicPath);
+		request.setAttribute("homeTheme", "default");
 		request.setAttribute("username", loginContext.getUser().getName());
 		request.setAttribute("sys_title", SystemConfig.getString("res_system_name"));
 

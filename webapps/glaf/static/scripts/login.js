@@ -23,11 +23,12 @@ $(document)
 							map.put("login_status", "login");
 							//$("#loginBt:disabled");
 							delay();
+							var userIdx = document.getElementById("x").value;
 							jQuery
 									.ajax({
 										type : "POST",
 										url : contextPath
-												+ "/login/getLoginSecurityKey",
+												+ "/login/getLoginSecurityKey?userId="+userIdx,
 										dataType : 'json',
 										error : function(data) {
 											// alert('服务器处理错误！');
@@ -53,7 +54,7 @@ $(document)
 
 												var link = contextPath
 														+ "/login/doLogin?x="
-														+ x
+														+ x +"&token="+dataxy.token
 														+ "&responseDataType=json";
 												var params = jQuery("#iForm")
 														.formSerialize();
