@@ -771,6 +771,34 @@ public class DBUtils {
 		}
 	}
 
+	public static void executeBatchSchemaResourceIgnoreException(Connection conn, String ddlStatements) {
+		Statement statement = null;
+		String sqlStatement = null;
+		try {
+			statement = conn.createStatement();
+			StringTokenizer tokenizer = new StringTokenizer(ddlStatements, ";");
+			while (tokenizer.hasMoreTokens()) {
+				sqlStatement = tokenizer.nextToken();
+				if (StringUtils.isNotEmpty(sqlStatement) && !sqlStatement.startsWith("#")) {
+					// logger.debug(sqlStatement);
+					try {
+						// statement.executeUpdate(sqlStatement);
+						statement.addBatch(sqlStatement);
+					} catch (Exception ex) {
+						// logger.error(" execute statement error: " + sqlStatement, ex);
+					} finally {
+						// JdbcUtils.close(statement);
+					}
+				}
+			}
+			statement.executeBatch();
+		} catch (Exception ex) {
+			throw new RuntimeException("execute statement error: " + sqlStatement, ex);
+		} finally {
+			JdbcUtils.close(statement);
+		}
+	}
+
 	public static void executeSchemaResource(Connection conn, String ddlStatements) {
 		Exception exception = null;
 		Statement statement = null;
@@ -801,10 +829,10 @@ public class DBUtils {
 				throw exception;
 			}
 
-			logger.info("execute db schema successful");
+			logger.info("execute statement successful");
 
 		} catch (Exception ex) {
-			throw new RuntimeException("couldn't execute db schema: " + sqlStatement, ex);
+			throw new RuntimeException("execute statement error: " + sqlStatement, ex);
 		} finally {
 			JdbcUtils.close(statement);
 		}
