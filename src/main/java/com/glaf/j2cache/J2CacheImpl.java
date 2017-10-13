@@ -18,9 +18,13 @@
 
 package com.glaf.j2cache;
 
+import java.io.IOException;
+
+import org.apache.commons.codec.binary.Base64;
 import com.glaf.core.cache.Cache;
 
 import net.oschina.j2cache.CacheChannel;
+import net.oschina.j2cache.CacheObject;
 import net.oschina.j2cache.J2Cache;
 
 public class J2CacheImpl implements Cache {
@@ -38,6 +42,20 @@ public class J2CacheImpl implements Cache {
 		if (object != null) {
 			if (object instanceof String) {
 				return (String) object;
+			} else if (object instanceof CacheObject) {
+				CacheObject cacheObject = (CacheObject) object;
+				if (cacheObject.getValue() != null) {
+					if (cacheObject.getValue() instanceof String) {
+						return (String) cacheObject.getValue();
+					} else if (cacheObject.getValue() instanceof byte[]) {
+						byte[] bytes = (byte[]) cacheObject.getValue();
+						try {
+							return new String(Base64.decodeBase64(bytes), "UTF-8");
+						} catch (IOException ex) {
+							return new String(Base64.decodeBase64(bytes));
+						}
+					}
+				}
 			} else {
 				return object.toString();
 			}
@@ -47,7 +65,13 @@ public class J2CacheImpl implements Cache {
 
 	@Override
 	public void put(String region, String key, String value) {
-		this.cache.set(region, key, value);
+		if (value != null) {
+			try {
+				this.cache.set(region, key, Base64.encodeBase64(value.getBytes("UTF-8")));
+			} catch (IOException ex) {
+				this.cache.set(region, key, Base64.encodeBase64(value.getBytes()));
+			}
+		}
 	}
 
 	@Override
