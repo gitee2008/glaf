@@ -107,59 +107,41 @@ public class LoginController {
 
 		// 获取参数
 		String account = ParamUtil.getParameter(request, "x");
-		String password2 = ParamUtil.getParameter(request, "y");
+		String password = ParamUtil.getParameter(request, "y");
 
 		String tk = request.getParameter("token");
 		IdentityToken token = identityTokenService.getIdentityTokenByToken(tk);
 
+		if (token == null) {
+			if (StringUtils.isNotEmpty(responseDataType) && StringUtils.equals(responseDataType, "json")) {
+				OutputStream output = null;
+				try {
+					request.setCharacterEncoding("UTF-8");
+					response.setCharacterEncoding("UTF-8");
+					response.setContentType("application/json; charset=UTF-8");
+					output = response.getOutputStream();
+					byte[] bytes = ResponseUtils.responseJsonResult(10001, "未初始化登录会话。");
+					output.write(bytes);
+					output.flush();
+					return null;
+				} catch (Exception ex) {
+				} finally {
+					IOUtils.closeStream(output);
+				}
+			}
+			return new ModelAndView("/login/login", modelMap);
+		}
+
 		SysUser bean = null;
-		if (StringUtils.isNotEmpty(account) && StringUtils.isNotEmpty(password2)) {
-			if (token == null) {
-				if (StringUtils.isNotEmpty(responseDataType) && StringUtils.equals(responseDataType, "json")) {
-					OutputStream output = null;
-					try {
-						request.setCharacterEncoding("UTF-8");
-						response.setCharacterEncoding("UTF-8");
-						response.setContentType("application/json; charset=UTF-8");
-						output = response.getOutputStream();
-						byte[] bytes = ResponseUtils.responseJsonResult(10001, "未初始化登录会话。");
-						output.write(bytes);
-						output.flush();
-						return null;
-					} catch (Exception e) {
-					} finally {
-						IOUtils.closeStream(output);
-					}
-				}
-				return new ModelAndView("/login/login", modelMap);
+		if (StringUtils.isNotEmpty(account) && StringUtils.isNotEmpty(password)) {
+			try {
+				LoginHandler handler = new PasswordLoginHandler();
+				bean = handler.doLogin(request, response, token);
+			} catch (Exception ex) {
+				logger.error(ex);
+			} finally {
+				identityTokenService.deleteById(token.getId());// 一次性令牌，登录成功即删除
 			}
-
-			String rand = token.getRand1();
-			String rand2 = token.getRand2();
-
-			if (StringUtils.isEmpty(rand) && StringUtils.isEmpty(rand2)) {
-				if (StringUtils.isNotEmpty(responseDataType) && StringUtils.equals(responseDataType, "json")) {
-					OutputStream output = null;
-					try {
-						request.setCharacterEncoding("UTF-8");
-						response.setCharacterEncoding("UTF-8");
-						response.setContentType("application/json; charset=UTF-8");
-						output = response.getOutputStream();
-						byte[] bytes = ResponseUtils.responseJsonResult(10002, "登录信息不正确。");
-						output.write(bytes);
-						output.flush();
-						return null;
-					} catch (Exception e) {
-					} finally {
-						IOUtils.closeStream(output);
-					}
-				}
-				return new ModelAndView("/login/login", modelMap);
-			}
-			LoginHandler handler = new PasswordLoginHandler();
-			bean = handler.doLogin(request, response, token);
-
-			identityTokenService.deleteById(token.getId());// 一次性令牌，登录成功即删除
 		}
 
 		if (bean == null) {
@@ -174,7 +156,7 @@ public class LoginController {
 					output.write(bytes);
 					output.flush();
 					return null;
-				} catch (Exception e) {
+				} catch (Exception ex) {
 				} finally {
 					IOUtils.closeStream(output);
 				}
@@ -296,7 +278,7 @@ public class LoginController {
 							}
 						}
 					} catch (Exception ex) {
-						ex.printStackTrace();
+						// ex.printStackTrace();
 						logger.error(ex);
 					}
 				}
@@ -305,7 +287,7 @@ public class LoginController {
 			LoginContext loginContext = IdentityFactory.getLoginContext(bean.getActorId());
 			logger.debug("actorId:" + RequestUtils.getActorId(request));
 			logger.debug(loginContext.getActorId() + "登录成功。");
-			logger.debug(loginContext.toJsonObject().toJSONString());
+			// logger.debug(loginContext.toJsonObject().toJSONString());
 
 			String redirectUrl = request.getParameter("redirectUrl");
 			if (StringUtils.isNotEmpty(redirectUrl)) {
@@ -338,13 +320,12 @@ public class LoginController {
 			} catch (IOException e) {
 			}
 			return null;
-			// return new ModelAndView("/main/main", modelMap);
 		}
 	}
 
 	@ResponseBody
-	@RequestMapping("/getLoginSecurityKey")
-	public void getLoginSecurityKey(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping("/getToken")
+	public void getToken(HttpServletRequest request, HttpServletResponse response) {
 		JSONObject json = new JSONObject();
 		String userId = request.getParameter("userId");
 		logger.debug("userId:" + userId);
@@ -366,6 +347,7 @@ public class LoginController {
 					identityToken.setTimeLive(30);// 30秒
 					identityToken.setToken(StringTools.getRandomString(random.nextInt(100)));
 					identityToken.setType("Login");
+					identityToken.setUserId(userId);
 					this.identityTokenService.save(identityToken);
 
 					json.put("x_y", rand1);
@@ -379,7 +361,7 @@ public class LoginController {
 					output = response.getOutputStream();
 					output.write(json.toJSONString().getBytes("UTF-8"));
 					output.flush();
-					// logger.debug("----------------------------getLoginSecurityKey--------------");
+					// logger.debug("----------------------------getLoginToken--------------");
 					// logger.debug(json.toJSONString());
 					return;
 				}
@@ -420,7 +402,6 @@ public class LoginController {
 				request.getSession().invalidate();
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
 		return this.prepareLogin(request, response, modelMap);
 	}
@@ -470,6 +451,11 @@ public class LoginController {
 		return new ModelAndView(view, modelMap);
 	}
 
+	@javax.annotation.Resource(name = "com.glaf.base.modules.sys.service.identityTokenService")
+	public void setIdentityTokenService(IdentityTokenService identityTokenService) {
+		this.identityTokenService = identityTokenService;
+	}
+
 	@javax.annotation.Resource
 	public void setSysUserService(SysUserService sysUserService) {
 		this.sysUserService = sysUserService;
@@ -478,11 +464,6 @@ public class LoginController {
 	@javax.annotation.Resource
 	public void setUserOnlineService(UserOnlineService userOnlineService) {
 		this.userOnlineService = userOnlineService;
-	}
-
-	@javax.annotation.Resource(name = "com.glaf.base.modules.sys.service.identityTokenService")
-	public void setIdentityTokenService(IdentityTokenService identityTokenService) {
-		this.identityTokenService = identityTokenService;
 	}
 
 }

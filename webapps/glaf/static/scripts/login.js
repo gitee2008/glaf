@@ -28,7 +28,7 @@ $(document)
 									.ajax({
 										type : "POST",
 										url : contextPath
-												+ "/login/getLoginSecurityKey?userId="+userIdx,
+												+ "/login/getToken?userId="+userIdx,
 										dataType : 'json',
 										error : function(data) {
 											// alert('服务器处理错误！');
