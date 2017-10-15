@@ -19,8 +19,6 @@
 package com.glaf.matrix.data.factory;
 
 import java.util.List;
-import java.util.Set;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executors;
@@ -68,6 +66,8 @@ public class RedisFileStorageFactory {
 	protected final static Log logger = LogFactory.getLog(RedisFileStorageFactory.class);
 
 	protected static ConcurrentMap<String, String> redisFileMap = new ConcurrentHashMap<String, String>();
+
+	protected static ConcurrentMap<Integer, String> redisPosMap = new ConcurrentHashMap<Integer, String>();
 
 	protected static ConcurrentMap<String, JedisPool> redisPoolMap = new ConcurrentHashMap<String, JedisPool>();
 
@@ -168,6 +168,7 @@ public class RedisFileStorageFactory {
 
 		List<ServerEntity> servers = getServerEntityService().list(query);
 		if (servers != null && !servers.isEmpty()) {
+			int index = 0;
 			for (ServerEntity serverEntity : servers) {
 				if (!StringUtils.startsWith(serverEntity.getMapping(), "file_")) {
 					continue;
@@ -186,12 +187,13 @@ public class RedisFileStorageFactory {
 					}
 					JedisPoolConfig config = new JedisPoolConfig();
 					config.setEvictionPolicyClassName("org.apache.commons.pool2.impl.DefaultEvictionPolicy");
-					config.setMaxTotal(500);// 最大连接数
-					config.setMaxIdle(50);
+					config.setMaxTotal(-1);// 最大连接数,-1代表不限制
+					config.setMaxIdle(2000);
 					config.setMaxWaitMillis(5000L);// 获取连接时的最大等待毫秒数
 					config.setNumTestsPerEvictionRun(10);// 每次逐出检查时 逐出的最大数目
-					config.setMinEvictableIdleTimeMillis(1800000L);// 逐出连接的最小空闲时间, 默认1800000毫秒(30分钟)
+					config.setMinEvictableIdleTimeMillis(864000000L);// 逐出连接的最小空闲时间, 默认1天(24小时)
 					config.setSoftMinEvictableIdleTimeMillis(10);// 对象空闲多久后逐出, 当空闲时间>该值 且 空闲连接>最大空闲数
+					config.setTimeBetweenEvictionRunsMillis(300000);
 					config.setTestOnBorrow(true);// 获得一个jedis实例的时候是否检查连接可用性
 					config.setBlockWhenExhausted(true);// 连接耗尽时是否阻塞, false报异常,ture阻塞直到超时, 默认true
 					config.setLifo(false);
@@ -211,8 +213,9 @@ public class RedisFileStorageFactory {
 					logger.debug("set redis value:" + value);
 					jedis.set("test".getBytes(), value.getBytes());
 					if (StringUtils.equals(jedis.get("test"), value)) {
-						redisPoolMap.putIfAbsent(serverEntity.getName(), pool);
-						serverMap.putIfAbsent(serverEntity.getName(), serverEntity);
+						redisPoolMap.put(serverEntity.getName(), pool);
+						serverMap.put(serverEntity.getName(), serverEntity);
+						redisPosMap.put(index++, serverEntity.getName());
 					}
 				} catch (Exception ex) {
 					logger.error("redis connection error", ex);
@@ -226,12 +229,20 @@ public class RedisFileStorageFactory {
 	}
 
 	public void saveData(String fileId, byte[] data) {
-		Set<Entry<String, JedisPool>> entrySet = redisPoolMap.entrySet();
-		for (Entry<String, JedisPool> entry : entrySet) {
-			String key = entry.getKey();
-			JedisPool pool = entry.getValue();
+		java.util.Random rand = new java.util.Random();
+		int size = redisPoolMap.size();
+		int pos = 0;
+		int retry = 0;
+		while (retry <= size) {
+			pos = rand.nextInt(size - 1);
+			if (pos < 0) {
+				pos = 0;
+			}
+			String key = redisPosMap.get(pos);
+			JedisPool pool = redisPoolMap.get(key);
 			Jedis jedis = null;
 			try {
+				retry++;
 				ServerEntity serverEntity = serverMap.get(key);
 				if (serverEntity != null && data != null && pool != null && !pool.isClosed()) {
 					jedis = pool.getResource();
@@ -240,7 +251,7 @@ public class RedisFileStorageFactory {
 						jedis.select(Integer.parseInt(serverEntity.getDbname()));
 					}
 					jedis.set(fileId.getBytes(), data);
-					redisFileMap.putIfAbsent(fileId, key);
+					redisFileMap.put(fileId, key);
 					return;
 				}
 			} catch (Exception ex) {
@@ -254,12 +265,20 @@ public class RedisFileStorageFactory {
 	}
 
 	public void saveDataFile(String fileId, DataFile dataFile) {
-		Set<Entry<String, JedisPool>> entrySet = redisPoolMap.entrySet();
-		for (Entry<String, JedisPool> entry : entrySet) {
-			String key = entry.getKey();
-			JedisPool pool = entry.getValue();
+		java.util.Random rand = new java.util.Random();
+		int size = redisPoolMap.size();
+		int pos = 0;
+		int retry = 0;
+		while (retry <= size) {
+			pos = rand.nextInt(size - 1);
+			if (pos < 0) {
+				pos = 0;
+			}
+			String key = redisPosMap.get(pos);
+			JedisPool pool = redisPoolMap.get(key);
 			Jedis jedis = null;
 			try {
+				retry++;
 				ServerEntity serverEntity = serverMap.get(key);
 				if (serverEntity != null && dataFile != null && pool != null && !pool.isClosed()) {
 					jedis = pool.getResource();
@@ -269,7 +288,7 @@ public class RedisFileStorageFactory {
 					}
 					jedis.set(fileId + "_json", dataFile.toJsonObject().toJSONString());
 					jedis.set(fileId.getBytes(), dataFile.getData());
-					redisFileMap.putIfAbsent(fileId, key);
+					redisFileMap.put(fileId, key);
 					return;
 				}
 			} catch (Exception ex) {
