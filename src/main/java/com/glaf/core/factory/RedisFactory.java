@@ -879,9 +879,9 @@ public class RedisFactory {
 						config.setMaxWaitMillis(PropertiesUtils.getInt(props, "maxWaitMillis", 2000));
 						config.setTimeBetweenEvictionRunsMillis(
 								PropertiesUtils.getInt(props, "timeBetweenEvictionRunsMillis", 30000));
-						// 逐出连接的最小空闲时间, 默认1800000毫秒(30分钟)
+						// 逐出连接的最小空闲时间, 默认864000000毫秒(24小时)
 						config.setMinEvictableIdleTimeMillis(
-								PropertiesUtils.getInt(props, "minEvictableIdleTimeMillis", 1800000));
+								PropertiesUtils.getInt(props, "minEvictableIdleTimeMillis", 864000000));
 
 						// 对象空闲多久后逐出, 当空闲时间>该值 且 空闲连接>最大空闲数
 						// 时直接逐出,不再根据MinEvictableIdleTimeMillis判断 (默认逐出策略)
@@ -903,16 +903,20 @@ public class RedisFactory {
 						if (props.getProperty("redis.master.host") != null
 								&& props.getProperty("redis.master.port") != null) {
 							JedisShardInfo master = new JedisShardInfo(props.getProperty("redis.master.host").trim(),
-									Integer.parseInt(props.getProperty("redis.master.port").trim()),
-									(StringUtils.isEmpty(password) ? null : password));
+									Integer.parseInt(props.getProperty("redis.master.port").trim()));
+							if (StringUtils.isNotEmpty(password)) {
+								master.setPassword(password);
+							}
 							servers.add(master);
 						}
 
 						if (props.getProperty("redis.slave.host") != null
 								&& props.getProperty("redis.slave.port") != null) {
 							JedisShardInfo slave = new JedisShardInfo(props.getProperty("redis.slave.host").trim(),
-									Integer.parseInt(props.getProperty("redis.slave.port").trim()),
-									(StringUtils.isEmpty(password) ? null : password));
+									Integer.parseInt(props.getProperty("redis.slave.port").trim()));
+							if (StringUtils.isNotEmpty(password)) {
+								slave.setPassword(password);
+							}
 							servers.add(slave);
 						}
 
@@ -923,13 +927,17 @@ public class RedisFactory {
 								if (StringUtils.contains(item, ":")) {
 									String h = item.substring(0, item.indexOf(":"));
 									int p = Integer.parseInt(item.substring(item.indexOf(":") + 1, item.length()));
-									JedisShardInfo slave = new JedisShardInfo(h, p,
-											(StringUtils.isEmpty(password) ? null : password));
+									JedisShardInfo slave = new JedisShardInfo(h, p);
+									if (StringUtils.isNotEmpty(password)) {
+										slave.setPassword(password);
+									}
 									servers.add(slave);
 									logger.info("add redis slave " + h + ":" + p);
 								} else {
-									JedisShardInfo slave = new JedisShardInfo(item, 6379,
-											(StringUtils.isEmpty(password) ? null : password));
+									JedisShardInfo slave = new JedisShardInfo(item, 6379);
+									if (StringUtils.isNotEmpty(password)) {
+										slave.setPassword(password);
+									}
 									servers.add(slave);
 									logger.info("add redis slave " + item + ":6379");
 								}
