@@ -18,7 +18,10 @@
 
 package com.glaf.matrix.data.factory;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executors;
@@ -38,7 +41,9 @@ import com.glaf.core.query.ServerEntityQuery;
 import com.glaf.core.security.SecurityUtils;
 import com.glaf.core.service.IServerEntityService;
 import com.glaf.core.util.DateUtils;
+import com.glaf.core.util.StringTools;
 import com.glaf.core.util.UUID32;
+
 import com.glaf.matrix.data.util.DataFileJsonFactory;
 
 import redis.clients.jedis.Jedis;
@@ -75,6 +80,8 @@ public class RedisFileStorageFactory {
 
 	protected static ScheduledExecutorService scheduledThreadPool = Executors.newSingleThreadScheduledExecutor();
 
+	protected static final String DEFAULT_REGION = "default";
+
 	protected static volatile IServerEntityService serverEntityService;
 
 	public static RedisFileStorageFactory getInstance() {
@@ -92,7 +99,24 @@ public class RedisFileStorageFactory {
 		startScheduler();
 	}
 
+	/**
+	 * 通过文件编号获取内容
+	 * 
+	 * @param fileId
+	 * @return
+	 */
 	public byte[] getData(String fileId) {
+		return this.getData(DEFAULT_REGION, fileId);
+	}
+
+	/**
+	 * 通过文件编号获取内容
+	 * 
+	 * @param region
+	 * @param fileId
+	 * @return
+	 */
+	public byte[] getData(String region, String fileId) {
 		Jedis jedis = null;
 		try {
 			String key = redisFileMap.get(fileId);
@@ -106,7 +130,11 @@ public class RedisFileStorageFactory {
 								&& StringUtils.isNumeric(serverEntity.getDbname())) {
 							jedis.select(Integer.parseInt(serverEntity.getDbname()));
 						}
-						return jedis.get(fileId.getBytes());
+						byte[] data = jedis.get(getKey(region, fileId));
+						if (data != null) {
+							logger.debug("get data from redis.");
+							return data;
+						}
 					}
 				}
 			}
@@ -121,7 +149,14 @@ public class RedisFileStorageFactory {
 		return null;
 	}
 
-	public DataFile getDataFile(String fileId) {
+	/**
+	 * 通过文件编号获取内容
+	 * 
+	 * @param region
+	 * @param fileId
+	 * @return
+	 */
+	public DataFile getDataFile(String region, String fileId) {
 		Jedis jedis = null;
 		try {
 			String key = redisFileMap.get(fileId);
@@ -136,12 +171,12 @@ public class RedisFileStorageFactory {
 							jedis.select(Integer.parseInt(serverEntity.getDbname()));
 						}
 						DataFile dataFile = null;
-						String text = jedis.get(fileId + "_json");
+						String text = jedis.get(getJsonKey(region, fileId));
 						if (StringUtils.isNotEmpty(text)) {
 							JSONObject json = JSON.parseObject(text);
 							dataFile = DataFileJsonFactory.jsonToObject(json);
 							if (dataFile != null) {
-								byte[] data = jedis.get(fileId.getBytes());
+								byte[] data = jedis.get(getKey(region, fileId));
 								dataFile.setData(data);
 							}
 						}
@@ -158,6 +193,55 @@ public class RedisFileStorageFactory {
 			}
 		}
 		return null;
+	}
+
+	protected String getJsonKey(String region, String fileId) {
+		return (region + ":json:" + fileId);
+	}
+
+	protected byte[] getKey(String region, String fileId) {
+		return (region + ":S:" + fileId).getBytes();
+	}
+
+	/**
+	 * 获取某个redis服务器上的键
+	 * 
+	 * @param region
+	 * @param server_name
+	 * @return
+	 */
+	public Collection<String> getKeys(String region, String server_name) {
+		Collection<String> keys = new HashSet<String>();
+		ServerEntity serverEntity = serverMap.get(server_name);
+		if (serverEntity != null) {
+			Jedis jedis = null;
+			try {
+				JedisPool pool = redisPoolMap.get(server_name);
+				jedis = pool.getResource();
+				if (jedis != null && jedis.isConnected()) {
+					if (StringUtils.isNotEmpty(serverEntity.getDbname())
+							&& StringUtils.isNumeric(serverEntity.getDbname())) {
+						jedis.select(Integer.parseInt(serverEntity.getDbname()));
+					}
+					Set<String> hkeys = jedis.keys(region + ":S:*");
+					if (hkeys != null && !hkeys.isEmpty()) {
+						for (String str : hkeys) {
+							str = StringTools.replace(str, region + ":S:", "");
+							keys.add(str);
+						}
+					}
+					logger.debug("->keys:" + keys);
+				}
+			} catch (Exception ex) {
+				// ex.printStackTrace();
+				logger.error("redis error", ex);
+			} finally {
+				if (jedis != null) {
+					jedis.close();
+				}
+			}
+		}
+		return keys;
 	}
 
 	public void init() {
@@ -228,13 +312,30 @@ public class RedisFileStorageFactory {
 		}
 	}
 
+	/**
+	 * 存储内容
+	 * 
+	 * @param fileId
+	 * @param data
+	 */
 	public void saveData(String fileId, byte[] data) {
+		this.saveData(DEFAULT_REGION, fileId, data);
+	}
+
+	/**
+	 * 存储内容
+	 * 
+	 * @param region
+	 * @param fileId
+	 * @param data
+	 */
+	public void saveData(String region, String fileId, byte[] data) {
 		java.util.Random rand = new java.util.Random();
 		int size = redisPoolMap.size();
 		int pos = 0;
 		int retry = 0;
 		while (retry <= size) {
-			pos = rand.nextInt(size - 1);
+			pos = rand.nextInt(size);
 			if (pos < 0) {
 				pos = 0;
 			}
@@ -250,7 +351,7 @@ public class RedisFileStorageFactory {
 							&& StringUtils.isNumeric(serverEntity.getDbname())) {
 						jedis.select(Integer.parseInt(serverEntity.getDbname()));
 					}
-					jedis.set(fileId.getBytes(), data);
+					jedis.set(getKey(region, fileId), data);
 					redisFileMap.put(fileId, key);
 					return;
 				}
@@ -264,13 +365,20 @@ public class RedisFileStorageFactory {
 		}
 	}
 
-	public void saveDataFile(String fileId, DataFile dataFile) {
+	/**
+	 * 存储内容
+	 * 
+	 * @param region
+	 * @param fileId
+	 * @param data
+	 */
+	public void saveDataFile(String region, String fileId, DataFile dataFile) {
 		java.util.Random rand = new java.util.Random();
 		int size = redisPoolMap.size();
 		int pos = 0;
 		int retry = 0;
 		while (retry <= size) {
-			pos = rand.nextInt(size - 1);
+			pos = rand.nextInt(size);
 			if (pos < 0) {
 				pos = 0;
 			}
@@ -286,8 +394,8 @@ public class RedisFileStorageFactory {
 							&& StringUtils.isNumeric(serverEntity.getDbname())) {
 						jedis.select(Integer.parseInt(serverEntity.getDbname()));
 					}
-					jedis.set(fileId + "_json", dataFile.toJsonObject().toJSONString());
-					jedis.set(fileId.getBytes(), dataFile.getData());
+					jedis.set(getJsonKey(region, fileId), dataFile.toJsonObject().toJSONString());
+					jedis.set(getKey(region, fileId), dataFile.getData());
 					redisFileMap.put(fileId, key);
 					return;
 				}
