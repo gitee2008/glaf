@@ -224,6 +224,8 @@ public class DataFileFactory {
 			for (DataFile dataFile : list) {
 				String currentSystemName = Environment.getCurrentSystemName();
 				try {
+					String fileIdx = tenantId + "_" + dataFile.getId();
+					RedisFileStorageFactory.getInstance().deleteById("data_file", fileIdx);
 					if (systemName != null && !StringUtils.equals(Environment.DEFAULT_SYSTEM_NAME, systemName)) {
 						Environment.setCurrentSystemName(systemName);
 						getDataFileService().deleteById(tenantId, dataFile.getId());// 先删除附件库
@@ -253,6 +255,8 @@ public class DataFileFactory {
 				DataFile dataFile = list.get(0);
 				String currentSystemName = Environment.getCurrentSystemName();
 				try {
+					String fileIdx = tenantId + "_" + dataFile.getId();
+					RedisFileStorageFactory.getInstance().deleteById("data_file", fileIdx);
 					if (systemName != null && !StringUtils.equals(Environment.DEFAULT_SYSTEM_NAME, systemName)) {
 						Environment.setCurrentSystemName(systemName);
 						getDataFileService().deleteById(tenantId, dataFile.getId());// 先删除附件库
@@ -274,6 +278,8 @@ public class DataFileFactory {
 		try {
 			DataFile dataFile = getDataFileService().getDataFileByFileId(tenantId, fileId);
 			if (dataFile != null) {
+				String fileIdx = tenantId + "_" + dataFile.getId();
+				RedisFileStorageFactory.getInstance().deleteById("data_file", fileIdx);
 				if (systemName != null && !StringUtils.equals(Environment.DEFAULT_SYSTEM_NAME, systemName)) {
 					Environment.setCurrentSystemName(systemName);
 					getDataFileService().deleteById(tenantId, dataFile.getId());// 先删除附件库
@@ -317,9 +323,9 @@ public class DataFileFactory {
 			String currentSystemName = Environment.getCurrentSystemName();
 			byte[] data = null;
 			try {
-				String fileId = tenantId + "_" + id;
+				String fileId = tenantId + "_" + dataFile.getId();
 				if (SystemConfig.getBoolean("use_file_cache")) {
-					data = RedisFileStorageFactory.getInstance().getData(fileId);
+					data = RedisFileStorageFactory.getInstance().getData("data_file", fileId);
 				}
 				if (data != null) {
 					logger.debug("get data from redis.");
@@ -334,7 +340,7 @@ public class DataFileFactory {
 				}
 				if (data != null) {
 					if (SystemConfig.getBoolean("use_file_cache")) {
-						RedisFileStorageFactory.getInstance().saveData(fileId, data);
+						RedisFileStorageFactory.getInstance().saveData("data_file", fileId, data);
 					}
 					return new BufferedInputStream(new ByteArrayInputStream(data));
 				}

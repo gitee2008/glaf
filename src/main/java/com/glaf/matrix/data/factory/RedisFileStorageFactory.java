@@ -100,6 +100,51 @@ public class RedisFileStorageFactory {
 	}
 
 	/**
+	 * 通过文件编号删除内容
+	 * 
+	 * @param fileId
+	 */
+	public void deleteById(String fileId) {
+		this.deleteById(DEFAULT_REGION, fileId);
+	}
+
+	/**
+	 * 通过文件编号删除内容
+	 * 
+	 * @param region
+	 * @param fileId
+	 */
+	public void deleteById(String region, String fileId) {
+		Jedis jedis = null;
+		try {
+			String key = redisFileMap.get(fileId);
+			if (key != null) {
+				ServerEntity serverEntity = serverMap.get(key);
+				if (serverEntity != null) {
+					JedisPool pool = redisPoolMap.get(key);
+					jedis = pool.getResource();
+					if (jedis != null && jedis.isConnected()) {
+						if (StringUtils.isNotEmpty(serverEntity.getDbname())
+								&& StringUtils.isNumeric(serverEntity.getDbname())) {
+							jedis.select(Integer.parseInt(serverEntity.getDbname()));
+						}
+						jedis.del(getKey(region, fileId));
+						jedis.del(getJsonKey(region, fileId));
+						logger.debug(key + "->" + region + ":" + fileId + " delete data from redis.");
+					}
+				}
+			}
+		} catch (Exception ex) {
+			// ex.printStackTrace();
+			logger.error("redis error", ex);
+		} finally {
+			if (jedis != null) {
+				jedis.close();
+			}
+		}
+	}
+
+	/**
 	 * 通过文件编号获取内容
 	 * 
 	 * @param fileId
