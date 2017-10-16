@@ -368,7 +368,7 @@ public class RedisFileStorageFactory {
 	}
 
 	/**
-	 * 存储内容
+	 * 存储内容，默认有限期为24小时
 	 * 
 	 * @param region
 	 * @param fileId
@@ -397,6 +397,7 @@ public class RedisFileStorageFactory {
 						jedis.select(Integer.parseInt(serverEntity.getDbname()));
 					}
 					jedis.set(getKey(region, fileId), data);
+					jedis.expire(getKey(region, fileId), 86400);// 24小时
 					redisFileMap.put(fileId, key);
 					return;
 				}
@@ -411,7 +412,7 @@ public class RedisFileStorageFactory {
 	}
 
 	/**
-	 * 存储内容
+	 * 存储内容，默认有限期为24小时
 	 * 
 	 * @param region
 	 * @param fileId
@@ -441,6 +442,8 @@ public class RedisFileStorageFactory {
 					}
 					jedis.set(getJsonKey(region, fileId), dataFile.toJsonObject().toJSONString());
 					jedis.set(getKey(region, fileId), dataFile.getData());
+					jedis.expire(getJsonKey(region, fileId), 86400);// 24小时
+					jedis.expire(getKey(region, fileId), 86400);// 24小时
 					redisFileMap.put(fileId, key);
 					return;
 				}
