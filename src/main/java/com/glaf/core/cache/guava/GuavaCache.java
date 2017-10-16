@@ -105,11 +105,15 @@ public class GuavaCache implements com.glaf.core.cache.Cache {
 	}
 
 	public void put(String key, String value) {
-		getCache().put(key, value);
+		Cache<Object, Object> cache = this.getCache();
+		cache.invalidate(key);
+		cache.put(key, value);
 	}
 
 	public void put(String region, String key, String value) {
-		getCache(region).put(key, value);
+		Cache<Object, Object> cache = this.getCache(region);
+		cache.invalidate(key);
+		cache.put(key, value);
 	}
 
 	public void remove(String key) {
