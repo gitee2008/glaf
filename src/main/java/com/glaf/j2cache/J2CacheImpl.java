@@ -40,9 +40,7 @@ public class J2CacheImpl implements Cache {
 	public String get(String region, String key) {
 		Object object = this.cache.get(region, key);
 		if (object != null) {
-			if (object instanceof String) {
-				return (String) object;
-			} else if (object instanceof CacheObject) {
+			if (object instanceof CacheObject) {
 				CacheObject cacheObject = (CacheObject) object;
 				if (cacheObject.getValue() != null) {
 					if (cacheObject.getValue() instanceof String) {
