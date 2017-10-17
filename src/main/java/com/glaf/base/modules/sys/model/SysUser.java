@@ -264,9 +264,6 @@ public class SysUser implements Serializable, User, JSONable {
 	protected Date updateDate;
 
 	@javax.persistence.Transient
-	protected String sessionId;
-
-	@javax.persistence.Transient
 	protected String attribute;
 
 	@javax.persistence.Transient
@@ -455,10 +452,6 @@ public class SysUser implements Serializable, User, JSONable {
 
 	public String getSecretLoginFlag() {
 		return secretLoginFlag;
-	}
-
-	public String getSessionId() {
-		return sessionId;
 	}
 
 	public String getSuperiorIds() {
@@ -729,10 +722,6 @@ public class SysUser implements Serializable, User, JSONable {
 
 	public void setSecretLoginFlag(String secretLoginFlag) {
 		this.secretLoginFlag = secretLoginFlag;
-	}
-
-	public void setSessionId(String sessionId) {
-		this.sessionId = sessionId;
 	}
 
 	public void setSuperiorIds(String superiorIds) {

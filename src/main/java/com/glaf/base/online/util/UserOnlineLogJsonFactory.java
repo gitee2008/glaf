@@ -59,9 +59,6 @@ public class UserOnlineLogJsonFactory {
 		if (jsonObject.containsKey("day")) {
 			model.setDay(jsonObject.getInteger("day"));
 		}
-		if (jsonObject.containsKey("sessionId")) {
-			model.setSessionId(jsonObject.getString("sessionId"));
-		}
 
 		return model;
 	}
@@ -73,27 +70,20 @@ public class UserOnlineLogJsonFactory {
 		jsonObject.put("_oid_", model.getId());
 		if (model.getActorId() != null) {
 			jsonObject.put("actorId", model.getActorId());
-			jsonObject.put("actorId_enc",
-					RequestUtils.encodeString(model.getActorId()));
+			jsonObject.put("actorId_enc", RequestUtils.encodeString(model.getActorId()));
 		}
 		if (model.getName() != null) {
 			jsonObject.put("name", model.getName());
 		}
 		if (model.getLogoutDate() != null) {
-			jsonObject.put("logoutDate",
-					DateUtils.getDate(model.getLogoutDate()));
-			jsonObject.put("logoutDate_date",
-					DateUtils.getDate(model.getLogoutDate()));
-			jsonObject.put("logoutDate_datetime",
-					DateUtils.getDateTime(model.getLogoutDate()));
+			jsonObject.put("logoutDate", DateUtils.getDate(model.getLogoutDate()));
+			jsonObject.put("logoutDate_date", DateUtils.getDate(model.getLogoutDate()));
+			jsonObject.put("logoutDate_datetime", DateUtils.getDateTime(model.getLogoutDate()));
 		}
 		if (model.getLoginDate() != null) {
-			jsonObject
-					.put("loginDate", DateUtils.getDate(model.getLoginDate()));
-			jsonObject.put("loginDate_date",
-					DateUtils.getDate(model.getLoginDate()));
-			jsonObject.put("loginDate_datetime",
-					DateUtils.getDateTime(model.getLoginDate()));
+			jsonObject.put("loginDate", DateUtils.getDate(model.getLoginDate()));
+			jsonObject.put("loginDate_date", DateUtils.getDate(model.getLoginDate()));
+			jsonObject.put("loginDate_datetime", DateUtils.getDateTime(model.getLoginDate()));
 		}
 		if (model.getLoginIP() != null) {
 			jsonObject.put("loginIP", model.getLoginIP());
@@ -102,9 +92,7 @@ public class UserOnlineLogJsonFactory {
 		jsonObject.put("month", model.getMonth());
 		jsonObject.put("quarter", model.getQuarter());
 		jsonObject.put("day", model.getDay());
-		if (model.getSessionId() != null) {
-			jsonObject.put("sessionId", model.getSessionId());
-		}
+
 		return jsonObject;
 	}
 
@@ -115,27 +103,20 @@ public class UserOnlineLogJsonFactory {
 		jsonObject.put("_oid_", model.getId());
 		if (model.getActorId() != null) {
 			jsonObject.put("actorId", model.getActorId());
-			jsonObject.put("actorId_enc",
-					RequestUtils.encodeString(model.getActorId()));
+			jsonObject.put("actorId_enc", RequestUtils.encodeString(model.getActorId()));
 		}
 		if (model.getName() != null) {
 			jsonObject.put("name", model.getName());
 		}
 		if (model.getLogoutDate() != null) {
-			jsonObject.put("logoutDate",
-					DateUtils.getDate(model.getLogoutDate()));
-			jsonObject.put("logoutDate_date",
-					DateUtils.getDate(model.getLogoutDate()));
-			jsonObject.put("logoutDate_datetime",
-					DateUtils.getDateTime(model.getLogoutDate()));
+			jsonObject.put("logoutDate", DateUtils.getDate(model.getLogoutDate()));
+			jsonObject.put("logoutDate_date", DateUtils.getDate(model.getLogoutDate()));
+			jsonObject.put("logoutDate_datetime", DateUtils.getDateTime(model.getLogoutDate()));
 		}
 		if (model.getLoginDate() != null) {
-			jsonObject
-					.put("loginDate", DateUtils.getDate(model.getLoginDate()));
-			jsonObject.put("loginDate_date",
-					DateUtils.getDate(model.getLoginDate()));
-			jsonObject.put("loginDate_datetime",
-					DateUtils.getDateTime(model.getLoginDate()));
+			jsonObject.put("loginDate", DateUtils.getDate(model.getLoginDate()));
+			jsonObject.put("loginDate_date", DateUtils.getDate(model.getLoginDate()));
+			jsonObject.put("loginDate_datetime", DateUtils.getDateTime(model.getLoginDate()));
 		}
 		if (model.getLoginIP() != null) {
 			jsonObject.put("loginIP", model.getLoginIP());
@@ -144,9 +125,7 @@ public class UserOnlineLogJsonFactory {
 		jsonObject.put("month", model.getMonth());
 		jsonObject.put("quarter", model.getQuarter());
 		jsonObject.put("day", model.getDay());
-		if (model.getSessionId() != null) {
-			jsonObject.put("sessionId", model.getSessionId());
-		}
+
 		return jsonObject;
 	}
 

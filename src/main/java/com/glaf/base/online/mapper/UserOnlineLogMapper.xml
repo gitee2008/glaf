@@ -15,7 +15,6 @@
 		<result property="month" column="MONTH_" jdbcType="INTEGER" />
 		<result property="quarter" column="QUARTER_" jdbcType="INTEGER" />
 		<result property="day" column="DAY_" jdbcType="INTEGER" />
-		<result property="sessionId" column="SESSIONID_" jdbcType="VARCHAR" />
 	</resultMap>
 
 
@@ -47,9 +46,6 @@
 			<if test="day != null">
 				,DAY_
 			</if>
-			<if test="sessionId != null">
-				,SESSIONID_
-			</if>
 		</trim>
 
 		<trim prefix=" values (" suffix=")" suffixOverrides=",">
@@ -78,9 +74,6 @@
 			</if>
 			<if test="day != null">
 				,#{day, jdbcType=INTEGER}
-			</if>
-			<if test="sessionId != null">
-				,#{sessionId, jdbcType=VARCHAR}
 			</if>
 		</trim>
 	</insert>
@@ -213,10 +206,6 @@
 
 			<if test="day != null">
 				and E.DAY_ = #{day}
-			</if>
-
-			<if test="sessionId != null and sessionId != '' ">
-				and E.SESSIONID_ = #{sessionId}
 			</if>
 
 		</where>

@@ -45,12 +45,6 @@ public class IdentityToken implements Serializable, JSONable {
 	protected String id;
 
 	/**
-	 * 会话编号
-	 */
-	@Column(name = "SESSIONID_", length = 200)
-	protected String sessionId;
-
-	/**
 	 * 用户编号
 	 */
 	@Column(name = "USERID_", length = 200)
@@ -169,10 +163,6 @@ public class IdentityToken implements Serializable, JSONable {
 		return rand2;
 	}
 
-	public String getSessionId() {
-		return this.sessionId;
-	}
-
 	public String getSignature() {
 		return this.signature;
 	}
@@ -231,10 +221,6 @@ public class IdentityToken implements Serializable, JSONable {
 
 	public void setRand2(String rand2) {
 		this.rand2 = rand2;
-	}
-
-	public void setSessionId(String sessionId) {
-		this.sessionId = sessionId;
 	}
 
 	public void setSignature(String signature) {

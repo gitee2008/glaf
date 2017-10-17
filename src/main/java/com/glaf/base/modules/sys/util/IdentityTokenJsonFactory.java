@@ -47,9 +47,6 @@ public class IdentityTokenJsonFactory {
 		if (jsonObject.containsKey("id")) {
 			model.setId(jsonObject.getString("id"));
 		}
-		if (jsonObject.containsKey("sessionId")) {
-			model.setSessionId(jsonObject.getString("sessionId"));
-		}
 		if (jsonObject.containsKey("userId")) {
 			model.setUserId(jsonObject.getString("userId"));
 		}
@@ -103,9 +100,7 @@ public class IdentityTokenJsonFactory {
 		jsonObject.put("id", model.getId());
 		jsonObject.put("_id_", model.getId());
 		jsonObject.put("_oid_", model.getId());
-		if (model.getSessionId() != null) {
-			jsonObject.put("sessionId", model.getSessionId());
-		}
+
 		if (model.getUserId() != null) {
 			jsonObject.put("userId", model.getUserId());
 		}
@@ -145,9 +140,7 @@ public class IdentityTokenJsonFactory {
 		jsonObject.put("id", model.getId());
 		jsonObject.put("_id_", model.getId());
 		jsonObject.put("_oid_", model.getId());
-		if (model.getSessionId() != null) {
-			jsonObject.put("sessionId", model.getSessionId());
-		}
+		
 		if (model.getUserId() != null) {
 			jsonObject.put("userId", model.getUserId());
 		}

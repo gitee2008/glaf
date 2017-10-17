@@ -6,7 +6,6 @@
 
 	<resultMap id="identityTokenResultMap" type="com.glaf.base.modules.sys.model.IdentityToken">
 		<id property="id" column="ID_" jdbcType="VARCHAR" />
-		<result property="sessionId" column="SESSIONID_" jdbcType="VARCHAR" />
 		<result property="userId" column="USERID_" jdbcType="VARCHAR" />
 		<result property="clientIP" column="CLIENTIP_" jdbcType="VARCHAR" />
 		<result property="signature" column="SIGNATURE_" jdbcType="VARCHAR" />
@@ -25,9 +24,6 @@
 		insert into SYS_IDENTITY_TOKEN
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			ID_
-			<if test="sessionId != null">
-				,SESSIONID_
-			</if>
 			<if test="userId != null">
 				,USERID_
 			</if>
@@ -66,9 +62,6 @@
 		<trim prefix=" values (" suffix=")" suffixOverrides=",">
 			#{id, jdbcType=VARCHAR}
 
-			<if test="sessionId != null">
-				,#{sessionId, jdbcType=VARCHAR}
-			</if>
 			<if test="userId != null">
 				,#{userId, jdbcType=VARCHAR}
 			</if>
@@ -185,18 +178,6 @@
 
 		<where>
 			1 = 1
-
-			<if test="sessionId != null and sessionId != '' ">
-				and E.SESSIONID_ = #{sessionId}
-			</if>
-
-			<if test="sessionIds != null and sessionIds.size() &gt; 0">
-				and E.SESSIONID_ IN
-				<foreach item="x_sessionId" index="index" collection="sessionIds"
-					open="(" separator="," close=")">
-					#{x_sessionId}
-				</foreach>
-			</if>
 
 			<if test="userId != null and userId != '' ">
 				and E.USERID_ = #{userId}

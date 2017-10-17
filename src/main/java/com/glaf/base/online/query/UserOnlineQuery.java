@@ -75,11 +75,6 @@ public class UserOnlineQuery extends DataQuery {
 			if ("loginIP".equals(sortColumn)) {
 				orderBy = "E.LOGINIP_" + a_x;
 			}
-
-			if ("sessionId".equals(sortColumn)) {
-				orderBy = "E.SESSIONID_" + a_x;
-			}
-
 		}
 		return orderBy;
 	}
@@ -104,7 +99,6 @@ public class UserOnlineQuery extends DataQuery {
 		addColumn("name", "NAME_");
 		addColumn("loginDate", "LOGINDATE_");
 		addColumn("loginIP", "LOGINIP_");
-		addColumn("sessionId", "SESSIONID_");
 	}
 
 	public UserOnlineQuery loginDateGreaterThanOrEqual(

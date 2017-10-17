@@ -12,7 +12,6 @@
 		<result property="loginIP" column="LOGINIP_" jdbcType="VARCHAR" />
 		<result property="checkDate" column="CHECKDATE_" jdbcType="TIMESTAMP" />
 		<result property="checkDateMs" column="CHECKDATEMS_" jdbcType="BIGINT" />
-		<result property="sessionId" column="SESSIONID_" jdbcType="VARCHAR" />
 	</resultMap>
 
 
@@ -38,9 +37,6 @@
 			<if test="checkDateMs != null">
 				,CHECKDATEMS_
 			</if>
-			<if test="sessionId != null">
-				,SESSIONID_
-			</if>
 		</trim>
 
 		<trim prefix=" values (" suffix=")" suffixOverrides=",">
@@ -63,9 +59,6 @@
 			</if>
 			<if test="checkDateMs != null">
 				,#{checkDateMs, jdbcType=BIGINT}
-			</if>
-			<if test="sessionId != null">
-				,#{sessionId, jdbcType=VARCHAR}
 			</if>
 		</trim>
 	</insert>
@@ -94,7 +87,7 @@
 	</update>
 
 
-    <update id="updateUserOnlineCheckDate" parameterType="com.glaf.base.online.domain.UserOnline">
+	<update id="updateUserOnlineCheckDate" parameterType="com.glaf.base.online.domain.UserOnline">
 		update SYS_USER_ONLINE
 		set
 		<trim prefix="" suffix="" suffixOverrides=",">
@@ -180,10 +173,10 @@
 			<if test="name != null and name != '' ">
 				and E.NAME_ = #{name}
 			</if>
-			
-			
+
 			<if test="searchWord != null and searchWord != '' ">
-				and ( E.NAME_ like #{searchWord} or E.ACTORID_ like #{searchWord} )
+				and ( E.NAME_ like #{searchWord} or E.ACTORID_ like
+				#{searchWord} )
 			</if>
 
 			<if test="loginDateGreaterThanOrEqual != null">

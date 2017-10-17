@@ -57,9 +57,6 @@ public class UserOnline implements Serializable, JSONable {
 	@Column(name = "CHECKDATEMS_")
 	protected Long checkDateMs;
 
-	@Column(name = "SESSIONID_", length = 200)
-	protected String sessionId;
-
 	public UserOnline() {
 
 	}
@@ -109,10 +106,6 @@ public class UserOnline implements Serializable, JSONable {
 		return this.name;
 	}
 
-	public String getSessionId() {
-		return this.sessionId;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -151,10 +144,6 @@ public class UserOnline implements Serializable, JSONable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public void setSessionId(String sessionId) {
-		this.sessionId = sessionId;
 	}
 
 	public JSONObject toJsonObject() {

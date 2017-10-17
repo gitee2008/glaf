@@ -25,8 +25,6 @@ public class IdentityTokenQuery extends DataQuery {
 	private static final long serialVersionUID = 1L;
 	protected List<String> ids;
 	protected Collection<String> appActorIds;
-	protected String sessionId;
-	protected List<String> sessionIds;
 	protected String userId;
 	protected List<String> userIds;
 	protected String token;
@@ -73,10 +71,6 @@ public class IdentityTokenQuery extends DataQuery {
 				a_x = sortOrder;
 			}
 
-			if ("sessionId".equals(sortColumn)) {
-				orderBy = "E.SESSIONID_" + a_x;
-			}
-
 			if ("userId".equals(sortColumn)) {
 				orderBy = "E.USERID_" + a_x;
 			}
@@ -113,14 +107,6 @@ public class IdentityTokenQuery extends DataQuery {
 		return orderBy;
 	}
 
-	public String getSessionId() {
-		return sessionId;
-	}
-
-	public List<String> getSessionIds() {
-		return sessionIds;
-	}
-
 	public String getToken() {
 		return token;
 	}
@@ -141,7 +127,6 @@ public class IdentityTokenQuery extends DataQuery {
 	public void initQueryColumns() {
 		super.initQueryColumns();
 		addColumn("id", "ID_");
-		addColumn("sessionId", "SESSIONID_");
 		addColumn("userId", "USERID_");
 		addColumn("clientIP", "CLIENTIP_");
 		addColumn("signature", "SIGNATURE_");
@@ -150,22 +135,6 @@ public class IdentityTokenQuery extends DataQuery {
 		addColumn("timeLive", "TIMELIVE_");
 		addColumn("timeMillis", "TIMEMILLIS_");
 		addColumn("createTime", "CREATETIME_");
-	}
-
-	public IdentityTokenQuery sessionId(String sessionId) {
-		if (sessionId == null) {
-			throw new RuntimeException("sessionId is null");
-		}
-		this.sessionId = sessionId;
-		return this;
-	}
-
-	public IdentityTokenQuery sessionIds(List<String> sessionIds) {
-		if (sessionIds == null) {
-			throw new RuntimeException("sessionIds is empty ");
-		}
-		this.sessionIds = sessionIds;
-		return this;
 	}
 
 	public void setAppActorIds(Collection<String> appActorIds) {
@@ -178,14 +147,6 @@ public class IdentityTokenQuery extends DataQuery {
 
 	public void setCreateTimeLessThanOrEqual(Date createTimeLessThanOrEqual) {
 		this.createTimeLessThanOrEqual = createTimeLessThanOrEqual;
-	}
-
-	public void setSessionId(String sessionId) {
-		this.sessionId = sessionId;
-	}
-
-	public void setSessionIds(List<String> sessionIds) {
-		this.sessionIds = sessionIds;
 	}
 
 	public void setToken(String token) {

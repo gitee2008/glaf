@@ -122,10 +122,9 @@ public class UserOnlineLogServiceImpl implements UserOnlineLogService {
 	 * @param actorId
 	 */
 	@Transactional
-	public void logout(String actorId, String sessionId) {
+	public void logout(String actorId) {
 		UserOnlineLogQuery query = new UserOnlineLogQuery();
 		query.actorId(actorId);
-		query.sessionId(sessionId);
 		List<UserOnlineLog> list = this.list(query);
 		if (list != null && !list.isEmpty()) {
 			UserOnlineLog model = list.get(0);

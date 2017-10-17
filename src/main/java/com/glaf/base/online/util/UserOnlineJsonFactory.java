@@ -47,10 +47,7 @@ public class UserOnlineJsonFactory {
 		if (jsonObject.containsKey("loginIP")) {
 			model.setLoginIP(jsonObject.getString("loginIP"));
 		}
-		if (jsonObject.containsKey("sessionId")) {
-			model.setSessionId(jsonObject.getString("sessionId"));
-		}
-
+		
 		return model;
 	}
 
@@ -86,9 +83,6 @@ public class UserOnlineJsonFactory {
 			jsonObject.put("loginIP", model.getLoginIP());
 		}
 
-		if (model.getSessionId() != null) {
-			jsonObject.put("sessionId", model.getSessionId());
-		}
 		return jsonObject;
 	}
 
@@ -123,9 +117,7 @@ public class UserOnlineJsonFactory {
 		if (model.getLoginIP() != null) {
 			jsonObject.put("loginIP", model.getLoginIP());
 		}
-		if (model.getSessionId() != null) {
-			jsonObject.put("sessionId", model.getSessionId());
-		}
+
 		return jsonObject;
 	}
 

@@ -30,6 +30,7 @@ public interface UserOnlineLogService {
 
 	/**
 	 * 获取用户当天登录次数
+	 * 
 	 * @param actorId
 	 * @return
 	 */
@@ -75,9 +76,8 @@ public interface UserOnlineLogService {
 	 * 退出系统
 	 * 
 	 * @param actorId
-	 * @param sessionId
 	 */
 	@Transactional
-	void logout(String actorId, String sessionId);
+	void logout(String actorId);
 
 }

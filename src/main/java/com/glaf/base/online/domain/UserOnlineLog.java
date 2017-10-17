@@ -55,19 +55,16 @@ public class UserOnlineLog implements Serializable, JSONable {
 	protected Date logoutDate;
 
 	@Column(name = "YEAR_")
-	protected Integer year;
+	protected int year;
 
 	@Column(name = "MONTH_")
-	protected Integer month;
+	protected int month;
 
 	@Column(name = "QUARTER_")
-	protected Integer quarter;
+	protected int quarter;
 
 	@Column(name = "DAY_")
-	protected Integer day;
-
-	@Column(name = "SESSIONID_", length = 200)
-	protected String sessionId;
+	protected int day;
 
 	public UserOnlineLog() {
 
@@ -94,7 +91,7 @@ public class UserOnlineLog implements Serializable, JSONable {
 		return this.actorId;
 	}
 
-	public Integer getDay() {
+	public int getDay() {
 		return day;
 	}
 
@@ -114,7 +111,7 @@ public class UserOnlineLog implements Serializable, JSONable {
 		return logoutDate;
 	}
 
-	public Integer getMonth() {
+	public int getMonth() {
 		return month;
 	}
 
@@ -122,15 +119,11 @@ public class UserOnlineLog implements Serializable, JSONable {
 		return this.name;
 	}
 
-	public Integer getQuarter() {
+	public int getQuarter() {
 		return quarter;
 	}
 
-	public String getSessionId() {
-		return this.sessionId;
-	}
-
-	public Integer getYear() {
+	public int getYear() {
 		return year;
 	}
 
@@ -150,7 +143,7 @@ public class UserOnlineLog implements Serializable, JSONable {
 		this.actorId = actorId;
 	}
 
-	public void setDay(Integer day) {
+	public void setDay(int day) {
 		this.day = day;
 	}
 
@@ -170,7 +163,7 @@ public class UserOnlineLog implements Serializable, JSONable {
 		this.logoutDate = logoutDate;
 	}
 
-	public void setMonth(Integer month) {
+	public void setMonth(int month) {
 		this.month = month;
 	}
 
@@ -178,15 +171,11 @@ public class UserOnlineLog implements Serializable, JSONable {
 		this.name = name;
 	}
 
-	public void setQuarter(Integer quarter) {
+	public void setQuarter(int quarter) {
 		this.quarter = quarter;
 	}
 
-	public void setSessionId(String sessionId) {
-		this.sessionId = sessionId;
-	}
-
-	public void setYear(Integer year) {
+	public void setYear(int year) {
 		this.year = year;
 	}
 
@@ -200,8 +189,7 @@ public class UserOnlineLog implements Serializable, JSONable {
 
 	@Override
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this,
-				ToStringStyle.MULTI_LINE_STYLE);
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 	}
 
 }

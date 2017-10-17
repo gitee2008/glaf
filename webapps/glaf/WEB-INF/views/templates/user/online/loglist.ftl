@@ -26,8 +26,7 @@
 						{title:'用户姓名',field:'name', width:120},
 						{title:'登录时间',field:'loginDate_datetime', width:90},
 						{title:'登录IP',field:'loginIP', width:120},
-						{title:'退出时间',field:'logoutDate_datetime', width:90},
-					    {title:'会话编号', field:'sessionId', align:'center', width:150}
+						{title:'退出时间',field:'logoutDate_datetime', width:90}
 				]],
 				rownumbers: false,
 				pagination: true,

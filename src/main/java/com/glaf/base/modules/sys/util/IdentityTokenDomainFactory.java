@@ -41,7 +41,6 @@ public class IdentityTokenDomainFactory {
 
 	static {
 		columnMap.put("id", "ID_");
-		columnMap.put("sessionId", "SESSIONID_");
 		columnMap.put("userId", "USERID_");
 		columnMap.put("clientIP", "CLIENTIP_");
 		columnMap.put("signature", "SIGNATURE_");
@@ -55,7 +54,6 @@ public class IdentityTokenDomainFactory {
 		columnMap.put("createTime", "CREATETIME_");
 
 		javaTypeMap.put("id", "String");
-		javaTypeMap.put("sessionId", "String");
 		javaTypeMap.put("userId", "String");
 		javaTypeMap.put("clientIP", "String");
 		javaTypeMap.put("signature", "String");
@@ -93,13 +91,6 @@ public class IdentityTokenDomainFactory {
 		idColumn.setJavaType("String");
 		idColumn.setLength(100);
 		tableDefinition.setIdColumn(idColumn);
-
-		ColumnDefinition sessionId = new ColumnDefinition();
-		sessionId.setName("sessionId");
-		sessionId.setColumnName("SESSIONID_");
-		sessionId.setJavaType("String");
-		sessionId.setLength(200);
-		tableDefinition.addColumn(sessionId);
 
 		ColumnDefinition userId = new ColumnDefinition();
 		userId.setName("userId");

@@ -32,7 +32,6 @@ public class UserOnlineLogQuery extends DataQuery {
 	protected Integer month;
 	protected Integer quarter;
 	protected Integer day;
-	protected String sessionId;
 
 	public UserOnlineLogQuery() {
 
@@ -97,10 +96,6 @@ public class UserOnlineLogQuery extends DataQuery {
 				orderBy = "E.LOGINIP_" + a_x;
 			}
 
-			if ("sessionId".equals(sortColumn)) {
-				orderBy = "E.SESSIONID_" + a_x;
-			}
-
 		}
 		return orderBy;
 	}
@@ -121,10 +116,6 @@ public class UserOnlineLogQuery extends DataQuery {
 		return searchWord;
 	}
 
-	public String getSessionId() {
-		return sessionId;
-	}
-
 	public Integer getYear() {
 		return year;
 	}
@@ -137,7 +128,6 @@ public class UserOnlineLogQuery extends DataQuery {
 		addColumn("name", "NAME_");
 		addColumn("loginDate", "LOGINDATE_");
 		addColumn("loginIP", "LOGINIP_");
-		addColumn("sessionId", "SESSIONID_");
 	}
 
 	public UserOnlineLogQuery loginDateGreaterThanOrEqual(Date loginDateGreaterThanOrEqual) {
@@ -196,14 +186,6 @@ public class UserOnlineLogQuery extends DataQuery {
 		return this;
 	}
 
-	public UserOnlineLogQuery sessionId(String sessionId) {
-		if (sessionId == null) {
-			throw new RuntimeException("sessionId is null");
-		}
-		this.sessionId = sessionId;
-		return this;
-	}
-
 	public void setActorId(String actorId) {
 		this.actorId = actorId;
 	}
@@ -242,10 +224,6 @@ public class UserOnlineLogQuery extends DataQuery {
 
 	public void setSearchWord(String searchWord) {
 		this.searchWord = searchWord;
-	}
-
-	public void setSessionId(String sessionId) {
-		this.sessionId = sessionId;
 	}
 
 	public void setYear(Integer year) {

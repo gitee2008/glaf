@@ -27,6 +27,7 @@ import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -108,6 +109,8 @@ public class LoginController {
 		// 获取参数
 		String account = ParamUtil.getParameter(request, "x");
 		String password = ParamUtil.getParameter(request, "y");
+
+		account = StringEscapeUtils.escapeHtml(account);
 
 		String tk = request.getParameter("token");
 		IdentityToken token = identityTokenService.getIdentityTokenByToken(tk);

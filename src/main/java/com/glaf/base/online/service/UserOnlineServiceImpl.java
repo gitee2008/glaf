@@ -88,7 +88,7 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 					long ts = System.currentTimeMillis() - bean.getCheckDateMs();
 					if (ts / 1000 > timeoutSeconds) {// 如果超时，从在线用户列表中删除
 						userOnlineMapper.deleteUserOnlineById(bean.getId());
-						userOnlineLogService.logout(bean.getActorId(), bean.getSessionId());
+						userOnlineLogService.logout(bean.getActorId());
 					}
 				}
 			}
@@ -149,7 +149,6 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 		if (userOnline != null) {
 			userOnline.setLoginDate(model.getLoginDate());
 			userOnline.setLoginIP(model.getLoginIP());
-			userOnline.setSessionId(model.getSessionId());
 			if (model.getLoginDate() == null) {
 				userOnline.setLoginDate(new Date());
 			}
@@ -158,7 +157,6 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 			UserOnlineLog log = new UserOnlineLog();
 			log.setActorId(model.getActorId());
 			log.setName(model.getName());
-			log.setSessionId(model.getSessionId());
 			log.setLoginDate(new Date());
 			log.setLoginIP(model.getLoginIP());
 			userOnlineLogService.login(log);
@@ -176,7 +174,6 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 			log.setLoginIP(model.getLoginIP());
 			log.setLoginDate(new Date());
 			log.setName(model.getName());
-			log.setSessionId(model.getSessionId());
 			userOnlineLogService.login(log);
 		}
 	}
@@ -191,7 +188,7 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 		UserOnline userOnline = this.getUserOnline(actorId);
 		if (userOnline != null) {
 			this.deleteById(userOnline.getId());
-			userOnlineLogService.logout(actorId, userOnline.getSessionId());
+			userOnlineLogService.logout(actorId);
 		}
 	}
 
@@ -223,7 +220,6 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 			log.setLoginIP(userOnline.getLoginIP());
 			log.setLoginDate(new Date());
 			log.setName(userOnline.getName());
-			log.setSessionId(userOnline.getSessionId());
 			userOnlineLogService.login(log);
 		} else {
 			userOnlineMapper.updateUserOnline(userOnline);
@@ -233,7 +229,6 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 			log.setLoginIP(userOnline.getLoginIP());
 			log.setLoginDate(userOnline.getLoginDate());
 			log.setName(userOnline.getName());
-			log.setSessionId(userOnline.getSessionId());
 		}
 	}
 
