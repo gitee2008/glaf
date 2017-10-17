@@ -435,7 +435,7 @@ public class RedisFileStorageFactory {
 							&& StringUtils.isNumeric(serverEntity.getDbname())) {
 						jedis.select(Integer.parseInt(serverEntity.getDbname()));
 					}
-					rnum = rand.nextInt(9);
+					rnum = rand.nextInt(2);
 					jedis.set(getKey(region, fileId), data);
 					jedis.expire(getKey(region, fileId), 7200 - rnum);// 2小时以内
 					logger.debug(key + "->" + region + ":" + fileId + " set into redis.");
