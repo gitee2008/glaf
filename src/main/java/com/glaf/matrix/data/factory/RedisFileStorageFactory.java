@@ -436,7 +436,7 @@ public class RedisFileStorageFactory {
 							&& StringUtils.isNumeric(serverEntity.getDbname())) {
 						jedis.select(Integer.parseInt(serverEntity.getDbname()));
 					}
-					rnum = rand.nextInt(9999);
+					rnum = rand.nextInt(9);
 					jedis.set(getKey(region, fileId), data);
 					jedis.expire(getKey(region, fileId), 86400 - rnum);// 24小时以内
 					logger.debug(key + "->" + region + ":" + fileId + " set into redis.");
@@ -486,7 +486,7 @@ public class RedisFileStorageFactory {
 							&& StringUtils.isNumeric(serverEntity.getDbname())) {
 						jedis.select(Integer.parseInt(serverEntity.getDbname()));
 					}
-					rnum = rand.nextInt(9999);
+					rnum = rand.nextInt(9);
 					jedis.set(getJsonKey(region, fileId), dataFile.toJsonObject().toJSONString());
 					jedis.set(getKey(region, fileId), dataFile.getData());
 					jedis.expire(getJsonKey(region, fileId), 86400 - rnum);// 24小时以内
