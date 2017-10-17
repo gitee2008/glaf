@@ -51,6 +51,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 
+
 public class RedisFileStorageFactory {
 	private static class RedisSingletonHolder {
 		public static RedisFileStorageFactory instance = new RedisFileStorageFactory();
@@ -69,8 +70,6 @@ public class RedisFileStorageFactory {
 	}
 
 	protected final static Log logger = LogFactory.getLog(RedisFileStorageFactory.class);
-
-	protected static ConcurrentMap<String, String> redisFileMap = new ConcurrentHashMap<String, String>();
 
 	protected static ConcurrentMap<Integer, String> redisPosMap = new ConcurrentHashMap<Integer, String>();
 
@@ -109,19 +108,24 @@ public class RedisFileStorageFactory {
 	}
 
 	/**
-	 * 通过文件编号删除内容
+	 * 通过文件编号删除内容，删除全部节点
 	 * 
 	 * @param region
 	 * @param fileId
 	 */
 	public void deleteById(String region, String fileId) {
-		Jedis jedis = null;
-		try {
-			String key = redisFileMap.get(fileId);
-			if (key != null) {
+		int size = redisPoolMap.size();
+		if (size == 0) {
+			return;
+		}
+		int pos = 0;
+		while (pos < size) {
+			String key = redisPosMap.get(pos++);
+			JedisPool pool = redisPoolMap.get(key);
+			Jedis jedis = null;
+			try {
 				ServerEntity serverEntity = serverMap.get(key);
 				if (serverEntity != null) {
-					JedisPool pool = redisPoolMap.get(key);
 					jedis = pool.getResource();
 					if (jedis != null && jedis.isConnected()) {
 						if (StringUtils.isNotEmpty(serverEntity.getDbname())
@@ -133,13 +137,15 @@ public class RedisFileStorageFactory {
 						logger.debug(key + "->" + region + ":" + fileId + " delete data from redis.");
 					}
 				}
-			}
-		} catch (Exception ex) {
-			// ex.printStackTrace();
-			logger.error("redis error", ex);
-		} finally {
-			if (jedis != null) {
-				jedis.close();
+			} catch (Exception ex) {
+				logger.error("redis error", ex);
+			} finally {
+				if (jedis != null) {
+					try {
+						jedis.close();
+					} catch (Exception ex) {
+					}
+				}
 			}
 		}
 	}
@@ -162,13 +168,22 @@ public class RedisFileStorageFactory {
 	 * @return
 	 */
 	public byte[] getData(String region, String fileId) {
+		int size = redisPoolMap.size();
+		if (size == 0) {
+			return null;
+		}
+		int pos = 0;
+		String key = null;
 		Jedis jedis = null;
-		try {
-			String key = redisFileMap.get(fileId);
-			if (key != null) {
-				ServerEntity serverEntity = serverMap.get(key);
+		JedisPool pool = null;
+		ServerEntity serverEntity = null;
+		while (pos < size) {
+			key = redisPosMap.get(pos++);
+			pool = redisPoolMap.get(key);
+			try {
+				long start = System.currentTimeMillis();
+				serverEntity = serverMap.get(key);
 				if (serverEntity != null) {
-					JedisPool pool = redisPoolMap.get(key);
 					jedis = pool.getResource();
 					if (jedis != null && jedis.isConnected()) {
 						if (StringUtils.isNotEmpty(serverEntity.getDbname())
@@ -176,19 +191,24 @@ public class RedisFileStorageFactory {
 							jedis.select(Integer.parseInt(serverEntity.getDbname()));
 						}
 						byte[] data = jedis.get(getKey(region, fileId));
+						long ts = System.currentTimeMillis() - start;
+						logger.debug("redis获取用时:" + ts);
 						if (data != null) {
-							logger.debug("get data from redis.");
+							logger.debug(key + "->" + region + ":" + fileId + " get data from redis.");
 							return data;
 						}
 					}
 				}
-			}
-		} catch (Exception ex) {
-			// ex.printStackTrace();
-			logger.error("redis error", ex);
-		} finally {
-			if (jedis != null) {
-				jedis.close();
+
+			} catch (Exception ex) {
+				logger.error("redis get error", ex);
+			} finally {
+				if (jedis != null) {
+					try {
+						jedis.close();
+					} catch (Exception ex) {
+					}
+				}
 			}
 		}
 		return null;
@@ -202,13 +222,22 @@ public class RedisFileStorageFactory {
 	 * @return
 	 */
 	public DataFile getDataFile(String region, String fileId) {
+		int size = redisPoolMap.size();
+		if (size == 0) {
+			return null;
+		}
+		int pos = 0;
+		String key = null;
 		Jedis jedis = null;
-		try {
-			String key = redisFileMap.get(fileId);
-			if (key != null) {
-				ServerEntity serverEntity = serverMap.get(key);
+		JedisPool pool = null;
+		ServerEntity serverEntity = null;
+		while (pos < size) {
+			key = redisPosMap.get(pos++);
+			pool = redisPoolMap.get(key);
+			try {
+				long start = System.currentTimeMillis();
+				serverEntity = serverMap.get(key);
 				if (serverEntity != null) {
-					JedisPool pool = redisPoolMap.get(key);
 					jedis = pool.getResource();
 					if (jedis != null && jedis.isConnected()) {
 						if (StringUtils.isNotEmpty(serverEntity.getDbname())
@@ -225,16 +254,20 @@ public class RedisFileStorageFactory {
 								dataFile.setData(data);
 							}
 						}
+						long ts = System.currentTimeMillis() - start;
+						logger.debug("redis获取用时:" + ts);
 						return dataFile;
 					}
 				}
-			}
-		} catch (Exception ex) {
-			// ex.printStackTrace();
-			logger.error("redis error", ex);
-		} finally {
-			if (jedis != null) {
-				jedis.close();
+			} catch (Exception ex) {
+				logger.error("redis get error", ex);
+			} finally {
+				if (jedis != null) {
+					try {
+						jedis.close();
+					} catch (Exception ex) {
+					}
+				}
 			}
 		}
 		return null;
@@ -282,7 +315,10 @@ public class RedisFileStorageFactory {
 				logger.error("redis error", ex);
 			} finally {
 				if (jedis != null) {
-					jedis.close();
+					try {
+						jedis.close();
+					} catch (Exception ex) {
+					}
 				}
 			}
 		}
@@ -293,7 +329,6 @@ public class RedisFileStorageFactory {
 		ServerEntityQuery query = new ServerEntityQuery();
 		query.type("redis");
 		query.active("1");
-		query.verify("Y");
 
 		List<ServerEntity> servers = getServerEntityService().list(query);
 		if (servers != null && !servers.isEmpty()) {
@@ -350,7 +385,10 @@ public class RedisFileStorageFactory {
 					logger.error("redis connection error", ex);
 				} finally {
 					if (jedis != null) {
-						jedis.close();
+						try {
+							jedis.close();
+						} catch (Exception ex) {
+						}
 					}
 				}
 			}
@@ -368,90 +406,100 @@ public class RedisFileStorageFactory {
 	}
 
 	/**
-	 * 存储内容，默认有限期为24小时
+	 * 存储内容到redis，写到全部节点
 	 * 
 	 * @param region
 	 * @param fileId
 	 * @param data
 	 */
 	public void saveData(String region, String fileId, byte[] data) {
-		java.util.Random rand = new java.util.Random();
 		int size = redisPoolMap.size();
+		if (size == 0) {
+			return;
+		}
 		int pos = 0;
-		int retry = 0;
-		while (retry <= size) {
-			pos = rand.nextInt(size);
-			if (pos < 0) {
-				pos = 0;
-			}
-			String key = redisPosMap.get(pos);
-			JedisPool pool = redisPoolMap.get(key);
-			Jedis jedis = null;
+		int rnum = 0;
+		String key = null;
+		Jedis jedis = null;
+		JedisPool pool = null;
+		ServerEntity serverEntity = null;
+		java.util.Random rand = new java.util.Random();
+		while (pos < size) {
+			key = redisPosMap.get(pos++);
+			pool = redisPoolMap.get(key);
 			try {
-				retry++;
-				ServerEntity serverEntity = serverMap.get(key);
+				long start = System.currentTimeMillis();
+				serverEntity = serverMap.get(key);
 				if (serverEntity != null && data != null && pool != null && !pool.isClosed()) {
 					jedis = pool.getResource();
 					if (StringUtils.isNotEmpty(serverEntity.getDbname())
 							&& StringUtils.isNumeric(serverEntity.getDbname())) {
 						jedis.select(Integer.parseInt(serverEntity.getDbname()));
 					}
+					rnum = rand.nextInt(9999);
 					jedis.set(getKey(region, fileId), data);
-					jedis.expire(getKey(region, fileId), 86400);// 24小时
-					redisFileMap.put(fileId, key);
-					return;
+					jedis.expire(getKey(region, fileId), 86400 - rnum);// 24小时以内
+					logger.debug(key + "->" + region + ":" + fileId + " set into redis.");
+					long ts = System.currentTimeMillis() - start;
+					logger.debug("redis存储用时:" + ts);
 				}
 			} catch (Exception ex) {
-				logger.error("redis error", ex);
+				logger.error("redis set error", ex);
 			} finally {
 				if (jedis != null) {
-					jedis.close();
+					try {
+						jedis.close();
+					} catch (Exception ex) {
+					}
 				}
 			}
 		}
 	}
 
 	/**
-	 * 存储内容，默认有限期为24小时
+	 * 存储内容到redis，写到全部节点
 	 * 
 	 * @param region
 	 * @param fileId
 	 * @param data
 	 */
 	public void saveDataFile(String region, String fileId, DataFile dataFile) {
-		java.util.Random rand = new java.util.Random();
 		int size = redisPoolMap.size();
+		if (size == 0) {
+			return;
+		}
 		int pos = 0;
-		int retry = 0;
-		while (retry <= size) {
-			pos = rand.nextInt(size);
-			if (pos < 0) {
-				pos = 0;
-			}
-			String key = redisPosMap.get(pos);
-			JedisPool pool = redisPoolMap.get(key);
-			Jedis jedis = null;
+		int rnum = 0;
+		String key = null;
+		Jedis jedis = null;
+		JedisPool pool = null;
+		ServerEntity serverEntity = null;
+		java.util.Random rand = new java.util.Random();
+		while (pos < size) {
+			key = redisPosMap.get(pos++);
+			pool = redisPoolMap.get(key);
 			try {
-				retry++;
-				ServerEntity serverEntity = serverMap.get(key);
+				serverEntity = serverMap.get(key);
 				if (serverEntity != null && dataFile != null && pool != null && !pool.isClosed()) {
 					jedis = pool.getResource();
 					if (StringUtils.isNotEmpty(serverEntity.getDbname())
 							&& StringUtils.isNumeric(serverEntity.getDbname())) {
 						jedis.select(Integer.parseInt(serverEntity.getDbname()));
 					}
+					rnum = rand.nextInt(9999);
 					jedis.set(getJsonKey(region, fileId), dataFile.toJsonObject().toJSONString());
 					jedis.set(getKey(region, fileId), dataFile.getData());
-					jedis.expire(getJsonKey(region, fileId), 86400);// 24小时
-					jedis.expire(getKey(region, fileId), 86400);// 24小时
-					redisFileMap.put(fileId, key);
-					return;
+					jedis.expire(getJsonKey(region, fileId), 86400 - rnum);// 24小时以内
+					jedis.expire(getKey(region, fileId), 86400 - rnum);// 24小时以内
 				}
 			} catch (Exception ex) {
-				logger.error("redis error", ex);
+				logger.error("redis set error", ex);
 			} finally {
 				if (jedis != null) {
-					jedis.close();
+					try {
+						jedis.close();
+					} catch (Exception ex) {
+					}
 				}
 			}
 		}
@@ -459,7 +507,7 @@ public class RedisFileStorageFactory {
 
 	public void startScheduler() {
 		RefreshTask command = new RefreshTask();
-		scheduledThreadPool.scheduleAtFixedRate(command, 1, 5, TimeUnit.MINUTES);// 每5分钟检查一次
+		scheduledThreadPool.scheduleAtFixedRate(command, 1, 15, TimeUnit.MINUTES);// 每15分钟检查一次
 	}
 
 }
