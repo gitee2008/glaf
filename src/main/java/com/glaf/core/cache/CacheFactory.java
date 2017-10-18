@@ -97,14 +97,14 @@ public class CacheFactory {
 
 	protected static Cache getCache() {
 		Cache cache = null;
-		if (SystemConfig.getBoolean("use_level2_cache", false)) {
+		if (SystemConfig.getBoolean("use_level2_cache")) {
 			cache = cacheMap.get("j2cache");
 			if (cache == null) {
 				String cacheClass = "com.glaf.j2cache.J2CacheImpl";
 				cache = (Cache) ReflectUtils.instantiate(cacheClass);
-			}
-			if (cache != null) {
-				cacheMap.put("j2cache", cache);
+				if (cache != null) {
+					cacheMap.put("j2cache", cache);
+				}
 			}
 		} else {
 			String provider = SystemConfig.getStringValue("cache_provider", "guava");
@@ -119,13 +119,16 @@ public class CacheFactory {
 				} else if (StringUtils.equals(provider, "geode")) {
 					String cacheClass = "com.glaf.core.cache.geode.GeodeCacheImpl";
 					cache = (Cache) ReflectUtils.instantiate(cacheClass);
+				} else if (StringUtils.equals(provider, "j2cache")) {
+					String cacheClass = "com.glaf.j2cache.J2CacheImpl";
+					cache = (Cache) ReflectUtils.instantiate(cacheClass);
 				} else {
 					String cacheClass = "com.glaf.core.cache.guava.GuavaCache";
 					cache = (Cache) ReflectUtils.instantiate(cacheClass);
 				}
-			}
-			if (cache != null) {
-				cacheMap.put(provider, cache);
+				if (cache != null) {
+					cacheMap.put(provider, cache);
+				}
 			}
 		}
 		return cache;
@@ -239,7 +242,7 @@ public class CacheFactory {
 
 			String configLocation = DEFAULT_CONFIG;
 
-			if (SystemConfig.getBoolean("use_level2_cache", false)) {
+			if (SystemConfig.getBoolean("use_level2_cache")) {
 				logger.info("use j2cache...");
 				configLocation = "com/glaf/j2cache/j2cache-context.xml";
 			} else {

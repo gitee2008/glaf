@@ -52,7 +52,7 @@ public class ResourceFactory {
 	protected static List<String> regions = new java.util.concurrent.CopyOnWriteArrayList<String>();
 
 	protected static Cache<String, byte[]> cache = CacheBuilder.newBuilder().maximumSize(5000)
-			.expireAfterAccess(30, TimeUnit.MINUTES).build();
+			.expireAfterWrite(30, TimeUnit.MINUTES).build();
 
 	protected static ExecutorService pool = Executors.newFixedThreadPool(10);
 

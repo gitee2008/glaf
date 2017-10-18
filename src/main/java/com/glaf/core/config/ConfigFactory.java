@@ -50,7 +50,7 @@ public class ConfigFactory {
 	protected static List<String> regions = new java.util.concurrent.CopyOnWriteArrayList<String>();
 
 	protected static Cache<String, String> cache = CacheBuilder.newBuilder().maximumSize(10000)
-			.expireAfterAccess(5, TimeUnit.MINUTES).build();
+			.expireAfterWrite(5, TimeUnit.MINUTES).build();
 
 	protected static ExecutorService pool = Executors.newFixedThreadPool(10);
 

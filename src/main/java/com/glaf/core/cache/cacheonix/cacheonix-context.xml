@@ -6,7 +6,7 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 
-	<bean id="cache" class="com.glaf.core.cache.guava.GuavaCache">
+	<bean id="cache" class="com.glaf.core.cache.cacheonix.CacheonixCache">
 		<property name="cacheSize">
 			<value>50000</value>
 		</property>

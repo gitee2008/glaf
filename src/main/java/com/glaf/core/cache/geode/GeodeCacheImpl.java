@@ -54,6 +54,7 @@ public class GeodeCacheImpl implements Cache {
 		this.getRegion(regionName).clear();
 	}
 
+	@Override
 	public String get(String regionName, String key) {
 		logger.debug("region:" + regionName + "\tkey:" + key);
 		String object = null;
@@ -115,6 +116,7 @@ public class GeodeCacheImpl implements Cache {
 		return null;
 	}
 
+	@Override
 	public void put(String regionName, String key, String value) {
 		this.getRegion(regionName).put(key, value);
 	}

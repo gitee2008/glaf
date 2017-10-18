@@ -45,7 +45,7 @@ public class GuavaCache<K, V> implements org.apache.shiro.cache.Cache<K, V> {
 	public GuavaCache(int cacheSize, int expireMinutes) {
 		this.cacheSize = cacheSize;
 		this.expireMinutes = expireMinutes;
-		cache = CacheBuilder.newBuilder().maximumSize(cacheSize).expireAfterAccess(expireMinutes, TimeUnit.MINUTES)
+		cache = CacheBuilder.newBuilder().maximumSize(cacheSize).expireAfterWrite(expireMinutes, TimeUnit.MINUTES)
 				.build();
 	}
 
@@ -84,7 +84,7 @@ public class GuavaCache<K, V> implements org.apache.shiro.cache.Cache<K, V> {
 	public Cache<Object, Object> getCache() {
 		if (cache == null) {
 			cache = CacheBuilder.newBuilder().maximumSize(getCacheSize())
-					.expireAfterAccess(getExpireMinutes(), TimeUnit.MINUTES).build();
+					.expireAfterWrite(getExpireMinutes(), TimeUnit.MINUTES).build();
 		}
 		return cache;
 	}

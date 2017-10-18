@@ -23,6 +23,9 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
@@ -32,6 +35,7 @@ import com.glaf.core.cache.CacheException;
 import com.glaf.core.context.ContextFactory;
 
 public class EHCacheImpl implements Cache {
+	protected static final Log logger = LogFactory.getLog(EHCacheImpl.class);
 
 	protected static ConcurrentMap<String, Ehcache> cacheConcurrentMap = new ConcurrentHashMap<String, Ehcache>();
 
@@ -41,7 +45,7 @@ public class EHCacheImpl implements Cache {
 
 	private Properties properties;
 
-	private int timeToLive;
+	private int timeToLive = 1800;// seconds
 
 	public EHCacheImpl() {
 
@@ -92,6 +96,7 @@ public class EHCacheImpl implements Cache {
 		}
 	}
 
+	@Override
 	public String get(String region, String key) {
 		try {
 			if (key == null) {
@@ -101,12 +106,19 @@ public class EHCacheImpl implements Cache {
 				if (element == null) {
 					return null;
 				} else {
-					return (String)element.getObjectValue();
+					logger.debug("get cache data from ehcahe.");
+					Object value = element.getObjectValue();
+					if (value != null) {
+						if (value instanceof String) {
+							return (String) value;
+						}
+					}
 				}
 			}
 		} catch (net.sf.ehcache.CacheException e) {
 			throw new CacheException(e);
 		}
+		return null;
 	}
 
 	public Ehcache getCache() {
@@ -123,6 +135,9 @@ public class EHCacheImpl implements Cache {
 				cacheManager = ContextFactory.getBean("ehCacheManager");
 			}
 			regionCache = cacheManager.getCache(region);
+			if (regionCache == null) {
+				regionCache = cacheManager.addCacheIfAbsent(region);
+			}
 			cacheConcurrentMap.put(region, regionCache);
 		}
 		return regionCache;
@@ -150,12 +165,13 @@ public class EHCacheImpl implements Cache {
 		}
 	}
 
-	public void put(String key, String value) {
+	public void put(String key, Object value) {
 		try {
 			Element element = new Element(key, value);
 			if (timeToLive > 0) {
 				element.setTimeToLive(timeToLive);
 			}
+			this.remove(key);
 			getCache().put(element);
 		} catch (IllegalArgumentException e) {
 			throw new CacheException(e);
@@ -166,6 +182,24 @@ public class EHCacheImpl implements Cache {
 		}
 	}
 
+	public void put(String region, String key, Object value) {
+		try {
+			Element element = new Element(key, value);
+			if (timeToLive > 0) {
+				element.setTimeToLive(timeToLive);
+			}
+			getCache(region).put(element);
+			logger.debug("put cache data into ehcahe.");
+		} catch (IllegalArgumentException e) {
+			throw new CacheException(e);
+		} catch (IllegalStateException e) {
+			throw new CacheException(e);
+		} catch (net.sf.ehcache.CacheException e) {
+			throw new CacheException(e);
+		}
+	}
+
+	@Override
 	public void put(String region, String key, String value) {
 		try {
 			Element element = new Element(key, value);
@@ -173,6 +207,7 @@ public class EHCacheImpl implements Cache {
 				element.setTimeToLive(timeToLive);
 			}
 			getCache(region).put(element);
+			logger.debug("put cache data into ehcahe.");
 		} catch (IllegalArgumentException e) {
 			throw new CacheException(e);
 		} catch (IllegalStateException e) {

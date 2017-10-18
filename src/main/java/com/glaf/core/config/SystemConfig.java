@@ -41,10 +41,10 @@ public class SystemConfig {
 	protected static final Log logger = LogFactory.getLog(SystemConfig.class);
 
 	protected static Cache<String, SystemProperty> concurrentMap = CacheBuilder.newBuilder().maximumSize(10000)
-			.expireAfterAccess(30, TimeUnit.MINUTES).build();
+			.expireAfterWrite(30, TimeUnit.MINUTES).build();
 
 	protected static Cache<String, Long> concurrentTimeMap = CacheBuilder.newBuilder().maximumSize(10000)
-			.expireAfterAccess(30, TimeUnit.MINUTES).build();
+			.expireAfterWrite(30, TimeUnit.MINUTES).build();
 
 	protected static AtomicBoolean loading = new AtomicBoolean(false);
 

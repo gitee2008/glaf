@@ -18,7 +18,9 @@
 
 package com.glaf.core.cache;
 
+import java.util.Random;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.logging.Log;
@@ -63,8 +65,12 @@ public class ClearCacheJob extends BaseJob {
 	}
 
 	public void runJob(JobExecutionContext context) throws JobExecutionException {
-		if ((System.currentTimeMillis() - lastExecuteTime.get()) < DateUtils.MINUTE * 15) {
+		if ((System.currentTimeMillis() - lastExecuteTime.get()) < DateUtils.MINUTE * 5) {
 			return;
+		}
+		try {
+			TimeUnit.SECONDS.sleep(5 + new Random().nextInt(120));// 随机，避免在集群环境下同时清理导致数据库瞬间过载。
+		} catch (InterruptedException e) {
 		}
 		logger.debug("taskId:" + context.getJobDetail().getJobDataMap().getString("taskId"));
 		this.clearAll();

@@ -36,9 +36,9 @@ public class GuavaCache implements com.glaf.core.cache.Cache {
 
 	protected Cache<Object, Object> cache;
 
-	protected int cacheSize = 200000;
+	protected int cacheSize = 50000;
 
-	protected int expireMinutes = 10;
+	protected int expireMinutes = 30;
 
 	public GuavaCache() {
 
@@ -65,23 +65,27 @@ public class GuavaCache implements com.glaf.core.cache.Cache {
 	public Object get(String key) {
 		Object value = getCache().getIfPresent(key);
 		if (value != null) {
-			// logger.debug("get object from guava cache.");
+
 		}
 		return value;
 	}
 
+	@Override
 	public String get(String region, String key) {
-		String value = (String)getCache(region).getIfPresent(key);
+		Object value = getCache(region).getIfPresent(key);
 		if (value != null) {
-			// logger.debug("get object from guava cache.");
+			if (value instanceof String) {
+				return (String) value;
+			}
 		}
-		return value;
+		return null;
 	}
 
 	public Cache<Object, Object> getCache() {
 		if (cache == null) {
 			cache = CacheBuilder.newBuilder().maximumSize(getCacheSize())
-					.expireAfterAccess(getExpireMinutes(), TimeUnit.MINUTES).build();
+					.expireAfterWrite(getExpireMinutes(), TimeUnit.MINUTES).refreshAfterWrite(2, TimeUnit.SECONDS)
+					.build();
 		}
 		return cache;
 	}
@@ -90,7 +94,8 @@ public class GuavaCache implements com.glaf.core.cache.Cache {
 		Cache<Object, Object> regionCache = cacheConcurrentMap.get(region);
 		if (regionCache == null) {
 			regionCache = CacheBuilder.newBuilder().maximumSize(getCacheSize())
-					.expireAfterAccess(getExpireMinutes(), TimeUnit.MINUTES).build();
+					.expireAfterWrite(getExpireMinutes(), TimeUnit.MINUTES).refreshAfterWrite(2, TimeUnit.SECONDS)
+					.build();
 			cacheConcurrentMap.put(region, regionCache);
 		}
 		return regionCache;
@@ -104,12 +109,19 @@ public class GuavaCache implements com.glaf.core.cache.Cache {
 		return expireMinutes;
 	}
 
-	public void put(String key, String value) {
+	public void put(String key, Object value) {
 		Cache<Object, Object> cache = this.getCache();
 		cache.invalidate(key);
 		cache.put(key, value);
 	}
 
+	public void put(String region, String key, Object value) {
+		Cache<Object, Object> cache = this.getCache(region);
+		cache.invalidate(key);
+		cache.put(key, value);
+	}
+
+	@Override
 	public void put(String region, String key, String value) {
 		Cache<Object, Object> cache = this.getCache(region);
 		cache.invalidate(key);

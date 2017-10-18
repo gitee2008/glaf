@@ -58,7 +58,7 @@ public class TableFactory {
 
 	private static Cache<String, String> getCache() {
 		if (cache == null) {
-			cache = CacheBuilder.newBuilder().maximumSize(cacheSize).expireAfterAccess(expireMinutes, TimeUnit.MINUTES)
+			cache = CacheBuilder.newBuilder().maximumSize(cacheSize).expireAfterWrite(expireMinutes, TimeUnit.MINUTES)
 					.build();
 		}
 		return cache;
