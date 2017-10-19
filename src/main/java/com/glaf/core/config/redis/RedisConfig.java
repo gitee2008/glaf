@@ -179,7 +179,6 @@ public class RedisConfig implements Config {
 			try {
 				RedisFactory.getInstance().hsetAsync(region2, getKeyName(key), SerializationUtils.serialize(value));
 			} catch (Exception ex) {
-				
 				throw new RuntimeException(ex);
 			}
 		}
@@ -192,7 +191,6 @@ public class RedisConfig implements Config {
 			try {
 				RedisFactory.getInstance().hsetAsync(region2, getKeyName(key), SerializationUtils.serialize(value));
 			} catch (Exception ex) {
-				
 				throw new RuntimeException(ex);
 			}
 		}

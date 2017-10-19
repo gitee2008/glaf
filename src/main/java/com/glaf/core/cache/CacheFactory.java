@@ -108,13 +108,18 @@ public class CacheFactory {
 			}
 		} else {
 			String provider = SystemConfig.getStringValue("cache_provider", "guava");
-			cache = cacheMap.get(provider);
+			if (provider != null) {
+				cache = cacheMap.get(provider);
+			}
 			if (cache == null) {
 				if (StringUtils.equals(provider, "ehcache")) {
 					String cacheClass = "com.glaf.core.cache.ehcache.EHCacheImpl";
 					cache = (Cache) ReflectUtils.instantiate(cacheClass);
 				} else if (StringUtils.equals(provider, "ehcache3")) {
 					String cacheClass = "com.glaf.core.cache.ehcache3.EHCache3Impl";
+					cache = (Cache) ReflectUtils.instantiate(cacheClass);
+				} else if (StringUtils.equals(provider, "cacheonix")) {
+					String cacheClass = "com.glaf.core.cache.cacheonix.CacheonixCache";
 					cache = (Cache) ReflectUtils.instantiate(cacheClass);
 				} else if (StringUtils.equals(provider, "geode")) {
 					String cacheClass = "com.glaf.core.cache.geode.GeodeCacheImpl";
@@ -126,7 +131,7 @@ public class CacheFactory {
 					String cacheClass = "com.glaf.core.cache.guava.GuavaCache";
 					cache = (Cache) ReflectUtils.instantiate(cacheClass);
 				}
-				if (cache != null) {
+				if (provider != null && cache != null) {
 					cacheMap.put(provider, cache);
 				}
 			}

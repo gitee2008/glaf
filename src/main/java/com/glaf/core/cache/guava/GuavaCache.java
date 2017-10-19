@@ -84,8 +84,7 @@ public class GuavaCache implements com.glaf.core.cache.Cache {
 	public Cache<Object, Object> getCache() {
 		if (cache == null) {
 			cache = CacheBuilder.newBuilder().maximumSize(getCacheSize())
-					.expireAfterWrite(getExpireMinutes(), TimeUnit.MINUTES).refreshAfterWrite(2, TimeUnit.SECONDS)
-					.build();
+					.expireAfterWrite(getExpireMinutes(), TimeUnit.MINUTES).build();
 		}
 		return cache;
 	}
@@ -94,8 +93,7 @@ public class GuavaCache implements com.glaf.core.cache.Cache {
 		Cache<Object, Object> regionCache = cacheConcurrentMap.get(region);
 		if (regionCache == null) {
 			regionCache = CacheBuilder.newBuilder().maximumSize(getCacheSize())
-					.expireAfterWrite(getExpireMinutes(), TimeUnit.MINUTES).refreshAfterWrite(2, TimeUnit.SECONDS)
-					.build();
+					.expireAfterWrite(getExpireMinutes(), TimeUnit.MINUTES).build();
 			cacheConcurrentMap.put(region, regionCache);
 		}
 		return regionCache;
