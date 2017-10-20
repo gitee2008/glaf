@@ -59,7 +59,6 @@ import com.glaf.matrix.data.service.ITableService;
 import com.glaf.matrix.data.service.SqlCriteriaService;
 import com.glaf.matrix.data.service.TableCorrelationService;
 
-
 @Controller("/tableData")
 @RequestMapping("/tableData")
 public class TableDataController {
@@ -178,8 +177,8 @@ public class TableDataController {
 					request.setAttribute("tableDefinition", sysTable);
 				}
 
-				//TableCorrelationQuery query = new TableCorrelationQuery();
-				//query.masterTableId(tableId);
+				// TableCorrelationQuery query = new TableCorrelationQuery();
+				// query.masterTableId(tableId);
 				List<TableCorrelation> list = tableCorrelationService.getTableCorrelationsByMasterTableId(tableId);
 				if (list != null && !list.isEmpty()) {
 					List<SysTable> correlations = new ArrayList<SysTable>();
@@ -438,9 +437,10 @@ public class TableDataController {
 						}
 
 						if (topId > 0) {
-							//TableCorrelationQuery query = new TableCorrelationQuery();
-							//query.slaveTableId(tableId);
-							List<TableCorrelation> list = tableCorrelationService.getTableCorrelationsBySlaveTableId(tableId);
+							// TableCorrelationQuery query = new TableCorrelationQuery();
+							// query.slaveTableId(tableId);
+							List<TableCorrelation> list = tableCorrelationService
+									.getTableCorrelationsBySlaveTableId(tableId);
 							// logger.debug("list:" + list);
 							if (list != null && !list.isEmpty()) {
 								TableCorrelation tc = list.get(0);
@@ -508,8 +508,6 @@ public class TableDataController {
 
 		return new ModelAndView("/tableData/edit", modelMap);
 	}
-
-	
 
 	@ResponseBody
 	@RequestMapping("/json")

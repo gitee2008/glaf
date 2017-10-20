@@ -27,13 +27,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.glaf.core.config.BaseConfiguration;
 import com.glaf.core.config.Configuration;
@@ -42,13 +39,11 @@ import com.glaf.core.util.ReflectUtils;
 
 public class CacheFactory {
 	protected static final Log logger = LogFactory.getLog(CacheFactory.class);
-	protected static final String DEFAULT_CONFIG = "com/glaf/core/cache/guava/guavacache-context.xml";
 	protected static final ConcurrentMap<String, Cache> cacheMap = new ConcurrentHashMap<String, Cache>();
 	protected static final List<CacheItem> items = new CopyOnWriteArrayList<CacheItem>();
 	protected static final List<String> regions = new CopyOnWriteArrayList<String>();
 	protected static Configuration conf = BaseConfiguration.create();
-	protected static ExecutorService pool = Executors.newFixedThreadPool(10);
-	private static volatile ApplicationContext ctx;
+	protected static ExecutorService pool = Executors.newFixedThreadPool(50);
 
 	public static void clear(final String region) {
 		Cache cache = getCache();
@@ -84,56 +79,34 @@ public class CacheFactory {
 		}
 	}
 
-	public static ApplicationContext getApplicationContext() {
-		return ctx;
-	}
-
-	public static Object getBean(Object name) {
-		if (ctx == null) {
-			ctx = reload();
-		}
-		return ctx.getBean((String) name);
-	}
-
 	protected static Cache getCache() {
 		Cache cache = null;
-		if (SystemConfig.getBoolean("use_level2_cache")) {
-			cache = cacheMap.get("j2cache");
-			if (cache == null) {
+		String provider = CacheProperties.getString("cache_provider", "ehcache");
+		if (provider != null) {
+			cache = cacheMap.get(provider);
+		}
+		if (cache == null) {
+			if (StringUtils.equals(provider, "cacheonix")) {
+				String cacheClass = "com.glaf.core.cache.cacheonix.CacheonixCache";
+				cache = (Cache) ReflectUtils.instantiate(cacheClass);
+			} else if (StringUtils.equals(provider, "ehcache")) {
+				String cacheClass = "com.glaf.core.cache.ehcache.EHCacheImpl";
+				cache = (Cache) ReflectUtils.instantiate(cacheClass);
+			} else if (StringUtils.equals(provider, "ehcache3")) {
+				String cacheClass = "com.glaf.core.cache.ehcache3.EHCache3Impl";
+				cache = (Cache) ReflectUtils.instantiate(cacheClass);
+			} else if (StringUtils.equals(provider, "geode")) {
+				String cacheClass = "com.glaf.core.cache.geode.GeodeCacheImpl";
+				cache = (Cache) ReflectUtils.instantiate(cacheClass);
+			} else if (StringUtils.equals(provider, "guava")) {
+				String cacheClass = "com.glaf.core.cache.guava.GuavaCache";
+				cache = (Cache) ReflectUtils.instantiate(cacheClass);
+			} else if (StringUtils.equals(provider, "j2cache")) {
 				String cacheClass = "com.glaf.j2cache.J2CacheImpl";
 				cache = (Cache) ReflectUtils.instantiate(cacheClass);
-				if (cache != null) {
-					cacheMap.put("j2cache", cache);
-				}
 			}
-		} else {
-			String provider = SystemConfig.getStringValue("cache_provider", "guava");
-			if (provider != null) {
-				cache = cacheMap.get(provider);
-			}
-			if (cache == null) {
-				if (StringUtils.equals(provider, "ehcache")) {
-					String cacheClass = "com.glaf.core.cache.ehcache.EHCacheImpl";
-					cache = (Cache) ReflectUtils.instantiate(cacheClass);
-				} else if (StringUtils.equals(provider, "ehcache3")) {
-					String cacheClass = "com.glaf.core.cache.ehcache3.EHCache3Impl";
-					cache = (Cache) ReflectUtils.instantiate(cacheClass);
-				} else if (StringUtils.equals(provider, "cacheonix")) {
-					String cacheClass = "com.glaf.core.cache.cacheonix.CacheonixCache";
-					cache = (Cache) ReflectUtils.instantiate(cacheClass);
-				} else if (StringUtils.equals(provider, "geode")) {
-					String cacheClass = "com.glaf.core.cache.geode.GeodeCacheImpl";
-					cache = (Cache) ReflectUtils.instantiate(cacheClass);
-				} else if (StringUtils.equals(provider, "j2cache")) {
-					String cacheClass = "com.glaf.j2cache.J2CacheImpl";
-					cache = (Cache) ReflectUtils.instantiate(cacheClass);
-				} else {
-					String cacheClass = "com.glaf.core.cache.guava.GuavaCache";
-					cache = (Cache) ReflectUtils.instantiate(cacheClass);
-				}
-				if (provider != null && cache != null) {
-					cacheMap.put(provider, cache);
-				}
+			if (cache != null && provider != null) {
+				cacheMap.put(provider, cache);
 			}
 		}
 		return cache;
@@ -159,7 +132,7 @@ public class CacheFactory {
 							// logger.debug(_region + " get object'" + key + "'
 							// from cache.");
 							String val = value.toString();
-							val = new String(Base64.decodeBase64(val), "UTF-8");
+							val = new String(com.glaf.core.util.Hex.hex2byte(val), "UTF-8");
 							return val;
 						}
 					}
@@ -200,7 +173,7 @@ public class CacheFactory {
 				cacheKey = DigestUtils.md5Hex(cacheKey.getBytes());
 				int limitSize = conf.getInt("cache.limitSize", 1024000);// 1024KB
 				if (value.length() < limitSize) {
-					String val = Base64.encodeBase64String(value.getBytes("UTF-8"));
+					String val = com.glaf.core.util.Hex.byte2hex(value.getBytes("UTF-8"));
 					cache.put(_region, cacheKey, val);
 					if (!regions.contains(_region)) {
 						regions.add(_region);
@@ -218,54 +191,6 @@ public class CacheFactory {
 			}
 		} catch (Throwable ex) {
 
-		}
-	}
-
-	protected static ApplicationContext reload() {
-		try {
-			if (null != ctx) {
-				Cache cache = getCache();
-				if (cache != null) {
-					if (items != null && !items.isEmpty()) {
-						for (CacheItem item : items) {
-							String _region = SystemConfig.getRegionName(item.getRegion());
-							try {
-								cache.remove(_region, item.getKey());
-							} catch (Throwable ex) {
-							}
-						}
-						items.clear();
-					}
-					if (regions != null && !regions.isEmpty()) {
-						for (String region : regions) {
-							cache.clear(region);
-						}
-					}
-				}
-				ctx = null;
-			}
-
-			String configLocation = DEFAULT_CONFIG;
-
-			if (SystemConfig.getBoolean("use_level2_cache")) {
-				logger.info("use j2cache...");
-				configLocation = "com/glaf/j2cache/j2cache-context.xml";
-			} else {
-				if (CacheProperties.getString("sys.cache.context") != null) {
-					configLocation = CacheProperties.getString("sys.cache.context");
-				}
-			}
-
-			ctx = new ClassPathXmlApplicationContext(configLocation);
-			logger.info("################# CacheFactory ##############");
-			logger.info("load cache config: " + configLocation);
-			return ctx;
-		} catch (Exception ex) {
-			if (logger.isDebugEnabled()) {
-
-				logger.debug(ex);
-			}
-			throw new CacheException("can't reload cache", ex);
 		}
 	}
 

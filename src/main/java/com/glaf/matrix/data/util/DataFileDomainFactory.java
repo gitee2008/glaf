@@ -20,6 +20,10 @@ package com.glaf.matrix.data.util;
 
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import com.glaf.core.context.ContextFactory;
 import com.glaf.core.domain.ColumnDefinition;
@@ -28,6 +32,7 @@ import com.glaf.core.domain.TableDefinition;
 import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.service.IDatabaseService;
 import com.glaf.core.util.DBUtils;
+import com.glaf.core.util.DateUtils;
 import com.glaf.core.util.JdbcUtils;
 
 /**
@@ -113,6 +118,86 @@ public class DataFileDomainFactory {
 			conn.setAutoCommit(false);
 			for (int i = 0; i < com.glaf.core.util.Constants.TABLE_PARTITION; i++) {
 				tableDefinition = getTableDefinition(TABLENAME + i);
+				sqlStatement = DBUtils.getCreateTableScript(dbType, tableDefinition);
+				statement = conn.createStatement();
+				statement.executeUpdate(sqlStatement);
+				JdbcUtils.close(statement);
+			}
+			conn.commit();
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		} finally {
+			JdbcUtils.close(statement);
+			JdbcUtils.close(conn);
+		}
+	}
+
+	public static void createTables(long databaseId, int year) {
+		List<Integer> days = new ArrayList<Integer>();
+		int now = DateUtils.getNowYearMonthDay();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+
+		StringBuilder buffer = new StringBuilder();
+		for (int month = 1; month <= 12; month++) {
+			int daysOfMonth = 31;
+			switch (month) {
+			case 2:
+				if (year % 4 == 0) {
+					daysOfMonth = 29;
+				} else {
+					daysOfMonth = 28;
+				}
+				break;
+			case 4:
+			case 6:
+			case 9:
+			case 11:
+				daysOfMonth = 30;
+				break;
+			default:
+				break;
+			}
+			for (int day = 1; day <= daysOfMonth; day++) {
+				buffer.delete(0, buffer.length());
+				buffer.append(year);
+				if (month < 10) {
+					buffer.append("0");
+				}
+				buffer.append(month);
+				if (day < 10) {
+					buffer.append("0");
+				}
+				buffer.append(day);
+				if (Integer.parseInt(buffer.toString()) >= now) {
+					days.add(Integer.parseInt(buffer.toString()));
+				}
+			}
+		}
+
+		String sqlStatement = null;
+		TableDefinition tableDefinition = null;
+
+		Connection conn = null;
+		Statement statement = null;
+		Database database = null;
+		try {
+			if (databaseId > 0) {
+				IDatabaseService databaseService = ContextFactory.getBean("databaseService");
+				database = databaseService.getDatabaseById(databaseId);
+			}
+
+			if (database != null) {
+				conn = DBConnectionFactory.getConnection(database.getName());
+			} else {
+				conn = DBConnectionFactory.getConnection();
+			}
+
+			String dbType = DBConnectionFactory.getDatabaseType(conn);
+			conn.setAutoCommit(false);
+			int size = days.size();
+			for (int i = 0; i < size; i++) {
+				tableDefinition = getTableDefinition(TABLENAME + days.get(i));
 				sqlStatement = DBUtils.getCreateTableScript(dbType, tableDefinition);
 				statement = conn.createStatement();
 				statement.executeUpdate(sqlStatement);

@@ -21,6 +21,7 @@ package com.glaf.matrix.data.web.springmvc;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,7 @@ import com.glaf.matrix.data.domain.DataFileEntity;
 import com.glaf.matrix.data.domain.DataModel;
 import com.glaf.matrix.data.domain.SysTable;
 import com.glaf.matrix.data.factory.DataFileFactory;
+import com.glaf.matrix.data.factory.RedisFileStorageFactory;
 import com.glaf.matrix.data.query.DataFileQuery;
 import com.glaf.matrix.data.service.ITableService;
 
@@ -279,6 +281,28 @@ public class DataFileController {
 				}
 			}
 		}
+	}
+
+	@ResponseBody
+	@RequestMapping("/getRedisKeys")
+	public byte[] getRedisKeys(HttpServletRequest request) {
+		LoginContext loginContext = RequestUtils.getLoginContext(request);
+		if (loginContext.isSystemAdministrator()) {
+			logger.debug(RequestUtils.getParameterMap(request));
+			String region = request.getParameter("region");
+			String server_name = request.getParameter("server_name");
+			if (region != null && server_name != null) {
+				Collection<String> keys = RedisFileStorageFactory.getInstance().getKeys(region, server_name);
+				if (keys != null) {
+					JSONArray array = new JSONArray();
+					for (String key : keys) {
+						array.add(key);
+					}
+					return array.toJSONString().getBytes();
+				}
+			}
+		}
+		return ResponseUtils.responseJsonResult(false);
 	}
 
 	@javax.annotation.Resource

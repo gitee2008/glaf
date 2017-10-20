@@ -49,6 +49,7 @@ import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.resource.ResourceFactory;
 import com.glaf.core.security.IdentityFactory;
 import com.glaf.core.util.DBUtils;
+import com.glaf.core.util.DateUtils;
 import com.glaf.core.util.FileUtils;
 import com.glaf.core.util.UUID32;
 
@@ -98,6 +99,11 @@ public class DataFileServiceImpl implements IDataFileService {
 
 	@Transactional
 	public void deleteById(String tenantId, String id) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String cacheKey = "datafile_" + id;
+			CacheFactory.remove("datafile", cacheKey);
+		}
+
 		DataFileQuery query = new DataFileQuery();
 		query.id(id);
 		if (StringUtils.isNotEmpty(tenantId)) {
@@ -107,10 +113,9 @@ public class DataFileServiceImpl implements IDataFileService {
 		DataFile dataFile = dataFileMapper.getDataFileById(query);
 		if (dataFile != null) {
 			dataFileMapper.deleteDataFileById(query);
-			if (SystemConfig.getBoolean("use_query_cache")) {
-				String cacheKey = "datafile_" + id;
-				CacheFactory.remove("datafile", cacheKey);
-			}
+
+			query.setTableSuffix(String.valueOf(DateUtils.getYearMonthDay(dataFile.getCreateDate())));
+			dataFileMapper.deleteDataFileById(query);
 		}
 	}
 
@@ -122,11 +127,26 @@ public class DataFileServiceImpl implements IDataFileService {
 			query.tenantId(tenantId);
 			query.setTableSuffix(String.valueOf(IdentityFactory.getTenantHash(tenantId)));
 		}
+
+		List<DataFile> list = dataFileMapper.getDataFiles(query);
+
 		dataFileMapper.deleteDataFilesByBusinessKey(query);
+
+		if (list != null && !list.isEmpty()) {
+			for (DataFile dataFile : list) {
+				query.setTableSuffix(String.valueOf(DateUtils.getYearMonthDay(dataFile.getCreateDate())));
+				dataFileMapper.deleteDataFileById(query);
+			}
+		}
+
 	}
 
 	@Transactional
 	public void deleteDataFileByFileId(String tenantId, String fileId) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String cacheKey = "datafile_" + fileId;
+			CacheFactory.remove("datafile", cacheKey);
+		}
 		DataFile dataFile = this.getDataFileByFileId(tenantId, fileId);
 		if (dataFile != null) {
 			DataFileQuery query = new DataFileQuery();
@@ -136,10 +156,9 @@ public class DataFileServiceImpl implements IDataFileService {
 				query.setTableSuffix(String.valueOf(IdentityFactory.getTenantHash(tenantId)));
 			}
 			dataFileMapper.deleteDataFilesByFileId(query);
-			if (SystemConfig.getBoolean("use_query_cache")) {
-				String cacheKey = "datafile_" + fileId;
-				CacheFactory.remove("datafile", cacheKey);
-			}
+
+			query.setTableSuffix(String.valueOf(DateUtils.getYearMonthDay(dataFile.getCreateDate())));
+			dataFileMapper.deleteDataFileById(query);
 		}
 	}
 
@@ -471,7 +490,13 @@ public class DataFileServiceImpl implements IDataFileService {
 
 		if (StringUtils.equals(DBUtils.POSTGRESQL, DBConnectionFactory.getDatabaseType())) {
 			dataFileMapper.insertDataFile_postgres(dataFile);
+
+			dataFile.setTableSuffix(String.valueOf(DateUtils.getYearMonthDay(dataFile.getCreateDate())));
+			dataFileMapper.insertDataFile_postgres(dataFile);
 		} else {
+			dataFileMapper.insertDataFile(dataFile);
+
+			dataFile.setTableSuffix(String.valueOf(DateUtils.getYearMonthDay(dataFile.getCreateDate())));
 			dataFileMapper.insertDataFile(dataFile);
 		}
 
@@ -674,6 +699,9 @@ public class DataFileServiceImpl implements IDataFileService {
 			dataFile.setTableSuffix(String.valueOf(IdentityFactory.getTenantHash(tenantId)));
 		}
 		dataFileMapper.updateDataFile(dataFile);
+
+		dataFile.setTableSuffix(String.valueOf(DateUtils.getYearMonthDay(dataFile.getCreateDate())));
+		dataFileMapper.updateDataFile(dataFile);
 	}
 
 	@Transactional
@@ -693,8 +721,14 @@ public class DataFileServiceImpl implements IDataFileService {
 		if (StringUtils.equals(DBUtils.POSTGRESQL, DBConnectionFactory.getDatabaseType())) {
 			dataFile.setPath(null);
 			entityDAO.update("updateDataFileFileInfo_postgres", dataFile);
+
+			dataFile.setTableSuffix(String.valueOf(DateUtils.getYearMonthDay(dataFile.getCreateDate())));
+			entityDAO.update("updateDataFileFileInfo_postgres", dataFile);
 		} else {
 			dataFile.setPath(null);
+			entityDAO.update("updateDataFileFileInfo", dataFile);
+
+			dataFile.setTableSuffix(String.valueOf(DateUtils.getYearMonthDay(dataFile.getCreateDate())));
 			entityDAO.update("updateDataFileFileInfo", dataFile);
 		}
 	}

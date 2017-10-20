@@ -20,7 +20,6 @@ package com.glaf.j2cache;
 
 import java.io.IOException;
 
-import org.apache.commons.codec.binary.Base64;
 import com.glaf.core.cache.Cache;
 
 import net.oschina.j2cache.CacheChannel;
@@ -44,13 +43,20 @@ public class J2CacheImpl implements Cache {
 				CacheObject cacheObject = (CacheObject) object;
 				if (cacheObject.getValue() != null) {
 					if (cacheObject.getValue() instanceof String) {
-						return (String) cacheObject.getValue();
+						String str = (String) cacheObject.getValue();
+						try {
+							return new String(com.glaf.core.util.Hex.hex2byte(str), "UTF-8");
+						} catch (IOException ex) {
+							return new String(com.glaf.core.util.Hex.hex2byte(str));
+						}
 					} else if (cacheObject.getValue() instanceof byte[]) {
 						byte[] bytes = (byte[]) cacheObject.getValue();
 						try {
-							return new String(Base64.decodeBase64(bytes), "UTF-8");
+							String str = new String(bytes, "UTF-8");
+							return str;
 						} catch (IOException ex) {
-							return new String(Base64.decodeBase64(bytes));
+							String str = new String(bytes);
+							return str;
 						}
 					}
 				}
@@ -65,9 +71,9 @@ public class J2CacheImpl implements Cache {
 	public void put(String region, String key, String value) {
 		if (value != null) {
 			try {
-				this.cache.set(region, key, Base64.encodeBase64(value.getBytes("UTF-8")));
+				this.cache.set(region, key, com.glaf.core.util.Hex.byte2hex(value.getBytes("UTF-8")));
 			} catch (IOException ex) {
-				this.cache.set(region, key, Base64.encodeBase64(value.getBytes()));
+				this.cache.set(region, key, com.glaf.core.util.Hex.byte2hex(value.getBytes()));
 			}
 		}
 	}
