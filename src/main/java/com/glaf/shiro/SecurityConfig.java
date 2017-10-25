@@ -24,7 +24,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.glaf.core.config.SystemProperties;
@@ -115,14 +114,12 @@ public class SecurityConfig {
 		InputStream inputStream = null;
 		try {
 			loading.set(true);
-			String config_path = SystemProperties.getConfigRootPath()
-					+ "/conf/security/";
+			String config_path = SystemProperties.getConfigRootPath() + "/conf/security/";
 			String defaultFileName = config_path + "system-security.properties";
 			File defaultFile = new File(defaultFileName);
 			if (defaultFile.isFile()) {
 				inputStream = new FileInputStream(defaultFile);
-				LinkedHashMap<String, String> p = PropertiesUtils
-						.load(inputStream);
+				LinkedHashMap<String, String> p = PropertiesUtils.load(inputStream);
 				if (p != null) {
 					Iterator<String> it = p.keySet().iterator();
 					while (it.hasNext()) {
@@ -136,7 +133,7 @@ public class SecurityConfig {
 						}
 					}
 				}
-				IOUtils.closeQuietly(inputStream);
+				com.glaf.core.util.IOUtils.closeStream(inputStream);
 				inputStream = null;
 			}
 			File directory = new File(config_path);
@@ -146,15 +143,12 @@ public class SecurityConfig {
 					for (int i = 0, len = filelist.length; i < len; i++) {
 						File file = filelist[i];
 						String filename = file.getAbsolutePath();
-						if (StringUtils.equals(filename,
-								"system-security.properties")) {
+						if (StringUtils.equals(filename, "system-security.properties")) {
 							continue;
 						}
-						if (file.isFile()
-								&& file.getName().endsWith(".properties")) {
+						if (file.isFile() && file.getName().endsWith(".properties")) {
 							inputStream = new FileInputStream(file);
-							LinkedHashMap<String, String> p = PropertiesUtils
-									.load(inputStream);
+							LinkedHashMap<String, String> p = PropertiesUtils.load(inputStream);
 							if (p != null) {
 								Iterator<String> it = p.keySet().iterator();
 								while (it.hasNext()) {
@@ -163,14 +157,12 @@ public class SecurityConfig {
 									/**
 									 * 保证后面添加的配置不能覆盖前面的配置
 									 */
-									if (!filterChainDefinitionMap
-											.containsKey(key)) {
-										filterChainDefinitionMap
-												.put(key, value);
+									if (!filterChainDefinitionMap.containsKey(key)) {
+										filterChainDefinitionMap.put(key, value);
 									}
 								}
 							}
-							IOUtils.closeQuietly(inputStream);
+							com.glaf.core.util.IOUtils.closeStream(inputStream);
 							inputStream = null;
 						}
 					}
@@ -180,7 +172,7 @@ public class SecurityConfig {
 			throw new RuntimeException(ex);
 		} finally {
 			loading.set(false);
-			IOUtils.closeQuietly(inputStream);
+			com.glaf.core.util.IOUtils.closeStream(inputStream);
 		}
 	}
 

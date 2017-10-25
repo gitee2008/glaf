@@ -34,7 +34,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
+ 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -60,6 +60,7 @@ import com.glaf.core.factory.DataServiceFactory;
 import com.glaf.core.security.LoginContext;
 import com.glaf.core.service.DictoryDefinitionService;
 import com.glaf.core.util.FileUtils;
+import com.glaf.core.util.IOUtils;
 import com.glaf.core.util.JsonUtils;
 import com.glaf.core.util.PageResult;
 import com.glaf.core.util.ParamUtils;
@@ -269,7 +270,7 @@ public class SysDictoryController {
 				status = false;
 				logger.error("error import data ", ex);
 			} finally {
-				IOUtils.closeQuietly(zipInputStream);
+				IOUtils.closeStream(zipInputStream);
 			}
 		}
 		return ResponseUtils.responseResult(status);

@@ -56,6 +56,10 @@ public class EHCache3Impl implements com.glaf.core.cache.Cache {
 			return cacheConcurrentMap.get(region);
 		}
 		Cache<String, String> cache = getCacheManager(region).getCache(region, String.class, String.class);
+		if (cache == null) {
+			cache = getCacheManager(region).createCache(region,
+					newCacheConfigurationBuilder(String.class, String.class, heap(100).offheap(10, MemoryUnit.MB)));
+		}
 		cacheConcurrentMap.put(region, cache);
 		return cache;
 	}

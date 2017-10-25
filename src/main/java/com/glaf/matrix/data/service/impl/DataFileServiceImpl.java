@@ -46,11 +46,9 @@ import com.glaf.core.config.SystemConfig;
 import com.glaf.core.dao.EntityDAO;
 import com.glaf.core.id.IdGenerator;
 import com.glaf.core.jdbc.DBConnectionFactory;
-import com.glaf.core.resource.ResourceFactory;
 import com.glaf.core.security.IdentityFactory;
 import com.glaf.core.util.DBUtils;
 import com.glaf.core.util.DateUtils;
-import com.glaf.core.util.FileUtils;
 import com.glaf.core.util.UUID32;
 
 import com.glaf.matrix.data.mapper.DataFileMapper;
@@ -164,15 +162,6 @@ public class DataFileServiceImpl implements IDataFileService {
 
 	public byte[] getBytesByFileId(String tenantId, String fileId) {
 		DataFile dataFile = this.getDataFileByFileId(tenantId, fileId);
-		String cacheKey = "datafile_" + fileId;
-
-		if (SystemConfig.getBoolean("use_file_cache")) {
-			byte[] data = ResourceFactory.getData("data_file", cacheKey);
-			if (data != null) {
-				logger.debug("fetch byte[] data from cache.");
-				return data;
-			}
-		}
 
 		DataFileQuery query = new DataFileQuery();
 		query.fileId(fileId);
@@ -187,11 +176,6 @@ public class DataFileServiceImpl implements IDataFileService {
 			dataFile = (DataFile) entityDAO.getSingleObject("getDataFileFileInfoByFileId", query);
 		}
 		if (dataFile != null && dataFile.getData() != null) {
-			if (SystemConfig.getBoolean("use_file_cache")
-					&& dataFile.getData().length < conf.getInt("cache_file_size", 800) * FileUtils.KB_SIZE) {
-				ResourceFactory.put("data_file", cacheKey, dataFile.getData());
-				logger.debug("put byte[] data into cache.");
-			}
 			return dataFile.getData();
 		}
 		return null;
@@ -199,15 +183,6 @@ public class DataFileServiceImpl implements IDataFileService {
 
 	public byte[] getBytesById(String tenantId, String id) {
 		DataFile dataFile = this.getDataFileById(tenantId, id);
-		String cacheKey = "datafile_" + id;
-
-		if (SystemConfig.getBoolean("use_file_cache")) {
-			byte[] data = ResourceFactory.getData("data_file", cacheKey);
-			if (data != null) {
-				logger.debug("fetch byte[] data from cache.");
-				return data;
-			}
-		}
 
 		DataFileQuery query = new DataFileQuery();
 		query.id(id);
@@ -222,11 +197,6 @@ public class DataFileServiceImpl implements IDataFileService {
 			dataFile = (DataFile) entityDAO.getSingleObject("getDataFileFileInfoById", query);
 		}
 		if (dataFile != null && dataFile.getData() != null) {
-			if (SystemConfig.getBoolean("use_file_cache")
-					&& dataFile.getData().length < conf.getInt("cache_file_size", 800) * FileUtils.KB_SIZE) {
-				ResourceFactory.put("data_file", cacheKey, dataFile.getData());
-				logger.debug("put byte[] data into cache.");
-			}
 			return dataFile.getData();
 		}
 		return null;

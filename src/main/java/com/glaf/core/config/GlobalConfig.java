@@ -26,13 +26,13 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
-import org.apache.commons.io.IOUtils;
+ 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.util.FileUtils;
+import com.glaf.core.util.IOUtils;
 import com.glaf.core.util.JdbcUtils;
 import com.glaf.core.util.PropertiesUtils;
 
@@ -53,10 +53,10 @@ public class GlobalConfig {
 				}
 			}
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			//ex.printStackTrace();
 			logger.error("load properties error", ex);
 		} finally {
-			IOUtils.closeQuietly(inputStream);
+			IOUtils.closeStream(inputStream);
 		}
 		return null;
 	}

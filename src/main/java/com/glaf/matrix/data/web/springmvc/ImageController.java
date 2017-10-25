@@ -30,7 +30,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
+ 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -228,7 +228,7 @@ public class ImageController {
 				} finally {
 					blob.setData(null);
 					blob = null;
-					IOUtils.closeQuietly(inputStream);
+					com.glaf.core.util.IOUtils.closeStream(inputStream);
 				}
 			}
 		}

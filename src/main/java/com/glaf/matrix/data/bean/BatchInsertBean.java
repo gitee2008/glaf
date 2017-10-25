@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
+ 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -174,8 +174,8 @@ public class BatchInsertBean {
 									} catch (SQLException ex) {
 										psmt.setBytes(index2, data);
 									} finally {
-										IOUtils.closeQuietly(bais);
-										IOUtils.closeQuietly(bis);
+										com.glaf.core.util.IOUtils.closeStream(bais);
+										com.glaf.core.util.IOUtils.closeStream(bis);
 									}
 								}
 							} else if (object instanceof java.sql.Blob) {
@@ -190,11 +190,11 @@ public class BatchInsertBean {
 									} catch (SQLException ex) {
 										psmt.setBytes(index2, data);
 									} finally {
-										IOUtils.closeQuietly(bais);
-										IOUtils.closeQuietly(bis);
+										com.glaf.core.util.IOUtils.closeStream(bais);
+										com.glaf.core.util.IOUtils.closeStream(bis);
 									}
 								}
-								IOUtils.closeQuietly(is);
+								com.glaf.core.util.IOUtils.closeStream(is);
 							} else if (object instanceof InputStream) {
 								is = (InputStream) object;
 								byte[] data = FileUtils.getBytes(is);
@@ -206,11 +206,11 @@ public class BatchInsertBean {
 									} catch (SQLException ex) {
 										psmt.setBytes(index2, data);
 									} finally {
-										IOUtils.closeQuietly(bais);
-										IOUtils.closeQuietly(bis);
+										com.glaf.core.util.IOUtils.closeStream(bais);
+										com.glaf.core.util.IOUtils.closeStream(bis);
 									}
 								}
-								IOUtils.closeQuietly(is);
+								com.glaf.core.util.IOUtils.closeStream(is);
 							}
 						} else {
 							psmt.setNull(index2, Types.NULL);
@@ -227,9 +227,9 @@ public class BatchInsertBean {
 		} catch (SQLException ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeQuietly(is);
-			IOUtils.closeQuietly(bais);
-			IOUtils.closeQuietly(bis);
+			com.glaf.core.util.IOUtils.closeStream(is);
+			com.glaf.core.util.IOUtils.closeStream(bais);
+			com.glaf.core.util.IOUtils.closeStream(bis);
 			JdbcUtils.close(psmt);
 		}
 	}

@@ -34,8 +34,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
-
-import org.apache.commons.io.IOUtils;
+ 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +43,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import com.glaf.core.util.FileUtils;
+import com.glaf.core.util.IOUtils;
 import com.glaf.core.util.MyX509TrustManager;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Response;
@@ -215,9 +215,9 @@ public class HttpUtils {
 			
 			log.error("http request error:{}", ex);
 		} finally {
-			IOUtils.closeQuietly(inputStream);
-			IOUtils.closeQuietly(bufferedReader);
-			IOUtils.closeQuietly(inputStreamReader);
+			IOUtils.closeStream(inputStream);
+			IOUtils.closeStream(bufferedReader);
+			IOUtils.closeStream(inputStreamReader);
 			if (conn != null) {
 				conn.disconnect();
 			}
@@ -261,12 +261,11 @@ public class HttpUtils {
 			inputStream = response.getResponseBodyAsStream();
 			buff = FileUtils.getBytes(inputStream);
 			// 释放资源
-			IOUtils.closeQuietly(inputStream);
+			IOUtils.closeStream(inputStream);
 		} catch (Exception ex) {
-			
 			log.error("http request error:{}", ex);
 		} finally {
-			IOUtils.closeQuietly(inputStream);
+			IOUtils.closeStream(inputStream);
 		}
 		return buff;
 	}
@@ -356,17 +355,15 @@ public class HttpUtils {
 				buffer.append(str);
 			}
 			// 释放资源
-			IOUtils.closeQuietly(bufferedReader);
-			IOUtils.closeQuietly(inputStreamReader);
-			IOUtils.closeQuietly(inputStream);
-
+			IOUtils.closeStream(bufferedReader);
+			IOUtils.closeStream(inputStreamReader);
+			IOUtils.closeStream(inputStream);
 		} catch (Exception ex) {
-			
 			log.error("http request error:{}", ex);
 		} finally {
-			IOUtils.closeQuietly(bufferedReader);
-			IOUtils.closeQuietly(inputStreamReader);
-			IOUtils.closeQuietly(inputStream);
+			IOUtils.closeStream(bufferedReader);
+			IOUtils.closeStream(inputStreamReader);
+			IOUtils.closeStream(inputStream);
 		}
 		return buffer.toString();
 	}

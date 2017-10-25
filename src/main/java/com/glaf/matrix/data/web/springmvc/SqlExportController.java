@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,20 +49,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+
 import com.glaf.core.config.SystemProperties;
-import com.glaf.core.resource.ResourceFactory;
 import com.glaf.core.service.IDatabaseService;
 import com.glaf.core.util.DateUtils;
 import com.glaf.core.util.FileUtils;
 import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.ResponseUtils;
+
 import com.glaf.matrix.data.bean.SqlQueryBean;
 import com.glaf.matrix.data.domain.SqlDefinition;
 import com.glaf.matrix.data.service.SqlDefinitionService;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 
 @Controller("/sql/export")
 @RequestMapping("/sql/export")
 public class SqlExportController {
+	protected static Cache<String, byte[]> cache = CacheBuilder.newBuilder().maximumSize(1000)
+			.expireAfterWrite(30, TimeUnit.MINUTES).build();
 
 	protected static final Log logger = LogFactory.getLog(SqlExportController.class);
 
@@ -95,11 +101,13 @@ public class SqlExportController {
 			String filename = SystemProperties.getConfigRootPath() + sqlDefinition.getExportTemplate();
 			byte[] data = null;
 			try {
-				data = ResourceFactory.getData("report_xls", sqlDefinition.getExportTemplate());
+				data = cache.getIfPresent(sqlDefinition.getExportTemplate());
 				if (data == null) {
 					logger.debug("read excel template:" + filename);
 					data = FileUtils.getBytes(filename);
-					ResourceFactory.put("report_xls", sqlDefinition.getExportTemplate(), data);
+					if (data != null) {
+						cache.put(sqlDefinition.getExportTemplate(), data);
+					}
 				}
 			} catch (Exception ex) {
 				// ex.printStackTrace();
@@ -159,7 +167,7 @@ public class SqlExportController {
 								"export" + DateUtils.getNowYearMonthDayHHmmss() + ".xls");
 					}
 				} catch (Exception ex) {
-					//ex.printStackTrace();
+					// ex.printStackTrace();
 					logger.error(ex);
 				} finally {
 					data = null;

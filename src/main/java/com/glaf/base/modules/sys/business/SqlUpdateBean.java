@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
+ 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.*;
@@ -37,6 +37,7 @@ import com.glaf.core.domain.TableDefinition;
 import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.util.DBUtils;
 import com.glaf.core.util.DateUtils;
+import com.glaf.core.util.IOUtils;
 import com.glaf.core.util.JdbcUtils;
 
 public class SqlUpdateBean {
@@ -62,7 +63,7 @@ public class SqlUpdateBean {
 		} catch (Exception ex) {
 			logger.error(ex);
 		} finally {
-			IOUtils.closeQuietly(inputStream);
+			IOUtils.closeStream(inputStream);
 		}
 	}
 

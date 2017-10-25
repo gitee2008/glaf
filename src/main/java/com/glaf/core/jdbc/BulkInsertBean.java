@@ -25,7 +25,7 @@ import java.io.StringReader;
 import java.sql.*;
 import java.util.*;
 
-import org.apache.commons.io.IOUtils;
+ 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +34,7 @@ import com.glaf.core.domain.*;
 import com.glaf.core.security.LoginContext;
 import com.glaf.core.util.DBUtils;
 import com.glaf.core.util.FileUtils;
+import com.glaf.core.util.IOUtils;
 import com.glaf.core.util.JdbcUtils;
 import com.glaf.core.util.ParamUtils;
 
@@ -177,8 +178,8 @@ public class BulkInsertBean {
 									} catch (SQLException ex) {
 										psmt.setBytes(index2, data);
 									} finally {
-										IOUtils.closeQuietly(bais);
-										IOUtils.closeQuietly(bis);
+										IOUtils.closeStream(bais);
+										IOUtils.closeStream(bis);
 									}
 								}
 							} else if (object instanceof java.sql.Blob) {
@@ -193,11 +194,11 @@ public class BulkInsertBean {
 									} catch (SQLException ex) {
 										psmt.setBytes(index2, data);
 									} finally {
-										IOUtils.closeQuietly(bais);
-										IOUtils.closeQuietly(bis);
+										IOUtils.closeStream(bais);
+										IOUtils.closeStream(bis);
 									}
 								}
-								IOUtils.closeQuietly(is);
+								IOUtils.closeStream(is);
 							} else if (object instanceof InputStream) {
 								is = (InputStream) object;
 								byte[] data = FileUtils.getBytes(is);
@@ -209,11 +210,11 @@ public class BulkInsertBean {
 									} catch (SQLException ex) {
 										psmt.setBytes(index2, data);
 									} finally {
-										IOUtils.closeQuietly(bais);
-										IOUtils.closeQuietly(bis);
+										IOUtils.closeStream(bais);
+										IOUtils.closeStream(bis);
 									}
 								}
-								IOUtils.closeQuietly(is);
+								IOUtils.closeStream(is);
 							}
 						} else {
 							psmt.setNull(index2, Types.NULL);
@@ -230,9 +231,9 @@ public class BulkInsertBean {
 		} catch (SQLException ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeQuietly(is);
-			IOUtils.closeQuietly(bais);
-			IOUtils.closeQuietly(bis);
+			IOUtils.closeStream(is);
+			IOUtils.closeStream(bais);
+			IOUtils.closeStream(bis);
 			JdbcUtils.close(psmt);
 		}
 	}
@@ -332,8 +333,8 @@ public class BulkInsertBean {
 									} catch (SQLException ex) {
 										psmt.setBytes(index2, data);
 									} finally {
-										IOUtils.closeQuietly(bais);
-										IOUtils.closeQuietly(bis);
+										IOUtils.closeStream(bais);
+										IOUtils.closeStream(bis);
 									}
 								}
 							} else if (object instanceof java.sql.Blob) {
@@ -348,11 +349,11 @@ public class BulkInsertBean {
 									} catch (SQLException ex) {
 										psmt.setBytes(index2, data);
 									} finally {
-										IOUtils.closeQuietly(bais);
-										IOUtils.closeQuietly(bis);
+										IOUtils.closeStream(bais);
+										IOUtils.closeStream(bis);
 									}
 								}
-								IOUtils.closeQuietly(is);
+								IOUtils.closeStream(is);
 							} else if (object instanceof InputStream) {
 								is = (InputStream) object;
 								byte[] data = FileUtils.getBytes(is);
@@ -364,11 +365,11 @@ public class BulkInsertBean {
 									} catch (SQLException ex) {
 										psmt.setBytes(index2, data);
 									} finally {
-										IOUtils.closeQuietly(bais);
-										IOUtils.closeQuietly(bis);
+										IOUtils.closeStream(bais);
+										IOUtils.closeStream(bis);
 									}
 								}
-								IOUtils.closeQuietly(is);
+								IOUtils.closeStream(is);
 							}
 						} else {
 							psmt.setNull(index2, Types.NULL);
@@ -386,9 +387,9 @@ public class BulkInsertBean {
 		} catch (SQLException ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeQuietly(is);
-			IOUtils.closeQuietly(bais);
-			IOUtils.closeQuietly(bis);
+			IOUtils.closeStream(is);
+			IOUtils.closeStream(bais);
+			IOUtils.closeStream(bis);
 			JdbcUtils.close(psmt);
 		}
 	}

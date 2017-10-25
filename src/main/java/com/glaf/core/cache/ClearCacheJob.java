@@ -32,7 +32,6 @@ import org.quartz.JobExecutionException;
 import com.glaf.core.config.ConfigFactory;
 import com.glaf.core.factory.TableFactory;
 import com.glaf.core.job.BaseJob;
-import com.glaf.core.resource.ResourceFactory;
 import com.glaf.core.util.DateUtils;
 
 public class ClearCacheJob extends BaseJob {
@@ -55,7 +54,6 @@ public class ClearCacheJob extends BaseJob {
 			TableFactory.clear();
 			CacheFactory.clearAll();
 			ConfigFactory.clearAll();
-			ResourceFactory.clearAll();
 			logger.debug("end clear cache.");
 		} catch (Exception ex) {
 			logger.debug(ex);

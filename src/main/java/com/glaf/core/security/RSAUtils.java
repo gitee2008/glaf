@@ -44,8 +44,8 @@ import javax.crypto.Cipher;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +53,7 @@ import org.slf4j.LoggerFactory;
 import com.glaf.core.context.ContextFactory;
 import com.glaf.core.domain.SysKey;
 import com.glaf.core.service.SysKeyService;
+import com.glaf.core.util.IOUtils;
 import com.glaf.core.util.UUID32;
 
 /**
@@ -510,8 +511,8 @@ public final class RSAUtils {
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeQuietly(ois);
-			IOUtils.closeQuietly(in);
+			IOUtils.closeStream(ois);
+			IOUtils.closeStream(in);
 		}
 		return true;
 	}
@@ -537,8 +538,8 @@ public final class RSAUtils {
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeQuietly(ois);
-			IOUtils.closeQuietly(in);
+			IOUtils.closeStream(ois);
+			IOUtils.closeStream(in);
 		}
 		return null;
 	}
@@ -563,8 +564,8 @@ public final class RSAUtils {
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeQuietly(oos);
-			IOUtils.closeQuietly(baos);
+			IOUtils.closeStream(oos);
+			IOUtils.closeStream(baos);
 		}
 		try {
 			SysKey sysKey = new SysKey();

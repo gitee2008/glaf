@@ -30,14 +30,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.PropertyConfigurator;
 
 public class LogUtils {
-	@SuppressWarnings("serial")
-	public static class LogInitializationException extends Exception {
-		public LogInitializationException(String msg) {
-			super(msg);
-		}
-	}
-
-	public static final String PLATFORM_L4J = "glaf-log4j.properties";
+	public static final String PLATFORM_L4J = "log4j.properties";
 
 	private final static Log LOG = LogFactory.getLog(LogUtils.class);
 
@@ -90,8 +83,7 @@ public class LogUtils {
 	}
 
 	/** Returns a stream that, when written to, adds log lines. */
-	private static PrintStream getLogStream(final Log logger,
-			final Method method) {
+	private static PrintStream getLogStream(final Log logger, final Method method) {
 		return new PrintStream(new ByteArrayOutputStream() {
 			private int scan = 0;
 
@@ -128,32 +120,25 @@ public class LogUtils {
 	}
 
 	/**
-	 * Initialize log4j based on platform-log4j.properties.
+	 * Initialize log4j based on log4j.properties.
 	 * 
-	 * @return an message suitable for display to the user
-	 * @throws LogInitializationException
-	 *             if log4j fails to initialize correctly
+	 * @return an message suitable for display to the user if log4j fails to
+	 *         initialize correctly
 	 */
-	public static String initPlatformLog4j() throws LogInitializationException {
+	public static String initPlatformLog4j() {
 		// allow platform log4j to override any normal initialized one
-		URL platform_l4j = LogUtils.class.getClassLoader().getResource(
-				PLATFORM_L4J);
+		URL platform_l4j = LogUtils.class.getClassLoader().getResource(PLATFORM_L4J);
 		if (platform_l4j != null) {
 			LogManager.resetConfiguration();
 			PropertyConfigurator.configure(platform_l4j);
 			return "Logging initialized using configuration in " + platform_l4j;
 		} else {
-			throw new LogInitializationException(
-					"Unable to initialize logging using "
-							+ LogUtils.PLATFORM_L4J
-							+ ", not found on CLASSPATH!");
+			throw new RuntimeException(
+					"Unable to initialize logging using " + LogUtils.PLATFORM_L4J + ", not found on CLASSPATH!");
 		}
 	}
 
 	public static boolean isDebug() {
-		// if (SystemConfig.hasObject("logger.debug")) {
-		// return SystemConfig.getBoolean("logger.debug");
-		// }
 		return true;
 	}
 

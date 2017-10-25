@@ -108,7 +108,7 @@ public class ZipUtils {
 				try {
 					IOUtils.copy(in, out);
 				} finally {
-					IOUtils.closeQuietly(in);
+					com.glaf.core.util.IOUtils.closeStream(in);
 				}
 			}
 		}
@@ -154,7 +154,7 @@ public class ZipUtils {
 							} catch (Exception e) {
 								throw new RuntimeException(e);
 							} finally {
-								IOUtils.closeQuietly(is);
+								com.glaf.core.util.IOUtils.closeStream(is);
 							}
 						}
 					}
@@ -162,7 +162,7 @@ public class ZipUtils {
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				} finally {
-					IOUtils.closeQuietly(zaos);
+					com.glaf.core.util.IOUtils.closeStream(zaos);
 				}
 			}
 		}
@@ -177,7 +177,7 @@ public class ZipUtils {
 			zipFile = new ZipOutputStream(new FileOutputStream(zipFilename));
 			compressDirectoryToZipfile(normDir(new File(sourceDir).getParent()), normDir(sourceDir), zipFile);
 		} finally {
-			IOUtils.closeQuietly(zipFile);
+			com.glaf.core.util.IOUtils.closeStream(zipFile);
 		}
 	}
 
@@ -242,14 +242,14 @@ public class ZipUtils {
 						} catch (IOException e) {
 							throw new IOException(e);
 						} finally {
-							IOUtils.closeQuietly(os);
+							com.glaf.core.util.IOUtils.closeStream(os);
 						}
 					}
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				} finally {
-					IOUtils.closeQuietly(zais);
-					IOUtils.closeQuietly(inputStream);
+					com.glaf.core.util.IOUtils.closeStream(zais);
+					com.glaf.core.util.IOUtils.closeStream(inputStream);
 				}
 			}
 		}
@@ -275,12 +275,12 @@ public class ZipUtils {
 					try {
 						IOUtils.copy(zipInputStream, outputStream);
 					} finally {
-						IOUtils.closeQuietly(outputStream);
+						com.glaf.core.util.IOUtils.closeStream(outputStream);
 					}
 				}
 			}
 		} finally {
-			IOUtils.closeQuietly(zipInputStream);
+			com.glaf.core.util.IOUtils.closeStream(zipInputStream);
 		}
 	}
 
@@ -292,7 +292,7 @@ public class ZipUtils {
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeQuietly(inputStream);
+			com.glaf.core.util.IOUtils.closeStream(inputStream);
 		}
 	}
 
@@ -316,7 +316,7 @@ public class ZipUtils {
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeQuietly(zipInputStream);
+			com.glaf.core.util.IOUtils.closeStream(zipInputStream);
 		}
 	}
 
@@ -369,18 +369,18 @@ public class ZipUtils {
 				}
 			}
 			jos.flush();
-			IOUtils.closeQuietly(jos);
+			com.glaf.core.util.IOUtils.closeStream(jos);
 			bos.flush();
-			IOUtils.closeQuietly(bos);
+			com.glaf.core.util.IOUtils.closeStream(bos);
 			bytes = baos.toByteArray();
-			IOUtils.closeQuietly(baos);
+			com.glaf.core.util.IOUtils.closeStream(baos);
 			return bytes;
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeQuietly(jos);
-			IOUtils.closeQuietly(bos);
-			IOUtils.closeQuietly(baos);
+			com.glaf.core.util.IOUtils.closeStream(jos);
+			com.glaf.core.util.IOUtils.closeStream(bos);
+			com.glaf.core.util.IOUtils.closeStream(baos);
 		}
 	}
 
@@ -401,15 +401,15 @@ public class ZipUtils {
 				}
 				bos.flush();
 				byte[] bytes = baos.toByteArray();
-				IOUtils.closeQuietly(baos);
-				IOUtils.closeQuietly(baos);
+				com.glaf.core.util.IOUtils.closeStream(baos);
+				com.glaf.core.util.IOUtils.closeStream(baos);
 				zipMap.put(zipEntry.getName(), bytes);
 			}
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeQuietly(baos);
-			IOUtils.closeQuietly(baos);
+			com.glaf.core.util.IOUtils.closeStream(baos);
+			com.glaf.core.util.IOUtils.closeStream(baos);
 		}
 		return zipMap;
 	}
@@ -434,16 +434,16 @@ public class ZipUtils {
 					}
 					bos.flush();
 					byte[] bytes = baos.toByteArray();
-					IOUtils.closeQuietly(baos);
-					IOUtils.closeQuietly(baos);
+					com.glaf.core.util.IOUtils.closeStream(baos);
+					com.glaf.core.util.IOUtils.closeStream(baos);
 					zipMap.put(zipEntry.getName(), bytes);
 				}
 			}
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeQuietly(baos);
-			IOUtils.closeQuietly(baos);
+			com.glaf.core.util.IOUtils.closeStream(baos);
+			com.glaf.core.util.IOUtils.closeStream(baos);
 		}
 		return zipMap;
 	}
@@ -536,25 +536,25 @@ public class ZipUtils {
 						while ((len = bis.read(buf)) >= 0) {
 							jos.write(buf, 0, len);
 						}
-						IOUtils.closeQuietly(bis);
+						com.glaf.core.util.IOUtils.closeStream(bis);
 						jos.closeEntry();
 					}
-					IOUtils.closeQuietly(inputStream);
+					com.glaf.core.util.IOUtils.closeStream(inputStream);
 				}
 			}
 			jos.flush();
 			jos.close();
 
 			bytes = baos.toByteArray();
-			IOUtils.closeQuietly(baos);
-			IOUtils.closeQuietly(bos);
+			com.glaf.core.util.IOUtils.closeStream(baos);
+			com.glaf.core.util.IOUtils.closeStream(bos);
 			return bytes;
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeQuietly(inputStream);
-			IOUtils.closeQuietly(baos);
-			IOUtils.closeQuietly(bos);
+			com.glaf.core.util.IOUtils.closeStream(inputStream);
+			com.glaf.core.util.IOUtils.closeStream(baos);
+			com.glaf.core.util.IOUtils.closeStream(bos);
 		}
 	}
 
@@ -576,16 +576,16 @@ public class ZipUtils {
 					bufferedoutputstream.write(abyte0, 0, i);
 				}
 				bufferedoutputstream.flush();
-				IOUtils.closeQuietly(fileoutputstream);
-				IOUtils.closeQuietly(bufferedoutputstream);
+				com.glaf.core.util.IOUtils.closeStream(fileoutputstream);
+				com.glaf.core.util.IOUtils.closeStream(bufferedoutputstream);
 			}
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeQuietly(fileInputStream);
-			IOUtils.closeQuietly(zipInputStream);
-			IOUtils.closeQuietly(fileoutputstream);
-			IOUtils.closeQuietly(bufferedoutputstream);
+			com.glaf.core.util.IOUtils.closeStream(fileInputStream);
+			com.glaf.core.util.IOUtils.closeStream(zipInputStream);
+			com.glaf.core.util.IOUtils.closeStream(fileoutputstream);
+			com.glaf.core.util.IOUtils.closeStream(bufferedoutputstream);
 		}
 	}
 
@@ -628,17 +628,17 @@ public class ZipUtils {
 					bufferedoutputstream.write(abyte0, 0, i);
 				}
 				bufferedoutputstream.flush();
-				IOUtils.closeQuietly(fileoutputstream);
-				IOUtils.closeQuietly(bufferedoutputstream);
+				com.glaf.core.util.IOUtils.closeStream(fileoutputstream);
+				com.glaf.core.util.IOUtils.closeStream(bufferedoutputstream);
 			}
 
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeQuietly(fileInputStream);
-			IOUtils.closeQuietly(zipInputStream);
-			IOUtils.closeQuietly(fileoutputstream);
-			IOUtils.closeQuietly(bufferedoutputstream);
+			com.glaf.core.util.IOUtils.closeStream(fileInputStream);
+			com.glaf.core.util.IOUtils.closeStream(zipInputStream);
+			com.glaf.core.util.IOUtils.closeStream(fileoutputstream);
+			com.glaf.core.util.IOUtils.closeStream(bufferedoutputstream);
 		}
 	}
 
@@ -677,16 +677,16 @@ public class ZipUtils {
 					bufferedoutputstream.write(abyte0, 0, i);
 				}
 				bufferedoutputstream.flush();
-				IOUtils.closeQuietly(fileoutputstream);
-				IOUtils.closeQuietly(bufferedoutputstream);
+				com.glaf.core.util.IOUtils.closeStream(fileoutputstream);
+				com.glaf.core.util.IOUtils.closeStream(bufferedoutputstream);
 			}
 
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeQuietly(zipInputStream);
-			IOUtils.closeQuietly(fileoutputstream);
-			IOUtils.closeQuietly(bufferedoutputstream);
+			com.glaf.core.util.IOUtils.closeStream(zipInputStream);
+			com.glaf.core.util.IOUtils.closeStream(fileoutputstream);
+			com.glaf.core.util.IOUtils.closeStream(bufferedoutputstream);
 		}
 	}
 
@@ -728,16 +728,16 @@ public class ZipUtils {
 					bufferedoutputstream.write(abyte0, 0, i);
 				}
 				bufferedoutputstream.flush();
-				IOUtils.closeQuietly(fileoutputstream);
-				IOUtils.closeQuietly(bufferedoutputstream);
+				com.glaf.core.util.IOUtils.closeStream(fileoutputstream);
+				com.glaf.core.util.IOUtils.closeStream(bufferedoutputstream);
 			}
 
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			IOUtils.closeQuietly(zipInputStream);
-			IOUtils.closeQuietly(fileoutputstream);
-			IOUtils.closeQuietly(bufferedoutputstream);
+			com.glaf.core.util.IOUtils.closeStream(zipInputStream);
+			com.glaf.core.util.IOUtils.closeStream(fileoutputstream);
+			com.glaf.core.util.IOUtils.closeStream(bufferedoutputstream);
 		}
 	}
 

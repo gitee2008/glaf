@@ -94,6 +94,11 @@ public class StartupListener extends ContextLoaderListener implements ServletCon
 	public void contextInitialized(ServletContextEvent event) {
 		logger.info("initializing servlet context......");
 		System.setProperty("java.net.preferIPv4Stack", "true");
+		System.setProperty("glaf.webapp.root", SystemProperties.getAppPath());
+		try {
+			com.glaf.core.util.LogUtils.initPlatformLog4j();
+		} catch (Exception ex) {
+		}
 		ServletContext context = event.getServletContext();
 		String root = context.getRealPath("/");
 		com.glaf.core.context.ApplicationContext.setAppPath(root);
@@ -107,7 +112,6 @@ public class StartupListener extends ContextLoaderListener implements ServletCon
 		System.setProperty(Constants.APP_PATH, SystemProperties.getAppPath());
 		System.setProperty(Constants.WEBAPP_PATH, SystemProperties.getAppPath());
 		System.setProperty(Constants.CONFIG_PATH, SystemProperties.getAppPath() + "/WEB-INF");
-		System.setProperty("glaf.webapp.root", SystemProperties.getAppPath());
 		if (DBConnectionFactory.checkConnection()) {
 			DatabaseFactory.getInstance().reload();
 			this.beforeContextInitialized(context);

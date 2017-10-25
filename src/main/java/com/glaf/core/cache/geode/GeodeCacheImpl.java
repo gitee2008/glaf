@@ -25,7 +25,6 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
@@ -37,6 +36,7 @@ import com.glaf.core.cache.Cache;
 import com.glaf.core.cache.CacheException;
 import com.glaf.core.config.SystemProperties;
 import com.glaf.core.util.FileUtils;
+import com.glaf.core.util.IOUtils;
 import com.glaf.core.util.PropertiesUtils;
 
 public class GeodeCacheImpl implements Cache {
@@ -84,10 +84,10 @@ public class GeodeCacheImpl implements Cache {
 					}
 				}
 			} catch (IOException ex) {
-				ex.printStackTrace();
+				// ex.printStackTrace();
 				logger.error("load geode config error", ex);
 			} finally {
-				IOUtils.closeQuietly(inStream);
+				IOUtils.closeStream(inStream);
 			}
 			cache = new ClientCacheFactory().addPoolLocator(host, port).create();
 		}

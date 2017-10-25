@@ -24,8 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import org.apache.commons.io.IOUtils;
+ 
 import org.slf4j.LoggerFactory;
 
 import com.jcraft.jsch.Channel;
@@ -272,7 +271,7 @@ public class SSHClient {
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			IOUtils.closeQuietly(fos);
+			IOUtils.closeStream(fos);
 		}
 	}
 
@@ -357,7 +356,7 @@ public class SSHClient {
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			IOUtils.closeQuietly(fis);
+			IOUtils.closeStream(fis);
 		}
 	}
 }

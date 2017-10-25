@@ -78,9 +78,11 @@ public class RedisFileStorageFactory {
 
 	protected static ScheduledExecutorService scheduledThreadPool = Executors.newSingleThreadScheduledExecutor();
 
+	protected static volatile IServerEntityService serverEntityService;
+
 	protected static final String DEFAULT_REGION = "default";
 
-	protected static volatile IServerEntityService serverEntityService;
+	protected static boolean loaded = false;
 
 	public static RedisFileStorageFactory getInstance() {
 		return RedisSingletonHolder.instance;
@@ -115,6 +117,14 @@ public class RedisFileStorageFactory {
 	public void deleteById(String region, String fileId) {
 		int size = redisPoolMap.size();
 		if (size == 0) {
+			if (!loaded) {
+				this.init();
+				loaded = true;
+			}
+			size = redisPoolMap.size();
+			if (size == 0) {
+				logger.warn("redis cache server is empty!!!");
+			}
 			return;
 		}
 		int pos = 0;
@@ -169,6 +179,14 @@ public class RedisFileStorageFactory {
 	public byte[] getData(String region, String fileId) {
 		int size = redisPoolMap.size();
 		if (size == 0) {
+			if (!loaded) {
+				this.init();
+				loaded = true;
+			}
+			size = redisPoolMap.size();
+			if (size == 0) {
+				logger.warn("redis cache server is empty!!!");
+			}
 			return null;
 		}
 		int pos = 0;
@@ -223,6 +241,14 @@ public class RedisFileStorageFactory {
 	public DataFile getDataFile(String region, String fileId) {
 		int size = redisPoolMap.size();
 		if (size == 0) {
+			if (!loaded) {
+				this.init();
+				loaded = true;
+			}
+			size = redisPoolMap.size();
+			if (size == 0) {
+				logger.warn("redis cache server is empty!!!");
+			}
 			return null;
 		}
 		int pos = 0;
@@ -346,8 +372,38 @@ public class RedisFileStorageFactory {
 				try {
 					pool = redisPoolMap.get(serverEntity.getName());
 					if (pool != null && !pool.isClosed()) {
-						continue;
+						jedis = pool.getResource();
+						if (StringUtils.isNotEmpty(serverEntity.getDbname())) {
+							jedis.select(Integer.parseInt(serverEntity.getDbname()));
+						}
+						String value = DateUtils.getNowYearMonthDayHHmmss() + "_" + UUID32.getUUID();
+						logger.info("check redis, set redis value:" + value);
+						jedis.set("test".getBytes(), value.getBytes());
+						jedis.expire("test".getBytes(), 60);
+						boolean skip = false;
+						if (StringUtils.equals(jedis.get("test"), value)) {
+							skip = true;
+						}
+						if (skip) {
+							continue;
+						} else {
+							pool.close();
+							pool.destroy();
+							pool = null;
+							redisPoolMap.remove(serverEntity.getName());
+						}
 					}
+				} catch (Exception ex) {
+					logger.error("redis connection error", ex);
+				} finally {
+					if (jedis != null) {
+						try {
+							jedis.close();
+						} catch (Exception ex) {
+						}
+					}
+				}
+				try {
 					JedisPoolConfig config = new JedisPoolConfig();
 					config.setEvictionPolicyClassName("org.apache.commons.pool2.impl.DefaultEvictionPolicy");
 					config.setMaxTotal(-1);// 最大连接数,-1代表不限制
@@ -373,12 +429,14 @@ public class RedisFileStorageFactory {
 						jedis.select(Integer.parseInt(serverEntity.getDbname()));
 					}
 					String value = DateUtils.getNowYearMonthDayHHmmss() + "_" + UUID32.getUUID();
-					logger.debug("set redis value:" + value);
+					logger.info("set redis value:" + value);
 					jedis.set("test".getBytes(), value.getBytes());
+					jedis.expire("test".getBytes(), 60);
 					if (StringUtils.equals(jedis.get("test"), value)) {
 						redisPoolMap.put(serverEntity.getName(), pool);
 						serverMap.put(serverEntity.getName(), serverEntity);
 						redisPosMap.put(index++, serverEntity.getName());
+						logger.info("redis pool has cache.");
 					}
 				} catch (Exception ex) {
 					logger.error("redis connection error", ex);
@@ -414,6 +472,14 @@ public class RedisFileStorageFactory {
 	public void saveData(String region, String fileId, byte[] data) {
 		int size = redisPoolMap.size();
 		if (size == 0) {
+			if (!loaded) {
+				this.init();
+				loaded = true;
+			}
+			size = redisPoolMap.size();
+			if (size == 0) {
+				logger.warn("redis cache server is empty!!!");
+			}
 			return;
 		}
 		int pos = 0;
@@ -465,6 +531,14 @@ public class RedisFileStorageFactory {
 	public void saveDataFile(String region, String fileId, DataFile dataFile) {
 		int size = redisPoolMap.size();
 		if (size == 0) {
+			if (!loaded) {
+				this.init();
+				loaded = true;
+			}
+			size = redisPoolMap.size();
+			if (size == 0) {
+				logger.warn("redis cache server is empty!!!");
+			}
 			return;
 		}
 		int pos = 0;
@@ -506,7 +580,7 @@ public class RedisFileStorageFactory {
 
 	public void startScheduler() {
 		RefreshTask command = new RefreshTask();
-		scheduledThreadPool.scheduleAtFixedRate(command, 1, 15, TimeUnit.MINUTES);// 每15分钟检查一次
+		scheduledThreadPool.scheduleAtFixedRate(command, 1, 5, TimeUnit.MINUTES);// 每5分钟检查一次
 	}
 
 }

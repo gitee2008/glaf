@@ -43,7 +43,6 @@ import com.glaf.core.config.ConfigFactory;
 import com.glaf.core.config.SystemConfig;
 import com.glaf.core.config.ViewProperties;
 import com.glaf.core.factory.TableFactory;
-import com.glaf.core.resource.ResourceFactory;
 import com.glaf.core.security.LoginContext;
 import com.glaf.core.util.Constants;
 import com.glaf.core.util.DateUtils;
@@ -68,13 +67,6 @@ public class SystemCacheMgrController {
 		try {
 			logger.debug("#################ConfigFactory.clearAll##################");
 			ConfigFactory.clearAll();
-		} catch (Exception ex) {
-
-		}
-
-		try {
-			logger.debug("#################ResourceFactory.clearAll##################");
-			ResourceFactory.clearAll();
 		} catch (Exception ex) {
 
 		}

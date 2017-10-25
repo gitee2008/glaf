@@ -29,7 +29,9 @@ import java.security.NoSuchAlgorithmException;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeUtility;
 
-import org.apache.commons.io.IOUtils;
+import com.glaf.core.util.IOUtils;
+
+ 
 
 public class DigestUtil {
 
@@ -58,9 +60,9 @@ public class DigestUtil {
 		} catch (Exception ex) {
 			throw new RuntimeException("Error computing Digest: " + ex);
 		} finally {
-			IOUtils.closeQuietly(fis);
-			IOUtils.closeQuietly(fos);
-			IOUtils.closeQuietly(encodedStream);
+			IOUtils.closeStream(fis);
+			IOUtils.closeStream(fos);
+			IOUtils.closeStream(encodedStream);
 		}
 	}
 
@@ -86,8 +88,8 @@ public class DigestUtil {
 		} catch (MessagingException me) {
 			throw new RuntimeException("Fatal error: " + me);
 		} finally {
-			IOUtils.closeQuietly(bos);
-			IOUtils.closeQuietly(encodedStream);
+			IOUtils.closeStream(bos);
+			IOUtils.closeStream(encodedStream);
 		}
 
 	}
