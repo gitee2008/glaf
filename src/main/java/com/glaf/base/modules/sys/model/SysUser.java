@@ -270,6 +270,9 @@ public class SysUser implements Serializable, User, JSONable {
 	private Collection<SysRole> roles = new HashSet<SysRole>();
 
 	@javax.persistence.Transient
+	private Set<SysUserRole> userRoles = new HashSet<SysUserRole>();
+
+	@javax.persistence.Transient
 	private Set<String> roleCodes = new HashSet<String>();
 
 	@javax.persistence.Transient
@@ -277,9 +280,6 @@ public class SysUser implements Serializable, User, JSONable {
 
 	@javax.persistence.Transient
 	private Collection<Object> objectIds = new HashSet<Object>();
-
-	@javax.persistence.Transient
-	private Set<SysUserRole> userRoles = new HashSet<SysUserRole>();
 
 	public SysUser() {
 
@@ -534,10 +534,6 @@ public class SysUser implements Serializable, User, JSONable {
 			}
 		}
 		return isOrganizationAdmin;
-	}
-
-	public boolean isSystemAdmin() {
-		return isSystemAdministrator();
 	}
 
 	public boolean isSystemAdministrator() {

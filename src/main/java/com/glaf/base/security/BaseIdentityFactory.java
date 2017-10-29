@@ -61,6 +61,17 @@ public class BaseIdentityFactory {
 	protected static volatile SysUserService sysUserService;
 
 	/**
+	 * 根据用户名获取用户对象
+	 * 
+	 * @param actorId
+	 *            用户登录账号
+	 * @return
+	 */
+	public static SysUser findByAccount(String actorId) {
+		return getSysUserService().findByAccount(actorId);
+	}
+
+	/**
 	 * 获取委托人编号集合（用户登录账号的集合）
 	 * 
 	 * @param assignTo
@@ -181,17 +192,6 @@ public class BaseIdentityFactory {
 		}
 
 		return sysTreeService;
-	}
-
-	/**
-	 * 根据用户名获取用户对象
-	 * 
-	 * @param actorId
-	 *            用户登录账号
-	 * @return
-	 */
-	public static SysUser getSysUser(String actorId) {
-		return getSysUserService().findByAccountWithAll(actorId);
 	}
 
 	public static SysUserService getSysUserService() {
@@ -333,15 +333,6 @@ public class BaseIdentityFactory {
 		List<String> actorIds = new ArrayList<String>();
 		actorIds.add(actorId);
 		return getUserRoleCodes(actorIds);
-	}
-
-	/**
-	 * 获取全部用户
-	 * 
-	 * @return
-	 */
-	public static List<SysUser> getUsers() {
-		return getSysUserService().getSysUserList(0);
 	}
 
 	public static void setSysApplicationService(SysApplicationService sysApplicationService) {

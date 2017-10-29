@@ -55,17 +55,7 @@ public class PermissionFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		String uri = request.getRequestURI();
-		if (StringUtils.endsWithIgnoreCase(uri, ".js")) {
-
-		} else if (StringUtils.endsWithIgnoreCase(uri, ".css")) {
-
-		} else if (StringUtils.endsWithIgnoreCase(uri, ".jpg")) {
-
-		} else if (StringUtils.endsWithIgnoreCase(uri, ".gif")) {
-
-		} else if (StringUtils.endsWithIgnoreCase(uri, ".png")) {
-
-		} else if (StringUtils.containsIgnoreCase(uri, ".jsp")) {
+		if (StringUtils.containsIgnoreCase(uri, ".jsp")) {
 			String ipAddr = RequestUtils.getIPAddress(request);
 			if (!(StringUtils.equalsIgnoreCase(ipAddr, "localhost") || StringUtils.equalsIgnoreCase(ipAddr, "127.0.0.1")
 					|| StringUtils.startsWith(ipAddr, "192.168."))) {

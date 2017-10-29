@@ -143,17 +143,6 @@ public class SysUserJsonFactory {
 			model.setToken(jsonObject.getString("token"));
 		}
 
-		if (jsonObject.containsKey("userRoles")) {
-			JSONArray array = jsonObject.getJSONArray("userRoles");
-			if (array != null && !array.isEmpty()) {
-				for (int i = 0; i < array.size(); i++) {
-					JSONObject json = array.getJSONObject(i);
-					SysUserRole r = SysUserRoleJsonFactory.jsonToObject(json);
-					model.getUserRoles().add(r);
-				}
-			}
-		}
-
 		if (jsonObject.containsKey("roles")) {
 			JSONArray array = jsonObject.getJSONArray("roles");
 			if (array != null && !array.isEmpty()) {
@@ -161,6 +150,17 @@ public class SysUserJsonFactory {
 					JSONObject json = array.getJSONObject(i);
 					SysRole r = SysRoleJsonFactory.jsonToObject(json);
 					model.getRoles().add(r);
+				}
+			}
+		}
+
+		if (jsonObject.containsKey("userRoles")) {
+			JSONArray array = jsonObject.getJSONArray("userRoles");
+			if (array != null && !array.isEmpty()) {
+				for (int i = 0; i < array.size(); i++) {
+					JSONObject json = array.getJSONObject(i);
+					SysUserRole r = SysUserRoleJsonFactory.jsonToObject(json);
+					model.getUserRoles().add(r);
 				}
 			}
 		}
@@ -231,6 +231,7 @@ public class SysUserJsonFactory {
 		if (user.getCreateBy() != null) {
 			jsonObject.put("createBy", user.getCreateBy());
 		}
+
 		if (user.getCreateTime() != null) {
 			jsonObject.put("createTime", DateUtils.getDate(user.getCreateTime()));
 			jsonObject.put("createDate", DateUtils.getDate(user.getCreateTime()));
@@ -268,20 +269,20 @@ public class SysUserJsonFactory {
 			jsonObject.put("loginSecretUpdateTime_datetime", DateUtils.getDateTime(user.getLoginSecretUpdateTime()));
 		}
 
-		if (user.getUserRoles() != null && !user.getUserRoles().isEmpty()) {
-			JSONArray array = new JSONArray();
-			for (SysUserRole sysUserRole : user.getUserRoles()) {
-				array.add(sysUserRole.toJsonObject());
-			}
-			jsonObject.put("userRoles", array);
-		}
-
 		if (user.getRoles() != null && !user.getRoles().isEmpty()) {
 			JSONArray array = new JSONArray();
 			for (SysRole sysole : user.getRoles()) {
 				array.add(sysole.toJsonObject());
 			}
 			jsonObject.put("roles", array);
+		}
+
+		if (user.getUserRoles() != null && !user.getUserRoles().isEmpty()) {
+			JSONArray array = new JSONArray();
+			for (SysUserRole sysUserRole : user.getUserRoles()) {
+				array.add(sysUserRole.toJsonObject());
+			}
+			jsonObject.put("userRoles", array);
 		}
 
 		return jsonObject;
@@ -367,20 +368,20 @@ public class SysUserJsonFactory {
 		}
 		jsonObject.put("loginRetry", user.getLoginRetry());
 
-		if (user.getUserRoles() != null && !user.getUserRoles().isEmpty()) {
-			ArrayNode array = new ObjectMapper().createArrayNode();
-			for (SysUserRole sysUserRole : user.getUserRoles()) {
-				array.add(sysUserRole.toObjectNode());
-			}
-			jsonObject.set("userRoles", array);
-		}
-
 		if (user.getRoles() != null && !user.getRoles().isEmpty()) {
 			ArrayNode array = new ObjectMapper().createArrayNode();
 			for (SysRole sysRole : user.getRoles()) {
 				array.add(sysRole.toObjectNode());
 			}
 			jsonObject.set("roles", array);
+		}
+
+		if (user.getUserRoles() != null && !user.getUserRoles().isEmpty()) {
+			ArrayNode array = new ObjectMapper().createArrayNode();
+			for (SysUserRole sysUserRole : user.getUserRoles()) {
+				array.add(sysUserRole.toObjectNode());
+			}
+			jsonObject.set("userRoles", array);
 		}
 
 		return jsonObject;

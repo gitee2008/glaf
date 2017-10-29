@@ -70,18 +70,27 @@ public class DictoryServiceImpl implements DictoryService {
 	@Transactional
 	public boolean create(Dictory bean) {
 		this.save(bean);
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("dictory");
+		}
 		return true;
 	}
 
 	@Transactional
 	public boolean delete(Dictory bean) {
 		this.deleteById(bean.getId());
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("dictory");
+		}
 		return true;
 	}
 
 	@Transactional
 	public boolean delete(long id) {
 		this.deleteById(id);
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("dictory");
+		}
 		return true;
 	}
 
@@ -92,6 +101,9 @@ public class DictoryServiceImpl implements DictoryService {
 				this.deleteById(id);
 			}
 		}
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("dictory");
+		}
 		return true;
 	}
 
@@ -99,6 +111,9 @@ public class DictoryServiceImpl implements DictoryService {
 	public void deleteById(Long id) {
 		if (id != null) {
 			dictoryMapper.deleteDictoryById(id);
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				CacheFactory.clear("dictory");
+			}
 		}
 	}
 
@@ -108,6 +123,9 @@ public class DictoryServiceImpl implements DictoryService {
 			DictoryQuery query = new DictoryQuery();
 			query.rowIds(rowIds);
 			dictoryMapper.deleteDictories(query);
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				CacheFactory.clear("dictory");
+			}
 		}
 	}
 
@@ -157,12 +175,12 @@ public class DictoryServiceImpl implements DictoryService {
 		Dictory dic = find(id);
 		return dic.getCode();
 	}
-	
+
 	public List<Dictory> getDictories(DictoryQuery query) {
 		return dictoryMapper.getDictories(query);
 	}
 
-	public List<Dictory> getDictories(String codeLike){
+	public List<Dictory> getDictories(String codeLike) {
 		DictoryQuery query = new DictoryQuery();
 		query.setCodeLike(codeLike);
 		return dictoryMapper.getDictories(query);

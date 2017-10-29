@@ -36,9 +36,9 @@ import com.glaf.core.config.Configuration;
 public class AuthorizeServiceImpl implements AuthorizeService {
 	private static final Log logger = LogFactory.getLog(AuthorizeServiceImpl.class);
 
-	private static Configuration conf = BaseConfiguration.create();
+	protected static Configuration conf = BaseConfiguration.create();
 
-	private SysUserService sysUserService;
+	protected SysUserService sysUserService;
 
 	/**
 	 * 用户登陆
@@ -51,16 +51,10 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 	public SysUser authorize(String account, String pwd) {
 		SysUser bean = sysUserService.findByAccount(account);
 		if (bean != null) {
-			if (bean.isDepartmentAdmin()) {
-				logger.debug(account + " is department admin");
-			}
-			if (bean.isSystemAdmin()) {
-				logger.debug(account + " is system admin");
-			}
 			if (bean.getLocked() == 1) {// 帐号禁止
 				return null;
 			}
-			if (!bean.isSystemAdmin()) {
+			if (!bean.isSystemAdministrator()) {
 				/**
 				 * 当登录重试次数大于系统默认的重试次数并且登录时间间隔没有达到系统默认的时间间隔，登录失败
 				 */
@@ -97,16 +91,10 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 	public SysUser authorizeLoginSecret(String account, String loginSecret) {
 		SysUser bean = sysUserService.findByAccount(account);
 		if (bean != null) {
-			if (bean.isDepartmentAdmin()) {
-				logger.debug(account + " is department admin");
-			}
-			if (bean.isSystemAdmin()) {
-				logger.debug(account + " is system admin");
-			}
 			if (bean.getLocked() == 1) {// 帐号禁止
 				return null;
 			}
-			if (!bean.isSystemAdmin()) {
+			if (!bean.isSystemAdministrator()) {
 				/**
 				 * 当登录重试次数大于系统默认的重试次数并且登录时间间隔没有达到系统默认的时间间隔，登录失败
 				 */
@@ -143,12 +131,6 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 	public SysUser login(String account) {
 		SysUser bean = sysUserService.findByAccountWithAll(account);
 		if (bean != null) {
-			if (bean.isDepartmentAdmin()) {
-				logger.debug(account + " is department admin");
-			}
-			if (bean.isSystemAdmin()) {
-				logger.debug(account + " is system admin");
-			}
 		}
 		return bean;
 	}
@@ -164,16 +146,10 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 	public SysUser login(String account, String pwd) {
 		SysUser bean = sysUserService.findByAccountWithAll(account);
 		if (bean != null) {
-			if (bean.isDepartmentAdmin()) {
-				logger.debug(account + " is department admin");
-			}
-			if (bean.isSystemAdmin()) {
-				logger.debug(account + " is system admin");
-			}
 			if (bean.getLocked() == 1) {// 帐号禁止
 				return null;
 			}
-			if (!bean.isSystemAdmin()) {
+			if (!bean.isSystemAdministrator()) {
 				/**
 				 * 当登录重试次数大于系统默认的重试次数并且登录时间间隔没有达到系统默认的时间间隔，登录失败
 				 */

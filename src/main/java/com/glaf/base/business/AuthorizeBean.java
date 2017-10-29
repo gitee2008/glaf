@@ -28,6 +28,7 @@ import com.glaf.core.cache.CacheFactory;
 import com.glaf.core.config.SystemConfig;
 import com.glaf.core.context.ContextFactory;
 import com.glaf.core.util.Constants;
+
 import com.glaf.base.modules.sys.model.SysUser;
 import com.glaf.base.modules.sys.service.AuthorizeService;
 import com.glaf.base.modules.sys.service.SysApplicationService;
@@ -36,9 +37,6 @@ import com.glaf.base.modules.sys.util.SysUserJsonFactory;
 
 public class AuthorizeBean {
 	private static final Log logger = LogFactory.getLog(AuthorizeBean.class);
-	protected static String configurationResource = "/conf/spring/spring-config.xml";
-
-	protected static volatile org.springframework.context.ApplicationContext ctx;
 
 	private SysApplicationService sysApplicationService;
 

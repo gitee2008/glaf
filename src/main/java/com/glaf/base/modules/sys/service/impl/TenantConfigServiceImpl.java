@@ -18,28 +18,32 @@
 
 package com.glaf.base.modules.sys.service.impl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.glaf.core.id.*;
-import com.glaf.core.cache.CacheFactory;
-import com.glaf.core.config.SystemConfig;
-import com.glaf.core.dao.*;
-import com.glaf.core.jdbc.DBConnectionFactory;
-import com.glaf.core.util.*;
 import com.alibaba.fastjson.JSON;
-import com.glaf.base.modules.sys.mapper.*;
-import com.glaf.base.modules.sys.model.*;
-import com.glaf.base.modules.sys.query.*;
+import com.glaf.base.modules.sys.mapper.TenantConfigMapper;
+import com.glaf.base.modules.sys.model.TenantConfig;
+import com.glaf.base.modules.sys.query.TenantConfigQuery;
 import com.glaf.base.modules.sys.service.TenantConfigService;
 import com.glaf.base.modules.sys.util.TenantConfigJsonFactory;
+
+import com.glaf.core.cache.CacheFactory;
+import com.glaf.core.config.SystemConfig;
+import com.glaf.core.dao.EntityDAO;
+import com.glaf.core.id.IdGenerator;
+import com.glaf.core.jdbc.DBConnectionFactory;
+import com.glaf.core.util.DBUtils;
 
 @Service("tenantConfigService")
 @Transactional(readOnly = true)

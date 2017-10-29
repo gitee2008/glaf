@@ -76,7 +76,7 @@ public class IdentityTokenController {
 		return json.toJSONString().getBytes();
 	}
 
-	@javax.annotation.Resource(name = "com.glaf.base.modules.sys.service.identityTokenService")
+	@javax.annotation.Resource(name = "identityTokenService")
 	public void setIdentityTokenService(IdentityTokenService identityTokenService) {
 		this.identityTokenService = identityTokenService;
 	}

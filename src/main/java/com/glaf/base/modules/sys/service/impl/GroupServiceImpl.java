@@ -49,13 +49,13 @@ public class GroupServiceImpl implements GroupService {
 
 	protected EntityDAO entityDAO;
 
+	protected IdGenerator idGenerator;
+
 	protected GroupMapper groupMapper;
 
 	protected GroupUserMapper groupUserMapper;
 
 	protected GroupLeaderMapper groupLeaderMapper;
-
-	protected IdGenerator idGenerator;
 
 	protected SqlSessionTemplate sqlSessionTemplate;
 

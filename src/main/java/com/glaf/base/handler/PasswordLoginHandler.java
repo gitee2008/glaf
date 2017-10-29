@@ -80,11 +80,10 @@ public class PasswordLoginHandler implements LoginHandler {
 				logger.debug("current authorize User--->" + account);
 				UserOnlineLogService userOnlineLogService = ContextFactory.getBean("userOnlineLogService");
 				// 如果每天登录次数超过设置值，设置用户对象为空，防止恶意操作
-				if (userOnlineLogService.getLoginCount(account) > conf.getInt("limit.loginCount", 1000)) {
+				if (userOnlineLogService.getLoginCount(account) > conf.getInt("limit.loginCount", 500)) {
 					bean = null;
 				}
 			}
-			logger.debug("sysuser is null --->" + (bean == null));
 		}
 
 		return bean;

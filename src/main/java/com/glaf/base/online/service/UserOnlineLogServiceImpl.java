@@ -18,21 +18,23 @@
 
 package com.glaf.base.online.service;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.glaf.core.id.*;
+import com.glaf.base.online.domain.UserOnlineLog;
+import com.glaf.base.online.mapper.UserOnlineLogMapper;
+import com.glaf.base.online.query.UserOnlineLogQuery;
+import com.glaf.core.dao.EntityDAO;
+import com.glaf.core.id.IdGenerator;
 import com.glaf.core.util.DateUtils;
-import com.glaf.core.dao.*;
-import com.glaf.base.online.mapper.*;
-import com.glaf.base.online.domain.*;
-import com.glaf.base.online.query.*;
 
 @Service("userOnlineLogService")
 @Transactional(readOnly = true)

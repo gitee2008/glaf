@@ -77,18 +77,27 @@ public class SysRoleServiceImpl implements SysRoleService {
 			bean.setCode("role_" + String.valueOf(bean.getId()));
 		}
 		sysRoleMapper.insertSysRole(bean);
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("user");
+		}
 		return true;
 	}
 
 	@Transactional
 	public boolean delete(String id) {
 		this.deleteById(id);
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("user");
+		}
 		return true;
 	}
 
 	@Transactional
 	public boolean delete(SysRole bean) {
 		this.deleteById(bean.getId());
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("user");
+		}
 		return true;
 	}
 
@@ -98,6 +107,9 @@ public class SysRoleServiceImpl implements SysRoleService {
 			for (String id : ids) {
 				this.deleteById(id);
 			}
+		}
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("user");
 		}
 		return true;
 	}
@@ -116,6 +128,9 @@ public class SysRoleServiceImpl implements SysRoleService {
 				}
 			}
 		}
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("user");
+		}
 	}
 
 	@Transactional
@@ -124,6 +139,9 @@ public class SysRoleServiceImpl implements SysRoleService {
 			SysRoleQuery query = new SysRoleQuery();
 			query.rowIds(rowIds);
 			sysRoleMapper.deleteSysRoles(query);
+		}
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("user");
 		}
 	}
 
@@ -266,6 +284,9 @@ public class SysRoleServiceImpl implements SysRoleService {
 		} else {
 			sysRole.setUpdateDate(new Date());
 			sysRoleMapper.updateSysRole(sysRole);
+		}
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("user");
 		}
 	}
 

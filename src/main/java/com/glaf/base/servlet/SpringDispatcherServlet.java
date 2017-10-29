@@ -72,7 +72,7 @@ public class SpringDispatcherServlet extends DispatcherServlet {
 		if (!StringUtils.startsWith(ipAddr, "192.168.")) {
 			int num = ContextUtil.increase(ipAddr);
 			if (num > 50000) {// 从某个IP地址来的访问量超过50000就重定向
-				response.sendRedirect("http://www.google.com");
+				response.sendRedirect("http://www.example.com");
 				return;
 			}
 		}
@@ -99,7 +99,7 @@ public class SpringDispatcherServlet extends DispatcherServlet {
 			if (actorId != null && ContextUtils.denyAccess(actorId)) {
 				if (!(StringUtils.equals(actorId, "admin") || StringUtils.equals(actorId, "root"))) {
 					// 如果登录用户恶意刷新，直接重定向
-					response.sendRedirect("http://www.google.com");
+					response.sendRedirect("http://www.example.com");
 					return;
 				}
 			}
@@ -116,7 +116,7 @@ public class SpringDispatcherServlet extends DispatcherServlet {
 			/**
 			 * 未登录或不是系统管理员，不允许访问系统管理地址
 			 */
-			if ((user == null) || (!user.isSystemAdmin())) {
+			if ((user == null) || (!user.isSystemAdministrator())) {
 				logger.debug("request uri:" + uri);
 			}
 		} catch (Exception ex) {

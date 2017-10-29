@@ -42,6 +42,7 @@ public class BaseDataRefreshJob extends BaseJob {
 		if (SystemConfig.getBoolean("refreshBaseData")) {
 			manager.refreshBaseData();
 		}
+		lastExecuteTime.set(System.currentTimeMillis());
 	}
 
 }

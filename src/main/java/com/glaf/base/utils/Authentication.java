@@ -26,8 +26,8 @@ public class Authentication {
 	private Authentication() {
 
 	}
-	
-	public static void clear(){
+
+	public static void clear() {
 		authenticatedAccountThreadLocal.remove();
 		authenticatedUserThreadLocal.remove();
 	}

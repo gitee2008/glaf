@@ -454,7 +454,7 @@ public class LoginController {
 		return new ModelAndView(view, modelMap);
 	}
 
-	@javax.annotation.Resource(name = "com.glaf.base.modules.sys.service.identityTokenService")
+	@javax.annotation.Resource(name = "identityTokenService")
 	public void setIdentityTokenService(IdentityTokenService identityTokenService) {
 		this.identityTokenService = identityTokenService;
 	}

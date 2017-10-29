@@ -135,7 +135,7 @@ public class SysUserServiceImpl implements SysUserService {
 		boolean result = false;
 		String pwd_hash = DigestUtils.sha512Hex(account + ":" + password);
 		String pwd = sysUserMapper.getPasswordHashByAccount(account);
-		logger.debug(pwd_hash + "><" + pwd);
+		//logger.debug(pwd_hash + ">" + pwd);
 		if (StringUtils.isNotEmpty(password) && StringUtils.equals(pwd_hash, pwd)) {
 			result = true;
 		}
@@ -193,6 +193,11 @@ public class SysUserServiceImpl implements SysUserService {
 		table2.addLongColumn("NODEID_", user.getOrganizationId());
 		table2.addStringColumn("TYPE_", "SysUserRole");
 		tableDataService.insertTableData(table2);
+
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("role");
+			CacheFactory.clear("user");
+		}
 	}
 
 	@Transactional
@@ -212,6 +217,10 @@ public class SysUserServiceImpl implements SysUserService {
 		table2.setTableName("SYS_MEMBERSHIP");
 		table2.addStringColumn("ACTORID_", bean.getUserId());
 		tableDataService.deleteTableData(table2);
+
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("user");
+		}
 
 		return true;
 	}
@@ -233,6 +242,11 @@ public class SysUserServiceImpl implements SysUserService {
 		table2.addStringColumn("ROLEID_", roleId);
 		table2.addLongColumn("NODEID_", user.getOrganizationId());
 		tableDataService.deleteTableData(table2);
+
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("role");
+			CacheFactory.clear("user");
+		}
 	}
 
 	/**
@@ -261,18 +275,51 @@ public class SysUserServiceImpl implements SysUserService {
 				tableDataService.deleteTableData(table2);
 			}
 		}
+
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("role");
+			CacheFactory.clear("user");
+		}
 	}
 
 	public SysUser findByAccount(String account) {
+		String cacheKey = "sys_user_" + account;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("user", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONObject json = JSON.parseObject(text);
+					return SysUserJsonFactory.jsonToObject(json);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
 		SysUser user = sysUserMapper.getSysUserByAccount(account);
 		if (user != null) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				JSONObject json = user.toJsonObject();
+				CacheFactory.put("user", cacheKey, json.toJSONString());
+			}
 			return user;
 		}
-
 		return null;
 	}
 
 	public SysUser findByAccountWithAll(String account) {
+		String cacheKey = "sys_user_all_" + account;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("user", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONObject json = JSON.parseObject(text);
+					return SysUserJsonFactory.jsonToObject(json);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
+
 		SysUser user = sysUserMapper.getSysUserByAccount(account);
 		if (user != null) {
 			List<String> actorIds = new ArrayList<String>();
@@ -281,6 +328,12 @@ public class SysUserServiceImpl implements SysUserService {
 			user.getRoles().addAll(roles);
 			List<SysUserRole> userRoles = sysUserRoleMapper.getSysUserRolesByUserId(user.getActorId());
 			user.getUserRoles().addAll(userRoles);
+
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				JSONObject jsonObject = SysUserJsonFactory.toJsonObject(user);
+				CacheFactory.put("user", cacheKey, jsonObject.toJSONString());
+			}
+
 			return user;
 		}
 
@@ -731,6 +784,9 @@ public class SysUserServiceImpl implements SysUserService {
 			String cacheKey = "sys_user_" + sysUser.getActorId();
 			CacheFactory.remove("user", cacheKey);
 
+			cacheKey = "sys_user_all_" + sysUser.getActorId();
+			CacheFactory.remove("user", cacheKey);
+
 			cacheKey = "cache_sys_user_" + sysUser.getActorId();
 			CacheFactory.remove("user", cacheKey);
 		}
@@ -745,6 +801,9 @@ public class SysUserServiceImpl implements SysUserService {
 			sysUser.setTokenTime(new Date(System.currentTimeMillis()));
 			sysUserMapper.resetUserToken(sysUser);
 			String cacheKey = "sys_user_" + sysUser.getActorId();
+			CacheFactory.remove("user", cacheKey);
+
+			cacheKey = "sys_user_all_" + sysUser.getActorId();
 			CacheFactory.remove("user", cacheKey);
 
 			cacheKey = "cache_sys_user_" + sysUser.getActorId();
@@ -770,6 +829,9 @@ public class SysUserServiceImpl implements SysUserService {
 
 			sysUserMapper.updateSysUser(sysUser);
 			String cacheKey = "sys_user_" + sysUser.getActorId();
+			CacheFactory.remove("user", cacheKey);
+
+			cacheKey = "sys_user_all_" + sysUser.getActorId();
 			CacheFactory.remove("user", cacheKey);
 
 			cacheKey = "cache_sys_user_" + sysUser.getActorId();
@@ -862,6 +924,11 @@ public class SysUserServiceImpl implements SysUserService {
 				membership.setAttribute(String.valueOf(authorized));
 				membershipService.save(membership);
 			}
+		}
+
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("role");
+			CacheFactory.clear("user");
 		}
 	}
 
@@ -975,6 +1042,9 @@ public class SysUserServiceImpl implements SysUserService {
 		String cacheKey = "sys_user_" + sysUser.getActorId();
 		CacheFactory.remove("user", cacheKey);
 
+		cacheKey = "sys_user_all_" + sysUser.getActorId();
+		CacheFactory.remove("user", cacheKey);
+
 		cacheKey = "cache_sys_user_" + sysUser.getActorId();
 		CacheFactory.remove("user", cacheKey);
 
@@ -987,8 +1057,17 @@ public class SysUserServiceImpl implements SysUserService {
 	 * @param model
 	 */
 	@Transactional
-	public void updateUserLoginSecret(SysUser model) {
-		sysUserMapper.updateUserLoginSecret(model);
+	public void updateUserLoginSecret(SysUser sysUser) {
+		String cacheKey = "sys_user_" + sysUser.getActorId();
+		CacheFactory.remove("user", cacheKey);
+
+		cacheKey = "sys_user_all_" + sysUser.getActorId();
+		CacheFactory.remove("user", cacheKey);
+
+		cacheKey = "cache_sys_user_" + sysUser.getActorId();
+		CacheFactory.remove("user", cacheKey);
+
+		sysUserMapper.updateUserLoginSecret(sysUser);
 	}
 
 	@Transactional
@@ -1056,8 +1135,16 @@ public class SysUserServiceImpl implements SysUserService {
 		String cacheKey = "sys_user_" + user.getActorId();
 		CacheFactory.remove("user", cacheKey);
 
+		cacheKey = "sys_user_all_" + user.getActorId();
+		CacheFactory.remove("user", cacheKey);
+
 		cacheKey = "cache_sys_user_" + user.getActorId();
 		CacheFactory.remove("user", cacheKey);
+
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("role");
+			CacheFactory.clear("user");
+		}
 
 		return true;
 	}

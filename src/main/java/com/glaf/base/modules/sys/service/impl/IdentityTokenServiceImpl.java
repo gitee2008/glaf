@@ -38,7 +38,7 @@ import com.glaf.core.dao.EntityDAO;
 import com.glaf.core.id.IdGenerator;
 import com.glaf.core.util.UUID32;
 
-@Service("com.glaf.base.modules.sys.service.identityTokenService")
+@Service("identityTokenService")
 @Transactional(readOnly = true)
 public class IdentityTokenServiceImpl implements IdentityTokenService {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());

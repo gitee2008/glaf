@@ -111,12 +111,18 @@ public class SysTreeServiceImpl implements SysTreeService {
 	@Transactional
 	public boolean delete(long id) {
 		this.deleteById(id);
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("tree");
+		}
 		return true;
 	}
 
 	@Transactional
 	public boolean delete(SysTree bean) {
 		this.deleteById(bean.getId());
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("tree");
+		}
 		return true;
 	}
 
@@ -125,6 +131,9 @@ public class SysTreeServiceImpl implements SysTreeService {
 		if (ids != null && ids.length > 0) {
 			for (long id : ids) {
 				this.deleteById(id);
+			}
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				CacheFactory.clear("tree");
 			}
 		}
 		return true;
