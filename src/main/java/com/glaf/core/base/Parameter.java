@@ -26,40 +26,28 @@ public interface Parameter {
 
 	Double getDoubleVal();
 
-	String getId();
-
 	Integer getIntVal();
-
-	String getKeyName();
 
 	Long getLongVal();
 
+	String getName();
+
 	String getStringVal();
 
-	String getTextVal();
+	boolean isAutoTypeConvert();
 
-	String getTitle();
-
-	String getTypeCd();
+	void setAutoTypeConvert(boolean autoTypeConvert);
 
 	void setDateVal(Date dateVal);
 
 	void setDoubleVal(Double doubleVal);
 
-	void setId(String id);
-
 	void setIntVal(Integer intVal);
-
-	void setKeyName(String keyName);
 
 	void setLongVal(Long longVal);
 
+	void setName(String name);
+
 	void setStringVal(String stringVal);
-
-	void setTaskId(String taskId);
-
-	void setTextVal(String textVal);
-
-	void setTitle(String title);
 
 }

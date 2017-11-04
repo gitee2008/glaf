@@ -111,6 +111,8 @@ public interface DataFile extends JSONable {
 	 */
 	int getLocked();
 
+	String getMasterDataId();
+
 	/**
 	 * 名称
 	 * 
@@ -226,6 +228,8 @@ public interface DataFile extends JSONable {
 	void setLastModified(long lastModified);
 
 	void setLocked(int locked);
+
+	void setMasterDataId(String masterDataId);
 
 	/**
 	 * 设置名称

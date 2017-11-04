@@ -67,7 +67,7 @@ public class SSHClient {
 			return b;
 
 		if (b == 1 || b == 2) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			int c;
 			do {
 				c = in.read();
@@ -91,7 +91,7 @@ public class SSHClient {
 		try {
 			logger.info("[" + username + "@" + hostname + "] Execute command: " + command);
 
-			StringBuffer text = new StringBuffer();
+			StringBuilder text = new StringBuilder(500);
 			int exitCode = -1;
 
 			Session session = newJSchSession();

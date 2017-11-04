@@ -49,8 +49,8 @@ public class ConfigFactory {
 
 	protected static List<String> regions = new java.util.concurrent.CopyOnWriteArrayList<String>();
 
-	protected static Cache<String, String> cache = CacheBuilder.newBuilder().maximumSize(10000)
-			.expireAfterWrite(15, TimeUnit.MINUTES).build();
+	protected static Cache<String, String> cache = CacheBuilder.newBuilder().maximumSize(20000)
+			.expireAfterWrite(5, TimeUnit.MINUTES).expireAfterAccess(5, TimeUnit.MINUTES).build();
 
 	protected static ExecutorService pool = Executors.newFixedThreadPool(10);
 
@@ -63,7 +63,6 @@ public class ConfigFactory {
 				logger.debug(region + " clear.");
 				logger.debug("###################################");
 			} catch (Throwable ex) {
-				//
 				logger.error(ex);
 			}
 		}
@@ -80,7 +79,6 @@ public class ConfigFactory {
 						logger.debug(region + " clear.");
 						logger.debug("###################################");
 					} catch (Throwable ex) {
-						//
 						logger.error(ex);
 					}
 				}
@@ -122,7 +120,6 @@ public class ConfigFactory {
 			try {
 				channel.put(regionName, complexKey, value);
 			} catch (Throwable ex) {
-
 				logger.error(ex);
 			}
 		}
@@ -139,7 +136,6 @@ public class ConfigFactory {
 			try {
 				channel.remove(regionName, complexKey);
 			} catch (Throwable ex) {
-				//
 				logger.error(ex);
 			}
 		}

@@ -38,7 +38,7 @@ public class GuavaCache implements com.glaf.core.cache.Cache {
 
 	protected int cacheSize = 50000;
 
-	protected int expireMinutes = 30;
+	protected int expireMinutes = 10;
 
 	public GuavaCache() {
 

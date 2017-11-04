@@ -93,7 +93,7 @@ public class AccessLogFactory {
 					tables.put(key, tableName);
 				}
 			} catch (Exception ex) {
-				
+
 			}
 		}
 	}
@@ -133,12 +133,12 @@ public class AccessLogFactory {
 				checkLogTable(systemName, AccessLogDomainFactory.TABLENAME);
 			}
 		} catch (Exception ex) {
-			
+
 		}
 		try {
 			loadTables(systemName);
 		} catch (Exception ex) {
-			
+
 		}
 	}
 
@@ -265,7 +265,7 @@ public class AccessLogFactory {
 			while (!accessLogs.isEmpty()) {
 				AccessLog bean = accessLogs.poll();
 				rows.add(bean);
-				if (rows.size() > 0 && rows.size() % 100 == 0) {
+				if (rows.size() > 0 && rows.size() % 2000 == 0) {
 					success = false;
 					retry = 0;
 					while (retry < 3 && !success) {

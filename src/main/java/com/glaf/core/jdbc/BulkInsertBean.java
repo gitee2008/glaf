@@ -83,7 +83,7 @@ public class BulkInsertBean {
 	public void bulkInsertInner(LoginContext loginContext, Connection conn, TableDefinition tableDefinition,
 			List<Map<String, Object>> dataList) {
 		List<ColumnDefinition> columns = tableDefinition.getColumns();
-		StringBuilder insertBuffer = new StringBuilder();
+		StringBuilder insertBuffer = new StringBuilder(500);
 		insertBuffer.append(" insert into ").append(tableDefinition.getTableName()).append(" (");
 		for (ColumnDefinition column : columns) {
 			insertBuffer.append(column.getColumnName()).append(", ");
@@ -240,7 +240,7 @@ public class BulkInsertBean {
 
 	public void insertInner(Connection conn, TableDefinition tableDefinition, List<Map<String, Object>> dataList) {
 		List<ColumnDefinition> columns = tableDefinition.getColumns();
-		StringBuffer insertBuffer = new StringBuffer();
+		StringBuilder insertBuffer = new StringBuilder(500);
 
 		insertBuffer.append(" insert into ").append(tableDefinition.getTableName()).append(" (");
 		for (ColumnDefinition column : columns) {

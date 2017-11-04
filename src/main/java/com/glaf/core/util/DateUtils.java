@@ -103,7 +103,7 @@ public class DateUtils {
 			endDate = format.parse(endDateStr);
 			day = (endDate.getTime() - beginDate.getTime()) / (24 * 60 * 60 * 1000);
 		} catch (java.text.ParseException ex) {
-			
+
 		}
 		return day;
 	}
@@ -248,7 +248,7 @@ public class DateUtils {
 		} while (result.get(Calendar.DAY_OF_WEEK) != 2);
 		return result;
 	}
-	
+
 	public static int getNowYear() {
 		String returnStr = null;
 		SimpleDateFormat f = new SimpleDateFormat("yyyy");
@@ -273,9 +273,16 @@ public class DateUtils {
 		return Integer.parseInt(returnStr);
 	}
 
+	public static String getNowYearMonthDayHHmm() {
+		String returnStr = null;
+		SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmm");
+		Date date = new Date();
+		returnStr = f.format(date);
+		return returnStr;
+	}
+
 	public static String getNowYearMonthDayHHmmss() {
 		String returnStr = null;
-		System.currentTimeMillis();
 		SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmmss");
 		Date date = new Date();
 		returnStr = f.format(date);
@@ -423,9 +430,8 @@ public class DateUtils {
 	}
 
 	/**
-	 * Current system time. Do not use this to calculate a duration or interval
-	 * to sleep, because it will be broken by settimeofday. Instead, use
-	 * monotonicNow.
+	 * Current system time. Do not use this to calculate a duration or interval to
+	 * sleep, because it will be broken by settimeofday. Instead, use monotonicNow.
 	 * 
 	 * @return current time in msec.
 	 */
@@ -436,8 +442,8 @@ public class DateUtils {
 	/**
 	 * Current time from some arbitrary time base in the past, counting in
 	 * milliseconds, and not affected by settimeofday or similar system clock
-	 * changes. This is appropriate to use when computing how much longer to
-	 * wait for an interval to expire.
+	 * changes. This is appropriate to use when computing how much longer to wait
+	 * for an interval to expire.
 	 * 
 	 * @return a monotonic clock that counts in milliseconds.
 	 */
@@ -498,7 +504,7 @@ public class DateUtils {
 		System.out.println(DateUtils.getYearDays(2015));
 
 		System.out.println(DateUtils.toDate("2015-12-25 22:45:50.0"));
-		
+
 		System.out.println(DateUtils.toDate("1474473600000"));
 		System.out.println(DateUtils.toDate("20160101142323"));
 
@@ -614,7 +620,7 @@ public class DateUtils {
 				}
 			}
 		} catch (ParseException ex) {
-			
+
 			throw new RuntimeException(" parse date string error: " + ex);
 		}
 		throw new RuntimeException("Input is not valid date string: " + dateString);

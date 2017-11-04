@@ -222,7 +222,7 @@ public class DataFileEntity implements DataFile, Serializable, JSONable {
 		return result;
 	}
 
-	public DataFileEntity jsonToObject(JSONObject jsonObject) {
+	public DataFile jsonToObject(JSONObject jsonObject) {
 		return DataFileJsonFactory.jsonToObject(jsonObject);
 	}
 

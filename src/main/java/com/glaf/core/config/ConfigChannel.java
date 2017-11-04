@@ -27,8 +27,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ConfigChannel {
 
-	protected final static Logger log = LoggerFactory
-			.getLogger(ConfigChannel.class);
+	protected final static Logger log = LoggerFactory.getLogger(ConfigChannel.class);
 
 	private static class ConfigChannelHolder {
 		public static ConfigChannel instance = new ConfigChannel();
@@ -46,7 +45,6 @@ public class ConfigChannel {
 		try {
 			ConfigManager.initConfigProvider();
 		} catch (Exception ex) {
-			
 			throw new RuntimeException(ex);
 		}
 	}
@@ -88,10 +86,9 @@ public class ConfigChannel {
 	 */
 	public void put(String region, String key, String value) {
 		if (region != null && key != null) {
-			if (value == null){
+			if (value == null) {
 				remove(region, key);
-			}
-			else {
+			} else {
 				ConfigManager.put(region, key, value);
 			}
 		}

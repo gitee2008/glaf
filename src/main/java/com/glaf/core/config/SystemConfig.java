@@ -40,11 +40,11 @@ import com.glaf.core.util.StringTools;
 public class SystemConfig {
 	protected static final Log logger = LogFactory.getLog(SystemConfig.class);
 
-	protected static Cache<String, SystemProperty> concurrentMap = CacheBuilder.newBuilder().maximumSize(10000)
-			.expireAfterWrite(30, TimeUnit.MINUTES).build();
+	protected static Cache<String, SystemProperty> concurrentMap = CacheBuilder.newBuilder().maximumSize(20000)
+			.expireAfterWrite(5, TimeUnit.MINUTES).expireAfterAccess(5, TimeUnit.MINUTES).build();
 
-	protected static Cache<String, Long> concurrentTimeMap = CacheBuilder.newBuilder().maximumSize(10000)
-			.expireAfterWrite(30, TimeUnit.MINUTES).build();
+	protected static Cache<String, Long> concurrentTimeMap = CacheBuilder.newBuilder().maximumSize(20000)
+			.expireAfterWrite(5, TimeUnit.MINUTES).expireAfterAccess(5, TimeUnit.MINUTES).build();
 
 	protected static AtomicBoolean loading = new AtomicBoolean(false);
 
@@ -199,7 +199,7 @@ public class SystemConfig {
 			month = month + 1;
 			logger.debug(year + "-" + month);
 
-			StringBuffer sb = new StringBuffer(50);
+			StringBuilder sb = new StringBuilder(50);
 			sb.append(year);
 
 			if (month <= 9) {
@@ -233,7 +233,7 @@ public class SystemConfig {
 
 			logger.debug(year + "-" + month + "-" + day);
 
-			StringBuffer sb = new StringBuffer(50);
+			StringBuilder sb = new StringBuilder(50);
 			sb.append(year);
 
 			if (month <= 9) {
@@ -346,7 +346,7 @@ public class SystemConfig {
 	}
 
 	public static String getRegionName(String name) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder(200);
 		if (Environment.getCurrentSystemName() != null
 				&& !StringUtils.equals(Environment.DEFAULT_SYSTEM_NAME, Environment.getCurrentSystemName())) {
 			buffer.append(Environment.getCurrentSystemName()).append("_");

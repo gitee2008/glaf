@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -80,9 +81,9 @@ public class RedisFileStorageFactory {
 
 	protected static volatile IServerEntityService serverEntityService;
 
-	protected static final String DEFAULT_REGION = "default";
+	protected static volatile AtomicBoolean loaded = new AtomicBoolean(false);
 
-	protected static boolean loaded = false;
+	protected static final String DEFAULT_REGION = "default";
 
 	public static RedisFileStorageFactory getInstance() {
 		return RedisSingletonHolder.instance;
@@ -117,9 +118,9 @@ public class RedisFileStorageFactory {
 	public void deleteById(String region, String fileId) {
 		int size = redisPoolMap.size();
 		if (size == 0) {
-			if (!loaded) {
+			if (!loaded.get()) {
 				this.init();
-				loaded = true;
+				loaded.set(true);
 			}
 			size = redisPoolMap.size();
 			if (size == 0) {
@@ -179,9 +180,9 @@ public class RedisFileStorageFactory {
 	public byte[] getData(String region, String fileId) {
 		int size = redisPoolMap.size();
 		if (size == 0) {
-			if (!loaded) {
+			if (!loaded.get()) {
 				this.init();
-				loaded = true;
+				loaded.set(true);
 			}
 			size = redisPoolMap.size();
 			if (size == 0) {
@@ -241,9 +242,9 @@ public class RedisFileStorageFactory {
 	public DataFile getDataFile(String region, String fileId) {
 		int size = redisPoolMap.size();
 		if (size == 0) {
-			if (!loaded) {
+			if (!loaded.get()) {
 				this.init();
-				loaded = true;
+				loaded.set(true);
 			}
 			size = redisPoolMap.size();
 			if (size == 0) {
@@ -472,9 +473,9 @@ public class RedisFileStorageFactory {
 	public void saveData(String region, String fileId, byte[] data) {
 		int size = redisPoolMap.size();
 		if (size == 0) {
-			if (!loaded) {
+			if (!loaded.get()) {
 				this.init();
-				loaded = true;
+				loaded.set(true);
 			}
 			size = redisPoolMap.size();
 			if (size == 0) {
@@ -531,9 +532,9 @@ public class RedisFileStorageFactory {
 	public void saveDataFile(String region, String fileId, DataFile dataFile) {
 		int size = redisPoolMap.size();
 		if (size == 0) {
-			if (!loaded) {
+			if (!loaded.get()) {
 				this.init();
-				loaded = true;
+				loaded.set(true);
 			}
 			size = redisPoolMap.size();
 			if (size == 0) {

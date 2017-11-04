@@ -34,6 +34,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
+import java.nio.charset.StandardCharsets;
 
 public class FileUtils {
 
@@ -124,8 +125,8 @@ public class FileUtils {
 	}
 
 	/**
-	 * Delete a directory and all its contents. If we return false, the
-	 * directory may be partially-deleted.
+	 * Delete a directory and all its contents. If we return false, the directory
+	 * may be partially-deleted.
 	 */
 	public static boolean fullyDelete(File dir) throws IOException {
 		if (!fullyDeleteContents(dir)) {
@@ -135,8 +136,8 @@ public class FileUtils {
 	}
 
 	/**
-	 * Delete the contents of a directory, not the directory itself. If we
-	 * return false, the directory may be partially-deleted.
+	 * Delete the contents of a directory, not the directory itself. If we return
+	 * false, the directory may be partially-deleted.
 	 */
 	public static boolean fullyDeleteContents(File dir) throws IOException {
 		boolean deletionSucceeded = true;
@@ -216,7 +217,7 @@ public class FileUtils {
 			output.flush();
 			return output.toByteArray();
 		} catch (IOException ex) {
-			
+
 			throw new RuntimeException(ex);
 		} finally {
 			if (output != null) {
@@ -440,6 +441,20 @@ public class FileUtils {
 			return new String(bytes);
 		}
 		return null;
+	}
+
+	public static String readFileUTF8(InputStream file) {
+		try (BufferedInputStream stream = new BufferedInputStream(file)) {
+			byte[] buff = new byte[1024];
+			StringBuilder builder = new StringBuilder();
+			int read;
+			while ((read = stream.read(buff)) != -1) {
+				builder.append(new String(buff, 0, read, StandardCharsets.UTF_8));
+			}
+			return builder.toString();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public static String replaceDirName(String pFileName) {

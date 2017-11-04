@@ -38,7 +38,6 @@ import com.glaf.core.base.JSONable;
 import com.glaf.core.base.Parameter;
 import com.glaf.core.domain.util.SchedulerParamJsonFactory;
 
-
 @Entity
 @Table(name = "SYS_SCHEDULER_PARAMS")
 public class SchedulerParam implements Serializable, Parameter, JSONable {
@@ -104,6 +103,9 @@ public class SchedulerParam implements Serializable, Parameter, JSONable {
 	@Column(name = "DOUBLE_VAL")
 	protected Double doubleVal;
 
+	@javax.persistence.Transient
+	protected boolean autoTypeConvert;
+
 	public SchedulerParam() {
 
 	}
@@ -149,6 +151,10 @@ public class SchedulerParam implements Serializable, Parameter, JSONable {
 		return this.longVal;
 	}
 
+	public String getName() {
+		return this.keyName;
+	}
+
 	public String getStringVal() {
 		return this.stringVal;
 	}
@@ -177,8 +183,16 @@ public class SchedulerParam implements Serializable, Parameter, JSONable {
 		return result;
 	}
 
+	public boolean isAutoTypeConvert() {
+		return autoTypeConvert;
+	}
+
 	public SchedulerParam jsonToObject(JSONObject jsonObject) {
 		return SchedulerParamJsonFactory.jsonToObject(jsonObject);
+	}
+
+	public void setAutoTypeConvert(boolean autoTypeConvert) {
+		this.autoTypeConvert = autoTypeConvert;
 	}
 
 	public void setDateVal(Date dateVal) {
@@ -203,6 +217,10 @@ public class SchedulerParam implements Serializable, Parameter, JSONable {
 
 	public void setLongVal(Long longVal) {
 		this.longVal = longVal;
+	}
+
+	public void setName(String keyName) {
+		this.keyName = keyName;
 	}
 
 	public void setStringVal(String stringVal) {
@@ -234,8 +252,7 @@ public class SchedulerParam implements Serializable, Parameter, JSONable {
 	}
 
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this,
-				ToStringStyle.MULTI_LINE_STYLE);
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 	}
 
 }

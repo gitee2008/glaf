@@ -38,28 +38,36 @@ class ConfigManager {
 
 	protected final static ConcurrentMap<String, Config> providerCache = new ConcurrentHashMap<String, Config>();
 
-	private static ConfigProvider _provider;
+	private static volatile ConfigProvider _provider;
+
+	private static volatile Properties props;
 
 	private final static Config _GetConfig(String config_name, boolean autoCreate) {
-		String providerName = SystemConfig.getString("config.provider");
-		log.debug("providerName:" + providerName);
+		if (props == null) {
+			props = GlobalConfig.getConfigProperties("config.properties");
+		}
+		String providerName = props.getProperty("config.provider_class");
+		// log.debug("providerName:" + providerName);
 		if (StringUtils.isNotEmpty(providerName)) {
 			if (providerCache.get(providerName) != null) {
-				log.debug("config provider:" + providerName);
+				// log.debug("config provider:" + providerName);
 				return providerCache.get(providerName);
 			} else {
 				try {
+					log.debug("providerName:" + providerName);
 					ConfigProvider configProvider = getProviderInstance(providerName);
+					configProvider.start(props);
 					Config cfg = configProvider.buildConfig(config_name, autoCreate);
 					providerCache.put(providerName, cfg);
 					log.debug("->config provider:" + providerName);
 					return cfg;
-				} catch (Exception e) {
-					e.printStackTrace();
+				} catch (Exception ex) {
+					ex.printStackTrace();
 				}
 			}
 		}
-		return (_provider).buildConfig(config_name, autoCreate);
+		_provider.start(props);
+		return _provider.buildConfig(config_name, autoCreate);
 	}
 
 	/**
@@ -75,18 +83,21 @@ class ConfigManager {
 	private final static ConfigProvider getProviderInstance(String value) throws Exception {
 		String className = value;
 
-		if ("redis".equalsIgnoreCase(value)) {
+		if ("consul".equalsIgnoreCase(value)) {
+			className = "com.glaf.core.config.consul.ConsulConfigProvider";
+		} else if ("mongodb".equalsIgnoreCase(value)) {
+			className = "com.glaf.core.config.mongodb.MongodbConfigProvider";
+		} else if ("redis".equalsIgnoreCase(value)) {
 			className = "com.glaf.core.config.redis.RedisConfigProvider";
-		}
-
-		if ("zookeeper".equalsIgnoreCase(value)) {
+		} else if ("zookeeper".equalsIgnoreCase(value)) {
 			className = "com.glaf.core.config.zookeeper.ZooKeeperConfigProvider";
 		}
 
-		if (StringUtils.isNotEmpty(className)) {
-			return (ConfigProvider) Class.forName(className).newInstance();
+		if (!StringUtils.startsWith(className, "com.glaf")) {
+			className = "com.glaf.core.config.redis.RedisConfigProvider";
 		}
-		return null;
+
+		return (ConfigProvider) Class.forName(className).newInstance();
 	}
 
 	private final static Properties getProviderProperties(Properties props, ConfigProvider provider) {
@@ -95,8 +106,9 @@ class ConfigManager {
 		String prefix = provider.name() + '.';
 		while (keys.hasMoreElements()) {
 			String key = (String) keys.nextElement();
-			if (key.startsWith(prefix))
+			if (key.startsWith(prefix)) {
 				new_props.setProperty(key.substring(prefix.length()), props.getProperty(key));
+			}
 		}
 		return new_props;
 	}
@@ -120,16 +132,13 @@ class ConfigManager {
 
 	public static void initConfigProvider() {
 		try {
-			Properties props = GlobalConfig.getProperties("sys_config");
-			if (props == null || props.isEmpty()) {
-				props = GlobalConfig.getConfigProperties("config.properties");
-			}
-			_provider = getProviderInstance(props.getProperty("config.provider_class"));
-			if (_provider != null) {
-				_provider.start(getProviderProperties(props, ConfigManager._provider));
-				log.info("Using ConfigProvider : " + _provider.getClass().getName());
-			}
+			props = GlobalConfig.getConfigProperties("config.properties");
+			ConfigManager._provider = getProviderInstance(props.getProperty("config.provider_class"));
+			ConfigManager._provider.start(getProviderProperties(props, ConfigManager._provider));
+			log.info("Using ConfigProvider : " + _provider.getClass().getName());
+			log.info("props:" + props);
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			log.error("Unabled to initialize config providers", ex);
 		}
 	}
@@ -145,7 +154,7 @@ class ConfigManager {
 		if (region != null && key != null && value != null) {
 			Config config = _GetConfig(region, true);
 			if (config != null) {
-				log.debug(config.getClass().getName());
+				// log.debug(config.getClass().getName());
 				config.put(key, value);
 			}
 		}

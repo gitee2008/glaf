@@ -27,10 +27,7 @@ import org.apache.shiro.util.Initializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
- 
-
-public class GuavaCacheManager implements CacheManager, Initializable,
-		Destroyable {
+public class GuavaCacheManager implements CacheManager, Initializable, Destroyable {
 	private final static Logger log = LoggerFactory.getLogger(GuavaCacheManager.class);
 
 	protected int cacheSize = 100000;

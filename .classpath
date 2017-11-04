@@ -211,5 +211,8 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/cacheonix-core.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/j2cache-core.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/snappy-java.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/caffeine.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/consul-api.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/gson.jar"/>
 	<classpathentry kind="output" path="webapps/glaf/WEB-INF/classes"/>
 </classpath>

@@ -548,7 +548,7 @@ public class SystemTableController {
 	@ResponseBody
 	@RequestMapping("/genCreateScripts")
 	public void genCreateScripts(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder(8192);
 		String tableNames = request.getParameter("tables");
 		String dbType = request.getParameter("dbType");
 		if (StringUtils.isNotEmpty(dbType) && StringUtils.isNotEmpty(tableNames)) {

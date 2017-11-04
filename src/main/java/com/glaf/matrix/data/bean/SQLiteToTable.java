@@ -201,7 +201,7 @@ public class SQLiteToTable {
 		Reader is = clob.getCharacterStream();// 得到流
 		BufferedReader br = new BufferedReader(is);
 		String s = br.readLine();
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		while (s != null) {// 执行循环将字符串全部取出付值给StringBuffer由StringBuffer转成STRING
 			sb.append(s);
 			s = br.readLine();

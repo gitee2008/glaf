@@ -75,7 +75,7 @@ public class RedisConfig implements Config {
 		}
 		try {
 			List<byte[]> okeys = new ArrayList<byte[]>();
-			for (int i = 0; i < keys.size(); i++) {
+			for (int i = 0, len = keys.size(); i < len; i++) {
 				Object object = keys.get(i);
 				if (object instanceof byte[]) {
 					byte[] key = (byte[]) object;

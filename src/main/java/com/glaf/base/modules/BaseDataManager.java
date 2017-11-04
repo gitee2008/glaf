@@ -872,7 +872,7 @@ public class BaseDataManager {
 		try {
 			logger.info("装载字典信息开始...");
 			List<SysTree> trees = getDictoryService().getAllCategories();
-			for (int i = 0; i < trees.size(); i++) {
+			for (int i = 0, len = trees.size(); i < len; i++) {
 				SysTree treeNode = trees.get(i);
 				if (treeNode != null) {
 					List<Dictory> list = getDictoryService().getAvailableDictoryList(treeNode.getId());

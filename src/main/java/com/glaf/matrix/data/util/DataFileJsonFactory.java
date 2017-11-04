@@ -28,11 +28,11 @@ import com.glaf.matrix.data.domain.DataFileEntity;
 
 public class DataFileJsonFactory {
 
-	public static java.util.List<DataFileEntity> arrayToList(JSONArray array) {
-		java.util.List<DataFileEntity> list = new java.util.ArrayList<DataFileEntity>();
+	public static java.util.List<DataFile> arrayToList(JSONArray array) {
+		java.util.List<DataFile> list = new java.util.ArrayList<DataFile>();
 		for (int i = 0, len = array.size(); i < len; i++) {
 			JSONObject jsonObject = array.getJSONObject(i);
-			DataFileEntity model = jsonToObject(jsonObject);
+			DataFile model = jsonToObject(jsonObject);
 			list.add(model);
 		}
 		return list;
@@ -49,8 +49,8 @@ public class DataFileJsonFactory {
 		return array;
 	}
 
-	public static DataFileEntity jsonToObject(JSONObject jsonObject) {
-		DataFileEntity model = new DataFileEntity();
+	public static DataFile jsonToObject(JSONObject jsonObject) {
+		DataFile model = new DataFileEntity();
 		if (jsonObject.containsKey("id")) {
 			model.setId(jsonObject.getString("id"));
 		}
@@ -112,10 +112,10 @@ public class DataFileJsonFactory {
 		return model;
 	}
 
-	public static JSONArray listToArray(java.util.List<DataFileEntity> list) {
+	public static JSONArray listToArray(java.util.List<DataFile> list) {
 		JSONArray array = new JSONArray();
 		if (list != null && !list.isEmpty()) {
-			for (DataFileEntity model : list) {
+			for (DataFile model : list) {
 				JSONObject jsonObject = model.toJsonObject();
 				array.add(jsonObject);
 			}
@@ -123,7 +123,7 @@ public class DataFileJsonFactory {
 		return array;
 	}
 
-	public static JSONObject toJsonObject(DataFileEntity model) {
+	public static JSONObject toJsonObject(DataFile model) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("id", model.getId());
 		jsonObject.put("_id_", model.getId());
@@ -177,7 +177,7 @@ public class DataFileJsonFactory {
 		return jsonObject;
 	}
 
-	public static ObjectNode toObjectNode(DataFileEntity model) {
+	public static ObjectNode toObjectNode(DataFile model) {
 		ObjectNode jsonObject = new ObjectMapper().createObjectNode();
 		jsonObject.put("id", model.getId());
 		jsonObject.put("_id_", model.getId());

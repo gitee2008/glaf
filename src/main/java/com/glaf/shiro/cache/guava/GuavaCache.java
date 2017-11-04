@@ -40,7 +40,7 @@ public class GuavaCache<K, V> implements org.apache.shiro.cache.Cache<K, V> {
 
 	protected int cacheSize = 100000;
 
-	protected int expireMinutes = 1440;
+	protected int expireMinutes = 480;
 
 	public GuavaCache(int cacheSize, int expireMinutes) {
 		this.cacheSize = cacheSize;

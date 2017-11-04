@@ -1408,7 +1408,7 @@ public class DBUtils {
 	}
 
 	private static String getColumnScript(String dbType, ColumnDefinition column) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder(500);
 		buffer.append(newline);
 		buffer.append("    ").append(column.getColumnName().toUpperCase());
 		if ("db2".equalsIgnoreCase(dbType)) {
@@ -1666,7 +1666,7 @@ public class DBUtils {
 	}
 
 	public static String getCreateTableScript(String dbType, TableDefinition tableDefinition) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder(4000);
 		Collection<ColumnDefinition> columns = tableDefinition.getColumns();
 		buffer.append(" create table ").append(tableDefinition.getTableName().toUpperCase());
 		buffer.append(" ( ");
@@ -1834,7 +1834,7 @@ public class DBUtils {
 	}
 
 	private static String getPrimaryKeyScript(String dbType, ColumnDefinition idField) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder(500);
 
 		buffer.append(newline);
 		buffer.append("    ").append(idField.getColumnName().toUpperCase());

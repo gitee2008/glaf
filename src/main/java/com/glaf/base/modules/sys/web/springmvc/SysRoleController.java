@@ -396,7 +396,7 @@ public class SysRoleController {
 		StringBuilder buffery = new StringBuilder();
 
 		if (allUsers != null && allUsers.size() > 0) {
-			for (int j = 0; j < allUsers.size(); j++) {
+			for (int j = 0, len = allUsers.size(); j < len; j++) {
 				SysUser r = (SysUser) allUsers.get(j);
 				if (selecteds != null && selecteds.contains(r.getUserId())) {
 					buffery.append("\n<option value=\"").append(r.getUserId()).append("\">").append(r.getName())
