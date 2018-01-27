@@ -71,7 +71,7 @@ public class SpringDispatcherServlet extends DispatcherServlet {
 
 		if (!StringUtils.startsWith(ipAddr, "192.168.")) {
 			int num = ContextUtil.increase(ipAddr);
-			if (num > 50000) {// 从某个IP地址来的访问量超过50000就重定向
+			if (num > 200000) {// 从某个IP地址来的访问量超过200000就重定向
 				response.sendRedirect("http://www.example.com");
 				return;
 			}

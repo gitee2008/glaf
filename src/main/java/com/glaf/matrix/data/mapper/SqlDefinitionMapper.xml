@@ -16,6 +16,8 @@
 		<result property="operation" column="OPERATION_" jdbcType="VARCHAR" />
 		<result property="rowKey" column="ROWKEY_" jdbcType="VARCHAR" />
 		<result property="cacheFlag" column="CACHEFLAG_" jdbcType="VARCHAR" />
+		<result property="dataItemFlag" column="DATAITEMFLAG_"
+			jdbcType="VARCHAR" />
 		<result property="fetchFlag" column="FETCHFLAG_" jdbcType="VARCHAR" />
 		<result property="deleteFetch" column="DELETEFETCH_" jdbcType="VARCHAR" />
 		<result property="exportFlag" column="EXPORTFLAG_" jdbcType="VARCHAR" />
@@ -80,6 +82,9 @@
 			</if>
 			<if test="cacheFlag != null">
 				,CACHEFLAG_
+			</if>
+			<if test="dataItemFlag != null">
+				,DATAITEMFLAG_
 			</if>
 			<if test="fetchFlag != null">
 				,FETCHFLAG_
@@ -170,6 +175,9 @@
 			<if test="cacheFlag != null">
 				,#{cacheFlag, jdbcType=VARCHAR}
 			</if>
+			<if test="dataItemFlag != null">
+				,#{dataItemFlag, jdbcType=VARCHAR}
+			</if>
 			<if test="fetchFlag != null">
 				,#{fetchFlag, jdbcType=VARCHAR}
 			</if>
@@ -255,6 +263,9 @@
 			</if>
 			<if test="cacheFlag != null">
 				CACHEFLAG_ = #{cacheFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="dataItemFlag != null">
+				DATAITEMFLAG_ = #{dataItemFlag, jdbcType=VARCHAR},
 			</if>
 			<if test="fetchFlag != null">
 				FETCHFLAG_ = #{fetchFlag, jdbcType=VARCHAR},

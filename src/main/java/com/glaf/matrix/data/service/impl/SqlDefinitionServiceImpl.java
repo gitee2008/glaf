@@ -93,8 +93,8 @@ public class SqlDefinitionServiceImpl implements SqlDefinitionService {
 		}
 		return sqlDefinition;
 	}
-	
-	public SqlDefinition getSqlDefinitionByCode(String code){
+
+	public SqlDefinition getSqlDefinitionByCode(String code) {
 		if (code == null) {
 			return null;
 		}

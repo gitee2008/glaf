@@ -104,7 +104,7 @@ public class StorageManager {
 
 		File tmpFile = getTmpFile();
 
-		byte[] dataBuf = new byte[2048];
+		byte[] dataBuf = new byte[4096];
 		BufferedInputStream bis = new BufferedInputStream(is, StorageManager.BUFFER_SIZE);
 
 		try {
@@ -135,7 +135,7 @@ public class StorageManager {
 
 		File tmpFile = getTmpFile();
 
-		byte[] dataBuf = new byte[2048];
+		byte[] dataBuf = new byte[4096];
 		BufferedInputStream bis = new BufferedInputStream(is, StorageManager.BUFFER_SIZE);
 
 		try {

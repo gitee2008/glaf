@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.data.mapper.DataItemDefinitionMapper">
+
+	<resultMap id="dataItemDefinitionResultMap" type="com.glaf.matrix.data.domain.DataItemDefinition">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="nodeId" column="NODEID_" jdbcType="BIGINT" />
+		<result property="category" column="CATEGORY_" jdbcType="VARCHAR" />
+		<result property="title" column="TITLE_" jdbcType="VARCHAR" />
+		<result property="code" column="CODE_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="keyColumn" column="KEYCOLUMN_" jdbcType="VARCHAR" />
+		<result property="valueColumn" column="VALUECOLUMN_" jdbcType="VARCHAR" />
+		<result property="sql" column="SQL_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertDataItemDefinition" parameterType="com.glaf.matrix.data.domain.DataItemDefinition">
+		insert into SYS_DATA_ITEM_DEF
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="nodeId != null">
+				,NODEID_
+			</if>
+			<if test="category != null">
+				,CATEGORY_
+			</if>
+			<if test="title != null">
+				,TITLE_
+			</if>
+			<if test="code != null">
+				,CODE_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="keyColumn != null">
+				,KEYCOLUMN_
+			</if>
+			<if test="valueColumn != null">
+				,VALUECOLUMN_
+			</if>
+			<if test="sql != null">
+				,SQL_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="nodeId != null">
+				,#{nodeId, jdbcType=BIGINT}
+			</if>
+			<if test="category != null">
+				,#{category, jdbcType=VARCHAR}
+			</if>
+			<if test="title != null">
+				,#{title, jdbcType=VARCHAR}
+			</if>
+			<if test="code != null">
+				,#{code, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="keyColumn != null">
+				,#{keyColumn, jdbcType=VARCHAR}
+			</if>
+			<if test="valueColumn != null">
+				,#{valueColumn, jdbcType=VARCHAR}
+			</if>
+			<if test="sql != null">
+				,#{sql, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertDataItemDefinition" parameterType="java.util.List">
+		insert into SYS_DATA_ITEM_DEF (
+		ID_
+		,NODEID_
+		,CATEGORY_
+		,TITLE_
+		,CODE_
+		,TYPE_
+		,KEYCOLUMN_
+		,VALUECOLUMN_
+		,SQL_
+		,CREATEBY_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="dataItemDefinition" index="index"
+			separator=",">
+			(
+			#{dataItemDefinition.id, jdbcType=BIGINT}
+			,#{dataItemDefinition.nodeId, jdbcType=BIGINT}
+			,#{dataItemDefinition.category, jdbcType=VARCHAR}
+			,#{dataItemDefinition.title, jdbcType=VARCHAR}
+			,#{dataItemDefinition.code, jdbcType=VARCHAR}
+			,#{dataItemDefinition.type, jdbcType=VARCHAR}
+			,#{dataItemDefinition.keyColumn, jdbcType=VARCHAR}
+			,#{dataItemDefinition.valueColumn, jdbcType=VARCHAR}
+			,#{dataItemDefinition.sql, jdbcType=VARCHAR}
+			,#{dataItemDefinition.createBy, jdbcType=VARCHAR}
+			,#{dataItemDefinition.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertDataItemDefinition_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="dataItemDefinition" index="index">
+			insert into SYS_DATA_ITEM_DEF (
+			ID_
+			,NODEID_
+			,CATEGORY_
+			,TITLE_
+			,CODE_
+			,TYPE_
+			,KEYCOLUMN_
+			,VALUECOLUMN_
+			,SQL_
+			,CREATEBY_
+			,CREATETIME_
+			) values (
+			#{dataItemDefinition.id, jdbcType=BIGINT}
+			,#{dataItemDefinition.nodeId, jdbcType=BIGINT}
+			,#{dataItemDefinition.category, jdbcType=VARCHAR}
+			,#{dataItemDefinition.title, jdbcType=VARCHAR}
+			,#{dataItemDefinition.code, jdbcType=VARCHAR}
+			,#{dataItemDefinition.type, jdbcType=VARCHAR}
+			,#{dataItemDefinition.keyColumn, jdbcType=VARCHAR}
+			,#{dataItemDefinition.valueColumn, jdbcType=VARCHAR}
+			,#{dataItemDefinition.sql, jdbcType=VARCHAR}
+			,#{dataItemDefinition.createBy, jdbcType=VARCHAR}
+			,#{dataItemDefinition.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateDataItemDefinition" parameterType="com.glaf.matrix.data.domain.DataItemDefinition">
+		update SYS_DATA_ITEM_DEF
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="nodeId != null">
+				NODEID_ = #{nodeId, jdbcType=BIGINT},
+			</if>
+			<if test="category != null">
+				CATEGORY_ = #{category, jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				TITLE_ = #{title, jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				CODE_ = #{code, jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				TYPE_ = #{type, jdbcType=VARCHAR},
+			</if>
+			<if test="keyColumn != null">
+				KEYCOLUMN_ = #{keyColumn, jdbcType=VARCHAR},
+			</if>
+			<if test="valueColumn != null">
+				VALUECOLUMN_ = #{valueColumn, jdbcType=VARCHAR},
+			</if>
+			<if test="sql != null">
+				SQL_ = #{sql, jdbcType=VARCHAR},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteDataItemDefinitionById" parameterType="long">
+		delete
+		from SYS_DATA_ITEM_DEF
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getDataItemDefinitionById" parameterType="long"
+		resultMap="dataItemDefinitionResultMap">
+		select * from SYS_DATA_ITEM_DEF where ID_ = #{id}
+	</select>
+
+
+	<select id="getDataItemDefinitionByCode" parameterType="string"
+		resultMap="dataItemDefinitionResultMap">
+		select * from SYS_DATA_ITEM_DEF where CODE_ = #{code}
+	</select>
+
+
+	<select id="getDataItemDefinitions" parameterType="com.glaf.matrix.data.query.DataItemDefinitionQuery"
+		resultMap="dataItemDefinitionResultMap">
+		select distinct E.*
+		<include refid="selectDataItemDefinitionsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.CREATETIME_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getDataItemDefinitionCount" parameterType="com.glaf.matrix.data.query.DataItemDefinitionQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectDataItemDefinitionsSql" />
+	</select>
+
+
+	<sql id="selectDataItemDefinitionsSql">
+
+		from SYS_DATA_ITEM_DEF E
+
+		<where>
+			1 = 1
+
+			<if test="nodeId != null">
+				and E.NODEID_ = #{nodeId}
+			</if>
+
+			<if test="nodeIds != null and nodeIds.size() &gt; 0">
+				and E.NODEID_ IN
+				<foreach item="x_nodeId" index="index" collection="nodeIds"
+					open="(" separator="," close=")">
+					#{x_nodeId}
+				</foreach>
+			</if>
+
+			<if test="category != null and category != '' ">
+				and E.CATEGORY_ = #{category}
+			</if>
+
+			<if test="titleLike != null and titleLike != '' ">
+				and E.TITLE_ like #{titleLike}
+			</if>
+
+			<if test="code != null and code != '' ">
+				and E.CODE_ = #{code}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+			<if test="dataRequest != null and dataRequest.filter != null ">
+				<include refid="com.glaf.global.GlobalMapper.dataRequestFilterCondition" />
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

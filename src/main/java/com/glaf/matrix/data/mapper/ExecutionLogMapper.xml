@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.data.mapper.ExecutionLogMapper">
+
+	<resultMap id="executionLogResultMap" type="com.glaf.matrix.data.domain.ExecutionLog">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="businessKey" column="BUSINESSKEY_" jdbcType="VARCHAR" />
+		<result property="jobNo" column="JOBNO_" jdbcType="VARCHAR" />
+		<result property="title" column="TITLE_" jdbcType="VARCHAR" />
+		<result property="content" column="CONTENT_" jdbcType="VARCHAR" />
+		<result property="startTime" column="STARTTIME_" jdbcType="TIMESTAMP" />
+		<result property="endTime" column="ENDTIME_" jdbcType="TIMESTAMP" />
+		<result property="runDay" column="RUNDAY_" jdbcType="INTEGER" />
+		<result property="runHour" column="RUNHOUR_" jdbcType="INTEGER" />
+		<result property="runTime" column="RUNTIME_" jdbcType="BIGINT" />
+		<result property="status" column="STATUS_" jdbcType="INTEGER" />
+		<result property="exitCode" column="EXITCODE_" jdbcType="VARCHAR" />
+		<result property="exitMessage" column="EXITMESSAGE_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertExecutionLog" parameterType="com.glaf.matrix.data.domain.ExecutionLog">
+		insert into SYS_EXECUTION_LOG
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="businessKey != null">
+				,BUSINESSKEY_
+			</if>
+			<if test="jobNo != null">
+				,JOBNO_
+			</if>
+			<if test="title != null">
+				,TITLE_
+			</if>
+			<if test="content != null">
+				,CONTENT_
+			</if>
+			<if test="startTime != null">
+				,STARTTIME_
+			</if>
+			<if test="endTime != null">
+				,ENDTIME_
+			</if>
+			<if test="runDay != null">
+				,RUNDAY_
+			</if>
+			<if test="runHour != null">
+				,RUNHOUR_
+			</if>
+			<if test="runTime != null">
+				,RUNTIME_
+			</if>
+			<if test="status != null">
+				,STATUS_
+			</if>
+			<if test="exitCode != null">
+				,EXITCODE_
+			</if>
+			<if test="exitMessage != null">
+				,EXITMESSAGE_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="businessKey != null">
+				,#{businessKey, jdbcType=VARCHAR}
+			</if>
+			<if test="jobNo != null">
+				,#{jobNo, jdbcType=VARCHAR}
+			</if>
+			<if test="title != null">
+				,#{title, jdbcType=VARCHAR}
+			</if>
+			<if test="content != null">
+				,#{content, jdbcType=VARCHAR}
+			</if>
+			<if test="startTime != null">
+				,#{startTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="endTime != null">
+				,#{endTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="runDay != null">
+				,#{runDay, jdbcType=INTEGER}
+			</if>
+			<if test="runHour != null">
+				,#{runHour, jdbcType=INTEGER}
+			</if>
+			<if test="runTime != null">
+				,#{runTime, jdbcType=BIGINT}
+			</if>
+			<if test="status != null">
+				,#{status, jdbcType=INTEGER}
+			</if>
+			<if test="exitCode != null">
+				,#{exitCode, jdbcType=VARCHAR}
+			</if>
+			<if test="exitMessage != null">
+				,#{exitMessage, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertExecutionLog" parameterType="java.util.List">
+		insert into SYS_EXECUTION_LOG (
+		ID_
+		,TYPE_
+		,BUSINESSKEY_
+		,JOBNO_
+		,TITLE_
+		,CONTENT_
+		,STARTTIME_
+		,ENDTIME_
+		,RUNDAY_
+		,RUNHOUR_
+		,RUNTIME_
+		,STATUS_
+		,EXITCODE_
+		,EXITMESSAGE_
+		,CREATEBY_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="executionLog" index="index"
+			separator=",">
+			(
+			#{executionLog.id, jdbcType=BIGINT}
+			,#{executionLog.type,
+			jdbcType=VARCHAR}
+			,#{executionLog.businessKey, jdbcType=VARCHAR}
+			,#{executionLog.jobNo, jdbcType=VARCHAR}
+			,#{executionLog.title,
+			jdbcType=VARCHAR}
+			,#{executionLog.content, jdbcType=VARCHAR}
+			,#{executionLog.startTime, jdbcType=TIMESTAMP}
+			,#{executionLog.endTime, jdbcType=TIMESTAMP}
+			,#{executionLog.runDay,
+			jdbcType=INTEGER}
+			,#{executionLog.runHour, jdbcType=INTEGER}
+			,#{executionLog.runTime, jdbcType=BIGINT}
+			,#{executionLog.status,
+			jdbcType=INTEGER}
+			,#{executionLog.exitCode, jdbcType=VARCHAR}
+			,#{executionLog.exitMessage, jdbcType=VARCHAR}
+			,#{executionLog.createBy, jdbcType=VARCHAR}
+			,#{executionLog.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertExecutionLog_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="executionLog" index="index">
+			insert
+			into SYS_EXECUTION_LOG (
+			ID_
+			,TYPE_
+			,BUSINESSKEY_
+			,JOBNO_
+			,TITLE_
+			,CONTENT_
+			,STARTTIME_
+			,ENDTIME_
+			,RUNDAY_
+			,RUNHOUR_
+			,RUNTIME_
+			,STATUS_
+			,EXITCODE_
+			,EXITMESSAGE_
+			,CREATEBY_
+			,CREATETIME_
+			) values (
+			#{executionLog.id, jdbcType=BIGINT}
+			,#{executionLog.type,
+			jdbcType=VARCHAR}
+			,#{executionLog.businessKey, jdbcType=VARCHAR}
+			,#{executionLog.jobNo, jdbcType=VARCHAR}
+			,#{executionLog.title,
+			jdbcType=VARCHAR}
+			,#{executionLog.content, jdbcType=VARCHAR}
+			,#{executionLog.startTime, jdbcType=TIMESTAMP}
+			,#{executionLog.endTime, jdbcType=TIMESTAMP}
+			,#{executionLog.runDay,
+			jdbcType=INTEGER}
+			,#{executionLog.runHour, jdbcType=INTEGER}
+			,#{executionLog.runTime, jdbcType=BIGINT}
+			,#{executionLog.status,
+			jdbcType=INTEGER}
+			,#{executionLog.exitCode, jdbcType=VARCHAR}
+			,#{executionLog.exitMessage, jdbcType=VARCHAR}
+			,#{executionLog.createBy, jdbcType=VARCHAR}
+			,#{executionLog.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<delete id="deleteExecutionLogById" parameterType="long">
+		delete from
+		SYS_EXECUTION_LOG
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deleteExecutionLogs" parameterType="com.glaf.matrix.data.query.ExecutionLogQuery">
+		delete from
+		SYS_EXECUTION_LOG
+		where TYPE_ = #{type}
+		and BUSINESSKEY_ =
+		#{businessKey}
+		and RUNDAY_ = #{runDay}
+	</delete>
+
+
+	<delete id="deleteOverdueExecutionLogs" parameterType="java.util.Date">
+
+		delete
+		from
+		SYS_EXECUTION_LOG
+		where CREATETIME_ &lt;= #{dateBefore}
+
+	</delete>
+
+
+	<select id="getExecutionLogById" parameterType="long"
+		resultMap="executionLogResultMap">
+		select * from SYS_EXECUTION_LOG where ID_ = #{id}
+	</select>
+
+
+	<select id="getExecutionLogs" parameterType="com.glaf.matrix.data.query.ExecutionLogQuery"
+		resultMap="executionLogResultMap">
+		select distinct E.*
+		<include refid="selectExecutionLogsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.CREATETIME_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getExecutionLogCount" parameterType="com.glaf.matrix.data.query.ExecutionLogQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectExecutionLogsSql" />
+	</select>
+
+
+	<sql id="selectExecutionLogsSql">
+
+		from SYS_EXECUTION_LOG E
+
+		<where>
+			1 = 1
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="types != null and types.size() &gt; 0">
+				and E.TYPE_ IN
+				<foreach item="x_type" index="index" collection="types"
+					open="(" separator="," close=")">
+					#{x_type}
+				</foreach>
+			</if>
+
+			<if test="businessKey != null and businessKey != '' ">
+				and E.BUSINESSKEY_ = #{businessKey}
+			</if>
+
+			<if test="businessKeys != null and businessKeys.size() &gt; 0">
+				and E.BUSINESSKEY_ IN
+				<foreach item="x_businessKey" index="index" collection="businessKeys"
+					open="(" separator="," close=")">
+					#{x_businessKey}
+				</foreach>
+			</if>
+
+			<if test="jobNo != null and jobNo != '' ">
+				and E.JOBNO_ = #{jobNo}
+			</if>
+
+			<if test="jobNoLike != null and jobNoLike != '' ">
+				and E.JOBNO_ like #{jobNoLike}
+			</if>
+
+			<if test="titleLike != null and titleLike != '' ">
+				and E.TITLE_ like #{titleLike}
+			</if>
+
+			<if test="startTimeGreaterThanOrEqual != null">
+				and E.STARTTIME_ &gt;= #{startTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="startTimeLessThanOrEqual != null">
+				and E.STARTTIME_ &lt;= #{startTimeLessThanOrEqual}
+			</if>
+
+			<if test="endTimeGreaterThanOrEqual != null">
+				and E.ENDTIME_ &gt;= #{endTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="endTimeLessThanOrEqual != null">
+				and E.ENDTIME_ &lt;= #{endTimeLessThanOrEqual}
+			</if>
+
+			<if test="runDay != null">
+				and E.RUNDAY_ = #{runDay}
+			</if>
+
+			<if test="runHour != null">
+				and E.RUNHOUR_ = #{runHour}
+			</if>
+
+			<if test="status != null">
+				and E.STATUS_ = #{status}
+			</if>
+
+			<if test="exitCode != null and exitCode != '' ">
+				and E.EXITCODE_ = #{exitCode}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+			<if test="dataRequest != null and dataRequest.filter != null ">
+				<include refid="com.glaf.global.GlobalMapper.dataRequestFilterCondition" />
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

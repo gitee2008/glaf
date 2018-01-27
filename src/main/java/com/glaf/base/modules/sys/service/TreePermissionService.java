@@ -89,6 +89,6 @@ public interface TreePermissionService {
 	 * @return
 	 */
 	@Transactional
-	void saveAll(String userId, String privilege, List<TreePermission> treePermissions);
+	void saveAll(String userId, String type, String privilege, List<TreePermission> treePermissions);
 
 }

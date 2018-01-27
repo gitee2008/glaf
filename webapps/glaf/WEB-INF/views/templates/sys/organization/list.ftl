@@ -539,9 +539,8 @@
 	
     <div data-options="region:'center'">  
         <div class="easyui-layout" data-options="fit:true">  
-           <div data-options="region:'center',split:true,border:true, fit:true">
-             <div> 
-			   <div class="toolbar-backgroud"  > 
+           <div data-options="region:'center', split:false, border:true, fit:true" class="toolbar-backgroud">
+             <div style="margin:4px;"> 
 				<img src="${contextPath}/static/images/window.png">
 				&nbsp;<span class="x_content_title">机构列表</span>
 				<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-add'" 
@@ -558,7 +557,6 @@
 				   onclick="javascript:sortOrg();">同级排序</a>
 				<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-reload'"
 				   onclick="javascript:reloadGrid();">全部</a> 
-			   </div> 
              </div>  
 
 			 <table id="mydatagrid" class="easyui-datagrid" 

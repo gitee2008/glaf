@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.combination.mapper.CombinationItemMapper">
+
+	<resultMap id="combinationItemResultMap"
+		type="com.glaf.matrix.combination.domain.CombinationItem">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="syncId" column="SYNCID_" jdbcType="BIGINT" />
+		<result property="deploymentId" column="DEPLOYMENTID_"
+			jdbcType="VARCHAR" />
+		<result property="title" column="TITLE_" jdbcType="VARCHAR" />
+		<result property="sql" column="SQL_" jdbcType="VARCHAR" />
+		<result property="recursionSql" column="RECURSIONSQL_"
+			jdbcType="VARCHAR" />
+		<result property="recursionColumns" column="RECURSIONCOLUMNS_"
+			jdbcType="VARCHAR" />
+		<result property="primaryKey" column="PRIMARYKEY_" jdbcType="VARCHAR" />
+		<result property="expression" column="EXPRESSION_" jdbcType="VARCHAR" />
+		<result property="createTableFlag" column="CREATETABLEFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="deleteFetch" column="DELETEFETCH_" jdbcType="VARCHAR" />
+		<result property="sortNo" column="SORTNO_" jdbcType="INTEGER" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertCombinationItem" parameterType="com.glaf.matrix.combination.domain.CombinationItem">
+		insert into SYS_COMBINATION_ITEM
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="syncId != null">
+				,SYNCID_
+			</if>
+			<if test="deploymentId != null">
+				,DEPLOYMENTID_
+			</if>
+			<if test="title != null">
+				,TITLE_
+			</if>
+			<if test="sql != null">
+				,SQL_
+			</if>
+			<if test="recursionSql != null">
+				,RECURSIONSQL_
+			</if>
+			<if test="recursionColumns != null">
+				,RECURSIONCOLUMNS_
+			</if>
+			<if test="primaryKey != null">
+				,PRIMARYKEY_
+			</if>
+			<if test="expression != null">
+				,EXPRESSION_
+			</if>
+			<if test="createTableFlag != null">
+				,CREATETABLEFLAG_
+			</if>
+			<if test="deleteFetch != null">
+				,DELETEFETCH_
+			</if>
+			<if test="sortNo != null">
+				,SORTNO_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="syncId != null">
+				,#{syncId, jdbcType=BIGINT}
+			</if>
+			<if test="deploymentId != null">
+				,#{deploymentId, jdbcType=VARCHAR}
+			</if>
+			<if test="title != null">
+				,#{title, jdbcType=VARCHAR}
+			</if>
+			<if test="sql != null">
+				,#{sql, jdbcType=VARCHAR}
+			</if>
+			<if test="recursionSql != null">
+				,#{recursionSql, jdbcType=VARCHAR}
+			</if>
+			<if test="recursionColumns != null">
+				,#{recursionColumns, jdbcType=VARCHAR}
+			</if>
+			<if test="primaryKey != null">
+				,#{primaryKey, jdbcType=VARCHAR}
+			</if>
+			<if test="expression != null">
+				,#{expression, jdbcType=VARCHAR}
+			</if>
+			<if test="createTableFlag != null">
+				,#{createTableFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="deleteFetch != null">
+				,#{deleteFetch, jdbcType=VARCHAR}
+			</if>
+			<if test="sortNo != null">
+				,#{sortNo, jdbcType=INTEGER}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateCombinationItem" parameterType="com.glaf.matrix.combination.domain.CombinationItem">
+		update SYS_COMBINATION_ITEM
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="title != null">
+				TITLE_ = #{title, jdbcType=VARCHAR},
+			</if>
+			<if test="sql != null">
+				SQL_ = #{sql, jdbcType=VARCHAR},
+			</if>
+			<if test="recursionSql != null">
+				RECURSIONSQL_ = #{recursionSql, jdbcType=VARCHAR},
+			</if>
+			<if test="recursionColumns != null">
+				RECURSIONCOLUMNS_ = #{recursionColumns,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="primaryKey != null">
+				PRIMARYKEY_ = #{primaryKey, jdbcType=VARCHAR},
+			</if>
+			<if test="expression != null">
+				EXPRESSION_ = #{expression, jdbcType=VARCHAR},
+			</if>
+			<if test="createTableFlag != null">
+				CREATETABLEFLAG_ = #{createTableFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="deleteFetch != null">
+				DELETEFETCH_ = #{deleteFetch, jdbcType=VARCHAR},
+			</if>
+			<if test="sortNo != null">
+				SORTNO_ = #{sortNo, jdbcType=INTEGER},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteCombinationItemById" parameterType="long">
+		delete from
+		SYS_COMBINATION_ITEM
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getCombinationItemById" parameterType="long"
+		resultMap="combinationItemResultMap">
+		select * from SYS_COMBINATION_ITEM where ID_ = #{id}
+	</select>
+
+
+	<select id="getCombinationItems"
+		parameterType="com.glaf.matrix.combination.query.CombinationItemQuery"
+		resultMap="combinationItemResultMap">
+		select E.*
+		<include refid="selectCombinationItemsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.SORTNO_ asc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getCombinationItemCount"
+		parameterType="com.glaf.matrix.combination.query.CombinationItemQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectCombinationItemsSql" />
+	</select>
+
+
+	<sql id="selectCombinationItemsSql">
+
+		from SYS_COMBINATION_ITEM E
+
+		<where>
+			1 = 1
+
+			<if test="syncId != null">
+				and E.SYNCID_ = #{syncId}
+			</if>
+
+			<if test="syncIds != null and syncIds.size() &gt; 0">
+				and E.SYNCID_ IN
+				<foreach item="x_syncId" index="index" collection="syncIds"
+					open="(" separator="," close=")">
+					#{x_syncId}
+				</foreach>
+			</if>
+
+			<if test="deploymentId != null and deploymentId != '' ">
+				and E.DEPLOYMENTID_ = #{deploymentId}
+			</if>
+
+			<if test="deploymentIds != null and deploymentIds.size() &gt; 0">
+				and E.DEPLOYMENTID_ IN
+				<foreach item="x_deploymentId" index="index" collection="deploymentIds"
+					open="(" separator="," close=")">
+					#{x_deploymentId}
+				</foreach>
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+			
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

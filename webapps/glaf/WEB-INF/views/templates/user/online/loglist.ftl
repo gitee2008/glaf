@@ -23,14 +23,14 @@
 				columns:[[
 				        {title:'序号', field:'startIndex', width:60, sortable:false},
 						{title:'用户名',field:'actorId', width:120, formatter:formatterUser},
-						{title:'用户姓名',field:'name', width:120},
+						{title:'用户姓名',field:'name', width:120, formatter:formatterUser},
 						{title:'登录时间',field:'loginDate_datetime', width:90},
 						{title:'登录IP',field:'loginIP', width:120},
 						{title:'退出时间',field:'logoutDate_datetime', width:90}
 				]],
 				rownumbers: false,
 				pagination: true,
-				pageSize: 10,
+				pageSize: 100,
 				pageList: [10,15,20,25,30,40,50,100,200,500,1000],
 				pagePosition: 'both',
 				onDblClickRow: onMyRowClick 
@@ -170,23 +170,23 @@
 </head>
 <body style="margin:1px;"> 
 
-<div style="margin:2;"></div>  
+<div style="margin:2px;"></div>  
 <div class="easyui-layout" data-options="fit:true">  
-   <div data-options="region:'north',split:true,border:true" style="height:40px"> 
-    <div class="toolbar-backgroud"  > 
-	<img src="${contextPath}/static/images/window.png">
-	&nbsp;<span class="x_content_title">用户在线日志</span>
-	&nbsp;用户&nbsp; <input id="searchWord2" name="searchWord2" type="text" 
-	       class="x-searchtext" size="20" maxlength="200"/>
-    &nbsp;登录时间&nbsp; 
-	<input id="startDate" name="startDate" type="text" 
-	       class="x-searchtext easyui-datebox" size="15" maxlength="200" 
-		   data-options=" onSelect:onSelect1"/>
-	~ <input id="endDate" name="endDate" type="text" 
-	       class="x-searchtext easyui-datebox" size="15" maxlength="200"
-		   data-options=" onSelect:onSelect2"/>
-	<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-search'"
-	   onclick="javascript:searchData();">查找</a>
+   <div data-options="region:'north', split:false, border:true" style="height:42px" class="toolbar-backgroud"> 
+    <div style="margin:4px;">
+		<img src="${contextPath}/static/images/window.png">
+		&nbsp;<span class="x_content_title">用户在线日志</span>
+		&nbsp;用户&nbsp; <input id="searchWord2" name="searchWord2" type="text" 
+			   class="x-searchtext" size="20" maxlength="200"/>
+		&nbsp;登录时间&nbsp; 
+		<input id="startDate" name="startDate" type="text" 
+			   class="x-searchtext easyui-datebox" size="15" maxlength="200" 
+			   data-options=" onSelect:onSelect1"/>
+		~ <input id="endDate" name="endDate" type="text" 
+			   class="x-searchtext easyui-datebox" size="15" maxlength="200"
+			   data-options=" onSelect:onSelect2"/>
+		<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-search'"
+		   onclick="javascript:searchData();">查找</a>
    </div> 
   </div> 
   <div data-options="region:'center',border:true">

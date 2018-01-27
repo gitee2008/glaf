@@ -20,7 +20,8 @@ package com.glaf.core.base;
 
 import java.util.Date;
 
-import com.alibaba.dubbo.common.utils.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import com.glaf.core.util.DateUtils;
 
 public class SqlParameter implements java.io.Serializable, Parameter {

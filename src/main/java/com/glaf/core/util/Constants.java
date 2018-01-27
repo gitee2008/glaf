@@ -32,12 +32,34 @@ public final class Constants {
 
 	public final static String BUSINESS_KEY = "businessKey";
 
-	public static final String LOGIN_USER_CACHE = "cache_login_user_";
+	public static final String CACHE_LOGIN_CONTEXT_KEY = "cache_login_context_";
 
-	public static final String USER_CACHE = "cache_user_";
+	public static final String CACHE_ROLE_KEY = "cache_role_";
+
+	public static final String CACHE_USER_KEY = "cache_user_";
+
+	public static final String CACHE_TENANT_KEY = "cache_tenant_";
+
+	public static final String CACHE_MGR_TENANT_KEY = "cache_mgr_tenant_";
+
+	public static final String CACHE_USER_ROLE_KEY = "cache_user_role_";
+
+	public static final String CACHE_USER_ROLE_CODE_KEY = "cache_user_role_code_";
+
+	public static final String CACHE_ROLE_REGION = "role";
+
+	public static final String CACHE_USER_REGION = "user";
+
+	public static final String CACHE_TENANT_REGION = "tenant";
+
+	public static final String CACHE_LOGIN_CONTEXT_REGION = "login_context";
+
+	public static final String CACHE_USER_ROLE_REGION = "user_role";
+
+	public static final String CACHE_USER_ROLE_CODE_REGION = "user_role_code";
 
 	public final static String COOKIE_NAME = "GLAF_COOKIE";
-	
+
 	public final static String AUTH_NAME = "GLAF_AUTH";
 
 	public final static String LOGIN_INFO = "LOGIN_INFO";

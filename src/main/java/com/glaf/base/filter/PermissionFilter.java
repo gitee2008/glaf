@@ -45,7 +45,6 @@ public class PermissionFilter extends OncePerRequestFilter {
 		includes.add("/login.jsp");
 		includes.add("/index.jsp");
 		includes.add("/test.jsp");
-		includes.add("/gnoem.jsp");
 		includes.add("/update.jsp");
 		includes.add("/unauthorized.jsp");
 		includes.add("/inc/globaljs.jsp");

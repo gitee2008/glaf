@@ -18,10 +18,8 @@
 
 package com.glaf.matrix.data.bean;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -194,20 +192,6 @@ public class SQLiteToTable {
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
-	}
-
-	public String clobToString2(Clob clob) throws SQLException, IOException {
-		String result = "";
-		Reader is = clob.getCharacterStream();// 得到流
-		BufferedReader br = new BufferedReader(is);
-		String s = br.readLine();
-		StringBuilder sb = new StringBuilder();
-		while (s != null) {// 执行循环将字符串全部取出付值给StringBuffer由StringBuffer转成STRING
-			sb.append(s);
-			s = br.readLine();
-		}
-		result = sb.toString();
-		return result;
 	}
 
 }

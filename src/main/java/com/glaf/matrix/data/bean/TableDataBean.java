@@ -503,9 +503,10 @@ public class TableDataBean {
 			if (dataMap.get("id_") != null && dataMap.get("uuid_") != null) {
 				int topId = ParamUtils.getInt(dataMap, "topid_");
 				if (topId > 0) {
-					//TableCorrelationQuery query = new TableCorrelationQuery();
-					//query.slaveTableId(sysTable.getTableId());
-					List<TableCorrelation> list = getTableCorrelationService().getTableCorrelationsBySlaveTableId(sysTable.getTableId());
+					// TableCorrelationQuery query = new TableCorrelationQuery();
+					// query.slaveTableId(sysTable.getTableId());
+					List<TableCorrelation> list = getTableCorrelationService()
+							.getTableCorrelationsBySlaveTableId(sysTable.getTableId());
 					// logger.debug("list:" + list);
 					if (list != null && !list.isEmpty()) {
 						TableCorrelation tc = list.get(0);
@@ -687,6 +688,16 @@ public class TableDataBean {
 								long nodeId = Long
 										.parseLong(column.getDataCode().substring(10, column.getDataCode().length()));
 								List<BaseItem> items = DataItemFactory.getInstance().getDictoryItems(nodeId);
+								column.setItems(items);
+								if (items != null && !items.isEmpty()) {
+									for (BaseItem item : items) {
+										column.addProperty(item.getValue(), item.getName());
+									}
+								}
+							} else if (StringUtils.startsWith(column.getDataCode(), "@sql:")) {
+								String rowId = column.getDataCode().substring(5, column.getDataCode().length());
+								List<BaseItem> items = DataItemFactory.getInstance().getSqlDataItems(loginContext,
+										Long.parseLong(rowId), params);
 								column.setItems(items);
 								if (items != null && !items.isEmpty()) {
 									for (BaseItem item : items) {

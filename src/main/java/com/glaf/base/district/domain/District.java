@@ -40,7 +40,7 @@ public class District implements java.io.Serializable, JSONable {
 	@Column(name = "ID_", nullable = false)
 	protected long id;
 
-	@Column(name = "PARENTID_")
+	@Column(name = "PARENTID_", nullable = false)
 	protected long parentId;
 
 	@Column(name = "CODE_", length = 50)

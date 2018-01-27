@@ -256,7 +256,7 @@ public class UserImpl implements User {
 	}
 
 	public boolean isSystemAdministrator() {
-		if ("1".equals(adminFlag)) {
+		if ("admin".equals(actorId)) {
 			return true;
 		}
 		return false;

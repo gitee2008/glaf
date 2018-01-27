@@ -91,15 +91,15 @@ public class SysUser implements Serializable, User, JSONable {
 	protected String fax;
 
 	/**
-	 * 性别
+	 * 性别：默认男性为1，女性为0
 	 */
-	@Column(name = "GENDER")
-	protected int gender;
+	@Column(name = "SEX")
+	protected int sex;
 
 	/**
 	 * 职务
 	 */
-	@Column(name = "HEADSHIP", length = 50)
+	@Column(name = "HEADSHIP", length = 200)
 	protected String headship;
 
 	/**
@@ -141,12 +141,6 @@ public class SysUser implements Serializable, User, JSONable {
 	protected String passwordHash;
 
 	/**
-	 * 上级领导
-	 */
-	@Column(name = "SUPERIORIDS", length = 250)
-	protected String superiorIds;
-
-	/**
 	 * 电话
 	 */
 	@Column(name = "TELEPHONE", length = 50)
@@ -157,12 +151,6 @@ public class SysUser implements Serializable, User, JSONable {
 	 */
 	@Column(name = "USERTYPE")
 	protected int userType;
-
-	@Column(name = "APPID", length = 200)
-	protected String appId;
-
-	@Column(name = "APPSECRET", length = 200)
-	protected String appSecret;
 
 	/**
 	 * 用户所属租户
@@ -312,14 +300,6 @@ public class SysUser implements Serializable, User, JSONable {
 		return adminFlag;
 	}
 
-	public String getAppId() {
-		return appId;
-	}
-
-	public String getAppSecret() {
-		return appSecret;
-	}
-
 	public String getAttribute() {
 		return attribute;
 	}
@@ -356,8 +336,8 @@ public class SysUser implements Serializable, User, JSONable {
 		return fax;
 	}
 
-	public int getGender() {
-		return gender;
+	public int getSex() {
+		return sex;
 	}
 
 	public String getHeadship() {
@@ -454,10 +434,6 @@ public class SysUser implements Serializable, User, JSONable {
 		return secretLoginFlag;
 	}
 
-	public String getSuperiorIds() {
-		return superiorIds;
-	}
-
 	public Integer getSyncFlag() {
 		return syncFlag;
 	}
@@ -514,7 +490,7 @@ public class SysUser implements Serializable, User, JSONable {
 
 		if (roles != null && !roles.isEmpty()) {
 			for (SysRole r : roles) {
-				if ("R006".equals(r.getCode())) {
+				if ("DepartmentManager".equals(r.getCode())) {
 					isOrganizationAdmin = true;
 					break;
 				}
@@ -525,7 +501,7 @@ public class SysUser implements Serializable, User, JSONable {
 			if (userRoles != null && !userRoles.isEmpty()) {
 				for (SysUserRole r : userRoles) {
 					if (r.getRole() != null) {
-						if ("R006".equals(r.getRole().getCode())) {
+						if ("DepartmentManager".equals(r.getRole().getCode())) {
 							isOrganizationAdmin = true;
 							break;
 						}
@@ -539,33 +515,38 @@ public class SysUser implements Serializable, User, JSONable {
 	public boolean isSystemAdministrator() {
 		boolean isAdmin = false;
 
-		if (StringUtils.equals(adminFlag, "1")) {
+		if (StringUtils.equals("admin", userId)) {
 			isAdmin = true;
-			return isAdmin;
 		}
+
+		return isAdmin;
+	}
+
+	public boolean isTenantAdmin() {
+		boolean isTenantAdmin = false;
 
 		if (roles != null && !roles.isEmpty()) {
 			for (SysRole r : roles) {
-				if ("SystemAdministrator".equals(r.getCode())) {
-					isAdmin = true;
+				if ("TenantAdmin".equals(r.getCode())) {
+					isTenantAdmin = true;
 					break;
 				}
 			}
 		}
 
-		if (!isAdmin) {
+		if (!isTenantAdmin) {
 			if (userRoles != null && !userRoles.isEmpty()) {
 				for (SysUserRole r : userRoles) {
 					if (r.getRole() != null) {
-						if ("SystemAdministrator".equals(r.getRole().getCode())) {
-							isAdmin = true;
+						if ("TenantAdmin".equals(r.getRole().getCode())) {
+							isTenantAdmin = true;
 							break;
 						}
 					}
 				}
 			}
 		}
-		return isAdmin;
+		return isTenantAdmin;
 	}
 
 	public SysUser jsonToObject(JSONObject jsonObject) {
@@ -582,14 +563,6 @@ public class SysUser implements Serializable, User, JSONable {
 
 	public void setAdminFlag(String adminFlag) {
 		this.adminFlag = adminFlag;
-	}
-
-	public void setAppId(String appId) {
-		this.appId = appId;
-	}
-
-	public void setAppSecret(String appSecret) {
-		this.appSecret = appSecret;
 	}
 
 	public void setAttribute(String attribute) {
@@ -628,8 +601,8 @@ public class SysUser implements Serializable, User, JSONable {
 		this.fax = fax;
 	}
 
-	public void setGender(int gender) {
-		this.gender = gender;
+	public void setSex(int sex) {
+		this.sex = sex;
 	}
 
 	public void setHeadship(String headship) {
@@ -718,10 +691,6 @@ public class SysUser implements Serializable, User, JSONable {
 
 	public void setSecretLoginFlag(String secretLoginFlag) {
 		this.secretLoginFlag = secretLoginFlag;
-	}
-
-	public void setSuperiorIds(String superiorIds) {
-		this.superiorIds = superiorIds;
 	}
 
 	public void setSyncFlag(Integer syncFlag) {

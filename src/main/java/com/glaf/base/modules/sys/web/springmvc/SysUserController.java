@@ -42,6 +42,20 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import com.glaf.core.base.TreeModel;
+import com.glaf.core.cache.CacheUtils;
+import com.glaf.core.config.ViewProperties;
+import com.glaf.core.domain.ServerEntity;
+import com.glaf.core.security.LoginContext;
+import com.glaf.core.service.IServerEntityService;
+import com.glaf.core.service.ITableDataService;
+import com.glaf.core.util.PageResult;
+import com.glaf.core.util.ParamUtils;
+import com.glaf.core.util.RequestUtils;
+import com.glaf.core.util.ResponseUtils;
+import com.glaf.core.util.StringTools;
+import com.glaf.core.util.Tools;
+
 import com.glaf.base.modules.sys.SysConstants;
 import com.glaf.base.modules.sys.business.UpdateTreeBean;
 import com.glaf.base.modules.sys.model.Dictory;
@@ -56,20 +70,6 @@ import com.glaf.base.modules.sys.service.SysTreeService;
 import com.glaf.base.modules.sys.service.SysUserService;
 import com.glaf.base.utils.ParamUtil;
 import com.glaf.base.utils.RequestUtil;
-import com.glaf.core.base.TreeModel;
-import com.glaf.core.cache.CacheUtils;
-import com.glaf.core.config.ViewProperties;
-import com.glaf.core.domain.ServerEntity;
-import com.glaf.core.security.LoginContext;
-import com.glaf.core.service.IServerEntityService;
-import com.glaf.core.service.ITableDataService;
-import com.glaf.core.util.JsonUtils;
-import com.glaf.core.util.PageResult;
-import com.glaf.core.util.ParamUtils;
-import com.glaf.core.util.RequestUtils;
-import com.glaf.core.util.ResponseUtils;
-import com.glaf.core.util.StringTools;
-import com.glaf.core.util.Tools;
 
 @Controller("/sys/user")
 @RequestMapping("/sys/user")
@@ -135,32 +135,6 @@ public class SysUserController {
 			logger.error(ex);
 		}
 		return ResponseUtils.responseResult(false);
-	}
-
-	@RequestMapping("/organizationUsers")
-	public ModelAndView organizationUsers(HttpServletRequest request, ModelMap modelMap) {
-		RequestUtils.setRequestParameterToAttribute(request);
-		String x_query = request.getParameter("x_query");
-		if (StringUtils.equals(x_query, "true")) {
-			Map<String, Object> paramMap = RequestUtils.getParameterMap(request);
-			String x_complex_query = JsonUtils.encode(paramMap);
-			x_complex_query = RequestUtils.encodeString(x_complex_query);
-			request.setAttribute("x_complex_query", x_complex_query);
-		} else {
-			request.setAttribute("x_complex_query", "");
-		}
-
-		String x_view = ViewProperties.getString("user.organizationUsers");
-		if (StringUtils.isNotEmpty(x_view)) {
-			return new ModelAndView(x_view, modelMap);
-		}
-
-		String view = request.getParameter("view");
-		if (StringUtils.isNotEmpty(view)) {
-			return new ModelAndView(view, modelMap);
-		}
-
-		return new ModelAndView("/sys/user/organizationUsers", modelMap);
 	}
 
 	@RequestMapping("/json")
@@ -245,7 +219,6 @@ public class SysUserController {
 	public ModelAndView list(HttpServletRequest request, ModelMap modelMap) {
 		RequestUtils.setRequestParameterToAttribute(request);
 		request.setAttribute("parent", request.getParameter("parent"));
-		 
 
 		ServerEntity serverEntity = serverEntityService.getServerEntityByMapping("GNRemote");
 		if (serverEntity != null) {
@@ -263,6 +236,23 @@ public class SysUserController {
 		}
 
 		return new ModelAndView("/sys/user/list", modelMap);
+	}
+
+	@RequestMapping("/organizationUsers")
+	public ModelAndView organizationUsers(HttpServletRequest request, ModelMap modelMap) {
+		RequestUtils.setRequestParameterToAttribute(request);
+
+		String x_view = ViewProperties.getString("user.organizationUsers");
+		if (StringUtils.isNotEmpty(x_view)) {
+			return new ModelAndView(x_view, modelMap);
+		}
+
+		String view = request.getParameter("view");
+		if (StringUtils.isNotEmpty(view)) {
+			return new ModelAndView(view, modelMap);
+		}
+
+		return new ModelAndView("/sys/user/organizationUsers", modelMap);
 	}
 
 	/**
@@ -394,20 +384,6 @@ public class SysUserController {
 		SysUser user = RequestUtil.getLoginUser(request);
 		SysUser bean = sysUserService.findByAccount(user.getUserId());
 		request.setAttribute("bean", bean);
-
-		if (bean != null && StringUtils.isNotEmpty(bean.getSuperiorIds())) {
-			List<String> userIds = StringTools.split(bean.getSuperiorIds());
-			StringBuilder buffer = new StringBuilder();
-			if (userIds != null && !userIds.isEmpty()) {
-				for (String userId : userIds) {
-					SysUser u = sysUserService.findByAccount(userId);
-					if (u != null) {
-						buffer.append(u.getName()).append("[").append(u.getUserId()).append("] ");
-					}
-				}
-				request.setAttribute("x_users_name", buffer.toString());
-			}
-		}
 
 		List<Dictory> dictories = dictoryService.getDictoryList(SysConstants.USER_HEADSHIP);
 		modelMap.put("dictories", dictories);
@@ -590,8 +566,7 @@ public class SysUserController {
 			bean.setName(ParamUtil.getParameter(request, "name"));
 			String password = ParamUtil.getParameter(request, "password");
 			bean.setPasswordHash(password);
-			bean.setSuperiorIds(ParamUtil.getParameter(request, "superiorIds"));
-			bean.setGender(ParamUtil.getIntParameter(request, "gender", 0));
+			bean.setSex(ParamUtil.getIntParameter(request, "sex", 0));
 			bean.setMobile(ParamUtil.getParameter(request, "mobile"));
 			bean.setEmail(ParamUtil.getParameter(request, "email"));
 			bean.setTelephone(ParamUtil.getParameter(request, "telephone"));
@@ -642,8 +617,7 @@ public class SysUserController {
 				Tools.populate(bean, RequestUtils.getParameterMap(request));
 				bean.setOrganizationId(RequestUtils.getLong(request, "organizationId"));
 				bean.setName(ParamUtil.getParameter(request, "name"));
-				bean.setSuperiorIds(ParamUtil.getParameter(request, "superiorIds"));
-				bean.setGender(ParamUtil.getIntParameter(request, "gender", 0));
+				bean.setSex(ParamUtil.getIntParameter(request, "sex", 0));
 				bean.setMobile(ParamUtil.getParameter(request, "mobile"));
 				bean.setEmail(ParamUtil.getParameter(request, "email"));
 				bean.setTelephone(ParamUtil.getParameter(request, "telephone"));
@@ -963,5 +937,94 @@ public class SysUserController {
 		}
 
 		return new ModelAndView("/sys/user/userMenus", modelMap);
+	}
+
+	@RequestMapping("/userjson")
+	@ResponseBody
+	public byte[] userjson(HttpServletRequest request) throws IOException {
+		Map<String, Object> params = RequestUtils.getParameterMap(request);
+		SysUserQuery query = new SysUserQuery();
+		Tools.populate(query, params);
+		query.setDeleteFlag(0);
+		query.setUserType(0);
+
+		int start = 0;
+		int limit = 10;
+		String orderName = null;
+		String order = null;
+
+		int pageNo = ParamUtils.getInt(params, "page");
+		limit = ParamUtils.getInt(params, "rows");
+		start = (pageNo - 1) * limit;
+		orderName = ParamUtils.getString(params, "sortName");
+		order = ParamUtils.getString(params, "sortOrder");
+
+		if (start < 0) {
+			start = 0;
+		}
+
+		if (limit <= 0) {
+			limit = PageResult.DEFAULT_PAGE_SIZE;
+		}
+
+		JSONObject result = new JSONObject();
+		int total = sysUserService.getSysUserCountByQueryCriteria(query);
+		if (total > 0) {
+			result.put("total", total);
+			result.put("totalCount", total);
+			result.put("totalRecords", total);
+			result.put("start", start);
+			result.put("startIndex", start);
+			result.put("limit", limit);
+			result.put("pageSize", limit);
+
+			if (StringUtils.isNotEmpty(orderName)) {
+				query.setSortOrder(orderName);
+				if (StringUtils.equals(order, "desc")) {
+					query.setSortOrder(" desc ");
+				}
+			}
+
+			List<SysUser> list = sysUserService.getSysUsersByQueryCriteria(start, limit, query);
+
+			if (list != null && !list.isEmpty()) {
+				JSONArray rowsJSON = new JSONArray();
+
+				result.put("rows", rowsJSON);
+
+				for (SysUser sysUser : list) {
+					JSONObject rowJSON = sysUser.toJsonObject();
+					rowJSON.put("id", sysUser.getId());
+					rowJSON.put("userId", sysUser.getUserId());
+					rowJSON.put("startIndex", ++start);
+					rowJSON.remove("token");
+					rowsJSON.add(rowJSON);
+				}
+
+			}
+		} else {
+			result.put("total", total);
+			result.put("totalCount", total);
+			JSONArray rowsJSON = new JSONArray();
+			result.put("rows", rowsJSON);
+		}
+		return result.toString().getBytes("UTF-8");
+	}
+
+	@RequestMapping("/userlist")
+	public ModelAndView userlist(HttpServletRequest request, ModelMap modelMap) {
+		RequestUtils.setRequestParameterToAttribute(request);
+
+		String x_view = ViewProperties.getString("user.userlist");
+		if (StringUtils.isNotEmpty(x_view)) {
+			return new ModelAndView(x_view, modelMap);
+		}
+
+		String view = request.getParameter("view");
+		if (StringUtils.isNotEmpty(view)) {
+			return new ModelAndView(view, modelMap);
+		}
+
+		return new ModelAndView("/sys/user/userlist", modelMap);
 	}
 }

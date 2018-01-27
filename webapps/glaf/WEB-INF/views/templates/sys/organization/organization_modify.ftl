@@ -38,7 +38,8 @@
 </script>
 </head>
 <body>
-<div class="nav-title"><span class="Title">机构管理</span>&gt;&gt;修改机构</div>
+<div class="nav-title">
+<span class="Title">机构管理</span>&gt;&gt;修改机构</div>
 <form id="iForm" name="iForm"  method="post" > 
 <input type="hidden" name="id" value="${organization.id}">
 <input type="hidden" name="organizationId" value="${organization.id}">

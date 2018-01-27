@@ -6,5 +6,10 @@
 		<name>dataset_query_timeout</name>
 		<value>30000</value>
 	</property>
+	
+	<property>
+		<name>distributed.config.enabled</name>
+		<value>true</value>
+	</property>
 
 </configuration>

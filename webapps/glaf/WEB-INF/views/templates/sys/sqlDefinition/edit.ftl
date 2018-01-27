@@ -60,11 +60,12 @@
 <div style="margin:0;"></div>  
 
 <div class="easyui-layout" data-options="fit:true">  
-  <div data-options="region:'north',split:true,border:true" style="height:40px"> 
-    <div class="toolbar-backgroud"> 
-	<span class="x_content_title">&nbsp;编辑SQL语句定义</span>
-	 <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'" 
-	    onclick="javascript:saveData();" >保存</a> 
+  <div data-options="region:'north',split:true,border:true" style="height:42px" class="toolbar-backgroud"> 
+    <div style="margin:4px;"> 
+		<img src="${contextPath}/static/images/window.png">&nbsp; 
+	    <span class="x_content_title">&nbsp;编辑SQL语句定义</span>
+	    <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'" 
+	       onclick="javascript:saveData();" >保存</a> 
     </div> 
   </div>
 
@@ -161,6 +162,13 @@
 		<td align="left">
             <input type="radio" name="fetchFlag" value="Y" <#if sqlDefinition.fetchFlag == 'Y' >checked</#if>>是&nbsp;&nbsp;
 	        <input type="radio" name="fetchFlag" value="N" <#if sqlDefinition.fetchFlag == 'N' >checked</#if>>否
+		</td>
+	</tr>
+	<tr>
+		<td width="15%" align="left">是否基础数据项</td>
+		<td align="left">
+            <input type="radio" name="dataItemFlag" value="Y" <#if sqlDefinition.dataItemFlag == 'Y' >checked</#if>>是&nbsp;&nbsp;
+	        <input type="radio" name="dataItemFlag" value="N" <#if sqlDefinition.dataItemFlag == 'N' >checked</#if>>否
 		</td>
 	</tr>
 	<tr>

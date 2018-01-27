@@ -455,6 +455,11 @@
 .window-thinborder .window-body {
   border-width: 0px;
 }
+.window-thinborder .window-footer {
+  border-left: transparent;
+  border-right: transparent;
+  border-bottom: transparent;
+}
 .window-thinborder .window-header .panel-icon,
 .window-thinborder .window-header .panel-tool {
   margin-top: -9px;
@@ -2352,7 +2357,6 @@
   color: #fff;
 }
 .spinner-arrow {
-  background-color: #3d3d3d;
   display: inline-block;
   overflow: hidden;
   vertical-align: top;
@@ -2364,6 +2368,7 @@
 }
 .spinner-arrow-up,
 .spinner-arrow-down {
+  background-color: #3d3d3d;
   opacity: 0.6;
   filter: alpha(opacity=60);
   display: block;
@@ -2399,9 +2404,11 @@
 }
 .spinner-arrow-up {
   background: url('images/spinner_arrows.png') no-repeat 1px center;
+  background-color: #3d3d3d;
 }
 .spinner-arrow-down {
   background: url('images/spinner_arrows.png') no-repeat -15px center;
+  background-color: #3d3d3d;
 }
 .spinner-button-up {
   background: url('images/spinner_arrows.png') no-repeat -32px center;
@@ -2437,6 +2444,7 @@
   color: #fff;
   font-size: 12px;
 }
+.progressbar-value,
 .progressbar-value .progressbar-text {
   background-color: #0052A3;
   color: #fff;

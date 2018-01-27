@@ -26,8 +26,8 @@ public abstract class TreeBase implements Component {
 	protected String action;
 
 	/**
-	 * Align menu 'left','right','top','bottom' ...and other alignment of
-	 * particular menu system
+	 * Align menu 'left','right','top','bottom' ...and other alignment of particular
+	 * menu system
 	 */
 	protected String align;
 
@@ -63,8 +63,8 @@ public abstract class TreeBase implements Component {
 	 * current module.
 	 * 
 	 * <p>
-	 * The default module is specified by <code>""</code>. Any non-default
-	 * module should begin with <code>"/"</code>.
+	 * The default module is specified by <code>""</code>. Any non-default module
+	 * should begin with <code>"/"</code>.
 	 */
 	protected String module;
 
@@ -107,6 +107,8 @@ public abstract class TreeBase implements Component {
 	protected String width;
 
 	protected int locked;
+
+	protected int level;
 
 	// ~ Methods
 	// ================================================================
@@ -185,6 +187,10 @@ public abstract class TreeBase implements Component {
 	 */
 	public String getImage() {
 		return image;
+	}
+
+	public int getLevel() {
+		return level;
 	}
 
 	/**
@@ -401,6 +407,10 @@ public abstract class TreeBase implements Component {
 	 */
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 	/**

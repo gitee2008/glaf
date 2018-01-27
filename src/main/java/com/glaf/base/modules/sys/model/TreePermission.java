@@ -57,6 +57,12 @@ public class TreePermission implements Serializable, JSONable {
 	protected String privilege;
 
 	/**
+	 * 类型
+	 */
+	@Column(name = "TYPE_", length = 50)
+	protected String type;
+
+	/**
 	 * 租户编号
 	 */
 	@Column(name = "TENANTID_", length = 50)
@@ -130,6 +136,10 @@ public class TreePermission implements Serializable, JSONable {
 		return this.tenantId;
 	}
 
+	public String getType() {
+		return type;
+	}
+
 	public String getUserId() {
 		return this.userId;
 	}
@@ -168,6 +178,10 @@ public class TreePermission implements Serializable, JSONable {
 
 	public void setTenantId(String tenantId) {
 		this.tenantId = tenantId;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public void setUserId(String userId) {

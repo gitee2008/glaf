@@ -334,20 +334,20 @@
 <body style="margin:1px;">  
 <div style="margin:0;"></div>  
 <div class="easyui-layout" data-options="fit:true">  
-   <div data-options="region:'north',split:true,border:true" style="height:40px"> 
-    <div class="toolbar-backgroud"  > 
-	<img src="${contextPath}/static/images/window.png">
-	&nbsp;<span class="x_content_title">关注者列表</span>
-    <!-- <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-add'" 
-	   onclick="javascript:addNew();">新增</a>  
-    <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-edit'"
-	   onclick="javascript:editSelected();">修改</a>  
-	<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-remove'"
-	   onclick="javascript:deleteSelections();">删除</a> --> 
-	<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-actor'"
-	   onclick="javascript:followmelistWin();">查看关注我的机构</a>
-	<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-actor'"
-	   onclick="javascript:searchWin();">添加我关注的机构</a>
+   <div data-options="region:'north', split:false, border:true" style="height:42px" class="toolbar-backgroud"> 
+    <div style="margin:4px;"> 
+		<img src="${contextPath}/static/images/window.png">
+		&nbsp;<span class="x_content_title">关注者列表</span>
+		<!-- <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-add'" 
+		   onclick="javascript:addNew();">新增</a>  
+		<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-edit'"
+		   onclick="javascript:editSelected();">修改</a>  
+		<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-remove'"
+		   onclick="javascript:deleteSelections();">删除</a> --> 
+		<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-actor'"
+		   onclick="javascript:followmelistWin();">查看关注我的机构</a>
+		<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-actor'"
+		   onclick="javascript:searchWin();">添加我关注的机构</a>
    </div> 
   </div> 
   <div data-options="region:'center',border:true">

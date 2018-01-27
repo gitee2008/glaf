@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ROWSET TABLENAME="SYS_DATA_ITEM_DEF" PK="ID_" UPDATABLE="true">
+  <ROW>
+    <ID_>1106</ID_>
+    <CATEGORY_>synthetic</CATEGORY_>
+    <CODE_>treetable_aggregate</CODE_>
+    <CREATEBY_>system</CREATEBY_>
+    <KEYCOLUMN_>ID_</KEYCOLUMN_>
+    <NODEID_>0</NODEID_>
+    <SQL_>select ID_, TITLE_ from SYS_TREETABLE_AGGREGATE where LOCKED_ = 0 and DELETEFLAG_ = 0</SQL_>
+    <TITLE_>树表逐级汇总</TITLE_>
+    <TYPE_>treetable_aggregate</TYPE_>
+    <VALUECOLUMN_>TITLE_</VALUECOLUMN_>
+  </ROW>
+  <ROW>
+    <ID_>1401</ID_>
+    <CATEGORY_>synthetic</CATEGORY_>
+    <CODE_>row_denormaliser</CODE_>
+    <CREATEBY_>system</CREATEBY_>
+    <KEYCOLUMN_>ID_</KEYCOLUMN_>
+    <NODEID_>0</NODEID_>
+    <SQL_>select ID_, TITLE_ from SYS_ROW_DENORMALISER where LOCKED_ = 0 </SQL_>
+    <TITLE_>行转列</TITLE_>
+    <TYPE_>row_denormaliser</TYPE_>
+    <VALUECOLUMN_>TITLE_</VALUECOLUMN_>
+  </ROW>
+  <ROW>
+    <ID_>1204</ID_>
+    <CATEGORY_>synthetic</CATEGORY_>
+    <CODE_>table_transform</CODE_>
+    <CREATEBY_>system</CREATEBY_>
+    <KEYCOLUMN_>TRANSFORMID_</KEYCOLUMN_>
+    <NODEID_>0</NODEID_>
+    <SQL_>select TRANSFORMID_, TITLE_ from SYS_TABLE_TRANSFORM where LOCKED_ = 0 and DELETEFLAG_ = 0</SQL_>
+    <TITLE_>表列转换</TITLE_>
+    <TYPE_>table_transform</TYPE_>
+    <VALUECOLUMN_>TITLE_</VALUECOLUMN_>
+  </ROW>
+  <ROW>
+    <ID_>1301</ID_>
+    <CATEGORY_>synthetic</CATEGORY_>
+    <CODE_>sync_app</CODE_>
+    <CREATEBY_>system</CREATEBY_>
+    <KEYCOLUMN_>ID_</KEYCOLUMN_>
+    <NODEID_>0</NODEID_>
+    <SQL_>select ID_, TITLE_ from SYS_SYNC_APP where ACTIVE_ = 'Y' </SQL_>
+    <TITLE_>SQL取数到目标表</TITLE_>
+    <TYPE_>sync_app</TYPE_>
+    <VALUECOLUMN_>TITLE_</VALUECOLUMN_>
+  </ROW>
+  <ROW>
+    <ID_>1501</ID_>
+    <CATEGORY_>synthetic</CATEGORY_>
+    <CODE_>combination_app</CODE_>
+    <CREATEBY_>system</CREATEBY_>
+    <KEYCOLUMN_>ID_</KEYCOLUMN_>
+    <NODEID_>0</NODEID_>
+    <SQL_>select ID_, TITLE_ from SYS_COMBINATION_APP where ACTIVE_ = 'Y' </SQL_>
+    <TITLE_>组合数据到表</TITLE_>
+    <TYPE_>combination_app</TYPE_>
+    <VALUECOLUMN_>TITLE_</VALUECOLUMN_>
+  </ROW>
+</ROWSET>

@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,6 +37,8 @@ public class CacheonixCache implements com.glaf.core.cache.Cache {
 	protected static final Log logger = LogFactory.getLog(CacheonixCache.class);
 
 	protected static ConcurrentMap<String, Cache<String, byte[]>> cacheConcurrentMap = new ConcurrentHashMap<String, Cache<String, byte[]>>();
+
+	protected static AtomicBoolean running = new AtomicBoolean(false);
 
 	protected static Cacheonix cacheonix = Cacheonix.getInstance();
 
@@ -93,7 +96,9 @@ public class CacheonixCache implements com.glaf.core.cache.Cache {
 		if (cache == null) {
 			cache = cacheonix.getCache("default");
 			if (cache == null) {
-				cache = cacheonix.createCache("default");
+				if (cache == null) {
+					cache = cacheonix.createCache("default");
+				}
 			}
 		}
 		return cache;
@@ -105,7 +110,16 @@ public class CacheonixCache implements com.glaf.core.cache.Cache {
 		if (regionCache == null) {
 			regionCache = cacheonix.getCache(region);
 			if (regionCache == null) {
-				regionCache = cacheonix.createCache(region);
+				if (!running.get()) {
+					try {
+						running.set(true);
+						if (regionCache == null) {
+							regionCache = cacheonix.createCache(region);
+						}
+					} finally {
+						running.set(false);
+					}
+				}
 			}
 		}
 		return regionCache;

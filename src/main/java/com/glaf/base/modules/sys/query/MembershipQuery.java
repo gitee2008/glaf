@@ -35,8 +35,6 @@ public class MembershipQuery extends DataQuery {
 	protected List<String> roleCodes;
 	protected String roleId;
 	protected List<String> roleIds;
-	protected String superiorId;
-	protected List<String> superiorIds;
 	protected String type;
 	protected List<String> types;
 
@@ -161,14 +159,6 @@ public class MembershipQuery extends DataQuery {
 
 	public List<String> getRoleIds() {
 		return roleIds;
-	}
-
-	public String getSuperiorId() {
-		return superiorId;
-	}
-
-	public List<String> getSuperiorIds() {
-		return superiorIds;
 	}
 
 	public String getTenantId() {
@@ -299,14 +289,6 @@ public class MembershipQuery extends DataQuery {
 		this.roleIds = roleIds;
 	}
 
-	public void setSuperiorId(String superiorId) {
-		this.superiorId = superiorId;
-	}
-
-	public void setSuperiorIds(List<String> superiorIds) {
-		this.superiorIds = superiorIds;
-	}
-
 	public void setTenantId(String tenantId) {
 		this.tenantId = tenantId;
 	}
@@ -317,22 +299,6 @@ public class MembershipQuery extends DataQuery {
 
 	public void setTypes(List<String> types) {
 		this.types = types;
-	}
-
-	public MembershipQuery superiorId(String superiorId) {
-		if (superiorId == null) {
-			throw new RuntimeException("superiorId is null");
-		}
-		this.superiorId = superiorId;
-		return this;
-	}
-
-	public MembershipQuery superiorIds(List<String> superiorIds) {
-		if (superiorIds == null) {
-			throw new RuntimeException("superiorIds is empty ");
-		}
-		this.superiorIds = superiorIds;
-		return this;
 	}
 
 	public MembershipQuery tenantId(String tenantId) {

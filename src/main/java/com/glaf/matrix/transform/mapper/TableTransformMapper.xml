@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.transform.mapper.TableTransformMapper">
+
+	<resultMap id="tableTransformResultMap"
+		type="com.glaf.matrix.transform.domain.TableTransform">
+		<id property="transformId" column="TRANSFORMID_" jdbcType="VARCHAR" />
+		<result property="tableName" column="TABLENAME_" jdbcType="VARCHAR" />
+		<result property="title" column="TITLE_" jdbcType="VARCHAR" />
+		<result property="databaseIds" column="DATABASEIDS_" jdbcType="VARCHAR" />
+		<result property="primaryKey" column="PRIMARYKEY_" jdbcType="VARCHAR" />
+		<result property="targetTableName" column="TARGETTABLENAME_"
+			jdbcType="VARCHAR" />
+		<result property="transformColumns" column="TRANSFORMCOLUMNS_"
+			jdbcType="VARCHAR" />
+		<result property="sqlCriteria" column="SQLCRITERIA_" jdbcType="VARCHAR" />
+		<result property="sort" column="SORT_" jdbcType="INTEGER" />
+		<result property="transformIfTargetColumnNotEmpty" column="TRANSFORM_IF_FLAG_"
+			jdbcType="VARCHAR" />
+		<result property="transformFlag" column="TRANSFORMFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="transformStatus" column="TRANSFORMSTATUS_"
+			jdbcType="INTEGER" />
+		<result property="transformTime" column="TRANSFORMTIME_"
+			jdbcType="TIMESTAMP" />
+		<result property="currentUserFlag" column="CURRENTUSERFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="deleteFlag" column="DELETEFLAG_" jdbcType="INTEGER" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY_" jdbcType="VARCHAR" />
+		<result property="updateTime" column="UPDATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertTableTransform"
+		parameterType="com.glaf.matrix.transform.domain.TableTransform">
+		insert into SYS_TABLE_TRANSFORM
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			TRANSFORMID_, TABLENAME_
+			<if test="title != null">
+				,TITLE_
+			</if>
+			<if test="databaseIds != null">
+				,DATABASEIDS_
+			</if>
+			<if test="primaryKey != null">
+				,PRIMARYKEY_
+			</if>
+			<if test="targetTableName != null">
+				,TARGETTABLENAME_
+			</if>
+			<if test="transformColumns != null">
+				,TRANSFORMCOLUMNS_
+			</if>
+			<if test="sqlCriteria != null">
+				,SQLCRITERIA_
+			</if>
+			<if test="sort != null">
+				,SORT_
+			</if>
+			<if test="transformIfTargetColumnNotEmpty != null">
+				,TRANSFORM_IF_FLAG_
+			</if>
+			<if test="transformFlag != null">
+				,TRANSFORMFLAG_
+			</if>
+			<if test="transformStatus != null">
+				,TRANSFORMSTATUS_
+			</if>
+			<if test="transformTime != null">
+				,TRANSFORMTIME_
+			</if>
+			<if test="currentUserFlag != null">
+				,CURRENTUSERFLAG_
+			</if>
+			<if test="deleteFlag != null">
+				,DELETEFLAG_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+			<if test="updateBy != null">
+				,UPDATEBY_
+			</if>
+			<if test="updateTime != null">
+				,UPDATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{transformId, jdbcType=VARCHAR}
+			,#{tableName, jdbcType=VARCHAR}
+
+			<if test="title != null">
+				,#{title, jdbcType=VARCHAR}
+			</if>
+			<if test="databaseIds != null">
+				,#{databaseIds, jdbcType=VARCHAR}
+			</if>
+			<if test="primaryKey != null">
+				,#{primaryKey, jdbcType=VARCHAR}
+			</if>
+			<if test="targetTableName != null">
+				,#{targetTableName, jdbcType=VARCHAR}
+			</if>
+			<if test="transformColumns != null">
+				,#{transformColumns, jdbcType=VARCHAR}
+			</if>
+			<if test="sqlCriteria != null">
+				,#{sqlCriteria, jdbcType=VARCHAR}
+			</if>
+			<if test="sort != null">
+				,#{sort, jdbcType=INTEGER}
+			</if>
+			<if test="transformIfTargetColumnNotEmpty != null">
+				,#{transformIfTargetColumnNotEmpty, jdbcType=VARCHAR}
+			</if>
+			<if test="transformFlag != null">
+				,#{transformFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="transformStatus != null">
+				,#{transformStatus, jdbcType=INTEGER}
+			</if>
+			<if test="transformTime != null">
+				,#{transformTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="currentUserFlag != null">
+				,#{currentUserFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="deleteFlag != null">
+				,#{deleteFlag, jdbcType=INTEGER}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy != null">
+				,#{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				,#{updateTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertTableTransform" parameterType="java.util.List">
+		insert into SYS_TABLE_TRANSFORM (
+		TRANSFORMID_,
+		TABLENAME_
+		,TITLE_
+		,DATABASEIDS_
+		,PRIMARYKEY_
+		,TARGETTABLENAME_
+		,TRANSFORMCOLUMNS_
+		,SQLCRITERIA_
+		,SORT_
+		,TRANSFORM_IF_FLAG_
+		,TRANSFORMFLAG_
+		,TRANSFORMSTATUS_
+		,TRANSFORMTIME_
+		,CURRENTUSERFLAG_
+		,DELETEFLAG_
+		,LOCKED_
+		,CREATEBY_
+		,CREATETIME_
+		,UPDATEBY_
+		,UPDATETIME_
+		)
+		values
+		<foreach collection="list" item="tableTransform" index="index"
+			separator=",">
+			(
+			#{tableTransform.transformId, jdbcType=VARCHAR}
+			,#{tableTransform.tableName, jdbcType=VARCHAR}
+			,#{tableTransform.title, jdbcType=VARCHAR}
+			,#{tableTransform.databaseIds, jdbcType=VARCHAR}
+			,#{tableTransform.primaryKey, jdbcType=VARCHAR}
+			,#{tableTransform.targetTableName, jdbcType=VARCHAR}
+			,#{tableTransform.transformColumns, jdbcType=VARCHAR}
+			,#{tableTransform.sqlCriteria, jdbcType=VARCHAR}
+			,#{tableTransform.sort, jdbcType=INTEGER}
+			,#{tableTransform.transformIfTargetColumnNotEmpty,
+			jdbcType=VARCHAR}
+			,#{tableTransform.transformFlag,
+			jdbcType=VARCHAR}
+			,#{tableTransform.transformStatus,
+			jdbcType=INTEGER}
+			,#{tableTransform.transformTime,
+			jdbcType=TIMESTAMP}
+			,#{tableTransform.currentUserFlag,
+			jdbcType=VARCHAR}
+			,#{tableTransform.deleteFlag,
+			jdbcType=INTEGER}
+			,#{tableTransform.locked, jdbcType=INTEGER}
+			,#{tableTransform.createBy, jdbcType=VARCHAR}
+			,#{tableTransform.createTime, jdbcType=TIMESTAMP}
+			,#{tableTransform.updateBy, jdbcType=VARCHAR}
+			,#{tableTransform.updateTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertTableTransform_oracle"
+		parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="tableTransform" index="index">
+			insert
+			into SYS_TABLE_TRANSFORM (
+			TRANSFORMID_,
+			TABLENAME_
+			,TITLE_
+			,DATABASEIDS_
+			,PRIMARYKEY_
+			,TARGETTABLENAME_
+			,TRANSFORMCOLUMNS_
+			,SQLCRITERIA_
+			,SORT_
+			,TRANSFORM_IF_FLAG_
+			,TRANSFORMFLAG_
+			,TRANSFORMSTATUS_
+			,TRANSFORMTIME_
+			,CURRENTUSERFLAG_
+			,DELETEFLAG_
+			,LOCKED_
+			,CREATEBY_
+			,CREATETIME_
+			,UPDATEBY_
+			,UPDATETIME_
+			)
+			values (
+			#{tableTransform.transformId, jdbcType=VARCHAR}
+			,#{tableTransform.tableName, jdbcType=VARCHAR}
+			,#{tableTransform.title, jdbcType=VARCHAR}
+			,#{tableTransform.databaseIds, jdbcType=VARCHAR}
+			,#{tableTransform.primaryKey, jdbcType=VARCHAR}
+			,#{tableTransform.targetTableName, jdbcType=VARCHAR}
+			,#{tableTransform.transformColumns, jdbcType=VARCHAR}
+			,#{tableTransform.sqlCriteria, jdbcType=VARCHAR}
+			,#{tableTransform.sort, jdbcType=INTEGER}
+			,#{tableTransform.transformIfTargetColumnNotEmpty,
+			jdbcType=VARCHAR}
+			,#{tableTransform.transformFlag,
+			jdbcType=VARCHAR}
+			,#{tableTransform.transformStatus,
+			jdbcType=INTEGER}
+			,#{tableTransform.transformTime,
+			jdbcType=TIMESTAMP}
+			,#{tableTransform.currentUserFlag,
+			jdbcType=VARCHAR}
+			,#{tableTransform.deleteFlag,
+			jdbcType=INTEGER}
+			,#{tableTransform.locked, jdbcType=INTEGER}
+			,#{tableTransform.createBy, jdbcType=VARCHAR}
+			,#{tableTransform.createTime, jdbcType=TIMESTAMP}
+			,#{tableTransform.updateBy, jdbcType=VARCHAR}
+			,#{tableTransform.updateTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateTableTransform"
+		parameterType="com.glaf.matrix.transform.domain.TableTransform">
+		update SYS_TABLE_TRANSFORM
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="title != null">
+				TITLE_ = #{title, jdbcType=VARCHAR},
+			</if>
+			<if test="databaseIds != null">
+				DATABASEIDS_ = #{databaseIds, jdbcType=VARCHAR},
+			</if>
+			<if test="primaryKey != null">
+				PRIMARYKEY_ = #{primaryKey, jdbcType=VARCHAR},
+			</if>
+			<if test="targetTableName != null">
+				TARGETTABLENAME_ = #{targetTableName, jdbcType=VARCHAR},
+			</if>
+			<if test="transformColumns != null">
+				TRANSFORMCOLUMNS_ = #{transformColumns,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="sqlCriteria != null">
+				SQLCRITERIA_ = #{sqlCriteria, jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null">
+				SORT_ = #{sort, jdbcType=INTEGER},
+			</if>
+			<if test="transformIfTargetColumnNotEmpty != null">
+				TRANSFORM_IF_FLAG_ = #{transformIfTargetColumnNotEmpty,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="transformFlag != null">
+				TRANSFORMFLAG_ = #{transformFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="transformStatus != null">
+				TRANSFORMSTATUS_ = #{transformStatus, jdbcType=INTEGER},
+			</if>
+			<if test="transformTime != null">
+				TRANSFORMTIME_ = #{transformTime, jdbcType=TIMESTAMP},
+			</if>
+			<if test="currentUserFlag != null">
+				CURRENTUSERFLAG_ = #{currentUserFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="deleteFlag != null">
+				DELETEFLAG_ = #{deleteFlag, jdbcType=INTEGER},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+			<if test="createBy != null">
+				CREATEBY_ = #{createBy, jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				CREATETIME_ = #{createTime, jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY_ = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATETIME_ = #{updateTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		TRANSFORMID_ = #{transformId, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<update id="updateTableTransformStatus"
+		parameterType="com.glaf.matrix.transform.domain.TableTransform">
+
+		update SYS_TABLE_TRANSFORM
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="transformStatus != null">
+				TRANSFORMSTATUS_ = #{transformStatus, jdbcType=INTEGER},
+			</if>
+			<if test="transformTime != null">
+				TRANSFORMTIME_ = #{transformTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		TRANSFORMID_ = #{transformId, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<update id="resetAllTableTransformStatus">
+
+		update SYS_TABLE_TRANSFORM
+		set TRANSFORMSTATUS_ =
+		0,
+		TRANSFORMTIME_ = null
+		where LOCKED_ = 0
+		and DELETEFLAG_ = 0
+
+	</update>
+
+
+	<delete id="deleteTableTransformById" parameterType="string">
+		delete from
+		SYS_TABLE_TRANSFORM
+		where TRANSFORMID_ = #{transformId}
+	</delete>
+
+
+	<select id="getTableTransformById" parameterType="string"
+		resultMap="tableTransformResultMap">
+		select * from SYS_TABLE_TRANSFORM where TRANSFORMID_ =
+		#{id}
+	</select>
+
+
+	<select id="getTableTransforms"
+		parameterType="com.glaf.matrix.transform.query.TableTransformQuery"
+		resultMap="tableTransformResultMap">
+		select distinct E.*
+		<include refid="selectTableTransformsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.CREATETIME_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getTableTransformCount"
+		parameterType="com.glaf.matrix.transform.query.TableTransformQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectTableTransformsSql" />
+	</select>
+
+
+	<sql id="selectTableTransformsSql">
+
+		from SYS_TABLE_TRANSFORM E
+
+		<where>
+			1 = 1
+
+			<if test="titleLike != null and titleLike != '' ">
+				and E.TITLE_ like #{titleLike}
+			</if>
+
+			<if test="transformStatus != null">
+				and E.TRANSFORMSTATUS_ = #{transformStatus}
+			</if>
+
+			<if test="transformTimeGreaterThanOrEqual != null">
+				and E.TRANSFORMTIME_ &gt;=
+				#{transformTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="transformTimeLessThanOrEqual != null">
+				and E.TRANSFORMTIME_ &lt;=
+				#{transformTimeLessThanOrEqual}
+			</if>
+
+			<if test="deleteFlag != null">
+				and E.DELETEFLAG_ = #{deleteFlag}
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+			<if test="dataRequest != null and dataRequest.filter != null ">
+				<include refid="com.glaf.global.GlobalMapper.dataRequestFilterCondition" />
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

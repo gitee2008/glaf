@@ -116,12 +116,12 @@
 <div class="easyui-layout" data-options="fit:true">  
    <div data-options="region:'center'">  
      <div class="easyui-layout" data-options="fit:true"> 
-	   <div data-options="region:'north',split:true,border:true" style="height:40px"> 
-		<div class="toolbar-backgroud"  > 
-		&nbsp;<img src="${contextPath}/static/images/window.png">
-		&nbsp;<span class="x_content_title">信息列表</span>
-		<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-view'"
-		   onclick="javascript:editSelected();">查看</a> 
+	   <div data-options="region:'north', split:false, border:true" style="height:42px" class="toolbar-backgroud"> 
+		<div style="margin:4px;"> 
+			&nbsp;<img src="${contextPath}/static/images/window.png">
+			&nbsp;<span class="x_content_title">信息列表</span>
+			<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-view'"
+			   onclick="javascript:editSelected();">查看</a> 
 	   </div> 
 	  </div> 
 	  <div data-options="region:'center',border:true">

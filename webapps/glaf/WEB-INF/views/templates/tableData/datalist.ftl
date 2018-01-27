@@ -9,8 +9,8 @@
     var _height = jQuery(window).height();
 	var _width = jQuery(window).width();
  
-    var x_height = Math.floor(_height * 0.80);
-	var x_width = Math.floor(_width * 0.98);
+    var x_height = Math.floor(_height * 0.82);
+	var x_width = Math.floor(_width);
 
 	//alert(jQuery(window).height());
 
@@ -136,7 +136,7 @@
 			  maxmin: true,
 			  shadeClose: true,
 			  title: "新增记录",
-			  area: ['880px', (jQuery(window).height() - 50) +'px'],
+			  area: ['980px', (jQuery(window).height() - 50) +'px'],
 			  shade: 0.8,
 			  fixed: false, //不固定
 			  shadeClose: true,
@@ -218,7 +218,7 @@
 			  maxmin: true,
 			  shadeClose: true,
 			  title: "编辑记录",
-			  area: ['880px', (jQuery(window).height() - 50) +'px'],
+			  area: ['980px', (jQuery(window).height() - 50) +'px'],
 			  shade: 0.8,
 			  fixed: false, //不固定
 			  shadeClose: true,
@@ -382,75 +382,79 @@
    </#if>
     <div data-options="region:'center'"> 
 	 <div class="easyui-layout" data-options="fit:true">  
-	  <div data-options="region:'center',border:false">
-	  <form id="iForm" name="iForm" method="post" action="">
-        <table>
-         <tr>
-	       <td colspan="10">
-	        <div class="toolbar-backgroud" style="margin-top:2px;height:30px"> 
-			&nbsp;<img src="${contextPath}/static/images/window.png">
-			&nbsp;<span class="x_content_title">${table.title}</span>
-			    <#if canEdit == true>
-				<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-add'" 
-				   onclick="javascript:addNew();">新增</a>  
-				<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-edit'"
-				   onclick="javascript:editSelected();">修改</a>
-				<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-remove'"
-				   onclick="javascript:removeSelected();">删除</a>
-			    </#if>
-			    <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_export_xls'"
-				   onclick="javascript:exportXls();">导出Excel</a>
-			    <#list correlations as table>
-			    <#if table.tableCorrelation.relationshipType == "OneToMany">
-                <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-list'"
-				   onclick="javascript:openWin${table.tableId}();">${table.title}</a>
-			    </#if>
-			    </#list>
-		    </div> 
-		   </td>
-		   </tr>
-		   <#if sqlCriterias?exists>
-		   <tr>
-		     <#list sqlCriterias as col>
-		     <td>
-               &nbsp;${col.paramTitle}&nbsp;
-			   <#if col.columnType == "Integer">
-			    <input id="${col.paramName}" name="${col.paramName}" type="text" 
-			       class="easyui-numberbox easyui-validatebox x-searchtext" style="width:90px;" precision="0"
-				   <#if col.requiredFlag == "Y"> required="true" data-options="required:true" </#if>
-				   value="${col.value}" size="10"/>
-				<#elseif col.columnType == "Long">
-				<input id="${col.paramName}" name="${col.paramName}" type="text" 
-					   class="easyui-numberbox easyui-validatebox x-searchtext" style="width:90px;" precision="0" 
+	  <div data-options="region:'north', split:false, border:true" style="height:42px" class="toolbar-backgroud"> 
+	    <div> 
+		  <form id="iForm" name="iForm" method="post" action="">
+			<table>
+			 <tr>
+			   <td colspan="10">
+				<div style="margin-top:2px;height:30px"> 
+				&nbsp;<img src="${contextPath}/static/images/window.png">
+				&nbsp;<span class="x_content_title">${table.title}</span>
+					<#if canEdit == true>
+					<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-add'" 
+					   onclick="javascript:addNew();">新增</a>  
+					<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-edit'"
+					   onclick="javascript:editSelected();">修改</a>
+					<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-remove'"
+					   onclick="javascript:removeSelected();">删除</a>
+					</#if>
+					<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_export_xls'"
+					   onclick="javascript:exportXls();">导出Excel</a>
+					<#list correlations as table>
+					<#if table.tableCorrelation.relationshipType == "OneToMany">
+					<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-list'"
+					   onclick="javascript:openWin${table.tableId}();">${table.title}</a>
+					</#if>
+					</#list>
+				</div> 
+			   </td>
+			   </tr>
+			   <#if sqlCriterias?exists>
+			   <tr>
+				 <#list sqlCriterias as col>
+				 <td>
+				   &nbsp;${col.paramTitle}&nbsp;
+				   <#if col.columnType == "Integer">
+					<input id="${col.paramName}" name="${col.paramName}" type="text" 
+					   class="easyui-numberbox easyui-validatebox x-searchtext" style="width:90px;" precision="0"
 					   <#if col.requiredFlag == "Y"> required="true" data-options="required:true" </#if>
 					   value="${col.value}" size="10"/>
-				<#elseif col.columnType == "Double">
-				<input id="${col.paramName}" name="${col.paramName}" type="text" 
-					   class="easyui-numberbox easyui-validatebox x-searchtext" style="width:90px;" precision="${col.scale}"
+					<#elseif col.columnType == "Long">
+					<input id="${col.paramName}" name="${col.paramName}" type="text" 
+						   class="easyui-numberbox easyui-validatebox x-searchtext" style="width:90px;" precision="0" 
+						   <#if col.requiredFlag == "Y"> required="true" data-options="required:true" </#if>
+						   value="${col.value}" size="10"/>
+					<#elseif col.columnType == "Double">
+					<input id="${col.paramName}" name="${col.paramName}" type="text" 
+						   class="easyui-numberbox easyui-validatebox x-searchtext" style="width:90px;" precision="${col.scale}"
+						   <#if col.requiredFlag == "Y"> required="true" data-options="required:true" </#if>
+						   value="${col.value}" size="10"/>
+					<#elseif col.columnType == "Date">
+					<input id="${col.paramName}" name="${col.paramName}" type="text" 
+						   class="easyui-datebox easyui-validatebox x-searchtext" style="width:120px;"  
+						   <#if col.requiredFlag == "Y"> required="true" data-options="required:true" </#if>
+						   value="${col.value}" size="30"/>
+					<#else>
+					<input id="${col.paramName}" name="${col.paramName}" type="text" 
+					   class="easyui-validatebox  x-searchtext" style="width:120px;"
 					   <#if col.requiredFlag == "Y"> required="true" data-options="required:true" </#if>
-					   value="${col.value}" size="10"/>
-				<#elseif col.columnType == "Date">
-				<input id="${col.paramName}" name="${col.paramName}" type="text" 
-					   class="easyui-datebox easyui-validatebox x-searchtext" style="width:120px;"  
-					   <#if col.requiredFlag == "Y"> required="true" data-options="required:true" </#if>
-					   value="${col.value}" size="30"/>
-				<#else>
-				<input id="${col.paramName}" name="${col.paramName}" type="text" 
-			       class="easyui-validatebox  x-searchtext" style="width:120px;"
-				   <#if col.requiredFlag == "Y"> required="true" data-options="required:true" </#if>
-				   value="${col.value}" size="50"/>
-				</#if>
-		     </td>
-			 </#list>
-			 <td align="left">
-		        <button type="button" id="searchButton" class="btn btnGrayMini" style="width: 60px" 
-	                onclick="javascript:searchData();">查找</button>
-		    </td>
-		   </tr>
-		   </#if>
-		</table>
-		</form>
-		<table id="mydatagrid"></table>
+					   value="${col.value}" size="50"/>
+					</#if>
+				 </td>
+				 </#list>
+				 <td align="left">
+					<button type="button" id="searchButton" class="btn btnGrayMini" style="width: 60px" 
+						onclick="javascript:searchData();">查找</button>
+				</td>
+			   </tr>
+			   </#if>
+			 </table>
+			</form>
+		  </div> 
+	    </div> 
+        <div data-options="region:'center',border:true">
+		  <table id="mydatagrid"></table>
 	  </div>  
 	</div>
   </div>

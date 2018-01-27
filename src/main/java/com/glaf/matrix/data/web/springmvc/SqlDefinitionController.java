@@ -32,9 +32,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -45,7 +43,6 @@ import com.glaf.core.config.ViewProperties;
 import com.glaf.core.identity.User;
 import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.security.LoginContext;
-import com.glaf.core.security.RSAUtils;
 import com.glaf.core.service.IDatabaseService;
 import com.glaf.core.util.DBUtils;
 import com.glaf.core.util.JdbcUtils;
@@ -55,7 +52,7 @@ import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.ResponseUtils;
 import com.glaf.core.util.StringTools;
 import com.glaf.core.util.Tools;
-
+import com.glaf.core.util.security.RSAUtils;
 import com.glaf.matrix.data.domain.SqlDefinition;
 import com.glaf.matrix.data.query.SqlDefinitionQuery;
 import com.glaf.matrix.data.service.SqlDefinitionService;
@@ -381,6 +378,7 @@ public class SqlDefinitionController {
 			sqlDefinition.setSql(request.getParameter("sql"));
 			sqlDefinition.setCountSql(request.getParameter("countSql"));
 			sqlDefinition.setRowKey(request.getParameter("rowKey"));
+			sqlDefinition.setDataItemFlag(request.getParameter("dataItemFlag"));
 			sqlDefinition.setFetchFlag(request.getParameter("fetchFlag"));
 			sqlDefinition.setDeleteFetch(request.getParameter("deleteFetch"));
 			sqlDefinition.setScheduleFlag(request.getParameter("scheduleFlag"));
@@ -412,51 +410,6 @@ public class SqlDefinitionController {
 			logger.error(ex);
 		}
 		return ResponseUtils.responseJsonResult(false);
-	}
-
-	@RequestMapping(value = "/saveOrUpdate", method = RequestMethod.POST)
-	public @ResponseBody SqlDefinition saveOrUpdate(HttpServletRequest request,
-			@RequestBody Map<String, Object> model) {
-		LoginContext loginContext = RequestUtils.getLoginContext(request);
-		String actorId = loginContext.getActorId();
-		SqlDefinition sqlDefinition = new SqlDefinition();
-		try {
-			Tools.populate(sqlDefinition, model);
-			sqlDefinition.setParentId(ParamUtils.getLong(model, "parentId"));
-			sqlDefinition.setName(ParamUtils.getString(model, "name"));
-			sqlDefinition.setCode(ParamUtils.getString(model, "code"));
-			sqlDefinition.setTitle(ParamUtils.getString(model, "title"));
-			sqlDefinition.setSql(ParamUtils.getString(model, "sql"));
-			sqlDefinition.setCountSql(ParamUtils.getString(model, "countSql"));
-			sqlDefinition.setRowKey(ParamUtils.getString(model, "rowKey"));
-			sqlDefinition.setFetchFlag(request.getParameter("fetchFlag"));
-			sqlDefinition.setDeleteFetch(request.getParameter("deleteFetch"));
-			sqlDefinition.setScheduleFlag(ParamUtils.getString(model, "scheduleFlag"));
-			sqlDefinition.setShareFlag(ParamUtils.getString(model, "shareFlag"));
-			sqlDefinition.setSaveFlag(request.getParameter("saveFlag"));
-			sqlDefinition.setPublicFlag(request.getParameter("publicFlag"));
-			sqlDefinition.setExportFlag(request.getParameter("exportFlag"));
-			sqlDefinition.setExportTableName(request.getParameter("exportTableName"));
-			sqlDefinition.setExportTemplate(request.getParameter("exportTemplate"));
-			sqlDefinition.setTargetTableName(request.getParameter("targetTableName"));
-			sqlDefinition.setAggregationFlag(request.getParameter("aggregationFlag"));
-			sqlDefinition.setCreateBy(actorId);
-			sqlDefinition.setUpdateBy(actorId);
-
-			if (!DBUtils.isLegalQuerySql(sqlDefinition.getSql())) {
-				throw new RuntimeException(" SQL statement illegal ");
-			}
-
-			if (!DBUtils.isAllowedSql(sqlDefinition.getSql())) {
-				throw new RuntimeException(" SQL statement illegal ");
-			}
-
-			sqlDefinition.setOperation("select");
-			this.sqlDefinitionService.save(sqlDefinition);
-		} catch (Exception ex) {
-			logger.error(ex);
-		}
-		return sqlDefinition;
 	}
 
 	@ResponseBody
@@ -545,6 +498,7 @@ public class SqlDefinitionController {
 		sqlDefinition.setSql(request.getParameter("sql"));
 		sqlDefinition.setCountSql(request.getParameter("countSql"));
 		sqlDefinition.setRowKey(request.getParameter("rowKey"));
+		sqlDefinition.setDataItemFlag(request.getParameter("dataItemFlag"));
 		sqlDefinition.setFetchFlag(request.getParameter("fetchFlag"));
 		sqlDefinition.setDeleteFetch(request.getParameter("deleteFetch"));
 		sqlDefinition.setScheduleFlag(request.getParameter("scheduleFlag"));

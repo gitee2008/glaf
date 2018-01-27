@@ -125,6 +125,7 @@ public class DistrictController {
 				tree.setName(district.getName());
 				tree.setSortNo(district.getSortNo());
 				tree.setIconCls("tree_folder");
+				tree.setLevel(district.getLevel());
 				treeModels.add(tree);
 				districtIds.add(district.getId());
 				treeMap.put(district.getId(), tree);

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.combination.mapper.TreeTableAggregateRuleMapper">
+
+	<resultMap id="treeTableAggregateRuleResultMap"	type="com.glaf.matrix.combination.domain.TreeTableAggregateRule">
+        <id property="id" column="ID_" jdbcType="BIGINT" />
+        <result property="aggregateId" column="AGGREGATEID_" jdbcType="BIGINT"/>
+        <result property="aggregateType" column="AGGREGATETYPE_" jdbcType="VARCHAR"/>
+        <result property="name" column="NAME_" jdbcType="VARCHAR"/>
+        <result property="title" column="TITLE_" jdbcType="VARCHAR"/>
+        <result property="sourceColumnName" column="SOURCECOLUMNNAME_" jdbcType="VARCHAR"/>
+        <result property="sourceColumnTitle" column="SOURCECOLUMNTITLE_" jdbcType="VARCHAR"/>
+        <result property="targetColumnName" column="TARGETCOLUMNNAME_" jdbcType="VARCHAR"/>
+        <result property="targetColumnTitle" column="TARGETCOLUMNTITLE_" jdbcType="VARCHAR"/>
+        <result property="targetColumnType" column="TARGETCOLUMNTYPE_" jdbcType="VARCHAR"/>
+        <result property="locked" column="LOCKED_" jdbcType="INTEGER"/>
+	</resultMap>
+
+ 
+	<insert id="insertTreeTableAggregateRule" parameterType="com.glaf.matrix.combination.domain.TreeTableAggregateRule">
+		insert into SYS_TREETABLE_AGGREGATE_RULE 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		    ID_
+			<if test="aggregateId != null">
+				,AGGREGATEID_ 
+			</if>
+			<if test="aggregateType != null">
+				,AGGREGATETYPE_ 
+			</if>
+			<if test="name != null">
+				,NAME_ 
+			</if>
+			<if test="title != null">
+				,TITLE_ 
+			</if>
+			<if test="sourceColumnName != null">
+				,SOURCECOLUMNNAME_ 
+			</if>
+			<if test="sourceColumnTitle != null">
+				,SOURCECOLUMNTITLE_ 
+			</if>
+			<if test="targetColumnName != null">
+				,TARGETCOLUMNNAME_ 
+			</if>
+			<if test="targetColumnTitle != null">
+				,TARGETCOLUMNTITLE_ 
+			</if>
+			<if test="targetColumnType != null">
+				,TARGETCOLUMNTYPE_ 
+			</if>
+			<if test="locked != null">
+				,LOCKED_ 
+			</if>
+        </trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			  #{id, jdbcType=BIGINT}
+	     
+			<if test="aggregateId != null">
+				,#{aggregateId, jdbcType=BIGINT}
+			</if>
+			<if test="aggregateType != null">
+				,#{aggregateType, jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="title != null">
+				,#{title, jdbcType=VARCHAR}
+			</if>
+			<if test="sourceColumnName != null">
+				,#{sourceColumnName, jdbcType=VARCHAR}
+			</if>
+			<if test="sourceColumnTitle != null">
+				,#{sourceColumnTitle, jdbcType=VARCHAR}
+			</if>
+			<if test="targetColumnName != null">
+				,#{targetColumnName, jdbcType=VARCHAR}
+			</if>
+			<if test="targetColumnTitle != null">
+				,#{targetColumnTitle, jdbcType=VARCHAR}
+			</if>
+			<if test="targetColumnType != null">
+				,#{targetColumnType, jdbcType=VARCHAR}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+	    </trim>
+    </insert>
+
+
+	<insert id="bulkInsertTreeTableAggregateRule" parameterType="java.util.List">
+		insert into SYS_TREETABLE_AGGREGATE_RULE ( 
+				ID_
+				,AGGREGATEID_ 
+				,AGGREGATETYPE_ 
+				,NAME_ 
+				,TITLE_ 
+				,SOURCECOLUMNNAME_ 
+				,SOURCECOLUMNTITLE_ 
+				,TARGETCOLUMNNAME_ 
+				,TARGETCOLUMNTITLE_ 
+				,TARGETCOLUMNTYPE_ 
+				,LOCKED_ 
+        ) values 
+		<foreach collection="list" item="treeTableAggregateRule" index="index" separator=",">
+            (
+					#{treeTableAggregateRule.id, jdbcType=BIGINT}
+					,#{treeTableAggregateRule.aggregateId, jdbcType=BIGINT}
+					,#{treeTableAggregateRule.aggregateType, jdbcType=VARCHAR}
+					,#{treeTableAggregateRule.name, jdbcType=VARCHAR}
+					,#{treeTableAggregateRule.title, jdbcType=VARCHAR}
+					,#{treeTableAggregateRule.sourceColumnName, jdbcType=VARCHAR}
+					,#{treeTableAggregateRule.sourceColumnTitle, jdbcType=VARCHAR}
+					,#{treeTableAggregateRule.targetColumnName, jdbcType=VARCHAR}
+					,#{treeTableAggregateRule.targetColumnTitle, jdbcType=VARCHAR}
+					,#{treeTableAggregateRule.targetColumnType, jdbcType=VARCHAR}
+					,#{treeTableAggregateRule.locked, jdbcType=INTEGER}
+		    )
+	   </foreach>
+    </insert>
+
+
+	<insert id="bulkInsertTreeTableAggregateRule_oracle" parameterType="java.util.List">
+	    INSERT ALL 
+		<foreach collection="list" item="treeTableAggregateRule" index="index">
+		  insert into SYS_TREETABLE_AGGREGATE_RULE ( 
+					ID_
+					,AGGREGATEID_ 
+					,AGGREGATETYPE_ 
+					,NAME_ 
+					,TITLE_ 
+					,SOURCECOLUMNNAME_ 
+					,SOURCECOLUMNTITLE_ 
+					,TARGETCOLUMNNAME_ 
+					,TARGETCOLUMNTITLE_ 
+					,TARGETCOLUMNTYPE_ 
+					,LOCKED_ 
+			) values (
+					#{treeTableAggregateRule.id, jdbcType=BIGINT}
+					,#{treeTableAggregateRule.aggregateId, jdbcType=BIGINT}
+					,#{treeTableAggregateRule.aggregateType, jdbcType=VARCHAR}
+					,#{treeTableAggregateRule.name, jdbcType=VARCHAR}
+					,#{treeTableAggregateRule.title, jdbcType=VARCHAR}
+					,#{treeTableAggregateRule.sourceColumnName, jdbcType=VARCHAR}
+					,#{treeTableAggregateRule.sourceColumnTitle, jdbcType=VARCHAR}
+					,#{treeTableAggregateRule.targetColumnName, jdbcType=VARCHAR}
+					,#{treeTableAggregateRule.targetColumnTitle, jdbcType=VARCHAR}
+					,#{treeTableAggregateRule.targetColumnType, jdbcType=VARCHAR}
+					,#{treeTableAggregateRule.locked, jdbcType=INTEGER}
+			)
+	   </foreach>
+	    SELECT * FROM dual
+    </insert>
+
+	 
+	<update id="updateTreeTableAggregateRule" parameterType="com.glaf.matrix.combination.domain.TreeTableAggregateRule">
+		update SYS_TREETABLE_AGGREGATE_RULE
+		set
+        <trim prefix="" suffix="" suffixOverrides=",">		
+			<if test="aggregateId != null">
+				AGGREGATEID_ = #{aggregateId, jdbcType=BIGINT},
+			</if>
+			<if test="aggregateType != null">
+				AGGREGATETYPE_ = #{aggregateType, jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				NAME_ = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				TITLE_ = #{title, jdbcType=VARCHAR},
+			</if>
+			<if test="sourceColumnName != null">
+				SOURCECOLUMNNAME_ = #{sourceColumnName, jdbcType=VARCHAR},
+			</if>
+			<if test="sourceColumnTitle != null">
+				SOURCECOLUMNTITLE_ = #{sourceColumnTitle, jdbcType=VARCHAR},
+			</if>
+			<if test="targetColumnName != null">
+				TARGETCOLUMNNAME_ = #{targetColumnName, jdbcType=VARCHAR},
+			</if>
+			<if test="targetColumnTitle != null">
+				TARGETCOLUMNTITLE_ = #{targetColumnTitle, jdbcType=VARCHAR},
+			</if>
+			<if test="targetColumnType != null">
+				TARGETCOLUMNTYPE_ = #{targetColumnType, jdbcType=VARCHAR},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+        </trim>
+		where
+          ID_ = #{id, jdbcType=BIGINT}
+		
+    </update>
+
+ 
+	<delete id="deleteTreeTableAggregateRuleById" parameterType="long"> 
+        delete from SYS_TREETABLE_AGGREGATE_RULE
+        where ID_ =	#{id}
+	</delete>
+
+
+	<delete id="deleteTreeTableAggregateRulesByAggregateId"
+		parameterType="long">
+		delete from SYS_TREETABLE_AGGREGATE_RULE
+		where
+		AGGREGATEID_ = #{aggregateId}
+	</delete>
+
+
+	<select id="getTreeTableAggregateRuleById" parameterType="long"
+		resultMap="treeTableAggregateRuleResultMap">
+		select * from SYS_TREETABLE_AGGREGATE_RULE where ID_ = #{id}
+	</select>
+
+
+	<select id="getTreeTableAggregateRulesByAggregateId"
+		parameterType="long" resultMap="treeTableAggregateRuleResultMap">
+		select * from
+		SYS_TREETABLE_AGGREGATE_RULE where AGGREGATEID_ = #{aggregateId}
+	</select>
+
+
+	<select id="getTreeTableAggregateRulesByTableName"
+		parameterType="string" resultMap="treeTableAggregateRuleResultMap">
+		select R.* from
+		SYS_TREETABLE_AGGREGATE_RULE R
+		inner join SYS_TREETABLE_AGGREGATE E
+		on
+		R.AGGREGATEID_ = E.ID_
+		where TARGETTABLENAME_ = #{tableName}
+		and
+		E.DELETEFLAG_ = 0
+	</select>
+
+
+</mapper>

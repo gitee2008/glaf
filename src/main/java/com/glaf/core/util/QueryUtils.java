@@ -189,6 +189,38 @@ public class QueryUtils {
 		return conditionBuffer.toString();
 	}
 
+	public static String getNumSQLCondition(List<String> rowKeys, String alias, String columnName) {
+		if (rowKeys == null || rowKeys.size() <= 0) {
+			return "";
+		}
+		int index = 1;
+		StringBuffer conditionBuffer = new StringBuffer();
+		conditionBuffer.append(" and ( ").append(alias).append(".").append(columnName).append(" in (0) ");
+		StringBuffer idsBuffer = new StringBuffer();
+		Iterator<String> iterator = rowKeys.iterator();
+		while (iterator.hasNext()) {
+			String x = iterator.next();
+			idsBuffer.append(x);
+			if (index == 500) {
+				conditionBuffer.append(" or ").append(alias).append(".").append(columnName).append(" in (")
+						.append(idsBuffer.toString()).append(")");
+				index = 0;
+				idsBuffer.delete(0, idsBuffer.length());
+			}
+			if (iterator.hasNext() && index > 0) {
+				idsBuffer.append(",");
+			}
+			index++;
+		}
+		if (idsBuffer.length() > 0) {
+			conditionBuffer.append(" or ").append(alias).append(".").append(columnName).append(" in (")
+					.append(idsBuffer.toString()).append(")");
+			idsBuffer.delete(0, idsBuffer.length());
+		}
+		conditionBuffer.append(" ) ");
+		return conditionBuffer.toString();
+	}
+
 	public static String getSelectFilter(String name) {
 		return getSelectFilter(name, true);
 	}
@@ -265,12 +297,14 @@ public class QueryUtils {
 	}
 
 	public static void main(String[] args) {
-		String sql = " select * from SYS_USER where 1=1 and ( status = ${status} ) and ( userId in (${userIds})) ";
+		String sql = " select * from USER_${xx} where 1=1 and ( status = ${status} ) and ( userId in (${userIds})) ";
 		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("xx", "1");
 		Collection<String> userIds = new ArrayList<String>();
 		userIds.add("kermit");
 		userIds.add("joe");
 		params.put("userIds", userIds);
+		System.out.println(QueryUtils.replaceSQLVars(sql, params));
 		System.out.println(QueryUtils.replaceDollarSQLParas(sql, params));
 	}
 
@@ -720,6 +754,42 @@ public class QueryUtils {
 		sql = StringTools.replace(sql, ExpressionConstants.CURRENT_YYYYMMDD_EXPRESSION,
 				SystemConfig.getCurrentYYYYMMDD());
 		return sql;
+	}
+
+	public static String replaceSQLVars(String str, Map<String, Object> params) {
+		if (str == null || params == null) {
+			return str;
+		}
+		Map<String, Object> dataMap = lowerKeyMap(params);
+		StringBuilder sb = new StringBuilder();
+		int begin = 0;
+		int end = 0;
+		boolean flag = false;
+		for (int i = 0; i < str.length(); i++) {
+			if (str.charAt(i) == '$' && str.charAt(i + 1) == '{') {
+				sb.append(str.substring(end, i));
+				begin = i + 2;
+				flag = true;
+			}
+			if (flag && str.charAt(i) == '}') {
+				String temp = str.substring(begin, i);
+				temp = temp.toLowerCase();
+				if (dataMap.get(temp) != null) {
+					String value = dataMap.get(temp).toString();
+					sb.append(value);
+					end = i + 1;
+					flag = false;
+				} else {
+					sb.append("${").append(temp).append('}');
+					end = i + 1;
+					flag = false;
+				}
+			}
+			if (i == str.length() - 1) {
+				sb.append(str.substring(end, i + 1));
+			}
+		}
+		return sb.toString();
 	}
 
 	public static String replaceTextParas(String str, Map<String, Object> params) {

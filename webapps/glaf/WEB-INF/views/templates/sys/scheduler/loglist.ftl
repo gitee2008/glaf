@@ -171,8 +171,8 @@
 <body style="margin:1px;">  
 <div style="margin:0;"></div>  
 <div class="easyui-layout" data-options="fit:true">  
-   <div data-options="region:'north',split:true,border:true" style="height:46px"> 
-    <div class="toolbar-backgroud"  > 
+   <div data-options="region:'north', split:false, border:true" style="height:42px;" class="toolbar-backgroud"> 
+    <div style="margin-top:4px;"> 
 	 <form id="iForm" name="iForm" method="post" action="">  
       <table>
 		   <tr>

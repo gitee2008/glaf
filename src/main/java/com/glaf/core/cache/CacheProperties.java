@@ -112,7 +112,7 @@ public class CacheProperties {
 		if (!loading.get()) {
 			try {
 				loading.set(true);
-				Properties props = GlobalConfig.getProperties("sys_cache");
+				Properties props = GlobalConfig.getConfigProperties("cache.properties");
 				if (props != null) {
 					Enumeration<?> e = props.keys();
 					while (e.hasMoreElements()) {

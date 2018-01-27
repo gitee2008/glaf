@@ -34,7 +34,9 @@ import com.glaf.core.context.ContextFactory;
 import com.glaf.core.security.LoginContext;
 import com.glaf.core.service.ITablePageService;
 import com.glaf.core.util.ParamUtils;
+import com.glaf.matrix.data.domain.SqlDefinition;
 import com.glaf.matrix.data.domain.TableDataItem;
+import com.glaf.matrix.data.service.SqlDefinitionService;
 import com.glaf.matrix.data.service.TableDataItemService;
 
 public class DataItemFactory {
@@ -61,6 +63,8 @@ public class DataItemFactory {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	protected ITablePageService tablePageService;
+
+	protected SqlDefinitionService sqlDefinitionService;
 
 	protected TableDataItemService tableDataItemService;
 
@@ -154,6 +158,50 @@ public class DataItemFactory {
 		}
 
 		return items;
+	}
+
+	public List<BaseItem> getSqlDataItems(LoginContext loginContext, long sqlDefId, Map<String, Object> params) {
+		List<BaseItem> items = null;
+		SqlDefinition sqlDefinition = getSqlDefinitionService().getSqlDefinition(sqlDefId);
+		if (sqlDefinition != null && sqlDefinition.getLocked() == 0) {
+			if (params == null) {
+				params = new HashMap<String, Object>();
+			}
+
+			params.put("userId", loginContext.getActorId());
+
+			if (loginContext.getUser().getOrganizationId() != 0) {
+				params.put("organizationid", loginContext.getUser().getOrganizationId());
+				params.put("organizationId", loginContext.getUser().getOrganizationId());
+			}
+			if (loginContext.getTenantId() != null) {
+				params.put("tenantid", loginContext.getTenantId());
+				params.put("tenantId", loginContext.getTenantId());
+			}
+
+			StringBuilder sqlBuffer = new StringBuilder();
+			sqlBuffer.append(sqlDefinition.getSql());
+
+			List<Map<String, Object>> datalist = getTablePageService().getListData(sqlBuffer.toString(), params);
+			if (datalist != null && !datalist.isEmpty()) {
+				items = new ArrayList<BaseItem>();
+				for (Map<String, Object> dataMap : datalist) {
+					BaseItem item = new BaseItem();
+					item.setName(ParamUtils.getString(dataMap, "name"));
+					item.setValue(ParamUtils.getString(dataMap, "value"));
+					items.add(item);
+				}
+			}
+		}
+
+		return items;
+	}
+
+	public SqlDefinitionService getSqlDefinitionService() {
+		if (sqlDefinitionService == null) {
+			sqlDefinitionService = ContextFactory.getBean("sqlDefinitionService");
+		}
+		return sqlDefinitionService;
 	}
 
 	public ITablePageService getTablePageService() {

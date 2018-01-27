@@ -149,9 +149,9 @@ public class QuartzUtils {
 					Class<Job> jobClass = (Class<Job>) clazz;
 
 					String jobName = "JOB_" + model.getId();
-					String jobGroup = "MX_JOB_GROUP";
+					String jobGroup = "JOB_GROUP";
 					String triggerName = "TRIGGER_" + model.getId();
-					String triggerGroup = "MX_TRIGGER_GROUP";
+					String triggerGroup = "TRIGGER_GROUP";
 
 					JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
 					TriggerKey triggerKey = TriggerKey.triggerKey(triggerName, triggerGroup);
@@ -293,9 +293,9 @@ public class QuartzUtils {
 					Class<Job> jobClass = (Class<Job>) clazz;
 
 					String jobName = "JOB2_" + model.getId();
-					String jobGroup = "MX_JOB_GROUP2";
+					String jobGroup = "JOB_GROUP2";
 					String triggerName = "TRIGGER2_" + model.getId();
-					String triggerGroup = "MX_TRIGGER_GROUP2";
+					String triggerGroup = "TRIGGER_GROUP2";
 
 					JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
 					TriggerKey triggerKey = TriggerKey.triggerKey(triggerName, triggerGroup);
@@ -415,9 +415,9 @@ public class QuartzUtils {
 			try {
 				if (getQuartzScheduler() != null) {
 					String jobName = "JOB_" + model.getId();
-					String jobGroup = "MX_JOB_GROUP";
+					String jobGroup = "JOB_GROUP";
 					String triggerName = "TRIGGER_" + model.getId();
-					String triggerGroup = "MX_TRIGGER_GROUP";
+					String triggerGroup = "TRIGGER_GROUP";
 
 					JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
 					if (getQuartzScheduler().checkExists(jobKey)) {

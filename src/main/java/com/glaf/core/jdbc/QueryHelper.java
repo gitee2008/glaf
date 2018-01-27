@@ -129,6 +129,65 @@ public class QueryHelper {
 	}
 
 	@SuppressWarnings("unchecked")
+	public List<ColumnDefinition> getColumnList(Connection conn, String sql, Map<String, Object> paramMap) {
+		if (!DBUtils.isLegalQuerySql(sql)) {
+			throw new RuntimeException(" SQL statement illegal ");
+		}
+		if (!DBUtils.isAllowedSql(sql)) {
+			throw new RuntimeException(" SQL statement illegal ");
+		}
+
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		ResultSetMetaData rsmd = null;
+		try {
+			List<Object> values = null;
+			if (paramMap != null) {
+				SqlExecutor sqlExecutor = DBUtils.replaceSQL(sql, paramMap);
+				sql = sqlExecutor.getSql();
+				values = (List<Object>) sqlExecutor.getParameter();
+			}
+
+			psmt = conn.prepareStatement(sql);
+
+			if (values != null && !values.isEmpty()) {
+				JdbcUtils.fillStatement(psmt, values);
+			}
+
+			rs = psmt.executeQuery();
+
+			rsmd = rs.getMetaData();
+
+			int count = rsmd.getColumnCount();
+			List<ColumnDefinition> columns = new ArrayList<ColumnDefinition>();
+
+			for (int index = 1; index <= count; index++) {
+				int sqlType = rsmd.getColumnType(index);
+				ColumnDefinition column = new ColumnDefinition();
+				column.setIndex(index);
+				column.setColumnName(rsmd.getColumnLabel(index));
+				column.setColumnLabel(rsmd.getColumnLabel(index));
+				column.setJavaType(FieldType.getJavaType(sqlType));
+				column.setPrecision(rsmd.getPrecision(index));
+				column.setScale(rsmd.getScale(index));
+				if (column.getScale() == 0 && sqlType == Types.NUMERIC) {
+					column.setJavaType("Long");
+				}
+				columns.add(column);
+			}
+
+			return columns;
+		} catch (Exception ex) {
+			logger.error(ex);
+			ex.printStackTrace();
+			throw new RuntimeException(ex);
+		} finally {
+			JdbcUtils.close(psmt);
+			JdbcUtils.close(rs);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	public List<ColumnDefinition> getColumns(Connection conn, String sql, Map<String, Object> paramMap) {
 		if (!DBUtils.isLegalQuerySql(sql)) {
 			throw new RuntimeException(" SQL statement illegal ");

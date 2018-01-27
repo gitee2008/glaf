@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,6 +34,8 @@ public class CaffeineCache implements com.glaf.core.cache.Cache {
 	protected static final Log logger = LogFactory.getLog(CaffeineCache.class);
 
 	protected static ConcurrentMap<String, Cache<Object, Object>> cacheConcurrentMap = new ConcurrentHashMap<String, Cache<Object, Object>>();
+
+	protected static AtomicBoolean running = new AtomicBoolean(false);
 
 	protected Cache<Object, Object> cache;
 
@@ -83,8 +86,17 @@ public class CaffeineCache implements com.glaf.core.cache.Cache {
 
 	public Cache<Object, Object> getCache() {
 		if (cache == null) {
-			cache = Caffeine.newBuilder().maximumSize(getCacheSize())
-					.expireAfterWrite(getExpireMinutes(), TimeUnit.MINUTES).build();
+			if (!running.get()) {
+				try {
+					running.set(true);
+					if (cache == null) {
+						cache = Caffeine.newBuilder().maximumSize(getCacheSize())
+								.expireAfterWrite(getExpireMinutes(), TimeUnit.MINUTES).build();
+					}
+				} finally {
+					running.set(false);
+				}
+			}
 		}
 		return cache;
 	}
@@ -92,9 +104,18 @@ public class CaffeineCache implements com.glaf.core.cache.Cache {
 	public Cache<Object, Object> getCache(String region) {
 		Cache<Object, Object> regionCache = cacheConcurrentMap.get(region);
 		if (regionCache == null) {
-			regionCache = Caffeine.newBuilder().maximumSize(getCacheSize())
-					.expireAfterWrite(getExpireMinutes(), TimeUnit.MINUTES).build();
-			cacheConcurrentMap.put(region, regionCache);
+			if (!running.get()) {
+				try {
+					running.set(true);
+					if (regionCache == null) {
+						regionCache = Caffeine.newBuilder().maximumSize(getCacheSize())
+								.expireAfterWrite(getExpireMinutes(), TimeUnit.MINUTES).build();
+						cacheConcurrentMap.put(region, regionCache);
+					}
+				} finally {
+					running.set(false);
+				}
+			}
 		}
 		return regionCache;
 	}

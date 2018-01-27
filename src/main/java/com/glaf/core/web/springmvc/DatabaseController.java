@@ -43,6 +43,7 @@ import com.glaf.core.identity.User;
 import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.security.*;
 import com.glaf.core.util.*;
+import com.glaf.core.util.security.RSAUtils;
 import com.glaf.core.domain.*;
 import com.glaf.core.factory.*;
 import com.glaf.core.query.*;
@@ -96,6 +97,24 @@ public class DatabaseController {
 				request.setAttribute("unselected", databases);
 			}
 			request.setAttribute("databases", databases);
+
+			StringBuffer bufferx = new StringBuffer();
+			StringBuffer buffery = new StringBuffer();
+
+			if (databases != null && databases.size() > 0) {
+				for (int j = 0; j < databases.size(); j++) {
+					Database d = (Database) databases.get(j);
+					if (selected != null && selected.contains(d.getId())) {
+						buffery.append("\n<option value=\"").append(d.getId()).append("\">").append(d.getTitle())
+								.append(" [").append(d.getMapping()).append("]").append("</option>");
+					} else {
+						bufferx.append("\n<option value=\"").append(d.getId()).append("\">").append(d.getTitle())
+								.append(" [").append(d.getMapping()).append("]").append("</option>");
+					}
+				}
+			}
+			request.setAttribute("bufferx", bufferx.toString());
+			request.setAttribute("buffery", buffery.toString());
 		}
 
 		String view = request.getParameter("view");
@@ -246,11 +265,11 @@ public class DatabaseController {
 
 				result.put("rows", rowsJSON);
 
-				for (Database repository : list) {
-					JSONObject rowJSON = repository.toJsonObject();
-					rowJSON.put("id", repository.getId());
-					rowJSON.put("rowId", repository.getId());
-					rowJSON.put("datamgrId", repository.getId());
+				for (Database database : list) {
+					JSONObject rowJSON = database.toJsonObject();
+					rowJSON.put("id", database.getId());
+					rowJSON.put("rowId", database.getId());
+					rowJSON.put("databaseId", database.getId());
 					rowJSON.put("startIndex", ++start);
 					rowJSON.remove("key");
 					rowJSON.remove("user");

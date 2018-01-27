@@ -134,7 +134,7 @@ public class HttpQueryUtils {
 		 * 将IP地址加入Cookie头中防止客户端篡改
 		 */
 		String ip = RequestUtils.getIPAddress(request);
-		String cookieKey = ip + "_mx_query_" + serviceKey;
+		String cookieKey = ip + "_query_" + serviceKey;
 		cookieKey = Hex.bytesToHex(cookieKey.getBytes());
 
 		String content = null;

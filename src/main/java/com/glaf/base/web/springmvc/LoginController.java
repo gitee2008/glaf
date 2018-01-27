@@ -41,7 +41,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.glaf.base.callback.LoginCallbackThread;
 import com.glaf.base.handler.LoginHandler;
 import com.glaf.base.handler.PasswordLoginHandler;
-import com.glaf.base.modules.sys.SysConstants;
 import com.glaf.base.modules.sys.model.IdentityToken;
 import com.glaf.base.modules.sys.model.SysUser;
 import com.glaf.base.modules.sys.service.IdentityTokenService;
@@ -58,7 +57,6 @@ import com.glaf.core.domain.SystemProperty;
 import com.glaf.core.identity.User;
 import com.glaf.core.security.IdentityFactory;
 import com.glaf.core.security.LoginContext;
-import com.glaf.core.security.RSAUtils;
 import com.glaf.core.util.ClassUtils;
 import com.glaf.core.util.Constants;
 import com.glaf.core.util.DateUtils;
@@ -67,6 +65,7 @@ import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.ResponseUtils;
 import com.glaf.core.util.StringTools;
 import com.glaf.core.util.UUID32;
+import com.glaf.core.util.security.RSAUtils;
 import com.glaf.core.web.callback.CallbackProperties;
 import com.glaf.core.web.callback.LoginCallback;
 
@@ -389,17 +388,17 @@ public class LoginController {
 		String actorId = RequestUtils.getActorId(request);
 		// 退出系统，清除session对象
 		if (request.getSession(false) != null) {
-			request.getSession().removeAttribute(SysConstants.LOGIN_USER);
+			request.getSession().removeAttribute(Constants.LOGIN_INFO);
 		}
 		try {
 			SystemProperty p = SystemConfig.getProperty("login_limit");
 			if (p != null && StringUtils.equals(p.getValue(), "true")) {
 				userOnlineService.logout(actorId);
 			}
-			String cacheKey = Constants.LOGIN_USER_CACHE + actorId;
-			CacheFactory.remove("loginContext", cacheKey);
-			cacheKey = Constants.USER_CACHE + actorId;
-			CacheFactory.remove("user", cacheKey);
+			String cacheKey = Constants.CACHE_LOGIN_CONTEXT_KEY + actorId;
+			CacheFactory.remove(Constants.CACHE_LOGIN_CONTEXT_REGION, cacheKey);
+			cacheKey = Constants.CACHE_USER_KEY + actorId;
+			CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 			com.glaf.shiro.ShiroSecurity.logout();
 			if (request.getSession(false) != null) {
 				request.getSession().invalidate();

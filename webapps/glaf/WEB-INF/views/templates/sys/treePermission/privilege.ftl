@@ -9,7 +9,7 @@
 	 var setting = {
 			async: {
 				enable: true,
-				url: "${contextPath}/sys/treePermission/treeJson?parentId=${parentId}&userId=${user.userId}",
+				url: "${contextPath}/sys/treePermission/treeJson?parentId=${parentId}&userId=${user.userId}&type=${type}",
 				dataFilter: filter
 			},
 			check: {
@@ -59,7 +59,7 @@
 		var params = jQuery("#iForm").formSerialize();
 		jQuery.ajax({
 				   type: "POST",
-				   url: '${contextPath}/sys/treePermission/saveTreePermission?userId=${user.userId}',
+				   url: '${contextPath}/sys/treePermission/saveTreePermission?userId=${user.userId}&type=${type}',
 				   dataType:  'json',
 				   data: params,
 				   error: function(data){
@@ -80,12 +80,12 @@
 </script>
 </head>
 
-<body style="margin:5px;"> 
+<body style="margin:2px;"> 
 <form id="iForm" name="iForm" method="post">
 <input type="hidden" id="nodeIds" name="nodeIds">
 <input type="hidden" id="privilege" name="privilege" value="${privilege}">
-<div class="toolbar-backgroud" style="height:40px"> 
-<span class="x_content_title">设置用户【${user.name}】的节点权限</span>
+<div class="toolbar-backgroud" style="height:42px"> 
+<img src="${contextPath}/static/images/window.png">&nbsp;<span class="x_content_title">设置用户【${user.name}】的节点权限</span>
 &nbsp;
 <input type="button" name="save" value="保存" class="btnGray" onclick="javascript:saveData();"> 
 &nbsp;

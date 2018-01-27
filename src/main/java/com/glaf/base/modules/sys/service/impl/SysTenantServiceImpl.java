@@ -46,6 +46,7 @@ import com.glaf.core.config.SystemConfig;
 import com.glaf.core.dao.EntityDAO;
 import com.glaf.core.id.IdGenerator;
 import com.glaf.core.security.Authentication;
+import com.glaf.core.util.Constants;
 import com.glaf.core.util.UUID32;
 
 @Service("sysTenantService")
@@ -95,9 +96,9 @@ public class SysTenantServiceImpl implements SysTenantService {
 		if (id == 0) {
 			return null;
 		}
-		String cacheKey = "sys_tenant_" + id;
+		String cacheKey = Constants.CACHE_TENANT_KEY + id;
 		if (SystemConfig.getBoolean("use_query_cache")) {
-			String text = CacheFactory.getString("sys_tenant", cacheKey);
+			String text = CacheFactory.getString(Constants.CACHE_TENANT_REGION, cacheKey);
 			if (StringUtils.isNotEmpty(text)) {
 				try {
 					com.alibaba.fastjson.JSONObject json = JSON.parseObject(text);
@@ -112,7 +113,7 @@ public class SysTenantServiceImpl implements SysTenantService {
 
 		SysTenant sysTenant = sysTenantMapper.getSysTenantById(id);
 		if (sysTenant != null) {
-			CacheFactory.put("sys_tenant", cacheKey, sysTenant.toJsonObject().toJSONString());
+			CacheFactory.put(Constants.CACHE_TENANT_REGION, cacheKey, sysTenant.toJsonObject().toJSONString());
 		}
 		return sysTenant;
 	}
@@ -123,9 +124,9 @@ public class SysTenantServiceImpl implements SysTenantService {
 	 * @return
 	 */
 	public SysTenant getSysTenantByName(String name) {
-		String cacheKey = "sys_tenant_" + name;
+		String cacheKey = Constants.CACHE_TENANT_KEY + name;
 		if (SystemConfig.getBoolean("use_query_cache")) {
-			String text = CacheFactory.getString("sys_tenant", cacheKey);
+			String text = CacheFactory.getString(Constants.CACHE_TENANT_REGION, cacheKey);
 			if (StringUtils.isNotEmpty(text)) {
 				try {
 					com.alibaba.fastjson.JSONObject json = JSON.parseObject(text);
@@ -143,15 +144,15 @@ public class SysTenantServiceImpl implements SysTenantService {
 		List<SysTenant> list = sysTenantMapper.getSysTenants(query);
 		if (list != null && !list.isEmpty()) {
 			SysTenant sysTenant = list.get(0);
-			CacheFactory.put("sys_tenant", cacheKey, sysTenant.toJsonObject().toJSONString());
+			CacheFactory.put(Constants.CACHE_TENANT_REGION, cacheKey, sysTenant.toJsonObject().toJSONString());
 		}
 		return null;
 	}
 
 	public SysTenant getSysTenantByTenantId(String tenantId) {
-		String cacheKey = "sys_tenantx_" + tenantId;
+		String cacheKey = Constants.CACHE_TENANT_KEY + tenantId;
 		if (SystemConfig.getBoolean("use_query_cache")) {
-			String text = CacheFactory.getString("sys_tenant", cacheKey);
+			String text = CacheFactory.getString(Constants.CACHE_TENANT_REGION, cacheKey);
 			if (StringUtils.isNotEmpty(text)) {
 				try {
 					com.alibaba.fastjson.JSONObject json = JSON.parseObject(text);
@@ -165,7 +166,7 @@ public class SysTenantServiceImpl implements SysTenantService {
 		}
 		SysTenant sysTenant = sysTenantMapper.getSysTenantByTenantId(tenantId);
 		if (sysTenant != null) {
-			CacheFactory.put("sys_tenant", cacheKey, sysTenant.toJsonObject().toJSONString());
+			CacheFactory.put(Constants.CACHE_TENANT_REGION, cacheKey, sysTenant.toJsonObject().toJSONString());
 		}
 		return sysTenant;
 	}
@@ -205,12 +206,12 @@ public class SysTenantServiceImpl implements SysTenantService {
 			sysTenant.setTelephone(user.getMobile());
 			sysTenantMapper.insertSysTenant(sysTenant);
 		} else {
-			String cacheKey = "sys_tenant_" + sysTenant.getId();
-			CacheFactory.remove("sys_tenant", cacheKey);
-			cacheKey = "sys_tenant_" + sysTenant.getName();
-			CacheFactory.remove("sys_tenant", cacheKey);
-			cacheKey = "sys_tenantx_" + sysTenant.getTenantId();
-			CacheFactory.remove("sys_tenant", cacheKey);
+			String cacheKey = Constants.CACHE_TENANT_KEY + sysTenant.getId();
+			CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
+			cacheKey = Constants.CACHE_TENANT_KEY + sysTenant.getName();
+			CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
+			cacheKey = Constants.CACHE_TENANT_KEY + sysTenant.getTenantId();
+			CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
 
 			sysTenantMapper.updateSysTenant(sysTenant);
 		}
@@ -254,12 +255,12 @@ public class SysTenantServiceImpl implements SysTenantService {
 			sysTenantMapper.insertSysTenant(sysTenant);
 		} else {
 
-			String cacheKey = "sys_tenant_" + sysTenant.getId();
-			CacheFactory.remove("sys_tenant", cacheKey);
-			cacheKey = "sys_tenant_" + sysTenant.getName();
-			CacheFactory.remove("sys_tenant", cacheKey);
-			cacheKey = "sys_tenantx_" + sysTenant.getTenantId();
-			CacheFactory.remove("sys_tenant", cacheKey);
+			String cacheKey = Constants.CACHE_TENANT_KEY + sysTenant.getId();
+			CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
+			cacheKey = Constants.CACHE_TENANT_KEY + sysTenant.getName();
+			CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
+			cacheKey = Constants.CACHE_TENANT_KEY + sysTenant.getTenantId();
+			CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
 
 			sysTenantMapper.updateSysTenant(sysTenant);
 		}

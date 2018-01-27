@@ -18,7 +18,7 @@ package com.glaf.core.util.threads;
 
 
 /**
- * A custom {@link RuntimeException} thrown by the {@link ThreadPoolExecutor}
+ * A custom {@link RuntimeException} thrown by the {@link MyThreadPoolExecutor}
  * to signal that the thread should be disposed of.
  */
 public class StopPooledThreadException extends RuntimeException {

@@ -30,13 +30,7 @@ public interface SysRoleMapper {
 
 	void deleteSysRoleById(String id);
 
-	void deleteSysRoleByStringId(String id);
-
-	void deleteSysRoles(SysRoleQuery query);
-
 	SysRole getSysRoleById(String id);
-
-	SysRole getSysRoleByStringId(String id);
 
 	int getSysRoleCount(SysRoleQuery query);
 

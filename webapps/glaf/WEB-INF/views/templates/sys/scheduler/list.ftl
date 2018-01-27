@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>调度管理</title>
-<#include "/inc/init_easyui_import.ftl"/>
+<#include "/inc/init_easyui_layer3_import.ftl"/>
 <script type="text/javascript">
 
    jQuery(function(){
@@ -113,7 +113,18 @@
 	  }
 
     function editRow(){
-		 location.href = '${contextPath}/sys/scheduler/edit?taskType=${taskType}';
+		 var link = '${contextPath}/sys/scheduler/edit?taskType=${taskType}';
+		 layer.open({
+			  type: 2,
+			  maxmin: true,
+			  shadeClose: true,
+			  title: "编辑信息",
+			  area: ['820px', (jQuery(window).height() - 50) +'px'],
+			  shade: 0.8,
+			  fixed: false, //不固定
+			  shadeClose: true,
+			  content: [link, 'no']
+			});
 	}
 	 
 
@@ -159,7 +170,18 @@
         var rows = jQuery('#mydatagrid').datagrid('getSelections');
 		if(rows.length ==1){
 		   var taskId = rows[0].taskId;
-		   location.href ='${contextPath}/sys/scheduler/edit?taskType=${taskType}&id='+taskId;
+		   var link ='${contextPath}/sys/scheduler/edit?taskType=${taskType}&id='+taskId;
+		   layer.open({
+			  type: 2,
+			  maxmin: true,
+			  shadeClose: true,
+			  title: "编辑信息",
+			  area: ['820px', (jQuery(window).height() - 50) +'px'],
+			  shade: 0.8,
+			  fixed: false, //不固定
+			  shadeClose: true,
+			  content: [link, 'no']
+			});
 		} else {
 		    alert("请选择其中一条记录。");
 		}
@@ -373,74 +395,74 @@
 
 <div style="margin:0;"></div>  
 <div class="easyui-layout" data-options="fit:true">  
-   <div data-options="region:'north',split:true,border:true" style="height:75px"> 
-    <div class="toolbar-backgroud"  > 
+   <div data-options="region:'north', split:false, border:true" style="height:75px" class="toolbar-backgroud"> 
+    <div style="margin:4px;"> 
       <form id="iForm" name="iForm" method="post" action="">  
-      <table>
-		   <tr>
-		   <td colspan="10">
-            <img src="${contextPath}/static/images/window.png">
-	        &nbsp;<span class="x_content_title">调度列表</span>
-		    &nbsp;
-			   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-add'"
-				  onclick="javascript:editRow();">新增</a> 
+		  <table>
+			   <tr>
+			   <td colspan="10">
+				<img src="${contextPath}/static/images/window.png">
+				&nbsp;<span class="x_content_title">调度列表</span>
+				&nbsp;
+				   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-add'"
+					  onclick="javascript:editRow();">新增</a> 
 
-			   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-edit'"
-				  onclick="javascript:updateRow();">修改</a>
+				   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-edit'"
+					  onclick="javascript:updateRow();">修改</a>
 
-			   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-remove'"
-				  onclick="javascript:deleteRows();">删除</a>
+				   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-remove'"
+					  onclick="javascript:deleteRows();">删除</a>
 
-			   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-list'"
-				  onclick="javascript:showLogs();">查看运行历史</a>
+				   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-list'"
+					  onclick="javascript:showLogs();">查看运行历史</a>
 
-			   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-ok'"
-				  onclick="javascript:enableRows();">启用</a> 
+				   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-ok'"
+					  onclick="javascript:enableRows();">启用</a> 
 
-			   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-no'"
-				  onclick="javascript:disableRows();">禁用</a> 
+				   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-no'"
+					  onclick="javascript:disableRows();">禁用</a> 
 
-			   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-run'"
-				  onclick="javascript:runIt();">运行</a> 
+				   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-run'"
+					  onclick="javascript:runIt();">运行</a> 
 
-			   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-sys'"
-				  onclick="javascript:restart();">重启</a> 
+				   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-sys'"
+					  onclick="javascript:restart();">重启</a> 
 
-			   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-stop'"
-				  onclick="javascript:stop();">停止</a>
+				   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-stop'"
+					  onclick="javascript:stop();">停止</a>
 
-			</td>
-			</tr>
-			<tr>
-		    <td>&nbsp;&nbsp;任务名&nbsp;</td>
-			<td>
-			  <input type="text" id="taskNameLike" name="taskNameLike" class="x-searchtext" size="50" 
-			         style="width:220px">
-			</td>
-			<td>状态&nbsp;</td>
-			<td>
-			 <select id="locked" name="locked">
-			    <option value=""></option>
-				<option value="0">启用</option>
-				<option value="1">禁用</option>
-			 </select>
-			</td>
-			<td>运行状态&nbsp;</td>
-			<td>
-			 <select id="runStatus" name="runStatus">
-			    <option value=""></option>
-				<option value="0">未运行</option>
-				<option value="1">运行中</option>
-				<option value="2">运行成功</option>
-				<option value="3">运行失败</option>
-			 </select>
-			</td>
-			<td>
-			  <input type="button" value="查找" class="btnGrayMini" onclick="javascript:search();">
-			</td>
-		   </tr>
-		</table>
-		<input type="hidden" id="ids" name="ids">
+				</td>
+				</tr>
+				<tr>
+				<td>&nbsp;&nbsp;任务名&nbsp;</td>
+				<td>
+				  <input type="text" id="taskNameLike" name="taskNameLike" class="x-searchtext" size="50" 
+						 style="width:220px">
+				</td>
+				<td>状态&nbsp;</td>
+				<td>
+				 <select id="locked" name="locked">
+					<option value=""></option>
+					<option value="0">启用</option>
+					<option value="1">禁用</option>
+				 </select>
+				</td>
+				<td>运行状态&nbsp;</td>
+				<td>
+				 <select id="runStatus" name="runStatus">
+					<option value=""></option>
+					<option value="0">未运行</option>
+					<option value="1">运行中</option>
+					<option value="2">运行成功</option>
+					<option value="3">运行失败</option>
+				 </select>
+				</td>
+				<td>
+				  <input type="button" value="查找" class="btnGrayMini" onclick="javascript:search();">
+				</td>
+			   </tr>
+			</table>
+		    <input type="hidden" id="ids" name="ids">
        </form>
    </div> 
   </div> 

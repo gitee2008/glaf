@@ -37,6 +37,8 @@ public interface TableColumnMapper {
 	TableColumn getTableColumnById(String id);
 
 	int getTableColumnCount(TableColumnQuery query);
+	
+	List<TableColumn> getTableColumns(TableColumnQuery query);
 
 	List<TableColumn> getTableColumnsByTableId(String tableId);
 

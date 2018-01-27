@@ -31,8 +31,6 @@ public interface User extends java.io.Serializable {
 
 	String getActorId();
 
-	String getAdminFlag();
-
 	String getFax();
 
 	long getId();
@@ -72,8 +70,6 @@ public interface User extends java.io.Serializable {
 	void setAccountType(int accountType);
 
 	void setActorId(String actorId);
-
-	void setAdminFlag(String adminFlag);
 
 	void setCreateDate(Date createDate);
 

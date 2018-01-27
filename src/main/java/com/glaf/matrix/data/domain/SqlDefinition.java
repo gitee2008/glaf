@@ -89,6 +89,12 @@ public class SqlDefinition implements java.lang.Comparable<SqlDefinition>, Seria
 	@Column(name = "CACHEFLAG_", length = 1)
 	protected String cacheFlag;
 
+	/**
+	 * 是否数据项
+	 */
+	@Column(name = "DATAITEMFLAG_", length = 1)
+	protected String dataItemFlag;
+
 	@Column(name = "FETCHFLAG_", length = 1)
 	protected String fetchFlag;
 
@@ -249,6 +255,10 @@ public class SqlDefinition implements java.lang.Comparable<SqlDefinition>, Seria
 		return "";
 	}
 
+	public String getDataItemFlag() {
+		return dataItemFlag;
+	}
+
 	public String getDeleteFetch() {
 		return deleteFetch;
 	}
@@ -394,6 +404,10 @@ public class SqlDefinition implements java.lang.Comparable<SqlDefinition>, Seria
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public void setDataItemFlag(String dataItemFlag) {
+		this.dataItemFlag = dataItemFlag;
 	}
 
 	public void setDeleteFetch(String deleteFetch) {

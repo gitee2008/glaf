@@ -19,7 +19,8 @@
 package com.glaf.core.config;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.lang3.StringUtils;
@@ -27,8 +28,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+
 import com.glaf.core.context.ContextFactory;
 import com.glaf.core.domain.SystemProperty;
 import com.glaf.core.domain.util.SystemPropertyJsonFactory;
@@ -40,11 +40,9 @@ import com.glaf.core.util.StringTools;
 public class SystemConfig {
 	protected static final Log logger = LogFactory.getLog(SystemConfig.class);
 
-	protected static Cache<String, SystemProperty> concurrentMap = CacheBuilder.newBuilder().maximumSize(20000)
-			.expireAfterWrite(5, TimeUnit.MINUTES).expireAfterAccess(5, TimeUnit.MINUTES).build();
+	protected static ConcurrentMap<String, SystemProperty> concurrentMap = new ConcurrentHashMap<String, SystemProperty>();
 
-	protected static Cache<String, Long> concurrentTimeMap = CacheBuilder.newBuilder().maximumSize(20000)
-			.expireAfterWrite(5, TimeUnit.MINUTES).expireAfterAccess(5, TimeUnit.MINUTES).build();
+	protected static ConcurrentMap<String, Long> concurrentTimeMap = new ConcurrentHashMap<String, Long>();
 
 	protected static AtomicBoolean loading = new AtomicBoolean(false);
 
@@ -94,12 +92,12 @@ public class SystemConfig {
 
 	public static boolean getBoolean(String key, boolean defaultValue) {
 		boolean ret = defaultValue;
-		SystemProperty property = concurrentMap.getIfPresent(key);
+		SystemProperty property = concurrentMap.get(key);
 		if (property == null) {
 			/**
 			 * 判断是否需要从数据库获取配置
 			 */
-			Long ts = concurrentTimeMap.getIfPresent(key);
+			Long ts = concurrentTimeMap.get(key);
 			if (ts == null || ((System.currentTimeMillis() - ts.longValue()) > DateUtils.MINUTE * 5)) {
 				PropertyHelper propertyHelper = new PropertyHelper();
 				property = propertyHelper.getSystemPropertyByKey(key);
@@ -320,12 +318,12 @@ public class SystemConfig {
 		if (concurrentMap.size() == 0) {
 			reload();
 		}
-		property = concurrentMap.getIfPresent(key);
+		property = concurrentMap.get(key);
 		if (property == null) {
 			/**
 			 * 判断是否需要从数据库获取配置
 			 */
-			Long ts = concurrentTimeMap.getIfPresent(key);
+			Long ts = concurrentTimeMap.get(key);
 			if (ts == null || ((System.currentTimeMillis() - ts.longValue()) > DateUtils.MINUTE * 5)) {
 				PropertyHelper propertyHelper = new PropertyHelper();
 				property = propertyHelper.getSystemPropertyById(key);
@@ -412,12 +410,12 @@ public class SystemConfig {
 
 	public static String getStringValue(String key, String defaultValue) {
 		String ret = defaultValue;
-		SystemProperty property = concurrentMap.getIfPresent(key);
+		SystemProperty property = concurrentMap.get(key);
 		if (property == null) {
 			/**
 			 * 判断是否需要从数据库获取配置
 			 */
-			Long ts = concurrentTimeMap.getIfPresent(key);
+			Long ts = concurrentTimeMap.get(key);
 			if (ts == null || ((System.currentTimeMillis() - ts.longValue()) > DateUtils.MINUTE * 5)) {
 				PropertyHelper propertyHelper = new PropertyHelper();
 				property = propertyHelper.getSystemPropertyByKey(key);
@@ -517,7 +515,8 @@ public class SystemConfig {
 			try {
 				loading.set(true);
 				logger.info("start reload system config...");
-				concurrentMap.cleanUp();
+				concurrentMap.clear();
+				concurrentTimeMap.clear();
 				ISystemPropertyService systemPropertyService = ContextFactory.getBean("systemPropertyService");
 				List<SystemProperty> list = systemPropertyService.getAllSystemProperties();
 				if (list != null && !list.isEmpty()) {

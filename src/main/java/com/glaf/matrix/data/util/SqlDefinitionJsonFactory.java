@@ -77,6 +77,9 @@ public class SqlDefinitionJsonFactory {
 		if (jsonObject.containsKey("cacheFlag")) {
 			model.setCacheFlag(jsonObject.getString("cacheFlag"));
 		}
+		if (jsonObject.containsKey("dataItemFlag")) {
+			model.setDataItemFlag(jsonObject.getString("dataItemFlag"));
+		}
 		if (jsonObject.containsKey("fetchFlag")) {
 			model.setFetchFlag(jsonObject.getString("fetchFlag"));
 		}
@@ -178,6 +181,9 @@ public class SqlDefinitionJsonFactory {
 		if (model.getCacheFlag() != null) {
 			jsonObject.put("cacheFlag", model.getCacheFlag());
 		}
+		if (model.getDataItemFlag() != null) {
+			jsonObject.put("dataItemFlag", model.getDataItemFlag());
+		} 
 		if (model.getFetchFlag() != null) {
 			jsonObject.put("fetchFlag", model.getFetchFlag());
 		}
@@ -275,7 +281,9 @@ public class SqlDefinitionJsonFactory {
 		if (model.getCacheFlag() != null) {
 			jsonObject.put("cacheFlag", model.getCacheFlag());
 		}
-
+		if (model.getDataItemFlag() != null) {
+			jsonObject.put("dataItemFlag", model.getDataItemFlag());
+		} 
 		if (model.getFetchFlag() != null) {
 			jsonObject.put("fetchFlag", model.getFetchFlag());
 		}

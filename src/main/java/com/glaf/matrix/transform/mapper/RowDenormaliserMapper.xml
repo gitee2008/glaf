@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.transform.mapper.RowDenormaliserMapper">
+
+	<resultMap id="rowDenormaliserResultMap" type="com.glaf.matrix.transform.domain.RowDenormaliser">
+		<id property="id" column="ID_" jdbcType="VARCHAR" />
+		<result property="title" column="TITLE_" jdbcType="VARCHAR" />
+		<result property="databaseIds" column="DATABASEIDS_" jdbcType="VARCHAR" />
+		<result property="sourceTableName" column="SOURCETABLENAME_"
+			jdbcType="VARCHAR" />
+		<result property="aggregateColumns" column="AGGREGATECOLUMNS_"
+			jdbcType="VARCHAR" />
+		<result property="primaryKey" column="PRIMARYKEY_" jdbcType="VARCHAR" />
+		<result property="transformColumn" column="TRANSFORMCOLUMN_"
+			jdbcType="VARCHAR" />
+		<result property="syncColumns" column="SYNCCOLUMNS_" jdbcType="VARCHAR" />
+		<result property="dateDimensionColumn" column="DATEDIMENSIONCOLUMN_"
+			jdbcType="VARCHAR" />
+		<result property="incrementColumn" column="INCREMENTCOLUMN_"
+			jdbcType="VARCHAR" />
+		<result property="sqlCriteria" column="SQLCRITERIA_" jdbcType="VARCHAR" />
+		<result property="delimiter" column="DELIMITER_" jdbcType="VARCHAR" />
+		<result property="sort" column="SORT_" jdbcType="INTEGER" />
+		<result property="transformStatus" column="TRANSFORMSTATUS_"
+			jdbcType="INTEGER" />
+		<result property="transformTime" column="TRANSFORMTIME_"
+			jdbcType="TIMESTAMP" />
+		<result property="transformFlag" column="TRANSFORMFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="targetTableName" column="TARGETTABLENAME_"
+			jdbcType="VARCHAR" />
+		<result property="targetColumn" column="TARGETCOLUMN_"
+			jdbcType="VARCHAR" />
+		<result property="targetColumnType" column="TARGETCOLUMNTYPE_"
+			jdbcType="VARCHAR" />
+		<result property="scheduleFlag" column="SCHEDULEFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="deleteFetch" column="DELETEFETCH_" jdbcType="VARCHAR" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY_" jdbcType="VARCHAR" />
+		<result property="updateTime" column="UPDATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertRowDenormaliser" parameterType="com.glaf.matrix.transform.domain.RowDenormaliser">
+		insert into SYS_ROW_DENORMALISER
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="title != null">
+				,TITLE_
+			</if>
+			<if test="databaseIds != null">
+				,DATABASEIDS_
+			</if>
+			<if test="sourceTableName != null">
+				,SOURCETABLENAME_
+			</if>
+			<if test="aggregateColumns != null">
+				,AGGREGATECOLUMNS_
+			</if>
+			<if test="primaryKey != null">
+				,PRIMARYKEY_
+			</if>
+			<if test="transformColumn != null">
+				,TRANSFORMCOLUMN_
+			</if>
+			<if test="syncColumns != null">
+				,SYNCCOLUMNS_
+			</if>
+			<if test="dateDimensionColumn != null">
+				,DATEDIMENSIONCOLUMN_
+			</if>
+			<if test="incrementColumn != null">
+				,INCREMENTCOLUMN_
+			</if>
+			<if test="sqlCriteria != null">
+				,SQLCRITERIA_
+			</if>
+			<if test="delimiter != null">
+				,DELIMITER_
+			</if>
+			<if test="sort != null">
+				,SORT_
+			</if>
+			<if test="transformStatus != null">
+				,TRANSFORMSTATUS_
+			</if>
+			<if test="transformTime != null">
+				,TRANSFORMTIME_
+			</if>
+			<if test="transformFlag != null">
+				,TRANSFORMFLAG_
+			</if>
+			<if test="targetTableName != null">
+				,TARGETTABLENAME_
+			</if>
+			<if test="targetColumn != null">
+				,TARGETCOLUMN_
+			</if>
+			<if test="targetColumnType != null">
+				,TARGETCOLUMNTYPE_
+			</if>
+			<if test="scheduleFlag != null">
+				,SCHEDULEFLAG_
+			</if>
+			<if test="deleteFetch != null">
+				,DELETEFETCH_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+			<if test="updateBy != null">
+				,UPDATEBY_
+			</if>
+			<if test="updateTime != null">
+				,UPDATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR}
+
+			<if test="title != null">
+				,#{title, jdbcType=VARCHAR}
+			</if>
+			<if test="databaseIds != null">
+				,#{databaseIds, jdbcType=VARCHAR}
+			</if>
+			<if test="sourceTableName != null">
+				,#{sourceTableName, jdbcType=VARCHAR}
+			</if>
+			<if test="aggregateColumns != null">
+				,#{aggregateColumns, jdbcType=VARCHAR}
+			</if>
+			<if test="primaryKey != null">
+				,#{primaryKey, jdbcType=VARCHAR}
+			</if>
+			<if test="transformColumn != null">
+				,#{transformColumn, jdbcType=VARCHAR}
+			</if>
+			<if test="syncColumns != null">
+				,#{syncColumns, jdbcType=VARCHAR}
+			</if>
+			<if test="dateDimensionColumn != null">
+				,#{dateDimensionColumn, jdbcType=VARCHAR}
+			</if>
+			<if test="incrementColumn != null">
+				,#{incrementColumn, jdbcType=VARCHAR}
+			</if>
+			<if test="sqlCriteria != null">
+				,#{sqlCriteria, jdbcType=VARCHAR}
+			</if>
+			<if test="delimiter != null">
+				,#{delimiter, jdbcType=VARCHAR}
+			</if>
+			<if test="sort != null">
+				,#{sort, jdbcType=INTEGER}
+			</if>
+			<if test="transformStatus != null">
+				,#{transformStatus, jdbcType=INTEGER}
+			</if>
+			<if test="transformTime != null">
+				,#{transformTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="transformFlag != null">
+				,#{transformFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="targetTableName != null">
+				,#{targetTableName, jdbcType=VARCHAR}
+			</if>
+			<if test="targetColumn != null">
+				,#{targetColumn, jdbcType=VARCHAR}
+			</if>
+			<if test="targetColumnType != null">
+				,#{targetColumnType, jdbcType=VARCHAR}
+			</if>
+			<if test="scheduleFlag != null">
+				,#{scheduleFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="deleteFetch != null">
+				,#{deleteFetch, jdbcType=VARCHAR}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy != null">
+				,#{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				,#{updateTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertRowDenormaliser" parameterType="java.util.List">
+		insert into SYS_ROW_DENORMALISER (
+		ID_
+		,TITLE_
+		,DATABASEIDS_
+		,SOURCETABLENAME_
+		,AGGREGATECOLUMNS_
+		,PRIMARYKEY_
+		,TRANSFORMCOLUMN_
+		,SYNCCOLUMNS_
+		,DATEDIMENSIONCOLUMN_
+		,INCREMENTCOLUMN_
+		,SQLCRITERIA_
+		,DELIMITER_
+		,SORT_
+		,TRANSFORMSTATUS_
+		,TRANSFORMTIME_
+		,TRANSFORMFLAG_
+		,TARGETTABLENAME_
+		,TARGETCOLUMN_
+		,TARGETCOLUMNTYPE_
+		,SCHEDULEFLAG_
+		,DELETEFETCH_
+		,LOCKED_
+		,CREATEBY_
+		,CREATETIME_
+		,UPDATEBY_
+		,UPDATETIME_
+		) values
+		<foreach collection="list" item="rowDenormaliser" index="index"
+			separator=",">
+			(
+			#{rowDenormaliser.id, jdbcType=VARCHAR}
+			,#{rowDenormaliser.title, jdbcType=VARCHAR}
+			,#{rowDenormaliser.databaseIds, jdbcType=VARCHAR}
+			,#{rowDenormaliser.sourceTableName, jdbcType=VARCHAR}
+			,#{rowDenormaliser.aggregateColumns, jdbcType=VARCHAR}
+			,#{rowDenormaliser.primaryKey, jdbcType=VARCHAR}
+			,#{rowDenormaliser.transformColumn, jdbcType=VARCHAR}
+			,#{rowDenormaliser.syncColumns, jdbcType=VARCHAR}
+			,#{rowDenormaliser.dateDimensionColumn, jdbcType=VARCHAR}
+			,#{rowDenormaliser.incrementColumn, jdbcType=VARCHAR}
+			,#{rowDenormaliser.sqlCriteria, jdbcType=VARCHAR}
+			,#{rowDenormaliser.delimiter, jdbcType=VARCHAR}
+			,#{rowDenormaliser.sort, jdbcType=INTEGER}
+			,#{rowDenormaliser.transformStatus, jdbcType=INTEGER}
+			,#{rowDenormaliser.transformTime, jdbcType=TIMESTAMP}
+			,#{rowDenormaliser.transformFlag, jdbcType=VARCHAR}
+			,#{rowDenormaliser.targetTableName, jdbcType=VARCHAR}
+			,#{rowDenormaliser.targetColumn, jdbcType=VARCHAR}
+			,#{rowDenormaliser.targetColumnType, jdbcType=VARCHAR}
+			,#{rowDenormaliser.scheduleFlag, jdbcType=VARCHAR}
+			,#{rowDenormaliser.deleteFetch, jdbcType=VARCHAR}
+			,#{rowDenormaliser.locked, jdbcType=INTEGER}
+			,#{rowDenormaliser.createBy, jdbcType=VARCHAR}
+			,#{rowDenormaliser.createTime, jdbcType=TIMESTAMP}
+			,#{rowDenormaliser.updateBy, jdbcType=VARCHAR}
+			,#{rowDenormaliser.updateTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertRowDenormaliser_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="rowDenormaliser" index="index">
+			insert into SYS_ROW_DENORMALISER (
+			ID_
+			,TITLE_
+			,DATABASEIDS_
+			,SOURCETABLENAME_
+			,AGGREGATECOLUMNS_
+			,PRIMARYKEY_
+			,TRANSFORMCOLUMN_
+			,SYNCCOLUMNS_
+			,DATEDIMENSIONCOLUMN_
+			,INCREMENTCOLUMN_
+			,SQLCRITERIA_
+			,DELIMITER_
+			,SORT_
+			,TRANSFORMSTATUS_
+			,TRANSFORMTIME_
+			,TRANSFORMFLAG_
+			,TARGETTABLENAME_
+			,TARGETCOLUMN_
+			,TARGETCOLUMNTYPE_
+			,SCHEDULEFLAG_
+			,DELETEFETCH_
+			,LOCKED_
+			,CREATEBY_
+			,CREATETIME_
+			,UPDATEBY_
+			,UPDATETIME_
+			) values (
+			#{rowDenormaliser.id,
+			jdbcType=VARCHAR}
+			,#{rowDenormaliser.title,
+			jdbcType=VARCHAR}
+			,#{rowDenormaliser.databaseIds, jdbcType=VARCHAR}
+			,#{rowDenormaliser.sourceTableName, jdbcType=VARCHAR}
+			,#{rowDenormaliser.aggregateColumns, jdbcType=VARCHAR}
+			,#{rowDenormaliser.primaryKey, jdbcType=VARCHAR}
+			,#{rowDenormaliser.transformColumn, jdbcType=VARCHAR}
+			,#{rowDenormaliser.syncColumns, jdbcType=VARCHAR}
+			,#{rowDenormaliser.dateDimensionColumn, jdbcType=VARCHAR}
+			,#{rowDenormaliser.incrementColumn, jdbcType=VARCHAR}
+			,#{rowDenormaliser.sqlCriteria, jdbcType=VARCHAR}
+			,#{rowDenormaliser.delimiter, jdbcType=VARCHAR}
+			,#{rowDenormaliser.sort, jdbcType=INTEGER}
+			,#{rowDenormaliser.transformStatus, jdbcType=INTEGER}
+			,#{rowDenormaliser.transformTime, jdbcType=TIMESTAMP}
+			,#{rowDenormaliser.transformFlag, jdbcType=VARCHAR}
+			,#{rowDenormaliser.targetTableName, jdbcType=VARCHAR}
+			,#{rowDenormaliser.targetColumn, jdbcType=VARCHAR}
+			,#{rowDenormaliser.targetColumnType, jdbcType=VARCHAR}
+			,#{rowDenormaliser.scheduleFlag, jdbcType=VARCHAR}
+			,#{rowDenormaliser.deleteFetch, jdbcType=VARCHAR}
+			,#{rowDenormaliser.locked, jdbcType=INTEGER}
+			,#{rowDenormaliser.createBy, jdbcType=VARCHAR}
+			,#{rowDenormaliser.createTime, jdbcType=TIMESTAMP}
+			,#{rowDenormaliser.updateBy, jdbcType=VARCHAR}
+			,#{rowDenormaliser.updateTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateRowDenormaliser" parameterType="com.glaf.matrix.transform.domain.RowDenormaliser">
+		update SYS_ROW_DENORMALISER
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="title != null">
+				TITLE_ = #{title, jdbcType=VARCHAR},
+			</if>
+			<if test="databaseIds != null">
+				DATABASEIDS_ = #{databaseIds, jdbcType=VARCHAR},
+			</if>
+			<if test="sourceTableName != null">
+				SOURCETABLENAME_ = #{sourceTableName, jdbcType=VARCHAR},
+			</if>
+			<if test="aggregateColumns != null">
+				AGGREGATECOLUMNS_ = #{aggregateColumns,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="primaryKey != null">
+				PRIMARYKEY_ = #{primaryKey, jdbcType=VARCHAR},
+			</if>
+			<if test="transformColumn != null">
+				TRANSFORMCOLUMN_ = #{transformColumn, jdbcType=VARCHAR},
+			</if>
+			<if test="syncColumns != null">
+				SYNCCOLUMNS_ = #{syncColumns, jdbcType=VARCHAR},
+			</if>
+			<if test="dateDimensionColumn != null">
+				DATEDIMENSIONCOLUMN_ = #{dateDimensionColumn,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="incrementColumn != null">
+				INCREMENTCOLUMN_ = #{incrementColumn, jdbcType=VARCHAR},
+			</if>
+			<if test="sqlCriteria != null">
+				SQLCRITERIA_ = #{sqlCriteria, jdbcType=VARCHAR},
+			</if>
+			<if test="delimiter != null">
+				DELIMITER_ = #{delimiter, jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null">
+				SORT_ = #{sort, jdbcType=INTEGER},
+			</if>
+			<if test="transformStatus != null">
+				TRANSFORMSTATUS_ = #{transformStatus, jdbcType=INTEGER},
+			</if>
+			<if test="transformTime != null">
+				TRANSFORMTIME_ = #{transformTime, jdbcType=TIMESTAMP},
+			</if>
+			<if test="transformFlag != null">
+				TRANSFORMFLAG_ = #{transformFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="targetTableName != null">
+				TARGETTABLENAME_ = #{targetTableName, jdbcType=VARCHAR},
+			</if>
+			<if test="targetColumn != null">
+				TARGETCOLUMN_ = #{targetColumn, jdbcType=VARCHAR},
+			</if>
+			<if test="targetColumnType != null">
+				TARGETCOLUMNTYPE_ = #{targetColumnType,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="scheduleFlag != null">
+				SCHEDULEFLAG_ = #{scheduleFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="deleteFetch != null">
+				DELETEFETCH_ = #{deleteFetch, jdbcType=VARCHAR},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY_ = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATETIME_ = #{updateTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<delete id="deleteRowDenormaliserById" parameterType="string">
+		delete from
+		SYS_ROW_DENORMALISER
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getRowDenormaliserById" parameterType="string"
+		resultMap="rowDenormaliserResultMap">
+		select * from SYS_ROW_DENORMALISER where ID_ = #{id}
+	</select>
+
+
+	<select id="getRowDenormalisers" parameterType="com.glaf.matrix.transform.query.RowDenormaliserQuery"
+		resultMap="rowDenormaliserResultMap">
+		select distinct E.*
+		<include refid="selectRowDenormalisersSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.SOURCETABLENAME_ asc, E.CREATETIME_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getRowDenormaliserCount" parameterType="com.glaf.matrix.transform.query.RowDenormaliserQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectRowDenormalisersSql" />
+	</select>
+
+
+	<sql id="selectRowDenormalisersSql">
+
+		from SYS_ROW_DENORMALISER E
+
+		<where>
+			1 = 1
+
+			<if test="titleLike != null and titleLike != '' ">
+				and E.TITLE_ like #{titleLike}
+			</if>
+
+			<if test="transformStatus != null">
+				and E.TRANSFORMSTATUS_ = #{transformStatus}
+			</if>
+
+			<if test="transformTimeGreaterThanOrEqual != null">
+				and E.TRANSFORMTIME_ &gt;=
+				#{transformTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="transformTimeLessThanOrEqual != null">
+				and E.TRANSFORMTIME_ &lt;=
+				#{transformTimeLessThanOrEqual}
+			</if>
+
+			<if test="transformFlag != null and transformFlag != '' ">
+				and E.TRANSFORMFLAG_ = #{transformFlag}
+			</if>
+
+			<if test="targetTableName != null and targetTableName != '' ">
+				and E.TARGETTABLENAME_ = #{targetTableName}
+			</if>
+
+			<if test="targetTableNameLike != null and targetTableNameLike != '' ">
+				and E.TARGETTABLENAME_ like #{targetTableNameLike}
+			</if>
+
+			<if test="scheduleFlag != null and scheduleFlag != '' ">
+				and E.SCHEDULEFLAG_ = #{scheduleFlag}
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+			<if test="dataRequest != null and dataRequest.filter != null ">
+				<include refid="com.glaf.global.GlobalMapper.dataRequestFilterCondition" />
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

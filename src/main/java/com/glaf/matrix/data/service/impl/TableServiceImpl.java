@@ -206,9 +206,8 @@ public class TableServiceImpl implements ITableService {
 		return tableColumnMapper.getTableColumnCount(query);
 	}
 
-	public List<SysTable> getTableColumns(SysTableQuery query) {
-		List<SysTable> list = sysTableMapper.getTableColumns(query);
-		return list;
+	public List<TableColumn> getTableColumns(TableColumnQuery query) {
+		 return tableColumnMapper.getTableColumns(query);
 	}
 
 	public List<TableColumn> getTableColumnsByTableId(String tableId) {
@@ -402,6 +401,18 @@ public class TableServiceImpl implements ITableService {
 				}
 				col.setTargetId(targetId);
 				tableColumnMapper.insertTableColumn(col);
+			}
+		}
+	}
+	
+	@Transactional
+	public void saveTargetColumn(String targetId, TableColumn column) {
+		CacheFactory.clear("sys_table");
+		if (StringUtils.isNotEmpty(column.getId())) {
+			TableColumn model = this.getTableColumn(column.getId());
+			if (model == null) {
+				column.setTargetId(targetId);
+				tableColumnMapper.insertTableColumn(column);
 			}
 		}
 	}

@@ -19,7 +19,6 @@
 			jdbcType="BIGINT" />
 		<result property="tenantId" column="TENANTID" jdbcType="VARCHAR" />
 		<result property="adminFlag" column="ISSYSTEM" jdbcType="VARCHAR" />
-		<result property="superiorIds" column="SUPERIORIDS" jdbcType="VARCHAR" />
 		<result property="lastLoginTime" column="LASTLOGINTIME"
 			jdbcType="TIMESTAMP" />
 		<result property="lastLoginIP" column="LASTLOGINIP" jdbcType="VARCHAR" />
@@ -55,7 +54,6 @@
 			jdbcType="BIGINT" />
 		<result property="tenantId" column="TENANTID" jdbcType="VARCHAR" />
 		<result property="adminFlag" column="ISSYSTEM" jdbcType="VARCHAR" />
-		<result property="superiorIds" column="SUPERIORIDS" jdbcType="VARCHAR" />
 		<result property="lastLoginTime" column="LASTLOGINTIME"
 			jdbcType="TIMESTAMP" />
 		<result property="lastLoginIP" column="LASTLOGINIP" jdbcType="VARCHAR" />
@@ -67,8 +65,6 @@
 		<result property="loginSecret" column="LOGINSECRET_" jdbcType="VARCHAR" />
 		<result property="loginSecretUpdateTime" column="LOGINSECRETUPDATETIME_"
 			jdbcType="TIMESTAMP" />
-		<result property="appId" column="APPID" jdbcType="VARCHAR" />
-		<result property="appSecret" column="APPSECRET" jdbcType="VARCHAR" />
 		<result property="token" column="TOKEN" jdbcType="VARCHAR" />
 		<result property="tokenTime" column="TOKENTIME" jdbcType="TIMESTAMP" />
 		<result property="syncFlag" column="SYNCFLAG" jdbcType="INTEGER" />
@@ -94,7 +90,6 @@
 			jdbcType="BIGINT" />
 		<result property="tenantId" column="TENANTID" jdbcType="VARCHAR" />
 		<result property="adminFlag" column="ISSYSTEM" jdbcType="VARCHAR" />
-		<result property="superiorIds" column="SUPERIORIDS" jdbcType="VARCHAR" />
 		<result property="lastLoginTime" column="LASTLOGINTIME"
 			jdbcType="TIMESTAMP" />
 		<result property="lastLoginIP" column="LASTLOGINIP" jdbcType="VARCHAR" />
@@ -160,9 +155,6 @@
 			<if test="adminFlag != null">
 				,ISSYSTEM
 			</if>
-			<if test="superiorIds != null">
-				,SUPERIORIDS
-			</if>
 			<if test="lastLoginTime != null">
 				,LASTLOGINTIME
 			</if>
@@ -183,12 +175,6 @@
 			</if>
 			<if test="loginSecretUpdateTime != null">
 				,LOGINSECRETUPDATETIME_
-			</if>
-			<if test="appId != null">
-				,APPID
-			</if>
-			<if test="appSecret != null">
-				,APPSECRET
 			</if>
 			<if test="token != null">
 				,TOKEN
@@ -258,9 +244,6 @@
 			<if test="adminFlag != null">
 				,#{adminFlag, jdbcType=VARCHAR}
 			</if>
-			<if test="superiorIds != null">
-				,#{superiorIds, jdbcType=VARCHAR}
-			</if>
 			<if test="lastLoginTime != null">
 				,#{lastLoginTime, jdbcType=TIMESTAMP}
 			</if>
@@ -281,12 +264,6 @@
 			</if>
 			<if test="loginSecretUpdateTime != null">
 				,#{loginSecretUpdateTime, jdbcType=TIMESTAMP}
-			</if>
-			<if test="appId != null">
-				,#{appId, jdbcType=VARCHAR}
-			</if>
-			<if test="appSecret != null">
-				,#{appSecret, jdbcType=VARCHAR}
 			</if>
 			<if test="token != null">
 				,#{token, jdbcType=VARCHAR}
@@ -313,22 +290,6 @@
 	</insert>
 
 
-	<update id="resetUserAppSecret" parameterType="com.glaf.base.modules.sys.model.SysUser">
-
-		update SYS_USER
-		set
-		APPID = #{appId, jdbcType=VARCHAR},
-		APPSECRET = #{appSecret,
-		jdbcType=VARCHAR},
-		TOKEN = #{token, jdbcType=VARCHAR},
-		TOKENTIME =
-		#{tokenTime, jdbcType=TIMESTAMP}
-		where USERID = #{userId,
-		jdbcType=VARCHAR}
-
-	</update>
-
-
 	<update id="resetUserToken" parameterType="com.glaf.base.modules.sys.model.SysUser">
 
 		update SYS_USER
@@ -348,8 +309,8 @@
 			<if test="name != null">
 				USERNAME = #{name, jdbcType=VARCHAR},
 			</if>
-			<if test="gender != null">
-				GENDER = #{gender, jdbcType=INTEGER},
+			<if test="sex != null">
+				SEX = #{sex, jdbcType=INTEGER},
 			</if>
 			<if test="locked != null">
 				LOCKED = #{locked, jdbcType=INTEGER},
@@ -377,9 +338,6 @@
 			</if>
 			<if test="adminFlag != null">
 				ISSYSTEM = #{adminFlag, jdbcType=VARCHAR},
-			</if>
-			<if test="superiorIds != null">
-				SUPERIORIDS = #{superiorIds, jdbcType=VARCHAR},
 			</if>
 			<if test="lastLoginTime != null">
 				LASTLOGINTIME = #{lastLoginTime, jdbcType=TIMESTAMP},

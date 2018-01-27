@@ -22,9 +22,9 @@
 				singleSelect: true,
 				idField: 'id',
 				columns:[[
-				        {title:'序号', field:'startIndex', width:80, sortable:false},
-						{title:'编号', field:'id', width:120},
-						{title:'名称', field:'name', width:120},
+				        {title:'序号', field:'startIndex', width:60, sortable:false},
+						{title:'编号', field:'id', width:90},
+						{title:'名称', field:'name', width:180},
 						{title:'代码', field:'code', width:120},
 						{title:'等级', field:'level', width:120, formatter:formatterLevel},
 						{title:'性质', field:'property', width:120, formatter:formatterProperty},
@@ -385,8 +385,8 @@
 <body style="margin:1px;">  
 <div style="margin:0;"></div>  
 <div class="easyui-layout" data-options="fit:true">  
-   <div data-options="region:'north',split:true,border:true" style="height:42px"> 
-    <div class="toolbar-backgroud"  > 
+   <div data-options="region:'north', split:false, border:true" style="height:42px" class="toolbar-backgroud"> 
+    <div style="margin:4px;"> 
 	<form id="iForm" name="iForm" method="post" action="">
     <table>
       <tr>

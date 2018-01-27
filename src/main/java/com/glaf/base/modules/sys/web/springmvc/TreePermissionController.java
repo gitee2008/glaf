@@ -36,28 +36,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+
+import com.glaf.core.base.BaseTree;
+import com.glaf.core.base.TreeModel;
+import com.glaf.core.identity.User;
+import com.glaf.core.tree.helper.JacksonTreeHelper;
+import com.glaf.core.util.RequestUtils;
+import com.glaf.core.util.ResponseUtils;
+import com.glaf.core.util.StringTools;
+
 import com.glaf.base.modules.sys.model.SysTree;
 import com.glaf.base.modules.sys.model.SysUser;
 import com.glaf.base.modules.sys.model.TreePermission;
-import com.glaf.base.modules.sys.query.SysUserQuery;
 import com.glaf.base.modules.sys.query.TreePermissionQuery;
 import com.glaf.base.modules.sys.service.SysTreeService;
 import com.glaf.base.modules.sys.service.SysUserService;
 import com.glaf.base.modules.sys.service.TreePermissionService;
-import com.glaf.core.base.BaseTree;
-import com.glaf.core.base.TreeModel;
-import com.glaf.core.config.ViewProperties;
-import com.glaf.core.identity.User;
-import com.glaf.core.tree.helper.JacksonTreeHelper;
-import com.glaf.core.util.PageResult;
-import com.glaf.core.util.ParamUtils;
-import com.glaf.core.util.RequestUtils;
-import com.glaf.core.util.ResponseUtils;
-import com.glaf.core.util.StringTools;
-import com.glaf.core.util.Tools;
 
 /**
  * 
@@ -103,6 +98,7 @@ public class TreePermissionController {
 		String actorId = user.getActorId();
 		String userId = request.getParameter("userId");
 		String privilege = request.getParameter("privilege");
+		String type = request.getParameter("type");
 		String objectIds = request.getParameter("nodeIds");
 
 		if (StringUtils.isNotEmpty(userId)) {
@@ -112,12 +108,13 @@ public class TreePermissionController {
 				for (Long nodeId : nodeIds) {
 					TreePermission p = new TreePermission();
 					p.setNodeId(nodeId);
+					p.setType(type);
 					p.setPrivilege(privilege);
 					p.setUserId(userId);
 					p.setCreateBy(actorId);
 					treePermissions.add(p);
 				}
-				treePermissionService.saveAll(userId, privilege, treePermissions);
+				treePermissionService.saveAll(userId, type, privilege, treePermissions);
 				return ResponseUtils.responseJsonResult(true);
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -161,7 +158,9 @@ public class TreePermissionController {
 		}
 
 		String userId = request.getParameter("userId");
+		String type = request.getParameter("type");
 		TreePermissionQuery query = new TreePermissionQuery();
+		query.type(type);
 		query.userId(userId);
 		List<TreePermission> perms = treePermissionService.list(query);
 		if (perms != null && !perms.isEmpty()) {
@@ -227,96 +226,6 @@ public class TreePermissionController {
 		} catch (IOException e) {
 			return responseJSON.toString().getBytes();
 		}
-
-	}
-
-	@RequestMapping("/userjson")
-	@ResponseBody
-	public byte[] userjson(HttpServletRequest request) throws IOException {
-		Map<String, Object> params = RequestUtils.getParameterMap(request);
-		SysUserQuery query = new SysUserQuery();
-		Tools.populate(query, params);
-		query.setDeleteFlag(0);
-		query.setUserType(0);
-
-		int start = 0;
-		int limit = 10;
-		String orderName = null;
-		String order = null;
-
-		int pageNo = ParamUtils.getInt(params, "page");
-		limit = ParamUtils.getInt(params, "rows");
-		start = (pageNo - 1) * limit;
-		orderName = ParamUtils.getString(params, "sortName");
-		order = ParamUtils.getString(params, "sortOrder");
-
-		if (start < 0) {
-			start = 0;
-		}
-
-		if (limit <= 0) {
-			limit = PageResult.DEFAULT_PAGE_SIZE;
-		}
-
-		JSONObject result = new JSONObject();
-		int total = sysUserService.getSysUserCountByQueryCriteria(query);
-		if (total > 0) {
-			result.put("total", total);
-			result.put("totalCount", total);
-			result.put("totalRecords", total);
-			result.put("start", start);
-			result.put("startIndex", start);
-			result.put("limit", limit);
-			result.put("pageSize", limit);
-
-			if (StringUtils.isNotEmpty(orderName)) {
-				query.setSortOrder(orderName);
-				if (StringUtils.equals(order, "desc")) {
-					query.setSortOrder(" desc ");
-				}
-			}
-
-			List<SysUser> list = sysUserService.getSysUsersByQueryCriteria(start, limit, query);
-
-			if (list != null && !list.isEmpty()) {
-				JSONArray rowsJSON = new JSONArray();
-
-				result.put("rows", rowsJSON);
-
-				for (SysUser sysUser : list) {
-					JSONObject rowJSON = sysUser.toJsonObject();
-					rowJSON.put("id", sysUser.getId());
-					rowJSON.put("userId", sysUser.getUserId());
-					rowJSON.put("startIndex", ++start);
-					rowJSON.remove("token");
-					rowsJSON.add(rowJSON);
-				}
-
-			}
-		} else {
-			result.put("total", total);
-			result.put("totalCount", total);
-			JSONArray rowsJSON = new JSONArray();
-			result.put("rows", rowsJSON);
-		}
-		return result.toString().getBytes("UTF-8");
-	}
-
-	@RequestMapping("/userlist")
-	public ModelAndView userlist(HttpServletRequest request, ModelMap modelMap) {
-		RequestUtils.setRequestParameterToAttribute(request);
-
-		String x_view = ViewProperties.getString("treePermission.userlist");
-		if (StringUtils.isNotEmpty(x_view)) {
-			return new ModelAndView(x_view, modelMap);
-		}
-
-		String view = request.getParameter("view");
-		if (StringUtils.isNotEmpty(view)) {
-			return new ModelAndView(view, modelMap);
-		}
-
-		return new ModelAndView("/sys/treePermission/userlist", modelMap);
 	}
 
 }

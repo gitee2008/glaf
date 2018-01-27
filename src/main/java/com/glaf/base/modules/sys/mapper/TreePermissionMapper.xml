@@ -9,6 +9,7 @@
 		<id property="id" column="ID_" jdbcType="BIGINT" />
 		<result property="nodeId" column="NODEID_" jdbcType="BIGINT" />
 		<result property="privilege" column="PRIVILEGE_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
 		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
 		<result property="userId" column="USERID_" jdbcType="VARCHAR" />
 		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
@@ -25,6 +26,9 @@
 			</if>
 			<if test="privilege != null">
 				,PRIVILEGE_
+			</if>
+			<if test="type != null">
+				,TYPE_
 			</if>
 			<if test="tenantId != null">
 				,TENANTID_
@@ -49,6 +53,9 @@
 			<if test="privilege != null">
 				,#{privilege, jdbcType=VARCHAR}
 			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
 			<if test="tenantId != null">
 				,#{tenantId, jdbcType=VARCHAR}
 			</if>
@@ -70,6 +77,7 @@
 		ID_
 		,NODEID_
 		,PRIVILEGE_
+		,TYPE_
 		,TENANTID_
 		,USERID_
 		,CREATEBY_
@@ -81,7 +89,9 @@
 			#{treePermission.id, jdbcType=BIGINT}
 			,#{treePermission.nodeId, jdbcType=BIGINT}
 			,#{treePermission.privilege, jdbcType=VARCHAR}
-			,#{treePermission.tenantId, jdbcType=VARCHAR}
+			,#{treePermission.type, jdbcType=VARCHAR}
+			,#{treePermission.tenantId,
+			jdbcType=VARCHAR}
 			,#{treePermission.userId, jdbcType=VARCHAR}
 			,#{treePermission.createBy, jdbcType=VARCHAR}
 			,#{treePermission.createTime, jdbcType=TIMESTAMP}
@@ -98,15 +108,19 @@
 			ID_
 			,NODEID_
 			,PRIVILEGE_
+			,TYPE_
 			,TENANTID_
 			,USERID_
 			,CREATEBY_
 			,CREATETIME_
 			) values (
-			#{treePermission.id, jdbcType=BIGINT}
+			#{treePermission.id,
+			jdbcType=BIGINT}
 			,#{treePermission.nodeId, jdbcType=BIGINT}
 			,#{treePermission.privilege, jdbcType=VARCHAR}
-			,#{treePermission.tenantId, jdbcType=VARCHAR}
+			,#{treePermission.type, jdbcType=VARCHAR}
+			,#{treePermission.tenantId,
+			jdbcType=VARCHAR}
 			,#{treePermission.userId, jdbcType=VARCHAR}
 			,#{treePermission.createBy, jdbcType=VARCHAR}
 			,#{treePermission.createTime, jdbcType=TIMESTAMP}
@@ -121,18 +135,6 @@
 		delete from
 		SYS_TREE_PERMISSION
 		where ID_ = #{id}
-	</delete>
-
-
-	<delete id="deleteTreePermissions" parameterType="com.glaf.base.modules.sys.query.TreePermissionQuery">
-		delete from SYS_TREE_PERMISSION
-		where (
-		ID_ IN
-		<foreach item="x_id" index="index" collection="ids" open="("
-			separator="," close=")">
-			#{x_id}
-		</foreach>
-		)
 	</delete>
 
 
@@ -185,6 +187,10 @@
 
 			<if test="privilege != null and privilege != '' ">
 				and E.PRIVILEGE_ = #{privilege}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
 			</if>
 
 			<if test="tenantId != null and tenantId != '' ">

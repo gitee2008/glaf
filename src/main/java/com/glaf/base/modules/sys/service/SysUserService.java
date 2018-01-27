@@ -150,14 +150,6 @@ public interface SysUserService {
 	List<UserRole> getRoleUserViews(UserRoleQuery query);
 
 	/**
-	 * 获取某个用户的上级
-	 * 
-	 * @param account
-	 * @return
-	 */
-	List<SysUser> getSuperiors(String account);
-
-	/**
 	 * 查找供应商用户 flag = true 表示该用户存在，否则为不存在
 	 * 
 	 * @param supplierNo
@@ -374,15 +366,6 @@ public interface SysUserService {
 	 */
 	@Transactional
 	void resetStatus(List<String> userIds, int status);
-
-	/**
-	 * 重置用户AppId及密锁
-	 * 
-	 * @param actorId
-	 * @return
-	 */
-	@Transactional
-	SysUser resetUserAppSecret(String actorId);
 
 	/**
 	 * 重置用户令牌及密锁

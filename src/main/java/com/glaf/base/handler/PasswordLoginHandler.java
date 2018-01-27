@@ -34,8 +34,8 @@ import com.glaf.base.utils.ParamUtil;
 import com.glaf.core.config.Configuration;
 import com.glaf.core.config.Environment;
 import com.glaf.core.context.ContextFactory;
-import com.glaf.core.security.RSAUtils;
 import com.glaf.core.util.StringTools;
+import com.glaf.core.util.security.RSAUtils;
 
 public class PasswordLoginHandler implements LoginHandler {
 	private static final Log logger = LogFactory.getLog(PasswordLoginHandler.class);

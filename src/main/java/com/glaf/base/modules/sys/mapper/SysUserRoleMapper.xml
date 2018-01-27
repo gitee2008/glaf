@@ -19,8 +19,6 @@
 			jdbcType="VARCHAR" />
 		<result property="createDate" column="CREATEDATE" jdbcType="TIMESTAMP" />
 		<result property="createBy" column="CREATEBY" jdbcType="VARCHAR" />
-		<association property="role" column="ROLEID"
-			select="com.glaf.base.modules.sys.mapper.SysRoleMapper.getSysRoleById" />
 	</resultMap>
 
 
@@ -159,8 +157,8 @@
 		resultMap="sysUserRoleResultMap">
 		select * from SYS_USER_ROLE where USERID = #{userId}
 	</select>
- 
- 
+
+
 	<select id="getSysUserRoles" parameterType="com.glaf.base.modules.sys.query.SysUserRoleQuery"
 		resultMap="sysUserRoleResultMap">
 		select E.*

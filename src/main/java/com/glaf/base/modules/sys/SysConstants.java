@@ -32,8 +32,6 @@ public final class SysConstants {
 
 	public static String SYSTEM_ADMINISTRATOR = "SystemAdministrator";// 分级管理员角色代码
 
-	public static String LOGIN_USER = "SYS_LOGIN_USER";
-
 	public static int SORT_FORWARD = 1;// 后移
 
 	public static int SORT_PREVIOUS = 0;// 前移

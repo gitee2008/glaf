@@ -33,7 +33,7 @@ public class ThreadFactory {
 
 	private static volatile ExecutorService executorService;
 
-	private static volatile MxThreadPoolExecutor executor;
+	private static volatile MyThreadPoolExecutor executor;
 
 	public static void execute(Runnable command) {
 		getExecutor().execute(command);
@@ -43,17 +43,14 @@ public class ThreadFactory {
 		getExecutor().execute(command, timeout, unit);
 	}
 
-	private static synchronized MxThreadPoolExecutor getExecutor() {
+	private static synchronized MyThreadPoolExecutor getExecutor() {
 		if (executor == null) {
 			int numberOfProcessors = Runtime.getRuntime().availableProcessors();
 			TaskQueue taskqueue = new TaskQueue();
-			TaskThreadFactory tf = new TaskThreadFactory("thread-exec-", true,
-					Thread.NORM_PRIORITY);
-			executor = new MxThreadPoolExecutor(conf.getInt(
-					"ThreadPool.minThreads", 1), conf.getInt(
-					"ThreadPool.maxThreads", numberOfProcessors), 60,
-					TimeUnit.SECONDS, taskqueue, tf);
-			taskqueue.setParent((MxThreadPoolExecutor) executor);
+			TaskThreadFactory tf = new TaskThreadFactory("thread-exec-", true, Thread.NORM_PRIORITY);
+			executor = new MyThreadPoolExecutor(conf.getInt("ThreadPool.minThreads", 1),
+					conf.getInt("ThreadPool.maxThreads", numberOfProcessors), 60, TimeUnit.SECONDS, taskqueue, tf);
+			taskqueue.setParent((MyThreadPoolExecutor) executor);
 		}
 		return executor;
 	}

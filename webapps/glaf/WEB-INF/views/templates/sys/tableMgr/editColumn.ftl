@@ -60,9 +60,9 @@
 <div style="margin:0;"></div>  
 
 <div class="easyui-layout" data-options="fit:true">  
-  <div data-options="region:'north',split:true,border:true" style="height:40px"> 
-    <div class="toolbar-backgroud"> 
-	<span class="x_content_title">编辑字段</span>
+  <div data-options="region:'north',split:false,border:true" style="height:42px"  class="toolbar-backgroud"> 
+    <div style="margin:4px;"> 
+	<img src="${contextPath}/static/images/window.png">&nbsp;<span class="x_content_title">编辑字段</span>
 	<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'" onclick="javascript:saveData();" >保存</a> 
     </div> 
   </div>
@@ -257,7 +257,7 @@
 		<td width="20%" align="left">设置值</td>
 		<td align="left">
             <select id="dataCode" name="dataCode">
-				<option value="">无</option>
+				<option value="">----请选择----</option>
 				<option value="CURR_USER">当前登录用户名称</option>
 				<option value="CURR_ORGANIZATION">当前登录用户机构名称</option>
 				<option value="CURR_DATE">当前日期</option>

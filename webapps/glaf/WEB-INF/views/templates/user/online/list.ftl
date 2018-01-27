@@ -22,8 +22,8 @@
 				idField: 'id',
 				columns:[[
 				        {title:'序号', field:'startIndex', width:80, sortable:false},
-						{title:'用户名',field:'actorId', width:90},
-						{title:'用户姓名',field:'name', width:90},
+						{title:'用户名',field:'actorId', width:120},
+						{title:'用户姓名',field:'name', width:120, formatter:formatterUser},
 						{title:'登录时间',field:'loginDate_datetime', width:120},
 						{title:'登录IP',field:'loginIP', width:120},
 						{title:'最后更新时间',field:'checkDate_datetime', width:120},
@@ -31,14 +31,32 @@
 				]],
 				rownumbers: false,
 				pagination: true,
-				pageSize: 10,
+				pageSize: 100,
 				pageList: [10,15,20,25,30,40,50,100,200,500,1000],
 				pagePosition: 'both',
 				onDblClickRow: onMyRowClick 
 			});
 	});
 
- 
+   function formatterUser(val, row){
+		var str = "<a href='javascript:viewUser(\""+row.actorId_enc+"\");'>"+val+"</a>";
+	    return str;
+	}
+
+	function viewUser(actorId){
+		var link = '${contextPath}/user/view?actorId='+actorId;
+		layer.open({
+		  type: 2,
+          maxmin: true,
+		  shadeClose: true,
+		  title: "查看用户信息",
+		  area: ['820px', (jQuery(window).height() - 50) +'px'],
+		  shade: 0.8,
+		  fixed: false, //不固定
+		  shadeClose: true,
+		  content: [link, 'no']
+		});
+	}
  
    function onMyRowClick(rowIndex, row){
 	    var link = '${contextPath}/user/view?actorId='+row.actorId_enc;
@@ -185,10 +203,10 @@
 </head>
 <body style="margin:1px;"> 
 
-<div style="margin:2;"></div>  
+<div style="margin:2px;"></div>  
 <div class="easyui-layout" data-options="fit:true">  
-   <div data-options="region:'north',split:true,border:true" style="height:40px"> 
-    <div class="toolbar-backgroud"  > 
+   <div data-options="region:'north', split:false, border:true" style="height:42px" class="toolbar-backgroud"> 
+    <div style="margin:4px;"> 
 	<img src="${contextPath}/static/images/window.png">
 	&nbsp;<span class="x_content_title">在线用户列表</span>
 	<#if permission == "SystemAdministrator">

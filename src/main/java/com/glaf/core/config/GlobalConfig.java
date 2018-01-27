@@ -26,11 +26,16 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
- 
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.glaf.core.context.ContextFactory;
+import com.glaf.core.domain.Database;
 import com.glaf.core.jdbc.DBConnectionFactory;
+import com.glaf.core.security.LoginContext;
+import com.glaf.core.service.IDatabaseService;
 import com.glaf.core.util.FileUtils;
 import com.glaf.core.util.IOUtils;
 import com.glaf.core.util.JdbcUtils;
@@ -53,7 +58,7 @@ public class GlobalConfig {
 				}
 			}
 		} catch (IOException ex) {
-			//ex.printStackTrace();
+			// ex.printStackTrace();
 			logger.error("load properties error", ex);
 		} finally {
 			IOUtils.closeStream(inputStream);
@@ -131,6 +136,34 @@ public class GlobalConfig {
 			JdbcUtils.close(rs);
 			JdbcUtils.close(pstmt);
 			JdbcUtils.close(conn);
+		}
+	}
+
+	public static void setCurrentSystemName(LoginContext loginContext) {
+		if (loginContext.getTenant() == null || loginContext.getTenantId() == null) {
+			return;
+		}
+		if (StringUtils.isNotEmpty(loginContext.getCurrentSystemName())) {
+			/**
+			 * 切换到用户的环境名称
+			 */
+			Environment.setCurrentSystemName(loginContext.getCurrentSystemName());
+			return;
+		}
+		long databaseId = loginContext.getTenant().getDatabaseId();
+		if (databaseId > 0) {
+			/**
+			 * 切换到默认主库查询数据库信息
+			 */
+			Environment.setCurrentSystemName(Environment.DEFAULT_SYSTEM_NAME);
+			IDatabaseService databaseService = ContextFactory.getBean("databaseService");
+			Database database = databaseService.getDatabaseById(databaseId);
+			if (database != null) {
+				/**
+				 * 切换到用户的环境名称
+				 */
+				Environment.setCurrentSystemName(database.getName());
+			}
 		}
 	}
 

@@ -537,6 +537,14 @@
 				and E.CITYID_ = #{cityId}
 			</if>
 
+			<if test="cityIds != null and cityIds.size() &gt; 0">
+				and E.CITYID_ IN
+				<foreach item="x_cityId" index="index" collection="cityIds"
+					open="(" separator="," close=")">
+					#{x_cityId}
+				</foreach>
+			</if>
+
 			<if test="area != null and area != '' ">
 				and E.AREA_ = #{area}
 			</if>
@@ -545,12 +553,28 @@
 				and E.AREAID_ = #{areaId}
 			</if>
 
+			<if test="areaIds != null and areaIds.size() &gt; 0">
+				and E.AREAID_ IN
+				<foreach item="x_areaId" index="index" collection="areaIds"
+					open="(" separator="," close=")">
+					#{x_areaId}
+				</foreach>
+			</if>
+
 			<if test="town != null and town != '' ">
 				and E.TOWN_ = #{town}
 			</if>
 
 			<if test="townId != null">
 				and E.TOWNID_ = #{townId}
+			</if>
+
+			<if test="townIds != null and townIds.size() &gt; 0">
+				and E.TOWNID_ IN
+				<foreach item="x_townId" index="index" collection="townIds"
+					open="(" separator="," close=")">
+					#{x_townId}
+				</foreach>
 			</if>
 
 			<if test="addressLike != null and addressLike != '' ">

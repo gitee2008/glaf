@@ -53,6 +53,9 @@ public class TreePermissionJsonFactory {
 		if (jsonObject.containsKey("privilege")) {
 			model.setPrivilege(jsonObject.getString("privilege"));
 		}
+		if (jsonObject.containsKey("type")) {
+			model.setType(jsonObject.getString("type"));
+		}
 		if (jsonObject.containsKey("tenantId")) {
 			model.setTenantId(jsonObject.getString("tenantId"));
 		}
@@ -89,6 +92,9 @@ public class TreePermissionJsonFactory {
 		if (model.getPrivilege() != null) {
 			jsonObject.put("privilege", model.getPrivilege());
 		}
+		if (model.getType() != null) {
+			jsonObject.put("type", model.getType());
+		}
 		if (model.getTenantId() != null) {
 			jsonObject.put("tenantId", model.getTenantId());
 		}
@@ -114,6 +120,9 @@ public class TreePermissionJsonFactory {
 		jsonObject.put("nodeId", model.getNodeId());
 		if (model.getPrivilege() != null) {
 			jsonObject.put("privilege", model.getPrivilege());
+		}
+		if (model.getType() != null) {
+			jsonObject.put("type", model.getType());
 		}
 		if (model.getTenantId() != null) {
 			jsonObject.put("tenantId", model.getTenantId());

@@ -13,7 +13,8 @@
 		<result property="sort" column="SORTNO" jdbcType="INTEGER" />
 		<result property="indexUrl" column="INDEXURL" jdbcType="VARCHAR" />
 		<result property="isUseBranch" column="ISUSEBRANCH" jdbcType="VARCHAR" />
-		<result property="isUseOrganization" column="ISUSEORGANIZATION" jdbcType="VARCHAR" />
+		<result property="isUseOrganization" column="ISUSEORGANIZATION"
+			jdbcType="VARCHAR" />
 		<result property="createDate" column="CREATEDATE" jdbcType="TIMESTAMP" />
 		<result property="createBy" column="CREATEBY" jdbcType="VARCHAR" />
 		<result property="updateBy" column="UPDATEBY" jdbcType="VARCHAR" />
@@ -142,7 +143,8 @@
 				ISUSEBRANCH = #{isUseBranch, jdbcType=VARCHAR},
 			</if>
 			<if test="isUseOrganization != null">
-				ISUSEORGANIZATION = #{isUseOrganization, jdbcType=VARCHAR},
+				ISUSEORGANIZATION = #{isUseOrganization,
+				jdbcType=VARCHAR},
 			</if>
 			<if test="updateBy != null">
 				UPDATEBY = #{updateBy, jdbcType=VARCHAR},
@@ -170,32 +172,7 @@
 	</delete>
 
 
-	<delete id="deleteSysRoleByStringId" parameterType="string">
-		delete from
-		SYS_ROLE
-		where ID = #{id}
-	</delete>
-
-
-	<delete id="deleteSysRoles" parameterType="com.glaf.base.modules.sys.query.SysRoleQuery">
-		delete from SYS_ROLE
-		where (
-		ID IN
-		<foreach item="x_rowId" index="index" collection="rowIds"
-			open="(" separator="," close=")">
-			#{x_rowId}
-		</foreach>
-		)
-	</delete>
-
-
 	<select id="getSysRoleById" parameterType="string" resultMap="sysRoleResultMap">
-		select * from SYS_ROLE where ID = #{id}
-	</select>
-
-
-	<select id="getSysRoleByStringId" parameterType="string"
-		resultMap="sysRoleResultMap">
 		select * from SYS_ROLE where ID = #{id}
 	</select>
 

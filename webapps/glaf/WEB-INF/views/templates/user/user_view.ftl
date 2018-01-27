@@ -70,8 +70,8 @@
       <tr>
         <td class="input-box2" valign="top">性　别</td>
         <td>
-          <#if user.gender==0>女</#if>
-          <#if user.gender==1>男</#if>
+          <#if user.sex==0>女</#if>
+          <#if user.sex==1>男</#if>
 		</td>
       </tr>
 

@@ -47,6 +47,11 @@ import com.glaf.core.util.*;
 import com.glaf.base.district.domain.*;
 import com.glaf.base.district.query.*;
 import com.glaf.base.district.service.*;
+import com.glaf.base.modules.sys.model.SysUser;
+import com.glaf.base.modules.sys.model.TreePermission;
+import com.glaf.base.modules.sys.query.TreePermissionQuery;
+import com.glaf.base.modules.sys.service.SysUserService;
+import com.glaf.base.modules.sys.service.TreePermissionService;
 import com.glaf.base.utils.XmlToDbImporter;
 
 @Controller("/sys/district")
@@ -55,6 +60,10 @@ public class SysDistrictController {
 	protected static final Log logger = LogFactory.getLog(SysDistrictController.class);
 
 	protected DistrictService districtService;
+
+	protected SysUserService sysUserService;
+
+	protected TreePermissionService treePermissionService;
 
 	public SysDistrictController() {
 
@@ -230,6 +239,22 @@ public class SysDistrictController {
 		return new ModelAndView("/sys/district/list", modelMap);
 	}
 
+	/**
+	 * 显示授权页面
+	 * 
+	 * @param request
+	 * @param modelMap
+	 * @return
+	 */
+	@RequestMapping("/privilege")
+	public ModelAndView privilege(HttpServletRequest request, ModelMap modelMap) {
+		RequestUtils.setRequestParameterToAttribute(request);
+		String userId = request.getParameter("userId");
+		SysUser user = sysUserService.findById(userId);
+		request.setAttribute("user", user);
+		return new ModelAndView("/sys/district/privilege", modelMap);
+	}
+
 	@ResponseBody
 	@RequestMapping("/reload")
 	public byte[] reload(HttpServletRequest request) {
@@ -315,6 +340,16 @@ public class SysDistrictController {
 		this.districtService = districtService;
 	}
 
+	@javax.annotation.Resource
+	public void setSysUserService(SysUserService sysUserService) {
+		this.sysUserService = sysUserService;
+	}
+
+	@javax.annotation.Resource
+	public void setTreePermissionService(TreePermissionService treePermissionService) {
+		this.treePermissionService = treePermissionService;
+	}
+
 	/**
 	 * 
 	 * @param request
@@ -348,6 +383,21 @@ public class SysDistrictController {
 			districts = districtService.getDistrictList(parentId);
 		}
 		if (districts != null && !districts.isEmpty()) {
+			String userId = request.getParameter("userId");
+			String type = request.getParameter("type");
+			List<Long> selected = new ArrayList<Long>();
+			if (StringUtils.isNotEmpty(type) && StringUtils.isNotEmpty(userId)) {
+				TreePermissionQuery query = new TreePermissionQuery();
+				query.type(type);
+				query.userId(userId);
+				List<TreePermission> perms = treePermissionService.list(query);
+				if (perms != null && !perms.isEmpty()) {
+					for (TreePermission p : perms) {
+						selected.add(p.getNodeId());
+					}
+				}
+			}
+
 			Map<Long, TreeModel> treeMap = new HashMap<Long, TreeModel>();
 			List<TreeModel> treeModels = new ArrayList<TreeModel>();
 			List<Long> districtIds = new ArrayList<Long>();
@@ -355,6 +405,7 @@ public class SysDistrictController {
 				if (district.getLocked() != 0) {
 					continue;
 				}
+				Map<String, Object> dataMap = new HashMap<String, Object>();
 				TreeModel tree = new BaseTree();
 				tree.setId(district.getId());
 				tree.setParentId(district.getParentId());
@@ -362,6 +413,85 @@ public class SysDistrictController {
 				tree.setName(district.getName());
 				tree.setSortNo(district.getSortNo());
 				tree.setIconCls("tree_folder");
+				if (selected.contains(district.getId())) {
+					if (selected.contains(district.getId())) {
+						tree.setChecked(true);
+						dataMap.put("checked", true);
+					} else {
+						dataMap.put("checked", false);
+					}
+				}
+				tree.setDataMap(dataMap);
+				treeModels.add(tree);
+				districtIds.add(district.getId());
+				treeMap.put(district.getId(), tree);
+			}
+			// logger.debug("treeModels:" + treeModels.size());
+			TreeHelper treeHelper = new TreeHelper();
+			JSONArray jsonArray = treeHelper.getTreeJSONArray(treeModels);
+			for (int i = 0, len = jsonArray.size(); i < len; i++) {
+				JSONObject json = jsonArray.getJSONObject(i);
+				json.put("isParent", true);
+			}
+			// logger.debug(jsonArray.toJSONString());
+			return jsonArray.toJSONString().getBytes("UTF-8");
+		}
+		return array.toJSONString().getBytes("UTF-8");
+	}
+
+	@ResponseBody
+	@RequestMapping("/treeJson3")
+	public byte[] treeJson3(HttpServletRequest request) throws IOException {
+		logger.debug("params:" + RequestUtils.getParameterMap(request));
+		JSONArray array = new JSONArray();
+		Long parentId = RequestUtils.getLong(request, "id", 0);
+		List<District> districts = null;
+		if (parentId != null) {
+			districts = districtService.getDistrictList(parentId);
+		}
+		if (districts != null && !districts.isEmpty()) {
+			String userId = request.getParameter("userId");
+			String type = request.getParameter("type");
+			List<Long> selected = new ArrayList<Long>();
+			if (StringUtils.isNotEmpty(type) && StringUtils.isNotEmpty(userId)) {
+				TreePermissionQuery query = new TreePermissionQuery();
+				query.type(type);
+				query.userId(userId);
+				List<TreePermission> perms = treePermissionService.list(query);
+				if (perms != null && !perms.isEmpty()) {
+					for (TreePermission p : perms) {
+						selected.add(p.getNodeId());
+					}
+				}
+			}
+
+			Map<Long, TreeModel> treeMap = new HashMap<Long, TreeModel>();
+			List<TreeModel> treeModels = new ArrayList<TreeModel>();
+			List<Long> districtIds = new ArrayList<Long>();
+			for (District district : districts) {
+				if (district.getLocked() != 0) {
+					continue;
+				}
+				if (district.getLevel() > 3) {
+					continue;
+				}
+				Map<String, Object> dataMap = new HashMap<String, Object>();
+				TreeModel tree = new BaseTree();
+				tree.setId(district.getId());
+				tree.setParentId(district.getParentId());
+				tree.setCode(district.getCode());
+				tree.setName(district.getName());
+				tree.setSortNo(district.getSortNo());
+				tree.setIconCls("tree_folder");
+				if (selected.contains(district.getId())) {
+					if (selected.contains(district.getId())) {
+						tree.setChecked(true);
+						dataMap.put("checked", true);
+					} else {
+						dataMap.put("checked", false);
+					}
+				}
+				tree.setDataMap(dataMap);
 				treeModels.add(tree);
 				districtIds.add(district.getId());
 				treeMap.put(district.getId(), tree);

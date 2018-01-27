@@ -35,10 +35,13 @@ public class SysTenantQuery extends DataQuery {
 	protected Long provinceId;
 	protected String city;
 	protected Long cityId;
+	protected List<Long> cityIds;
 	protected String area;
 	protected Long areaId;
+	protected List<Long> areaIds;
 	protected String town;
 	protected Long townId;
+	protected List<Long> townIds;
 	protected String addressLike;
 	protected String property;
 	protected String verify;
@@ -78,6 +81,14 @@ public class SysTenantQuery extends DataQuery {
 		return this;
 	}
 
+	public SysTenantQuery areaIds(List<Long> areaIds) {
+		if (areaIds == null) {
+			throw new RuntimeException("areaIds is null");
+		}
+		this.areaIds = areaIds;
+		return this;
+	}
+
 	public SysTenantQuery city(String city) {
 		if (city == null) {
 			throw new RuntimeException("city is null");
@@ -91,6 +102,14 @@ public class SysTenantQuery extends DataQuery {
 			throw new RuntimeException("cityId is null");
 		}
 		this.cityId = cityId;
+		return this;
+	}
+
+	public SysTenantQuery cityIds(List<Long> cityIds) {
+		if (cityIds == null) {
+			throw new RuntimeException("cityIds is null");
+		}
+		this.cityIds = cityIds;
 		return this;
 	}
 
@@ -162,12 +181,20 @@ public class SysTenantQuery extends DataQuery {
 		return areaId;
 	}
 
+	public List<Long> getAreaIds() {
+		return areaIds;
+	}
+
 	public String getCity() {
 		return city;
 	}
 
 	public Long getCityId() {
 		return cityId;
+	}
+
+	public List<Long> getCityIds() {
+		return cityIds;
 	}
 
 	public String getCode() {
@@ -321,6 +348,10 @@ public class SysTenantQuery extends DataQuery {
 		return townId;
 	}
 
+	public List<Long> getTownIds() {
+		return townIds;
+	}
+
 	public Date getUpdateTimeGreaterThanOrEqual() {
 		return updateTimeGreaterThanOrEqual;
 	}
@@ -427,12 +458,20 @@ public class SysTenantQuery extends DataQuery {
 		this.areaId = areaId;
 	}
 
+	public void setAreaIds(List<Long> areaIds) {
+		this.areaIds = areaIds;
+	}
+
 	public void setCity(String city) {
 		this.city = city;
 	}
 
 	public void setCityId(Long cityId) {
 		this.cityId = cityId;
+	}
+
+	public void setCityIds(List<Long> cityIds) {
+		this.cityIds = cityIds;
 	}
 
 	public void setCode(String code) {
@@ -511,6 +550,10 @@ public class SysTenantQuery extends DataQuery {
 		this.townId = townId;
 	}
 
+	public void setTownIds(List<Long> townIds) {
+		this.townIds = townIds;
+	}
+
 	public void setUpdateTimeGreaterThanOrEqual(Date updateTimeGreaterThanOrEqual) {
 		this.updateTimeGreaterThanOrEqual = updateTimeGreaterThanOrEqual;
 	}
@@ -560,6 +603,14 @@ public class SysTenantQuery extends DataQuery {
 			throw new RuntimeException("townId is null");
 		}
 		this.townId = townId;
+		return this;
+	}
+
+	public SysTenantQuery townIds(List<Long> townIds) {
+		if (townIds == null) {
+			throw new RuntimeException("townIds is null");
+		}
+		this.townIds = townIds;
 		return this;
 	}
 

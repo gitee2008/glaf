@@ -94,6 +94,7 @@ public class TreeRepositoryBuilder {
 			component.setUrl(treeModel.getUrl());
 			component.setTreeId(treeModel.getTreeId());
 			component.setCls(treeModel.getIconCls());
+			component.setLevel(treeModel.getLevel());
 			component.setDataMap(treeModel.getDataMap());
 			repository.addTree(component);
 			// logger.debug("add tree: " + component.getTitle());
@@ -130,6 +131,7 @@ public class TreeRepositoryBuilder {
 					parentTree.setUrl(parent.getUrl());
 					parentTree.setTreeId(parent.getTreeId());
 					parentTree.setCls(parent.getIconCls());
+					parentTree.setLevel(parent.getLevel());
 					parentTree.setDataMap(parent.getDataMap());
 					// repository.addTree(parentTree);
 				}
@@ -203,6 +205,7 @@ public class TreeRepositoryBuilder {
 			component.setUrl(treeModel.getUrl());
 			component.setTreeId(treeModel.getTreeId());
 			component.setCls(treeModel.getIconCls());
+			component.setLevel(treeModel.getLevel());
 			component.setDataMap(treeModel.getDataMap());
 
 			String parentId = String.valueOf(treeModel.getParentId());
@@ -222,6 +225,7 @@ public class TreeRepositoryBuilder {
 					parentTree.setUrl(parent.getUrl());
 					parentTree.setTreeId(parent.getTreeId());
 					parentTree.setCls(parent.getIconCls());
+					parentTree.setLevel(parent.getLevel());
 					parentTree.setDataMap(parent.getDataMap());
 					repository.addTree(parentTree);
 				}
@@ -248,6 +252,7 @@ public class TreeRepositoryBuilder {
 			component.setImage(tree.getIcon());
 			component.setUrl(tree.getUrl());
 			component.setTreeId(tree.getTreeId());
+			component.setLevel(tree.getLevel());
 			component.setDataMap(tree.getDataMap());
 			treeMap.put(component.getId(), component);
 			if (tree.getParentId() > 0) {
@@ -329,6 +334,7 @@ public class TreeRepositoryBuilder {
 			component.setUrl(treeModel.getUrl());
 			component.setTreeId(treeModel.getTreeId());
 			component.setCls(treeModel.getCls());
+			component.setLevel(treeModel.getLevel());
 			component.setDataMap(treeModel.getDataMap());
 			repository.addTree(component);
 			// logger.debug("add tree: " + component.getTitle());
@@ -364,6 +370,7 @@ public class TreeRepositoryBuilder {
 					parentTree.setUrl(parent.getUrl());
 					parentTree.setTreeId(parent.getTreeId());
 					parentTree.setCls(parent.getCls());
+					parentTree.setLevel(parent.getLevel());
 					parentTree.setDataMap(parent.getDataMap());
 					// repository.addTree(parentTree);
 				}
@@ -410,6 +417,7 @@ public class TreeRepositoryBuilder {
 			component.setUrl(treeModel.getUrl());
 			component.setTreeId(treeModel.getTreeId());
 			component.setCls(treeModel.getCls());
+			component.setLevel(treeModel.getLevel());
 			component.setDataMap(treeModel.getDataMap());
 
 			if (treeModel.getParent() != null) {
@@ -429,6 +437,7 @@ public class TreeRepositoryBuilder {
 						parentTree.setUrl(parent.getUrl());
 						parentTree.setTreeId(parent.getTreeId());
 						parentTree.setCls(parent.getCls());
+						parentTree.setLevel(parent.getLevel());
 						parentTree.setDataMap(parent.getDataMap());
 						repository.addTree(parentTree);
 					}

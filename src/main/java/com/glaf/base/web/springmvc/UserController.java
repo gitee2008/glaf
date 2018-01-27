@@ -55,7 +55,6 @@ import com.glaf.core.util.PageResult;
 import com.glaf.core.util.ParamUtils;
 import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.ResponseUtils;
-import com.glaf.core.util.StringTools;
 import com.glaf.core.util.Tools;
 
 @Controller("/user")
@@ -189,20 +188,6 @@ public class UserController {
 		SysUser bean = sysUserService.findByAccount(user.getUserId());
 		request.setAttribute("user", bean);
 
-		if (bean != null && StringUtils.isNotEmpty(bean.getSuperiorIds())) {
-			List<String> userIds = StringTools.split(bean.getSuperiorIds());
-			StringBuilder buffer = new StringBuilder();
-			if (userIds != null && !userIds.isEmpty()) {
-				for (String userId : userIds) {
-					SysUser u = sysUserService.findByAccount(userId);
-					if (u != null) {
-						buffer.append(u.getName()).append("[").append(u.getUserId()).append("] ");
-					}
-				}
-				request.setAttribute("x_users_name", buffer.toString());
-			}
-		}
-
 		String x_view = ViewProperties.getString("identity.user.prepareModifyInfo");
 		if (StringUtils.isNotEmpty(x_view)) {
 			return new ModelAndView(x_view, modelMap);
@@ -247,8 +232,7 @@ public class UserController {
 			boolean ret = false;
 			if (bean != null) {
 				bean.setName(ParamUtil.getParameter(request, "name"));
-				bean.setSuperiorIds(ParamUtil.getParameter(request, "superiorIds"));
-				bean.setGender(ParamUtil.getIntParameter(request, "gender", 0));
+				bean.setSex(ParamUtil.getIntParameter(request, "sex", 0));
 				bean.setMobile(ParamUtil.getParameter(request, "mobile"));
 				bean.setEmail(ParamUtil.getParameter(request, "email"));
 				bean.setTelephone(ParamUtil.getParameter(request, "telephone"));
@@ -387,20 +371,6 @@ public class UserController {
 
 		request.setAttribute("bean", bean);
 		request.setAttribute("user", bean);
-
-		if (bean != null && StringUtils.isNotEmpty(bean.getSuperiorIds())) {
-			List<String> userIds = StringTools.split(bean.getSuperiorIds());
-			StringBuilder buffer = new StringBuilder();
-			if (userIds != null && !userIds.isEmpty()) {
-				for (String userId : userIds) {
-					SysUser u = sysUserService.findByAccount(userId);
-					if (u != null) {
-						buffer.append(u.getName()).append("[").append(u.getUserId()).append("] ");
-					}
-				}
-				request.setAttribute("x_users_name", buffer.toString());
-			}
-		}
 
 		String x_view = ViewProperties.getString("user.view");
 		if (StringUtils.isNotEmpty(x_view)) {

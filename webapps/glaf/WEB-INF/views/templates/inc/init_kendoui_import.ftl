@@ -1,9 +1,9 @@
 <#include "/inc/include.ftl"/>
 <link href="${contextPath}/static/plugins/kendoui/styles/kendo.common.min.css" rel="stylesheet" />
 <link href="${contextPath}/static/plugins/kendoui/styles/kendo.rtl.min.css" rel="stylesheet" />
-<link href="${contextPath}/static/plugins/kendoui/styles/kendo.default.min.css" rel="stylesheet" />
+<link href="${contextPath}/static/plugins/kendoui/styles/kendo.bootstrap.min.css" rel="stylesheet" />
 <link href="${contextPath}/static/plugins/kendoui/styles/kendo.dataviz.min.css" rel="stylesheet" />
-<link href="${contextPath}/static/plugins/kendoui/styles/kendo.dataviz.default.min.css" rel="stylesheet" />
+<link href="${contextPath}/static/plugins/kendoui/styles/kendo.dataviz.bootstrap.min.css" rel="stylesheet" />
 <link href="${contextPath}/static/plugins/kendoui/styles/kendo.mobile.all.min.css" rel="stylesheet" />
 <link href="${contextPath}/static/plugins/layer/skin/layer.css" rel="stylesheet" />
 <link href="${contextPath}/static/css/icons.css" rel="stylesheet" type="text/css" >

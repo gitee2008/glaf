@@ -80,9 +80,9 @@
       <tr>
         <td class="input-box2" valign="top">性　别</td>
         <td>
-          <input type="radio" name="gender" value="0" <#if user.gender==0>checked</#if>>女
+          <input type="radio" name="sex" value="0" <#if user.sex==0>checked</#if>>女
 		  &nbsp;
-          <input type="radio" name="gender" value="1" <#if user.gender==1>checked</#if>>男
+          <input type="radio" name="sex" value="1" <#if user.sex==1>checked</#if>>男
 		</td>
       </tr>
       <tr>

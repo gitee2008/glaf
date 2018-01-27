@@ -204,18 +204,6 @@
 		<where>
 			1 = 1
 
-			<if test="superiorId != null and superiorId != '' ">
-				and E.SUPERIORID_ = #{superiorId}
-			</if>
-
-			<if test="superiorIds != null and superiorIds.size != 0">
-				and E.SUPERIORID_ IN
-				<foreach item="x_superiorId" index="index" collection="superiorIds"
-					open="(" separator="," close=")">
-					#{x_superiorId}
-				</foreach>
-			</if>
-
 			<if test="nodeId != null">
 				and E.NODEID_ = #{nodeId}
 			</if>

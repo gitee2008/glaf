@@ -27,6 +27,7 @@ public class TreePermissionQuery extends DataQuery {
 	protected Long nodeId;
 	protected List<Long> nodeIds;
 	protected String privilege;
+	protected String type;
 	protected List<String> tenantIds;
 	protected String userId;
 	protected List<String> userIds;
@@ -120,6 +121,10 @@ public class TreePermissionQuery extends DataQuery {
 		return tenantIds;
 	}
 
+	public String getType() {
+		return type;
+	}
+
 	public String getUserId() {
 		return userId;
 	}
@@ -192,6 +197,10 @@ public class TreePermissionQuery extends DataQuery {
 		this.tenantIds = tenantIds;
 	}
 
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
@@ -213,6 +222,14 @@ public class TreePermissionQuery extends DataQuery {
 			throw new RuntimeException("tenantIds is empty ");
 		}
 		this.tenantIds = tenantIds;
+		return this;
+	}
+
+	public TreePermissionQuery type(String type) {
+		if (type == null) {
+			throw new RuntimeException("type is null");
+		}
+		this.type = type;
 		return this;
 	}
 

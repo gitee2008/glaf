@@ -145,7 +145,7 @@ public class SystemCacheMgrController {
 			JSONArray rowsJSON = new JSONArray();
 			Date date = null;
 			int index = 0;
-			String cacheKey = Constants.LOGIN_USER_CACHE + actorId;
+			String cacheKey = Constants.CACHE_LOGIN_CONTEXT_KEY + actorId;
 			for (CacheItem item : rows) {
 				if (StringUtils.equals(cacheKey, item.getName())) {
 					continue;

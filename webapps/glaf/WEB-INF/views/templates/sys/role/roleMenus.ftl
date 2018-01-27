@@ -96,12 +96,11 @@
 
 </script>
 </head>
-
-<body style="margin:5px;"> 
+<body style="margin:2px;"> 
 <form id="iForm" name="iForm" method="post">
 <input type="hidden" id="nodeIds" name="nodeIds">
 <div class="toolbar-backgroud" style="height:40px"> 
-<span class="x_content_title">设置角色【${role.name}】的菜单</span>
+<img src="${contextPath}/static/images/window.png">&nbsp;<span class="x_content_title">设置角色【${role.name}】的菜单</span>
 &nbsp;
 <input type="button" name="save" value="保存" class="btnGray" onclick="javascript:saveRoleSiteMenus();"> 
 &nbsp;

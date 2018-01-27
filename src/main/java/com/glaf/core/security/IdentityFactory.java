@@ -263,9 +263,9 @@ public class IdentityFactory {
 		if (!StringUtils.equals(currentName, Environment.DEFAULT_SYSTEM_NAME)) {
 			return null;
 		}
-		String cacheKey = Constants.LOGIN_USER_CACHE + userId;
+		String cacheKey = Constants.CACHE_LOGIN_CONTEXT_KEY + userId;
 		if (SystemConfig.getBoolean("use_query_cache")) {
-			String text = CacheFactory.getString("login_context", cacheKey);
+			String text = CacheFactory.getString(Constants.CACHE_LOGIN_CONTEXT_REGION, cacheKey);
 			if (StringUtils.isNotEmpty(text)) {
 				try {
 					JSONObject jsonObject = JSON.parseObject(text);
@@ -315,7 +315,8 @@ public class IdentityFactory {
 			}
 
 			if (SystemConfig.getBoolean("use_query_cache")) {
-				CacheFactory.put("login_context", cacheKey, loginContext.toJsonObject().toJSONString());
+				CacheFactory.put(Constants.CACHE_LOGIN_CONTEXT_REGION, cacheKey,
+						loginContext.toJsonObject().toJSONString());
 			}
 			return loginContext;
 		}
@@ -331,10 +332,10 @@ public class IdentityFactory {
 	 */
 	public static List<String> getManagedTenantIds(String grantee) {
 		StringBuilder buffer = new StringBuilder();
-		buffer.append("cache_managed_tenant_").append(grantee);
+		buffer.append(Constants.CACHE_MGR_TENANT_KEY).append(grantee);
 
 		String cacheKey = buffer.toString();
-		String text = CacheFactory.getString("cache_managed_tenant", cacheKey);
+		String text = CacheFactory.getString(Constants.CACHE_TENANT_REGION, cacheKey);
 		if (text != null) {
 			return StringTools.split(text);
 		}
@@ -349,7 +350,7 @@ public class IdentityFactory {
 				}
 			}
 		}
-		CacheFactory.put("cache_managed_tenant", cacheKey, buffer.toString());
+		CacheFactory.put(Constants.CACHE_TENANT_REGION, cacheKey, buffer.toString());
 		return managedTenantIds;
 	}
 
@@ -449,8 +450,8 @@ public class IdentityFactory {
 	 * @return
 	 */
 	public static Tenant getTenantById(String tenantId) {
-		String cacheKey = "cache_sys_tenant_" + tenantId;
-		String text = CacheFactory.getString("tenant", cacheKey);
+		String cacheKey = Constants.CACHE_TENANT_KEY + tenantId;
+		String text = CacheFactory.getString(Constants.CACHE_TENANT_REGION, cacheKey);
 		if (text != null) {
 			try {
 				JSONObject jsonObject = JSON.parseObject(text);
@@ -460,7 +461,7 @@ public class IdentityFactory {
 		}
 		Tenant tenant = (Tenant) getEntityService().getById("getTenantById", tenantId);
 		if (tenant != null) {
-			CacheFactory.put("tenant", cacheKey, tenant.toJsonObject().toJSONString());
+			CacheFactory.put(Constants.CACHE_TENANT_REGION, cacheKey, tenant.toJsonObject().toJSONString());
 		}
 		return tenant;
 	}
@@ -472,8 +473,11 @@ public class IdentityFactory {
 	 * @return
 	 */
 	public static int getTenantHash(String tenantId) {
-		return Math.abs(JenkinsHash.getInstance().hash(tenantId.getBytes()))
-				% com.glaf.core.util.Constants.TABLE_PARTITION;
+		if (tenantId != null) {
+			return Math.abs(JenkinsHash.getInstance().hash(tenantId.getBytes()))
+					% com.glaf.core.util.Constants.TABLE_PARTITION;
+		}
+		return 0;
 	}
 
 	public static List<Tenant> getTenants() {
@@ -528,8 +532,8 @@ public class IdentityFactory {
 	 * @return
 	 */
 	public static User getUser(String actorId) {
-		String cacheKey = "cache_sys_user_" + actorId;
-		String text = CacheFactory.getString("user", cacheKey);
+		String cacheKey = Constants.CACHE_USER_KEY + actorId;
+		String text = CacheFactory.getString(Constants.CACHE_USER_REGION, cacheKey);
 		if (text != null) {
 			try {
 				JSONObject jsonObject = JSON.parseObject(text);
@@ -539,7 +543,7 @@ public class IdentityFactory {
 		}
 		User user = (User) getEntityService().getById("getUserById", actorId);
 		if (user != null) {
-			CacheFactory.put("user", cacheKey, user.toJsonObject().toJSONString());
+			CacheFactory.put(Constants.CACHE_USER_REGION, cacheKey, user.toJsonObject().toJSONString());
 		}
 		return user;
 	}
@@ -616,10 +620,10 @@ public class IdentityFactory {
 
 	public static List<String> getUserRoleCodes(String actorId) {
 		StringBuilder buffer = new StringBuilder();
-		buffer.append("cache_userrolecode_").append(actorId);
+		buffer.append(Constants.CACHE_USER_ROLE_CODE_KEY).append(actorId);
 
 		String cacheKey = buffer.toString();
-		String text = CacheFactory.getString("cache_userrolecode", cacheKey);
+		String text = CacheFactory.getString(Constants.CACHE_USER_ROLE_CODE_REGION, cacheKey);
 		if (text != null) {
 			return StringTools.split(text);
 		}
@@ -637,7 +641,7 @@ public class IdentityFactory {
 				buffer.append(object.toString()).append(",");
 			}
 		}
-		CacheFactory.put("cache_userrolecode", cacheKey, buffer.toString());
+		CacheFactory.put(Constants.CACHE_USER_ROLE_CODE_REGION, cacheKey, buffer.toString());
 		return roles;
 	}
 

@@ -264,87 +264,87 @@
 <body style="margin:1px;">  
 <div style="margin:0;"></div>  
 <div class="easyui-layout" data-options="fit:true">  
-   <div data-options="region:'north',split:true,border:true" style="height:42px"> 
-    <div class="toolbar-backgroud"  > 
-	&nbsp;<img src="${contextPath}/static/images/window.png">
-	<span class="x_content_title">数据表</span>
-        数据库类型：
-		<select id="dbType" name="dbType">
-			<option value="h2">H2</option>
-			<option value="hbase">HBase</option>
-			<option value="db2">DB2</option>
-			<option value="oracle">Oracle</option>
-			<option value="mysql" selected>MySQL</option>
-			<option value="sqlserver">SQLServer</option>
-			<option value="postgresql">PostgreSQL</option>
-		</select>
+   <div data-options="region:'north', split:false, border:true" style="height:42px" class="toolbar-backgroud"> 
+    <div style="margin:4px;"> 
+		&nbsp;<img src="${contextPath}/static/images/window.png">
+		<span class="x_content_title">数据表</span>
+			数据库类型：
+			<select id="dbType" name="dbType">
+				<option value="h2">H2</option>
+				<option value="hbase">HBase</option>
+				<option value="db2">DB2</option>
+				<option value="oracle">Oracle</option>
+				<option value="mysql" selected>MySQL</option>
+				<option value="sqlserver">SQLServer</option>
+				<option value="postgresql">PostgreSQL</option>
+			</select>
 
-	   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'"
-	      onclick="javascript:genCreateScripts();">生成数据库建表脚本</a> 
+		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'"
+			  onclick="javascript:genCreateScripts();">生成数据库建表脚本</a> 
 
-	   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'"
-	      onclick="javascript:showInsertScripts();">生成插入数据脚本</a>
+		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'"
+			  onclick="javascript:showInsertScripts();">生成插入数据脚本</a>
 
-	   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'"
-	      onclick="javascript:exportSysTables();">生成基础表数据脚本</a>
+		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'"
+			  onclick="javascript:exportSysTables();">生成基础表数据脚本</a>
 
-	   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'"
-	      onclick="javascript:genMappings();">生成Mapping文件</a> 
+		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'"
+			  onclick="javascript:genMappings();">生成Mapping文件</a> 
 
-	   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'"
-	      onclick="javascript:exportDB();">生成SQLite数据</a> 
+		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'"
+			  onclick="javascript:exportDB();">生成SQLite数据</a> 
 
-	   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'"
-	      onclick="javascript:updateHibernateDDL();">更新本数据库结构</a> 
+		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'"
+			  onclick="javascript:updateHibernateDDL();">更新本数据库结构</a> 
 
-	   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-list'"
-	      onclick="javascript:showData();">查看数据</a> 
-   </div> 
-  </div> 
-  <div data-options="region:'center',border:true">
-	 <table id="mydatagrid"></table>
-  </div>  
-</div>
-<form id="iForm" name="iForm" method="post" action="">
-	<input type="hidden" id="tables" name="tables">
-</form>
+		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-list'"
+			  onclick="javascript:showData();">查看数据</a> 
+	   </div> 
+	  </div> 
+	  <div data-options="region:'center',border:true">
+		 <table id="mydatagrid"></table>
+	  </div>  
+	</div>
+	<form id="iForm" name="iForm" method="post" action="">
+		<input type="hidden" id="tables" name="tables">
+	</form>
 
-<div id="exp_dlg" class="easyui-dialog" style="width:450px;height:400px;padding:10px 20px" closed="true" >
-    <form id="exportForm" name="exportForm" method="post">
-	     <input type="hidden" id="exportTables" name="exportTables" >
-         <table class="easyui-form" width="95%" align="center" border="0" cellspacing="0" cellpadding="5">
-		  <tr>
-			<td>
-			   <select id="selectedTables" name="selectedTables" style="width: 250px;" size="22">
-			      <option value=""></option>
-				  <option value=""></option>
-				  <option value=""></option>
-				  <option value=""></option>
-				  <option value=""></option>
-				  <option value=""></option>
-				  <option value=""></option>
-				  <option value=""></option>
-				  <option value=""></option>
-				  <option value=""></option>
-			   </select>
-            </td>
-			<td  align="center" valign="top" height="30">&nbsp;
-			    <a href="#" class="easyui-linkbutton" iconCls="icon-up" 
-				   onclick="javascript:moveUp();">向上</a>
-				<br/><br/>
-				<a href="#" class="easyui-linkbutton" iconCls="icon-down" 
-				   onclick="javascript:moveDown();">向下</a>
-                <br/><br/>
-				<a href="#" class="easyui-linkbutton" iconCls="icon-ok" 
-				   onclick="javascript:exportData();">确定</a>
-				<br/><br/>
-	            <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" 
-				   onclick="javascript:jQuery('#exp_dlg').dialog('close');">取消</a>
-			</td>
-		  </tr>
-		</table>
-    </form>
-</div>
+	<div id="exp_dlg" class="easyui-dialog" style="width:450px;height:400px;padding:10px 20px" closed="true" >
+		<form id="exportForm" name="exportForm" method="post">
+			 <input type="hidden" id="exportTables" name="exportTables" >
+			 <table class="easyui-form" width="95%" align="center" border="0" cellspacing="0" cellpadding="5">
+			  <tr>
+				<td>
+				   <select id="selectedTables" name="selectedTables" style="width: 250px;" size="22">
+					  <option value=""></option>
+					  <option value=""></option>
+					  <option value=""></option>
+					  <option value=""></option>
+					  <option value=""></option>
+					  <option value=""></option>
+					  <option value=""></option>
+					  <option value=""></option>
+					  <option value=""></option>
+					  <option value=""></option>
+				   </select>
+				</td>
+				<td  align="center" valign="top" height="30">&nbsp;
+					<a href="#" class="easyui-linkbutton" iconCls="icon-up" 
+					   onclick="javascript:moveUp();">向上</a>
+					<br/><br/>
+					<a href="#" class="easyui-linkbutton" iconCls="icon-down" 
+					   onclick="javascript:moveDown();">向下</a>
+					<br/><br/>
+					<a href="#" class="easyui-linkbutton" iconCls="icon-ok" 
+					   onclick="javascript:exportData();">确定</a>
+					<br/><br/>
+					<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" 
+					   onclick="javascript:jQuery('#exp_dlg').dialog('close');">取消</a>
+				</td>
+			  </tr>
+			</table>
+		</form>
+	</div>
 
 </body>
 </html>

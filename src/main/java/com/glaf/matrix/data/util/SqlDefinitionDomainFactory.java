@@ -53,6 +53,7 @@ public class SqlDefinitionDomainFactory {
 		columnMap.put("rowKey", "ROWKEY_");
 		columnMap.put("scheduleFlag", "SCHEDULEFLAG_");
 		columnMap.put("cacheFlag", "CACHEFLAG_");
+		columnMap.put("dataItemFlag", "DATAITEMFLAG_");
 		columnMap.put("fetchFlag", "FETCHFLAG_");
 		columnMap.put("deleteFetch", "DELETEFETCH_");
 		columnMap.put("exportFlag", "EXPORTFLAG_");
@@ -83,6 +84,7 @@ public class SqlDefinitionDomainFactory {
 		javaTypeMap.put("rowKey", "String");
 		javaTypeMap.put("scheduleFlag", "String");
 		javaTypeMap.put("cacheFlag", "String");
+		javaTypeMap.put("dataItemFlag", "String");
 		javaTypeMap.put("deleteFetch", "String");
 		javaTypeMap.put("fetchFlag", "String");
 		javaTypeMap.put("exportFlag", "String");
@@ -207,6 +209,13 @@ public class SqlDefinitionDomainFactory {
 		cacheFlag.setJavaType("String");
 		cacheFlag.setLength(1);
 		tableDefinition.addColumn(cacheFlag);
+
+		ColumnDefinition dataItemFlag = new ColumnDefinition();
+		dataItemFlag.setName("dataItemFlag");
+		dataItemFlag.setColumnName("DATAITEMFLAG_");
+		dataItemFlag.setJavaType("String");
+		dataItemFlag.setLength(2);
+		tableDefinition.addColumn(dataItemFlag);
 
 		ColumnDefinition fetchFlag = new ColumnDefinition();
 		fetchFlag.setName("fetchFlag");

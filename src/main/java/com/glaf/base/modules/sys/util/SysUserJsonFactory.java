@@ -58,8 +58,8 @@ public class SysUserJsonFactory {
 			model.setEvection(jsonObject.getIntValue("evection"));
 		}
 
-		if (jsonObject.containsKey("gender")) {
-			model.setGender(jsonObject.getIntValue("gender"));
+		if (jsonObject.containsKey("sex")) {
+			model.setSex(jsonObject.getIntValue("sex"));
 		}
 
 		if (jsonObject.containsKey("userType")) {
@@ -108,10 +108,6 @@ public class SysUserJsonFactory {
 
 		if (jsonObject.containsKey("headship")) {
 			model.setHeadship(jsonObject.getString("headship"));
-		}
-
-		if (jsonObject.containsKey("superiorIds")) {
-			model.setSuperiorIds(jsonObject.getString("superiorIds"));
 		}
 
 		if (jsonObject.containsKey("locked")) {
@@ -195,9 +191,8 @@ public class SysUserJsonFactory {
 		jsonObject.put("tenantId", user.getTenantId());
 		jsonObject.put("organizationId", user.getOrganizationId());
 
-		jsonObject.put("gender", user.getGender());
+		jsonObject.put("sex", user.getSex());
 		jsonObject.put("evection", user.getEvection());
-		jsonObject.put("superiorIds", user.getSuperiorIds());
 
 		jsonObject.put("fax", user.getFax());
 		jsonObject.put("telephone", user.getTelephone());
@@ -304,9 +299,8 @@ public class SysUserJsonFactory {
 		jsonObject.put("tenantId", user.getTenantId());
 		jsonObject.put("organizationId", user.getOrganizationId());
 
-		jsonObject.put("gender", user.getGender());
+		jsonObject.put("sex", user.getSex());
 		jsonObject.put("evection", user.getEvection());
-		jsonObject.put("superiorIds", user.getSuperiorIds());
 
 		jsonObject.put("fax", user.getFax());
 		jsonObject.put("telephone", user.getTelephone());

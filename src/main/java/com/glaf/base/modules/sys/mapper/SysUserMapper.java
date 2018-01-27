@@ -79,8 +79,6 @@ public interface SysUserMapper {
 	
 	void resetStatus(SysUser model);
 
-	void resetUserAppSecret(SysUser model);
-
 	void resetUserToken(SysUser model);
 
 	void updateSysUser(SysUser model);

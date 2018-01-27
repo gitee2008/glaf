@@ -45,9 +45,10 @@ import com.glaf.core.security.Authentication;
 import com.glaf.core.cache.CacheFactory;
 import com.glaf.core.config.SystemConfig;
 import com.glaf.core.service.ITableDataService;
+import com.glaf.core.util.Constants;
 import com.glaf.core.util.PageResult;
-import com.glaf.core.util.StringTools;
 import com.glaf.core.util.UUID32;
+
 import com.glaf.base.modules.sys.SysConstants;
 import com.glaf.base.modules.sys.mapper.SysAccessMapper;
 import com.glaf.base.modules.sys.mapper.SysApplicationMapper;
@@ -135,7 +136,7 @@ public class SysUserServiceImpl implements SysUserService {
 		boolean result = false;
 		String pwd_hash = DigestUtils.sha512Hex(account + ":" + password);
 		String pwd = sysUserMapper.getPasswordHashByAccount(account);
-		//logger.debug(pwd_hash + ">" + pwd);
+		// logger.debug(pwd_hash + ">" + pwd);
 		if (StringUtils.isNotEmpty(password) && StringUtils.equals(pwd_hash, pwd)) {
 			result = true;
 		}
@@ -150,8 +151,6 @@ public class SysUserServiceImpl implements SysUserService {
 	public boolean create(SysUser bean) {
 		bean.setCreateTime(new Date());
 		bean.setToken(UUID32.getUUID());
-		bean.setAppId(UUID32.getUUID());
-		bean.setAppSecret(UUID32.getUUID());
 		String pwd_hash = DigestUtils.sha512Hex(bean.getUserId() + ":" + bean.getPasswordHash());
 		bean.setPasswordHash(pwd_hash);
 		this.save(bean);
@@ -162,8 +161,6 @@ public class SysUserServiceImpl implements SysUserService {
 	public boolean register(SysUser bean) {
 		bean.setCreateTime(new Date());
 		bean.setToken(UUID32.getUUID());
-		bean.setAppId(UUID32.getUUID());
-		bean.setAppSecret(UUID32.getUUID());
 		String pwd_hash = DigestUtils.sha512Hex(bean.getUserId() + ":" + bean.getPasswordHash());
 		bean.setPasswordHash(pwd_hash);
 		this.save(bean);
@@ -195,8 +192,8 @@ public class SysUserServiceImpl implements SysUserService {
 		tableDataService.insertTableData(table2);
 
 		if (SystemConfig.getBoolean("use_query_cache")) {
-			CacheFactory.clear("role");
-			CacheFactory.clear("user");
+			CacheFactory.clear(Constants.CACHE_ROLE_REGION);
+			CacheFactory.clear(Constants.CACHE_USER_REGION);
 		}
 	}
 
@@ -219,7 +216,7 @@ public class SysUserServiceImpl implements SysUserService {
 		tableDataService.deleteTableData(table2);
 
 		if (SystemConfig.getBoolean("use_query_cache")) {
-			CacheFactory.clear("user");
+			CacheFactory.clear(Constants.CACHE_USER_REGION);
 		}
 
 		return true;
@@ -244,8 +241,8 @@ public class SysUserServiceImpl implements SysUserService {
 		tableDataService.deleteTableData(table2);
 
 		if (SystemConfig.getBoolean("use_query_cache")) {
-			CacheFactory.clear("role");
-			CacheFactory.clear("user");
+			CacheFactory.clear(Constants.CACHE_ROLE_REGION);
+			CacheFactory.clear(Constants.CACHE_USER_REGION);
 		}
 	}
 
@@ -277,15 +274,15 @@ public class SysUserServiceImpl implements SysUserService {
 		}
 
 		if (SystemConfig.getBoolean("use_query_cache")) {
-			CacheFactory.clear("role");
-			CacheFactory.clear("user");
+			CacheFactory.clear(Constants.CACHE_ROLE_REGION);
+			CacheFactory.clear(Constants.CACHE_USER_REGION);
 		}
 	}
 
 	public SysUser findByAccount(String account) {
-		String cacheKey = "sys_user_" + account;
+		String cacheKey = "user_" + account;
 		if (SystemConfig.getBoolean("use_query_cache")) {
-			String text = CacheFactory.getString("user", cacheKey);
+			String text = CacheFactory.getString(Constants.CACHE_USER_REGION, cacheKey);
 			if (StringUtils.isNotEmpty(text)) {
 				try {
 					JSONObject json = JSON.parseObject(text);
@@ -299,7 +296,7 @@ public class SysUserServiceImpl implements SysUserService {
 		if (user != null) {
 			if (SystemConfig.getBoolean("use_query_cache")) {
 				JSONObject json = user.toJsonObject();
-				CacheFactory.put("user", cacheKey, json.toJSONString());
+				CacheFactory.put(Constants.CACHE_USER_REGION, cacheKey, json.toJSONString());
 			}
 			return user;
 		}
@@ -307,9 +304,9 @@ public class SysUserServiceImpl implements SysUserService {
 	}
 
 	public SysUser findByAccountWithAll(String account) {
-		String cacheKey = "sys_user_all_" + account;
+		String cacheKey = "user_all_" + account;
 		if (SystemConfig.getBoolean("use_query_cache")) {
-			String text = CacheFactory.getString("user", cacheKey);
+			String text = CacheFactory.getString(Constants.CACHE_USER_REGION, cacheKey);
 			if (StringUtils.isNotEmpty(text)) {
 				try {
 					JSONObject json = JSON.parseObject(text);
@@ -331,7 +328,7 @@ public class SysUserServiceImpl implements SysUserService {
 
 			if (SystemConfig.getBoolean("use_query_cache")) {
 				JSONObject jsonObject = SysUserJsonFactory.toJsonObject(user);
-				CacheFactory.put("user", cacheKey, jsonObject.toJSONString());
+				CacheFactory.put(Constants.CACHE_USER_REGION, cacheKey, jsonObject.toJSONString());
 			}
 
 			return user;
@@ -342,9 +339,9 @@ public class SysUserServiceImpl implements SysUserService {
 
 	@Override
 	public SysUser findById(String account) {
-		String cacheKey = "sys_user_" + account;
+		String cacheKey = "user_" + account;
 		if (SystemConfig.getBoolean("use_query_cache")) {
-			String text = CacheFactory.getString("user", cacheKey);
+			String text = CacheFactory.getString(Constants.CACHE_USER_REGION, cacheKey);
 			if (StringUtils.isNotEmpty(text)) {
 				try {
 					JSONObject json = JSON.parseObject(text);
@@ -359,7 +356,7 @@ public class SysUserServiceImpl implements SysUserService {
 		if (user != null) {
 			if (SystemConfig.getBoolean("use_query_cache")) {
 				JSONObject json = user.toJsonObject();
-				CacheFactory.put("user", cacheKey, json.toJSONString());
+				CacheFactory.put(Constants.CACHE_USER_REGION, cacheKey, json.toJSONString());
 			}
 		}
 		return user;
@@ -383,23 +380,6 @@ public class SysUserServiceImpl implements SysUserService {
 
 	public List<UserRole> getRoleUserViews(UserRoleQuery query) {
 		return sysUserMapper.getRoleUserViews(query);
-	}
-
-	public List<SysUser> getSuperiors(String account) {
-		List<SysUser> superiors = new ArrayList<SysUser>();
-		SysUser bean = this.findByAccount(account);
-		if (bean != null && bean.getSuperiorIds() != null) {
-			List<String> superiorIds = StringTools.split(bean.getSuperiorIds());
-			if (superiorIds != null && !superiorIds.isEmpty()) {
-				for (String superiorId : superiorIds) {
-					SysUser user = this.findByAccount(superiorId);
-					if (user != null && user.getLocked() == 0) {
-						superiors.add(user);
-					}
-				}
-			}
-		}
-		return superiors;
 	}
 
 	public List<SysUser> getSupplierUser(String supplierNo) {
@@ -766,33 +746,6 @@ public class SysUserServiceImpl implements SysUserService {
 		}
 	}
 
-	/**
-	 * 重置用户AppId及密锁
-	 * 
-	 * @param actorId
-	 * @return
-	 */
-	@Transactional
-	public SysUser resetUserAppSecret(String actorId) {
-		SysUser sysUser = this.findByAccount(actorId);
-		if (sysUser != null) {
-			sysUser.setAppId(UUID32.getUUID());
-			sysUser.setAppSecret(UUID32.getUUID());
-			sysUser.setToken(UUID32.getUUID() + UUID32.getUUID() + UUID32.getUUID() + UUID32.getUUID());
-			sysUser.setTokenTime(new Date(System.currentTimeMillis()));
-			sysUserMapper.resetUserAppSecret(sysUser);
-			String cacheKey = "sys_user_" + sysUser.getActorId();
-			CacheFactory.remove("user", cacheKey);
-
-			cacheKey = "sys_user_all_" + sysUser.getActorId();
-			CacheFactory.remove("user", cacheKey);
-
-			cacheKey = "cache_sys_user_" + sysUser.getActorId();
-			CacheFactory.remove("user", cacheKey);
-		}
-		return sysUser;
-	}
-
 	@Transactional
 	public SysUser resetUserToken(String actorId) {
 		SysUser sysUser = this.findByAccount(actorId);
@@ -800,14 +753,14 @@ public class SysUserServiceImpl implements SysUserService {
 			sysUser.setToken(UUID32.getUUID() + UUID32.getUUID() + UUID32.getUUID() + UUID32.getUUID());
 			sysUser.setTokenTime(new Date(System.currentTimeMillis()));
 			sysUserMapper.resetUserToken(sysUser);
-			String cacheKey = "sys_user_" + sysUser.getActorId();
-			CacheFactory.remove("user", cacheKey);
+			String cacheKey = "user_" + sysUser.getActorId();
+			CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 
-			cacheKey = "sys_user_all_" + sysUser.getActorId();
-			CacheFactory.remove("user", cacheKey);
+			cacheKey = "user_all_" + sysUser.getActorId();
+			CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 
-			cacheKey = "cache_sys_user_" + sysUser.getActorId();
-			CacheFactory.remove("user", cacheKey);
+			cacheKey = "cache_user_" + sysUser.getActorId();
+			CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 		}
 		return sysUser;
 	}
@@ -816,8 +769,6 @@ public class SysUserServiceImpl implements SysUserService {
 	public void save(SysUser sysUser) {
 		if (this.findByAccount(sysUser.getUserId()) == null) {
 			sysUser.setCreateTime(new Date());
-			sysUser.setAppId(UUID32.getUUID());
-			sysUser.setAppSecret(UUID32.getUUID());
 			sysUser.setToken(UUID32.getUUID() + UUID32.getUUID() + UUID32.getUUID() + UUID32.getUUID());
 			sysUser.setTokenTime(new Date(System.currentTimeMillis()));
 			sysUser.setSyncFlag(0);
@@ -828,14 +779,14 @@ public class SysUserServiceImpl implements SysUserService {
 			sysUser.setSyncTime(null);
 
 			sysUserMapper.updateSysUser(sysUser);
-			String cacheKey = "sys_user_" + sysUser.getActorId();
-			CacheFactory.remove("user", cacheKey);
+			String cacheKey = "user_" + sysUser.getActorId();
+			CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 
-			cacheKey = "sys_user_all_" + sysUser.getActorId();
-			CacheFactory.remove("user", cacheKey);
+			cacheKey = "user_all_" + sysUser.getActorId();
+			CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 
-			cacheKey = "cache_sys_user_" + sysUser.getActorId();
-			CacheFactory.remove("user", cacheKey);
+			cacheKey = "cache_user_" + sysUser.getActorId();
+			CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 		}
 
 		TableModel table = new TableModel();
@@ -849,29 +800,6 @@ public class SysUserServiceImpl implements SysUserService {
 		}
 		tableDataService.deleteTableData(table);
 
-		if (StringUtils.isNotEmpty(sysUser.getSuperiorIds())) {
-			List<String> superiorIds = StringTools.split(sysUser.getSuperiorIds());
-			if (superiorIds != null && !superiorIds.isEmpty()) {
-				for (String superiorId : superiorIds) {
-					if (!StringUtils.equals(superiorId, sysUser.getUserId())) {
-						Membership membership = new Membership();
-						membership.setActorId(sysUser.getUserId());
-						membership.setSuperiorId(superiorId);
-						membership.setModifyBy(sysUser.getUpdateBy());
-						membership.setModifyDate(new java.util.Date());
-						membership.setType("Superior");
-						membership.setObjectId("Superior");
-						membership.setObjectValue(superiorId);
-						if (sysUser.getTenantId() != null) {
-							membership.setTenantId(sysUser.getTenantId());
-						} else {
-							membership.setTenantId(SysConstants.SYSTEM_TENANT);
-						}
-						membershipService.save(membership);
-					}
-				}
-			}
-		}
 	}
 
 	/**
@@ -927,8 +855,9 @@ public class SysUserServiceImpl implements SysUserService {
 		}
 
 		if (SystemConfig.getBoolean("use_query_cache")) {
-			CacheFactory.clear("role");
-			CacheFactory.clear("user");
+			CacheFactory.clear(Constants.CACHE_USER_REGION);
+			CacheFactory.clear(Constants.CACHE_USER_ROLE_REGION);
+			CacheFactory.clear(Constants.CACHE_USER_ROLE_CODE_REGION);
 		}
 	}
 
@@ -997,38 +926,14 @@ public class SysUserServiceImpl implements SysUserService {
 		}
 		tableDataService.deleteTableData(table);
 
-		if (StringUtils.isNotEmpty(user.getSuperiorIds())) {
-			List<String> superiorIds = StringTools.split(user.getSuperiorIds());
-			if (superiorIds != null && !superiorIds.isEmpty()) {
-				for (String superiorId : superiorIds) {
-					if (!StringUtils.equals(superiorId, user.getUserId())) {
-						Membership membership = new Membership();
-						membership.setActorId(user.getUserId());
-						membership.setSuperiorId(superiorId);
-						membership.setModifyBy(user.getUpdateBy());
-						membership.setModifyDate(new java.util.Date());
-						membership.setType("Superior");
-						membership.setObjectId("Superior");
-						membership.setObjectValue(superiorId);
-						if (user.getTenantId() != null) {
-							membership.setTenantId(user.getTenantId());
-						} else {
-							membership.setTenantId(SysConstants.SYSTEM_TENANT);
-						}
-						membershipService.save(membership);
-					}
-				}
-			}
-		}
+		String cacheKey = "user_" + user.getActorId();
+		CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 
-		String cacheKey = "sys_user_" + user.getActorId();
-		CacheFactory.remove("user", cacheKey);
+		cacheKey = "user_all_" + user.getActorId();
+		CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 
 		cacheKey = "cache_user_" + user.getActorId();
-		CacheFactory.remove("user", cacheKey);
-
-		cacheKey = "cache_sys_user_" + user.getActorId();
-		CacheFactory.remove("user", cacheKey);
+		CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 
 		return true;
 	}
@@ -1039,14 +944,14 @@ public class SysUserServiceImpl implements SysUserService {
 		sysUser.setLockLoginTime(null);
 		sysUserMapper.updateSysUser(sysUser);
 
-		String cacheKey = "sys_user_" + sysUser.getActorId();
-		CacheFactory.remove("user", cacheKey);
+		String cacheKey = "user_" + sysUser.getActorId();
+		CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 
-		cacheKey = "sys_user_all_" + sysUser.getActorId();
-		CacheFactory.remove("user", cacheKey);
+		cacheKey = "user_all_" + sysUser.getActorId();
+		CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 
-		cacheKey = "cache_sys_user_" + sysUser.getActorId();
-		CacheFactory.remove("user", cacheKey);
+		cacheKey = "cache_user_" + sysUser.getActorId();
+		CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 
 		return true;
 	}
@@ -1058,14 +963,14 @@ public class SysUserServiceImpl implements SysUserService {
 	 */
 	@Transactional
 	public void updateUserLoginSecret(SysUser sysUser) {
-		String cacheKey = "sys_user_" + sysUser.getActorId();
-		CacheFactory.remove("user", cacheKey);
+		String cacheKey = "user_" + sysUser.getActorId();
+		CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 
-		cacheKey = "sys_user_all_" + sysUser.getActorId();
-		CacheFactory.remove("user", cacheKey);
+		cacheKey = "user_all_" + sysUser.getActorId();
+		CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 
-		cacheKey = "cache_sys_user_" + sysUser.getActorId();
-		CacheFactory.remove("user", cacheKey);
+		cacheKey = "cache_user_" + sysUser.getActorId();
+		CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 
 		sysUserMapper.updateUserLoginSecret(sysUser);
 	}
@@ -1132,18 +1037,19 @@ public class SysUserServiceImpl implements SysUserService {
 
 		membershipService.saveMemberships(user.getOrganizationId(), "SysUserRole", memberships);
 
-		String cacheKey = "sys_user_" + user.getActorId();
-		CacheFactory.remove("user", cacheKey);
+		String cacheKey = "user_" + user.getActorId();
+		CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 
-		cacheKey = "sys_user_all_" + user.getActorId();
-		CacheFactory.remove("user", cacheKey);
+		cacheKey = "user_all_" + user.getActorId();
+		CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 
-		cacheKey = "cache_sys_user_" + user.getActorId();
-		CacheFactory.remove("user", cacheKey);
+		cacheKey = "cache_user_" + user.getActorId();
+		CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 
 		if (SystemConfig.getBoolean("use_query_cache")) {
-			CacheFactory.clear("role");
-			CacheFactory.clear("user");
+			CacheFactory.clear(Constants.CACHE_USER_REGION);
+			CacheFactory.clear(Constants.CACHE_USER_ROLE_REGION);
+			CacheFactory.clear(Constants.CACHE_USER_ROLE_CODE_REGION);
 		}
 
 		return true;

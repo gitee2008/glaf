@@ -88,10 +88,10 @@ public class UserOnlineController {
 						request.getSession().removeAttribute("SYS_LOGIN_USER");
 						try {
 							userOnlineService.logout(actorId);
-							String cacheKey = Constants.LOGIN_USER_CACHE + actorId;
-							CacheFactory.remove("loginContext", cacheKey);
-							cacheKey = Constants.USER_CACHE + actorId;
-							CacheFactory.remove("user", cacheKey);
+							String cacheKey = Constants.CACHE_LOGIN_CONTEXT_KEY + actorId;
+							CacheFactory.remove(Constants.CACHE_LOGIN_CONTEXT_REGION, cacheKey);
+							cacheKey = Constants.CACHE_USER_KEY + actorId;
+							CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 							// com.glaf.shiro.ShiroSecurity.logout();
 							logger.info("用户" + actorId + "已经下线！");
 						} catch (Exception ex) {

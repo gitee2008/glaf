@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.sync.mapper.SyncAppMapper">
+
+	<resultMap id="syncAppResultMap" type="com.glaf.matrix.sync.domain.SyncApp">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="nodeId" column="NODEID_" jdbcType="BIGINT" />
+		<result property="deploymentId" column="DEPLOYMENTID_"
+			jdbcType="VARCHAR" />
+		<result property="title" column="TITLE_" jdbcType="VARCHAR" />
+		<result property="srcDatabaseId" column="SRCDATABASEID_"
+			jdbcType="BIGINT" />
+		<result property="syncFlag" column="SYNCFLAG_" jdbcType="VARCHAR" />
+		<result property="targetDatabaseIds" column="TARGETDATABASEIDS_"
+			jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="autoSyncFlag" column="AUTOSYNCFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="interval" column="INTERVAL_" jdbcType="INTEGER" />
+		<result property="active" column="ACTIVE_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY_" jdbcType="VARCHAR" />
+		<result property="updateTime" column="UPDATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertSyncApp" parameterType="com.glaf.matrix.sync.domain.SyncApp">
+		insert into SYS_SYNC_APP
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="nodeId != null">
+				,NODEID_
+			</if>
+			<if test="deploymentId != null">
+				,DEPLOYMENTID_
+			</if>
+			<if test="title != null">
+				,TITLE_
+			</if>
+			<if test="srcDatabaseId != null">
+				,SRCDATABASEID_
+			</if>
+			<if test="syncFlag != null">
+				,SYNCFLAG_
+			</if>
+			<if test="targetDatabaseIds != null">
+				,TARGETDATABASEIDS_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="autoSyncFlag != null">
+				,AUTOSYNCFLAG_
+			</if>
+			<if test="interval != null">
+				,INTERVAL_
+			</if>
+			<if test="active != null">
+				,ACTIVE_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+			<if test="updateBy != null">
+				,UPDATEBY_
+			</if>
+			<if test="updateTime != null">
+				,UPDATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="nodeId != null">
+				,#{nodeId, jdbcType=BIGINT}
+			</if>
+			<if test="deploymentId != null">
+				,#{deploymentId, jdbcType=VARCHAR}
+			</if>
+			<if test="title != null">
+				,#{title, jdbcType=VARCHAR}
+			</if>
+			<if test="srcDatabaseId != null">
+				,#{srcDatabaseId, jdbcType=BIGINT}
+			</if>
+			<if test="syncFlag != null">
+				,#{syncFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="targetDatabaseIds != null">
+				,#{targetDatabaseIds, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="autoSyncFlag != null">
+				,#{autoSyncFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="interval != null">
+				,#{interval, jdbcType=INTEGER}
+			</if>
+			<if test="active != null">
+				,#{active, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy != null">
+				,#{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				,#{updateTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateSyncApp" parameterType="com.glaf.matrix.sync.domain.SyncApp">
+		update SYS_SYNC_APP
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="nodeId != null">
+				NODEID_ = #{nodeId, jdbcType=BIGINT},
+			</if>
+			<if test="title != null">
+				TITLE_ = #{title, jdbcType=VARCHAR},
+			</if>
+			<if test="srcDatabaseId != null">
+				SRCDATABASEID_ = #{srcDatabaseId, jdbcType=BIGINT},
+			</if>
+			<if test="syncFlag != null">
+				SYNCFLAG_ = #{syncFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="targetDatabaseIds != null">
+				TARGETDATABASEIDS_ = #{targetDatabaseIds,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				TYPE_ = #{type, jdbcType=VARCHAR},
+			</if>
+			<if test="active != null">
+				ACTIVE_ = #{active, jdbcType=VARCHAR},
+			</if>
+			<if test="autoSyncFlag != null">
+				AUTOSYNCFLAG_ = #{autoSyncFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="interval != null">
+				INTERVAL_ = #{interval, jdbcType=INTEGER},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY_ = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATETIME_ = #{updateTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteSyncAppById" parameterType="long">
+		delete from
+		SYS_SYNC_APP
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getSyncAppById" parameterType="long" resultMap="syncAppResultMap">
+		select * from SYS_SYNC_APP where ID_ = #{id}
+	</select>
+
+
+	<select id="getSyncApps" parameterType="com.glaf.matrix.sync.query.SyncAppQuery"
+		resultMap="syncAppResultMap">
+		select distinct E.*
+		<include refid="selectSyncAppsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getSyncAppCount" parameterType="com.glaf.matrix.sync.query.SyncAppQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectSyncAppsSql" />
+	</select>
+
+
+	<sql id="selectSyncAppsSql">
+
+		from SYS_SYNC_APP E
+
+		<where>
+			1 = 1
+
+			<if test="nodeId != null">
+				and E.NODEID_ = #{nodeId}
+			</if>
+
+			<if test="nodeIds != null and nodeIds.size() &gt; 0">
+				and E.NODEID_ IN
+				<foreach item="x_nodeId" index="index" collection="nodeIds"
+					open="(" separator="," close=")">
+					#{x_nodeId}
+				</foreach>
+			</if>
+
+			<if test="deploymentId != null and deploymentId != '' ">
+				and E.DEPLOYMENTID_ = #{deploymentId}
+			</if>
+
+			<if test="deploymentIds != null and deploymentIds.size() &gt; 0">
+				and E.DEPLOYMENTID_ IN
+				<foreach item="x_deploymentId" index="index" collection="deploymentIds"
+					open="(" separator="," close=")">
+					#{x_deploymentId}
+				</foreach>
+			</if>
+
+			<if test="titleLike != null and titleLike != '' ">
+				and E.TITLE_ like #{titleLike}
+			</if>
+
+			<if test="syncFlag != null and syncFlag != '' ">
+				and E.SYNCFLAG_ = #{syncFlag}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="autoSyncFlag != null and autoSyncFlag != '' ">
+				and E.AUTOSYNCFLAG_ = #{autoSyncFlag}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+			<if test="updateBy != null and updateBy != '' ">
+				and E.UPDATEBY_ = #{updateBy}
+			</if>
+
+			<if test="updateTimeGreaterThanOrEqual != null">
+				and E.UPDATETIME_ &gt;= #{updateTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="updateTimeLessThanOrEqual != null">
+				and E.UPDATETIME_ &lt;= #{updateTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

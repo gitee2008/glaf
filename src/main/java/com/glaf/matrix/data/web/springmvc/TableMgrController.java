@@ -62,13 +62,17 @@ import com.glaf.core.util.Tools;
 import com.glaf.core.util.ZipUtils;
 import com.glaf.matrix.data.bean.GenaralDBToSQLite;
 import com.glaf.matrix.data.bean.SQLiteToGenaralDB;
+import com.glaf.matrix.data.domain.SqlDefinition;
 import com.glaf.matrix.data.domain.SysTable;
 import com.glaf.matrix.data.domain.TableColumn;
 import com.glaf.matrix.data.domain.TableDataItem;
 import com.glaf.matrix.data.factory.DataItemFactory;
+import com.glaf.matrix.data.query.SqlDefinitionQuery;
 import com.glaf.matrix.data.query.SysTableQuery;
+import com.glaf.matrix.data.query.TableColumnQuery;
 import com.glaf.matrix.data.query.TableDataItemQuery;
 import com.glaf.matrix.data.service.ITableService;
+import com.glaf.matrix.data.service.SqlDefinitionService;
 import com.glaf.matrix.data.service.TableDataItemService;
 import com.glaf.matrix.data.util.TableDomainFactory;
 
@@ -80,6 +84,8 @@ public class TableMgrController {
 	protected ITableService tableService;
 
 	protected ITablePageService tablePageService;
+
+	protected SqlDefinitionService sqlDefinitionService;
 
 	protected TableDataItemService tableDataItemService;
 
@@ -273,10 +279,23 @@ public class TableMgrController {
 		query.locked(0);
 		List<TableDataItem> list = tableDataItemService.list(query);
 		if (list != null && !list.isEmpty()) {
-			for (TableDataItem bean : list) {
+			for (TableDataItem m : list) {
 				BaseItem item = new BaseItem();
-				item.setName(bean.getTitle());
-				item.setValue("@table:" + bean.getId());
+				item.setName(m.getTitle());
+				item.setValue("@table:" + m.getId());
+				items.add(item);
+			}
+		}
+
+		SqlDefinitionQuery query2 = new SqlDefinitionQuery();
+		query2.dataItemFlag("Y");
+		query2.locked(0);
+		List<SqlDefinition> list2 = sqlDefinitionService.list(query2);
+		if (list2 != null && !list2.isEmpty()) {
+			for (SqlDefinition m : list2) {
+				BaseItem item = new BaseItem();
+				item.setName(m.getTitle());
+				item.setValue("@sql:" + m.getId());
 				items.add(item);
 			}
 		}
@@ -332,6 +351,65 @@ public class TableMgrController {
 			} catch (Exception ex) {
 			}
 		}
+	}
+
+	// http://127.0.0.1:8080/glaf/sys/tableMgr/exportSysTables?systemName=db_401
+	@RequestMapping("/exportSysTables")
+	@ResponseBody
+	public void exportSysTables(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String systemName = request.getParameter("systemName");
+		if (StringUtils.isNotEmpty(systemName)) {
+			String sqliteDB = systemName + DateUtils.getNowYearMonthDayHHmmss() + "_sqlite.db";
+			GenaralDBToSQLite dbToSqliteDB = new GenaralDBToSQLite();
+			List<String> tables = DBUtils.getTables(systemName);
+			List<String> sysTables = new ArrayList<String>();
+			sysTables.add("health_dietary_item");
+			sysTables.add("health_dietary_template");
+			sysTables.add("health_food_adi");
+			sysTables.add("health_food_composition");
+			sysTables.add("health_food_dri");
+			sysTables.add("health_food_dri_percent");
+			sysTables.add("health_grade_info");
+			sysTables.add("health_person_info");
+			sysTables.add("health_grade_privilege");
+			sysTables.add("health_growth_standard");
+			sysTables.add("health_person_linkman");
+			sysTables.add("health_repast_person");
+			for (String tbl : tables) {
+				if (StringUtils.startsWithIgnoreCase(tbl, "sys_")) {
+					sysTables.add(tbl);
+				}
+			}
+			dbToSqliteDB.export(systemName, sysTables, sqliteDB);
+			String dbpath = SystemProperties.getConfigRootPath() + "/db/" + sqliteDB;
+			String zipFilePath = SystemProperties.getConfigRootPath() + "/db/" + sqliteDB + ".zip";
+			File[] files = new File[] { new File(dbpath) };
+			ZipUtils.compressFile(files, zipFilePath);
+			byte[] data = FileUtils.getBytes(zipFilePath);
+			try {
+				ResponseUtils.download(request, response, data, sqliteDB + ".zip");
+			} catch (Exception ex) {
+			}
+		}
+	}
+
+	@RequestMapping("/extColumns")
+	public ModelAndView extColumns(HttpServletRequest request, ModelMap modelMap) {
+		RequestUtils.setRequestParameterToAttribute(request);
+		String targetId = request.getParameter("targetId");
+		if (StringUtils.isNotEmpty(targetId)) {
+			TableColumnQuery query = new TableColumnQuery();
+			query.targetId(targetId);
+			List<TableColumn> columns = tableService.getTableColumns(query);
+			request.setAttribute("columns", columns);
+		}
+
+		String view = request.getParameter("view");
+		if (StringUtils.isNotEmpty(view)) {
+			return new ModelAndView(view, modelMap);
+		}
+
+		return new ModelAndView("/sys/tableMgr/extColumns", modelMap);
 	}
 
 	@RequestMapping("/json")
@@ -571,6 +649,34 @@ public class TableMgrController {
 		return ResponseUtils.responseJsonResult(false);
 	}
 
+	@ResponseBody
+	@RequestMapping("/saveColumns")
+	public byte[] saveColumns(HttpServletRequest request) {
+		LoginContext loginContext = RequestUtils.getLoginContext(request);
+		if (loginContext.isSystemAdministrator()) {
+			String targetId = request.getParameter("targetId");
+			try {
+				if (StringUtils.isNotEmpty(targetId)) {
+					TableColumnQuery query = new TableColumnQuery();
+					query.targetId(targetId);
+					List<TableColumn> columns = tableService.getTableColumns(query);
+					for (TableColumn col : columns) {
+						col.setTitle(request.getParameter("title_" + col.getId()));
+						col.setColumnName(request.getParameter("columnName_" + col.getId()));
+						col.setJavaType(request.getParameter("javaType_" + col.getId()));
+						col.setLength(RequestUtils.getInt(request, "length_" + col.getId()));
+					}
+					tableService.saveColumns(targetId, columns);
+					return ResponseUtils.responseJsonResult(true);
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				logger.error(ex);
+			}
+		}
+		return ResponseUtils.responseJsonResult(false);
+	}
+
 	/**
 	 * 排序
 	 * 
@@ -615,6 +721,11 @@ public class TableMgrController {
 			}
 		}
 		return ResponseUtils.responseResult(false);
+	}
+
+	@javax.annotation.Resource
+	public void setSqlDefinitionService(SqlDefinitionService sqlDefinitionService) {
+		this.sqlDefinitionService = sqlDefinitionService;
 	}
 
 	@javax.annotation.Resource

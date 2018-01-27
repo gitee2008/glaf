@@ -103,7 +103,6 @@ public class UserJsonFactory {
 		jsonObject.put("locked", user.getLocked());
 		jsonObject.put("organizationId", user.getOrganizationId());
 		jsonObject.put("tenantId", user.getTenantId());
-		jsonObject.put("adminFlag", user.getAdminFlag());
 		jsonObject.put("accountType", user.getAccountType());
 		jsonObject.put("userType", user.getUserType());
 		jsonObject.put("loginRetry", user.getLoginRetry());
@@ -137,7 +136,6 @@ public class UserJsonFactory {
 		jsonObject.put("locked", user.getLocked());
 		jsonObject.put("organizationId", user.getOrganizationId());
 		jsonObject.put("tenantId", user.getTenantId());
-		jsonObject.put("adminFlag", user.getAdminFlag());
 		jsonObject.put("accountType", user.getAccountType());
 		jsonObject.put("userType", user.getUserType());
 		jsonObject.put("loginRetry", user.getLoginRetry());

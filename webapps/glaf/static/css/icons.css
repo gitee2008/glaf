@@ -6,6 +6,10 @@
 	background: url('../images/add.png') no-repeat;
 }
 
+.icon-copy {
+	background: url('../images/copy.png') no-repeat;
+}
+
 .icon-menu {
 	background: url('../images/m.gif') no-repeat;
 }
@@ -118,6 +122,12 @@
 .icon-ok {
 	background: url('../images/ok.png') no-repeat;
 }
+
+
+.icon-area {
+	background: url('../images/application_view_tile.png') no-repeat;
+}
+
 
 .icon-no {
 	background: url('../images/no.png') no-repeat;

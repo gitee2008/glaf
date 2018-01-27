@@ -267,7 +267,6 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 	}
 
 	public PageResult getApplicationList(long parentId, int pageNo, int pageSize) {
-		// 计算总数
 		PageResult pager = new PageResult();
 		SysApplicationQuery query = new SysApplicationQuery();
 		query.setDeleteFlag(0);

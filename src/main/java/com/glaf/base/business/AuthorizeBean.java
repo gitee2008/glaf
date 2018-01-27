@@ -36,13 +36,13 @@ import com.glaf.base.modules.sys.service.SysUserService;
 import com.glaf.base.modules.sys.util.SysUserJsonFactory;
 
 public class AuthorizeBean {
-	private static final Log logger = LogFactory.getLog(AuthorizeBean.class);
+	protected static final Log logger = LogFactory.getLog(AuthorizeBean.class);
 
-	private SysApplicationService sysApplicationService;
+	protected SysApplicationService sysApplicationService;
 
-	private AuthorizeService authorizeService;
+	protected AuthorizeService authorizeService;
 
-	private SysUserService sysUserService;
+	protected SysUserService sysUserService;
 
 	public AuthorizeBean() {
 
@@ -70,12 +70,11 @@ public class AuthorizeBean {
 	}
 
 	public SysUser getUser(String account) {
-		logger.debug("#account=" + account);
 		SysUser sysUser = null;
 		if (account != null) {
-			String cacheKey = Constants.USER_CACHE + account;
+			String cacheKey = Constants.CACHE_USER_KEY + account;
 			if (SystemConfig.getBoolean("use_query_cache")) {
-				String text = CacheFactory.getString("user", cacheKey);
+				String text = CacheFactory.getString(Constants.CACHE_USER_REGION, cacheKey);
 				if (StringUtils.isNotEmpty(text)) {
 					try {
 						JSONObject jsonObject = JSON.parseObject(text);
@@ -87,7 +86,7 @@ public class AuthorizeBean {
 			if (sysUser == null) {
 				sysUser = getSysUserService().findByAccountWithAll(account);
 				if (sysUser != null && SystemConfig.getBoolean("use_query_cache")) {
-					CacheFactory.put("user", cacheKey, sysUser.toJsonObject().toJSONString());
+					CacheFactory.put(Constants.CACHE_USER_REGION, cacheKey, sysUser.toJsonObject().toJSONString());
 				}
 			}
 		}
@@ -105,10 +104,6 @@ public class AuthorizeBean {
 
 	public void setSysUserService(SysUserService sysUserService) {
 		this.sysUserService = sysUserService;
-	}
-
-	public static void main(String[] args) {
-
 	}
 
 }

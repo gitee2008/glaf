@@ -220,24 +220,24 @@ public class MyBatisSessionFactory {
 				List<String> list = getClassPathMappers();
 				for (int i = 0; i < list.size(); i++) {
 					Resource mapperLocation = new FileSystemResource(list.get(i));
-					try {
-						XMLMapperBuilder xmlMapperBuilder = new XMLMapperBuilder(mapperLocation.getInputStream(),
-								configuration, mapperLocation.toString(), configuration.getSqlFragments());
-						xmlMapperBuilder.parse();
-						// logger.info("parse " + mapperLocation.getFilename());
-						if (mapperLocation != null && mapperLocation.getFilename() != null
-								&& mapperLocation.getFile() != null) {
-							mappers.add(mapperLocation.getFilename());
-							if (properties != null) {
+					if (mapperLocation != null) {
+						try {
+							XMLMapperBuilder xmlMapperBuilder = new XMLMapperBuilder(mapperLocation.getInputStream(),
+									configuration, mapperLocation.toString(), configuration.getSqlFragments());
+							xmlMapperBuilder.parse();
+							// logger.info("parse " + mapperLocation.getFilename());
+							if (mapperLocation.getFilename() != null && mapperLocation.getFile() != null) {
+								mappers.add(mapperLocation.getFilename());
 								properties.put(mapperLocation.getFilename(),
 										mapperLocation.getFile().getAbsolutePath());
 							}
+						} catch (Exception ex) {
+							ex.printStackTrace();
+							throw new NestedIOException("Failed to parse mapping resource: '" + mapperLocation + "'",
+									ex);
+						} finally {
+							ErrorContext.instance().reset();
 						}
-					} catch (Exception ex) {
-						ex.printStackTrace();
-						throw new NestedIOException("Failed to parse mapping resource: '" + mapperLocation + "'", ex);
-					} finally {
-						ErrorContext.instance().reset();
 					}
 				}
 

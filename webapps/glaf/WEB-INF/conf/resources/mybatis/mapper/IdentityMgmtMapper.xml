@@ -17,7 +17,6 @@
 			jdbcType="BIGINT" />
 		<result property="mail" column="EMAIL" jdbcType="VARCHAR" />
 		<result property="mobile" column="MOBILE" jdbcType="VARCHAR" />
-		<result property="adminFlag" column="ISSYSTEM" jdbcType="VARCHAR" />
 		<result property="accountType" column="ACCOUNTTYPE" jdbcType="INTEGER" />
 		<result property="tenantId" column="TENANTID" jdbcType="VARCHAR" />
 		<result property="userType" column="USERTYPE" jdbcType="INTEGER" />
@@ -35,7 +34,8 @@
 	</resultMap>
 
 
-	<resultMap id="sysOrganizationResultMap" type="com.glaf.base.modules.sys.model.SysOrganization">
+	<resultMap id="sysOrganizationResultMap"
+		type="com.glaf.base.modules.sys.model.SysOrganization">
 		<id property="id" column="ID" jdbcType="BIGINT" />
 		<result property="name" column="NAME" jdbcType="VARCHAR" />
 		<result property="description" column="ORG_DESC" jdbcType="VARCHAR" />
@@ -88,6 +88,23 @@
 		<result property="url" column="URL" jdbcType="VARCHAR" />
 		<result property="locked" column="LOCKED" jdbcType="INTEGER" />
 	</resultMap>
+
+
+	<select id="getAgents" resultType="com.glaf.core.identity.impl.AgentImpl"
+		parameterType="string">
+
+		select ASSIGNFROM_ as assignFrom, ASSIGNTO_ as assignTo,
+		OBJECTID_ as objectId, OBJECTVALUE_ as objectValue,
+		PROCESSNAME_ as
+		processName, TASKNAME_ as taskName,
+		AGENTTYPE_ as agentType, STARTDATE_
+		as startDate,
+		ENDDATE_ as endDate
+		from sys_agent
+		where ASSIGNTO_ =
+		#{assignTo}
+
+	</select>
 
 
 	<insert id="insertSysTree" parameterType="com.glaf.core.base.BaseTree">
@@ -339,15 +356,15 @@
 		FROM SYS_USER x
 
 		<if test="roleId != null">
-			INNER JOIN SYS_USER_ROLE r
-			ON x.USERID = r.USERID
+			INNER JOIN SYS_USER_ROLE userrole
+			ON x.USERID = userrole.USERID
 		</if>
 
 		WHERE 1=1
 		and x.DELETEFLAG = 0
 
 		<if test="roleId != null">
-			AND r.ROLEID = #{roleId}
+			AND userrole.ROLEID = #{roleId}
 		</if>
 
 		<if test="nodeId != null">
@@ -376,7 +393,8 @@
 		FROM SYS_ORGANIZATION o
 
 		WHERE 1=1
-		and o.DELETEFLAG = 0
+		and o.DELETEFLAG =
+		0
 
 		<if test="nodeId != null">
 			AND ( o.ID = #{nodeId} )
@@ -404,15 +422,15 @@
 		FROM SYS_USER x
 
 		<if test="roleId != null">
-			INNER JOIN SYS_USER_ROLE r
-			ON x.USERID = r.USERID
+			INNER JOIN SYS_USER_ROLE userrole
+			ON x.USERID = userrole.USERID
 		</if>
 
 		WHERE 1=1
 		and x.DELETEFLAG = 0
 
 		<if test="roleId != null">
-			AND r.ROLEID = #{roleId}
+			AND userrole.ROLEID = #{roleId}
 		</if>
 
 		<if test="nodeId != null">
@@ -449,10 +467,10 @@
 
 		SELECT x.*
 		FROM SYS_USER x
-		INNER JOIN SYS_USER_ROLE r
+		INNER JOIN SYS_USER_ROLE userrole
 		ON
-		x.USERID = r.USERID
-		WHERE r.ROLEID = #{roleId}
+		x.USERID = userrole.USERID
+		WHERE userrole.ROLEID = #{roleId}
 		and x.DELETEFLAG = 0
 		ORDER BY x.USERID ASC
 
@@ -524,11 +542,13 @@
 	</select>
 
 
-	<select id="getManagedTenantIds" resultType="string" parameterType="string">
+	<select id="getManagedTenantIds" resultType="string"
+		parameterType="string">
 
 		SELECT t.TENANTID_
 		FROM SYS_TENANT_GRANT t
-		WHERE t.GRANTEE_ = #{userId}
+		WHERE
+		t.GRANTEE_ = #{userId}
 
 	</select>
 
@@ -548,8 +568,9 @@
 
 		SELECT t.*
 		FROM SYS_TENANT t
-		WHERE t.TENANTID_ = #{tenantId}
-	
+		WHERE t.TENANTID_ =
+		#{tenantId}
+
 	</select>
 
 

@@ -127,6 +127,12 @@ public class ThemeController {
 		return new ModelAndView("/ui/theme/edit", modelMap);
 	}
 
+	@RequestMapping("/iconfont")
+	public ModelAndView iconfont(HttpServletRequest request, ModelMap modelMap) {
+		RequestUtils.setRequestParameterToAttribute(request);
+		return new ModelAndView("/common/iconfont", modelMap);
+	}
+
 	@RequestMapping("/json")
 	@ResponseBody
 	public byte[] json(HttpServletRequest request, ModelMap modelMap) throws IOException {

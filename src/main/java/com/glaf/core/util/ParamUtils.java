@@ -101,6 +101,7 @@ public class ParamUtils {
 		if (value != null && StringUtils.isNotEmpty(value.toString())) {
 			if (value instanceof String) {
 				String tmp = (String) value;
+				tmp = StringTools.replace(tmp, ",", "");
 				result = Double.parseDouble(tmp);
 			} else if (value instanceof Integer) {
 				Integer x = (Integer) value;
@@ -113,6 +114,7 @@ public class ParamUtils {
 				result = x.doubleValue();
 			} else {
 				String tmp = value.toString();
+				tmp = StringTools.replace(tmp, ",", "");
 				result = Double.parseDouble(tmp);
 			}
 		} else {
@@ -134,6 +136,7 @@ public class ParamUtils {
 		if (value != null && StringUtils.isNotEmpty(value.toString())) {
 			if (value instanceof String) {
 				String tmp = (String) value;
+				tmp = StringTools.replace(tmp, ",", "");
 				result = Double.parseDouble(tmp);
 			} else if (value instanceof Integer) {
 				Integer x = (Integer) value;
@@ -146,6 +149,7 @@ public class ParamUtils {
 				result = x.doubleValue();
 			} else {
 				String tmp = value.toString();
+				tmp = StringTools.replace(tmp, ",", "");
 				result = Double.parseDouble(tmp);
 			}
 		} else {
@@ -166,6 +170,7 @@ public class ParamUtils {
 		if (value != null && StringUtils.isNotEmpty(value.toString())) {
 			if (value instanceof String) {
 				String tmp = (String) value;
+				tmp = StringTools.replace(tmp, ",", "");
 				result = Integer.parseInt(tmp);
 			} else if (value instanceof Integer) {
 				Integer x = (Integer) value;
@@ -178,6 +183,7 @@ public class ParamUtils {
 				result = x.intValue();
 			} else {
 				String tmp = value.toString();
+				tmp = StringTools.replace(tmp, ",", "");
 				result = Integer.parseInt(tmp);
 			}
 		}
@@ -196,6 +202,7 @@ public class ParamUtils {
 		if (value != null && StringUtils.isNotEmpty(value.toString())) {
 			if (value instanceof String) {
 				String tmp = (String) value;
+				tmp = StringTools.replace(tmp, ",", "");
 				result = Integer.parseInt(tmp);
 			} else if (value instanceof Integer) {
 				Integer x = (Integer) value;
@@ -208,6 +215,7 @@ public class ParamUtils {
 				result = x.intValue();
 			} else {
 				String tmp = value.toString();
+				tmp = StringTools.replace(tmp, ",", "");
 				result = Integer.parseInt(tmp);
 			}
 		}
@@ -226,6 +234,7 @@ public class ParamUtils {
 		if (value != null && StringUtils.isNotEmpty(value.toString())) {
 			if (value instanceof String) {
 				String tmp = (String) value;
+				tmp = StringTools.replace(tmp, ",", "");
 				result = Long.parseLong(tmp);
 			} else if (value instanceof Integer) {
 				Integer x = (Integer) value;
@@ -238,6 +247,7 @@ public class ParamUtils {
 				result = x.longValue();
 			} else {
 				String tmp = value.toString();
+				tmp = StringTools.replace(tmp, ",", "");
 				result = Long.parseLong(tmp);
 			}
 		}
@@ -256,6 +266,7 @@ public class ParamUtils {
 		if (value != null && StringUtils.isNotEmpty(value.toString())) {
 			if (value instanceof String) {
 				String tmp = (String) value;
+				tmp = StringTools.replace(tmp, ",", "");
 				result = Long.parseLong(tmp);
 			} else if (value instanceof Integer) {
 				Integer x = (Integer) value;
@@ -268,6 +279,7 @@ public class ParamUtils {
 				result = x.longValue();
 			} else {
 				String tmp = value.toString();
+				tmp = StringTools.replace(tmp, ",", "");
 				result = Long.parseLong(tmp);
 			}
 		}
@@ -312,8 +324,7 @@ public class ParamUtils {
 		return result;
 	}
 
-	public static String getString(Map<String, Object> dataMap, String key,
-			String defaultValue) {
+	public static String getString(Map<String, Object> dataMap, String key, String defaultValue) {
 		String result = defaultValue;
 		if (dataMap == null || key == null) {
 			return result;
@@ -347,7 +358,7 @@ public class ParamUtils {
 		if (value == null) {
 			value = dataMap.get(key.toUpperCase());
 		}
-		if (value != null  && StringUtils.isNotEmpty(value.toString())) {
+		if (value != null && StringUtils.isNotEmpty(value.toString())) {
 			if (value instanceof String) {
 				result = DateUtils.toTimestamp(value.toString());
 			} else if (value instanceof Date) {

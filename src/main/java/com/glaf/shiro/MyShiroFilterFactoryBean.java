@@ -50,11 +50,8 @@ public class MyShiroFilterFactoryBean extends ShiroFilterFactoryBean {
 			filterChainDefinitionMap.put("/sys/**", "authc,perms[SystemAdministrator]");
 			filterChainDefinitionMap.put("/dataset/**", "authc,perms[SystemAdministrator]");
 			filterChainDefinitionMap.put("/sql/query/**", "authc,perms[SystemAdministrator]");
-			filterChainDefinitionMap.put("/datamgr/sql/definition/**", "authc,perms[SystemAdministrator]");
+			filterChainDefinitionMap.put("/sql/definition/**", "authc,perms[SystemAdministrator]");
 			filterChainDefinitionMap.put("/sys/**", "authc,perms[SystemAdministrator]");
-			filterChainDefinitionMap.put("/dataset/**", "authc,perms[SystemAdministrator]");
-			filterChainDefinitionMap.put("/sql/query/**", "authc,perms[SystemAdministrator]");
-			filterChainDefinitionMap.put("/datamgr/sql/definition/**", "authc,perms[SystemAdministrator]");
 		}
 		logger.debug("load system security properties...");
 		LinkedHashMap<String, String> props = SecurityConfig.getProperties();

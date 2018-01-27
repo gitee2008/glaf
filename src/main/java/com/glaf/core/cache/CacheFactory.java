@@ -27,7 +27,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,6 +40,7 @@ import com.glaf.core.util.ReflectUtils;
 public class CacheFactory {
 	protected static final Log logger = LogFactory.getLog(CacheFactory.class);
 	protected static final ConcurrentMap<String, Cache> cacheMap = new ConcurrentHashMap<String, Cache>();
+	protected static final ConcurrentMap<String, CacheItem> cacheKeyMap = new ConcurrentHashMap<String, CacheItem>();
 	protected static final List<CacheItem> items = new CopyOnWriteArrayList<CacheItem>();
 	protected static final List<String> regions = new CopyOnWriteArrayList<String>();
 	protected static Configuration conf = BaseConfiguration.create();
@@ -81,7 +82,7 @@ public class CacheFactory {
 
 	protected static Cache getCache() {
 		Cache cache = null;
-		String provider = CacheProperties.getString("cache_provider", "ehcache");
+		String provider = CacheProperties.getString("cache_provider");
 		if (provider != null) {
 			cache = cacheMap.get(provider);
 		}
@@ -89,23 +90,28 @@ public class CacheFactory {
 			if (StringUtils.equals(provider, "cacheonix")) {
 				String cacheClass = "com.glaf.core.cache.cacheonix.CacheonixCache";
 				cache = (Cache) ReflectUtils.instantiate(cacheClass);
+			} else if (StringUtils.equals(provider, "caffeine")) {
+				String cacheClass = "com.glaf.core.cache.caffeine.CaffeineCache";
+				cache = (Cache) ReflectUtils.instantiate(cacheClass);
 			} else if (StringUtils.equals(provider, "ehcache")) {
 				String cacheClass = "com.glaf.core.cache.ehcache.EHCacheImpl";
 				cache = (Cache) ReflectUtils.instantiate(cacheClass);
 			} else if (StringUtils.equals(provider, "ehcache3")) {
 				String cacheClass = "com.glaf.core.cache.ehcache3.EHCache3Impl";
 				cache = (Cache) ReflectUtils.instantiate(cacheClass);
-			} else if (StringUtils.equals(provider, "geode")) {
-				String cacheClass = "com.glaf.core.cache.geode.GeodeCacheImpl";
-				cache = (Cache) ReflectUtils.instantiate(cacheClass);
 			} else if (StringUtils.equals(provider, "guava")) {
 				String cacheClass = "com.glaf.core.cache.guava.GuavaCache";
 				cache = (Cache) ReflectUtils.instantiate(cacheClass);
 			} else if (StringUtils.equals(provider, "j2cache")) {
-				String cacheClass = "com.glaf.j2cache.J2CacheImpl";
+				String cacheClass = "com.glaf.core.cache.j2cache.J2CacheImpl";
+				cache = (Cache) ReflectUtils.instantiate(cacheClass);
+			} else {
+				provider = "caffeine";
+				String cacheClass = "com.glaf.core.cache.caffeine.CaffeineCache";
 				cache = (Cache) ReflectUtils.instantiate(cacheClass);
 			}
 			if (cache != null && provider != null) {
+				logger.debug("cache provider:" + cache.getClass().getName());
 				cacheMap.put(provider, cache);
 			}
 		}
@@ -134,6 +140,12 @@ public class CacheFactory {
 							String val = value.toString();
 							val = new String(com.glaf.core.util.Hex.hex2byte(val), "UTF-8");
 							return val;
+						} else {
+							CacheItem item = cacheKeyMap.get(cacheKey);
+							if (item != null) {
+								items.remove(item);
+							}
+							cacheKeyMap.remove(cacheKey);
 						}
 					}
 				} catch (Throwable ex) {
@@ -185,6 +197,7 @@ public class CacheFactory {
 					item.setLastModified(System.currentTimeMillis());
 					item.setSize(value.length());
 					items.add(item);
+					cacheKeyMap.put(cacheKey, item);
 					// logger.debug(_region + ":" + cacheKey + " put into
 					// cache.");
 				}
@@ -202,7 +215,11 @@ public class CacheFactory {
 				String cacheKey = _region + "_" + key;
 				cacheKey = DigestUtils.md5Hex(cacheKey.getBytes());
 				cache.remove(_region, cacheKey);
-				items.remove(new CacheItem(_region, cacheKey));
+				CacheItem item = cacheKeyMap.get(cacheKey);
+				if (item != null) {
+					items.remove(item);
+				}
+				cacheKeyMap.remove(cacheKey);
 			}
 		} catch (Throwable ex) {
 

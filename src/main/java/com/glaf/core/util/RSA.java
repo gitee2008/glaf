@@ -53,7 +53,7 @@ public class RSA {
 			String provider = "org.bouncycastle.jce.provider.BouncyCastleProvider";
 			java.security.Security.addProvider((Provider) Class.forName(provider).newInstance());
 		} catch (Exception ex) {
-			
+
 		}
 	}
 
@@ -66,7 +66,7 @@ public class RSA {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			KeyPairGenerator generator = KeyPairGenerator.getInstance(KEY_RSA);
-			generator.initialize(2048);
+			generator.initialize(1024);
 			KeyPair keyPair = generator.generateKeyPair();
 			// 公钥
 			RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
@@ -76,7 +76,7 @@ public class RSA {
 			map.put(KEY_RSA_PUBLICKEY, publicKey);
 			map.put(KEY_RSA_PRIVATEKEY, privateKey);
 		} catch (NoSuchAlgorithmException ex) {
-			
+
 		}
 		return map;
 	}

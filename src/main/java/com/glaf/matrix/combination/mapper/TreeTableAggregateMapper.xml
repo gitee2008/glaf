@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.combination.mapper.TreeTableAggregateMapper">
+
+	<resultMap id="treeTableAggregateResultMap" type="com.glaf.matrix.combination.domain.TreeTableAggregate">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="title" column="TITLE_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="sourceTableName" column="SOURCETABLENAME_"
+			jdbcType="VARCHAR" />
+		<result property="sourceIdColumn" column="SOURCEIDCOLUMN_"
+			jdbcType="VARCHAR" />
+		<result property="sourceIndexIdColumn" column="SOURCEINDEXIDCOLUMN_"
+			jdbcType="VARCHAR" />
+		<result property="sourceParentIdColumn" column="SOURCEPARENTIDCOLUMN_"
+			jdbcType="VARCHAR" />
+		<result property="sourceTreeIdColumn" column="SOURCETREEIDCOLUMN_"
+			jdbcType="VARCHAR" />
+		<result property="sourceTextColumn" column="SOURCETEXTCOLUMN_"
+			jdbcType="VARCHAR" />
+		<result property="sourceWbsIndexColumn" column="SOURCEWBSINDEXCOLUMN_"
+			jdbcType="VARCHAR" />
+		<result property="sourceTableDateSplitColumn" column="SOURCETABLEDATESPLITCOLUMN_"
+			jdbcType="VARCHAR" />
+		<result property="sourceTableExecutionIds" column="SOURCETABLEEXECUTIONIDS_"
+			jdbcType="VARCHAR" />
+		<result property="databaseIds" column="DATABASEIDS_" jdbcType="VARCHAR" />
+		<result property="targetTableName" column="TARGETTABLENAME_"
+			jdbcType="VARCHAR" />
+		<result property="targetTableExecutionIds" column="TARGETTABLEEXECUTIONIDS_"
+			jdbcType="VARCHAR" />
+		<result property="createTableFlag" column="CREATETABLEFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="aggregateFlag" column="AGGREGATEFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="scheduleFlag" column="SCHEDULEFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="genByMonth" column="GENBYMONTH_" jdbcType="VARCHAR" />
+		<result property="privateFlag" column="PRIVATEFLAG_" jdbcType="INTEGER" />
+		<result property="deleteFetch" column="DELETEFETCH_" jdbcType="VARCHAR" />
+		<result property="jobNo" column="JOBNO_" jdbcType="VARCHAR" />
+		<result property="syncColumns" column="SYNCCOLUMNS_" jdbcType="VARCHAR" />
+		<result property="syncStatus" column="SYNCSTATUS_" jdbcType="INTEGER" />
+		<result property="syncTime" column="SYNCTIME_" jdbcType="TIMESTAMP" />
+		<result property="dynamicCondition" column="DYNAMICCONDITION_"
+			jdbcType="VARCHAR" />
+		<result property="sqlCriteria" column="SQLCRITERIA_" jdbcType="VARCHAR" />
+		<result property="startYear" column="STARTYEAR_" jdbcType="INTEGER" />
+		<result property="stopYear" column="STOPYEAR_" jdbcType="INTEGER" />
+		<result property="sortNo" column="SORTNO_" jdbcType="INTEGER" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="deleteFlag" column="DELETEFLAG_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY_" jdbcType="VARCHAR" />
+		<result property="updateTime" column="UPDATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertTreeTableAggregate" parameterType="com.glaf.matrix.combination.domain.TreeTableAggregate">
+		insert into SYS_TREETABLE_AGGREGATE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="title != null">
+				,TITLE_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="sourceTableName != null">
+				,SOURCETABLENAME_
+			</if>
+			<if test="sourceIdColumn != null">
+				,SOURCEIDCOLUMN_
+			</if>
+			<if test="sourceIndexIdColumn != null">
+				,SOURCEINDEXIDCOLUMN_
+			</if>
+			<if test="sourceParentIdColumn != null">
+				,SOURCEPARENTIDCOLUMN_
+			</if>
+			<if test="sourceTreeIdColumn != null">
+				,SOURCETREEIDCOLUMN_
+			</if>
+			<if test="sourceTextColumn != null">
+				,SOURCETEXTCOLUMN_
+			</if>
+			<if test="sourceWbsIndexColumn != null">
+				,SOURCEWBSINDEXCOLUMN_
+			</if>
+			<if test="sourceTableDateSplitColumn != null">
+				,SOURCETABLEDATESPLITCOLUMN_
+			</if>
+			<if test="sourceTableExecutionIds != null">
+				,SOURCETABLEEXECUTIONIDS_
+			</if>
+			<if test="databaseIds != null">
+				,DATABASEIDS_
+			</if>
+			<if test="targetTableName != null">
+				,TARGETTABLENAME_
+			</if>
+			<if test="targetTableExecutionIds != null">
+				,TARGETTABLEEXECUTIONIDS_
+			</if>
+			<if test="createTableFlag != null">
+				,CREATETABLEFLAG_
+			</if>
+			<if test="aggregateFlag != null">
+				,AGGREGATEFLAG_
+			</if>
+			<if test="scheduleFlag != null">
+				,SCHEDULEFLAG_
+			</if>
+			<if test="genByMonth != null">
+				,GENBYMONTH_
+			</if>
+			<if test="privateFlag != null">
+				,PRIVATEFLAG_
+			</if>
+			<if test="deleteFetch != null">
+				,DELETEFETCH_
+			</if>
+			<if test="jobNo != null">
+				,JOBNO_
+			</if>
+			<if test="syncColumns != null">
+				,SYNCCOLUMNS_
+			</if>
+			<if test="syncStatus != null">
+				,SYNCSTATUS_
+			</if>
+			<if test="syncTime != null">
+				,SYNCTIME_
+			</if>
+			<if test="dynamicCondition != null">
+				,DYNAMICCONDITION_
+			</if>
+			<if test="sqlCriteria != null">
+				,SQLCRITERIA_
+			</if>
+			<if test="startYear != null">
+				,STARTYEAR_
+			</if>
+			<if test="stopYear != null">
+				,STOPYEAR_
+			</if>
+			<if test="sortNo != null">
+				,SORTNO_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="deleteFlag != null">
+				,DELETEFLAG_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+			<if test="updateBy != null">
+				,UPDATEBY_
+			</if>
+			<if test="updateTime != null">
+				,UPDATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="title != null">
+				,#{title, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="sourceTableName != null">
+				,#{sourceTableName, jdbcType=VARCHAR}
+			</if>
+			<if test="sourceIdColumn != null">
+				,#{sourceIdColumn, jdbcType=VARCHAR}
+			</if>
+			<if test="sourceIndexIdColumn != null">
+				,#{sourceIndexIdColumn, jdbcType=VARCHAR}
+			</if>
+			<if test="sourceParentIdColumn != null">
+				,#{sourceParentIdColumn, jdbcType=VARCHAR}
+			</if>
+			<if test="sourceTreeIdColumn != null">
+				,#{sourceTreeIdColumn, jdbcType=VARCHAR}
+			</if>
+			<if test="sourceTextColumn != null">
+				,#{sourceTextColumn, jdbcType=VARCHAR}
+			</if>
+			<if test="sourceWbsIndexColumn != null">
+				,#{sourceWbsIndexColumn, jdbcType=VARCHAR}
+			</if>
+			<if test="sourceTableDateSplitColumn != null">
+				,#{sourceTableDateSplitColumn, jdbcType=VARCHAR}
+			</if>
+			<if test="sourceTableExecutionIds != null">
+				,#{sourceTableExecutionIds, jdbcType=VARCHAR}
+			</if>
+			<if test="databaseIds != null">
+				,#{databaseIds, jdbcType=VARCHAR}
+			</if>
+			<if test="targetTableName != null">
+				,#{targetTableName, jdbcType=VARCHAR}
+			</if>
+			<if test="targetTableExecutionIds != null">
+				,#{targetTableExecutionIds, jdbcType=VARCHAR}
+			</if>
+			<if test="createTableFlag != null">
+				,#{createTableFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="aggregateFlag != null">
+				,#{aggregateFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="scheduleFlag != null">
+				,#{scheduleFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="genByMonth != null">
+				,#{genByMonth, jdbcType=VARCHAR}
+			</if>
+			<if test="privateFlag != null">
+				,#{privateFlag, jdbcType=INTEGER}
+			</if>
+			<if test="deleteFetch != null">
+				,#{deleteFetch, jdbcType=VARCHAR}
+			</if>
+			<if test="jobNo != null">
+				,#{jobNo, jdbcType=VARCHAR}
+			</if>
+			<if test="syncColumns != null">
+				,#{syncColumns, jdbcType=VARCHAR}
+			</if>
+			<if test="syncStatus != null">
+				,#{syncStatus, jdbcType=INTEGER}
+			</if>
+			<if test="syncTime != null">
+				,#{syncTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="dynamicCondition != null">
+				,#{dynamicCondition, jdbcType=VARCHAR}
+			</if>
+			<if test="sqlCriteria != null">
+				,#{sqlCriteria, jdbcType=VARCHAR}
+			</if>
+			<if test="startYear != null">
+				,#{startYear, jdbcType=INTEGER}
+			</if>
+			<if test="stopYear != null">
+				,#{stopYear, jdbcType=INTEGER}
+			</if>
+			<if test="sortNo != null">
+				,#{sortNo, jdbcType=INTEGER}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="deleteFlag != null">
+				,#{deleteFlag, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy != null">
+				,#{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				,#{updateTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateTreeTableAggregate" parameterType="com.glaf.matrix.combination.domain.TreeTableAggregate">
+		update SYS_TREETABLE_AGGREGATE
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="name != null">
+				NAME_ = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				TITLE_ = #{title, jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				TYPE_ = #{type, jdbcType=VARCHAR},
+			</if>
+			<if test="sourceTableName != null">
+				SOURCETABLENAME_ = #{sourceTableName, jdbcType=VARCHAR},
+			</if>
+			<if test="sourceIdColumn != null">
+				SOURCEIDCOLUMN_ = #{sourceIdColumn, jdbcType=VARCHAR},
+			</if>
+			<if test="sourceIndexIdColumn != null">
+				SOURCEINDEXIDCOLUMN_ = #{sourceIndexIdColumn,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="sourceParentIdColumn != null">
+				SOURCEPARENTIDCOLUMN_ = #{sourceParentIdColumn,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="sourceTreeIdColumn != null">
+				SOURCETREEIDCOLUMN_ = #{sourceTreeIdColumn,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="sourceTextColumn != null">
+				SOURCETEXTCOLUMN_ = #{sourceTextColumn,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="sourceWbsIndexColumn != null">
+				SOURCEWBSINDEXCOLUMN_ = #{sourceWbsIndexColumn,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="sourceTableDateSplitColumn != null">
+				SOURCETABLEDATESPLITCOLUMN_ =
+				#{sourceTableDateSplitColumn, jdbcType=VARCHAR},
+			</if>
+			<if test="sourceTableExecutionIds != null">
+				SOURCETABLEEXECUTIONIDS_ = #{sourceTableExecutionIds,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="databaseIds != null">
+				DATABASEIDS_ = #{databaseIds,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="targetTableName != null">
+				TARGETTABLENAME_ = #{targetTableName, jdbcType=VARCHAR},
+			</if>
+			<if test="targetTableExecutionIds != null">
+				TARGETTABLEEXECUTIONIDS_ = #{targetTableExecutionIds,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="createTableFlag != null">
+				CREATETABLEFLAG_ = #{createTableFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="aggregateFlag != null">
+				AGGREGATEFLAG_ = #{aggregateFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="scheduleFlag != null">
+				SCHEDULEFLAG_ = #{scheduleFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="genByMonth != null">
+				GENBYMONTH_ = #{genByMonth, jdbcType=VARCHAR},
+			</if>
+			<if test="deleteFetch != null">
+				DELETEFETCH_ = #{deleteFetch, jdbcType=VARCHAR},
+			</if>
+			<if test="syncColumns != null">
+				SYNCCOLUMNS_ = #{syncColumns, jdbcType=VARCHAR},
+			</if>
+			<if test="syncStatus != null">
+				SYNCSTATUS_ = #{syncStatus, jdbcType=INTEGER},
+			</if>
+			<if test="syncTime != null">
+				SYNCTIME_ = #{syncTime, jdbcType=TIMESTAMP},
+			</if>
+			<if test="dynamicCondition != null">
+				DYNAMICCONDITION_ = #{dynamicCondition,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="sqlCriteria != null">
+				SQLCRITERIA_ = #{sqlCriteria, jdbcType=VARCHAR},
+			</if>
+			<if test="startYear != null">
+				STARTYEAR_ = #{startYear, jdbcType=INTEGER},
+			</if>
+			<if test="stopYear != null">
+				STOPYEAR_ = #{stopYear, jdbcType=INTEGER},
+			</if>
+			<if test="sortNo != null">
+				SORTNO_ = #{sortNo, jdbcType=INTEGER},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+			<if test="deleteFlag != null">
+				DELETEFLAG_ = #{deleteFlag, jdbcType=INTEGER},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY_ = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATETIME_ = #{updateTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<update id="updateTreeTableAggregateStatus" parameterType="com.glaf.matrix.combination.domain.TreeTableAggregate">
+
+		update SYS_TREETABLE_AGGREGATE
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="syncStatus != null">
+				SYNCSTATUS_ = #{syncStatus, jdbcType=INTEGER},
+			</if>
+			<if test="syncTime != null">
+				SYNCTIME_ = #{syncTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<update id="resetAllTreeTableAggregateStatus">
+
+		update
+		SYS_TREETABLE_AGGREGATE
+		set SYNCSTATUS_ = 0,
+		SYNCTIME_ = null
+		where LOCKED_ = 0
+		and DELETEFLAG_ = 0
+
+	</update>
+
+
+	<delete id="deleteTreeTableAggregateById" parameterType="long">
+		delete
+		from SYS_TREETABLE_AGGREGATE
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deleteTreeTableAggregates" parameterType="com.glaf.matrix.combination.query.TreeTableAggregateQuery">
+		delete from SYS_TREETABLE_AGGREGATE
+		where (
+		ID_ IN
+		<foreach item="x_id" index="index" collection="ids" open="("
+			separator="," close=")">
+			#{x_id}
+		</foreach>
+		)
+	</delete>
+
+
+	<select id="getTreeTableAggregateById" parameterType="long"
+		resultMap="treeTableAggregateResultMap">
+		select * from SYS_TREETABLE_AGGREGATE where ID_ = #{id}
+	</select>
+
+
+	<select id="getTreeTableAggregates" parameterType="com.glaf.matrix.combination.query.TreeTableAggregateQuery"
+		resultMap="treeTableAggregateResultMap">
+		select distinct E.*
+		<include refid="selectTreeTableAggregatesSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.CREATETIME_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getTreeTableAggregateCount" parameterType="com.glaf.matrix.combination.query.TreeTableAggregateQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectTreeTableAggregatesSql" />
+	</select>
+
+
+	<sql id="selectTreeTableAggregatesSql">
+
+		from SYS_TREETABLE_AGGREGATE E
+
+		<where>
+			1 = 1
+
+			<if test="name != null and name != '' ">
+				and E.NAME_ = #{name}
+			</if>
+
+			<if test="nameLike != null and nameLike != '' ">
+				and E.NAME_ like #{nameLike}
+			</if>
+
+			<if test="titleLike != null and titleLike != '' ">
+				and E.TITLE_ like #{titleLike}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="sourceTableName != null and sourceTableName != '' ">
+				and E.SOURCETABLENAME_ = #{sourceTableName}
+			</if>
+
+			<if test="sourceTableNameLike != null and sourceTableNameLike != '' ">
+				and E.SOURCETABLENAME_ like #{sourceTableNameLike}
+			</if>
+
+			<if test="targetTableName != null and targetTableName != '' ">
+				and E.TARGETTABLENAME_ = #{targetTableName}
+			</if>
+
+			<if test="targetTableNameLike != null and targetTableNameLike != '' ">
+				and E.TARGETTABLENAME_ like #{targetTableNameLike}
+			</if>
+
+			<if test="aggregateFlag != null and aggregateFlag != '' ">
+				and E.AGGREGATEFLAG_ = #{aggregateFlag}
+			</if>
+
+			<if test="scheduleFlag != null and scheduleFlag != '' ">
+				and E.SCHEDULEFLAG_ = #{scheduleFlag}
+			</if>
+
+			<if test="privateFlag != null">
+				and E.PRIVATEFLAG_ = #{privateFlag}
+			</if>
+
+			<if test="syncStatus != null">
+				and E.SYNCSTATUS_ = #{syncStatus}
+			</if>
+
+			<if test="syncTimeGreaterThanOrEqual != null">
+				and E.SYNCTIME_ &gt;= #{syncTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="syncTimeLessThanOrEqual != null">
+				and E.SYNCTIME_ &lt;= #{syncTimeLessThanOrEqual}
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+
+			<if test="deleteFlag != null">
+				and E.DELETEFLAG_ = #{deleteFlag}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+			<if test="dataRequest != null and dataRequest.filter != null ">
+				<include refid="com.glaf.global.GlobalMapper.dataRequestFilterCondition" />
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

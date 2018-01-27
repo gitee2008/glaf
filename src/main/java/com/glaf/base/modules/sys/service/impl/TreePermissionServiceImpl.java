@@ -178,10 +178,11 @@ public class TreePermissionServiceImpl implements TreePermissionService {
 	 * @return
 	 */
 	@Transactional
-	public void saveAll(String userId, String privilege, List<TreePermission> treePermissions) {
+	public void saveAll(String userId, String type, String privilege, List<TreePermission> treePermissions) {
 		TableModel table = new TableModel();
 		table.setTableName("SYS_TREE_PERMISSION");
 		table.addStringColumn("USERID_", userId);
+		table.addStringColumn("TYPE_", type);
 		table.addStringColumn("PRIVILEGE_", privilege);
 		tableDataService.deleteTableData(table);
 

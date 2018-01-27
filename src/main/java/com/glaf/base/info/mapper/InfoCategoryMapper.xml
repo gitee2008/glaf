@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.base.info.mapper.InfoCategoryMapper">
+
+	<resultMap id="infoCategoryResultMap" type="com.glaf.base.info.model.InfoCategory">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="parentId" column="PARENT_" jdbcType="BIGINT" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="treeId" column="TREEID_" jdbcType="VARCHAR" />
+		<result property="sort" column="SORT_" jdbcType="INTEGER" />
+		<result property="icon" column="ICON_" jdbcType="VARCHAR" />
+		<result property="iconCls" column="ICONCLS_" jdbcType="VARCHAR" />
+		<result property="coverIcon" column="COVERICON_" jdbcType="VARCHAR" />
+		<result property="indexShow" column="INDEXSHOW_" jdbcType="INTEGER" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="code" column="CODE_" jdbcType="VARCHAR" />
+		<result property="desc" column="DESC_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="eventType" column="EVENTTYPE_" jdbcType="VARCHAR" />
+		<result property="url" column="URL_" jdbcType="VARCHAR" />
+		<result property="uuid" column="UUID_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createDate" column="CREATEDATE_" jdbcType="TIMESTAMP" />
+		<result property="lastUpdateDate" column="LASTUPDATEDATE_"
+			jdbcType="TIMESTAMP" />
+		<result property="lastUpdateBy" column="LASTUPDATEBY_"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<insert id="insertInfoCategory" parameterType="com.glaf.base.info.model.InfoCategory">
+		insert into INFO_CATEGORY
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="parentId != null">
+				,PARENT_
+			</if>
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="treeId != null">
+				,TREEID_
+			</if>
+			<if test="sort != null">
+				,SORT_
+			</if>
+			<if test="icon != null">
+				,ICON_
+			</if>
+			<if test="iconCls != null">
+				,ICONCLS_
+			</if>
+			<if test="coverIcon != null">
+				,COVERICON_
+			</if>
+			<if test="indexShow != null">
+				,INDEXSHOW_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="code != null">
+				,CODE_
+			</if>
+			<if test="desc != null">
+				,DESC_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="eventType != null">
+				,EVENTTYPE_
+			</if>
+			<if test="url != null">
+				,URL_
+			</if>
+			<if test="uuid != null">
+				,UUID_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createDate != null">
+				,CREATEDATE_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+			<if test="parentId != null">
+				,#{parentId, jdbcType=BIGINT}
+			</if>
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="treeId != null">
+				,#{treeId, jdbcType=VARCHAR}
+			</if>
+			<if test="sort != null">
+				,#{sort, jdbcType=INTEGER}
+			</if>
+			<if test="icon != null">
+				,#{icon, jdbcType=VARCHAR}
+			</if>
+			<if test="iconCls != null">
+				,#{iconCls, jdbcType=VARCHAR}
+			</if>
+			<if test="coverIcon != null">
+				,#{coverIcon, jdbcType=VARCHAR}
+			</if>
+			<if test="indexShow != null">
+				,#{indexShow, jdbcType=INTEGER}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="code != null">
+				,#{code, jdbcType=VARCHAR}
+			</if>
+			<if test="desc != null">
+				,#{desc, jdbcType=VARCHAR}
+			</if>
+			<if test="eventType != null">
+				,#{eventType, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="url != null">
+				,#{url, jdbcType=VARCHAR}
+			</if>
+			<if test="uuid != null">
+				,#{uuid, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createDate != null">
+				,#{createDate, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateInfoCategory" parameterType="com.glaf.base.info.model.InfoCategory">
+		update INFO_CATEGORY
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="parentId != null">
+				PARENT_ = #{parentId, jdbcType=BIGINT},
+			</if>
+			<if test="sort != null">
+				SORT_ = #{sort, jdbcType=INTEGER},
+			</if>
+			<if test="icon != null">
+				ICON_ = #{icon, jdbcType=VARCHAR},
+			</if>
+			<if test="iconCls != null">
+				ICONCLS_ = #{iconCls, jdbcType=VARCHAR},
+			</if>
+			<if test="coverIcon != null">
+				COVERICON_ = #{coverIcon, jdbcType=VARCHAR},
+			</if>
+			<if test="indexShow != null">
+				INDEXSHOW_ = #{indexShow, jdbcType=INTEGER},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				NAME_ = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				CODE_ = #{code, jdbcType=VARCHAR},
+			</if>
+			<if test="desc != null">
+				DESC_ = #{desc, jdbcType=VARCHAR},
+			</if>
+			<if test="treeId != null">
+				TREEID = #{treeId, jdbcType=VARCHAR},
+			</if>
+			<if test="eventType != null">
+				EVENTTYPE_ = #{eventType, jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				URL_ = #{url, jdbcType=VARCHAR},
+			</if>
+			<if test="lastUpdateDate != null">
+				LASTUPDATEDATE_ = #{lastUpdateDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="lastUpdateBy != null">
+				LASTUPDATEBY_ = #{lastUpdateBy, jdbcType=VARCHAR},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteInfoCategoryById" parameterType="long">
+		delete from
+		INFO_CATEGORY
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deleteInfoCategories" parameterType="com.glaf.base.info.query.InfoCategoryQuery">
+		delete from INFO_CATEGORY
+		where (
+		ID_ IN
+		<foreach item="x_id" index="index" collection="ids" open="("
+			separator="," close=")">
+			#{x_id}
+		</foreach>
+		)
+	</delete>
+
+
+	<select id="getInfoCategoryById" parameterType="long"
+		resultMap="infoCategoryResultMap">
+		select * from INFO_CATEGORY where ID_ = #{id}
+	</select>
+
+
+	<select id="getInfoCategoryByUUID" parameterType="string"
+		resultMap="infoCategoryResultMap">
+		select * from INFO_CATEGORY where UUID_ = #{id}
+	</select>
+
+
+	<select id="getInfoCategories" parameterType="com.glaf.base.info.query.InfoCategoryQuery"
+		resultMap="infoCategoryResultMap">
+		select distinct E.*
+		<include refid="selectInfoCategoriesSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.SORT_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getInfoCategoryCount" parameterType="com.glaf.base.info.query.InfoCategoryQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectInfoCategoriesSql" />
+	</select>
+
+
+	<sql id="selectInfoCategoriesSql">
+
+		from INFO_CATEGORY E
+
+		<where>
+			1 = 1
+
+			<if test="tenantId != null">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="parentId != null">
+				and E.PARENT_ = #{parentId}
+			</if>
+
+			<if test="parentIds != null and parentIds.size !=0">
+				and E.PARENT_ IN
+				<foreach item="x_parentId" index="index" collection="parentIds"
+					open="(" separator="," close=")">
+					#{x_parentId}
+				</foreach>
+			</if>
+
+			<if test="treeId != null and treeId != '' ">
+				and E.TREEID_ = #{treeId}
+			</if>
+
+			<if test="treeIdLike != null and treeIdLike != '' ">
+				and E.TREEID_ like #{treeIdLike}
+			</if>
+
+			<if test="treeIds != null and treeIds.size !=0">
+				and E.TREEID_ IN
+				<foreach item="x_treeId" index="index" collection="treeIds"
+					open="(" separator="," close=")">
+					#{x_treeId}
+				</foreach>
+			</if>
+
+			<if test="sortGreaterThanOrEqual != null">
+				and E.SORT_ &gt;= #{sortGreaterThanOrEqual}
+			</if>
+
+			<if test="sortLessThanOrEqual != null">
+				and E.SORT_ &lt;= #{sortLessThanOrEqual}
+			</if>
+
+			<if test="icon != null and icon != '' ">
+				and E.ICON_ = #{icon}
+			</if>
+
+			<if test="iconLike != null and iconLike != '' ">
+				and E.ICON_ like #{iconLike}
+			</if>
+
+			<if test="iconCls != null and iconCls != '' ">
+				and E.ICONCLS_ = #{iconCls}
+			</if>
+
+			<if test="iconClsLike != null and iconClsLike != '' ">
+				and E.ICONCLS_ like #{iconClsLike}
+			</if>
+
+			<if test="indexIcon != null and indexIcon != '' ">
+				and E.INDEXICON_ = #{indexIcon}
+			</if>
+
+			<if test="indexIconLike != null and indexIconLike != '' ">
+				and E.INDEXICON_ like #{indexIconLike}
+			</if>
+
+			<if test="indexShow != null">
+				and E.INDEXSHOW_ = #{indexShow}
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+
+			<if test="name != null and name != '' ">
+				and E.NAME_ = #{name}
+			</if>
+
+			<if test="nameLike != null and nameLike != '' ">
+				and E.NAME_ like #{nameLike}
+			</if>
+
+			<if test="code != null and code != '' ">
+				and E.CODE_ = #{code}
+			</if>
+
+			<if test="codeLike != null and codeLike != '' ">
+				and E.CODE_ like #{codeLike}
+			</if>
+
+			<if test="descLike != null and descLike != '' ">
+				and E.DESC_ like #{descLike}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="eventType != null and eventType != '' ">
+				and E.EVENTTYPE_ = #{eventType}
+			</if>
+
+			<if test="eventTypeLike != null and eventTypeLike != '' ">
+				and E.EVENTTYPE_ like #{eventTypeLike}
+			</if>
+
+			<if test="urlLike != null and urlLike != '' ">
+				and E.URL_ like #{urlLike}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createDateGreaterThanOrEqual != null">
+				and E.CREATEDATE_ &gt;= #{createDateGreaterThanOrEqual}
+			</if>
+
+			<if test="createDateLessThanOrEqual != null">
+				and E.CREATEDATE_ &lt;= #{createDateLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

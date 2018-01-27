@@ -28,13 +28,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 
 import com.glaf.core.cache.CacheFactory;
 import com.glaf.core.context.ContextFactory;
-import com.glaf.core.identity.Agent;
-import com.glaf.core.identity.User;
+
 import com.glaf.core.service.EntityService;
+import com.glaf.core.util.Constants;
 import com.glaf.core.util.StringTools;
 import com.glaf.base.modules.sys.model.SysRole;
 import com.glaf.base.modules.sys.model.SysUser;
@@ -43,7 +42,6 @@ import com.glaf.base.modules.sys.service.SysRoleService;
 import com.glaf.base.modules.sys.service.SysTreeService;
 import com.glaf.base.modules.sys.service.SysUserService;
 import com.glaf.base.modules.sys.util.SysRoleJsonFactory;
-import com.glaf.base.modules.sys.util.SysUserJsonFactory;
 import com.glaf.base.utils.ContextUtil;
 
 public class BaseIdentityFactory {
@@ -69,36 +67,6 @@ public class BaseIdentityFactory {
 	 */
 	public static SysUser findByAccount(String actorId) {
 		return getSysUserService().findByAccount(actorId);
-	}
-
-	/**
-	 * 获取委托人编号集合（用户登录账号的集合）
-	 * 
-	 * @param assignTo
-	 *            受托人编号（登录账号）
-	 * @return
-	 */
-	public static List<String> getAgentIds(String assignTo) {
-		List<String> agentIds = new ArrayList<String>();
-		List<Object> rows = getEntityService().getList("getAgents", assignTo);
-		if (rows != null && !rows.isEmpty()) {
-			for (Object object : rows) {
-				if (object instanceof Agent) {
-					Agent agent = (Agent) object;
-					if (!agent.isValid()) {
-						continue;
-					}
-					switch (agent.getAgentType()) {
-					case 0:// 全局代理
-						agentIds.add(agent.getAssignFrom());
-						break;
-					default:
-						break;
-					}
-				}
-			}
-		}
-		return agentIds;
 	}
 
 	public static EntityService getEntityService() {
@@ -217,30 +185,6 @@ public class BaseIdentityFactory {
 	}
 
 	/**
-	 * 根据用户名获取用户对象
-	 * 
-	 * @param actorId
-	 *            用户登录账号
-	 * @return
-	 */
-	public static User getUser(String actorId) {
-		String cacheKey = "cache_sys_user_" + actorId;
-		String text = CacheFactory.getString("user", cacheKey);
-		if (text != null) {
-			try {
-				JSONObject jsonObject = JSON.parseObject(text);
-				return SysUserJsonFactory.jsonToObject(jsonObject);
-			} catch (Exception ex) {
-			}
-		}
-		SysUser user = getSysUserService().findByAccount(actorId);
-		if (user != null) {
-			CacheFactory.put("user", cacheKey, user.toJsonObject().toJSONString());
-		}
-		return user;
-	}
-
-	/**
 	 * 获取全部用户Map
 	 * 
 	 * @return
@@ -267,13 +211,13 @@ public class BaseIdentityFactory {
 			return new ArrayList<String>();
 		}
 		StringBuilder buffer = new StringBuilder();
-		buffer.append("cache_userrole");
+		buffer.append(Constants.CACHE_USER_ROLE_CODE_KEY);
 		for (String actorId : actorIds) {
 			buffer.append("_").append(actorId);
 		}
 
 		String cacheKey = buffer.toString();
-		String text = CacheFactory.getString("userrole", cacheKey);
+		String text = CacheFactory.getString(Constants.CACHE_USER_ROLE_CODE_REGION, cacheKey);
 		if (text != null) {
 			return StringTools.split(text);
 		}
@@ -289,7 +233,7 @@ public class BaseIdentityFactory {
 				}
 			}
 		}
-		CacheFactory.put("userrole", cacheKey, buffer.toString());
+		CacheFactory.put(Constants.CACHE_USER_ROLE_CODE_REGION, cacheKey, buffer.toString());
 		return codes;
 	}
 
@@ -299,13 +243,13 @@ public class BaseIdentityFactory {
 		}
 
 		StringBuilder buffer = new StringBuilder();
-		buffer.append("cache_userrole");
+		buffer.append(Constants.CACHE_USER_ROLE_KEY);
 		for (String actorId : actorIds) {
 			buffer.append("_").append(actorId);
 		}
 
 		String cacheKey = buffer.toString();
-		String text = CacheFactory.getString("userrole", cacheKey);
+		String text = CacheFactory.getString(Constants.CACHE_USER_ROLE_REGION, cacheKey);
 		if (text != null) {
 			try {
 				com.alibaba.fastjson.JSONArray array = JSON.parseArray(text);
@@ -317,7 +261,7 @@ public class BaseIdentityFactory {
 		List<SysRole> roles = getSysUserService().getUserRoles(actorIds);
 		if (roles != null && !roles.isEmpty()) {
 			com.alibaba.fastjson.JSONArray array = SysRoleJsonFactory.listToArray(roles);
-			CacheFactory.put("userrole", cacheKey, array.toJSONString());
+			CacheFactory.put(Constants.CACHE_USER_ROLE_REGION, cacheKey, array.toJSONString());
 		}
 		return roles;
 	}

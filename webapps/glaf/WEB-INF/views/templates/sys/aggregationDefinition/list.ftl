@@ -313,37 +313,37 @@
 <body style="margin:1px;">  
 <div style="margin:0;"></div>  
 <div class="easyui-layout" data-options="fit:true">  
-   <div data-options="region:'north',split:true,border:true" style="height:48px"> 
-    <div class="toolbar-backgroud"  > 
-	<form id="iForm" name="iForm" method="post" action="">
-    <table>
-      <tr>
-	    <td>
-			<img src="${contextPath}/static/images/window.png">
-			&nbsp;<span class="x_content_title">汇总定义列表</span>
-			<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-add'" 
-			   onclick="javascript:addNew();">新增</a>  
-			<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-edit'"
-			   onclick="javascript:editSelected();">修改</a>  
-			<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-remove'"
-			   onclick="javascript:deleteSelections();">删除</a> 
-			<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-sort'"
-			   onclick="javascript:sortProject();">同级排序</a>
-		</td>
-		<td>
-		   <select id="serviceKey" name="serviceKey" onchange="javascript:switchXY();">
-				<option value="">----请选择----</option>
-				<#list dictoryList as d>
-				<option value="${d.code}">${d.name}</option>
-				</#list> 
-		    </select>
-		    <script type="text/javascript">
-			   document.getElementById("serviceKey").value="${serviceKey}";
-		    </script>
-		</td>
-	  </tr>
-    </table>
-	</form>
+   <div data-options="region:'north', split:false, border:true" style="height:42px" class="toolbar-backgroud"> 
+    <div style="margin:4px;"> 
+		<form id="iForm" name="iForm" method="post" action="">
+			<table>
+			  <tr>
+				<td>
+					<img src="${contextPath}/static/images/window.png">
+					&nbsp;<span class="x_content_title">汇总定义列表</span>
+					<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-add'" 
+					   onclick="javascript:addNew();">新增</a>  
+					<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-edit'"
+					   onclick="javascript:editSelected();">修改</a>  
+					<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-remove'"
+					   onclick="javascript:deleteSelections();">删除</a> 
+					<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-sort'"
+					   onclick="javascript:sortProject();">同级排序</a>
+				</td>
+				<td>
+				   <select id="serviceKey" name="serviceKey" onchange="javascript:switchXY();">
+						<option value="">----请选择----</option>
+						<#list dictoryList as d>
+						<option value="${d.code}">${d.name}</option>
+						</#list> 
+					</select>
+					<script type="text/javascript">
+					   document.getElementById("serviceKey").value="${serviceKey}";
+					</script>
+				</td>
+			  </tr>
+			</table>
+		</form>
    </div> 
   </div> 
   <div data-options="region:'center',border:true">

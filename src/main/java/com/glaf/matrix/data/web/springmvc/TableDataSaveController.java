@@ -272,7 +272,7 @@ public class TableDataSaveController {
 						}
 					}
 
-					if (hasUpdatePermission) {
+					if (hasUpdatePermission && createDate != null) {
 						switch (sysTable.getUpdateCascade()) {
 						case 0:// 可以修改
 							canUpdate = true;

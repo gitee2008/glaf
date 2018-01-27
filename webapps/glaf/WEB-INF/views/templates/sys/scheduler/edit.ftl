@@ -6,10 +6,15 @@
 <link rel="stylesheet" type="text/css" href="${contextPath}/static/plugins/calendar/skins/aqua/theme.css"/>
 <script type="text/javascript" src="${contextPath}/static/scripts/jquery.min.js"></script>
 <script type="text/javascript" src="${contextPath}/static/scripts/jquery.form.js"></script>
+<script type="text/javascript" src="${contextPath}/static/scripts/jquery.cookie.js"></script>
 <script type="text/javascript" src="${contextPath}/static/plugins/calendar/calendar.js" ></script>
 <script type="text/javascript" src="${contextPath}/static/plugins/calendar/lang/calendar-en.js"></script>
 <script type="text/javascript" src="${contextPath}/static/plugins/calendar/calendar-setup.js"></script>
 <script type="text/javascript">
+
+  jQuery.cookie('init_taskName', null);   
+  jQuery.cookie('init_title', null);   
+
 
   String.prototype.trim = function() {
      return this.replace(/(^\s*)|(\s*$)/g, "");
@@ -42,7 +47,6 @@
 		document.schedulerForm.title.focus();
 		return;
 	 }
-
 
      document.schedulerForm.submit();
  }
@@ -88,7 +92,24 @@
 
 	function changeName(){
         var jobClass = document.getElementById("jobClass");
-        
+        if(jobClass != ""){
+			var objSx = document.getElementById("jobClass");
+            var title = objSx.options[objSx.selectedIndex].title;
+
+			if(document.getElementById("taskName").value == ""){
+			   jQuery.cookie('init_taskName', 'empty');
+               document.getElementById("taskName").value = title;
+			} else if(jQuery.cookie('init_taskName') == "empty"){
+               document.getElementById("taskName").value = title;
+			}
+
+			if(document.getElementById("title").value == ""){
+			  jQuery.cookie('init_title', 'empty');
+              document.getElementById("title").value = title;
+			} else if(jQuery.cookie('init_title') == "empty"){
+               document.getElementById("title").value = title;
+			}
+		}
 	}
 
 </script>
@@ -140,7 +161,7 @@
 			<select id="jobClass" name="jobClass" nullable="no" chname="任务类名" onchange="javascript:changeName();">
               <option value="">----请选择----</option>
 			  <#list items as item>
-				<option value="${item.name}">${item.value}</option>
+				<option title="${item.value}" value="${item.name}">${item.value}</option>
 			  </#list>
 			</select>
 			<script type="text/javascript">
@@ -237,6 +258,7 @@
 	    <input name="btn_save" type="submit" value="保存" class="btn btnGray">
 	</div>
 
+ 
 </form>
 
 <script type="text/javascript">

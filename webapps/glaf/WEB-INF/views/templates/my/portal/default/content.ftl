@@ -7,22 +7,22 @@
 <link href="${contextPath}/static/html/home/${homeTheme}/css/select.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
   #cdiv {
-	position:absolute;
-	width:30px;height:30px;
-	z-index:9999;
-	top:50%;
-	left:10px;
+		position:absolute;
+		width:30px;height:30px;
+		z-index:9999;
+		top:50%;
+		left:10px;
 	}
 	.removea{
-	font-weight: bolder;
-	color: red;
-	cursor: pointer;
+		font-weight: bolder;
+		color: red;
+		cursor: pointer;
 	}
 	.removediv{
-	position:absolute;
-	width:6px;height:6px;
-	z-index:200;
-	float: left;
+		position:absolute;
+		width:6px;height:6px;
+		z-index:200;
+		float: left;
   }
 </style>
 <script type="text/javascript" src="${contextPath}/static/scripts/jquery.min.js"></script>
@@ -64,7 +64,7 @@
 				//adom.addClass("selected");
 				adom.append(name);
 				lidom.append(adom);
-				var lidivdom="<div class=\"removediv\" style=\"display: none;\"><a class=\"removea\" href=\"#\" onclick=\"closePage(this)\" style=\"color:#66C8F2;font-weight: bolder;font-size: 18px;\">×</a></div>";
+				var lidivdom="<div class=\"removediv\" style=\"display: none;\"><a class=\"removea\" href=\"#\" onclick=\"closePage(this)\" style=\"color:#ff0033;font-weight: bolder;font-size: 18px;\">×</a></div>";
 				lidom.append(lidivdom);
 				$(".itab ul").append(lidom);
 				var divdom = $("<div></div>");

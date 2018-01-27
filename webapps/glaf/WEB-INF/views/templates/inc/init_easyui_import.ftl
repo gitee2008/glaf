@@ -1,7 +1,8 @@
 <#include "/inc/include.ftl"/>
 
 <link rel="stylesheet" type="text/css" href="${contextPath}/static/plugins/layer/skin/layer.css" />
-<link rel="stylesheet" type="text/css" href="${contextPath}/static/plugins/easyui/themes/gray/easyui.css">
+<link rel="stylesheet" type="text/css" href="${contextPath}/static/plugins/layer/skin/layer.ext.css" />
+<link rel="stylesheet" type="text/css" href="${contextPath}/static/plugins/easyui/themes/blue/easyui.css">
 <link rel="stylesheet" type="text/css" href="${contextPath}/static/plugins/ztree/css/zTreeStyle/zTreeStyle.css">
 <link rel="stylesheet" type="text/css" href="${contextPath}/static/css/core.css"/>
 <link rel="stylesheet" type="text/css" href="${contextPath}/static/css/icons.css"/>

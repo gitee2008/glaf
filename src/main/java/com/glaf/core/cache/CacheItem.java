@@ -31,11 +31,6 @@ public class CacheItem implements java.io.Serializable {
 				return false;
 		} else if (!key.equals(other.key))
 			return false;
-		if (region == null) {
-			if (other.region != null)
-				return false;
-		} else if (!region.equals(other.region))
-			return false;
 		return true;
 	}
 
@@ -64,7 +59,6 @@ public class CacheItem implements java.io.Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((key == null) ? 0 : key.hashCode());
-		result = prime * result + ((region == null) ? 0 : region.hashCode());
 		return result;
 	}
 

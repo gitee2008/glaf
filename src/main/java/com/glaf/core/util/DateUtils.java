@@ -66,6 +66,23 @@ public class DateUtils {
 	public static final String FULL_DATE_FORMAT = "yyyyMMddHHmmss";
 
 	/**
+	 * 判断某个时间time2是否在另一个时间time1之后
+	 * 
+	 * @param time1
+	 * @param time2
+	 * @return
+	 */
+	public static boolean afterTime(Date time1, Date time2) {
+		Calendar calendar1 = Calendar.getInstance();
+		calendar1.setTime(time1);
+
+		Calendar calendar2 = Calendar.getInstance();
+		calendar2.setTime(time2);
+
+		return calendar1.after(calendar2);
+	}
+
+	/**
 	 * 判断某个时间time2是否在另一个时间time1之前
 	 * 
 	 * @param time1
@@ -276,6 +293,14 @@ public class DateUtils {
 	public static String getNowYearMonthDayHHmm() {
 		String returnStr = null;
 		SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmm");
+		Date date = new Date();
+		returnStr = f.format(date);
+		return returnStr;
+	}
+
+	public static String getNowYearMonthDayHour() {
+		String returnStr = null;
+		SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHH");
 		Date date = new Date();
 		returnStr = f.format(date);
 		return returnStr;

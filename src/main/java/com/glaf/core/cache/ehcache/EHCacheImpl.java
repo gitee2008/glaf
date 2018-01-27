@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,6 +39,8 @@ public class EHCacheImpl implements Cache {
 	protected static final Log logger = LogFactory.getLog(EHCacheImpl.class);
 
 	protected static ConcurrentMap<String, Ehcache> cacheConcurrentMap = new ConcurrentHashMap<String, Ehcache>();
+
+	protected static AtomicBoolean running = new AtomicBoolean(false);
 
 	private CacheManager cacheManager;
 
@@ -136,9 +139,18 @@ public class EHCacheImpl implements Cache {
 			}
 			regionCache = cacheManager.getCache(region);
 			if (regionCache == null) {
-				regionCache = cacheManager.addCacheIfAbsent(region);
+				if (!running.get()) {
+					try {
+						running.set(true);
+						if (regionCache == null) {
+							regionCache = cacheManager.addCacheIfAbsent(region);
+							cacheConcurrentMap.put(region, regionCache);
+						}
+					} finally {
+						running.set(false);
+					}
+				}
 			}
-			cacheConcurrentMap.put(region, regionCache);
 		}
 		return regionCache;
 	}

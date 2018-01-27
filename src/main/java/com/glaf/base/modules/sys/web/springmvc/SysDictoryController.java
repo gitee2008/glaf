@@ -68,6 +68,7 @@ import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.ResponseUtils;
 import com.glaf.core.util.Tools;
 import com.glaf.core.util.ZipUtils;
+import com.glaf.matrix.data.factory.DataItemFactory;
 import com.glaf.base.modules.BaseDataManager;
 import com.glaf.base.modules.sys.SysConstants;
 import com.glaf.base.modules.sys.model.Dictory;
@@ -481,6 +482,7 @@ public class SysDictoryController {
 	public ModelAndView reloadDictory(HttpServletRequest request, ModelMap modelMap) {
 
 		BaseDataManager.getInstance().refreshBaseData();
+		DataItemFactory.clearAll();
 		SystemConfig.reload();
 
 		String x_view = ViewProperties.getString("dictory.reloadDictory");

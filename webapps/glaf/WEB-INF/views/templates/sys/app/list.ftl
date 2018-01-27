@@ -299,8 +299,8 @@
 	</div> 
    <div data-options="region:'center'"> 
 	<div class="easyui-layout" data-options="fit:true">  
-	  <div data-options="region:'center',border:false">
-	    <div class="toolbar-backgroud"  > 
+	  <div data-options="region:'center',border:false" class="toolbar-backgroud">
+	    <div style="margin:4px;"> 
 			<img src="${contextPath}/static/images/window.png">
 			&nbsp;<span class="x_content_title">应用列表</span>
 			<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-add'" 

@@ -27,11 +27,15 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.glaf.core.config.ConnectionTask;
 import com.glaf.core.config.DatabaseConnectionConfig;
 import com.glaf.core.domain.Database;
 import com.glaf.core.domain.TableDefinition;
@@ -79,7 +83,7 @@ public class DatabaseFactory {
 		}
 		return 0;
 	}
-	
+
 	public static synchronized void clearAll() {
 		databases.clear();
 		databaseNames.clear();
@@ -223,22 +227,32 @@ public class DatabaseFactory {
 		} catch (Exception ex) {
 			logger.error("init tables error", ex);
 		}
+		ForkJoinPool pool = ForkJoinPool.commonPool();
+		logger.info("准备执行并行任务...");
 		try {
 			DatabaseConnectionConfig config = new DatabaseConnectionConfig();
 			config.checkAndInitToken();
 			List<Database> databases = getDatabases();
 			if (databases != null && !databases.isEmpty()) {
 				for (Database database : databases) {
-					if ("1".equals(database.getActive())) {
-						if (config.checkConfig(database)) {
-							activeDatabases.add(database);
-							logger.debug(database.getName() + " check connection ok.");
-						}
+					ConnectionTask task = new ConnectionTask(database);
+					Future<Database> result = pool.submit(task);
+					if (result != null && result.get() != null) {
+						activeDatabases.add(result.get());
 					}
 				}
+
+				// 线程阻塞，等待所有任务完成
+				try {
+					pool.awaitTermination(500, TimeUnit.MILLISECONDS);
+				} catch (InterruptedException ex) {
+				}
 			}
-		} catch (Exception ex) {
-			logger.error("reload databases error", ex);
+		} catch (java.lang.Throwable ex) {
+			logger.error("load database list error", ex);
+		} finally {
+			pool.shutdown();
+			logger.info("并行任务已经结束。");
 		}
 	}
 

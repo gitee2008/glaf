@@ -20,6 +20,8 @@
 	<import resource="spring-ehcache.xml" />
 	<import resource="spring-freemarker.xml" />
 	<import resource="spring-scheduler.xml" />
+	<!-- <import resource="spring-flowable.xml" /> -->
+	
 	<!-- <import resource="spring-redis.xml" /> -->
 
 	<import resource="classpath*:com/glaf/**/*-spring-context.xml" />

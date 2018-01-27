@@ -80,6 +80,8 @@ public class TreeHelper {
 				child.put("icon", component.getImage());
 				child.put("img", component.getImage());
 				child.put("image", component.getImage());
+				child.put("level", component.getLevel());
+
 				if (StringUtils.isNotEmpty(component.getUrl())) {
 					child.put("url", component.getUrl());
 				}
@@ -126,6 +128,8 @@ public class TreeHelper {
 				child.put("id", component.getId());
 				child.put("code", component.getCode());
 				child.put("text", component.getTitle());
+				child.put("level", component.getLevel());
+
 				if (viewType == 1) {
 					child.put("name", component.getTitle() + "(" + component.getCode() + ")");
 				} else {
@@ -183,6 +187,8 @@ public class TreeHelper {
 		object.put("icon", root.getIcon());
 		object.put("img", root.getIcon());
 		object.put("image", root.getIcon());
+		object.put("level", root.getLevel());
+
 		if (StringUtils.isNotEmpty(root.getUrl())) {
 			object.put("url", root.getUrl());
 		}
@@ -214,6 +220,8 @@ public class TreeHelper {
 							child.put("icon", component.getImage());
 							child.put("img", component.getImage());
 							child.put("image", component.getImage());
+							child.put("level", component.getLevel());
+
 							if (StringUtils.isNotEmpty(component.getUrl())) {
 								child.put("url", component.getUrl());
 							}
@@ -244,6 +252,8 @@ public class TreeHelper {
 							child.put("icon", component.getImage());
 							child.put("img", component.getImage());
 							child.put("image", component.getImage());
+							child.put("level", component.getLevel());
+
 							if (StringUtils.isNotEmpty(component.getUrl())) {
 								child.put("url", component.getUrl());
 							}
@@ -288,6 +298,7 @@ public class TreeHelper {
 			object.put("code", root.getCode());
 			object.put("text", root.getName());
 			object.put("leaf", Boolean.valueOf(false));
+			object.put("level", root.getLevel());
 			object.put("cls", "folder");
 		}
 
@@ -304,7 +315,7 @@ public class TreeHelper {
 						if (root != null) {
 							if (StringUtils.equals(component.getId(), String.valueOf(root.getId()))) {
 								this.buildTreeModel(object, component);
-							}else {
+							} else {
 								logger.debug("top component:" + component.getTitle() + "[" + component.getId() + "]");
 								JSONObject child = new JSONObject();
 								this.addDataMap(component, child);
@@ -314,6 +325,8 @@ public class TreeHelper {
 								child.put("icon", component.getImage());
 								child.put("img", component.getImage());
 								child.put("image", component.getImage());
+								child.put("level", component.getLevel());
+
 								if (StringUtils.isNotEmpty(component.getUrl())) {
 									child.put("url", component.getUrl());
 								}
@@ -345,6 +358,8 @@ public class TreeHelper {
 							object.put("icon", component.getImage());
 							object.put("img", component.getImage());
 							object.put("image", component.getImage());
+							object.put("level", component.getLevel());
+
 							if (StringUtils.isNotEmpty(component.getUrl())) {
 								object.put("url", component.getUrl());
 							}
@@ -370,6 +385,8 @@ public class TreeHelper {
 							child.put("icon", component.getImage());
 							child.put("img", component.getImage());
 							child.put("image", component.getImage());
+							child.put("level", component.getLevel());
+
 							if (StringUtils.isNotEmpty(component.getUrl())) {
 								child.put("url", component.getUrl());
 							}
@@ -419,6 +436,8 @@ public class TreeHelper {
 						child.put("id", component.getId());
 						child.put("code", component.getCode());
 						child.put("text", component.getTitle());
+						child.put("level", component.getLevel());
+
 						if (viewType == 1) {
 							child.put("name", component.getTitle() + "(" + component.getCode() + ")");
 						} else {
@@ -473,6 +492,8 @@ public class TreeHelper {
 						child.put("id", component.getId());
 						child.put("code", component.getCode());
 						child.put("text", component.getTitle());
+						child.put("level", component.getLevel());
+
 						if (viewType == 1) {
 							child.put("name", component.getTitle() + "(" + component.getCode() + ")");
 						} else {
@@ -515,6 +536,7 @@ public class TreeHelper {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("id", tree.getId());
 		jsonObject.put("parentId", tree.getParentId());
+		jsonObject.put("level", tree.getLevel());
 
 		if (tree.getCode() != null) {
 			jsonObject.put("code", tree.getCode());

@@ -105,8 +105,8 @@
       <tr>
         <td class="input-box2" valign="top">性　别</td>
         <td>
-          <input type="radio" name="gender" value="0">男
-          <input type="radio" name="gender" value="1" checked>女
+          <input type="radio" name="sex" value="0">男
+          <input type="radio" name="sex" value="1" checked>女
 		</td>
       </tr>
       <tr>

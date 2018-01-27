@@ -28,7 +28,7 @@ import com.glaf.base.modules.sys.business.SqlUpdateBean;
 import com.glaf.base.modules.sys.model.SysUser;
 import com.glaf.base.modules.sys.service.SysUserService;
 import com.glaf.core.context.ContextFactory;
-import com.glaf.core.security.AESUtils;
+import com.glaf.core.util.security.AESUtils;
 
 public class InitBaseDataServlet extends HttpServlet {
 	private static final long serialVersionUID = 2072103368980714549L;

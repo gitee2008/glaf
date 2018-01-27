@@ -18,17 +18,28 @@
 
 package com.glaf.matrix.data.web.springmvc;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.jxls.common.Context;
+import org.jxls.transform.poi.PoiTransformer;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +50,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.glaf.core.base.BaseItem;
 import com.glaf.core.security.IdentityFactory;
 import com.glaf.core.security.LoginContext;
-import com.glaf.core.security.RSAUtils;
 import com.glaf.core.service.EntityService;
 import com.glaf.core.service.ITableDataService;
 import com.glaf.core.service.ITablePageService;
@@ -47,7 +57,10 @@ import com.glaf.core.util.Constants;
 import com.glaf.core.util.DateUtils;
 import com.glaf.core.util.LowerLinkedMap;
 import com.glaf.core.util.RequestUtils;
+import com.glaf.core.util.ResponseUtils;
+import com.glaf.core.util.security.RSAUtils;
 import com.glaf.matrix.data.bean.TableDataBean;
+import com.glaf.matrix.data.bean.TableExcelExportBean;
 import com.glaf.matrix.data.domain.Comment;
 import com.glaf.matrix.data.domain.DataModel;
 import com.glaf.matrix.data.domain.SqlCriteria;
@@ -58,6 +71,9 @@ import com.glaf.matrix.data.factory.DataItemFactory;
 import com.glaf.matrix.data.service.ITableService;
 import com.glaf.matrix.data.service.SqlCriteriaService;
 import com.glaf.matrix.data.service.TableCorrelationService;
+import com.glaf.report.bean.ReportContainer;
+import com.glaf.report.data.ReportDefinition;
+import com.glaf.report.data.ReportPreprocessor;
 
 @Controller("/tableData")
 @RequestMapping("/tableData")
@@ -129,6 +145,16 @@ public class TableDataController {
 											column.getDataCode().substring(10, column.getDataCode().length()));
 									List<BaseItem> items = DataItemFactory.getInstance().getDictoryItems(nodeId);
 									column.setItems(items);
+								} else if (StringUtils.startsWith(column.getDataCode(), "@sql:")) {
+									String rowId = column.getDataCode().substring(5, column.getDataCode().length());
+									List<BaseItem> items = DataItemFactory.getInstance().getSqlDataItems(loginContext,
+											Long.parseLong(rowId), params);
+									column.setItems(items);
+									if (items != null && !items.isEmpty()) {
+										for (BaseItem item : items) {
+											column.addProperty(item.getValue(), item.getName());
+										}
+									}
 								} else if (StringUtils.startsWith(column.getDataCode(), "@table:")) {
 									String rowId = column.getDataCode().substring(7, column.getDataCode().length());
 									List<BaseItem> items = DataItemFactory.getInstance().getTableItems(loginContext,
@@ -475,6 +501,16 @@ public class TableDataController {
 											column.getDataCode().substring(10, column.getDataCode().length()));
 									List<BaseItem> items = DataItemFactory.getInstance().getDictoryItems(nodeId);
 									column.setItems(items);
+								} else if (StringUtils.startsWith(column.getDataCode(), "@sql:")) {
+									String rowId = column.getDataCode().substring(5, column.getDataCode().length());
+									List<BaseItem> items = DataItemFactory.getInstance().getSqlDataItems(loginContext,
+											Long.parseLong(rowId), params);
+									column.setItems(items);
+									if (items != null && !items.isEmpty()) {
+										for (BaseItem item : items) {
+											column.addProperty(item.getValue(), item.getName());
+										}
+									}
 								} else if (StringUtils.startsWith(column.getDataCode(), "@table:")) {
 									String rowId = column.getDataCode().substring(7, column.getDataCode().length());
 									List<BaseItem> items = DataItemFactory.getInstance().getTableItems(loginContext,
@@ -507,6 +543,83 @@ public class TableDataController {
 		}
 
 		return new ModelAndView("/tableData/edit", modelMap);
+	}
+
+	@ResponseBody
+	@RequestMapping("/exportXls")
+	public void exportXls(HttpServletRequest request, HttpServletResponse response) {
+		LoginContext loginContext = RequestUtils.getLoginContext(request);
+		Map<String, Object> params = RequestUtils.getParameterMap(request);
+		// String systemName = Environment.getCurrentSystemName();
+		ReportDefinition rdf = null;
+		ReportPreprocessor reportPreprocessor = null;
+		byte[] bytes = null;
+		InputStream is = null;
+		ByteArrayInputStream bais = null;
+		ByteArrayOutputStream baos = null;
+		BufferedOutputStream bos = null;
+		try {
+			// EnvUtils.setEnv(loginContext, false);// 切换到读库
+			request.setAttribute("exportXls", true);
+			String reportId = null;
+			String tableId = request.getParameter("tableId");
+			if (StringUtils.isNotEmpty(tableId)) {
+				SysTable sysTable = tableService.getSysTableById(tableId);
+				if (sysTable != null) {
+					reportId = sysTable.getReportId();
+				}
+			}
+
+			if (StringUtils.isNotEmpty(reportId)) {
+				rdf = ReportContainer.getContainer().getReportDefinition(reportId);
+			}
+
+			if (rdf != null && rdf.getData() != null) {
+				if (StringUtils.isNotEmpty(rdf.getPrepareClass())) {
+					reportPreprocessor = (ReportPreprocessor) com.glaf.core.util.ReflectUtils
+							.instantiate(rdf.getPrepareClass());
+					reportPreprocessor.prepare(loginContext, params);
+				}
+				bais = new ByteArrayInputStream(rdf.getData());
+				is = new BufferedInputStream(bais);
+				baos = new ByteArrayOutputStream();
+				bos = new BufferedOutputStream(baos);
+
+				Context context2 = PoiTransformer.createInitialContext();
+
+				Set<Entry<String, Object>> entrySet = params.entrySet();
+				for (Entry<String, Object> entry : entrySet) {
+					String key = entry.getKey();
+					Object value = entry.getValue();
+					context2.putVar(key, value);
+				}
+
+				org.jxls.util.JxlsHelper.getInstance().processTemplate(is, bos, context2);
+
+				bos.flush();
+				baos.flush();
+				bytes = baos.toByteArray();
+			} else {
+				TableExcelExportBean exportBean = new TableExcelExportBean();
+				// long databaseId = loginContext.getTenant().getDatabaseId();
+				XSSFWorkbook wb = exportBean.export(request);
+				baos = new ByteArrayOutputStream();
+				bos = new BufferedOutputStream(baos);
+				wb.write(bos);
+				bos.flush();
+				baos.flush();
+				bytes = baos.toByteArray();
+			}
+			ResponseUtils.download(request, response, bytes, "export" + DateUtils.getNowYearMonthDayHHmmss() + ".xlsx");
+		} catch (Exception ex) {
+			logger.error(ex);
+		} finally {
+			// Environment.setCurrentSystemName(systemName);
+			com.glaf.core.util.IOUtils.closeStream(is);
+			com.glaf.core.util.IOUtils.closeStream(bais);
+			com.glaf.core.util.IOUtils.closeStream(baos);
+			com.glaf.core.util.IOUtils.closeStream(bos);
+		}
 	}
 
 	@ResponseBody

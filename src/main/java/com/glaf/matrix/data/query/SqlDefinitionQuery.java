@@ -30,6 +30,7 @@ public class SqlDefinitionQuery extends DataQuery {
 	protected String name;
 	protected String titleLike;
 	protected String type;
+	protected String dataItemFlag;
 	protected String exportFlag;
 	protected String fetchFlag;
 	protected String publicFlag;
@@ -60,6 +61,14 @@ public class SqlDefinitionQuery extends DataQuery {
 		return this;
 	}
 
+	public SqlDefinitionQuery dataItemFlag(String dataItemFlag) {
+		if (dataItemFlag == null) {
+			throw new RuntimeException("dataItemFlag is null");
+		}
+		this.dataItemFlag = dataItemFlag;
+		return this;
+	}
+
 	public String getCode() {
 		return code;
 	}
@@ -74,6 +83,10 @@ public class SqlDefinitionQuery extends DataQuery {
 
 	public Date getCreateTimeLessThanOrEqual() {
 		return createTimeLessThanOrEqual;
+	}
+
+	public String getDataItemFlag() {
+		return dataItemFlag;
 	}
 
 	public String getExportFlag() {
@@ -246,6 +259,10 @@ public class SqlDefinitionQuery extends DataQuery {
 
 	public void setCreateTimeLessThanOrEqual(Date createTimeLessThanOrEqual) {
 		this.createTimeLessThanOrEqual = createTimeLessThanOrEqual;
+	}
+
+	public void setDataItemFlag(String dataItemFlag) {
+		this.dataItemFlag = dataItemFlag;
 	}
 
 	public void setExportFlag(String exportFlag) {

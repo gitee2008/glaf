@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.sync.mapper.SyncItemMapper">
+
+	<resultMap id="syncItemResultMap" type="com.glaf.matrix.sync.domain.SyncItem">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="syncId" column="SYNCID_" jdbcType="BIGINT" />
+		<result property="deploymentId" column="DEPLOYMENTID_"
+			jdbcType="VARCHAR" />
+		<result property="sql" column="SQL_" jdbcType="VARCHAR" />
+		<result property="removeSql" column="REMOVESQL_" jdbcType="VARCHAR" />
+		<result property="targetTableName" column="TARGETTABLENAME_"
+			jdbcType="VARCHAR" />
+		<result property="sortNo" column="SORTNO_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertSyncItem" parameterType="com.glaf.matrix.sync.domain.SyncItem">
+		insert into SYS_SYNC_ITEM
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="syncId != null">
+				,SYNCID_
+			</if>
+			<if test="deploymentId != null">
+				,DEPLOYMENTID_
+			</if>
+			<if test="sql != null">
+				,SQL_
+			</if>
+			<if test="removeSql != null">
+				,REMOVESQL_
+			</if>
+			<if test="targetTableName != null">
+				,TARGETTABLENAME_
+			</if>
+			<if test="sortNo != null">
+				,SORTNO_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="syncId != null">
+				,#{syncId, jdbcType=BIGINT}
+			</if>
+			<if test="deploymentId != null">
+				,#{deploymentId, jdbcType=VARCHAR}
+			</if>
+			<if test="sql != null">
+				,#{sql, jdbcType=VARCHAR}
+			</if>
+			<if test="removeSql != null">
+				,#{removeSql, jdbcType=VARCHAR}
+			</if>
+			<if test="targetTableName != null">
+				,#{targetTableName, jdbcType=VARCHAR}
+			</if>
+			<if test="sortNo != null">
+				,#{sortNo, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateSyncItem" parameterType="com.glaf.matrix.sync.domain.SyncItem">
+		update SYS_SYNC_ITEM
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="sql != null">
+				SQL_ = #{sql, jdbcType=VARCHAR},
+			</if>
+			<if test="removeSql != null">
+				REMOVESQL_ = #{removeSql, jdbcType=VARCHAR},
+			</if>
+			<if test="targetTableName != null">
+				TARGETTABLENAME_ = #{targetTableName, jdbcType=VARCHAR},
+			</if>
+			<if test="sortNo != null">
+				SORTNO_ = #{sortNo, jdbcType=INTEGER},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteSyncItemById" parameterType="long">
+		delete from
+		SYS_SYNC_ITEM
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getSyncItemById" parameterType="long" resultMap="syncItemResultMap">
+		select * from SYS_SYNC_ITEM where ID_ = #{id}
+	</select>
+
+
+	<select id="getSyncItems" parameterType="com.glaf.matrix.sync.query.SyncItemQuery"
+		resultMap="syncItemResultMap">
+		select distinct E.*
+		<include refid="selectSyncItemsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.SORTNO_ asc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getSyncItemCount" parameterType="com.glaf.matrix.sync.query.SyncItemQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectSyncItemsSql" />
+	</select>
+
+
+	<sql id="selectSyncItemsSql">
+
+		from SYS_SYNC_ITEM E
+
+		<where>
+			1 = 1
+
+			<if test="syncId != null">
+				and E.SYNCID_ = #{syncId}
+			</if>
+
+			<if test="syncIds != null and syncIds.size() &gt; 0">
+				and E.SYNCID_ IN
+				<foreach item="x_syncId" index="index" collection="syncIds"
+					open="(" separator="," close=")">
+					#{x_syncId}
+				</foreach>
+			</if>
+
+			<if test="deploymentId != null and deploymentId != '' ">
+				and E.DEPLOYMENTID_ = #{deploymentId}
+			</if>
+
+			<if test="deploymentIds != null and deploymentIds.size() &gt; 0">
+				and E.DEPLOYMENTID_ IN
+				<foreach item="x_deploymentId" index="index" collection="deploymentIds"
+					open="(" separator="," close=")">
+					#{x_deploymentId}
+				</foreach>
+			</if>
+
+			<if test="targetTableName != null and targetTableName != '' ">
+				and E.TARGETTABLENAME_ = #{targetTableName}
+			</if>
+
+			<if test="targetTableNameLike != null and targetTableNameLike != '' ">
+				and E.TARGETTABLENAME_ like #{targetTableNameLike}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

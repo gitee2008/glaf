@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.matrix.data.mapper.SyntheticFlowMapper">
+
+	<resultMap id="syntheticFlowResultMap" type="com.glaf.matrix.data.domain.SyntheticFlow">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="currentStep" column="CURRENTSTEP_" jdbcType="VARCHAR" />
+		<result property="currentType" column="CURRENTTYPE_" jdbcType="VARCHAR" />
+		<result property="previousStep" column="PREVIOUSSTEP_"
+			jdbcType="VARCHAR" />
+		<result property="previousType" column="PREVIOUSTYPE_"
+			jdbcType="VARCHAR" />
+		<result property="nextStep" column="NEXTSTEP_" jdbcType="VARCHAR" />
+		<result property="nextType" column="NEXTTYPE_" jdbcType="VARCHAR" />
+		<result property="sort" column="SORT_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertSyntheticFlow" parameterType="com.glaf.matrix.data.domain.SyntheticFlow">
+		insert into SYS_SYNTHETIC_FLOW
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="currentStep != null">
+				,CURRENTSTEP_
+			</if>
+			<if test="currentType != null">
+				,CURRENTTYPE_
+			</if>
+			<if test="previousStep != null">
+				,PREVIOUSSTEP_
+			</if>
+			<if test="previousType != null">
+				,PREVIOUSTYPE_
+			</if>
+			<if test="nextStep != null">
+				,NEXTSTEP_
+			</if>
+			<if test="nextType != null">
+				,NEXTTYPE_
+			</if>
+			<if test="sort != null">
+				,SORT_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="currentStep != null">
+				,#{currentStep, jdbcType=VARCHAR}
+			</if>
+			<if test="currentType != null">
+				,#{currentType, jdbcType=VARCHAR}
+			</if>
+			<if test="previousStep != null">
+				,#{previousStep, jdbcType=VARCHAR}
+			</if>
+			<if test="previousType != null">
+				,#{previousType, jdbcType=VARCHAR}
+			</if>
+			<if test="nextStep != null">
+				,#{nextStep, jdbcType=VARCHAR}
+			</if>
+			<if test="nextType != null">
+				,#{nextType, jdbcType=VARCHAR}
+			</if>
+			<if test="sort != null">
+				,#{sort, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertSyntheticFlow" parameterType="java.util.List">
+		insert into SYS_SYNTHETIC_FLOW (
+		ID_
+		,CURRENTSTEP_
+		,CURRENTTYPE_
+		,PREVIOUSSTEP_
+		,PREVIOUSTYPE_
+		,NEXTSTEP_
+		,NEXTTYPE_
+		,SORT_
+		,CREATEBY_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="syntheticFlow" index="index"
+			separator=",">
+			(
+			#{syntheticFlow.id, jdbcType=BIGINT}
+			,#{syntheticFlow.currentStep, jdbcType=VARCHAR}
+			,#{syntheticFlow.currentType, jdbcType=VARCHAR}
+			,#{syntheticFlow.previousStep, jdbcType=VARCHAR}
+			,#{syntheticFlow.previousType, jdbcType=VARCHAR}
+			,#{syntheticFlow.nextStep, jdbcType=VARCHAR}
+			,#{syntheticFlow.nextType, jdbcType=VARCHAR}
+			,#{syntheticFlow.sort,
+			jdbcType=INTEGER}
+			,#{syntheticFlow.createBy, jdbcType=VARCHAR}
+			,#{syntheticFlow.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertSyntheticFlow_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="syntheticFlow" index="index">
+			insert
+			into SYS_SYNTHETIC_FLOW (
+			ID_
+			,CURRENTSTEP_
+			,CURRENTTYPE_
+			,PREVIOUSSTEP_
+			,PREVIOUSTYPE_
+			,NEXTSTEP_
+			,NEXTTYPE_
+			,SORT_
+			,CREATEBY_
+			,CREATETIME_
+			)
+			values (
+			#{syntheticFlow.id, jdbcType=BIGINT}
+			,#{syntheticFlow.currentStep, jdbcType=VARCHAR}
+			,#{syntheticFlow.currentType, jdbcType=VARCHAR}
+			,#{syntheticFlow.previousStep, jdbcType=VARCHAR}
+			,#{syntheticFlow.previousType, jdbcType=VARCHAR}
+			,#{syntheticFlow.nextStep, jdbcType=VARCHAR}
+			,#{syntheticFlow.nextType, jdbcType=VARCHAR}
+			,#{syntheticFlow.sort,
+			jdbcType=INTEGER}
+			,#{syntheticFlow.createBy, jdbcType=VARCHAR}
+			,#{syntheticFlow.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateSyntheticFlow" parameterType="com.glaf.matrix.data.domain.SyntheticFlow">
+		update SYS_SYNTHETIC_FLOW
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="currentStep != null">
+				CURRENTSTEP_ = #{currentStep, jdbcType=VARCHAR},
+			</if>
+			<if test="currentType != null">
+				CURRENTTYPE_ = #{currentType, jdbcType=VARCHAR},
+			</if>
+			<if test="previousStep != null">
+				PREVIOUSSTEP_ = #{previousStep, jdbcType=VARCHAR},
+			</if>
+			<if test="previousType != null">
+				PREVIOUSTYPE_ = #{previousType, jdbcType=VARCHAR},
+			</if>
+			<if test="nextStep != null">
+				NEXTSTEP_ = #{nextStep, jdbcType=VARCHAR},
+			</if>
+			<if test="nextType != null">
+				NEXTTYPE_ = #{nextType, jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null">
+				SORT_ = #{sort, jdbcType=INTEGER},
+			</if>
+			<if test="createBy != null">
+				CREATEBY_ = #{createBy, jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				CREATETIME_ = #{createTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteSyntheticFlowById" parameterType="long">
+		delete from
+		SYS_SYNTHETIC_FLOW
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getSyntheticFlowById" parameterType="long"
+		resultMap="syntheticFlowResultMap">
+		select * from SYS_SYNTHETIC_FLOW where ID_ = #{id}
+	</select>
+
+
+	<select id="getSyntheticFlows" parameterType="com.glaf.matrix.data.query.SyntheticFlowQuery"
+		resultMap="syntheticFlowResultMap">
+		select distinct E.*
+		<include refid="selectSyntheticFlowsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getSyntheticFlowCount" parameterType="com.glaf.matrix.data.query.SyntheticFlowQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectSyntheticFlowsSql" />
+	</select>
+
+
+	<sql id="selectSyntheticFlowsSql">
+
+		from SYS_SYNTHETIC_FLOW E
+
+		<where>
+			1 = 1
+
+
+			<if test="currentStep != null and currentStep != '' ">
+				and E.CURRENTSTEP_ = #{currentStep}
+			</if>
+
+			<if test="currentType != null and currentType != '' ">
+				and E.CURRENTTYPE_ = #{currentType}
+			</if>
+
+			<if test="previousStep != null and previousStep != '' ">
+				and E.PREVIOUSSTEP_ = #{previousStep}
+			</if>
+
+			<if test="previousType != null and previousType != '' ">
+				and E.PREVIOUSTYPE_ = #{previousType}
+			</if>
+
+			<if test="nextStep != null and nextStep != '' ">
+				and E.NEXTSTEP_ = #{nextStep}
+			</if>
+
+			<if test="nextType != null and nextType != '' ">
+				and E.NEXTTYPE_ = #{nextType}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+			<if test="dataRequest != null and dataRequest.filter != null ">
+				<include refid="com.glaf.global.GlobalMapper.dataRequestFilterCondition" />
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

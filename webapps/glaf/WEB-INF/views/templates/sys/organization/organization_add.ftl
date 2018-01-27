@@ -44,7 +44,8 @@
 </script>
 </head>
 <body>
-<div class="nav-title"><span class="Title">机构管理</span>&gt;&gt;增加机构</div>
+<div class="nav-title">
+<span class="Title">机构管理</span>&gt;&gt;增加机构</div>
 <form id="iForm" name="iForm" method="post"   > 
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0" class="box">
   <tr>

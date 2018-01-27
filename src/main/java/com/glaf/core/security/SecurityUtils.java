@@ -41,6 +41,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import com.glaf.core.util.StringTools;
 import com.glaf.core.util.UUID32;
+import com.glaf.core.util.security.DESUtils;
 
 public class SecurityUtils {
 
@@ -51,7 +52,7 @@ public class SecurityUtils {
 			String provider = "org.bouncycastle.jce.provider.BouncyCastleProvider";
 			java.security.Security.addProvider((Provider) Class.forName(provider).newInstance());
 		} catch (Exception ex) {
-			
+
 		}
 	}
 

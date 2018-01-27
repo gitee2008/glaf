@@ -336,19 +336,7 @@ public class TenantUserController {
 		SysUser bean = sysUserService.findByAccount(user.getUserId());
 		request.setAttribute("bean", bean);
 
-		if (bean != null && StringUtils.isNotEmpty(bean.getSuperiorIds())) {
-			List<String> userIds = StringTools.split(bean.getSuperiorIds());
-			StringBuilder buffer = new StringBuilder();
-			if (userIds != null && !userIds.isEmpty()) {
-				for (String userId : userIds) {
-					SysUser u = sysUserService.findByAccount(userId);
-					if (u != null) {
-						buffer.append(u.getName()).append("[").append(u.getUserId()).append("] ");
-					}
-				}
-				request.setAttribute("x_users_name", buffer.toString());
-			}
-		}
+		 
 
 		List<Dictory> dictories = dictoryService.getDictoryList(SysConstants.USER_HEADSHIP);
 		modelMap.put("dictories", dictories);
@@ -508,7 +496,7 @@ public class TenantUserController {
 					bean.setName(ParamUtil.getParameter(request, "name"));
 					String password = ParamUtil.getParameter(request, "password");
 					bean.setPasswordHash(password);
-					bean.setGender(ParamUtil.getIntParameter(request, "gender", 0));
+					bean.setSex(ParamUtil.getIntParameter(request, "sex", 0));
 					bean.setMobile(ParamUtil.getParameter(request, "mobile"));
 					bean.setEmail(ParamUtil.getParameter(request, "email"));
 					bean.setTelephone(ParamUtil.getParameter(request, "telephone"));
@@ -563,8 +551,7 @@ public class TenantUserController {
 					Tools.populate(bean, RequestUtils.getParameterMap(request));
 					bean.setOrganizationId(RequestUtils.getLong(request, "organizationId"));
 					bean.setName(ParamUtil.getParameter(request, "name"));
-					bean.setSuperiorIds(ParamUtil.getParameter(request, "superiorIds"));
-					bean.setGender(ParamUtil.getIntParameter(request, "gender", 0));
+					bean.setSex(ParamUtil.getIntParameter(request, "sex", 0));
 					bean.setMobile(ParamUtil.getParameter(request, "mobile"));
 					bean.setEmail(ParamUtil.getParameter(request, "email"));
 					bean.setTelephone(ParamUtil.getParameter(request, "telephone"));

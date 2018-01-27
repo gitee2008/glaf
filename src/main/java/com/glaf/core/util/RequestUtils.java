@@ -45,9 +45,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.glaf.core.config.SystemConfig;
 import com.glaf.core.identity.User;
-import com.glaf.core.security.AESUtils;
 import com.glaf.core.security.IdentityFactory;
 import com.glaf.core.security.LoginContext;
+import com.glaf.core.util.security.AESUtils;
 
 public class RequestUtils {
 	private static final int COOKIE_LIVING_SECONDS = 3600 * 8;

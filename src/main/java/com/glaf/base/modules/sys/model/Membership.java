@@ -48,25 +48,25 @@ public class Membership implements Serializable, JSONable {
 	/**
 	 * 所属租户
 	 */
-	@Column(name = "TENANTID_")
+	@Column(name = "TENANTID_", length = 50)
 	protected String tenantId;
 
 	/**
 	 * 用户账号
 	 */
-	@Column(name = "ACTORID_")
+	@Column(name = "ACTORID_", length = 50)
 	protected String actorId;
 
 	/**
 	 * 扩展属性
 	 */
-	@Column(name = "ATTRIBUTE_")
+	@Column(name = "ATTRIBUTE_", length = 500)
 	protected String attribute;
 
 	/**
 	 * 修改人
 	 */
-	@Column(name = "MODIFYBY_")
+	@Column(name = "MODIFYBY_", length = 50)
 	protected String modifyBy;
 
 	/**
@@ -80,30 +80,30 @@ public class Membership implements Serializable, JSONable {
 	 * 节点编号
 	 */
 	@Column(name = "NODEID_")
-	protected Long nodeId;
+	protected long nodeId;
 
 	/**
 	 * 目标Id
 	 */
-	@Column(name = "OBJECTID_")
+	@Column(name = "OBJECTID_", length = 200)
 	protected String objectId;
 
 	/**
 	 * 目标值
 	 */
-	@Column(name = "OBJECTVALUE_")
+	@Column(name = "OBJECTVALUE_", length = 500)
 	protected String objectValue;
 
 	/**
 	 * 角色编号
 	 */
-	@Column(name = "ROLEID_")
+	@Column(name = "ROLEID_", length = 50)
 	protected String roleId;
 
 	/**
 	 * 上级领导
 	 */
-	@Column(name = "SUPERIORID_")
+	@Column(name = "SUPERIORID_", length = 50)
 	protected String superiorId;
 
 	/**
@@ -150,7 +150,7 @@ public class Membership implements Serializable, JSONable {
 		return this.modifyDate;
 	}
 
-	public Long getNodeId() {
+	public long getNodeId() {
 		return this.nodeId;
 	}
 
@@ -210,7 +210,7 @@ public class Membership implements Serializable, JSONable {
 		this.modifyDate = modifyDate;
 	}
 
-	public void setNodeId(Long nodeId) {
+	public void setNodeId(long nodeId) {
 		this.nodeId = nodeId;
 	}
 

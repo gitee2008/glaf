@@ -54,23 +54,6 @@ public interface ITableService {
 	List<SysTable> getAllSysTables();
 
 	/**
-	 * 
-	 * @param columnId
-	 * @return
-	 */
-	TableColumn getTableColumn(String columnId);
-
-	int getTableColumnCount(TableColumnQuery query);
-
-	List<TableColumn> getTableColumnsByTableId(String tableId);
-
-	List<TableColumn> getTableColumnsByTableName(String tableName);
-
-	List<TableColumn> getTableColumnsByTargetId(String targetId);
-
-	List<SysTable> getTableColumns(SysTableQuery query);
-
-	/**
 	 * 根据表Id获取表对象
 	 * 
 	 * @return
@@ -92,6 +75,23 @@ public interface ITableService {
 	 * @return
 	 */
 	List<SysTable> getSysTablesByQueryCriteria(int start, int pageSize, SysTableQuery query);
+
+	/**
+	 * 
+	 * @param columnId
+	 * @return
+	 */
+	TableColumn getTableColumn(String columnId);
+
+	int getTableColumnCount(TableColumnQuery query);
+
+	List<TableColumn> getTableColumns(TableColumnQuery query);
+
+	List<TableColumn> getTableColumnsByTableId(String tableId);
+
+	List<TableColumn> getTableColumnsByTableName(String tableName);
+
+	List<TableColumn> getTableColumnsByTargetId(String targetId);
 
 	@Transactional
 	void insertColumns(String tableName, List<TableColumn> columns);
@@ -119,32 +119,32 @@ public interface ITableService {
 	 */
 	@Transactional
 	void save(SysTable tableDefinition);
-	
+
 	/**
 	 * 保存表定义信息
 	 * 
 	 * @return
 	 */
 	@Transactional
-	void saveAs(SysTable tableDefinition, List<TableColumn> columnDefinitions);
+	void saveAs(SysTable tableDefinition, List<TableColumn> columns);
 
 	/**
 	 * 保存字段信息
 	 * 
 	 * @param tableName
-	 * @param columnDefinition
+	 * @param column
 	 */
 	@Transactional
-	void saveColumn(String tableName, TableColumn columnDefinition);
+	void saveColumn(String tableName, TableColumn column);
 
 	/**
 	 * 保存列定义信息
 	 * 
 	 * @param targetId
-	 * @param columnDefinitions
+	 * @param columns
 	 */
 	@Transactional
-	void saveColumns(String targetId, List<TableColumn> columnDefinitions);
+	void saveColumns(String targetId, List<TableColumn> columns);
 
 	/**
 	 * 保存定义
@@ -155,12 +155,15 @@ public interface ITableService {
 	@Transactional
 	void saveSystemTable(String tableName, List<TableColumn> rows);
 
+	@Transactional
+	void saveTargetColumn(String targetId, TableColumn column);
+
 	/**
 	 * 保存字段信息
 	 * 
-	 * @param columnDefinition
+	 * @param column
 	 */
 	@Transactional
-	void updateColumn(TableColumn columnDefinition);
+	void updateColumn(TableColumn column);
 
 }

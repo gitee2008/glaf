@@ -45,13 +45,9 @@ public class PathFormat {
 		PathFormat.currentDate = new Date();
 
 		StringBuffer sb = new StringBuffer();
-
 		while (matcher.find()) {
-
 			matcher.appendReplacement(sb, PathFormat.getString(matcher.group(1)));
-
 		}
-
 		matcher.appendTail(sb);
 
 		return sb.toString();

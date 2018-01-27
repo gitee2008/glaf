@@ -21,6 +21,7 @@ package com.glaf.core.cache.ehcache3;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.ehcache.Cache;
 import org.ehcache.CacheManager;
@@ -36,6 +37,8 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class EHCache3Impl implements com.glaf.core.cache.Cache {
 
 	protected static final Logger LOGGER = getLogger(EHCache3Impl.class);
+
+	protected static AtomicBoolean running = new AtomicBoolean(false);
 
 	protected static ConcurrentMap<String, CacheManager> cacheMgrConcurrentMap = new ConcurrentHashMap<String, CacheManager>();
 
@@ -57,10 +60,20 @@ public class EHCache3Impl implements com.glaf.core.cache.Cache {
 		}
 		Cache<String, String> cache = getCacheManager(region).getCache(region, String.class, String.class);
 		if (cache == null) {
-			cache = getCacheManager(region).createCache(region,
-					newCacheConfigurationBuilder(String.class, String.class, heap(100).offheap(10, MemoryUnit.MB)));
+			if (!running.get()) {
+				try {
+					running.set(true);
+					if (cache == null) {
+						cache = getCacheManager(region).createCache(region, newCacheConfigurationBuilder(String.class,
+								String.class, heap(100).offheap(10, MemoryUnit.MB)));
+						cacheConcurrentMap.put(region, cache);
+					}
+				} finally {
+					running.set(false);
+				}
+			}
 		}
-		cacheConcurrentMap.put(region, cache);
+
 		return cache;
 	}
 
@@ -68,11 +81,19 @@ public class EHCache3Impl implements com.glaf.core.cache.Cache {
 		if (cacheMgrConcurrentMap.get(region) != null) {
 			return cacheMgrConcurrentMap.get(region);
 		}
-		CacheManager cacheManager = newCacheManagerBuilder()
-				.withCache(region,
-						newCacheConfigurationBuilder(String.class, String.class, heap(100).offheap(10, MemoryUnit.MB)))
-				.build(true);
-		cacheMgrConcurrentMap.put(region, cacheManager);
+		CacheManager cacheManager = null;
+		if (!running.get()) {
+			try {
+				running.set(true);
+				if (cacheManager == null) {
+					cacheManager = newCacheManagerBuilder().withCache(region, newCacheConfigurationBuilder(String.class,
+							String.class, heap(100).offheap(10, MemoryUnit.MB))).build(true);
+					cacheMgrConcurrentMap.put(region, cacheManager);
+				}
+			} finally {
+				running.set(false);
+			}
+		}
 		return cacheManager;
 	}
 
