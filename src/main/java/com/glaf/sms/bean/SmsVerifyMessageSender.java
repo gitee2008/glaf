@@ -19,6 +19,8 @@
 package com.glaf.sms.bean;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -31,6 +33,7 @@ import com.glaf.sms.service.SmsServerService;
 import com.glaf.sms.service.SmsVerifyMessageService;
 
 public class SmsVerifyMessageSender {
+	protected static final Log logger = LogFactory.getLog(SmsVerifyMessageSender.class);
 
 	protected SmsServerService smsServerService;
 
@@ -71,7 +74,10 @@ public class SmsVerifyMessageSender {
 				requestBody = StringTools.replace(requestBody, "#{uuid}", smsVerifyMessage.getId());
 				requestBody = StringTools.replace(requestBody, "#{mobile}", smsVerifyMessage.getMobile());
 				requestBody = StringTools.replace(requestBody, "#{code}", smsVerifyMessage.getVerificationCode());
+				logger.debug("准备发送短信给用户:" + smsVerifyMessage.getMobile());
+				logger.debug("发送内容:" + requestBody);
 				String text = HttpCoreUtils.doPost(buff.toString(), requestBody);
+				logger.debug("响应消息体:" + text);
 				if (StringUtils.isNotEmpty(text)) {
 					JSONObject jsonObject = JSON.parseObject(text);
 					smsVerifyMessage.setSendTime(new java.util.Date());

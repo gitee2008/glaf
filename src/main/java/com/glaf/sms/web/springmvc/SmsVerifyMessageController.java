@@ -35,6 +35,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.glaf.base.modules.sys.model.SysUser;
+import com.glaf.base.modules.sys.service.SysUserService;
 import com.glaf.core.security.LoginContext;
 import com.glaf.core.util.DateUtils;
 import com.glaf.core.util.Paging;
@@ -58,6 +60,8 @@ import com.glaf.sms.service.SmsVerifyMessageService;
 public class SmsVerifyMessageController {
 	protected static final Log logger = LogFactory.getLog(SmsVerifyMessageController.class);
 
+	protected SysUserService sysUserService;
+
 	protected SmsVerifyMessageService smsVerifyMessageService;
 
 	public SmsVerifyMessageController() {
@@ -75,45 +79,50 @@ public class SmsVerifyMessageController {
 				num = num / 100000000;
 				logger.debug("num=" + num);
 				if (num >= 130 && num <= 199) {
-					long dateAfter = System.currentTimeMillis() - DateUtils.DAY;
-					if (smsVerifyMessageService.getSmsCount(mobile, dateAfter) <= 10) {
-						String id = mobile + "_" + DateUtils.getNowYearMonthDayHHmm();
-						smsVerifyMessage = smsVerifyMessageService.getSmsVerifyMessage(id);
-						if (smsVerifyMessage == null) {
-							smsVerifyMessage = new SmsVerifyMessage();
-							smsVerifyMessage.setName(request.getParameter("name"));
-							smsVerifyMessage.setMobile(mobile);
-							smsVerifyMessage.setType("Login");
-							java.util.Random rand = new java.util.Random();
-							smsVerifyMessage.setVerificationCode(String.valueOf(1000 + rand.nextInt(9000)));
+					SysUser user = sysUserService.findByMobile(mobile);
+					if (user != null && user.getLocked() == 0) {
+						long dateAfter = System.currentTimeMillis() - DateUtils.DAY;
+						if (smsVerifyMessageService.getSmsCount(mobile, dateAfter) <= 10) {
+							String id = mobile + "_" + DateUtils.getNowYearMonthDayHHmm();
+							smsVerifyMessage = smsVerifyMessageService.getSmsVerifyMessage(id);
+							if (smsVerifyMessage == null) {
+								smsVerifyMessage = new SmsVerifyMessage();
+								smsVerifyMessage.setName(request.getParameter("name"));
+								smsVerifyMessage.setMobile(mobile);
+								smsVerifyMessage.setType("Login");
+								java.util.Random rand = new java.util.Random();
+								smsVerifyMessage.setVerificationCode(String.valueOf(100000 + rand.nextInt(900000)));
 
-							this.smsVerifyMessageService.save(smsVerifyMessage);
+								this.smsVerifyMessageService.save(smsVerifyMessage);
 
-							SmsVerifyMessageSender sender = new SmsVerifyMessageSender();
-							sender.setSmsVerifyMessageService(smsVerifyMessageService);
-							sender.sendSMS(smsVerifyMessage);
-
-							return ResponseUtils.responseJsonResult(true);
-						} else {
-							if (smsVerifyMessage.getStatus() != 9) {
 								SmsVerifyMessageSender sender = new SmsVerifyMessageSender();
 								sender.setSmsVerifyMessageService(smsVerifyMessageService);
 								sender.sendSMS(smsVerifyMessage);
 
 								return ResponseUtils.responseJsonResult(true);
+							} else {
+								if (smsVerifyMessage.getStatus() != 9) {
+									SmsVerifyMessageSender sender = new SmsVerifyMessageSender();
+									sender.setSmsVerifyMessageService(smsVerifyMessageService);
+									sender.sendSMS(smsVerifyMessage);
+
+									return ResponseUtils.responseJsonResult(true);
+								}
 							}
+						} else {
+							return ResponseUtils.responseJsonResult(false, "发送时间太频繁，请稍候再试。");
 						}
 					} else {
-						return ResponseUtils.responseJsonResult(false, "发送时间太频繁，请稍候再试。");
+						return ResponseUtils.responseJsonResult(false, "手机号码不正确！");
 					}
 				} else {
-					return ResponseUtils.responseJsonResult(false, "手机号码不正确");
+					return ResponseUtils.responseJsonResult(false, "手机号码不正确！");
 				}
 			} else {
-				return ResponseUtils.responseJsonResult(false, "手机号码不正确");
+				return ResponseUtils.responseJsonResult(false, "手机号码不正确！");
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			// ex.printStackTrace();
 			logger.error(ex);
 		}
 		return ResponseUtils.responseJsonResult(false);
@@ -168,7 +177,7 @@ public class SmsVerifyMessageController {
 				return ResponseUtils.responseJsonResult(false, "手机号码不正确");
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			// ex.printStackTrace();
 			logger.error(ex);
 		}
 		return ResponseUtils.responseJsonResult(false);
@@ -268,6 +277,11 @@ public class SmsVerifyMessageController {
 	@javax.annotation.Resource(name = "com.glaf.sms.service.smsVerifyMessageService")
 	public void setSmsVerifyMessageService(SmsVerifyMessageService smsVerifyMessageService) {
 		this.smsVerifyMessageService = smsVerifyMessageService;
+	}
+
+	@javax.annotation.Resource
+	public void setSysUserService(SysUserService sysUserService) {
+		this.sysUserService = sysUserService;
 	}
 
 	@ResponseBody
