@@ -46,14 +46,21 @@ public class TableTransformJob extends BaseJob {
 
 	protected static AtomicLong lastExecuteTime = new AtomicLong(System.currentTimeMillis());
 
+	protected static int F_STEP = 0;
+
 	public void runJob(JobExecutionContext context) throws JobExecutionException {
-		if ((System.currentTimeMillis() - lastExecuteTime.get()) < DateUtils.HOUR) {// 1小时
-			return;
+		logger.info("-----------------------TableTransformJob-------------------------");
+		if (F_STEP > 0) {
+			if ((System.currentTimeMillis() - lastExecuteTime.get()) < DateUtils.MINUTE * 5) {
+				logger.info("间隔时间未到，不执行。");
+				return;
+			}
 		}
 		try {
-			TimeUnit.SECONDS.sleep(4 + new Random().nextInt(120));// 随机等待，避免Job同时执行
+			TimeUnit.SECONDS.sleep(1 + new Random().nextInt(30));// 随机等待，避免Job同时执行
 		} catch (InterruptedException e) {
 		}
+		F_STEP++;
 		IDatabaseService databaseService = ContextFactory.getBean("databaseService");
 		TableTransformService tableTransformService = ContextFactory.getBean("tableTransformService");
 		TableTransformQuery query = new TableTransformQuery();

@@ -90,7 +90,7 @@ public class SysUserRole implements Serializable, JSONable {
 	/**
 	 * 部门角色编号
 	 */
-	@Column(name = "ROLEID")
+	@Column(name = "ROLEID", length = 50)
 	protected String roleId;
 
 	/**
@@ -102,7 +102,7 @@ public class SysUserRole implements Serializable, JSONable {
 	/**
 	 * 用户名
 	 */
-	@Column(name = "USERID")
+	@Column(name = "USERID", length = 50)
 	protected String userId;
 
 	@javax.persistence.Transient

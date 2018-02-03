@@ -135,6 +135,12 @@ public class SysUser implements Serializable, User, JSONable {
 	protected String mobile;
 
 	/**
+	 * 手机验证标识
+	 */
+	@Column(name = "MOBILEVERIFYFLAG_", length = 1)
+	protected String mobileVerifyFlag;
+
+	/**
 	 * Hash密码
 	 */
 	@Column(name = "PASSWORD_HASH", length = 250)
@@ -336,10 +342,6 @@ public class SysUser implements Serializable, User, JSONable {
 		return fax;
 	}
 
-	public int getSex() {
-		return sex;
-	}
-
 	public String getHeadship() {
 		return headship;
 	}
@@ -392,6 +394,10 @@ public class SysUser implements Serializable, User, JSONable {
 		return mobile;
 	}
 
+	public String getMobileVerifyFlag() {
+		return mobileVerifyFlag;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -432,6 +438,10 @@ public class SysUser implements Serializable, User, JSONable {
 
 	public String getSecretLoginFlag() {
 		return secretLoginFlag;
+	}
+
+	public int getSex() {
+		return sex;
 	}
 
 	public Integer getSyncFlag() {
@@ -601,10 +611,6 @@ public class SysUser implements Serializable, User, JSONable {
 		this.fax = fax;
 	}
 
-	public void setSex(int sex) {
-		this.sex = sex;
-	}
-
 	public void setHeadship(String headship) {
 		this.headship = headship;
 	}
@@ -657,6 +663,10 @@ public class SysUser implements Serializable, User, JSONable {
 		this.mobile = mobile;
 	}
 
+	public void setMobileVerifyFlag(String mobileVerifyFlag) {
+		this.mobileVerifyFlag = mobileVerifyFlag;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -691,6 +701,10 @@ public class SysUser implements Serializable, User, JSONable {
 
 	public void setSecretLoginFlag(String secretLoginFlag) {
 		this.secretLoginFlag = secretLoginFlag;
+	}
+
+	public void setSex(int sex) {
+		this.sex = sex;
 	}
 
 	public void setSyncFlag(Integer syncFlag) {

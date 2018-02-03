@@ -65,6 +65,7 @@ $.extend($.jgrid,{
 			if(o.gb !== '') {
 				try {$(".jqgrid-overlay:first",o.gb).hide();} catch (e){}
 			}
+			try { $(".jqgrid-overlay-modal").hide(); } catch (e) {}
 			$(selector).hide().attr("aria-hidden","true");
 		}
 		if( o.removemodal ) {
@@ -207,6 +208,14 @@ $.extend($.jgrid,{
 			jqm : true,
 			jqM : true
 		}, o || {});
+		var style="";
+		if(o.gbox) {
+			var grid = $("#"+o.gbox.substring(6))[0];
+			try {
+				style = $(grid).jqGrid('getStyleUI',  grid.p.styleUI+'.common','overlay', false, 'jqgrid-overlay-modal');
+				o.overlayClass = $(grid).jqGrid('getStyleUI',  grid.p.styleUI+'.common','overlay', true);
+			} catch (em){}
+		}
 		if(o.focusField === undefined) {
 			o.focusField = 0;
 		}
@@ -222,8 +231,16 @@ $.extend($.jgrid,{
 			else {$(selector).attr("aria-hidden","false").jqmShow();}
 		} else {
 			if(o.gbox !== '') {
-				$(".jqgrid-overlay:first",o.gbox).show();
-				$(selector).data("gbox",o.gbox);
+				var zInd = parseInt($(selector).css("z-index")) - 1;
+				if(o.modal) {
+					if(!$(".jqgrid-overlay-modal")[0] ) {
+						$('body').prepend("<div "+style+"></div>" );
+					}
+					$(".jqgrid-overlay-modal").css("z-index",zInd).show();
+				} else {
+					$(".jqgrid-overlay:first",o.gbox).css("z-index",zInd).show();
+					$(selector).data("gbox",o.gbox);
+				}
 			}
 			$(selector).show().attr("aria-hidden","false");
 			if(o.focusField >= 0) {
@@ -669,7 +686,25 @@ $.extend($.jgrid,{
 	},
 	checkValues : function(val, valref, customobject, nam) {
 		var edtrul,i, nm, dft, len, g = this, cm = g.p.colModel,
-		msg = $.jgrid.getRegional(this, 'edit.msg'), fmtdate;
+		msg = $.jgrid.getRegional(this, 'edit.msg'), fmtdate,
+		isNum = function(vn) {
+			var vn = vn.toString();
+			if(vn.length >= 2) {
+				var chkv, dot;
+				if(vn[0] === "-" ) {
+					chkv = vn[1];
+					if(vn[2]) { dot = vn[2];}
+				} else {
+					chkv = vn[0];
+					if(vn[1]) { dot = vn[1];}
+				}
+				if( chkv === "0"  && dot !== ".") {
+					return false; //octal
+				} 
+			}
+			return typeof parseFloat(vn) === 'number' && isFinite(vn); 
+		};
+
 		if(customobject === undefined) {
 			if(typeof valref==='string'){
 				for( i =0, len=cm.length;i<len; i++){
@@ -696,7 +731,7 @@ $.extend($.jgrid,{
 			var rqfield = edtrul.required === false ? false : true;
 			if(edtrul.number === true) {
 				if( !(rqfield === false && $.jgrid.isEmpty(val)) ) {
-					if(isNaN(val)) { return [false,nm+": "+msg.number,""]; }
+					if(!isNum(val)) { return [false,nm+": "+msg.number,""]; }
 				}
 			}
 			if(edtrul.minValue !== undefined && !isNaN(edtrul.minValue)) {
@@ -715,7 +750,7 @@ $.extend($.jgrid,{
 			}
 			if(edtrul.integer === true) {
 				if( !(rqfield === false && $.jgrid.isEmpty(val)) ) {
-					if(isNaN(val)) { return [false,nm+": "+msg.integer,""]; }
+					if(!isNum(val)) { return [false,nm+": "+msg.integer,""]; }
 					if ((val % 1 !== 0) || (val.indexOf('.') !== -1)) { return [false,nm+": "+msg.integer,""];}
 				}
 			}
@@ -755,6 +790,98 @@ $.extend($.jgrid,{
 			}
 		}
 		return [true,"",""];
+	},
+	validateForm : function(form) {
+		var	f, field, formvalid = true;
+
+		for (f = 0; f < form.elements.length; f++) {
+			field = form.elements[f];
+			// ignore buttons, fieldsets, etc.
+			if (field.nodeName !== "INPUT" && field.nodeName !== "TEXTAREA" && field.nodeName !== "SELECT") continue;
+			// is native browser validation available?
+			if (typeof field.willValidate !== "undefined") {
+				// native validation available
+				if (field.nodeName === "INPUT" && field.type !== field.getAttribute("type")) {
+					// input type not supported! Use legacy JavaScript validation
+					field.setCustomValidity($.jgrid.LegacyValidation(field) ? "" : "error");
+				}
+				// native browser check display error
+				field.reportValidity();
+			} else {
+				// native validation not available
+				field.validity = field.validity || {};
+				field.validity.valid = $.jgrid.LegacyValidation(field);
+			}
+
+			if (field.validity.valid) {
+				// remove error styles and messages
+			} else {
+				// style field, show error, etc.
+				// form is invalid
+				//var message = field.validationMessage;
+				formvalid = false;
+				break;
+			}
+		}
+		return formvalid;
+	},
+	// basic legacy validation checking
+	LegacyValidation : function (field) {
+	var	valid = true,
+		val = field.value,
+		type = field.getAttribute("type"),
+		chkbox = (type === "checkbox" || type === "radio"),
+		required = field.getAttribute("required"),
+		minlength = field.getAttribute("minlength"),
+		maxlength = field.getAttribute("maxlength"),
+		pattern = field.getAttribute("pattern");
+
+		// disabled fields should not be validated
+		if ( field.disabled ) { 
+			return valid;
+		}
+		// value required?
+		valid = valid && (!required ||
+			(chkbox && field.checked) ||
+			(!chkbox && val !== "")
+		);
+
+		// minlength or maxlength set?
+		valid = valid && (chkbox || (
+			(!minlength || val.length >= minlength) &&
+			(!maxlength || val.length <= maxlength)
+		));
+
+		// test pattern
+		if (valid && pattern) {
+			pattern = new RegExp(pattern);
+			valid = pattern.test(val);
+		}
+
+		return valid;
+	},
+	buildButtons : function ( buttons, source, commonstyle) {
+		var icon, str;
+		$.each(buttons, function(i,n) {
+			// side, position, text, icon, click, id, index
+			if(!n.id) {
+				n.id = $.jgrid.randId();
+			}
+			if(!n.position) {
+				n.position = 'last';
+			}
+			if(!n.side) {
+				n.side = 'left';
+			}
+			icon = n.icon ? " fm-button-icon-" + n.side + "'><span class='" + commonstyle.icon_base + " " + n.icon + "'></span>" : "'>";
+			str = "<a  data-index='"+i+"' id='" + n.id + "' class='fm-button " + commonstyle.button + icon + n.text+"</a>";
+			if(n.position === "last" ) {
+				source = source + str;
+			} else {
+				source = str + source;
+			}
+		});
+		return source;
 	}
 });
 //module end

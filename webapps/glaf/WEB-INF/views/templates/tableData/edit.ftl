@@ -111,7 +111,7 @@
 		<#if dataModel.businessStatus == 9>
 		&nbsp;<span style="font:bold 13px 宋体; color:#ff0000;">已审核</span>&nbsp;
 		<#else>
-		<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'" 
+		<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-saveas'" 
 		   onclick="javascript:saveAsData(false);" >另存</a>
 		</#if>
     </div> 
@@ -153,22 +153,22 @@
 			<td align="left">
 				<#if col.javaType == "Integer">
 				<input id="${col.id}" name="${col.id}" type="text" <#if col.comment?exists> title="${col.comment}" </#if>
-					   class="easyui-numberbox easyui-validatebox x-text" style="width:60px;" precision="0"
+					   class="easyui-numberbox easyui-validatebox x-text" style="width:60px; text-align:right;" precision="0"
 					   <#if col.requiredField == "1"> required="true" data-options="required:true" </#if>
 					   value="${col.value}" size="10"/>
 				<#elseif col.javaType == "Long">
 				<input id="${col.id}" name="${col.id}" type="text" <#if col.comment?exists> title="${col.comment}" </#if>
-					   class="easyui-numberbox easyui-validatebox x-text" style="width:60px;" precision="0" 
+					   class="easyui-numberbox easyui-validatebox x-text" style="width:60px; text-align:right;" precision="0" 
 					   <#if col.requiredField == "1"> required="true" data-options="required:true" </#if>
 					   value="${col.value}" size="10"/>
 				<#elseif col.javaType == "Double">
 				<input id="${col.id}" name="${col.id}" type="text" <#if col.comment?exists> title="${col.comment}" </#if> 
-					   class="easyui-numberbox easyui-validatebox x-text" style="width:60px;" precision="${col.scale}"
+					   class="easyui-numberbox easyui-validatebox x-text" style="width:60px; text-align:right;" precision="${col.scale}"
 					   <#if col.requiredField == "1"> required="true" data-options="required:true" </#if>
 					   value="${col.value}" size="10"/>
 				<#elseif col.javaType == "Date">
 				<input id="${col.id}" name="${col.id}" type="text" <#if col.comment?exists> title="${col.comment}" </#if>
-					   class="easyui-datebox easyui-validatebox x-text" style="width:100px;"  
+					   class="easyui-datebox easyui-validatebox x-text" style="width:108px; text-align:center;"  
 					   <#if col.requiredField == "1"> required="true" data-options="required:true" </#if>
 					   <#if col.value?exists>value="${col.value?string('yyyy-MM-dd')}"</#if> size="30"/>
 				<#else>
@@ -196,7 +196,7 @@
 					   >${col.value}</textarea>
 				  <#else>
 				   <input id="${col.id}" name="${col.id}" type="text" 
-					   class="easyui-validatebox x-text" <#if col.listWidth gte 10> style="width:${col.listWidth}px;" <#else> style="width:180px;"</#if>
+					   class="easyui-validatebox x-text" <#if col.listWidth gte 180> style="width:${col.listWidth}px;" <#else> style="width:180px;"</#if>
 					   <#if col.comment?exists> alt="${col.comment}" </#if>
 					   <#if col.requiredField == "1"> required="true" data-options="required:true" </#if>
 					   value="${col.value}" size="50"/>

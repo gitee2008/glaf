@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.sms.mapper.SmsMessageMapper">
+
+	<resultMap id="smsMessageResultMap" type="com.glaf.sms.domain.SmsMessage">
+		<id property="id" column="ID_" jdbcType="VARCHAR" />
+		<result property="clientId" column="CLIENTID_" jdbcType="VARCHAR" />
+		<result property="serverId" column="SERVERID_" jdbcType="VARCHAR" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="mobile" column="MOBILE_" jdbcType="VARCHAR" />
+		<result property="subject" column="SUBJECT_" jdbcType="VARCHAR" />
+		<result property="message" column="MESSAGE_" jdbcType="VARCHAR" />
+		<result property="sendLaterTime" column="SENDLATERTIME_" jdbcType="TIMESTAMP"/>
+		<result property="retryTimes" column="RETRYTIMES_" jdbcType="INTEGER" />
+		<result property="sendTime" column="SENDTIME_" jdbcType="TIMESTAMP" />
+		<result property="status" column="STATUS_" jdbcType="INTEGER" />
+		<result property="year" column="YEAR_" jdbcType="INTEGER" />
+		<result property="month" column="MONTH_" jdbcType="INTEGER" />
+		<result property="fullDay" column="FULLDAY_" jdbcType="INTEGER" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="result" column="RESULT_" jdbcType="VARCHAR" />
+		<result property="limit" column="LIMITP_" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<insert id="insertSmsMessage" parameterType="com.glaf.sms.domain.SmsMessage">
+		insert into SMS_MESSAGE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="clientId != null">
+				,CLIENTID_
+			</if>
+			<if test="serverId != null">
+				,SERVERID_
+			</if>
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="mobile != null">
+				,MOBILE_
+			</if>
+			<if test="subject != null">
+				,SUBJECT_
+			</if>
+			<if test="message != null">
+				,MESSAGE_
+			</if>
+			<if test="retryTimes != null">
+				,RETRYTIMES_
+			</if>
+			<if test="sendLaterTime != null">
+				,SENDLATERTIME_ 
+			</if>
+			<if test="sendTime != null">
+				,SENDTIME_
+			</if>
+			<if test="status != null">
+				,STATUS_
+			</if>
+			<if test="year != null">
+				,YEAR_
+			</if>
+			<if test="month != null">
+				,MONTH_
+			</if>
+			<if test="fullDay != null">
+				,FULLDAY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR}
+
+			<if test="clientId != null">
+				,#{clientId, jdbcType=VARCHAR}
+			</if>
+			<if test="serverId != null">
+				,#{serverId, jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="mobile != null">
+				,#{mobile, jdbcType=VARCHAR}
+			</if>
+			<if test="subject != null">
+				,#{subject, jdbcType=VARCHAR}
+			</if>
+			<if test="message != null">
+				,#{message, jdbcType=VARCHAR}
+			</if>
+			<if test="retryTimes != null">
+				,#{retryTimes, jdbcType=INTEGER}
+			</if>
+			<if test="sendLaterTime != null">
+				,#{sendLaterTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="sendTime != null">
+				,#{sendTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="status != null">
+				,#{status, jdbcType=INTEGER}
+			</if>
+			<if test="year != null">
+				,#{year, jdbcType=INTEGER}
+			</if>
+			<if test="month != null">
+				,#{month, jdbcType=INTEGER}
+			</if>
+			<if test="fullDay != null">
+				,#{fullDay, jdbcType=INTEGER}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertSmsMessage" parameterType="java.util.List">
+		insert into SMS_MESSAGE (
+		ID_
+		,CLIENTID_
+		,SERVERID_
+		,NAME_
+		,MOBILE_
+		,SUBJECT_
+		,MESSAGE_
+		,RETRYTIMES_
+		,SENDLATERTIME_
+		,SENDTIME_
+		,STATUS_
+		,YEAR_
+		,MONTH_
+		,FULLDAY_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="smsMessage" index="index"
+			separator=",">
+			(
+			#{smsMessage.id, jdbcType=VARCHAR}
+			,#{smsMessage.clientId,
+			jdbcType=VARCHAR}
+			,#{smsMessage.serverId, jdbcType=VARCHAR}
+			,#{smsMessage.name, jdbcType=VARCHAR}
+			,#{smsMessage.mobile,
+			jdbcType=VARCHAR}
+			,#{smsMessage.subject, jdbcType=VARCHAR}
+			,#{smsMessage.message, jdbcType=VARCHAR}
+			,#{smsMessage.retryTimes,
+			jdbcType=INTEGER}
+			,#{smsMessage.sendLaterTime, jdbcType=TIMESTAMP}
+			,#{smsMessage.sendTime, jdbcType=TIMESTAMP}
+			,#{smsMessage.status, jdbcType=INTEGER}
+			,#{smsMessage.year,
+			jdbcType=INTEGER}
+			,#{smsMessage.month, jdbcType=INTEGER}
+			,#{smsMessage.fullDay, jdbcType=INTEGER}
+			,#{smsMessage.createTime,
+			jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertSmsMessage_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="smsMessage" index="index">
+			insert into
+			SMS_MESSAGE (
+			ID_
+			,CLIENTID_
+			,SERVERID_
+			,NAME_
+			,MOBILE_
+			,SUBJECT_
+			,MESSAGE_
+			,RETRYTIMES_
+			,SENDLATERTIME_
+			,SENDTIME_
+			,STATUS_
+			,YEAR_
+			,MONTH_
+			,FULLDAY_
+			,CREATETIME_
+			)
+			values (
+			#{smsMessage.id, jdbcType=VARCHAR}
+			,#{smsMessage.clientId,
+			jdbcType=VARCHAR}
+			,#{smsMessage.serverId, jdbcType=VARCHAR}
+			,#{smsMessage.name, jdbcType=VARCHAR}
+			,#{smsMessage.mobile,
+			jdbcType=VARCHAR}
+			,#{smsMessage.subject, jdbcType=VARCHAR}
+			,#{smsMessage.message, jdbcType=VARCHAR}
+			,#{smsMessage.retryTimes,
+			jdbcType=INTEGER}
+			,#{smsMessage.sendLaterTime, jdbcType=TIMESTAMP}
+			,#{smsMessage.sendTime, jdbcType=TIMESTAMP}
+			,#{smsMessage.status, jdbcType=INTEGER}
+			,#{smsMessage.year,
+			jdbcType=INTEGER}
+			,#{smsMessage.month, jdbcType=INTEGER}
+			,#{smsMessage.fullDay, jdbcType=INTEGER}
+			,#{smsMessage.createTime,
+			jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateSmsMessage" parameterType="com.glaf.sms.domain.SmsMessage">
+		update SMS_MESSAGE
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="serverId != null">
+				SERVERID_ = #{serverId, jdbcType=VARCHAR},
+			</if>
+			<if test="subject != null">
+				SUBJECT_ = #{subject, jdbcType=VARCHAR},
+			</if>
+			<if test="message != null">
+				MESSAGE_ = #{message, jdbcType=VARCHAR},
+			</if>
+			<if test="retryTimes != null">
+				RETRYTIMES_ = #{retryTimes, jdbcType=INTEGER},
+			</if>
+			<if test="sendTime != null">
+				SENDTIME_ = #{sendTime, jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				STATUS_ = #{status, jdbcType=INTEGER},
+			</if>
+			<if test="result != null">
+				RESULT_ = #{result, jdbcType=VARCHAR},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<delete id="deleteSmsMessageById" parameterType="string">
+		delete from
+		SMS_MESSAGE
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getSmsMessageById" parameterType="string"
+		resultMap="smsMessageResultMap">
+		select * from SMS_MESSAGE where ID_ = #{id}
+	</select>
+
+
+	<select id="getSmsMessages" parameterType="com.glaf.sms.query.SmsMessageQuery"
+		resultMap="smsMessageResultMap">
+		select distinct E.*
+		<include refid="selectSmsMessagesSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getSmsMessageCount" parameterType="com.glaf.sms.query.SmsMessageQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectSmsMessagesSql" />
+	</select>
+	
+	<select id="getSmsMessageAbleSendCount" parameterType="com.glaf.sms.query.SmsMessageQuery"
+		resultType="int">
+		select count(*)
+		from SMS_MESSAGE E left join SMS_CLIENT S on E.CLIENTID_ = S.ID_ 
+		left join SMS_PERSON P ON S.ID_ = P.CLIENTID_ AND E.MOBILE_ = P.MOBILE_
+		<where>
+			and (
+					E.SENDLATERTIME_ is null
+					or E.SENDLATERTIME_ &lt;= GETDATE() 
+				)
+			and (
+					E.STATUS_ = 0
+					or E.STATUS_ = 1 
+				)
+			and P.LOCKED_ = 0
+		</where>
+	</select>
+	
+	<select id="getSmsMessageAbleSend"	resultMap="smsMessageResultMap">
+		select E.*,P.LIMIT_ AS LIMITP_
+		from SMS_MESSAGE E left join SMS_CLIENT S on E.CLIENTID_ = S.ID_ 
+		left join SMS_PERSON P ON S.ID_ = P.CLIENTID_ AND E.MOBILE_ = P.MOBILE_
+		<where>
+			and (
+					E.SENDLATERTIME_ is null
+					or E.SENDLATERTIME_ &lt;= GETDATE() 
+				)
+			and (
+					E.STATUS_ = 0
+					or E.STATUS_ = 1 
+				)
+			and P.LOCKED_ = 0
+		</where>
+	</select>
+
+
+	<sql id="selectSmsMessagesSql">
+
+		from SMS_MESSAGE E
+
+		<where>
+			1 = 1
+
+			<if test="clientId != null and clientId != '' ">
+				and E.CLIENTID_ = #{clientId}
+			</if>
+
+			<if test="serverId != null and serverId != '' ">
+				and E.SERVERID_ = #{serverId}
+			</if>
+
+			<if test="mobile != null and mobile != '' ">
+				and E.MOBILE_ = #{mobile}
+			</if>
+
+			<if test="mobileLike != null and mobileLike != '' ">
+				and E.MOBILE_ like #{mobileLike}
+			</if>
+
+			<if test="sendTimeGreaterThanOrEqual != null">
+				and E.SENDTIME_ &gt;= #{sendTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="sendTimeLessThanOrEqual != null">
+				and E.SENDTIME_ &lt;= #{sendTimeLessThanOrEqual}
+			</if>
+
+			<if test="status != null">
+				and E.STATUS_ = #{status}
+			</if>
+			
+			<if test="checkAbleSend != null and checkAbleSend > 0">
+				and (
+					E.STATUS_ = 0
+					or E.STATUS_ = 1 
+				)
+			</if>
+
+			<if test="year != null">
+				and E.YEAR_ = #{year}
+			</if>
+
+			<if test="month != null">
+				and E.MONTH_ = #{month}
+			</if>
+
+			<if test="fullDay != null">
+				and E.FULLDAY_ = #{fullDay}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+			<if test="sendLaterTimeGreaterThanOrEqual != null">
+				and (
+					SENDLATERTIME_ is null
+					or E.SENDLATERTIME_ &lt;= #{sendLaterTimeGreaterThanOrEqual}
+				)
+            </if>
+		</where>
+	</sql>
+
+</mapper>

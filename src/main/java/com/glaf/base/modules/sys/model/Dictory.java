@@ -70,7 +70,7 @@ public class Dictory implements Serializable, JSONable {
 	 * 类型编号
 	 */
 	@Column(name = "TYPEID")
-	protected Long nodeId;
+	protected long nodeId;
 
 	/**
 	 * 序号
@@ -368,7 +368,7 @@ public class Dictory implements Serializable, JSONable {
 		return this.name;
 	}
 
-	public Long getNodeId() {
+	public long getNodeId() {
 		return this.nodeId;
 	}
 
@@ -516,7 +516,7 @@ public class Dictory implements Serializable, JSONable {
 		this.name = name;
 	}
 
-	public void setNodeId(Long nodeId) {
+	public void setNodeId(long nodeId) {
 		this.nodeId = nodeId;
 	}
 

@@ -580,6 +580,7 @@ public class SysUserController {
 			bean.setLastLoginTime(new Date());
 			bean.setCreateBy(RequestUtils.getActorId(request));
 			bean.setUpdateBy(RequestUtils.getActorId(request));
+			logger.debug("sex:" + ParamUtil.getIntParameter(request, "sex", 0));
 
 			if (StringUtils.isNotEmpty(bean.getUserId()) && StringUtils.isNotEmpty(bean.getName())) {
 				if (sysUserService.findByAccount(bean.getUserId()) == null) {

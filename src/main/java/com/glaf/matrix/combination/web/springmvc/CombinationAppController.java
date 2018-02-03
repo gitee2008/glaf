@@ -360,6 +360,7 @@ public class CombinationAppController {
 			combinationApp.setType(request.getParameter("type"));
 			combinationApp.setActive(request.getParameter("active"));
 			combinationApp.setAutoSyncFlag(request.getParameter("autoSyncFlag"));
+			combinationApp.setDeleteFetch(request.getParameter("deleteFetch"));
 			combinationApp.setExternalColumnsFlag(request.getParameter("externalColumnsFlag"));
 			combinationApp.setInterval(RequestUtils.getInt(request, "interval"));
 			combinationApp.setSortNo(RequestUtils.getInt(request, "sortNo"));

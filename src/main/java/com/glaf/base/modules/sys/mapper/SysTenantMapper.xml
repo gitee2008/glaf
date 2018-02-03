@@ -25,6 +25,7 @@
 		<result property="address" column="ADDRESS_" jdbcType="VARCHAR" />
 		<result property="property" column="PROPERTY_" jdbcType="VARCHAR" />
 		<result property="verify" column="VERIFY_" jdbcType="VARCHAR" />
+		<result property="ticketFlag" column="TICKETFLAG_" jdbcType="VARCHAR" />
 		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
 		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
 		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
@@ -93,6 +94,9 @@
 			</if>
 			<if test="verify != null">
 				,VERIFY_
+			</if>
+			<if test="ticketFlag != null">
+				,TICKETFLAG_
 			</if>
 			<if test="locked != null">
 				,LOCKED_
@@ -171,6 +175,9 @@
 			<if test="verify != null">
 				,#{verify, jdbcType=VARCHAR}
 			</if>
+			<if test="ticketFlag != null">
+				,#{ticketFlag, jdbcType=VARCHAR}
+			</if>
 			<if test="locked != null">
 				,#{locked, jdbcType=INTEGER}
 			</if>
@@ -212,6 +219,7 @@
 		,ADDRESS_
 		,PROPERTY_
 		,VERIFY_
+		,TICKETFLAG_
 		,LOCKED_
 		,CREATEBY_
 		,CREATETIME_
@@ -252,14 +260,17 @@
 			,#{sysTenant.property, jdbcType=VARCHAR}
 			,#{sysTenant.verify,
 			jdbcType=VARCHAR}
+			,#{sysTenant.ticketFlag, jdbcType=VARCHAR}
 			,#{sysTenant.locked,
 			jdbcType=INTEGER}
-			,#{sysTenant.createBy, jdbcType=VARCHAR}
+			,#{sysTenant.createBy,
+			jdbcType=VARCHAR}
 			,#{sysTenant.createTime,
 			jdbcType=TIMESTAMP}
 			,#{sysTenant.updateBy,
 			jdbcType=VARCHAR}
-			,#{sysTenant.updateTime, jdbcType=TIMESTAMP}
+			,#{sysTenant.updateTime,
+			jdbcType=TIMESTAMP}
 			)
 		</foreach>
 	</insert>
@@ -290,6 +301,7 @@
 			,ADDRESS_
 			,PROPERTY_
 			,VERIFY_
+			,TICKETFLAG_
 			,LOCKED_
 			,CREATEBY_
 			,CREATETIME_
@@ -331,6 +343,7 @@
 			,#{sysTenant.property,
 			jdbcType=VARCHAR}
 			,#{sysTenant.verify, jdbcType=VARCHAR}
+			,#{sysTenant.ticketFlag, jdbcType=VARCHAR}
 			,#{sysTenant.locked,
 			jdbcType=INTEGER}
 			,#{sysTenant.createBy,
@@ -401,6 +414,9 @@
 			</if>
 			<if test="verify != null">
 				VERIFY_ = #{verify, jdbcType=VARCHAR},
+			</if>
+			<if test="ticketFlag != null">
+				TICKETFLAG_ = #{ticketFlag, jdbcType=VARCHAR},
 			</if>
 			<if test="locked != null">
 				LOCKED_ = #{locked, jdbcType=INTEGER},
@@ -587,6 +603,10 @@
 
 			<if test="verify != null and verify != '' ">
 				and E.VERIFY_ = #{verify}
+			</if>
+
+			<if test="ticketFlag != null and ticketFlag != '' ">
+				and E.TICKETFLAG_ = #{ticketFlag}
 			</if>
 
 			<if test="locked != null">

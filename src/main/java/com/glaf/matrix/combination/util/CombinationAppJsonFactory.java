@@ -67,6 +67,9 @@ public class CombinationAppJsonFactory {
 		if (jsonObject.containsKey("autoSyncFlag")) {
 			model.setAutoSyncFlag(jsonObject.getString("autoSyncFlag"));
 		}
+		if (jsonObject.containsKey("deleteFetch")) {
+			model.setDeleteFetch(jsonObject.getString("deleteFetch"));
+		}
 		if (jsonObject.containsKey("externalColumnsFlag")) {
 			model.setExternalColumnsFlag(jsonObject.getString("externalColumnsFlag"));
 		}
@@ -128,6 +131,9 @@ public class CombinationAppJsonFactory {
 		if (model.getExternalColumnsFlag() != null) {
 			jsonObject.put("externalColumnsFlag", model.getExternalColumnsFlag());
 		}
+		if (model.getDeleteFetch() != null) {
+			jsonObject.put("deleteFetch", model.getDeleteFetch());
+		}
 		jsonObject.put("interval", model.getInterval());
 		if (model.getCreateBy() != null) {
 			jsonObject.put("createBy", model.getCreateBy());
@@ -183,6 +189,9 @@ public class CombinationAppJsonFactory {
 		}
 		if (model.getExternalColumnsFlag() != null) {
 			jsonObject.put("externalColumnsFlag", model.getExternalColumnsFlag());
+		}
+		if (model.getDeleteFetch() != null) {
+			jsonObject.put("deleteFetch", model.getDeleteFetch());
 		}
 		jsonObject.put("interval", model.getInterval());
 		if (model.getCreateBy() != null) {

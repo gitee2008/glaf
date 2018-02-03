@@ -136,7 +136,6 @@ public class SysUserServiceImpl implements SysUserService {
 		boolean result = false;
 		String pwd_hash = DigestUtils.sha512Hex(account + ":" + password);
 		String pwd = sysUserMapper.getPasswordHashByAccount(account);
-		// logger.debug(pwd_hash + ">" + pwd);
 		if (StringUtils.isNotEmpty(password) && StringUtils.equals(pwd_hash, pwd)) {
 			result = true;
 		}

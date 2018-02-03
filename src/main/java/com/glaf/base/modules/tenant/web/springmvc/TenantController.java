@@ -19,11 +19,14 @@
 package com.glaf.base.modules.tenant.web.springmvc;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -42,13 +45,17 @@ import com.glaf.base.modules.sys.query.SysTenantQuery;
 import com.glaf.base.modules.sys.query.TreePermissionQuery;
 import com.glaf.base.modules.sys.service.SysTenantService;
 import com.glaf.base.modules.sys.service.TreePermissionService;
+import com.glaf.core.base.DataFile;
 import com.glaf.core.config.ViewProperties;
 import com.glaf.core.security.LoginContext;
+import com.glaf.core.util.IOUtils;
 import com.glaf.core.util.Paging;
 import com.glaf.core.util.ParamUtils;
 import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.ResponseUtils;
 import com.glaf.core.util.Tools;
+
+import com.glaf.matrix.data.factory.DataFileFactory;
 
 /**
  * 
@@ -224,6 +231,54 @@ public class TenantController {
 	@javax.annotation.Resource
 	public void setTreePermissionService(TreePermissionService treePermissionService) {
 		this.treePermissionService = treePermissionService;
+	}
+
+	@RequestMapping("/tcFile")
+	public ModelAndView tcFile(HttpServletRequest request, ModelMap modelMap) {
+		RequestUtils.setRequestParameterToAttribute(request);
+		String tenantId = request.getParameter("tenantId");
+		if (StringUtils.isNotEmpty(tenantId)) {
+			try {
+				DataFile dataFile = DataFileFactory.getInstance().getDataFileByFileId(tenantId, tenantId + "_tc_image");
+				if (dataFile != null) {
+					request.setAttribute("dataFile", dataFile);
+				}
+			} catch (Exception ex) {
+				// ex.printStackTrace();
+			}
+		}
+		return new ModelAndView("/tenant/tcFile", modelMap);
+	}
+
+	@RequestMapping("/tcImage")
+	public void tcImage(HttpServletRequest request, HttpServletResponse response) {
+		String tenantId = request.getParameter("tenantId");
+		if (StringUtils.isNotEmpty(tenantId)) {
+			InputStream inputStream = null;
+			PrintWriter writer = null;
+			try {
+				DataFile dataFile = DataFileFactory.getInstance().getDataFileByFileId(tenantId, tenantId + "_tc_image");
+				if (dataFile != null) {
+					inputStream = DataFileFactory.getInstance().getInputStreamById(tenantId, tenantId + "_tc_image");
+					if (inputStream != null) {
+						ResponseUtils.download(request, response, inputStream, dataFile.getFilename());
+						return;
+					}
+				}
+				request.setCharacterEncoding("UTF-8");
+				response.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html; charset=UTF-8");
+				writer = response.getWriter();
+				writer.println("<h3><font color='red'>未上传相关证件！</font></h3>");
+				writer.flush();
+				writer.close();
+			} catch (Exception ex) {
+				// ex.printStackTrace();
+			} finally {
+				IOUtils.closeStream(inputStream);
+				IOUtils.closeStream(writer);
+			}
+		}
 	}
 
 	@RequestMapping("/view")

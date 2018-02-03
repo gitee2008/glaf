@@ -21,6 +21,7 @@
 		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
 		<result property="autoSyncFlag" column="AUTOSYNCFLAG_"
 			jdbcType="VARCHAR" />
+		<result property="deleteFetch" column="DELETEFETCH_" jdbcType="VARCHAR" />
 		<result property="externalColumnsFlag" column="EXTERNALCOLUMNSFLAG_"
 			jdbcType="VARCHAR" />
 		<result property="interval" column="INTERVAL_" jdbcType="INTEGER" />
@@ -63,6 +64,9 @@
 			</if>
 			<if test="autoSyncFlag != null">
 				,AUTOSYNCFLAG_
+			</if>
+			<if test="deleteFetch != null">
+				,DELETEFETCH_
 			</if>
 			<if test="externalColumnsFlag != null">
 				,EXTERNALCOLUMNSFLAG_
@@ -119,6 +123,9 @@
 			</if>
 			<if test="autoSyncFlag != null">
 				,#{autoSyncFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="deleteFetch != null">
+				,#{deleteFetch, jdbcType=VARCHAR}
 			</if>
 			<if test="externalColumnsFlag != null">
 				,#{externalColumnsFlag, jdbcType=VARCHAR}
@@ -179,6 +186,9 @@
 			</if>
 			<if test="autoSyncFlag != null">
 				AUTOSYNCFLAG_ = #{autoSyncFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="deleteFetch != null">
+				DELETEFETCH_ = #{deleteFetch, jdbcType=VARCHAR},
 			</if>
 			<if test="externalColumnsFlag != null">
 				EXTERNALCOLUMNSFLAG_ = #{externalColumnsFlag,

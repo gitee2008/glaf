@@ -103,6 +103,9 @@ public class SysTenantJsonFactory {
 		if (jsonObject.containsKey("verify")) {
 			model.setVerify(jsonObject.getString("verify"));
 		}
+		if (jsonObject.containsKey("ticketFlag")) {
+			model.setTicketFlag(jsonObject.getString("ticketFlag"));
+		}
 		if (jsonObject.containsKey("locked")) {
 			model.setLocked(jsonObject.getInteger("locked"));
 		}
@@ -182,6 +185,9 @@ public class SysTenantJsonFactory {
 		if (model.getVerify() != null) {
 			jsonObject.put("verify", model.getVerify());
 		}
+		if (model.getTicketFlag() != null) {
+			jsonObject.put("ticketFlag", model.getTicketFlag());
+		}
 		jsonObject.put("locked", model.getLocked());
 		if (model.getCreateBy() != null) {
 			jsonObject.put("createBy", model.getCreateBy());
@@ -250,6 +256,9 @@ public class SysTenantJsonFactory {
 		}
 		if (model.getVerify() != null) {
 			jsonObject.put("verify", model.getVerify());
+		}
+		if (model.getTicketFlag() != null) {
+			jsonObject.put("ticketFlag", model.getTicketFlag());
 		}
 		jsonObject.put("locked", model.getLocked());
 		if (model.getCreateBy() != null) {

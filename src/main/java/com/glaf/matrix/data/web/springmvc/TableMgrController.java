@@ -630,6 +630,7 @@ public class TableMgrController {
 							Tools.populate(columnDefinition, params);
 							columnDefinition.setDataCode(request.getParameter("dataCode"));
 							columnDefinition.setTableName(tableDefinition.getTableName());
+							columnDefinition.setComment(request.getParameter("comment"));
 							tableService.updateColumn(columnDefinition);
 						}
 					} else {
@@ -637,6 +638,7 @@ public class TableMgrController {
 						Tools.populate(columnDefinition, params);
 						columnDefinition.setDataCode(request.getParameter("dataCode"));
 						columnDefinition.setTableName(tableDefinition.getTableName());
+						columnDefinition.setComment(request.getParameter("comment"));
 						tableService.saveColumn(tableDefinition.getTableName(), columnDefinition);
 					}
 					return ResponseUtils.responseJsonResult(true);

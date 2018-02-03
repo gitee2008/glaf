@@ -279,22 +279,22 @@
 				<option value="postgresql">PostgreSQL</option>
 			</select>
 
-		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'"
+		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_export'"
 			  onclick="javascript:genCreateScripts();">生成数据库建表脚本</a> 
 
-		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'"
+		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_export'"
 			  onclick="javascript:showInsertScripts();">生成插入数据脚本</a>
 
-		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'"
+		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_export'"
 			  onclick="javascript:exportSysTables();">生成基础表数据脚本</a>
 
-		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'"
+		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_export'"
 			  onclick="javascript:genMappings();">生成Mapping文件</a> 
 
-		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'"
+		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_export'"
 			  onclick="javascript:exportDB();">生成SQLite数据</a> 
 
-		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'"
+		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-package'"
 			  onclick="javascript:updateHibernateDDL();">更新本数据库结构</a> 
 
 		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-list'"

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.sms.mapper.SmsVerifyMessageMapper">
+
+	<resultMap id="smsVerifyMessageResultMap" type="com.glaf.sms.domain.SmsVerifyMessage">
+		<id property="id" column="ID_" jdbcType="VARCHAR" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="mobile" column="MOBILE_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="verificationCode" column="VERIFICATIONCODE_"
+			jdbcType="VARCHAR" />
+		<result property="status" column="STATUS_" jdbcType="INTEGER" />
+		<result property="sendTime" column="SENDTIME_" jdbcType="TIMESTAMP" />
+		<result property="sendTimeMs" column="SENDTIMEMS_" jdbcType="BIGINT" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertSmsVerifyMessage" parameterType="com.glaf.sms.domain.SmsVerifyMessage">
+		insert into SMS_VERIFY_MESSAGE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="mobile != null">
+				,MOBILE_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="verificationCode != null">
+				,VERIFICATIONCODE_
+			</if>
+			<if test="status != null">
+				,STATUS_
+			</if>
+			<if test="sendTime != null">
+				,SENDTIME_
+			</if>
+			<if test="sendTimeMs != null">
+				,SENDTIMEMS_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR}
+
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="mobile != null">
+				,#{mobile, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="verificationCode != null">
+				,#{verificationCode, jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				,#{status, jdbcType=INTEGER}
+			</if>
+			<if test="sendTime != null">
+				,#{sendTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="sendTimeMs != null">
+				,#{sendTimeMs, jdbcType=BIGINT}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertSmsVerifyMessage" parameterType="java.util.List">
+		insert into SMS_VERIFY_MESSAGE (
+		ID_
+		,NAME_
+		,MOBILE_
+		,TYPE_
+		,VERIFICATIONCODE_
+		,STATUS_
+		,SENDTIME_
+		,SENDTIMEMS_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="smsVerifyMessage" index="index"
+			separator=",">
+			(
+			#{smsVerifyMessage.id, jdbcType=VARCHAR}
+			,#{smsVerifyMessage.name, jdbcType=VARCHAR}
+			,#{smsVerifyMessage.mobile, jdbcType=VARCHAR}
+			,#{smsVerifyMessage.type, jdbcType=VARCHAR}
+			,#{smsVerifyMessage.verificationCode, jdbcType=VARCHAR}
+			,#{smsVerifyMessage.status, jdbcType=INTEGER}
+			,#{smsVerifyMessage.sendTime, jdbcType=TIMESTAMP}
+			,#{smsVerifyMessage.sendTimeMs, jdbcType=BIGINT}
+			,#{smsVerifyMessage.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertSmsVerifyMessage_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="smsVerifyMessage" index="index">
+			insert into SMS_VERIFY_MESSAGE (
+			ID_
+			,NAME_
+			,MOBILE_
+			,TYPE_
+			,VERIFICATIONCODE_
+			,STATUS_
+			,SENDTIME_
+			,SENDTIMEMS_
+			,CREATETIME_
+			) values
+			(
+			#{smsVerifyMessage.id, jdbcType=VARCHAR}
+			,#{smsVerifyMessage.name,
+			jdbcType=VARCHAR}
+			,#{smsVerifyMessage.mobile, jdbcType=VARCHAR}
+			,#{smsVerifyMessage.type, jdbcType=VARCHAR}
+			,#{smsVerifyMessage.verificationCode, jdbcType=VARCHAR}
+			,#{smsVerifyMessage.status, jdbcType=INTEGER}
+			,#{smsVerifyMessage.sendTime, jdbcType=TIMESTAMP}
+			,#{smsVerifyMessage.sendTimeMs, jdbcType=BIGINT}
+			,#{smsVerifyMessage.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateSmsVerifyMessage" parameterType="com.glaf.sms.domain.SmsVerifyMessage">
+		update SMS_VERIFY_MESSAGE
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="status != null">
+				STATUS_ = #{status, jdbcType=INTEGER},
+			</if>
+			<if test="sendTime != null">
+				SENDTIME_ = #{sendTime, jdbcType=TIMESTAMP},
+			</if>
+			<if test="sendTimeMs != null">
+				SENDTIMEMS_ = #{sendTimeMs, jdbcType=BIGINT},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<delete id="deleteSmsVerifyMessageById" parameterType="string">
+		delete
+		from SMS_VERIFY_MESSAGE
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getSmsVerifyMessageById" parameterType="string"
+		resultMap="smsVerifyMessageResultMap">
+		select * from SMS_VERIFY_MESSAGE where ID_ = #{id}
+	</select>
+
+
+	<select id="getSmsVerifyMessages" parameterType="com.glaf.sms.query.SmsVerifyMessageQuery"
+		resultMap="smsVerifyMessageResultMap">
+		select distinct E.*
+		<include refid="selectSmsVerifyMessagesSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getSmsVerifyMessageCount" parameterType="com.glaf.sms.query.SmsVerifyMessageQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectSmsVerifyMessagesSql" />
+	</select>
+
+
+	<sql id="selectSmsVerifyMessagesSql">
+
+		from SMS_VERIFY_MESSAGE E
+
+		<where>
+			1 = 1
+
+			<if test="mobile != null and mobile != '' ">
+				and E.MOBILE_ = #{mobile}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="status != null">
+				and E.STATUS_ = #{status}
+			</if>
+
+			<if test="sendTimeGreaterThanOrEqual != null">
+				and E.SENDTIME_ &gt;= #{sendTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="sendTimeLessThanOrEqual != null">
+				and E.SENDTIME_ &lt;= #{sendTimeLessThanOrEqual}
+			</if>
+
+			<if test="sendTimeMsGreaterThanOrEqual != null">
+				and E.SENDTIMEMS_ &gt;= #{sendTimeMsGreaterThanOrEqual}
+			</if>
+
+			<if test="sendTimeMsLessThanOrEqual != null">
+				and E.SENDTIMEMS_ &lt;= #{sendTimeMsLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

@@ -147,7 +147,7 @@ public class SqlToCombinationTableBean {
 				for (ColumnDefinition col : columns) {
 					columnNames.add(col.getColumnName().trim().toLowerCase());
 				}
-				
+
 				/**
 				 * 优先使用外部定义的列信息
 				 */
@@ -178,7 +178,6 @@ public class SqlToCombinationTableBean {
 					}
 				}
 
-
 				TableDefinition tableDefinition = new TableDefinition();
 				tableDefinition.setTableName(combinationApp.getTargetTableName());
 				tableDefinition.setColumns(columns);
@@ -193,6 +192,12 @@ public class SqlToCombinationTableBean {
 				syncIdColumn.setColumnName("EX_SYNCID_");// syncId
 				syncIdColumn.setJavaType("Long");
 				tableDefinition.addColumn(syncIdColumn);
+
+				ColumnDefinition complexIdColumn = new ColumnDefinition();
+				complexIdColumn.setColumnName("EX_COMPLEX_KEY_");// 原始组合主键
+				complexIdColumn.setJavaType("String");
+				complexIdColumn.setLength(500);
+				tableDefinition.addColumn(complexIdColumn);
 
 				List<ColumnDefinition> cols = null;
 				List<CombinationItem> items = combinationApp.getItems();
@@ -350,6 +355,7 @@ public class SqlToCombinationTableBean {
 												dataMap = new LowerLinkedMap();
 												dataMap.put("ex_id_", idValue);
 												dataMap.put("ex_syncid_", syncId);
+												dataMap.put("ex_complex_key_", keyBuffer.toString());
 												if (recursionKeyExists) {
 													for (String recursionKey : recursionKeys) {
 														dataMap.put(recursionKey,
@@ -420,6 +426,7 @@ public class SqlToCombinationTableBean {
 											dataMap = new LowerLinkedMap();
 											dataMap.put("ex_id_", idValue);
 											dataMap.put("ex_syncid_", syncId);
+											dataMap.put("ex_complex_key_", keyBuffer.toString());
 										}
 										dataMap.putAll(rowMap);
 										dataListMap.put(idValue, dataMap);
@@ -447,8 +454,11 @@ public class SqlToCombinationTableBean {
 				if (insertList.size() > 0) {
 					BulkInsertBean insertBean = new BulkInsertBean();
 					targetConn.setAutoCommit(false);
-					DBUtils.executeSchemaResource(targetConn, " delete from " + combinationApp.getTargetTableName()
-							+ " where ex_syncid_ = " + combinationApp.getId());
+					if (combinationApp.getDeleteFetch() == null
+							|| StringUtils.equals(combinationApp.getDeleteFetch(), "Y")) {
+						DBUtils.executeSchemaResource(targetConn, " delete from " + combinationApp.getTargetTableName()
+								+ " where ex_syncid_ = " + combinationApp.getId());
+					}
 					insertBean.bulkInsert(null, targetConn, tableDefinition, insertList);
 					targetConn.commit();
 				}

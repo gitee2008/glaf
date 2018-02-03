@@ -45,6 +45,7 @@ public class SysTenantQuery extends DataQuery {
 	protected String addressLike;
 	protected String property;
 	protected String verify;
+	protected String ticketFlag;
 	protected Integer level;
 	protected Integer levelGreaterThanOrEqual;
 	protected Integer levelLessThanOrEqual;
@@ -340,6 +341,10 @@ public class SysTenantQuery extends DataQuery {
 		return tenantType;
 	}
 
+	public String getTicketFlag() {
+		return ticketFlag;
+	}
+
 	public String getTown() {
 		return town;
 	}
@@ -542,6 +547,10 @@ public class SysTenantQuery extends DataQuery {
 		this.tenantType = tenantType;
 	}
 
+	public void setTicketFlag(String ticketFlag) {
+		this.ticketFlag = ticketFlag;
+	}
+
 	public void setTown(String town) {
 		this.town = town;
 	}
@@ -587,6 +596,14 @@ public class SysTenantQuery extends DataQuery {
 			throw new RuntimeException("tenantType is null");
 		}
 		this.tenantType = tenantType;
+		return this;
+	}
+
+	public SysTenantQuery ticketFlag(String ticketFlag) {
+		if (ticketFlag == null) {
+			throw new RuntimeException("ticketFlag is null");
+		}
+		this.ticketFlag = ticketFlag;
 		return this;
 	}
 

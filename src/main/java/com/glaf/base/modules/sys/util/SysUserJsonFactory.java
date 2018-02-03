@@ -102,6 +102,10 @@ public class SysUserJsonFactory {
 			model.setMobile(jsonObject.getString("mobile"));
 		}
 
+		if (jsonObject.containsKey("mobileVerifyFlag")) {
+			model.setMobileVerifyFlag(jsonObject.getString("mobileVerifyFlag"));
+		}
+
 		if (jsonObject.containsKey("telephone")) {
 			model.setTelephone(jsonObject.getString("telephone"));
 		}
@@ -205,6 +209,9 @@ public class SysUserJsonFactory {
 		}
 		if (user.getMobile() != null) {
 			jsonObject.put("mobile", user.getMobile());
+		}
+		if (user.getMobileVerifyFlag() != null) {
+			jsonObject.put("mobileVerifyFlag", user.getMobileVerifyFlag());
 		}
 		if (user.getLastLoginTime() != null) {
 			jsonObject.put("lastLoginDate", DateUtils.getDateTime(user.getLastLoginDate()));
@@ -313,6 +320,9 @@ public class SysUserJsonFactory {
 		}
 		if (user.getMobile() != null) {
 			jsonObject.put("mobile", user.getMobile());
+		}
+		if (user.getMobileVerifyFlag() != null) {
+			jsonObject.put("mobileVerifyFlag", user.getMobileVerifyFlag());
 		}
 		if (user.getToken() != null) {
 			jsonObject.put("token", user.getToken());

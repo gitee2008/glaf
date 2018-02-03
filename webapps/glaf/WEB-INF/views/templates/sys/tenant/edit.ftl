@@ -61,7 +61,7 @@
 <body>
 <div style="margin:0;"></div>
 <div class="easyui-layout" data-options="fit:true">  
-  <div data-options="region:'north',split:true,border:true" style="height:42px" class="toolbar-backgroud"> 
+  <div data-options="region:'north',split:false,border:true" style="height:42px" class="toolbar-backgroud"> 
     <div style="margin:4px;"> 
 	<span class="x_content_title">&nbsp;<img src="${contextPath}/static/images/window.png">&nbsp;编辑租户信息</span>
 	<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'" onclick="javascript:saveData();" >保存</a> 
@@ -223,9 +223,20 @@
 	<tr>
 		<td width="20%" align="left">详细地址</td>
 		<td align="left">
-            <input id="address" name="address" type="text" 
-			       class="easyui-validatebox  x-text" style="width:350px;" 
-				   value="${sysTenant.address}">
+		    <input id="address" name="address" type="text" style="height:60px; width:350px;text-align:left;"
+				   class=" x-textarea" value="${sysTenant.address}"/>
+		</td>
+	</tr>
+	<tr>
+		<td width="20%" align="left">允许上次票据</td>
+		<td align="left">
+            <select id="ticketFlag" name="ticketFlag">
+			    <option value="Y">是</option>
+				<option value="N">否</option>
+			</select>
+			<script type="text/javascript">
+				document.getElementById("ticketFlag").value="${sysTenant.ticketFlag}";
+			</script> 
 		</td>
 	</tr>
 	<tr>

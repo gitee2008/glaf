@@ -74,7 +74,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		bean.setCreateDate(new Date());
 		bean.setSort(0);
 		if (StringUtils.isEmpty(bean.getCode())) {
-			bean.setCode("role_" + String.valueOf(bean.getId()));
+			bean.setCode("role_" + bean.getId());
 		}
 		sysRoleMapper.insertSysRole(bean);
 		if (SystemConfig.getBoolean("use_query_cache")) {
@@ -148,13 +148,28 @@ public class SysRoleServiceImpl implements SysRoleService {
 	}
 
 	public SysRole findByCode(String code) {
+		String cacheKey = Constants.CACHE_ROLE_KEY + code;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_ROLE_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONObject json = JSON.parseObject(text);
+					return SysRoleJsonFactory.jsonToObject(json);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
 		SysRoleQuery query = new SysRoleQuery();
 		query.code(code);
 		query.setOrderBy(" E.CODE asc ");
 
 		List<SysRole> list = this.list(query);
 		if (list != null && !list.isEmpty()) {
-			return list.get(0);
+			SysRole sysRole = list.get(0);
+			JSONObject json = sysRole.toJsonObject();
+			CacheFactory.put(Constants.CACHE_ROLE_REGION, cacheKey, json.toJSONString());
+			return sysRole;
 		}
 
 		return null;
@@ -184,13 +199,28 @@ public class SysRoleServiceImpl implements SysRoleService {
 	}
 
 	public SysRole findByName(String name) {
+		String cacheKey = Constants.CACHE_ROLE_KEY + name;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_ROLE_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONObject json = JSON.parseObject(text);
+					return SysRoleJsonFactory.jsonToObject(json);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
 		SysRoleQuery query = new SysRoleQuery();
 		query.name(name);
 		query.setOrderBy(" E.ROLENAME asc ");
 
 		List<SysRole> list = this.list(query);
 		if (list != null && !list.isEmpty()) {
-			return list.get(0);
+			SysRole sysRole = list.get(0);
+			JSONObject json = sysRole.toJsonObject();
+			CacheFactory.put(Constants.CACHE_ROLE_REGION, cacheKey, json.toJSONString());
+			return sysRole;
 		}
 
 		return null;

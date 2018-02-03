@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.sms.mapper.SmsServerMapper">
+
+	<resultMap id="smsServerResultMap" type="com.glaf.sms.domain.SmsServer">
+		<id property="id" column="ID_" jdbcType="VARCHAR" />
+		<result property="subject" column="SUBJECT_" jdbcType="VARCHAR" />
+		<result property="serverIP" column="SERVERIP_" jdbcType="VARCHAR" />
+		<result property="port" column="PORT_" jdbcType="INTEGER" />
+		<result property="path" column="PATH_" jdbcType="VARCHAR" />
+		<result property="requestBody" column="REQUESTBODY_" jdbcType="VARCHAR" />
+		<result property="responseBody" column="RESPONSEBODY_"
+			jdbcType="VARCHAR" />
+		<result property="responseResult" column="RESPONSERESULT_"
+			jdbcType="VARCHAR" />
+		<result property="frequence" column="FREQUENCE_" jdbcType="INTEGER" />
+		<result property="retryTimes" column="RETRYTIMES_" jdbcType="INTEGER" />
+		<result property="key" column="KEY_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertSmsServer" parameterType="com.glaf.sms.domain.SmsServer">
+		insert into SMS_SERVER
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="subject != null">
+				,SUBJECT_
+			</if>
+			<if test="serverIP != null">
+				,SERVERIP_
+			</if>
+			<if test="port != null">
+				,PORT_
+			</if>
+			<if test="path != null">
+				,PATH_
+			</if>
+			<if test="requestBody != null">
+				,REQUESTBODY_
+			</if>
+			<if test="responseBody != null">
+				,RESPONSEBODY_
+			</if>
+			<if test="responseResult != null">
+				,RESPONSERESULT_
+			</if>
+			<if test="frequence != null">
+				,FREQUENCE_
+			</if>
+			<if test="retryTimes != null">
+				,RETRYTIMES_
+			</if>
+			<if test="key != null">
+				,KEY_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR}
+
+			<if test="subject != null">
+				,#{subject, jdbcType=VARCHAR}
+			</if>
+			<if test="serverIP != null">
+				,#{serverIP, jdbcType=VARCHAR}
+			</if>
+			<if test="port != null">
+				,#{port, jdbcType=INTEGER}
+			</if>
+			<if test="path != null">
+				,#{path, jdbcType=VARCHAR}
+			</if>
+			<if test="requestBody != null">
+				,#{requestBody, jdbcType=VARCHAR}
+			</if>
+			<if test="responseBody != null">
+				,#{responseBody, jdbcType=VARCHAR}
+			</if>
+			<if test="responseResult != null">
+				,#{responseResult, jdbcType=VARCHAR}
+			</if>
+			<if test="frequence != null">
+				,#{frequence, jdbcType=INTEGER}
+			</if>
+			<if test="retryTimes != null">
+				,#{retryTimes, jdbcType=INTEGER}
+			</if>
+			<if test="key != null">
+				,#{key, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertSmsServer" parameterType="java.util.List">
+		insert into SMS_SERVER (
+		ID_
+		,SUBJECT_
+		,SERVERIP_
+		,PORT_
+		,PATH_
+		,REQUESTBODY_
+		,RESPONSEBODY_
+		,RESPONSERESULT_
+		,FREQUENCE_
+		,RETRYTIMES_
+		,KEY_
+		,TYPE_
+		,LOCKED_
+		,CREATEBY_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="smsServer" index="index"
+			separator=",">
+			(
+			#{smsServer.id, jdbcType=VARCHAR}
+			,#{smsServer.subject,
+			jdbcType=VARCHAR}
+			,#{smsServer.serverIP, jdbcType=VARCHAR}
+			,#{smsServer.port, jdbcType=INTEGER}
+			,#{smsServer.path,
+			jdbcType=VARCHAR}
+			,#{smsServer.requestBody, jdbcType=VARCHAR}
+			,#{smsServer.responseBody, jdbcType=VARCHAR}
+			,#{smsServer.responseResult, jdbcType=VARCHAR}
+			,#{smsServer.frequence,
+			jdbcType=INTEGER}
+			,#{smsServer.retryTimes,
+			jdbcType=INTEGER}
+			,#{smsServer.key, jdbcType=VARCHAR}
+			,#{smsServer.type,
+			jdbcType=VARCHAR}
+			,#{smsServer.locked,
+			jdbcType=INTEGER}
+			,#{smsServer.createBy, jdbcType=VARCHAR}
+			,#{smsServer.createTime,
+			jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertSmsServer_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="smsServer" index="index">
+			insert into
+			SMS_SERVER (
+			ID_
+			,SUBJECT_
+			,SERVERIP_
+			,PORT_
+			,PATH_
+			,REQUESTBODY_
+			,RESPONSEBODY_
+			,RESPONSERESULT_
+			,FREQUENCE_
+			,RETRYTIMES_
+			,KEY_
+			,TYPE_
+			,LOCKED_
+			,CREATEBY_
+			,CREATETIME_
+			) values (
+			#{smsServer.id,
+			jdbcType=VARCHAR}
+			,#{smsServer.subject,
+			jdbcType=VARCHAR}
+			,#{smsServer.serverIP,
+			jdbcType=VARCHAR}
+			,#{smsServer.port,
+			jdbcType=INTEGER}
+			,#{smsServer.path,
+			jdbcType=VARCHAR}
+			,#{smsServer.requestBody,
+			jdbcType=VARCHAR}
+			,#{smsServer.responseBody, jdbcType=VARCHAR}
+			,#{smsServer.responseResult, jdbcType=VARCHAR}
+			,#{smsServer.frequence, jdbcType=INTEGER}
+			,#{smsServer.retryTimes,
+			jdbcType=INTEGER}
+			,#{smsServer.key,
+			jdbcType=VARCHAR}
+			,#{smsServer.type, jdbcType=VARCHAR}
+			,#{smsServer.locked,
+			jdbcType=INTEGER}
+			,#{smsServer.createBy,
+			jdbcType=VARCHAR}
+			,#{smsServer.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateSmsServer" parameterType="com.glaf.sms.domain.SmsServer">
+		update SMS_SERVER
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="subject != null">
+				SUBJECT_ = #{subject, jdbcType=VARCHAR},
+			</if>
+			<if test="serverIP != null">
+				SERVERIP_ = #{serverIP, jdbcType=VARCHAR},
+			</if>
+			<if test="port != null">
+				PORT_ = #{port, jdbcType=INTEGER},
+			</if>
+			<if test="path != null">
+				PATH_ = #{path, jdbcType=VARCHAR},
+			</if>
+			<if test="requestBody != null">
+				REQUESTBODY_ = #{requestBody, jdbcType=VARCHAR},
+			</if>
+			<if test="responseBody != null">
+				RESPONSEBODY_ = #{responseBody, jdbcType=VARCHAR},
+			</if>
+			<if test="responseResult != null">
+				RESPONSERESULT_ = #{responseResult, jdbcType=VARCHAR},
+			</if>
+			<if test="frequence != null">
+				FREQUENCE_ = #{frequence, jdbcType=INTEGER},
+			</if>
+			<if test="retryTimes != null">
+				RETRYTIMES_ = #{retryTimes, jdbcType=INTEGER},
+			</if>
+			<if test="key != null">
+				KEY_ = #{key, jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				TYPE_ = #{type, jdbcType=VARCHAR},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<delete id="deleteSmsServerById" parameterType="string">
+		delete from
+		SMS_SERVER
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getSmsServerById" parameterType="string" resultMap="smsServerResultMap">
+		select * from SMS_SERVER where ID_ = #{id}
+	</select>
+
+
+	<select id="getSmsServers" parameterType="com.glaf.sms.query.SmsServerQuery"
+		resultMap="smsServerResultMap">
+		select distinct E.*
+		<include refid="selectSmsServersSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getSmsServerCount" parameterType="com.glaf.sms.query.SmsServerQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectSmsServersSql" />
+	</select>
+
+
+	<sql id="selectSmsServersSql">
+
+		from SMS_SERVER E
+
+		<where>
+			1 = 1
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

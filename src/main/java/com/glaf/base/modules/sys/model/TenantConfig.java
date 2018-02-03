@@ -60,7 +60,7 @@ public class TenantConfig implements Serializable, JSONable {
 	 * 餐点类型
 	 */
 	@Column(name = "TYPEID_")
-	protected Long typeId;
+	protected long typeId;
 
 	/**
 	 * 早餐时间
@@ -193,7 +193,7 @@ public class TenantConfig implements Serializable, JSONable {
 		return this.tenantId;
 	}
 
-	public Long getTypeId() {
+	public long getTypeId() {
 		return this.typeId;
 	}
 
@@ -268,7 +268,7 @@ public class TenantConfig implements Serializable, JSONable {
 		this.tenantId = tenantId;
 	}
 
-	public void setTypeId(Long typeId) {
+	public void setTypeId(long typeId) {
 		this.typeId = typeId;
 	}
 

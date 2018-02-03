@@ -29,8 +29,7 @@ import com.glaf.base.district.query.*;
 
 @Transactional(readOnly = true)
 public interface DistrictService {
-	
-	
+
 	void deleteById(long id);
 
 	/**
@@ -38,15 +37,15 @@ public interface DistrictService {
 	 * 
 	 * @return
 	 */
-	District getDistrict(Long id);
-	
+	District getDistrict(long id);
+
 	/**
 	 * 根据编码获取一条记录
 	 * 
 	 * @return
 	 */
 	District getDistrictByCode(String code);
-	
+
 	/**
 	 * 根据名称获取一条记录
 	 * 
@@ -61,13 +60,14 @@ public interface DistrictService {
 	 */
 	int getDistrictCountByQueryCriteria(DistrictQuery query);
 
+	List<District> getDistrictList(long parentId);
+
 	/**
 	 * 根据查询参数获取一页的数据
 	 * 
 	 * @return
 	 */
-	List<District> getDistrictsByQueryCriteria(int start, int pageSize,
-			DistrictQuery query);
+	List<District> getDistrictsByQueryCriteria(int start, int pageSize, DistrictQuery query);
 
 	int getDistrictTreeModelCount(TreeModelQuery query);
 
@@ -79,8 +79,6 @@ public interface DistrictService {
 	 * @return
 	 */
 	List<District> list(DistrictQuery query);
-	
-	List<District>  getDistrictList(long parentId);
 
 	/**
 	 * 保存一条记录

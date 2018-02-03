@@ -65,7 +65,7 @@ public class IdentityToken implements Serializable, JSONable {
 	/**
 	 * 令牌
 	 */
-	@Column(name = "TOKEN_", length = 200)
+	@Column(name = "TOKEN_", length = 500)
 	protected String token;
 
 	/**

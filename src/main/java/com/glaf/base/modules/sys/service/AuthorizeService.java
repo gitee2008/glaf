@@ -28,40 +28,30 @@ public interface AuthorizeService {
 	/**
 	 * 用户登陆
 	 * 
-	 * @param account
-	 * @param pwd
+	 * @param userId
+	 * @param password
 	 * @return
 	 */
 	@Transactional
-	SysUser authorize(String account, String pwd);
+	SysUser authorize(String userId, String password);
 
 	/**
 	 * 用户登陆
 	 * 
-	 * @param account
-	 * @param loginSecret
+	 * @param userId
 	 * @return
 	 */
 	@Transactional
-	SysUser authorizeLoginSecret(String account, String loginSecret);
+	SysUser login(String userId);
 
 	/**
 	 * 用户登陆
 	 * 
-	 * @param account
+	 * @param userId
+	 * @param password
 	 * @return
 	 */
 	@Transactional
-	SysUser login(String account);
-
-	/**
-	 * 用户登陆
-	 * 
-	 * @param account
-	 * @param pwd
-	 * @return
-	 */
-	@Transactional
-	SysUser login(String account, String pwd);
+	SysUser login(String userId, String password);
 
 }

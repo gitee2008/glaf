@@ -8,8 +8,11 @@
 		<id property="userId" column="USERID" jdbcType="BIGINT" />
 		<result property="name" column="USERNAME" jdbcType="VARCHAR" />
 		<result property="locked" column="LOCKED" jdbcType="INTEGER" />
+		<result property="sex" column="SEX" jdbcType="INTEGER" />
 		<result property="createTime" column="CREATETIME" jdbcType="TIMESTAMP" />
 		<result property="mobile" column="MOBILE" jdbcType="VARCHAR" />
+		<result property="mobileVerifyFlag" column="MOBILEVERIFYFLAG_"
+			jdbcType="VARCHAR" />
 		<result property="email" column="EMAIL" jdbcType="VARCHAR" />
 		<result property="telephone" column="TELEPHONE" jdbcType="VARCHAR" />
 		<result property="headship" column="HEADSHIP" jdbcType="VARCHAR" />
@@ -43,8 +46,11 @@
 		<id property="userId" column="USERID" jdbcType="BIGINT" />
 		<result property="name" column="USERNAME" jdbcType="VARCHAR" />
 		<result property="locked" column="LOCKED" jdbcType="INTEGER" />
+		<result property="sex" column="SEX" jdbcType="INTEGER" />
 		<result property="createTime" column="CREATETIME" jdbcType="TIMESTAMP" />
 		<result property="mobile" column="MOBILE" jdbcType="VARCHAR" />
+		<result property="mobileVerifyFlag" column="MOBILEVERIFYFLAG_"
+			jdbcType="VARCHAR" />
 		<result property="email" column="EMAIL" jdbcType="VARCHAR" />
 		<result property="telephone" column="TELEPHONE" jdbcType="VARCHAR" />
 		<result property="headship" column="HEADSHIP" jdbcType="VARCHAR" />
@@ -79,8 +85,11 @@
 		<id property="userId" column="USERID" jdbcType="BIGINT" />
 		<result property="name" column="USERNAME" jdbcType="VARCHAR" />
 		<result property="locked" column="LOCKED" jdbcType="INTEGER" />
+		<result property="sex" column="SEX" jdbcType="INTEGER" />
 		<result property="createTime" column="CREATETIME" jdbcType="TIMESTAMP" />
 		<result property="mobile" column="MOBILE" jdbcType="VARCHAR" />
+		<result property="mobileVerifyFlag" column="MOBILEVERIFYFLAG_"
+			jdbcType="VARCHAR" />
 		<result property="email" column="EMAIL" jdbcType="VARCHAR" />
 		<result property="telephone" column="TELEPHONE" jdbcType="VARCHAR" />
 		<result property="headship" column="HEADSHIP" jdbcType="VARCHAR" />
@@ -122,6 +131,9 @@
 			<if test="locked != null">
 				,LOCKED
 			</if>
+			<if test="sex != null">
+				,SEX
+			</if>
 			<if test="createBy != null">
 				,CREATEBY
 			</if>
@@ -130,6 +142,9 @@
 			</if>
 			<if test="mobile != null">
 				,MOBILE
+			</if>
+			<if test="mobileVerifyFlag != null">
+				,MOBILEVERIFYFLAG_
 			</if>
 			<if test="email != null">
 				,EMAIL
@@ -211,6 +226,9 @@
 			<if test="locked != null">
 				,#{locked, jdbcType=VARCHAR}
 			</if>
+			<if test="sex != null">
+				,#{sex, jdbcType=VARCHAR}
+			</if>
 			<if test="createBy != null">
 				,#{createBy, jdbcType=VARCHAR}
 			</if>
@@ -219,6 +237,9 @@
 			</if>
 			<if test="mobile != null">
 				,#{mobile, jdbcType=VARCHAR}
+			</if>
+			<if test="mobileVerifyFlag != null">
+				,#{mobileVerifyFlag, jdbcType=VARCHAR}
 			</if>
 			<if test="email != null">
 				,#{email, jdbcType=VARCHAR}
@@ -317,6 +338,10 @@
 			</if>
 			<if test="mobile != null">
 				MOBILE = #{mobile, jdbcType=VARCHAR},
+			</if>
+			<if test="mobileVerifyFlag != null and mobileVerifyFlag != ''">
+				MOBILEVERIFYFLAG_ = #{mobileVerifyFlag,
+				jdbcType=VARCHAR},
 			</if>
 			<if test="email != null">
 				EMAIL = #{email, jdbcType=VARCHAR},

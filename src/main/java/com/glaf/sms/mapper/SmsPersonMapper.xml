@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.sms.mapper.SmsPersonMapper">
+
+	<resultMap id="smsPersonResultMap" type="com.glaf.sms.domain.SmsPerson">
+		<id property="id" column="ID_" jdbcType="VARCHAR" />
+		<result property="clientId" column="CLIENTID_" jdbcType="VARCHAR" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="mobile" column="MOBILE_" jdbcType="VARCHAR" />
+		<result property="limit" column="LIMIT_" jdbcType="INTEGER" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertSmsPerson" parameterType="com.glaf.sms.domain.SmsPerson">
+		insert into SMS_PERSON
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="clientId != null">
+				,CLIENTID_
+			</if>
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="mobile != null">
+				,MOBILE_
+			</if>
+			<if test="limit != null">
+				,LIMIT_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR}
+
+			<if test="clientId != null">
+				,#{clientId, jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="mobile != null">
+				,#{mobile, jdbcType=VARCHAR}
+			</if>
+			<if test="limit != null">
+				,#{limit, jdbcType=INTEGER}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertSmsPerson" parameterType="java.util.List">
+		insert into SMS_PERSON (
+		ID_
+		,CLIENTID_
+		,NAME_
+		,MOBILE_
+		,LIMIT_
+		,LOCKED_
+		,CREATEBY_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="smsPerson" index="index"
+			separator=",">
+			(
+			#{smsPerson.id, jdbcType=VARCHAR}
+			,#{smsPerson.clientId,
+			jdbcType=VARCHAR}
+			,#{smsPerson.name, jdbcType=VARCHAR}
+			,#{smsPerson.mobile, jdbcType=VARCHAR}
+			,#{smsPerson.limit,
+			jdbcType=INTEGER}
+			,#{smsPerson.locked, jdbcType=INTEGER}
+			,#{smsPerson.createBy, jdbcType=VARCHAR}
+			,#{smsPerson.createTime,
+			jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertSmsPerson_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="smsPerson" index="index">
+			insert into
+			SMS_PERSON (
+			ID_
+			,CLIENTID_
+			,NAME_
+			,MOBILE_
+			,LIMIT_
+			,LOCKED_
+			,CREATEBY_
+			,CREATETIME_
+			) values (
+			#{smsPerson.id, jdbcType=VARCHAR}
+			,#{smsPerson.clientId, jdbcType=VARCHAR}
+			,#{smsPerson.name,
+			jdbcType=VARCHAR}
+			,#{smsPerson.mobile, jdbcType=VARCHAR}
+			,#{smsPerson.limit, jdbcType=INTEGER}
+			,#{smsPerson.locked,
+			jdbcType=INTEGER}
+			,#{smsPerson.createBy, jdbcType=VARCHAR}
+			,#{smsPerson.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateSmsPerson" parameterType="com.glaf.sms.domain.SmsPerson">
+		update SMS_PERSON
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="name != null">
+				NAME_ = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				MOBILE_ = #{mobile, jdbcType=VARCHAR},
+			</if>
+			<if test="limit != null">
+				LIMIT_ = #{limit, jdbcType=INTEGER},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<delete id="deleteSmsPersonById" parameterType="string">
+		delete from
+		SMS_PERSON
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deleteByClientId" parameterType="string">
+		delete from
+		SMS_PERSON
+		where CLIENTID_ = #{clientId}
+	</delete>
+
+
+	<select id="getSmsPersonById" parameterType="string" resultMap="smsPersonResultMap">
+		select * from SMS_PERSON where ID_ = #{id}
+	</select>
+
+
+	<select id="getSmsPersons" parameterType="com.glaf.sms.query.SmsPersonQuery"
+		resultMap="smsPersonResultMap">
+		select distinct E.*
+		<include refid="selectSmsPersonsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getSmsPersonCount" parameterType="com.glaf.sms.query.SmsPersonQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectSmsPersonsSql" />
+	</select>
+
+
+	<sql id="selectSmsPersonsSql">
+
+		from SMS_PERSON E
+
+		<where>
+			1 = 1
+
+			<if test="clientId != null and clientId != '' ">
+				and E.CLIENTID_ = #{clientId}
+			</if>
+
+			<if test="mobile != null and mobile != '' ">
+				and E.MOBILE_ = #{mobile}
+			</if>
+
+			<if test="mobileLike != null and mobileLike != '' ">
+				and E.MOBILE_ like #{mobileLike}
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

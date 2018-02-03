@@ -16,15 +16,19 @@ public class FileUploadProgressListener implements ProgressListener {
 	public FileUploadProgressListener(HttpSession session) {
 		this.session = session;
 		Progress status = new Progress();
-		session.setAttribute("fileupload_status", status);
+		if (session != null) {
+			session.setAttribute("fileupload_status", status);
+		}
 	}
 
 	@Override
 	public void update(long bytesRead, long contentLength, int pItems) {
-		Progress status = (Progress) session.getAttribute("fileupload_status");
-		status.setBytesRead(bytesRead);
-		status.setContentLength(contentLength);
-		status.setItems(pItems);
-		session.setAttribute("fileupload_status", status);
+		if (session != null) {
+			Progress status = (Progress) session.getAttribute("fileupload_status");
+			status.setBytesRead(bytesRead);
+			status.setContentLength(contentLength);
+			status.setItems(pItems);
+			session.setAttribute("fileupload_status", status);
+		}
 	}
 }

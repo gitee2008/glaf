@@ -141,7 +141,7 @@ public class MyBatisDbIdGenerator implements IdGenerator {
 		if (lastId2.get() < nextId2.get()) {
 			this.getNewBlock(name);
 		}
-		Long value = nextId2.incrementAndGet() - 1;
+		Long value = nextId2.incrementAndGet();
 		return value;
 	}
 

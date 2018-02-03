@@ -30,6 +30,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -54,6 +56,7 @@ import com.glaf.core.util.MyX509TrustManager;
  *
  */
 public class HttpCoreUtils {
+	protected static final Log logger = LogFactory.getLog(HttpCoreUtils.class);
 	private static PoolingHttpClientConnectionManager connMgr;
 	private static RequestConfig requestConfig;
 	private static final int MAX_TIMEOUT = 15000;
@@ -123,7 +126,7 @@ public class HttpCoreUtils {
 				result = IOUtils.toString(instream, "UTF-8");
 			}
 		} catch (IOException ex) {
-			
+
 		}
 		return result;
 	}
@@ -165,7 +168,7 @@ public class HttpCoreUtils {
 			HttpEntity entity = response.getEntity();
 			httpStr = EntityUtils.toString(entity, "UTF-8");
 		} catch (IOException ex) {
-			
+
 		} finally {
 			if (response != null) {
 				try {
@@ -186,6 +189,8 @@ public class HttpCoreUtils {
 	 * @return
 	 */
 	public static String doPost(String apiUrl, Object json) {
+		//logger.debug(apiUrl);
+		//logger.debug(json);
 		String httpStr = null;
 		CloseableHttpResponse response = null;
 		HttpPost httpPost = new HttpPost(apiUrl);
@@ -198,10 +203,10 @@ public class HttpCoreUtils {
 			httpPost.setEntity(stringEntity);
 			response = httpClient.execute(httpPost);
 			HttpEntity entity = response.getEntity();
-			// System.out.println(response.getStatusLine().getStatusCode());
+			// logger.debug(response.getStatusLine().getStatusCode());
 			httpStr = EntityUtils.toString(entity, "UTF-8");
 		} catch (IOException ex) {
-			
+			ex.printStackTrace();
 		} finally {
 			if (response != null) {
 				try {
@@ -253,7 +258,7 @@ public class HttpCoreUtils {
 			}
 			httpStr = EntityUtils.toString(entity, "utf-8");
 		} catch (Exception ex) {
-			
+
 		} finally {
 			if (response != null) {
 				try {
@@ -302,7 +307,7 @@ public class HttpCoreUtils {
 			}
 			httpStr = EntityUtils.toString(entity, "utf-8");
 		} catch (Exception ex) {
-			
+
 		} finally {
 			if (response != null) {
 				try {

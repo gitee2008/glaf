@@ -114,6 +114,24 @@ a:hover {
 	text-align: center;
 }
 
+.x_blue_name {
+	background-color: inherit;
+	font-family: "Î¢ÈíÑÅºÚ";
+	color: #3366cc;
+	font-size: 13px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.x_green_name {
+	background-color: inherit;
+	font-family: "Î¢ÈíÑÅºÚ";
+	color: rgb(90, 170, 75);
+	font-size: 13px;
+	font-weight: bold;
+	text-align: center;
+}
+
 .x_text_value {
 	background-color: inherit;
 	font-family: "Î¢ÈíÑÅºÚ";

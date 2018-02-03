@@ -14,6 +14,10 @@
 	background: url('../images/m.gif') no-repeat;
 }
 
+.icon-user-message {
+	background: url('../images/user_message.png') no-repeat;
+}
+
 .icon-run {
 	background: url('../images/run.png') no-repeat;
 }
@@ -32,15 +36,15 @@
 }
 
 .icon-edit {
-	background: url('../images/edit.gif') no-repeat;
+	background: url('../images/edit.png') no-repeat;
 }
 
 .icon-delete {
-	background: url('../images/no.png') no-repeat;
+	background: url('../images/deleteSmall.png') no-repeat;
 }
 
 .icon-remove {
-	background: url('../images/remove.png') no-repeat;
+	background: url('../images/deleteSmall.png') no-repeat;
 }
 
 .icon-clear {
@@ -111,6 +115,10 @@
 	background: url('../images/save.png') no-repeat;
 }
 
+.icon-saveas {
+	background: url('../images/saveas.png') no-repeat;
+}
+
 .icon-view {
 	background: url('../images/view.gif') no-repeat;
 }
@@ -120,7 +128,7 @@
 }
 
 .icon-ok {
-	background: url('../images/ok.png') no-repeat;
+	background: url('../images/true.png') no-repeat;
 }
 
 
@@ -277,6 +285,9 @@
 	background: url('../images/application_view_tile.png') no-repeat;
 }
 
+.icon_export {
+	background: url('../images/export.png') no-repeat;
+}
 
 .icon_export_xls {
 	background: url('../images/page_excel.png') no-repeat;
@@ -288,6 +299,10 @@
 
 .icon_check {
 	background: url('../images/check.png') no-repeat;
+}
+
+.icon_new {
+	background: url('../images/new.png') no-repeat;
 }
 
 

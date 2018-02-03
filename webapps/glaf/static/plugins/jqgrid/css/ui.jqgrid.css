@@ -10,10 +10,14 @@
 /* caption*/
 .ui-jqgrid .ui-jqgrid-titlebar {height:19px; padding: .3em .2em .2em .3em; position: relative; font-size: 12px; border-left: 0 none;border-right: 0 none; border-top: 0 none;}
 .ui-jqgrid .ui-jqgrid-caption {text-align: left;}
-.ui-jqgrid .ui-jqgrid-title { margin: .1em 0 .2em; }
+.ui-jqgrid .ui-jqgrid-title {
+	padding: .2em .1em .1em;
+	position: absolute; 
+}
 .ui-jqgrid .ui-jqgrid-titlebar-close { position: absolute;top: 50%; width: 19px; margin: -10px 0 0 0; padding: 1px; height:18px; cursor:pointer;}
 .ui-jqgrid .ui-jqgrid-titlebar-close span { display: block; margin: 1px; }
 .ui-jqgrid .ui-jqgrid-titlebar-close:hover { padding: 0; }
+.ui-jqgrid .menubar:hover {  border: 0 none;}
 /* header*/
 .ui-jqgrid .ui-jqgrid-hdiv {position: relative; margin: 0;padding: 0; overflow: hidden; border-left: 0 none !important; border-top : 0 none !important; border-right : 0 none !important;}
 .ui-jqgrid .ui-jqgrid-hbox {float: left; padding-right: 20px;}
@@ -66,7 +70,7 @@
 .ui-jqgrid tr.footrow-ltr td {text-align:left;border-right-width: 1px; border-right-color: inherit; border-right-style: solid;}
 .ui-jqgrid tr.footrow-rtl td {text-align:right;border-left-width: 1px; border-left-color: inherit; border-left-style: solid;}
 /* Pager*/
-.ui-jqgrid .ui-jqgrid-pager { border-left: 0 none !important;border-right: 0 none !important; border-bottom: 0 none !important; border-top: 0 none; margin: 0 !important; padding: 0 !important; position: relative; height: auto; min-height: 28px; white-space: nowrap;overflow: hidden;font-size:11px; z-index:101}
+.ui-jqgrid .ui-jqgrid-pager { border-left: 0 none !important;border-right: 0 none !important; border-bottom: 0 none !important; border-top: 0 none; margin: 0 !important; padding: 0 !important; position: relative; height: auto; min-height: 28px; white-space: nowrap;overflow: hidden;font-size:11px; z-index:100}
 .ui-jqgrid .ui-jqgrid-toppager .ui-pager-control, .ui-jqgrid .ui-jqgrid-pager .ui-pager-control {position: relative;border-left: 0;border-bottom: 0;border-top: 0; height: 28px;}
 .ui-jqgrid .ui-pg-table {position: relative; padding: 1px 0; width:auto; margin: 0;}
 .ui-jqgrid .ui-pg-table td {font-weight:normal; vertical-align:middle; padding:0px 1px;}
@@ -139,7 +143,7 @@
 .ui-jqgrid .ui-th-subgrid {height:20px;}
 /* loading */
 .ui-jqgrid .loading {position: absolute; top: 45%;left: 45%;width: auto;z-index:101;padding: 6px; margin: 5px;text-align: center;font-weight: bold;display: none;border-width: 2px !important; font-size:11px;}
-.ui-jqgrid .jqgrid-overlay {display:none;z-index:100;}
+.ui-jqgrid .jqgrid-overlay {display:none;}
 /* IE * html .jqgrid-overlay {width: expression(this.parentNode.offsetWidth+'px');height: expression(this.parentNode.offsetHeight+'px');} */
 * .jqgrid-overlay iframe {position:absolute;top:0;left:0;z-index:-1;}
 /* IE width: expression(this.parentNode.offsetWidth+'px');height: expression(this.parentNode.offsetHeight+'px');}*/
@@ -159,6 +163,7 @@
 .ui-jqdialog .ui-jqconfirm {padding: .4em 1em; border-width:3px;position:absolute;bottom:10px;right:10px;overflow:visible;display:none;height:80px;width:220px;text-align:center;}
 .ui-jqdialog>.ui-resizable-se { bottom: -3px; right: -3px}
 .ui-jqgrid>.ui-resizable-se { bottom: -3px; right: -3px }
+.jqgrid-overlay-modal {	display : none; }
 /* end Modal window*/
 /* Form edit */
 .ui-jqdialog-content .FormGrid {margin: 0; overflow:auto;position:relative;}
@@ -298,7 +303,6 @@ a.g-menu-item, a.soptclass, a.clearsearchclass { cursor: pointer; }
 .ui-jqgrid .ui-jqgrid-htable .ui-th-div {
 	height:17px;
 	margin-top:5px;
-	display:inine-block;
 }
 .column-menu, .ui-search-menu {
 	padding: 10px 10px;
@@ -357,4 +361,44 @@ td.menu_text {
 }
 #column_menu.ui-menu .ui-menu-item {
 	position :static;
+}
+/*menubar*/
+.ui-jqgrid .ui-jqgrid-menubar {
+	margin: 0px 5px;
+	width:19px;
+	height:18px;
+}
+.ui-jqgrid .ui-jqgrid-menubar:hover {
+	border: 0 none;
+}
+.ui-jqgrid .menubar-rtl {
+	float : right;
+}
+
+.ui-jqgrid .menubar-ltr {
+	float : left;
+}
+/*printing*/
+
+.jqgridprint {
+	width : 100%;
+	font-size: 13px;
+}
+
+.jqgridprint th,
+.jqgridprint td {
+	padding: 4px 4px 4px 4px ;
+	text-align: center ;
+}
+.jqgridprint th {
+	border-bottom: 2px solid #333333 ;
+}
+.jqgridprint td {
+	border-bottom: 1px dotted #999999 ;
+}
+
+.jqgridprint tfoot td {
+	border-bottom-width: 0px ;
+	border-top: 2px solid #333333 ;
+	padding-top: 20px ;
 }

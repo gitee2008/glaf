@@ -3,11 +3,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>用户列表</title>
-<#include "/inc/init_easyui_layer3_import.ftl"/>
+<#include "/inc/init_easyui_import.ftl"/>
 <script type="text/javascript">
    var contextPath="${contextPath}";
 
-   jQuery(function(){
+    jQuery(function(){
 		jQuery('#mydatagrid').datagrid({
 				width:1000,
 				height:480,
@@ -47,17 +47,19 @@
 
 	function viewUser(actorId){
 		var link = '${contextPath}/user/view?actorId='+actorId;
-		layer.open({
-		  type: 2,
-          maxmin: true,
-		  shadeClose: true,
-		  title: "查看用户信息",
-		  area: ['820px', (jQuery(window).height() - 50) +'px'],
-		  shade: 0.8,
-		  fixed: false, //不固定
-		  shadeClose: true,
-		  content: [link, 'no']
-		});
+		jQuery.layer({
+				type: 2,
+				maxmin: true,
+				shadeClose: true,
+				title: "查看用户信息",
+				closeBtn: [0, true],
+				shade: [0.8, '#000'],
+				border: [10, 0.3, '#000'],
+				offset: ['20px',''],
+				fadeIn: 100,
+				area: ['680px', (jQuery(window).height() - 50) +'px'],
+				iframe: {src: link}
+			});
 	}
 
     function formatterKeys(val, row){
@@ -65,7 +67,7 @@
 	    return str;
 	}
  
-   function onMyRowClick(rowIndex, row){
+    function onMyRowClick(rowIndex, row){
 	    var link = '${contextPath}/sys/user/prepareModify?userId='+row.userId_enc;
 		jQuery.layer({
 				type: 2,
@@ -82,7 +84,7 @@
 			});
 	}
 
-  function addNew(){
+    function addNew(){
 	    var link="${contextPath}/sys/user/prepareAdd";
 		jQuery.layer({
 				type: 2,

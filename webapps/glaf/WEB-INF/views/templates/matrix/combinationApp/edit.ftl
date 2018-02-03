@@ -181,6 +181,20 @@
 		</td>
 	</tr>
 	<tr>
+		<td width="15%" align="left">抓取策略</td>
+		<td align="left">
+		    <select id="deleteFetch" name="deleteFetch">
+			    <option value="">----请选择----</option>
+				<option value="Y">每次抓取前删除</option>
+			    <option value="N">增量抓取</option>
+             </select>
+             <script type="text/javascript">
+                 document.getElementById("deleteFetch").value="${combinationApp.deleteFetch}";
+             </script>
+			 &nbsp;（提示：增量抓取需要在合成主键列自行设置增量日期字段。）
+		</td>
+	</tr>
+	<tr>
 		<td width="15%" align="left">时间间隔</td>
 		<td align="left">
 		    <select id="interval" name="interval">

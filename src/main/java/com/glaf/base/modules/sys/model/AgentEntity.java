@@ -66,7 +66,7 @@ public class AgentEntity implements Agent, JSONable {
 	/**
 	 * 委托人 ，consigner
 	 */
-	@Column(name = "ASSIGNFROM_")
+	@Column(name = "ASSIGNFROM_", length = 50)
 	protected String assignFrom;
 
 	/**
@@ -78,7 +78,7 @@ public class AgentEntity implements Agent, JSONable {
 	/**
 	 * 受托人，assignee
 	 */
-	@Column(name = "ASSIGNTO_")
+	@Column(name = "ASSIGNTO_", length = 50)
 	protected String assignTo;
 
 	/**
@@ -110,19 +110,19 @@ public class AgentEntity implements Agent, JSONable {
 	/**
 	 * 对象编号
 	 */
-	@Column(name = "OBJECTID_")
+	@Column(name = "OBJECTID_", length = 250)
 	protected String objectId;
 
 	/**
 	 * 对象值
 	 */
-	@Column(name = "OBJECTVALUE_")
+	@Column(name = "OBJECTVALUE_", length = 250)
 	protected String objectValue;
 
 	/**
 	 * 流程名称
 	 */
-	@Column(name = "PROCESSNAME_")
+	@Column(name = "PROCESSNAME_", length = 250)
 	protected String processName;
 
 	@Column(name = "SERVICEKEY_", length = 50)
@@ -138,7 +138,7 @@ public class AgentEntity implements Agent, JSONable {
 	/**
 	 * 任务名称
 	 */
-	@Column(name = "TASKNAME_")
+	@Column(name = "TASKNAME_", length = 250)
 	protected String taskName;
 
 	@Transient

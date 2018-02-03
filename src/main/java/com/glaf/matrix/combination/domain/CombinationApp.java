@@ -99,6 +99,12 @@ public class CombinationApp implements Serializable, JSONable {
 	protected String autoSyncFlag;
 
 	/**
+	 * 每次抓取前删除
+	 */
+	@Column(name = "DELETEFETCH_", length = 1)
+	protected String deleteFetch;
+
+	/**
 	 * 外部列定义
 	 */
 	@Column(name = "EXTERNALCOLUMNSFLAG_", length = 50)
@@ -199,6 +205,10 @@ public class CombinationApp implements Serializable, JSONable {
 		return "";
 	}
 
+	public String getDeleteFetch() {
+		return deleteFetch;
+	}
+
 	public String getDeploymentId() {
 		return this.deploymentId;
 	}
@@ -292,6 +302,10 @@ public class CombinationApp implements Serializable, JSONable {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public void setDeleteFetch(String deleteFetch) {
+		this.deleteFetch = deleteFetch;
 	}
 
 	public void setDeploymentId(String deploymentId) {

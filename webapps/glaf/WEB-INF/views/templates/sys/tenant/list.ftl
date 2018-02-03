@@ -52,7 +52,7 @@
 	});
 
 	function formatterKeys(val, row){
-		var str = "<a href='javascript:editRow(\""+row.id+"\");'>修改</a>&nbsp;<a href='javascript:users(\""+row.tenantId+"\");'>用户</a>&nbsp;";
+		var str = "<a href='javascript:editRow(\""+row.id+"\");'>修改</a>&nbsp;<a href='javascript:users(\""+row.tenantId+"\");'>用户</a>&nbsp;<a href='javascript:tcImage(\""+row.tenantId+"\");'>营业执照</a>&nbsp;";
 	    return str;
 	}
 	
@@ -116,6 +116,24 @@
 			maxmin: true,
 			shadeClose: true,
 			title: "用户列表",
+			closeBtn: [0, true],
+			shade: [0.8, '#000'],
+			border: [10, 0.3, '#000'],
+			offset: ['20px',''],
+			fadeIn: 100,
+			area: ['980px', (jQuery(window).height() - 50) +'px'],
+            iframe: {src: link}
+		});
+	}
+
+
+	function tcImage(tenantId){
+        var link="${contextPath}/tenant/tcFile?tenantId="+tenantId;
+		jQuery.layer({
+			type: 2,
+			maxmin: true,
+			shadeClose: true,
+			title: "营业执照",
 			closeBtn: [0, true],
 			shade: [0.8, '#000'],
 			border: [10, 0.3, '#000'],

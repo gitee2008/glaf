@@ -50,6 +50,7 @@ public class CombinationAppDomainFactory {
 		columnMap.put("targetTableName", "TARGETTABLENAME_");
 		columnMap.put("type", "TYPE_");
 		columnMap.put("autoSyncFlag", "AUTOSYNCFLAG_");
+		columnMap.put("deleteFetch", "DELETEFETCH_");
 		columnMap.put("externalColumnsFlag", "EXTERNALCOLUMNSFLAG_");
 		columnMap.put("interval", "INTERVAL_");
 		columnMap.put("sortNo", "SORTNO_");
@@ -69,6 +70,7 @@ public class CombinationAppDomainFactory {
 		javaTypeMap.put("targetTableName", "String");
 		javaTypeMap.put("type", "String");
 		javaTypeMap.put("autoSyncFlag", "String");
+		javaTypeMap.put("deleteFetch", "String");
 		javaTypeMap.put("externalColumnsFlag", "String");
 		javaTypeMap.put("interval", "Integer");
 		javaTypeMap.put("sortNo", "Integer");
@@ -170,6 +172,13 @@ public class CombinationAppDomainFactory {
 		autoSyncFlag.setJavaType("String");
 		autoSyncFlag.setLength(50);
 		tableDefinition.addColumn(autoSyncFlag);
+
+		ColumnDefinition deleteFetch = new ColumnDefinition();
+		deleteFetch.setName("deleteFetch");
+		deleteFetch.setColumnName("DELETEFETCH_");
+		deleteFetch.setJavaType("String");
+		deleteFetch.setLength(1);
+		tableDefinition.addColumn(deleteFetch);
 
 		ColumnDefinition externalColumnsFlag = new ColumnDefinition();
 		externalColumnsFlag.setName("externalColumnsFlag");

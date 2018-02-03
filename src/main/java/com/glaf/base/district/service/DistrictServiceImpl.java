@@ -18,7 +18,9 @@
 
 package com.glaf.base.district.service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -28,17 +30,23 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.glaf.core.id.*;
-import com.glaf.core.query.TreeModelQuery;
-import com.glaf.core.service.ITableDataService;
-import com.glaf.core.util.StringTools;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.glaf.base.district.domain.District;
+import com.glaf.base.district.mapper.DistrictMapper;
+import com.glaf.base.district.query.DistrictQuery;
+import com.glaf.base.district.util.DistrictJsonFactory;
 import com.glaf.core.base.ColumnModel;
 import com.glaf.core.base.TableModel;
 import com.glaf.core.base.TreeModel;
+import com.glaf.core.cache.CacheFactory;
+import com.glaf.core.config.SystemConfig;
 import com.glaf.core.dao.EntityDAO;
-import com.glaf.base.district.domain.*;
-import com.glaf.base.district.query.*;
-import com.glaf.base.district.mapper.*;
+import com.glaf.core.id.IdGenerator;
+import com.glaf.core.query.TreeModelQuery;
+import com.glaf.core.service.ITableDataService;
+import com.glaf.core.util.StringTools;
 
 @Service("districtService")
 @Transactional(readOnly = true)
@@ -70,10 +78,28 @@ public class DistrictServiceImpl implements DistrictService {
 		if (children == null || children.isEmpty()) {
 			districtMapper.deleteDistrictById(id);
 		}
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("district");
+		}
 	}
 
-	public District getDistrict(Long id) {
+	public District getDistrict(long id) {
+		String cacheKey = "sys_district_" + id;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("district", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONObject json = JSON.parseObject(text);
+					return DistrictJsonFactory.jsonToObject(json);
+				} catch (Exception ex) {
+				}
+			}
+		}
 		District district = districtMapper.getDistrictById(id);
+		if (district != null && SystemConfig.getBoolean("use_query_cache")) {
+			JSONObject json = district.toJsonObject();
+			CacheFactory.put("district", cacheKey, json.toJSONString());
+		}
 		return district;
 	}
 
@@ -83,7 +109,23 @@ public class DistrictServiceImpl implements DistrictService {
 	 * @return
 	 */
 	public District getDistrictByCode(String code) {
-		return districtMapper.getDistrictByCode(code);
+		String cacheKey = "sys_district_" + code;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("district", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONObject json = JSON.parseObject(text);
+					return DistrictJsonFactory.jsonToObject(json);
+				} catch (Exception ex) {
+				}
+			}
+		}
+		District district = districtMapper.getDistrictByCode(code);
+		if (district != null && SystemConfig.getBoolean("use_query_cache")) {
+			JSONObject json = district.toJsonObject();
+			CacheFactory.put("district", cacheKey, json.toJSONString());
+		}
+		return district;
 	}
 
 	/**
@@ -92,11 +134,28 @@ public class DistrictServiceImpl implements DistrictService {
 	 * @return
 	 */
 	public District getDistrictByName(String name) {
+		String cacheKey = "sys_district_" + name;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("district", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONObject json = JSON.parseObject(text);
+					return DistrictJsonFactory.jsonToObject(json);
+				} catch (Exception ex) {
+				}
+			}
+		}
+
 		DistrictQuery query = new DistrictQuery();
 		query.nameLike(name);
 		List<District> rows = districtMapper.getDistricts(query);
 		if (rows != null && !rows.isEmpty()) {
-			return rows.get(0);
+			District district = rows.get(0);
+			if (district != null && SystemConfig.getBoolean("use_query_cache")) {
+				JSONObject json = district.toJsonObject();
+				CacheFactory.put("district", cacheKey, json.toJSONString());
+			}
+			return district;
 		}
 		return null;
 	}
@@ -111,9 +170,27 @@ public class DistrictServiceImpl implements DistrictService {
 	}
 
 	public List<District> getDistrictList(long parentId) {
+		String cacheKey = "sys_districts_" + parentId;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("district", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONArray array = JSON.parseArray(text);
+					return DistrictJsonFactory.arrayToList(array);
+				} catch (Exception ex) {
+				}
+			}
+		}
 		DistrictQuery query = new DistrictQuery();
 		query.parentId(parentId);
-		return list(query);
+		List<District> rows = list(query);
+		if (rows != null && !rows.isEmpty()) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				JSONArray array = DistrictJsonFactory.listToArray(rows);
+				CacheFactory.put("district", cacheKey, array.toJSONString());
+			}
+		}
+		return rows;
 	}
 
 	/**
@@ -170,6 +247,9 @@ public class DistrictServiceImpl implements DistrictService {
 
 	@Transactional
 	public void save(District district) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("district");
+		}
 		if (district.getId() == 0) {
 			district.setLevel(1);
 			district.setId(idGenerator.nextId());
@@ -235,6 +315,9 @@ public class DistrictServiceImpl implements DistrictService {
 
 	@Transactional
 	public boolean update(District bean) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("district");
+		}
 		District model = this.getDistrict(bean.getId());
 		/**
 		 * 如果节点移动了位置，即移动到别的节点下面去了

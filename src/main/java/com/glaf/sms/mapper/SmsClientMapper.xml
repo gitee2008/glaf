@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.sms.mapper.SmsClientMapper">
+
+	<resultMap id="smsClientResultMap" type="com.glaf.sms.domain.SmsClient">
+		<id property="id" column="ID_" jdbcType="VARCHAR" />
+		<result property="subject" column="SUBJECT_" jdbcType="VARCHAR" />
+		<result property="remoteIP" column="REMOTEIP_" jdbcType="VARCHAR" />
+		<result property="sysCode" column="SYSCODE_" jdbcType="VARCHAR" />
+		<result property="sysPwd" column="SYSPWD_" jdbcType="VARCHAR" />
+		<result property="encryptionFlag" column="ENCRYPTIONFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="publicKey" column="PUBLICKEY_" jdbcType="VARCHAR" />
+		<result property="privateKey" column="PRIVATEKEY_" jdbcType="VARCHAR" />
+		<result property="peerPublicKey" column="PEERPUBLICKEY_"
+			jdbcType="VARCHAR" />
+		<result property="token" column="TOKEN_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="frequence" column="FREQUENCE_" jdbcType="INTEGER" />
+		<result property="limit" column="LIMIT_" jdbcType="INTEGER" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertSmsClient" parameterType="com.glaf.sms.domain.SmsClient">
+		insert into SMS_CLIENT
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="subject != null">
+				,SUBJECT_
+			</if>
+			<if test="remoteIP != null">
+				,REMOTEIP_
+			</if>
+			<if test="sysCode != null">
+				,SYSCODE_
+			</if>
+			<if test="sysPwd != null">
+				,SYSPWD_
+			</if>
+			<if test="encryptionFlag != null">
+				,ENCRYPTIONFLAG_
+			</if>
+			<if test="publicKey != null">
+				,PUBLICKEY_
+			</if>
+			<if test="privateKey != null">
+				,PRIVATEKEY_
+			</if>
+			<if test="peerPublicKey != null">
+				,PEERPUBLICKEY_
+			</if>
+			<if test="token != null">
+				,TOKEN_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="frequence != null">
+				,FREQUENCE_
+			</if>
+			<if test="limit != null">
+				,LIMIT_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR}
+
+			<if test="subject != null">
+				,#{subject, jdbcType=VARCHAR}
+			</if>
+			<if test="remoteIP != null">
+				,#{remoteIP, jdbcType=VARCHAR}
+			</if>
+			<if test="sysCode != null">
+				,#{sysCode, jdbcType=VARCHAR}
+			</if>
+			<if test="sysPwd != null">
+				,#{sysPwd, jdbcType=VARCHAR}
+			</if>
+			<if test="encryptionFlag != null">
+				,#{encryptionFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="publicKey != null">
+				,#{publicKey, jdbcType=VARCHAR}
+			</if>
+			<if test="privateKey != null">
+				,#{privateKey, jdbcType=VARCHAR}
+			</if>
+			<if test="peerPublicKey != null">
+				,#{peerPublicKey, jdbcType=VARCHAR}
+			</if>
+			<if test="token != null">
+				,#{token, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="frequence != null">
+				,#{frequence, jdbcType=INTEGER}
+			</if>
+			<if test="limit != null">
+				,#{limit, jdbcType=INTEGER}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertSmsClient" parameterType="java.util.List">
+		insert into SMS_CLIENT (
+		ID_
+		,SUBJECT_
+		,REMOTEIP_
+		,SYSCODE_
+		,SYSPWD_
+		,ENCRYPTIONFLAG_
+		,PUBLICKEY_
+		,PRIVATEKEY_
+		,PEERPUBLICKEY_
+		,TOKEN_
+		,TYPE_
+		,FREQUENCE_
+		,LIMIT_
+		,LOCKED_
+		,CREATEBY_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="smsClient" index="index"
+			separator=",">
+			(
+			#{smsClient.id, jdbcType=VARCHAR}
+			,#{smsClient.subject,
+			jdbcType=VARCHAR}
+			,#{smsClient.remoteIP, jdbcType=VARCHAR}
+			,#{smsClient.sysCode, jdbcType=VARCHAR}
+			,#{smsClient.sysPwd,
+			jdbcType=VARCHAR}
+			,#{smsClient.encryptionFlag, jdbcType=VARCHAR}
+			,#{smsClient.publicKey, jdbcType=VARCHAR}
+			,#{smsClient.privateKey,
+			jdbcType=VARCHAR}
+			,#{smsClient.peerPublicKey, jdbcType=VARCHAR}
+			,#{smsClient.token,
+			jdbcType=VARCHAR}
+			,#{smsClient.type,
+			jdbcType=VARCHAR}
+			,#{smsClient.frequence, jdbcType=INTEGER}
+			,#{smsClient.limit,
+			jdbcType=INTEGER}
+			,#{smsClient.locked,
+			jdbcType=INTEGER}
+			,#{smsClient.createBy, jdbcType=VARCHAR}
+			,#{smsClient.createTime,
+			jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertSmsClient_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="smsClient" index="index">
+			insert into
+			SMS_CLIENT (
+			ID_
+			,SUBJECT_
+			,REMOTEIP_
+			,SYSCODE_
+			,SYSPWD_
+			,ENCRYPTIONFLAG_
+			,PUBLICKEY_
+			,PRIVATEKEY_
+			,PEERPUBLICKEY_
+			,TOKEN_
+			,TYPE_
+			,FREQUENCE_
+			,LIMIT_
+			,LOCKED_
+			,CREATEBY_
+			,CREATETIME_
+			) values (
+			#{smsClient.id,
+			jdbcType=VARCHAR}
+			,#{smsClient.subject, jdbcType=VARCHAR}
+			,#{smsClient.remoteIP,
+			jdbcType=VARCHAR}
+			,#{smsClient.sysCode,
+			jdbcType=VARCHAR}
+			,#{smsClient.sysPwd, jdbcType=VARCHAR}
+			,#{smsClient.encryptionFlag, jdbcType=VARCHAR}
+			,#{smsClient.publicKey,
+			jdbcType=VARCHAR}
+			,#{smsClient.privateKey,
+			jdbcType=VARCHAR}
+			,#{smsClient.peerPublicKey, jdbcType=VARCHAR}
+			,#{smsClient.token,
+			jdbcType=VARCHAR}
+			,#{smsClient.type,
+			jdbcType=VARCHAR}
+			,#{smsClient.frequence, jdbcType=INTEGER}
+			,#{smsClient.limit,
+			jdbcType=INTEGER}
+			,#{smsClient.locked,
+			jdbcType=INTEGER}
+			,#{smsClient.createBy, jdbcType=VARCHAR}
+			,#{smsClient.createTime,
+			jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateSmsClient" parameterType="com.glaf.sms.domain.SmsClient">
+		update SMS_CLIENT
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="subject != null">
+				SUBJECT_ = #{subject, jdbcType=VARCHAR},
+			</if>
+			<if test="remoteIP != null">
+				REMOTEIP_ = #{remoteIP, jdbcType=VARCHAR},
+			</if>
+			<if test="sysCode != null">
+				SYSCODE_ = #{sysCode, jdbcType=VARCHAR},
+			</if>
+			<if test="sysPwd != null">
+				SYSPWD_ = #{sysPwd, jdbcType=VARCHAR},
+			</if>
+			<if test="encryptionFlag != null">
+				ENCRYPTIONFLAG_ = #{encryptionFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="publicKey != null">
+				PUBLICKEY_ = #{publicKey, jdbcType=VARCHAR},
+			</if>
+			<if test="privateKey != null">
+				PRIVATEKEY_ = #{privateKey, jdbcType=VARCHAR},
+			</if>
+			<if test="peerPublicKey != null">
+				PEERPUBLICKEY_ = #{peerPublicKey, jdbcType=VARCHAR},
+			</if>
+			<if test="token != null">
+				TOKEN_ = #{token, jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				TYPE_ = #{type, jdbcType=VARCHAR},
+			</if>
+			<if test="frequence != null">
+				FREQUENCE_ = #{frequence, jdbcType=INTEGER},
+			</if>
+			<if test="limit != null">
+				LIMIT_ = #{limit, jdbcType=INTEGER},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<delete id="deleteSmsClientById" parameterType="string">
+		delete from
+		SMS_CLIENT
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getSmsClientById" parameterType="string" resultMap="smsClientResultMap">
+		select * from SMS_CLIENT where ID_ = #{id}
+	</select>
+
+
+	<select id="getSmsClientBySysCode" parameterType="string"
+		resultMap="smsClientResultMap">
+		select * from SMS_CLIENT where SYSCODE_ = #{sysCode}
+	</select>
+
+
+	<select id="getSmsClients" parameterType="com.glaf.sms.query.SmsClientQuery"
+		resultMap="smsClientResultMap">
+		select distinct E.*
+		<include refid="selectSmsClientsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getSmsClientCount" parameterType="com.glaf.sms.query.SmsClientQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectSmsClientsSql" />
+	</select>
+
+
+	<sql id="selectSmsClientsSql">
+
+		from SMS_CLIENT E
+
+		<where>
+			1 = 1
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

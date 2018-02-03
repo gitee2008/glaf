@@ -255,6 +255,7 @@ public class SysTenantController {
 			sysTenant.setAddress(request.getParameter("address"));
 			sysTenant.setProperty(request.getParameter("property"));
 			sysTenant.setVerify(request.getParameter("verify"));
+			sysTenant.setTicketFlag(request.getParameter("ticketFlag"));
 			sysTenant.setLocked(RequestUtils.getInt(request, "locked"));
 			sysTenant.setUpdateBy(actorId);
 			this.sysTenantService.save(sysTenant);

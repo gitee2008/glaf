@@ -43,13 +43,13 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 	/**
 	 * 用户登陆
 	 * 
-	 * @param account
-	 * @param pwd
+	 * @param userId
+	 * @param password
 	 * @return
 	 */
 	@Transactional
-	public SysUser authorize(String account, String pwd) {
-		SysUser bean = sysUserService.findByAccount(account);
+	public SysUser authorize(String userId, String password) {
+		SysUser bean = sysUserService.findByAccount(userId);
 		if (bean != null) {
 			if (bean.getLocked() == 1) {// 帐号禁止
 				return null;
@@ -62,7 +62,7 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 					if (bean.getLockLoginTime() != null) {
 						if (System.currentTimeMillis() - bean.getLockLoginTime().getTime() < 60 * 1000
 								* conf.getInt("login.retryMinutes", 30)) {
-							sysUserService.loginFailure(account);
+							sysUserService.loginFailure(userId);
 							return null;
 						}
 					} else {
@@ -70,10 +70,10 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 					}
 				}
 			}
-			boolean success = sysUserService.checkPassword(account, pwd);
+			boolean success = sysUserService.checkPassword(userId, password);
 			if (!success) {// 密码不匹配
-				logger.debug(account + "密码不匹配!");
-				sysUserService.loginFailure(account);
+				logger.debug(userId + "密码不匹配!");
+				sysUserService.loginFailure(userId);
 				bean = null;
 			}
 		}
@@ -83,53 +83,13 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 	/**
 	 * 用户登陆
 	 * 
-	 * @param account
-	 * @param loginSecret
-	 * @return
-	 */
-	@Transactional
-	public SysUser authorizeLoginSecret(String account, String loginSecret) {
-		SysUser bean = sysUserService.findByAccount(account);
-		if (bean != null) {
-			if (bean.getLocked() == 1) {// 帐号禁止
-				return null;
-			}
-			if (!bean.isSystemAdministrator()) {
-				/**
-				 * 当登录重试次数大于系统默认的重试次数并且登录时间间隔没有达到系统默认的时间间隔，登录失败
-				 */
-				if (bean.getLoginRetry() > conf.getInt("login.retryCount", 10)) {
-					if (bean.getLockLoginTime() != null) {
-						if (System.currentTimeMillis() - bean.getLockLoginTime().getTime() < 60 * 1000
-								* conf.getInt("login.retryMinutes", 30)) {
-							sysUserService.loginFailure(account);
-							logger.warn(account + " login locked!");
-							return null;
-						}
-					} else {
-						return null;
-					}
-				}
-			}
-			boolean success = sysUserService.checkLoginSecret(account, loginSecret);
-			if (!success) {// 密码不匹配
-				sysUserService.loginFailure(account);
-				bean = null;
-			}
-		}
-		return bean;
-	}
-
-	/**
-	 * 用户登陆
-	 * 
-	 * @param account
+	 * @param userId
 	 * @param pwd
 	 * @return
 	 */
 	@Transactional
-	public SysUser login(String account) {
-		SysUser bean = sysUserService.findByAccountWithAll(account);
+	public SysUser login(String userId) {
+		SysUser bean = sysUserService.findByAccountWithAll(userId);
 		if (bean != null) {
 		}
 		return bean;
@@ -138,13 +98,13 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 	/**
 	 * 用户登陆
 	 * 
-	 * @param account
-	 * @param pwd
+	 * @param userId
+	 * @param password
 	 * @return
 	 */
 	@Transactional
-	public SysUser login(String account, String pwd) {
-		SysUser bean = sysUserService.findByAccountWithAll(account);
+	public SysUser login(String userId, String password) {
+		SysUser bean = sysUserService.findByAccountWithAll(userId);
 		if (bean != null) {
 			if (bean.getLocked() == 1) {// 帐号禁止
 				return null;
@@ -157,15 +117,15 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 					if (bean.getLockLoginTime() != null) {
 						if (System.currentTimeMillis() - bean.getLockLoginTime().getTime() < 60 * 1000
 								* conf.getInt("login.retryMinutes", 30)) {
-							sysUserService.loginFailure(account);
+							sysUserService.loginFailure(userId);
 							return null;
 						}
 					}
 				}
 			}
-			boolean success = sysUserService.checkPassword(account, pwd);
+			boolean success = sysUserService.checkPassword(userId, password);
 			if (!success) {// 密码不匹配
-				sysUserService.loginFailure(account);
+				sysUserService.loginFailure(userId);
 				bean = null;
 			} else if (bean.getAccountType() != 1) {
 

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.sms.mapper.SmsHistoryMessageMapper">
+
+	<resultMap id="smsHistoryMessageResultMap" type="com.glaf.sms.domain.SmsHistoryMessage">
+		<id property="id" column="ID_" jdbcType="VARCHAR" />
+		<result property="clientId" column="CLIENTID_" jdbcType="VARCHAR" />
+		<result property="serverId" column="SERVERID_" jdbcType="VARCHAR" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="mobile" column="MOBILE_" jdbcType="VARCHAR" />
+		<result property="subject" column="SUBJECT_" jdbcType="VARCHAR" />
+		<result property="message" column="MESSAGE_" jdbcType="VARCHAR" />
+		<result property="sendTime" column="SENDTIME_" jdbcType="TIMESTAMP" />
+		<result property="status" column="STATUS_" jdbcType="INTEGER" />
+		<result property="year" column="YEAR_" jdbcType="INTEGER" />
+		<result property="month" column="MONTH_" jdbcType="INTEGER" />
+		<result property="fullDay" column="FULLDAY_" jdbcType="INTEGER" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="result" column="RESULT_" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<insert id="insertSmsHistoryMessage" parameterType="com.glaf.sms.domain.SmsHistoryMessage">
+		insert into SMS_HISTORY_MESSAGE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="clientId != null">
+				,CLIENTID_
+			</if>
+			<if test="serverId != null">
+				,SERVERID_
+			</if>
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="mobile != null">
+				,MOBILE_
+			</if>
+			<if test="subject != null">
+				,SUBJECT_
+			</if>
+			<if test="message != null">
+				,MESSAGE_
+			</if>
+			<if test="sendTime != null">
+				,SENDTIME_
+			</if>
+			<if test="status != null">
+				,STATUS_
+			</if>
+			<if test="year != null">
+				,YEAR_
+			</if>
+			<if test="month != null">
+				,MONTH_
+			</if>
+			<if test="fullDay != null">
+				,FULLDAY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+			<if test="result != null">
+				,RESULT_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR}
+
+			<if test="clientId != null">
+				,#{clientId, jdbcType=VARCHAR}
+			</if>
+			<if test="serverId != null">
+				,#{serverId, jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="mobile != null">
+				,#{mobile, jdbcType=VARCHAR}
+			</if>
+			<if test="subject != null">
+				,#{subject, jdbcType=VARCHAR}
+			</if>
+			<if test="message != null">
+				,#{message, jdbcType=VARCHAR}
+			</if>
+			<if test="sendTime != null">
+				,#{sendTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="status != null">
+				,#{status, jdbcType=INTEGER}
+			</if>
+			<if test="year != null">
+				,#{year, jdbcType=INTEGER}
+			</if>
+			<if test="month != null">
+				,#{month, jdbcType=INTEGER}
+			</if>
+			<if test="fullDay != null">
+				,#{fullDay, jdbcType=INTEGER}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="result != null">
+				,#{result, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertSmsHistoryMessage" parameterType="java.util.List">
+		insert into SMS_HISTORY_MESSAGE (
+		ID_
+		,CLIENTID_
+		,SERVERID_
+		,NAME_
+		,MOBILE_
+		,SUBJECT_
+		,MESSAGE_
+		,SENDTIME_
+		,STATUS_
+		,YEAR_
+		,MONTH_
+		,FULLDAY_
+		,CREATETIME_
+		,RESULT_
+		) values
+		<foreach collection="list" item="smsHistoryMessage" index="index"
+			separator=",">
+			(
+			#{smsHistoryMessage.id, jdbcType=VARCHAR}
+			,#{smsHistoryMessage.clientId, jdbcType=VARCHAR}
+			,#{smsHistoryMessage.serverId, jdbcType=VARCHAR}
+			,#{smsHistoryMessage.name, jdbcType=VARCHAR}
+			,#{smsHistoryMessage.mobile, jdbcType=VARCHAR}
+			,#{smsHistoryMessage.subject, jdbcType=VARCHAR}
+			,#{smsHistoryMessage.message, jdbcType=VARCHAR}
+			,#{smsHistoryMessage.sendTime, jdbcType=TIMESTAMP}
+			,#{smsHistoryMessage.status, jdbcType=INTEGER}
+			,#{smsHistoryMessage.year, jdbcType=INTEGER}
+			,#{smsHistoryMessage.month, jdbcType=INTEGER}
+			,#{smsHistoryMessage.fullDay, jdbcType=INTEGER}
+			,#{smsHistoryMessage.createTime, jdbcType=TIMESTAMP}
+			,#{smsHistoryMessage.result, jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertSmsHistoryMessage_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="smsHistoryMessage" index="index">
+			insert into SMS_HISTORY_MESSAGE (
+			ID_
+			,CLIENTID_
+			,SERVERID_
+			,NAME_
+			,MOBILE_
+			,SUBJECT_
+			,MESSAGE_
+			,SENDTIME_
+			,STATUS_
+			,YEAR_
+			,MONTH_
+			,FULLDAY_
+			,CREATETIME_
+			,RESULT_
+			) values (
+			#{smsHistoryMessage.id, jdbcType=VARCHAR}
+			,#{smsHistoryMessage.clientId, jdbcType=VARCHAR}
+			,#{smsHistoryMessage.serverId, jdbcType=VARCHAR}
+			,#{smsHistoryMessage.name, jdbcType=VARCHAR}
+			,#{smsHistoryMessage.mobile, jdbcType=VARCHAR}
+			,#{smsHistoryMessage.subject, jdbcType=VARCHAR}
+			,#{smsHistoryMessage.message, jdbcType=VARCHAR}
+			,#{smsHistoryMessage.sendTime, jdbcType=TIMESTAMP}
+			,#{smsHistoryMessage.status, jdbcType=INTEGER}
+			,#{smsHistoryMessage.year, jdbcType=INTEGER}
+			,#{smsHistoryMessage.month, jdbcType=INTEGER}
+			,#{smsHistoryMessage.fullDay, jdbcType=INTEGER}
+			,#{smsHistoryMessage.createTime, jdbcType=TIMESTAMP}
+			,#{smsHistoryMessage.result, jdbcType=VARCHAR}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<delete id="deleteSmsHistoryMessageById" parameterType="string">
+		delete
+		from SMS_HISTORY_MESSAGE
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getSmsHistoryMessageById" parameterType="string"
+		resultMap="smsHistoryMessageResultMap">
+		select * from SMS_HISTORY_MESSAGE where ID_ = #{id}
+	</select>
+
+
+	<select id="getSmsHistoryMessages" parameterType="com.glaf.sms.query.SmsHistoryMessageQuery"
+		resultMap="smsHistoryMessageResultMap">
+		select distinct E.*
+		<include refid="selectSmsHistoryMessagesSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getSmsHistoryMessageCount" parameterType="com.glaf.sms.query.SmsHistoryMessageQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectSmsHistoryMessagesSql" />
+	</select>
+
+
+	<sql id="selectSmsHistoryMessagesSql">
+
+		from SMS_HISTORY_MESSAGE E
+
+		<where>
+			1 = 1
+
+			<if test="clientId != null and clientId != '' ">
+				and E.CLIENTID_ = #{clientId}
+			</if>
+
+			<if test="serverId != null and serverId != '' ">
+				and E.SERVERID_ = #{serverId}
+			</if>
+
+			<if test="mobile != null and mobile != '' ">
+				and E.MOBILE_ = #{mobile}
+			</if>
+
+			<if test="mobileLike != null and mobileLike != '' ">
+				and E.MOBILE_ like #{mobileLike}
+			</if>
+
+			<if test="sendTimeGreaterThanOrEqual != null">
+				and E.SENDTIME_ &gt;= #{sendTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="sendTimeLessThanOrEqual != null">
+				and E.SENDTIME_ &lt;= #{sendTimeLessThanOrEqual}
+			</if>
+
+			<if test="status != null">
+				and E.STATUS_ = #{status}
+			</if>
+
+			<if test="year != null">
+				and E.YEAR_ = #{year}
+			</if>
+
+			<if test="month != null">
+				and E.MONTH_ = #{month}
+			</if>
+
+			<if test="fullDay != null">
+				and E.FULLDAY_ = #{fullDay}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

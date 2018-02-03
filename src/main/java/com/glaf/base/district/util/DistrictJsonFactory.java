@@ -18,6 +18,7 @@
 
 package com.glaf.base.district.util;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -25,52 +26,14 @@ import com.glaf.base.district.domain.District;
 
 public class DistrictJsonFactory {
 
-	public static ObjectNode toObjectNode(District bean) {
-		ObjectNode jsonObject = new ObjectMapper().createObjectNode();
-		jsonObject.put("id", bean.getId());
-		jsonObject.put("parentId", bean.getParentId());
-
-		if (bean.getName() != null) {
-			jsonObject.put("name", bean.getName());
+	public static java.util.List<District> arrayToList(JSONArray array) {
+		java.util.List<District> list = new java.util.ArrayList<District>();
+		for (int i = 0; i < array.size(); i++) {
+			JSONObject jsonObject = array.getJSONObject(i);
+			District model = jsonToObject(jsonObject);
+			list.add(model);
 		}
-		if (bean.getCode() != null) {
-			jsonObject.put("code", bean.getCode());
-		}
-		if (bean.getTreeId() != null) {
-			jsonObject.put("treeId", bean.getTreeId());
-		}
-		jsonObject.put("level", bean.getLevel());
-		if (bean.getUseType() != null) {
-			jsonObject.put("useType", bean.getUseType());
-		}
-		jsonObject.put("sortNo", bean.getSortNo());
-		jsonObject.put("locked", bean.getLocked());
-
-		return jsonObject;
-	}
-
-	public static JSONObject toJsonObject(District bean) {
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("id", bean.getId());
-		jsonObject.put("parentId", bean.getParentId());
-
-		if (bean.getName() != null) {
-			jsonObject.put("name", bean.getName());
-		}
-		if (bean.getCode() != null) {
-			jsonObject.put("code", bean.getCode());
-		}
-		if (bean.getTreeId() != null) {
-			jsonObject.put("treeId", bean.getTreeId());
-		}
-		jsonObject.put("level", bean.getLevel());
-		if (bean.getUseType() != null) {
-			jsonObject.put("useType", bean.getUseType());
-		}
-
-		jsonObject.put("sortNo", bean.getSortNo());
-		jsonObject.put("locked", bean.getLocked());
-		return jsonObject;
+		return list;
 	}
 
 	public static District jsonToObject(JSONObject jsonObject) {
@@ -103,6 +66,65 @@ public class DistrictJsonFactory {
 			model.setLocked(jsonObject.getInteger("locked"));
 		}
 		return model;
+	}
+
+	public static JSONArray listToArray(java.util.List<District> list) {
+		JSONArray array = new JSONArray();
+		if (list != null && !list.isEmpty()) {
+			for (District model : list) {
+				JSONObject jsonObject = model.toJsonObject();
+				array.add(jsonObject);
+			}
+		}
+		return array;
+	}
+
+	public static JSONObject toJsonObject(District bean) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("id", bean.getId());
+		jsonObject.put("parentId", bean.getParentId());
+
+		if (bean.getName() != null) {
+			jsonObject.put("name", bean.getName());
+		}
+		if (bean.getCode() != null) {
+			jsonObject.put("code", bean.getCode());
+		}
+		if (bean.getTreeId() != null) {
+			jsonObject.put("treeId", bean.getTreeId());
+		}
+		jsonObject.put("level", bean.getLevel());
+		if (bean.getUseType() != null) {
+			jsonObject.put("useType", bean.getUseType());
+		}
+
+		jsonObject.put("sortNo", bean.getSortNo());
+		jsonObject.put("locked", bean.getLocked());
+		return jsonObject;
+	}
+
+	public static ObjectNode toObjectNode(District bean) {
+		ObjectNode jsonObject = new ObjectMapper().createObjectNode();
+		jsonObject.put("id", bean.getId());
+		jsonObject.put("parentId", bean.getParentId());
+
+		if (bean.getName() != null) {
+			jsonObject.put("name", bean.getName());
+		}
+		if (bean.getCode() != null) {
+			jsonObject.put("code", bean.getCode());
+		}
+		if (bean.getTreeId() != null) {
+			jsonObject.put("treeId", bean.getTreeId());
+		}
+		jsonObject.put("level", bean.getLevel());
+		if (bean.getUseType() != null) {
+			jsonObject.put("useType", bean.getUseType());
+		}
+		jsonObject.put("sortNo", bean.getSortNo());
+		jsonObject.put("locked", bean.getLocked());
+
+		return jsonObject;
 	}
 
 }

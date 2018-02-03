@@ -30,7 +30,7 @@
 									src="${request.contextPath}/static/html/login/img/user.png" width="16"
 									style="vertical-align: middle;" />&nbsp;&nbsp;用户名</span> <input
 									type="text" name="x" class="ipt ipt-user" id="x"
-									autocomplete="off" value="" maxlength="40" style=""
+									autocomplete="off" value="${x}" maxlength="40" style=""
 									onclick="hiddenUserWarn()" onblur="validUser()"> <input
 									type="text" class="ipt ipt-user ipt-replace" id="replaceun"
 									autocomplete="off" value="用户名" maxlength="40"

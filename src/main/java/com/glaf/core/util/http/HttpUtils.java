@@ -124,7 +124,6 @@ public class HttpUtils {
 			Response response = (Response) future.get();
 			return response.getResponseBody();
 		} catch (Exception ex) {
-			
 			log.error("http request error:{}", ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -140,7 +139,6 @@ public class HttpUtils {
 			Response response = (Response) future.get();
 			return response.getResponseBody();
 		} catch (Exception ex) {
-			
 			log.error("http request error:{}", ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -212,7 +210,6 @@ public class HttpUtils {
 			ce.printStackTrace();
 			log.error(" http server connection timed out.");
 		} catch (Exception ex) {
-			
 			log.error("http request error:{}", ex);
 		} finally {
 			IOUtils.closeStream(inputStream);

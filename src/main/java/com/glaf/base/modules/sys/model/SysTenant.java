@@ -25,6 +25,8 @@ import com.alibaba.fastjson.*;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.glaf.core.base.*;
 import com.glaf.core.identity.Tenant;
 import com.glaf.core.util.DateUtils;
@@ -160,6 +162,12 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 	protected String telephone;
 
 	/**
+	 * 票据标识
+	 */
+	@Column(name = "TICKETFLAG_", length = 1)
+	protected String ticketFlag;
+
+	/**
 	 * 是否锁定
 	 */
 	@Column(name = "LOCKED_")
@@ -190,6 +198,9 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "UPDATETIME_")
 	protected Date updateTime;
+
+	@javax.persistence.Transient
+	protected MultipartFile file;
 
 	public SysTenant() {
 
@@ -252,6 +263,10 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 		return this.databaseId;
 	}
 
+	public MultipartFile getFile() {
+		return file;
+	}
+
 	public long getId() {
 		return this.id;
 	}
@@ -294,6 +309,10 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 
 	public int getTenantType() {
 		return this.tenantType;
+	}
+
+	public String getTicketFlag() {
+		return ticketFlag;
 	}
 
 	public String getTown() {
@@ -371,6 +390,10 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 		this.databaseId = databaseId;
 	}
 
+	public void setFile(MultipartFile file) {
+		this.file = file;
+	}
+
 	public void setId(long id) {
 		this.id = id;
 	}
@@ -413,6 +436,10 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 
 	public void setTenantType(int tenantType) {
 		this.tenantType = tenantType;
+	}
+
+	public void setTicketFlag(String ticketFlag) {
+		this.ticketFlag = ticketFlag;
 	}
 
 	public void setTown(String town) {

@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.lang.StringUtils;
@@ -30,13 +32,22 @@ import com.glaf.matrix.util.SysParams;
 public class CombinationAppJob extends BaseJob {
 
 	protected static AtomicLong lastExecuteTime = new AtomicLong(System.currentTimeMillis());
+	
+	protected static int F_STEP = 0;
 
-	@Override
 	public void runJob(JobExecutionContext context) throws JobExecutionException {
-		logger.debug("-------------------------CombinationAppJob-----------------------");
-		if ((System.currentTimeMillis() - lastExecuteTime.get()) < DateUtils.MINUTE) {
-			return;
+		logger.info("-----------------------CombinationAppJob-------------------------");
+		if (F_STEP > 0) {
+			if ((System.currentTimeMillis() - lastExecuteTime.get()) < DateUtils.MINUTE * 5) {
+				logger.info("间隔时间未到，不执行。");
+				return;
+			}
 		}
+		try {
+			TimeUnit.SECONDS.sleep(1 + new Random().nextInt(30));// 随机等待，避免Job同时执行
+		} catch (InterruptedException e) {
+		}
+		F_STEP++;
 		IDatabaseService databaseService = ContextFactory.getBean("databaseService");
 		CombinationAppService combinationAppService = ContextFactory
 				.getBean("com.glaf.matrix.combination.service.combinationAppService");

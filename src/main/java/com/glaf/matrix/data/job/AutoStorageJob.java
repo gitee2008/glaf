@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.lang3.StringUtils;
@@ -47,12 +49,21 @@ public class AutoStorageJob extends BaseJob {
 
 	protected static AtomicLong lastExecuteTime = new AtomicLong(System.currentTimeMillis());
 
-	@Override
+	protected static int F_STEP = 0;
+
 	public void runJob(JobExecutionContext context) throws JobExecutionException {
-		logger.debug("--------------------AutoStorageJob-------------------------");
-		if ((System.currentTimeMillis() - lastExecuteTime.get()) < DateUtils.MINUTE * 2) {
-			return;
+		logger.info("-----------------------AutoStorageJob-------------------------");
+		if (F_STEP > 0) {
+			if ((System.currentTimeMillis() - lastExecuteTime.get()) < DateUtils.MINUTE * 5) {
+				logger.info("间隔时间未到，不执行。");
+				return;
+			}
 		}
+		try {
+			TimeUnit.SECONDS.sleep(1 + new Random().nextInt(30));// 随机等待，避免Job同时执行
+		} catch (InterruptedException e) {
+		}
+		F_STEP++;
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
 		/**
