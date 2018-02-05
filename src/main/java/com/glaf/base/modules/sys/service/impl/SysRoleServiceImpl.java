@@ -68,6 +68,11 @@ public class SysRoleServiceImpl implements SysRoleService {
 
 	@Transactional
 	public boolean create(SysRole bean) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear(Constants.CACHE_ROLE_REGION);
+			CacheFactory.clear(Constants.CACHE_USER_REGION);
+		}
+
 		if (bean.getId() == null) {
 			bean.setId(UUID32.getUUID());
 		}
@@ -77,50 +82,56 @@ public class SysRoleServiceImpl implements SysRoleService {
 			bean.setCode("role_" + bean.getId());
 		}
 		sysRoleMapper.insertSysRole(bean);
-		if (SystemConfig.getBoolean("use_query_cache")) {
-			CacheFactory.clear(Constants.CACHE_ROLE_REGION);
-			CacheFactory.clear(Constants.CACHE_USER_REGION);
-		}
+
 		return true;
 	}
 
 	@Transactional
 	public boolean delete(String id) {
-		this.deleteById(id);
 		if (SystemConfig.getBoolean("use_query_cache")) {
 			CacheFactory.clear(Constants.CACHE_ROLE_REGION);
 			CacheFactory.clear(Constants.CACHE_USER_REGION);
 		}
+
+		this.deleteById(id);
+
 		return true;
 	}
 
 	@Transactional
 	public boolean delete(SysRole bean) {
-		this.deleteById(bean.getId());
 		if (SystemConfig.getBoolean("use_query_cache")) {
 			CacheFactory.clear(Constants.CACHE_ROLE_REGION);
 			CacheFactory.clear(Constants.CACHE_USER_REGION);
 		}
+
+		this.deleteById(bean.getId());
+
 		return true;
 	}
 
 	@Transactional
 	public boolean deleteAll(String[] ids) {
 		if (ids != null && ids.length > 0) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				CacheFactory.clear(Constants.CACHE_ROLE_REGION);
+				CacheFactory.clear(Constants.CACHE_USER_REGION);
+			}
 			for (String id : ids) {
 				this.deleteById(id);
 			}
 		}
-		if (SystemConfig.getBoolean("use_query_cache")) {
-			CacheFactory.clear(Constants.CACHE_ROLE_REGION);
-			CacheFactory.clear(Constants.CACHE_USER_REGION);
-		}
+
 		return true;
 	}
 
 	@Transactional
 	public void deleteById(String id) {
 		if (id != null) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				CacheFactory.clear(Constants.CACHE_ROLE_REGION);
+				CacheFactory.clear(Constants.CACHE_USER_REGION);
+			}
 			SysRole role = sysRoleMapper.getSysRoleById(id);
 			if (role != null && StringUtils.equals(role.getType(), "SYS")) {
 				throw new RuntimeException("Can't delete sys role");
@@ -128,23 +139,21 @@ public class SysRoleServiceImpl implements SysRoleService {
 				sysRoleMapper.deleteSysRoleById(id);
 			}
 		}
-		if (SystemConfig.getBoolean("use_query_cache")) {
-			CacheFactory.clear(Constants.CACHE_ROLE_REGION);
-			CacheFactory.clear(Constants.CACHE_USER_REGION);
-		}
+
 	}
 
 	@Transactional
 	public void deleteByIds(List<String> roleIds) {
 		if (roleIds != null && !roleIds.isEmpty()) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				CacheFactory.clear(Constants.CACHE_ROLE_REGION);
+				CacheFactory.clear(Constants.CACHE_USER_REGION);
+			}
 			for (String roleId : roleIds) {
 				this.deleteById(roleId);
 			}
 		}
-		if (SystemConfig.getBoolean("use_query_cache")) {
-			CacheFactory.clear(Constants.CACHE_ROLE_REGION);
-			CacheFactory.clear(Constants.CACHE_USER_REGION);
-		}
+
 	}
 
 	public SysRole findByCode(String code) {
@@ -305,6 +314,11 @@ public class SysRoleServiceImpl implements SysRoleService {
 
 	@Transactional
 	public void save(SysRole sysRole) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear(Constants.CACHE_ROLE_REGION);
+			CacheFactory.clear(Constants.CACHE_USER_REGION);
+		}
+
 		if (sysRole.getId() == null) {
 			sysRole.setId(idGenerator.getNextId());
 			sysRole.setCreateDate(new Date());
@@ -312,10 +326,6 @@ public class SysRoleServiceImpl implements SysRoleService {
 		} else {
 			sysRole.setUpdateDate(new Date());
 			sysRoleMapper.updateSysRole(sysRole);
-		}
-		if (SystemConfig.getBoolean("use_query_cache")) {
-			CacheFactory.clear(Constants.CACHE_ROLE_REGION);
-			CacheFactory.clear(Constants.CACHE_USER_REGION);
 		}
 	}
 
@@ -397,12 +407,16 @@ public class SysRoleServiceImpl implements SysRoleService {
 
 	@Transactional
 	public boolean update(SysRole bean) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String cacheKey = Constants.CACHE_ROLE_KEY + bean.getId();
+			CacheFactory.remove(Constants.CACHE_ROLE_REGION, cacheKey);
+			CacheFactory.clear(Constants.CACHE_ROLE_REGION);
+			CacheFactory.clear(Constants.CACHE_USER_REGION);
+		}
+
 		bean.setUpdateDate(new Date());
 		sysRoleMapper.updateSysRole(bean);
-		String cacheKey = Constants.CACHE_ROLE_KEY + bean.getId();
-		CacheFactory.remove(Constants.CACHE_ROLE_REGION, cacheKey);
-		CacheFactory.clear(Constants.CACHE_ROLE_REGION);
-		CacheFactory.clear(Constants.CACHE_USER_REGION);
+
 		return true;
 	}
 }

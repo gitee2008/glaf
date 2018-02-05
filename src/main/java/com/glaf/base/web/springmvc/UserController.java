@@ -305,6 +305,31 @@ public class UserController {
 		return ResponseUtils.responseResult(false);
 	}
 
+	/**
+	 * 修改用户密码
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/savePwd2")
+	@ResponseBody
+	public byte[] savePwd2(HttpServletRequest request) {
+		SysUser bean = RequestUtil.getLoginUser(request);
+		String newPwd = ParamUtil.getParameter(request, "newPwd");
+		if (bean != null && StringUtils.isNotEmpty(newPwd)) {
+			try {
+				SysUser user = sysUserService.findById(bean.getActorId());
+				if (user != null) {
+					sysUserService.changePassword(user.getUserId(), newPwd);
+					return ResponseUtils.responseResult(true);
+				}
+			} catch (Exception ex) {
+				logger.error(ex);
+			}
+		}
+		return ResponseUtils.responseResult(false);
+	}
+
 	@javax.annotation.Resource
 	public void setSysRoleService(SysRoleService sysRoleService) {
 		this.sysRoleService = sysRoleService;

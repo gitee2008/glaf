@@ -110,31 +110,35 @@ public class SysTreeServiceImpl implements SysTreeService {
 
 	@Transactional
 	public boolean delete(long id) {
-		this.deleteById(id);
 		if (SystemConfig.getBoolean("use_query_cache")) {
 			CacheFactory.clear("tree");
 		}
+		this.deleteById(id);
+
 		return true;
 	}
 
 	@Transactional
 	public boolean delete(SysTree bean) {
-		this.deleteById(bean.getId());
 		if (SystemConfig.getBoolean("use_query_cache")) {
 			CacheFactory.clear("tree");
 		}
+		this.deleteById(bean.getId());
+
 		return true;
 	}
 
 	@Transactional
 	public boolean deleteAll(long[] ids) {
 		if (ids != null && ids.length > 0) {
-			for (long id : ids) {
-				this.deleteById(id);
-			}
 			if (SystemConfig.getBoolean("use_query_cache")) {
 				CacheFactory.clear("tree");
 			}
+
+			for (long id : ids) {
+				this.deleteById(id);
+			}
+
 		}
 		return true;
 	}
@@ -146,7 +150,6 @@ public class SysTreeServiceImpl implements SysTreeService {
 			if (treeList != null && !treeList.isEmpty()) {
 				throw new RuntimeException("tree node exist children ");
 			}
-			sysTreeMapper.deleteSysTreeById(id);
 			if (SystemConfig.getBoolean("use_query_cache")) {
 				String cacheKey = "cache_treemodel_" + id;
 				CacheFactory.remove("tree", cacheKey);
@@ -154,6 +157,9 @@ public class SysTreeServiceImpl implements SysTreeService {
 				CacheFactory.remove("tree", cacheKey);
 				CacheFactory.clear("tree");
 			}
+
+			sysTreeMapper.deleteSysTreeById(id);
+
 		}
 	}
 
@@ -538,12 +544,17 @@ public class SysTreeServiceImpl implements SysTreeService {
 			}
 		} else {
 			bean.setUpdateDate(new Date());
+
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				String cacheKey = "sys_tree_" + bean.getId();
+				CacheFactory.remove("tree", cacheKey);
+				cacheKey = "cache_treemodel_" + bean.getId();
+				CacheFactory.remove("tree", cacheKey);
+				CacheFactory.clear("tree");
+			}
+
 			this.update(bean);
-			String cacheKey = "sys_tree_" + bean.getId();
-			CacheFactory.remove("tree", cacheKey);
-			cacheKey = "cache_treemodel_" + bean.getId();
-			CacheFactory.remove("tree", cacheKey);
-			CacheFactory.clear("tree");
+
 		}
 	}
 
@@ -629,7 +640,9 @@ public class SysTreeServiceImpl implements SysTreeService {
 
 	@Transactional
 	public boolean update(SysTree bean) {
+
 		SysTree model = this.findById(bean.getId());
+
 		/**
 		 * 如果节点移动了位置，即移动到别的节点下面去了
 		 */
@@ -691,12 +704,17 @@ public class SysTreeServiceImpl implements SysTreeService {
 				}
 			}
 		}
-		String cacheKey = "sys_tree_" + bean.getId();
-		CacheFactory.remove("tree", cacheKey);
-		cacheKey = "cache_treemodel_" + bean.getId();
-		CacheFactory.remove("tree", cacheKey);
-		CacheFactory.clear("tree");
+
 		sysTreeMapper.updateSysTree(bean);
+
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String cacheKey = "sys_tree_" + bean.getId();
+			CacheFactory.remove("tree", cacheKey);
+			cacheKey = "cache_treemodel_" + bean.getId();
+			CacheFactory.remove("tree", cacheKey);
+			CacheFactory.clear("tree");
+		}
+
 		return true;
 	}
 
@@ -737,6 +755,11 @@ public class SysTreeServiceImpl implements SysTreeService {
 	 */
 	@Transactional
 	public void updateTreeIds(Map<Long, String> treeMap) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear("tree");
+			CacheFactory.clear("treemodel");
+		}
+
 		TableModel tableModel = new TableModel();
 		tableModel.setTableName("SYS_TREE");
 		ColumnModel idColumn = new ColumnModel();

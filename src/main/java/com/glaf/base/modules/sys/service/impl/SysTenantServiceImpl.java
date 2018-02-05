@@ -79,6 +79,10 @@ public class SysTenantServiceImpl implements SysTenantService {
 	@Transactional
 	public void deleteById(long id) {
 		if (id != 0) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				String cacheKey = Constants.CACHE_TENANT_KEY + id;
+				CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
+			}
 			sysTenantMapper.deleteSysTenantById(id);
 		}
 	}
@@ -87,6 +91,10 @@ public class SysTenantServiceImpl implements SysTenantService {
 	public void deleteByIds(List<Long> ids) {
 		if (ids != null && !ids.isEmpty()) {
 			for (Long id : ids) {
+				if (SystemConfig.getBoolean("use_query_cache")) {
+					String cacheKey = Constants.CACHE_TENANT_KEY + id;
+					CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
+				}
 				sysTenantMapper.deleteSysTenantById(id);
 			}
 		}
@@ -166,7 +174,9 @@ public class SysTenantServiceImpl implements SysTenantService {
 		}
 		SysTenant sysTenant = sysTenantMapper.getSysTenantByTenantId(tenantId);
 		if (sysTenant != null) {
-			CacheFactory.put(Constants.CACHE_TENANT_REGION, cacheKey, sysTenant.toJsonObject().toJSONString());
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				CacheFactory.put(Constants.CACHE_TENANT_REGION, cacheKey, sysTenant.toJsonObject().toJSONString());
+			}
 		}
 		return sysTenant;
 	}
@@ -206,12 +216,14 @@ public class SysTenantServiceImpl implements SysTenantService {
 			sysTenant.setTelephone(user.getMobile());
 			sysTenantMapper.insertSysTenant(sysTenant);
 		} else {
-			String cacheKey = Constants.CACHE_TENANT_KEY + sysTenant.getId();
-			CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
-			cacheKey = Constants.CACHE_TENANT_KEY + sysTenant.getName();
-			CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
-			cacheKey = Constants.CACHE_TENANT_KEY + sysTenant.getTenantId();
-			CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				String cacheKey = Constants.CACHE_TENANT_KEY + sysTenant.getId();
+				CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
+				cacheKey = Constants.CACHE_TENANT_KEY + sysTenant.getName();
+				CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
+				cacheKey = Constants.CACHE_TENANT_KEY + sysTenant.getTenantId();
+				CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
+			}
 
 			sysTenantMapper.updateSysTenant(sysTenant);
 		}
@@ -254,13 +266,14 @@ public class SysTenantServiceImpl implements SysTenantService {
 			sysTenant.setCreateTime(new Date());
 			sysTenantMapper.insertSysTenant(sysTenant);
 		} else {
-
-			String cacheKey = Constants.CACHE_TENANT_KEY + sysTenant.getId();
-			CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
-			cacheKey = Constants.CACHE_TENANT_KEY + sysTenant.getName();
-			CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
-			cacheKey = Constants.CACHE_TENANT_KEY + sysTenant.getTenantId();
-			CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				String cacheKey = Constants.CACHE_TENANT_KEY + sysTenant.getId();
+				CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
+				cacheKey = Constants.CACHE_TENANT_KEY + sysTenant.getName();
+				CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
+				cacheKey = Constants.CACHE_TENANT_KEY + sysTenant.getTenantId();
+				CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
+			}
 
 			sysTenantMapper.updateSysTenant(sysTenant);
 		}

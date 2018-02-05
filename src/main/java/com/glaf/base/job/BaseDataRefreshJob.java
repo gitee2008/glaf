@@ -32,11 +32,11 @@ public class BaseDataRefreshJob extends BaseJob {
 
 	private static BaseDataManager manager = BaseDataManager.getInstance();// 基础信息管理
 
-	protected static AtomicLong lastExecuteTime = new AtomicLong(System.currentTimeMillis());
+	private static AtomicLong lastExecuteTime = new AtomicLong(System.currentTimeMillis());
 
 	@Override
 	public void runJob(JobExecutionContext context) throws JobExecutionException {
-		if ((System.currentTimeMillis() - lastExecuteTime.get()) < DateUtils.MINUTE * 2) {
+		if ((System.currentTimeMillis() - lastExecuteTime.get()) < DateUtils.MINUTE * 5) {
 			return;
 		}
 		if (SystemConfig.getBoolean("refreshBaseData")) {
