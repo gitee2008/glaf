@@ -22,6 +22,7 @@ import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
@@ -29,10 +30,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.glaf.core.id.*;
 import com.glaf.core.util.DateUtils;
+import com.glaf.core.cache.CacheFactory;
+import com.glaf.core.config.SystemConfig;
 import com.glaf.core.dao.*;
 import com.glaf.base.online.mapper.*;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.glaf.base.online.domain.*;
 import com.glaf.base.online.query.*;
+import com.glaf.base.online.util.UserOnlineJsonFactory;
 
 @Service("userOnlineService")
 @Transactional(readOnly = true)
@@ -58,16 +64,14 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 	}
 
 	@Transactional
-	public void deleteById(Long id) {
-		if (id != null) {
-			userOnlineMapper.deleteUserOnlineById(id);
-		}
-	}
-
-	@Transactional
-	public void deleteByIds(List<Long> ids) {
-		if (ids != null && !ids.isEmpty()) {
-			for (Long id : ids) {
+	public void deleteById(long id) {
+		if (id != 0) {
+			UserOnline userOnline = userOnlineMapper.getUserOnlineById(id);
+			if (userOnline != null) {
+				if (SystemConfig.getBoolean("use_query_cache")) {
+					String cacheKey = "useronline_" + userOnline.getActorId();
+					CacheFactory.remove("useronline", cacheKey);
+				}
 				userOnlineMapper.deleteUserOnlineById(id);
 			}
 		}
@@ -89,39 +93,14 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 					if (ts / 1000 > timeoutSeconds) {// 如果超时，从在线用户列表中删除
 						userOnlineMapper.deleteUserOnlineById(bean.getId());
 						userOnlineLogService.logout(bean.getActorId());
+						if (SystemConfig.getBoolean("use_query_cache")) {
+							String cacheKey = "useronline_" + bean.getActorId();
+							CacheFactory.remove("useronline", cacheKey);
+						}
 					}
 				}
 			}
 		}
-	}
-
-	public UserOnline getUserOnline(Long id) {
-		if (id == null) {
-			return null;
-		}
-		UserOnline userOnline = userOnlineMapper.getUserOnlineById(id);
-		return userOnline;
-	}
-
-	public UserOnline getUserOnline(String actorId) {
-		UserOnlineQuery query = new UserOnlineQuery();
-		query.actorId(actorId);
-		List<UserOnline> list = this.list(query);
-		UserOnline userOnline = null;
-		if (list != null && !list.isEmpty()) {
-			userOnline = list.get(0);
-		}
-		return userOnline;
-	}
-
-	public int getUserOnlineCountByQueryCriteria(UserOnlineQuery query) {
-		return userOnlineMapper.getUserOnlineCount(query);
-	}
-
-	public List<UserOnline> getUserOnlinesByQueryCriteria(int start, int pageSize, UserOnlineQuery query) {
-		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<UserOnline> rows = sqlSessionTemplate.selectList("getUserOnlines", query, rowBounds);
-		return rows;
 	}
 
 	/**
@@ -138,6 +117,51 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 		return list;
 	}
 
+	public UserOnline getUserOnline(long id) {
+		if (id == 0) {
+			return null;
+		}
+		UserOnline userOnline = userOnlineMapper.getUserOnlineById(id);
+		return userOnline;
+	}
+
+	public UserOnline getUserOnline(String actorId) {
+		String cacheKey = "useronline_" + actorId;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("useronline", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONObject json = JSON.parseObject(text);
+					return UserOnlineJsonFactory.jsonToObject(json);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
+
+		UserOnlineQuery query = new UserOnlineQuery();
+		query.actorId(actorId);
+		List<UserOnline> list = this.list(query);
+		UserOnline userOnline = null;
+		if (list != null && !list.isEmpty()) {
+			userOnline = list.get(0);
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				CacheFactory.put("useronline", cacheKey, userOnline.toJsonObject().toJSONString());
+			}
+		}
+		return userOnline;
+	}
+
+	public int getUserOnlineCountByQueryCriteria(UserOnlineQuery query) {
+		return userOnlineMapper.getUserOnlineCount(query);
+	}
+
+	public List<UserOnline> getUserOnlinesByQueryCriteria(int start, int pageSize, UserOnlineQuery query) {
+		RowBounds rowBounds = new RowBounds(start, pageSize);
+		List<UserOnline> rows = sqlSessionTemplate.selectList("getUserOnlines", query, rowBounds);
+		return rows;
+	}
+
 	public List<UserOnline> list(UserOnlineQuery query) {
 		List<UserOnline> list = userOnlineMapper.getUserOnlines(query);
 		return list;
@@ -145,6 +169,10 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 
 	@Transactional
 	public void login(UserOnline model) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String cacheKey = "useronline_" + model.getActorId();
+			CacheFactory.remove("useronline", cacheKey);
+		}
 		UserOnline userOnline = this.getUserOnline(model.getActorId());
 		if (userOnline != null) {
 			userOnline.setLoginDate(model.getLoginDate());
@@ -185,6 +213,10 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 	 */
 	@Transactional
 	public void logout(String actorId) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String cacheKey = "useronline_" + actorId;
+			CacheFactory.remove("useronline", cacheKey);
+		}
 		UserOnline userOnline = this.getUserOnline(actorId);
 		if (userOnline != null) {
 			this.deleteById(userOnline.getId());
@@ -199,6 +231,10 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 	 */
 	@Transactional
 	public void remain(String actorId) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String cacheKey = "useronline_" + actorId;
+			CacheFactory.remove("useronline", cacheKey);
+		}
 		UserOnline userOnline = this.getUserOnline(actorId);
 		if (userOnline != null) {
 			userOnline.setCheckDateMs(System.currentTimeMillis());
@@ -209,6 +245,10 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 
 	@Transactional
 	public void save(UserOnline userOnline) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String cacheKey = "useronline_" + userOnline.getActorId();
+			CacheFactory.remove("useronline", cacheKey);
+		}
 		if (userOnline.getId() == null) {
 			userOnline.setId(idGenerator.nextId());
 			userOnline.setCheckDateMs(System.currentTimeMillis());
@@ -223,12 +263,6 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 			userOnlineLogService.login(log);
 		} else {
 			userOnlineMapper.updateUserOnline(userOnline);
-
-			UserOnlineLog log = new UserOnlineLog();
-			log.setActorId(userOnline.getActorId());
-			log.setLoginIP(userOnline.getLoginIP());
-			log.setLoginDate(userOnline.getLoginDate());
-			log.setName(userOnline.getName());
 		}
 	}
 

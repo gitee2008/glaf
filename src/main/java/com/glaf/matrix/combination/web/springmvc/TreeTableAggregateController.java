@@ -728,6 +728,14 @@ public class TreeTableAggregateController {
 
 	@RequestMapping("/save")
 	public ModelAndView save(HttpServletRequest request, ModelMap modelMap) {
+		String targetTableName = request.getParameter("targetTableName");
+		if (!(StringUtils.startsWithIgnoreCase(targetTableName, "etl_")
+				|| StringUtils.startsWithIgnoreCase(targetTableName, "tmp")
+				|| StringUtils.startsWithIgnoreCase(targetTableName, "sync")
+				|| StringUtils.startsWithIgnoreCase(targetTableName, "useradd")
+				|| StringUtils.startsWithIgnoreCase(targetTableName, "tree_table_"))) {
+			throw new RuntimeException("目标表必须以etl_,tmp,sync,useradd,tree_table_前缀开头。");
+		}
 		User user = RequestUtils.getUser(request);
 		String actorId = user.getActorId();
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
@@ -775,6 +783,14 @@ public class TreeTableAggregateController {
 	@ResponseBody
 	@RequestMapping("/saveAs")
 	public byte[] saveAs(HttpServletRequest request) {
+		String targetTableName = request.getParameter("targetTableName");
+		if (!(StringUtils.startsWithIgnoreCase(targetTableName, "etl_")
+				|| StringUtils.startsWithIgnoreCase(targetTableName, "tmp")
+				|| StringUtils.startsWithIgnoreCase(targetTableName, "sync")
+				|| StringUtils.startsWithIgnoreCase(targetTableName, "useradd")
+				|| StringUtils.startsWithIgnoreCase(targetTableName, "tree_table_"))) {
+			return ResponseUtils.responseJsonResult(false, "目标表必须以etl_,tmp,sync,useradd,tree_table_前缀开头。");
+		}
 		User user = RequestUtils.getUser(request);
 		String actorId = user.getActorId();
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
@@ -830,6 +846,14 @@ public class TreeTableAggregateController {
 	@RequestMapping(value = "/saveOrUpdate", method = RequestMethod.POST)
 	public @ResponseBody TreeTableAggregate saveOrUpdate(HttpServletRequest request,
 			@RequestBody Map<String, Object> model) {
+		String targetTableName = request.getParameter("targetTableName");
+		if (!(StringUtils.startsWithIgnoreCase(targetTableName, "etl_")
+				|| StringUtils.startsWithIgnoreCase(targetTableName, "tmp")
+				|| StringUtils.startsWithIgnoreCase(targetTableName, "sync")
+				|| StringUtils.startsWithIgnoreCase(targetTableName, "useradd")
+				|| StringUtils.startsWithIgnoreCase(targetTableName, "tree_table_"))) {
+			throw new RuntimeException("目标表必须以etl_,tmp,sync,useradd,tree_table_前缀开头。");
+		}
 		User user = RequestUtils.getUser(request);
 		String actorId = user.getActorId();
 		TreeTableAggregate treeTableAggregate = new TreeTableAggregate();
@@ -877,6 +901,14 @@ public class TreeTableAggregateController {
 	@ResponseBody
 	@RequestMapping("/saveTreeTableAggregate")
 	public byte[] saveTreeTableAggregate(HttpServletRequest request) {
+		String targetTableName = request.getParameter("targetTableName");
+		if (!(StringUtils.startsWithIgnoreCase(targetTableName, "etl_")
+				|| StringUtils.startsWithIgnoreCase(targetTableName, "tmp")
+				|| StringUtils.startsWithIgnoreCase(targetTableName, "sync")
+				|| StringUtils.startsWithIgnoreCase(targetTableName, "useradd")
+				|| StringUtils.startsWithIgnoreCase(targetTableName, "tree_table_"))) {
+			return ResponseUtils.responseJsonResult(false, "目标表必须以etl_,tmp,sync,useradd,tree_table_前缀开头。");
+		}
 		User user = RequestUtils.getUser(request);
 		String actorId = user.getActorId();
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
@@ -943,52 +975,6 @@ public class TreeTableAggregateController {
 	@javax.annotation.Resource
 	public void setTreeTableAggregateService(TreeTableAggregateService treeTableAggregateService) {
 		this.treeTableAggregateService = treeTableAggregateService;
-	}
-
-	@RequestMapping("/update")
-	public ModelAndView update(HttpServletRequest request, ModelMap modelMap) {
-		User user = RequestUtils.getUser(request);
-		Map<String, Object> params = RequestUtils.getParameterMap(request);
-
-		TreeTableAggregate treeTableAggregate = treeTableAggregateService
-				.getTreeTableAggregate(RequestUtils.getLong(request, "id"));
-
-		Tools.populate(treeTableAggregate, params);
-
-		treeTableAggregate.setName(request.getParameter("name"));
-		treeTableAggregate.setTitle(request.getParameter("title"));
-		treeTableAggregate.setType(request.getParameter("type"));
-		treeTableAggregate.setSourceTableName(request.getParameter("sourceTableName"));
-		treeTableAggregate.setSourceIdColumn(request.getParameter("sourceIdColumn"));
-		treeTableAggregate.setSourceIndexIdColumn(request.getParameter("sourceIndexIdColumn"));
-		treeTableAggregate.setSourceParentIdColumn(request.getParameter("sourceParentIdColumn"));
-		treeTableAggregate.setSourceTreeIdColumn(request.getParameter("sourceTreeIdColumn"));
-		treeTableAggregate.setSourceTextColumn(request.getParameter("sourceTextColumn"));
-		treeTableAggregate.setSourceWbsIndexColumn(request.getParameter("sourceWbsIndexColumn"));
-		treeTableAggregate.setSourceTableDateSplitColumn(request.getParameter("sourceTableDateSplitColumn"));
-		treeTableAggregate.setSourceTableExecutionIds(request.getParameter("sourceTableExecutionIds"));
-		treeTableAggregate.setDatabaseIds(request.getParameter("databaseIds"));
-		treeTableAggregate.setDynamicCondition(request.getParameter("dynamicCondition"));
-		treeTableAggregate.setSqlCriteria(request.getParameter("sqlCriteria"));
-		treeTableAggregate.setStartYear(RequestUtils.getInt(request, "startYear"));
-		treeTableAggregate.setStopYear(RequestUtils.getInt(request, "stopYear"));
-		treeTableAggregate.setTargetTableName(request.getParameter("targetTableName"));
-		treeTableAggregate.setTargetTableExecutionIds(request.getParameter("targetTableExecutionIds"));
-		treeTableAggregate.setCreateTableFlag(request.getParameter("createTableFlag"));
-		treeTableAggregate.setAggregateFlag(request.getParameter("aggregateFlag"));
-		treeTableAggregate.setScheduleFlag(request.getParameter("scheduleFlag"));
-		treeTableAggregate.setGenByMonth(request.getParameter("genByMonth"));
-		treeTableAggregate.setDeleteFetch(request.getParameter("deleteFetch"));
-		treeTableAggregate.setSyncColumns(request.getParameter("syncColumns"));
-		treeTableAggregate.setSyncStatus(RequestUtils.getInt(request, "syncStatus"));
-		treeTableAggregate.setSyncTime(RequestUtils.getDate(request, "syncTime"));
-		treeTableAggregate.setSortNo(RequestUtils.getInt(request, "sortNo"));
-		treeTableAggregate.setLocked(RequestUtils.getInt(request, "locked"));
-		treeTableAggregate.setUpdateBy(user.getActorId());
-
-		treeTableAggregateService.save(treeTableAggregate);
-
-		return this.list(request, modelMap);
 	}
 
 	@RequestMapping("/view")

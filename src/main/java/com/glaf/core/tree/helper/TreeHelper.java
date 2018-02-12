@@ -316,7 +316,7 @@ public class TreeHelper {
 							if (StringUtils.equals(component.getId(), String.valueOf(root.getId()))) {
 								this.buildTreeModel(object, component);
 							} else {
-								logger.debug("top component:" + component.getTitle() + "[" + component.getId() + "]");
+								//logger.debug("top component:" + component.getTitle() + "[" + component.getId() + "]");
 								JSONObject child = new JSONObject();
 								this.addDataMap(component, child);
 								child.put("id", component.getId());
@@ -376,7 +376,7 @@ public class TreeHelper {
 					} else {
 						for (int i = 0, len = topTrees.size(); i < len; i++) {
 							TreeComponent component = (TreeComponent) topTrees.get(i);
-							logger.debug("top component:" + component.getTitle() + "[" + component.getId() + "]");
+							//logger.debug("top component:" + component.getTitle() + "[" + component.getId() + "]");
 							JSONObject child = new JSONObject();
 							this.addDataMap(component, child);
 							child.put("id", component.getId());

@@ -18,18 +18,22 @@
 
 package com.glaf.base.modules.sys.util;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.glaf.base.modules.sys.model.SysApplication;
 import com.glaf.core.util.DateUtils;
 
+/**
+ * 
+ * JSON工厂类
+ *
+ */
 public class SysApplicationJsonFactory {
 
 	public static java.util.List<SysApplication> arrayToList(JSONArray array) {
 		java.util.List<SysApplication> list = new java.util.ArrayList<SysApplication>();
-		for (int i = 0; i < array.size(); i++) {
+		for (int i = 0, len = array.size(); i < len; i++) {
 			JSONObject jsonObject = array.getJSONObject(i);
 			SysApplication model = jsonToObject(jsonObject);
 			list.add(model);
@@ -48,8 +52,41 @@ public class SysApplicationJsonFactory {
 		if (jsonObject.containsKey("name")) {
 			model.setName(jsonObject.getString("name"));
 		}
+		if (jsonObject.containsKey("code")) {
+			model.setCode(jsonObject.getString("code"));
+		}
+		if (jsonObject.containsKey("discriminator")) {
+			model.setDiscriminator(jsonObject.getString("discriminator"));
+		}
+		if (jsonObject.containsKey("icon")) {
+			model.setIcon(jsonObject.getString("icon"));
+		}
+		if (jsonObject.containsKey("iconCls")) {
+			model.setIconCls(jsonObject.getString("iconCls"));
+		}
+		if (jsonObject.containsKey("treeId")) {
+			model.setTreeId(jsonObject.getString("treeId"));
+		}
+		if (jsonObject.containsKey("level")) {
+			model.setLevel(jsonObject.getInteger("level"));
+		}
 		if (jsonObject.containsKey("desc")) {
 			model.setDesc(jsonObject.getString("desc"));
+		}
+		if (jsonObject.containsKey("locked")) {
+			model.setLocked(jsonObject.getInteger("locked"));
+		}
+		if (jsonObject.containsKey("deleteFlag")) {
+			model.setDeleteFlag(jsonObject.getInteger("deleteFlag"));
+		}
+		if (jsonObject.containsKey("showMenu")) {
+			model.setShowMenu(jsonObject.getInteger("showMenu"));
+		}
+		if (jsonObject.containsKey("showType")) {
+			model.setShowType(jsonObject.getString("showType"));
+		}
+		if (jsonObject.containsKey("sort")) {
+			model.setSort(jsonObject.getInteger("sort"));
 		}
 		if (jsonObject.containsKey("url")) {
 			model.setUrl(jsonObject.getString("url"));
@@ -57,28 +94,20 @@ public class SysApplicationJsonFactory {
 		if (jsonObject.containsKey("imagePath")) {
 			model.setImagePath(jsonObject.getString("imagePath"));
 		}
-		if (jsonObject.containsKey("code")) {
-			model.setCode(jsonObject.getString("code"));
-		}
-
-		if (jsonObject.containsKey("locked")) {
-			model.setLocked(jsonObject.getInteger("locked"));
-		}
-
-		if (jsonObject.containsKey("sort")) {
-			model.setSort(jsonObject.getInteger("sort"));
-		}
-
-		if (jsonObject.containsKey("showMenu")) {
-			model.setShowMenu(jsonObject.getInteger("showMenu"));
-		}
-
-		if (jsonObject.containsKey("showType")) {
-			model.setShowType(jsonObject.getString("showType"));
-		}
-
 		if (jsonObject.containsKey("linkType")) {
 			model.setLinkType(jsonObject.getString("linkType"));
+		}
+		if (jsonObject.containsKey("createBy")) {
+			model.setCreateBy(jsonObject.getString("createBy"));
+		}
+		if (jsonObject.containsKey("createDate")) {
+			model.setCreateDate(jsonObject.getDate("createDate"));
+		}
+		if (jsonObject.containsKey("updateBy")) {
+			model.setUpdateBy(jsonObject.getString("updateBy"));
+		}
+		if (jsonObject.containsKey("updateDate")) {
+			model.setUpdateDate(jsonObject.getDate("updateDate"));
 		}
 
 		return model;
@@ -100,61 +129,61 @@ public class SysApplicationJsonFactory {
 		jsonObject.put("id", model.getId());
 		jsonObject.put("_id_", model.getId());
 		jsonObject.put("_oid_", model.getId());
-		jsonObject.put("appId", model.getId());
-
-		jsonObject.put("sort", model.getSort());
-		jsonObject.put("showMenu", model.getShowMenu());
-		jsonObject.put("locked", model.getLocked());
 		jsonObject.put("parentId", model.getParentId());
-
 		if (model.getName() != null) {
 			jsonObject.put("name", model.getName());
 		}
-
-		if (model.getDesc() != null) {
-			jsonObject.put("desc", model.getDesc());
-		}
-
-		if (model.getUrl() != null) {
-			jsonObject.put("url", model.getUrl());
-		}
-
-		if (model.getImagePath() != null) {
-			jsonObject.put("imagePath", model.getImagePath());
-		}
-
 		if (model.getCode() != null) {
 			jsonObject.put("code", model.getCode());
 		}
-
+		if (model.getDiscriminator() != null) {
+			jsonObject.put("discriminator", model.getDiscriminator());
+		}
+		if (model.getIcon() != null) {
+			jsonObject.put("icon", model.getIcon());
+		}
+		if (model.getIconCls() != null) {
+			jsonObject.put("iconCls", model.getIconCls());
+		}
+		if (model.getTreeId() != null) {
+			jsonObject.put("treeId", model.getTreeId());
+		}
+		jsonObject.put("level", model.getLevel());
+		if (model.getDesc() != null) {
+			jsonObject.put("desc", model.getDesc());
+		}
+		jsonObject.put("locked", model.getLocked());
+		jsonObject.put("deleteFlag", model.getDeleteFlag());
+		jsonObject.put("showMenu", model.getShowMenu());
 		if (model.getShowType() != null) {
 			jsonObject.put("showType", model.getShowType());
 		}
-
+		jsonObject.put("sort", model.getSort());
+		if (model.getUrl() != null) {
+			jsonObject.put("url", model.getUrl());
+		}
+		if (model.getImagePath() != null) {
+			jsonObject.put("imagePath", model.getImagePath());
+		}
 		if (model.getLinkType() != null) {
 			jsonObject.put("linkType", model.getLinkType());
 		}
-
+		if (model.getCreateBy() != null) {
+			jsonObject.put("createBy", model.getCreateBy());
+		}
 		if (model.getCreateDate() != null) {
 			jsonObject.put("createDate", DateUtils.getDate(model.getCreateDate()));
 			jsonObject.put("createDate_date", DateUtils.getDate(model.getCreateDate()));
 			jsonObject.put("createDate_datetime", DateUtils.getDateTime(model.getCreateDate()));
 		}
-
-		if (model.getCreateBy() != null) {
-			jsonObject.put("createBy", model.getCreateBy());
-		}
-
 		if (model.getUpdateBy() != null) {
 			jsonObject.put("updateBy", model.getUpdateBy());
 		}
-
 		if (model.getUpdateDate() != null) {
 			jsonObject.put("updateDate", DateUtils.getDate(model.getUpdateDate()));
 			jsonObject.put("updateDate_date", DateUtils.getDate(model.getUpdateDate()));
 			jsonObject.put("updateDate_datetime", DateUtils.getDateTime(model.getUpdateDate()));
 		}
-
 		return jsonObject;
 	}
 
@@ -163,50 +192,61 @@ public class SysApplicationJsonFactory {
 		jsonObject.put("id", model.getId());
 		jsonObject.put("_id_", model.getId());
 		jsonObject.put("_oid_", model.getId());
-		jsonObject.put("appId", model.getId());
-		jsonObject.put("sort", model.getSort());
-		jsonObject.put("showMenu", model.getShowMenu());
-		jsonObject.put("locked", model.getLocked());
 		jsonObject.put("parentId", model.getParentId());
-
 		if (model.getName() != null) {
 			jsonObject.put("name", model.getName());
 		}
-
-		if (model.getDesc() != null) {
-			jsonObject.put("desc", model.getDesc());
-		}
-
-		if (model.getUrl() != null) {
-			jsonObject.put("url", model.getUrl());
-		}
-
-		if (model.getImagePath() != null) {
-			jsonObject.put("imagePath", model.getImagePath());
-		}
-
 		if (model.getCode() != null) {
 			jsonObject.put("code", model.getCode());
 		}
-
+		if (model.getDiscriminator() != null) {
+			jsonObject.put("discriminator", model.getDiscriminator());
+		}
+		if (model.getIcon() != null) {
+			jsonObject.put("icon", model.getIcon());
+		}
+		if (model.getIconCls() != null) {
+			jsonObject.put("iconCls", model.getIconCls());
+		}
+		if (model.getTreeId() != null) {
+			jsonObject.put("treeId", model.getTreeId());
+		}
+		jsonObject.put("level", model.getLevel());
+		if (model.getDesc() != null) {
+			jsonObject.put("desc", model.getDesc());
+		}
+		jsonObject.put("locked", model.getLocked());
+		jsonObject.put("deleteFlag", model.getDeleteFlag());
+		jsonObject.put("showMenu", model.getShowMenu());
+		if (model.getShowType() != null) {
+			jsonObject.put("showType", model.getShowType());
+		}
+		jsonObject.put("sort", model.getSort());
+		if (model.getUrl() != null) {
+			jsonObject.put("url", model.getUrl());
+		}
+		if (model.getImagePath() != null) {
+			jsonObject.put("imagePath", model.getImagePath());
+		}
 		if (model.getLinkType() != null) {
 			jsonObject.put("linkType", model.getLinkType());
 		}
-
 		if (model.getCreateBy() != null) {
 			jsonObject.put("createBy", model.getCreateBy());
 		}
-
+		if (model.getCreateDate() != null) {
+			jsonObject.put("createDate", DateUtils.getDate(model.getCreateDate()));
+			jsonObject.put("createDate_date", DateUtils.getDate(model.getCreateDate()));
+			jsonObject.put("createDate_datetime", DateUtils.getDateTime(model.getCreateDate()));
+		}
 		if (model.getUpdateBy() != null) {
 			jsonObject.put("updateBy", model.getUpdateBy());
 		}
-
 		if (model.getUpdateDate() != null) {
 			jsonObject.put("updateDate", DateUtils.getDate(model.getUpdateDate()));
 			jsonObject.put("updateDate_date", DateUtils.getDate(model.getUpdateDate()));
 			jsonObject.put("updateDate_datetime", DateUtils.getDateTime(model.getUpdateDate()));
 		}
-
 		return jsonObject;
 	}
 

@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -57,13 +58,18 @@ public class UserOnlineController {
 
 	@RequestMapping("/doKickOut")
 	@ResponseBody
-	public void doKickOut(HttpServletRequest request) {
+	public void doKickOut(HttpServletRequest request, HttpServletResponse response) {
 		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		if (loginContext.isSystemAdministrator()) {
 			String actorId = request.getParameter("actorId");
 			if (!(StringUtils.equals(actorId, "admin") || StringUtils.equals(actorId, "root"))) {
 				try {
 					userOnlineService.logout(actorId);
+					String cacheKey = Constants.CACHE_LOGIN_CONTEXT_KEY + actorId;
+					CacheFactory.remove(Constants.CACHE_LOGIN_CONTEXT_REGION, cacheKey);
+					cacheKey = Constants.CACHE_USER_KEY + actorId;
+					CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
+					logger.info("用户" + actorId + "已经下线！");
 				} catch (Exception ex) {
 				}
 			}
@@ -72,7 +78,7 @@ public class UserOnlineController {
 
 	@RequestMapping("/doRemain")
 	@ResponseBody
-	public void doRemain(HttpServletRequest request) {
+	public void doRemain(HttpServletRequest request, HttpServletResponse response) {
 		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		if (loginContext != null) {
 			String actorId = loginContext.getActorId();
@@ -85,7 +91,8 @@ public class UserOnlineController {
 					// 如果被踢出的用户不是系统管理员，注销用户
 					if (!loginContext.isSystemAdministrator()) {
 						// 退出系统，清除session对象
-						request.getSession().removeAttribute("SYS_LOGIN_USER");
+						RequestUtils.removeLoginUser(request, response);
+						request.getSession().removeAttribute(Constants.LOGIN_INFO);
 						try {
 							userOnlineService.logout(actorId);
 							String cacheKey = Constants.CACHE_LOGIN_CONTEXT_KEY + actorId;
@@ -95,7 +102,6 @@ public class UserOnlineController {
 							// com.glaf.shiro.ShiroSecurity.logout();
 							logger.info("用户" + actorId + "已经下线！");
 						} catch (Exception ex) {
-
 						}
 					}
 				}

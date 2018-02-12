@@ -34,6 +34,9 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.glaf.base.modules.sys.SysConstants;
 import com.glaf.base.modules.sys.mapper.SysAccessMapper;
 import com.glaf.base.modules.sys.mapper.SysApplicationMapper;
@@ -44,9 +47,12 @@ import com.glaf.base.modules.sys.query.SysApplicationQuery;
 import com.glaf.base.modules.sys.service.SysApplicationService;
 import com.glaf.base.modules.sys.service.SysRoleService;
 import com.glaf.base.modules.sys.service.SysUserService;
-
+import com.glaf.base.modules.sys.util.SysApplicationJsonFactory;
+import com.glaf.core.cache.CacheFactory;
+import com.glaf.core.config.SystemConfig;
 import com.glaf.core.id.IdGenerator;
 import com.glaf.core.service.EntityService;
+import com.glaf.core.util.Constants;
 import com.glaf.core.util.PageResult;
 
 @Service("sysApplicationService")
@@ -75,6 +81,9 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 	@Transactional
 	public void batchCreate(List<SysApplication> rows) {
 		if (rows != null && !rows.isEmpty()) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				CacheFactory.clear(Constants.CACHE_MENU_REGION);
+			}
 			for (SysApplication bean : rows) {
 				this.create(bean);
 			}
@@ -87,6 +96,9 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 
 	@Transactional
 	public boolean create(SysApplication app) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear(Constants.CACHE_MENU_REGION);
+		}
 		boolean ret = false;
 
 		if (app.getId() == 0) {
@@ -114,12 +126,22 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 
 	@Transactional
 	public boolean delete(long id) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String cacheKey = "sys_app_" + id;
+			CacheFactory.remove(Constants.CACHE_MENU_REGION, cacheKey);
+			CacheFactory.clear(Constants.CACHE_MENU_REGION);
+		}
 		this.deleteById(id);
 		return true;
 	}
 
 	@Transactional
 	public boolean delete(SysApplication bean) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String cacheKey = "sys_app_" + bean.getId();
+			CacheFactory.remove(Constants.CACHE_MENU_REGION, cacheKey);
+			CacheFactory.clear(Constants.CACHE_MENU_REGION);
+		}
 		this.deleteById(bean.getId());
 		return true;
 	}
@@ -127,6 +149,9 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 	@Transactional
 	public boolean deleteAll(long[] ids) {
 		if (ids != null && ids.length > 0) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				CacheFactory.clear(Constants.CACHE_MENU_REGION);
+			}
 			for (long id : ids) {
 				this.deleteById(id);
 			}
@@ -137,13 +162,18 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 	@Transactional
 	public void deleteById(long appId) {
 		if (appId > 0) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				String cacheKey = "sys_app_" + appId;
+				CacheFactory.remove(Constants.CACHE_MENU_REGION, cacheKey);
+				CacheFactory.clear(Constants.CACHE_MENU_REGION);
+			}
 			List<SysApplication> list = this.getApplicationListWithChildren(appId);
 			if (list != null && !list.isEmpty()) {
 				if (list.size() > 1) {
 					throw new RuntimeException("children is exists");
 				}
 			}
-			SysApplication app = this.getSysApplication(appId);
+			SysApplication app = this.findById(appId);
 			if (app != null) {
 				sysAccessMapper.deleteSysAccessByAppId(appId);
 				sysApplicationMapper.deleteSysApplicationById(appId);
@@ -171,8 +201,29 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 	}
 
 	public SysApplication findById(long id) {
-		SysApplication app = sysApplicationMapper.getSysApplicationById(id);
-		return app;
+		if (id == 0) {
+			return null;
+		}
+		String cacheKey = "sys_app_" + id;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_MENU_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONObject json = JSON.parseObject(text);
+					return SysApplicationJsonFactory.jsonToObject(json);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
+
+		SysApplication sysApplication = sysApplicationMapper.getSysApplicationById(id);
+		if (sysApplication != null) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				CacheFactory.put(Constants.CACHE_MENU_REGION, cacheKey, sysApplication.toJsonObject().toJSONString());
+			}
+		}
+		return sysApplication;
 	}
 
 	public SysApplication findByName(String name) {
@@ -186,6 +237,31 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 		}
 
 		return null;
+	}
+
+	public List<SysApplication> getAllSysApplications() {
+		String cacheKey = "sys_app_all";
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_MENU_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONArray jsonArray = JSON.parseArray(text);
+					return SysApplicationJsonFactory.arrayToList(jsonArray);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
+
+		SysApplicationQuery query = new SysApplicationQuery();
+		List<SysApplication> list = this.list(query);
+		if (list != null && !list.isEmpty()) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				JSONArray jsonArray = SysApplicationJsonFactory.listToArray(list);
+				CacheFactory.put(Constants.CACHE_MENU_REGION, cacheKey, jsonArray.toJSONString());
+			}
+		}
+		return list;
 	}
 
 	public PageResult getApplicationList(int pageNo, int pageSize, SysApplicationQuery query) {
@@ -209,9 +285,34 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 		return pager;
 	}
 
+	public PageResult getApplicationList(long parentId, int pageNo, int pageSize) {
+		PageResult pager = new PageResult();
+		SysApplicationQuery query = new SysApplicationQuery();
+		query.setDeleteFlag(0);
+		query.parentId(parentId);
+
+		int count = this.count(query);
+		if (count == 0) {// 结果集为空
+			pager.setPageSize(pageSize);
+			return pager;
+		}
+		query.setOrderBy(" E.LOCKED asc, E.SORTNO asc ");
+
+		int start = pageSize * (pageNo - 1);
+		List<SysApplication> list = this.getSysApplicationsByQueryCriteria(start, pageSize, query);
+		pager.setResults(list);
+		pager.setPageSize(pageSize);
+		pager.setCurrentPageNo(pageNo);
+		pager.setTotalRecordCount(count);
+
+		return pager;
+	}
+
 	public List<SysApplication> getApplicationListWithChildren(long parentId) {
 		String treeIdLike = null;
 		SysApplication parent = findById(parentId);
+		logger.debug("parentId:" + parentId);
+		logger.debug("parent:" + parent);
 		if (parent != null && parent.getTreeId() != null) {
 			treeIdLike = parent.getTreeId() + "%";
 		}
@@ -266,43 +367,9 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 		return list;
 	}
 
-	public PageResult getApplicationList(long parentId, int pageNo, int pageSize) {
-		PageResult pager = new PageResult();
-		SysApplicationQuery query = new SysApplicationQuery();
-		query.setDeleteFlag(0);
-		query.parentId(parentId);
-
-		int count = this.count(query);
-		if (count == 0) {// 结果集为空
-			pager.setPageSize(pageSize);
-			return pager;
-		}
-		query.setOrderBy(" E.LOCKED asc, E.SORTNO asc ");
-
-		int start = pageSize * (pageNo - 1);
-		List<SysApplication> list = this.getSysApplicationsByQueryCriteria(start, pageSize, query);
-		pager.setResults(list);
-		pager.setPageSize(pageSize);
-		pager.setCurrentPageNo(pageNo);
-		pager.setTotalRecordCount(count);
-
-		return pager;
-	}
-
 	public List<RealmInfo> getRealmInfos() {
 		Map<String, Object> params = new HashMap<String, Object>();
 		return sysApplicationMapper.getRealmInfos(params);
-	}
-
-	public SysApplication getSysApplication(Long id) {
-		if (id == null) {
-			return null;
-		}
-		SysApplication sysApplication = sysApplicationMapper.getSysApplicationById(id);
-		if (sysApplication != null) {
-
-		}
-		return sysApplication;
 	}
 
 	/**
@@ -311,7 +378,27 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 	 * @return List
 	 */
 	public List<SysApplication> getSysApplicationByUserId(String actorId) {
-		return sysApplicationMapper.getSysApplicationsByUserId(actorId);
+		String cacheKey = "x_sys_app_user_" + actorId;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_MENU_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONArray jsonArray = JSON.parseArray(text);
+					return SysApplicationJsonFactory.arrayToList(jsonArray);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
+
+		List<SysApplication> list = sysApplicationMapper.getSysApplicationsByUserId(actorId);
+
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			JSONArray jsonArray = SysApplicationJsonFactory.listToArray(list);
+			CacheFactory.put(Constants.CACHE_MENU_REGION, cacheKey, jsonArray.toJSONString());
+		}
+
+		return list;
 	}
 
 	public int getSysApplicationCountByQueryCriteria(SysApplicationQuery query) {
@@ -343,8 +430,13 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 	@Transactional
 	public void markDeleteFlag(long id, int deleteFlag) {
 		if (id > 0) {
-			SysApplication application = this.getSysApplication(id);
+			SysApplication application = this.findById(id);
 			if (application != null) {
+				if (SystemConfig.getBoolean("use_query_cache")) {
+					String cacheKey = "sys_app_" + id;
+					CacheFactory.remove(Constants.CACHE_MENU_REGION, cacheKey);
+					CacheFactory.clear(Constants.CACHE_MENU_REGION);
+				}
 				application.setDeleteFlag(1);
 				application.setDeleteTime(new Date());
 				sysApplicationMapper.updateSysApplication(application);
@@ -361,6 +453,9 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 	@Transactional
 	public void markDeleteFlag(long[] ids, int deleteFlag) {
 		if (ids != null && ids.length > 0) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				CacheFactory.clear(Constants.CACHE_MENU_REGION);
+			}
 			for (long id : ids) {
 				this.markDeleteFlag(id, deleteFlag);
 			}
@@ -369,6 +464,9 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 
 	@Transactional
 	public void saveRoleApplications(String roleId, List<Long> appIds) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear(Constants.CACHE_MENU_REGION);
+		}
 		sysAccessMapper.deleteSysAccessByRoleId(roleId);
 		for (Long appId : appIds) {
 			SysAccess model = new SysAccess();
@@ -476,6 +574,11 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 
 	@Transactional
 	public boolean update(SysApplication bean) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String cacheKey = "sys_app_" + bean.getId();
+			CacheFactory.remove(Constants.CACHE_MENU_REGION, cacheKey);
+			CacheFactory.clear(Constants.CACHE_MENU_REGION);
+		}
 		bean.setUpdateDate(new Date());
 		if (StringUtils.isEmpty(bean.getCode())) {
 			bean.setCode("app_" + bean.getId());

@@ -68,15 +68,6 @@ public class IdentityTokenServiceImpl implements IdentityTokenService {
 		}
 	}
 
-	@Transactional
-	public void deleteByIds(List<String> ids) {
-		if (ids != null && !ids.isEmpty()) {
-			for (String id : ids) {
-				identityTokenMapper.deleteIdentityTokenById(id);
-			}
-		}
-	}
-
 	public IdentityToken getIdentityToken(String id) {
 		if (id == null) {
 			return null;
@@ -144,7 +135,7 @@ public class IdentityTokenServiceImpl implements IdentityTokenService {
 		this.entityDAO = entityDAO;
 	}
 
-	@javax.annotation.Resource(name = "com.glaf.base.modules.sys.mapper.IdentityTokenMapper")
+	@javax.annotation.Resource
 	public void setIdentityTokenMapper(IdentityTokenMapper identityTokenMapper) {
 		this.identityTokenMapper = identityTokenMapper;
 	}

@@ -30,7 +30,7 @@ import com.glaf.base.modules.sys.query.*;
  *
  */
 
-@Component("com.glaf.base.modules.sys.mapper.IdentityTokenMapper")
+@Component
 public interface IdentityTokenMapper {
 
 	void deleteIdentityTokenById(String id);

@@ -44,9 +44,9 @@ public class TreeRepository implements Serializable {
 	 */
 	public void addTree(TreeComponent component) {
 		if (trees.containsKey(component.getId())) {
-			if (log.isDebugEnabled()) {
-				log.warn("Tree '" + component.getTitle() + "[" + component.getId() + "]' already exists in repository");
-			}
+			//if (log.isDebugEnabled()) {
+			//	log.warn("Tree '" + component.getTitle() + "[" + component.getId() + "]' already exists in repository");
+			//}
 			List<TreeComponent> children = (getTree(component.getId())).getComponents();
 			if (children != null && component.getComponents() != null) {
 				for (Iterator<TreeComponent> it = children.iterator(); it.hasNext();) {

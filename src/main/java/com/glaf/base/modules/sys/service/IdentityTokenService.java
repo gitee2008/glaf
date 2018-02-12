@@ -36,20 +36,12 @@ public interface IdentityTokenService {
 	void deleteById(String id);
 
 	/**
-	 * 根据主键删除多条记录
-	 * 
-	 * @return
-	 */
-	@Transactional
-	void deleteByIds(List<String> ids);
-
-	/**
 	 * 根据主键获取一条记录
 	 * 
 	 * @return
 	 */
 	IdentityToken getIdentityToken(String id);
-	
+
 	IdentityToken getIdentityTokenByToken(String token);
 
 	/**

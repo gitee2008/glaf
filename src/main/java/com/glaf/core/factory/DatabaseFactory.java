@@ -228,7 +228,7 @@ public class DatabaseFactory {
 			logger.error("init tables error", ex);
 		}
 		ForkJoinPool pool = ForkJoinPool.commonPool();
-		logger.info("准备执行并行任务...");
+		logger.info("准备连接数据库...");
 		try {
 			DatabaseConnectionConfig config = new DatabaseConnectionConfig();
 			config.checkAndInitToken();
@@ -252,7 +252,7 @@ public class DatabaseFactory {
 			logger.error("load database list error", ex);
 		} finally {
 			pool.shutdown();
-			logger.info("并行任务已经结束。");
+			logger.info("数据库连接完成。");
 		}
 	}
 

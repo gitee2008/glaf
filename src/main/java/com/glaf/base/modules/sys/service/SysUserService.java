@@ -406,6 +406,14 @@ public interface SysUserService {
 	boolean updateUser(SysUser bean);
 
 	/**
+	 * 更新用户登录信息
+	 * 
+	 * @param model
+	 */
+	@Transactional
+	void updateUserLoginInfo(SysUser model);
+
+	/**
 	 * 更新登录密锁
 	 * 
 	 * @param model

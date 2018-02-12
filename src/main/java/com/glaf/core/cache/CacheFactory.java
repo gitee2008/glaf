@@ -39,8 +39,8 @@ import com.glaf.core.util.ReflectUtils;
 
 public class CacheFactory {
 	protected static final Log logger = LogFactory.getLog(CacheFactory.class);
-	protected static final ConcurrentMap<String, Cache> cacheMap = new ConcurrentHashMap<String, Cache>();
 	protected static final ConcurrentMap<String, CacheItem> cacheKeyMap = new ConcurrentHashMap<String, CacheItem>();
+	protected static final ConcurrentMap<String, Cache> cacheMap = new ConcurrentHashMap<String, Cache>();
 	protected static final List<CacheItem> items = new CopyOnWriteArrayList<CacheItem>();
 	protected static final List<String> regions = new CopyOnWriteArrayList<String>();
 	protected static Configuration conf = BaseConfiguration.create();
@@ -62,10 +62,7 @@ public class CacheFactory {
 			Cache cache = getCache();
 			if (cache != null) {
 				if (items != null && !items.isEmpty()) {
-					for (CacheItem item : items) {
-						String _region = SystemConfig.getRegionName(item.getRegion());
-						cache.remove(_region, item.getKey());
-					}
+					items.clear();
 				}
 				if (regions != null && !regions.isEmpty()) {
 					for (String region : regions) {
@@ -135,17 +132,9 @@ public class CacheFactory {
 						cacheKey = DigestUtils.md5Hex(cacheKey.getBytes());
 						Object value = cache.get(_region, cacheKey);
 						if (value != null) {
-							// logger.debug(_region + " get object'" + key + "'
-							// from cache.");
 							String val = value.toString();
 							val = new String(com.glaf.core.util.Hex.hex2byte(val), "UTF-8");
 							return val;
-						} else {
-							CacheItem item = cacheKeyMap.get(cacheKey);
-							if (item != null) {
-								items.remove(item);
-							}
-							cacheKeyMap.remove(cacheKey);
 						}
 					}
 				} catch (Throwable ex) {
@@ -183,7 +172,7 @@ public class CacheFactory {
 				String _region = SystemConfig.getRegionName(region);
 				String cacheKey = _region + "_" + key;
 				cacheKey = DigestUtils.md5Hex(cacheKey.getBytes());
-				int limitSize = conf.getInt("cache.limitSize", 1024000);// 1024KB
+				int limitSize = conf.getInt("cache.limitSize", 5120000);// 5MB
 				if (value.length() < limitSize) {
 					String val = com.glaf.core.util.Hex.byte2hex(value.getBytes("UTF-8"));
 					cache.put(_region, cacheKey, val);
@@ -198,12 +187,9 @@ public class CacheFactory {
 					item.setSize(value.length());
 					items.add(item);
 					cacheKeyMap.put(cacheKey, item);
-					// logger.debug(_region + ":" + cacheKey + " put into
-					// cache.");
 				}
 			}
 		} catch (Throwable ex) {
-
 		}
 	}
 
@@ -222,7 +208,6 @@ public class CacheFactory {
 				cacheKeyMap.remove(cacheKey);
 			}
 		} catch (Throwable ex) {
-
 		}
 	}
 
@@ -231,10 +216,6 @@ public class CacheFactory {
 			Cache cache = getCache();
 			if (cache != null) {
 				if (items != null && !items.isEmpty()) {
-					for (CacheItem item : items) {
-						String _region = SystemConfig.getRegionName(item.getRegion());
-						cache.remove(_region, item.getKey());
-					}
 					items.clear();
 				}
 				if (regions != null && !regions.isEmpty()) {
@@ -244,7 +225,6 @@ public class CacheFactory {
 				}
 			}
 		} catch (Throwable ex) {
-
 		}
 	}
 

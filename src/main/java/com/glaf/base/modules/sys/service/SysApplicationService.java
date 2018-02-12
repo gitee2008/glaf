@@ -97,16 +97,9 @@ public interface SysApplicationService {
 	 */
 	SysApplication findByName(String name);
 
-	PageResult getApplicationList(int pageNo, int pageSize, SysApplicationQuery query);
+	List<SysApplication> getAllSysApplications();
 
-	/**
-	 * 获取某个模块的全部子节点及子孙节点
-	 * 
-	 * @param parentId
-	 *            long
-	 * @return List
-	 */
-	List<SysApplication> getApplicationListWithChildren(long parentId);
+	PageResult getApplicationList(int pageNo, int pageSize, SysApplicationQuery query);
 
 	/**
 	 * 获取分页列表
@@ -120,6 +113,15 @@ public interface SysApplicationService {
 	 * @return
 	 */
 	PageResult getApplicationList(long parentId, int pageNo, int pageSize);
+
+	/**
+	 * 获取某个模块的全部子节点及子孙节点
+	 * 
+	 * @param parentId
+	 *            long
+	 * @return List
+	 */
+	List<SysApplication> getApplicationListWithChildren(long parentId);
 
 	/**
 	 * 获取某个用户的全部模块列表

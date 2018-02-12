@@ -237,7 +237,7 @@ public class LoginController {
 			bean.setLastLoginIP(ipAddr);
 			bean.setLockLoginTime(new Date());
 			bean.setLoginRetry(0);
-			sysUserService.updateUser(bean);
+			sysUserService.updateUserLoginInfo(bean);
 
 			ContextUtil.put(bean.getUserId(), bean);// 传入全局变量
 
@@ -386,21 +386,16 @@ public class LoginController {
 	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) {
 		RequestUtils.setRequestParameterToAttribute(request);
 		String actorId = RequestUtils.getActorId(request);
-		// 退出系统，清除session对象
-		if (request.getSession(false) != null) {
-			request.getSession().removeAttribute(Constants.LOGIN_INFO);
-		}
 		try {
-			SystemProperty p = SystemConfig.getProperty("login_limit");
-			if (p != null && StringUtils.equals(p.getValue(), "true")) {
-				userOnlineService.logout(actorId);
-			}
+			userOnlineService.logout(actorId);
 			String cacheKey = Constants.CACHE_LOGIN_CONTEXT_KEY + actorId;
 			CacheFactory.remove(Constants.CACHE_LOGIN_CONTEXT_REGION, cacheKey);
 			cacheKey = Constants.CACHE_USER_KEY + actorId;
 			CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 			com.glaf.shiro.ShiroSecurity.logout();
 			if (request.getSession(false) != null) {
+				// 退出系统，清除session对象
+				request.getSession().removeAttribute(Constants.LOGIN_INFO);
 				request.getSession().invalidate();
 			}
 		} catch (Exception ex) {

@@ -24,6 +24,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import com.glaf.base.modules.sys.model.SysUser;
+import com.glaf.base.modules.sys.model.UserPassword;
 import com.glaf.base.modules.sys.model.UserRole;
 import com.glaf.base.modules.sys.query.SysUserQuery;
 import com.glaf.base.modules.sys.query.UserRoleQuery;
@@ -33,7 +34,7 @@ public interface SysUserMapper {
 
 	void deleteSysUserById(Long id);
 
-	void deleteSysUsers(SysUserQuery query);
+	List<UserPassword> getAllUserPasswords();
 
 	List<SysUser> getAuthorizedUsers(SysUserQuery query);
 
@@ -44,8 +45,6 @@ public interface SysUserMapper {
 	String getPasswordHashByAccount(String account);
 
 	List<UserRole> getRoleUserViews(UserRoleQuery query);
-	
-	List<SysUser> getSysUsersByPostId(long postId);
 
 	SysUser getSysUserByAccount(String account);
 
@@ -56,35 +55,39 @@ public interface SysUserMapper {
 	SysUser getSysUserByMobile(String mobile);
 
 	int getSysUserCount(SysUserQuery query);
-	
+
 	int getSysUserExCount(SysUserQuery query);
 
 	SysUser getSysUserLoginSecret(String account);
-	
+
 	List<SysUser> getSysUserLoginSecretList(SysUserQuery query);
 
 	List<SysUser> getSysUsers(SysUserQuery query);
 
+	List<SysUser> getSysUsersByPostId(long postId);
+
 	List<SysUser> getSysUsersByRoleCode(String roleCode);
-	
+
 	List<SysUser> getSysUsersByRoleId(String roleId);
 
-	List<SysUser> getSysUsersByRoleIds(@Param("roleIds")List<String> roleIds);
-	
+	List<SysUser> getSysUsersByRoleIds(@Param("roleIds") List<String> roleIds);
+
 	List<SysUser> getSysUsersByTenantId(String tenantId);
 
 	void insertSysUser(SysUser model);
 
 	void resetLoginStatus(SysUser model);
-	
+
 	void resetStatus(SysUser model);
 
 	void resetUserToken(SysUser model);
 
 	void updateSysUser(SysUser model);
+	
+	void updateSysUserLoginInfo(SysUser model);
 
 	void updateUserLoginRetry(SysUser model);
-	
+
 	void updateUserLoginSecret(SysUser model);
 
 	void updateUserPassword(SysUser model);

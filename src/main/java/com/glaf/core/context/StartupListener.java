@@ -138,7 +138,6 @@ public class StartupListener extends ContextLoaderListener implements ServletCon
 		try {
 			SystemConfig.reload();
 		} catch (Exception ex) {
-
 		}
 
 	}

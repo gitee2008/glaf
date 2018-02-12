@@ -96,9 +96,7 @@ public class CacheonixCache implements com.glaf.core.cache.Cache {
 		if (cache == null) {
 			cache = cacheonix.getCache("default");
 			if (cache == null) {
-				if (cache == null) {
-					cache = cacheonix.createCache("default");
-				}
+				cache = cacheonix.createCache("default");
 			}
 		}
 		return cache;

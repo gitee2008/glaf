@@ -24,6 +24,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.annotation.Resource;
 
@@ -37,6 +39,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import com.glaf.core.base.TableModel;
@@ -64,12 +67,15 @@ import com.glaf.base.modules.sys.query.SysUserQuery;
 import com.glaf.base.modules.sys.query.UserRoleQuery;
 import com.glaf.base.modules.sys.service.MembershipService;
 import com.glaf.base.modules.sys.service.SysUserService;
+import com.glaf.base.modules.sys.util.SysRoleJsonFactory;
 import com.glaf.base.modules.sys.util.SysUserJsonFactory;
 
 @Service("sysUserService")
 @Transactional(readOnly = true)
 public class SysUserServiceImpl implements SysUserService {
 	protected final static Log logger = LogFactory.getLog(SysUserServiceImpl.class);
+
+	protected static ConcurrentMap<String, String> passwordMap = new ConcurrentHashMap<String, String>();
 
 	protected IdGenerator idGenerator;
 
@@ -105,6 +111,7 @@ public class SysUserServiceImpl implements SysUserService {
 			SysUser bean = new SysUser();
 			bean.setUserId(account);
 			bean.setPasswordHash(pwd_hash);
+			passwordMap.put(account, pwd_hash);
 			sysUserMapper.updateUserPassword(bean);
 		}
 	}
@@ -135,6 +142,14 @@ public class SysUserServiceImpl implements SysUserService {
 	public boolean checkPassword(String account, String password) {
 		boolean result = false;
 		String pwd_hash = DigestUtils.sha512Hex(account + ":" + password);
+		/**
+		 * if (passwordMap.isEmpty()) { List<UserPassword> list =
+		 * sysUserMapper.getAllUserPasswords(); if (list != null && !list.isEmpty()) {
+		 * for (UserPassword up : list) { passwordMap.put(up.getUserId(),
+		 * up.getPassword()); } } } if (!passwordMap.isEmpty()) { String pwd =
+		 * passwordMap.get(account); if (StringUtils.isNotEmpty(pwd) &&
+		 * StringUtils.equals(pwd_hash, pwd)) { return true; } }
+		 **/
 		String pwd = sysUserMapper.getPasswordHashByAccount(account);
 		if (StringUtils.isNotEmpty(password) && StringUtils.equals(pwd_hash, pwd)) {
 			result = true;
@@ -153,17 +168,6 @@ public class SysUserServiceImpl implements SysUserService {
 		String pwd_hash = DigestUtils.sha512Hex(bean.getUserId() + ":" + bean.getPasswordHash());
 		bean.setPasswordHash(pwd_hash);
 		this.save(bean);
-		return true;
-	}
-
-	@Transactional
-	public boolean register(SysUser bean) {
-		bean.setCreateTime(new Date());
-		bean.setToken(UUID32.getUUID());
-		String pwd_hash = DigestUtils.sha512Hex(bean.getUserId() + ":" + bean.getPasswordHash());
-		bean.setPasswordHash(pwd_hash);
-		this.save(bean);
-		this.createRoleUser("TenantAdmin", bean.getUserId());
 		return true;
 	}
 
@@ -636,7 +640,7 @@ public class SysUserServiceImpl implements SysUserService {
 	 * @return
 	 */
 	public String getUserIndexUrl(String actorId) {
-		List<SysRole> list = sysRoleMapper.getSysRolesOfUser(actorId);
+		List<SysRole> list = this.getUserRoles(actorId);
 		if (list != null && !list.isEmpty()) {
 			Collections.sort(list);
 			for (SysRole role : list) {
@@ -658,7 +662,7 @@ public class SysUserServiceImpl implements SysUserService {
 		List<SysRole> roles = new ArrayList<SysRole>();
 		if (actorIds != null && !actorIds.isEmpty()) {
 			for (String actorId : actorIds) {
-				List<SysRole> list = sysRoleMapper.getSysRolesOfUser(actorId);
+				List<SysRole> list = this.getUserRoles(actorId);
 				if (list != null && !list.isEmpty()) {
 					for (SysRole role : list) {
 						if (!roles.contains(role)) {
@@ -672,6 +676,19 @@ public class SysUserServiceImpl implements SysUserService {
 	}
 
 	public List<SysRole> getUserRoles(String actorId) {
+		String cacheKey = "cache_userrole_" + actorId;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_USER_ROLE_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONArray jsonArray = JSON.parseArray(text);
+					return SysRoleJsonFactory.arrayToList(jsonArray);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
+
 		List<SysRole> roles = new ArrayList<SysRole>();
 		List<SysRole> list = sysRoleMapper.getSysRolesOfUser(actorId);
 		if (list != null && !list.isEmpty()) {
@@ -681,6 +698,12 @@ public class SysUserServiceImpl implements SysUserService {
 				}
 			}
 		}
+
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			JSONArray jsonArray = SysRoleJsonFactory.listToArray(roles);
+			CacheFactory.put(Constants.CACHE_USER_ROLE_REGION, cacheKey, jsonArray.toJSONString());
+		}
+
 		return roles;
 	}
 
@@ -725,6 +748,17 @@ public class SysUserServiceImpl implements SysUserService {
 			user.setLoginRetry(user.getLoginRetry() + 1);
 			sysUserMapper.updateUserLoginRetry(user);
 		}
+	}
+
+	@Transactional
+	public boolean register(SysUser bean) {
+		bean.setCreateTime(new Date());
+		bean.setToken(UUID32.getUUID());
+		String pwd_hash = DigestUtils.sha512Hex(bean.getUserId() + ":" + bean.getPasswordHash());
+		bean.setPasswordHash(pwd_hash);
+		this.save(bean);
+		this.createRoleUser("TenantAdmin", bean.getUserId());
+		return true;
 	}
 
 	/**
@@ -780,6 +814,9 @@ public class SysUserServiceImpl implements SysUserService {
 
 				cacheKey = "cache_user_" + sysUser.getActorId();
 				CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
+
+				cacheKey = "cache_userrole_" + sysUser.getActorId();
+				CacheFactory.remove(Constants.CACHE_USER_ROLE_REGION, cacheKey);
 			}
 
 			sysUser.setToken(UUID32.getUUID() + UUID32.getUUID() + UUID32.getUUID() + UUID32.getUUID());
@@ -809,6 +846,9 @@ public class SysUserServiceImpl implements SysUserService {
 
 				cacheKey = "cache_user_" + sysUser.getActorId();
 				CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
+
+				cacheKey = "cache_userrole_" + sysUser.getActorId();
+				CacheFactory.remove(Constants.CACHE_USER_ROLE_REGION, cacheKey);
 			}
 
 			sysUser.setUpdateDate(new Date(System.currentTimeMillis()));
@@ -949,6 +989,9 @@ public class SysUserServiceImpl implements SysUserService {
 
 			cacheKey = "cache_user_" + user.getActorId();
 			CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
+
+			cacheKey = "cache_userrole_" + user.getActorId();
+			CacheFactory.remove(Constants.CACHE_USER_ROLE_REGION, cacheKey);
 		}
 
 		user.setLoginRetry(0);
@@ -984,6 +1027,9 @@ public class SysUserServiceImpl implements SysUserService {
 			cacheKey = "cache_user_" + sysUser.getActorId();
 			CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 
+			cacheKey = "cache_userrole_" + sysUser.getActorId();
+			CacheFactory.remove(Constants.CACHE_USER_ROLE_REGION, cacheKey);
+
 		}
 
 		sysUser.setLoginRetry(0);
@@ -991,6 +1037,31 @@ public class SysUserServiceImpl implements SysUserService {
 		sysUserMapper.updateSysUser(sysUser);
 
 		return true;
+	}
+
+	/**
+	 * 更新用户登录信息
+	 * 
+	 * @param model
+	 */
+	@Transactional
+	public void updateUserLoginInfo(SysUser user) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String cacheKey = "user_" + user.getActorId();
+			CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
+
+			cacheKey = "user_all_" + user.getActorId();
+			CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
+
+			cacheKey = "cache_user_" + user.getActorId();
+			CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
+
+			cacheKey = "cache_userrole_" + user.getActorId();
+			CacheFactory.remove(Constants.CACHE_USER_ROLE_REGION, cacheKey);
+		}
+
+		sysUserMapper.updateSysUserLoginInfo(user);
+
 	}
 
 	/**
@@ -1009,6 +1080,9 @@ public class SysUserServiceImpl implements SysUserService {
 
 			cacheKey = "cache_user_" + sysUser.getActorId();
 			CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
+
+			cacheKey = "cache_userrole_" + sysUser.getActorId();
+			CacheFactory.remove(Constants.CACHE_USER_ROLE_REGION, cacheKey);
 		}
 
 		sysUserMapper.updateUserLoginSecret(sysUser);
@@ -1025,6 +1099,9 @@ public class SysUserServiceImpl implements SysUserService {
 
 			cacheKey = "cache_user_" + user.getActorId();
 			CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
+
+			cacheKey = "cache_userrole_" + user.getActorId();
+			CacheFactory.remove(Constants.CACHE_USER_ROLE_REGION, cacheKey);
 
 			CacheFactory.clear(Constants.CACHE_USER_REGION);
 			CacheFactory.clear(Constants.CACHE_USER_ROLE_REGION);

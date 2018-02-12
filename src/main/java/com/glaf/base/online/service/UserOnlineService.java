@@ -34,36 +34,29 @@ public interface UserOnlineService {
 	 * @return
 	 */
 	@Transactional
-	void deleteById(Long id);
+	void deleteById(long id);
 
 	/**
-	 * 根据主键删除多条记录
-	 * 
-	 * @return
-	 */
-	@Transactional
-	void deleteByIds(List<Long> ids);
-	
-	/**
 	 * 删除超时的在线用户
+	 * 
 	 * @param timeoutSeconds
 	 */
 	@Transactional
 	void deleteTimeoutUsers(int timeoutSeconds);
 
 	/**
-	 * 根据查询参数获取记录列表
-	 * 
-	 * @return
-	 */
-	List<UserOnline> list(UserOnlineQuery query);
-	
-	/**
 	 * 获取当天的用户在线列表
 	 * 
 	 * @return
 	 */
 	List<UserOnline> getTodayUserOnlines();
+
+	/**
+	 * 根据主键获取一条记录
+	 * 
+	 * @return
+	 */
+	UserOnline getUserOnline(String actorId);
 
 	/**
 	 * 根据查询参数获取记录总数
@@ -77,29 +70,22 @@ public interface UserOnlineService {
 	 * 
 	 * @return
 	 */
-	List<UserOnline> getUserOnlinesByQueryCriteria(int start, int pageSize,
-			UserOnlineQuery query);
+	List<UserOnline> getUserOnlinesByQueryCriteria(int start, int pageSize, UserOnlineQuery query);
 
 	/**
-	 * 根据主键获取一条记录
+	 * 根据查询参数获取记录列表
 	 * 
 	 * @return
 	 */
-	UserOnline getUserOnline(String actorId);
+	List<UserOnline> list(UserOnlineQuery query);
 
 	/**
 	 * 记录在线用户
+	 * 
 	 * @param model
 	 */
 	@Transactional
 	void login(UserOnline model);
-	
-	/**
-	 * 持续在线用户
-	 * @param actorId
-	 */
-	@Transactional
-	void remain(String actorId);
 
 	/**
 	 * 退出系统
@@ -108,5 +94,13 @@ public interface UserOnlineService {
 	 */
 	@Transactional
 	void logout(String actorId);
+
+	/**
+	 * 持续在线用户
+	 * 
+	 * @param actorId
+	 */
+	@Transactional
+	void remain(String actorId);
 
 }

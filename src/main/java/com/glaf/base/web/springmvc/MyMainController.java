@@ -43,6 +43,7 @@ import com.glaf.base.modules.sys.model.TenantConfig;
 import com.glaf.base.modules.sys.service.SysApplicationService;
 import com.glaf.base.modules.sys.service.TenantConfigService;
 import com.glaf.base.utils.LoginContextUtil;
+
 import com.glaf.core.base.BaseTree;
 import com.glaf.core.base.TreeModel;
 import com.glaf.core.config.SystemConfig;
@@ -94,11 +95,41 @@ public class MyMainController {
 			apps = sysApplicationService.getSysApplicationByUserId(actorId);
 		}
 
+		List<SysApplication> allApps = sysApplicationService.getAllSysApplications();
+
 		SysApplication root = sysApplicationService.findById(parentId);
 		if (root != null && apps != null && !apps.isEmpty()) {
+
+			Map<Long, Long> lockedMap = new HashMap<Long, Long>();
+			for (SysApplication app : allApps) {
+				if (app.getLocked() != 0) {
+					lockedMap.put(app.getId(), app.getId());
+				}
+				if (app.getDeleteFlag() != 0) {
+					lockedMap.put(app.getId(), app.getId());
+				}
+			}
+
+			for (int i = 0; i <= 10; i++) {
+				for (SysApplication app : allApps) {
+					if (lockedMap.containsKey(app.getParentId())) {
+						lockedMap.put(app.getId(), app.getParentId());
+					}
+				}
+			}
+
+			List<SysApplication> myapps2 = new ArrayList<SysApplication>();
+			for (SysApplication app : apps) {
+				if (!lockedMap.containsKey(app.getId())) {
+					if (app.getLocked() == 0 && app.getDeleteFlag() == 0) {
+						myapps2.add(app);
+					}
+				}
+			}
+
 			List<TreeModel> treeModels = new ArrayList<TreeModel>();
-			if (apps != null && !apps.isEmpty()) {
-				for (SysApplication p : apps) {
+			if (myapps2 != null && !myapps2.isEmpty()) {
+				for (SysApplication p : myapps2) {
 					TreeModel tree = new BaseTree();
 					String name = p.getName();
 					if (name.length() > 10) {

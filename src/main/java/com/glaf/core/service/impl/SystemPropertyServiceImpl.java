@@ -31,19 +31,24 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.glaf.core.cache.CacheFactory;
 import com.glaf.core.config.SystemConfig;
 import com.glaf.core.dao.EntityDAO;
 import com.glaf.core.domain.SystemProperty;
+import com.glaf.core.domain.util.SystemPropertyJsonFactory;
 import com.glaf.core.id.IdGenerator;
 import com.glaf.core.mapper.SystemPropertyMapper;
 import com.glaf.core.query.SystemPropertyQuery;
 import com.glaf.core.service.ISystemPropertyService;
+import com.glaf.core.util.Constants;
 
 @Service("systemPropertyService")
 @Transactional(readOnly = true)
 public class SystemPropertyServiceImpl implements ISystemPropertyService {
-	protected final static Log logger = LogFactory
-			.getLog(SystemPropertyServiceImpl.class);
+	protected final static Log logger = LogFactory.getLog(SystemPropertyServiceImpl.class);
 
 	protected EntityDAO entityDAO;
 
@@ -66,14 +71,20 @@ public class SystemPropertyServiceImpl implements ISystemPropertyService {
 		systemPropertyMapper.deleteSystemPropertyById(id);
 	}
 
-	@Transactional
-	public void deleteByIds(List<String> rowIds) {
-		SystemPropertyQuery query = new SystemPropertyQuery();
-		query.rowIds(rowIds);
-		systemPropertyMapper.deleteSystemProperties(query);
-	}
-
 	public List<SystemProperty> getAllSystemProperties() {
+		String cacheKey = Constants.CACHE_PROPERTY_REGION + "_all";
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_PROPERTY_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONArray jsonArray = JSON.parseArray(text);
+					return SystemPropertyJsonFactory.arrayToList(jsonArray);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
+
 		SystemPropertyQuery query = new SystemPropertyQuery();
 		List<SystemProperty> list = this.list(query);
 		List<SystemProperty> rows = new ArrayList<SystemProperty>();
@@ -84,6 +95,12 @@ public class SystemPropertyServiceImpl implements ISystemPropertyService {
 				}
 			}
 		}
+
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			JSONArray jsonArray = SystemPropertyJsonFactory.listToArray(rows);
+			CacheFactory.put(Constants.CACHE_PROPERTY_REGION, cacheKey, jsonArray.toJSONString());
+		}
+
 		return rows;
 	}
 
@@ -99,6 +116,19 @@ public class SystemPropertyServiceImpl implements ISystemPropertyService {
 	}
 
 	public List<SystemProperty> getSystemProperties(String category) {
+		String cacheKey = Constants.CACHE_PROPERTY_REGION + "_" + category;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_PROPERTY_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONArray jsonArray = JSON.parseArray(text);
+					return SystemPropertyJsonFactory.arrayToList(jsonArray);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
+
 		SystemPropertyQuery query = new SystemPropertyQuery();
 		query.category(category);
 		List<SystemProperty> list = this.list(query);
@@ -110,29 +140,65 @@ public class SystemPropertyServiceImpl implements ISystemPropertyService {
 				}
 			}
 		}
+
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			JSONArray jsonArray = SystemPropertyJsonFactory.listToArray(rows);
+			CacheFactory.put(Constants.CACHE_PROPERTY_REGION, cacheKey, jsonArray.toJSONString());
+		}
+
 		return rows;
 	}
 
 	public SystemProperty getSystemProperty(String category, String name) {
+		String cacheKey = Constants.CACHE_PROPERTY_REGION + "_" + category + "_" + name;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_PROPERTY_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONObject json = JSON.parseObject(text);
+					return SystemPropertyJsonFactory.jsonToObject(json);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
+
 		SystemPropertyQuery query = new SystemPropertyQuery();
 		query.category(category);
 		query.name(name);
 		List<SystemProperty> list = this.list(query);
 		if (list != null && !list.isEmpty()) {
-			return list.get(0);
+			SystemProperty property = list.get(0);
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				CacheFactory.put(Constants.CACHE_PROPERTY_REGION, cacheKey, property.toJsonObject().toJSONString());
+			}
+			return property;
 		}
 		return null;
 	}
 
 	public SystemProperty getSystemPropertyById(String id) {
-		SystemProperty systemProperty = systemPropertyMapper
-				.getSystemPropertyById(id);
-		return systemProperty;
+		String cacheKey = Constants.CACHE_PROPERTY_REGION + "_" + id;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_PROPERTY_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONObject json = JSON.parseObject(text);
+					return SystemPropertyJsonFactory.jsonToObject(json);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
+		SystemProperty property = systemPropertyMapper.getSystemPropertyById(id);
+		if (property != null && SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.put(Constants.CACHE_PROPERTY_REGION, cacheKey, property.toJsonObject().toJSONString());
+		}
+		return property;
 	}
 
 	public List<SystemProperty> list(SystemPropertyQuery query) {
-		List<SystemProperty> list = systemPropertyMapper
-				.getSystemProperties(query);
+		List<SystemProperty> list = systemPropertyMapper.getSystemProperties(query);
 		List<SystemProperty> rows = new ArrayList<SystemProperty>();
 		if (list != null && !list.isEmpty()) {
 			for (SystemProperty p : list) {
@@ -146,6 +212,7 @@ public class SystemPropertyServiceImpl implements ISystemPropertyService {
 
 	@Transactional
 	public void save(SystemProperty property) {
+		CacheFactory.clear(Constants.CACHE_PROPERTY_REGION);
 		if (StringUtils.isNotEmpty(property.getId())) {
 			SystemProperty bean = this.getSystemPropertyById(property.getId());
 			if (bean != null) {
@@ -190,6 +257,7 @@ public class SystemPropertyServiceImpl implements ISystemPropertyService {
 
 	@Transactional
 	public void saveAll(List<SystemProperty> props) {
+		CacheFactory.clear(Constants.CACHE_PROPERTY_REGION);
 		Map<String, SystemProperty> propertyMap = this.getProperyMap();
 		if (props != null && props.size() > 0) {
 			Map<String, String> dataMap = new TreeMap<String, String>();
@@ -229,8 +297,7 @@ public class SystemPropertyServiceImpl implements ISystemPropertyService {
 	}
 
 	@javax.annotation.Resource
-	public void setSystemPropertyMapper(
-			SystemPropertyMapper systemPropertyMapper) {
+	public void setSystemPropertyMapper(SystemPropertyMapper systemPropertyMapper) {
 		this.systemPropertyMapper = systemPropertyMapper;
 	}
 

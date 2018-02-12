@@ -333,7 +333,7 @@
 		and E.LOCKED = 0
 		and E.DELETEFLAG = 0
 		order by E.SORTNO asc
-		
+
 	</select>
 
 

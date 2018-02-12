@@ -51,6 +51,10 @@ public final class Constants {
 	public static final String CACHE_USER_REGION = "user";
 
 	public static final String CACHE_TENANT_REGION = "tenant";
+	
+	public static final String CACHE_MENU_REGION = "menu";
+	
+	public static final String CACHE_PROPERTY_REGION = "property";
 
 	public static final String CACHE_LOGIN_CONTEXT_REGION = "login_context";
 
