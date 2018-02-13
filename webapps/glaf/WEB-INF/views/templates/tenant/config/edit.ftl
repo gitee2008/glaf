@@ -82,7 +82,7 @@
 		<td width="20%" align="left">早餐时间</td>
 		<td align="left">
             <input id="breakfastTime" name="breakfastTime" type="text" 
-			       class="easyui-timespinner easyui-validatebox  x-text" style=" width:125px;"
+			       class="easyui-timespinner easyui-validatebox  x-text" style=" width:85px;"
 				   value="${tenantConfig.breakfastTime}"/>
 		</td>
 	</tr>
@@ -90,7 +90,7 @@
 		<td width="20%" align="left">早点时间</td>
 		<td align="left">
             <input id="breakfastMidTime" name="breakfastMidTime" type="text" 
-			       class="easyui-timespinner easyui-validatebox  x-text" style=" width:125px;"
+			       class="easyui-timespinner easyui-validatebox  x-text" style=" width:85px;"
 				   value="${tenantConfig.breakfastMidTime}"/>
 		</td>
 	</tr>
@@ -98,7 +98,7 @@
 		<td width="20%" align="left">午餐时间</td>
 		<td align="left">
             <input id="lunchTime" name="lunchTime" type="text" 
-			       class="easyui-timespinner easyui-validatebox  x-text" style=" width:125px;"
+			       class="easyui-timespinner easyui-validatebox  x-text" style=" width:85px;"
 				   value="${tenantConfig.lunchTime}"/>
 		</td>
 	</tr>
@@ -106,7 +106,7 @@
 		<td width="20%" align="left">午点时间</td>
 		<td align="left">
             <input id="snackTime" name="snackTime" type="text" 
-			       class="easyui-timespinner easyui-validatebox  x-text" style=" width:125px;"
+			       class="easyui-timespinner easyui-validatebox  x-text" style=" width:85px;"
 				   value="${tenantConfig.snackTime}"/>
 		</td>
 	</tr>
@@ -114,7 +114,7 @@
 		<td width="20%" align="left">晚餐时间</td>
 		<td align="left">
             <input id="dinnerTime" name="dinnerTime" type="text" 
-			       class="easyui-timespinner easyui-validatebox  x-text" style=" width:125px;"			
+			       class="easyui-timespinner easyui-validatebox  x-text" style=" width:85px;"			
 				   value="${tenantConfig.dinnerTime}"/>
 		</td>
 	</tr>

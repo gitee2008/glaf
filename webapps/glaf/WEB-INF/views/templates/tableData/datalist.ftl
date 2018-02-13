@@ -136,8 +136,8 @@
 			  maxmin: true,
 			  shadeClose: true,
 			  title: "新增记录",
-			  area: ['980px', (jQuery(window).height() - 50) +'px'],
-			  shade: 0.8,
+			  area: ['980px', (jQuery(window).height() - 30) +'px'],
+			  shade: 0.85,
 			  fixed: false, //不固定
 			  shadeClose: true,
 			  content: [link, 'no']
@@ -183,8 +183,8 @@
 			  maxmin: true,
 			  shadeClose: true,
 			  title: "审核意见",
-			  area: ['680px', (jQuery(window).height() - 50) +'px'],
-			  shade: 0.8,
+			  area: ['680px', (jQuery(window).height() - 30) +'px'],
+			  shade: 0.85,
 			  fixed: false, //不固定
 			  shadeClose: true,
 			  content: [link, 'no']
@@ -200,8 +200,8 @@
 			  maxmin: true,
 			  shadeClose: true,
 			  title: "${table.title}",
-			  area: ['1080px', (jQuery(window).height() - 50) +'px'],
-			  shade: 0.8,
+			  area: ['1080px', (jQuery(window).height() - 30) +'px'],
+			  shade: 0.85,
 			  fixed: false, //不固定
 			  shadeClose: true,
 			  content: [link, 'no']
@@ -218,8 +218,8 @@
 			  maxmin: true,
 			  shadeClose: true,
 			  title: "编辑记录",
-			  area: ['980px', (jQuery(window).height() - 50) +'px'],
-			  shade: 0.8,
+			  area: ['980px', (jQuery(window).height() - 30) +'px'],
+			  shade: 0.85,
 			  fixed: false, //不固定
 			  shadeClose: true,
 			  content: [link, 'no']
@@ -344,8 +344,8 @@
 			  maxmin: true,
 			  shadeClose: true,
 			  title: "${table.title}",
-			  area: ['1080px', (jQuery(window).height() - 50) +'px'],
-			  shade: 0.8,
+			  area: ['1080px', (jQuery(window).height() - 30) +'px'],
+			  shade: 0.85,
 			  fixed: false, //不固定
 			  shadeClose: true,
 			  content: [link, 'no']

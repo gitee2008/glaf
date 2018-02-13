@@ -271,8 +271,7 @@
         	 <td height="28"><label for="subject" >标题</label></td>
         	 <td colspan="3" height="28">
               <input id="subject" name="subject" class="span8 x-text" type="text"
-                value="${chart.subject}" size="103"
-        	 ></input>
+                     value="${chart.subject}" size="102"></input>
         	 </td>
          </tr>
 
@@ -292,12 +291,12 @@
         	 <td height="28">X坐标标签</td>
         	 <td height="28">
               <input id="coordinateX" name="coordinateX" class="span3 x-text" type="text"
-                value="${chart.coordinateX}" size="30"></input>
+                     value="${chart.coordinateX}" size="30"></input>
         	 </td>
         	 <td height="28">Y坐标标签</td>
         	 <td height="28">
               <input id="coordinateY" name="coordinateY" class="span3 x-text" type="text"
-                value="${chart.coordinateY}" size="30"></input>
+                     value="${chart.coordinateY}" size="30"></input>
         	 </td>
         </tr>
 
@@ -305,12 +304,12 @@
         	 <td height="28">第二轴X坐标标签</td>
         	 <td height="28">
               <input id="secondCoordinateX" name="secondCoordinateX" class="span3 x-text" type="text"
-                value="${chart.secondCoordinateX}" size="30"></input>
+                     value="${chart.secondCoordinateX}" size="30"></input>
         	 </td>
         	 <td height="28">第二轴Y坐标标签</td>
         	 <td height="28">
               <input id="secondCoordinateY" name="secondCoordinateY" class="span3 x-text" type="text"
-                value="${chart.secondCoordinateY}" size="30"></input>
+                     value="${chart.secondCoordinateY}" size="30"></input>
         	 </td>
         </tr>
 
@@ -318,19 +317,19 @@
         	 <td height="28">图表主题</td>
         	 <td height="28">
               <input id="chartTitle" name="chartTitle" class="span3 x-text" type="text"
-                value="${chart.chartTitle}" size="30"></input>
+                     value="${chart.chartTitle}" size="30"></input>
         	 </td>
            <td height="28">图表次标题</td>
         	 <td height="28">
               <input id="chartSubTitle" name="chartSubTitle" class="span3 x-text" type="text"
-                value="${chart.chartSubTitle}" size="30"></input>
+                     value="${chart.chartSubTitle}" size="30"></input>
         	 </td>
         </tr>
 
         <tr>
         	 <td height="28">图表宽度</td>
         	 <td height="28">
-                 <select id="chartWidth"  name="chartWidth" value="${chart.chartWidth}" 
+                 <select id="chartWidth" name="chartWidth" value="${chart.chartWidth}" 
                	        class="span2" style="height:20px; width:90px;">
                      <#list scales as scale>
 					  <option value="${scale}">${scale}</option>
@@ -342,7 +341,7 @@
         	 </td>
         	 <td height="28">图表高度</td>
         	 <td height="28">
-                 <select id="chartHeight"  name="chartHeight" value="${chart.chartHeight}" 
+                 <select id="chartHeight" name="chartHeight" value="${chart.chartHeight}" 
                	         class="span2" style="height:20px; width:90px;">
 				    <#list scales as scale>
 					 <option value="${scale}">${scale}</option>

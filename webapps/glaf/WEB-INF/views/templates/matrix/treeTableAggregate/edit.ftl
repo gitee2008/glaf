@@ -140,11 +140,10 @@
  </script>
 </head>
 <body style="margin-top:0px;">
-<div id="main_content" class="k-content ">
+<div id="main_content">
 <br>
-<div class="x_content_title"><img
-	src="${request.contextPath}/static/images/window.png" alt="编辑聚合表信息">&nbsp;
-    编辑聚合表信息</div>
+<div class="x_content_title">
+<img src="${request.contextPath}/static/images/window.png" alt="编辑聚合表信息">&nbsp;编辑聚合表信息</div>
 <br>
 <form id="iForm" name="iForm" method="post"  novalidate="novalidate">
 <input type="hidden" id="id" name="id" value="${treeTableAggregate.id}"/>
@@ -153,10 +152,8 @@
     <td width="2%" align="left">&nbsp;</td>
     <td align="left">
 	    <label for="title" class="required">标题&nbsp;</label>
-        <input id="title" name="title" type="text" class="easyui-validatebox x-text"  
-	           data-bind="value: title" style="width:380px"
+        <input id="title" name="title" type="text" class="easyui-validatebox x-text" style="width:380px"
 	           value="${treeTableAggregate.title}" validationMessage="请输入标题"/>
-	    <span class="k-invalid-msg" data-for="title"></span>
     </td>
   </tr>
 
@@ -170,8 +167,7 @@
 				  readonly="true" >${selectedDB}</textarea>&nbsp;
 	    <a href="#" onclick="javascript:openDatabaseX();">
 			<img src="${request.contextPath}/static/images/search_results.gif" border="0">
-		</a>  
-	    <span class="k-invalid-msg" data-for="selectedDB"></span>
+		</a>
     </td>
   </tr>
 
@@ -180,9 +176,8 @@
     <td align="left">
 	    <label for="sourceTableName" class="required">来源表&nbsp;</label>
         <input id="sourceTableName" name="sourceTableName" type="text" class="easyui-validatebox x-text"  
-	           data-bind="value: sourceTableName" style="width:380px"
+	           style="width:380px"
 	           value="${treeTableAggregate.sourceTableName}" validationMessage="请输入来源表"/>
-	    <span class="k-invalid-msg" data-for="sourceTableName"></span>
     </td>
   </tr>
 
@@ -191,9 +186,8 @@
     <td align="left">
 	    <label for="sourceIdColumn" class="required">来源表主键列&nbsp;</label>
         <input id="sourceIdColumn" name="sourceIdColumn" type="text" class="easyui-validatebox x-text"  
-	           data-bind="value: sourceIdColumn" style="width:380px"
+	           style="width:380px"
 	           value="${treeTableAggregate.sourceIdColumn}" validationMessage="请输入来源表主键列"/>
-	    <span class="k-invalid-msg" data-for="sourceIdColumn"></span>
     </td>
   </tr>
 
@@ -202,10 +196,9 @@
     <td align="left">
 	    <label for="sourceIndexIdColumn" class="required">来源表IndexId列&nbsp;</label>
         <input id="sourceIndexIdColumn" name="sourceIndexIdColumn" type="text" class="easyui-validatebox x-text"  
-	           data-bind="value: sourceIndexIdColumn" style="width:380px"
+	           style="width:380px"
 	           value="${treeTableAggregate.sourceIndexIdColumn}" validationMessage="请输入来源表IndexId列"/>
 		&nbsp;（提示：数据类型仅限整数型）
-	    <span class="k-invalid-msg" data-for="sourceIndexIdColumn"></span>
     </td>
   </tr>
 
@@ -214,10 +207,9 @@
     <td align="left">
 	    <label for="sourceParentIdColumn" class="required">来源表ParentId列&nbsp;</label>
         <input id="sourceParentIdColumn" name="sourceParentIdColumn" type="text" class="easyui-validatebox x-text"  
-	           data-bind="value: sourceParentIdColumn" style="width:380px"
+	           style="width:380px"
 	           value="${treeTableAggregate.sourceParentIdColumn}" validationMessage="请输入来源表ParentId列"/>
 		&nbsp;（提示：数据类型仅限整数型）
-	    <span class="k-invalid-msg" data-for="sourceParentIdColumn"></span>
     </td>
   </tr>
 
@@ -226,10 +218,9 @@
     <td align="left">
 	    <label for="sourceTreeIdColumn" class="required">来源表TreeId列&nbsp;</label>
         <input id="sourceTreeIdColumn" name="sourceTreeIdColumn" type="text" class="easyui-validatebox x-text"  
-	           data-bind="value: sourceTreeIdColumn" style="width:380px"
+	           style="width:380px"
 	           value="${treeTableAggregate.sourceTreeIdColumn}" validationMessage="请输入来源表TreeId列"/>
 		&nbsp;（提示：数据类型仅限字符串型）
-	    <span class="k-invalid-msg" data-for="sourceTreeIdColumn"></span>
     </td>
   </tr>
 
@@ -238,10 +229,9 @@
     <td align="left">
 	    <label for="sourceTextColumn" class="required">来源表名称列&nbsp;</label>
         <input id="sourceTextColumn" name="sourceTextColumn" type="text" class="easyui-validatebox x-text"  
-	           data-bind="value: sourceTextColumn" style="width:380px"
+	           style="width:380px"
 	           value="${treeTableAggregate.sourceTextColumn}" validationMessage="请输入来源表名称列"/>
 		&nbsp;（提示：数据类型仅限字符串型）
-	    <span class="k-invalid-msg" data-for="sourceTextColumn"></span>
     </td>
   </tr>
 
@@ -250,10 +240,9 @@
     <td align="left">
 	    <label for="sourceTableDateSplitColumn" class="required">来源表日期切分列&nbsp;</label>
         <input id="sourceTableDateSplitColumn" name="sourceTableDateSplitColumn" type="text" class="easyui-validatebox x-text"  
-	           data-bind="value: sourceTableDateSplitColumn" style="width:380px"
+	           style="width:380px"
 	           value="${treeTableAggregate.sourceTableDateSplitColumn}" validationMessage="请输入来源表日期切分列"/>
 		&nbsp;（提示：数据类型必须是日期型）
-	    <span class="k-invalid-msg" data-for="sourceTableDateSplitColumn"></span>
     </td>
   </tr>
 
@@ -262,10 +251,9 @@
     <td align="left">
 	    <label for="startYear" class="required">开始年份&nbsp;</label>
         <input id="startYear" name="startYear" type="text" class="easyui-validatebox x-text"  
-	           data-bind="value: startYear" style="width:60px" maxlength="4"
+	           style="width:60px" maxlength="4"
 	           value="${treeTableAggregate.startYear}" validationMessage="请输入开始年份"/>
 		&nbsp;（提示：如果不填写年份，开始年份默认为当年）
-	    <span class="k-invalid-msg" data-for="startYear"></span>
     </td>
   </tr>
 
@@ -274,10 +262,9 @@
     <td align="left">
 	    <label for="stopYear" class="required">结束年份&nbsp;</label>
         <input id="stopYear" name="stopYear" type="text" class="easyui-validatebox x-text"  
-	           data-bind="value: stopYear" style="width:60px" maxlength="4"
+	           style="width:60px" maxlength="4"
 	           value="${treeTableAggregate.stopYear}" validationMessage="请输入结束年份"/>
 		&nbsp;（提示：如果不填写年份，结束年份默认为当年）
-	    <span class="k-invalid-msg" data-for="stopYear"></span>
     </td>
   </tr>
 
@@ -291,7 +278,6 @@
 	    <a href="#" onclick="javascript:openColumnsX();">
 			<img src="${request.contextPath}/static/images/search_results.gif" border="0">
 		</a> 
-	    <span class="k-invalid-msg" data-for="syncColumns"></span>
     </td>
   </tr>
 
@@ -300,7 +286,7 @@
     <td width="2%" align="left" height="25">&nbsp;</td>
     <td align="left">
 	  <label for="dynamicCondition" class="required">自定义参数条件&nbsp;</label>
-	  <button type="button" id="qcButton"  class="btn btnGray" style="width: 120px" 
+	  <button type="button" id="qcButton" class="btn btnGray" style="width: 120px" 
 	          onclick="javascript:openConditionWin();">编辑条件</button>
     </td>
   </tr>
@@ -326,39 +312,28 @@
 	    <label for="sqlCriteria" class="required">提取SQL条件&nbsp;</label>
         <textarea id="sqlCriteria" name="sqlCriteria" rows="12" cols="68" class="easyui-validatebox x-text"
 				  style="width:380px;height:80px;" >${treeTableAggregate.sqlCriteria}</textarea>&nbsp;
-	    <span class="k-invalid-msg" data-for="sqlCriteria"></span>
 		&nbsp;（提示：添加and条件即可）
     </td>
   </tr>
 
  
-  <#if treeTableAggregate.targetTableName?if_exists>
   <tr>
     <td width="2%" align="left">&nbsp;</td>
     <td align="left">
 		<label for="targetTableName" class="required">目标表&nbsp;</label>
-		${treeTableAggregate.targetTableName} 
-    </td>
-  </tr>
-  <#else>
-  <tr>
-    <td width="2%" align="left">&nbsp;</td>
-    <td align="left">
-		<label for="targetTableName" class="required">目标表&nbsp;</label>
-		<select id="targetTableName" name="targetTableName" >
-			<option value="">----请选择----</option>    
-			<#list  targetTables as item>
-			<option value="${item.targetTableName}">${item.title}[${item.targetTableName}]</option>     
-			</#list>
-		</select>
+		<input id="targetTableName" name="targetTableName" type="text" class="easyui-validatebox x-text"
+		       style="width:380px"
+		       value="${treeTableAggregate.targetTableName}" > 
 		<div style="margin-top:5px;">
+		    <span style="color:red; margin-left:110px;">
+			（提示：为了保证系统安全，目标表只能以useradd_、etl_、sync_、tmp_、tree_table_开头。）
+			</span>
 			<span style="color:blue; margin-left:110px;">
-			 （提示：可以选择已经存在的表做目标表，如不选择，将生成新表做目标表。）
+			 （可以输入已经存在的表做目标表，如不输入，将自动生成新表做目标表。）
 			</span>
 	   </div>
     </td>
   </tr>
-  </#if>
 
   <tr>
     <td width="2%" align="left" height="25">&nbsp;</td>
@@ -372,7 +347,6 @@
 	    <script type="text/javascript">
 	       document.getElementById("createTableFlag").value="${treeTableAggregate.createTableFlag}";
 	    </script>
-	    <span class="k-invalid-msg" data-for="createTableFlag"></span>
     </td>
   </tr>
 
@@ -388,7 +362,6 @@
 	   <script type="text/javascript">
 	       document.getElementById("deleteFetch").value="${treeTableAggregate.deleteFetch}";
 	   </script>
-	   <span class="k-invalid-msg" data-for="deleteFetch"></span>
     </td>
   </tr>
 
@@ -405,7 +378,6 @@
 	    <script type="text/javascript">
 	       document.getElementById("genByMonth").value="${treeTableAggregate.genByMonth}";
 	    </script>
-	    <span class="k-invalid-msg" data-for="genByMonth"></span>
     </td>
   </tr>
 
@@ -462,9 +434,9 @@
   <tr>
     <td colspan="2" align="center" valign="bottom" height="25">&nbsp;
     <div>
-      <button type="button" id="iconButton"  class="btn btnGray" style="width: 90px" onclick="javascript:save();">保存</button>
+      <button type="button" id="savaButton"  class="btn btnGray" style="width: 90px" onclick="javascript:save();">保存</button>
 	  &nbsp;
-	  <button type="button" id="iconButton"  class="btn btnGray" style="width: 90px" onclick="javascript:saveAs();">另存</button>
+	  <button type="button" id="savaAsButton"  class="btn btnGray" style="width: 90px" onclick="javascript:saveAs();">另存</button>
 	</div>
 	</td>
   </tr>

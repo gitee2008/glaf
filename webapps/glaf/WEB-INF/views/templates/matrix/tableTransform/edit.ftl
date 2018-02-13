@@ -215,7 +215,7 @@
 	    <span class="k-invalid-msg" data-for="sqlCriteria"></span>
 		 <div style="margin-top:5px;">
 			<span style="  margin-left:110px;">
-			 （提示：添加and条件即可，动态参数也是支持的 column1 = {param1}）。
+			 （提示：添加and条件即可，动态参数也是支持的 column1 = <script>document.write("#");</script>{param1}）。
 			</span>
 	     </div>
     </td>

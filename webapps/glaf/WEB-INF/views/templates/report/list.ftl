@@ -239,11 +239,9 @@
 
 		function clearSelections(){
 			jQuery('#mydatagrid').datagrid('clearSelections');
-		}
-
+		} 
 		 
-		 
-	</script>
+</script>
 </head>
 <body style="margin:0px;">  
 <div style="margin:0;"></div>  

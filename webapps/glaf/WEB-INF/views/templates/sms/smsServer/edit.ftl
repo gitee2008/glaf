@@ -91,7 +91,7 @@
 		<td align="left">
 			<input id="port" name="port" type="text" 
 			       class="easyui-numberbox x-text" 
-				   increment="10"  style=" width:85px;"
+				   increment="10"  style=" text-align:right; width:65px;"
 				   value="${smsServer.port}"/>
 		</td>
 	</tr>
@@ -125,7 +125,7 @@
 		<td align="left">
 			<input id="frequence" name="frequence" type="text" 
 			       class="easyui-numberbox x-text" 
-				   increment="10" style=" width:85px;" 
+				   increment="10" style=" text-align:right; width:65px;" 
 				   value="${smsServer.frequence}"/>
 			<br>（提示：间隔时间，单位为秒）
 		</td>
@@ -135,7 +135,7 @@
 		<td align="left">
 			<input id="retryTimes" name="retryTimes" type="text" 
 			       class="easyui-numberbox x-text" 
-				   increment="10" style=" width:85px;" 
+				   increment="10" style=" text-align:right; width:65px;" 
 				   value="${smsServer.retryTimes}"/>
 		</td>
 	</tr>

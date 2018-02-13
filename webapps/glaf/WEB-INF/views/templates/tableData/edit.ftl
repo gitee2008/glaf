@@ -21,7 +21,7 @@
 				   type: "POST",
 				   url: '${contextPath}/tableDataSave/saveData',
 				   data: params,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },
@@ -64,7 +64,7 @@
 				   type: "POST",
 				   url: '${contextPath}/tableDataSave/saveData',
 				   data: params,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },
@@ -99,7 +99,7 @@
 <div class="easyui-layout" data-options="fit:true">  
   <div data-options="region:'north',split:false, border:true" style="height:38px" class="toolbar-backgroud"> 
     <div style="margin:4px;"> 
-		&nbsp;&nbsp;<img src="${contextPath}/static/images/window.png"><span class="x_content_title">&nbsp;编辑记录</span>
+		&nbsp;<img src="${contextPath}/static/images/window.png">&nbsp;<span class="x_content_title">编辑记录</span>
 		<#if canEdit == true>
 		 <#if canUpdate == true>
 		 <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-save'" 
@@ -122,11 +122,11 @@
   <input type="hidden" id="uuid" name="uuid" value="${uuid}"/>
   <input type="hidden" id="tableId" name="tableId" value="${tableId}" >
   <input type="hidden" id="topId" name="topId" value="${topId}" >
-  <table class="easyui-form" style="width:880px;margin-left:5px;" align="left">
+  <table class="easyui-form" style="width:880px; margin-left:5px; margin-top:8px;" align="left">
     <tbody>
 	<#if treeNodes?exists>
 		<tr>
-			<td width="25%" align="left">上级节点</td>
+			<td width="25%" align="left" height="30">上级节点</td>
 			<td align="left">
 				 <select id="parentId" name="parentId">
 				   <option value="">----请选择----</option>
@@ -144,7 +144,7 @@
     <#list columns as col>
 	<#if col.editableField == "Y">
 		<tr>
-			<td width="25%" align="left">
+			<td width="25%" align="left" height="30">
 			<b>${col.title}</b> 
 			<#if col.columnName == "name_" || col.columnName == "code_" || col.requiredField == "1">
 				<label for="${col.id}" class="required">&nbsp;*</label>

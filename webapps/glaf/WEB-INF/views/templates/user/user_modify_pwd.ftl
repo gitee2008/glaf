@@ -66,7 +66,7 @@
 <body>
 <br><br>
 <form id="iForm" name="iForm"  action="${contextPath}/user/savePwd" method="post" > 
-  <table width="500" align="center" border="0" cellspacing="0" cellpadding="5">
+  <table width="550" align="center" border="0" cellspacing="0" cellpadding="5">
 	  <tr>
         <td height="28"class="input-box2" valign="top">原密码*</td>
         <td height="28"><input id="oldPwd" name="oldPwd" type="password" size="30"  class="input span3 x-text" value="" datatype="string" nullable="no" minsize="6" maxsize="20" chname="密码"></td>
