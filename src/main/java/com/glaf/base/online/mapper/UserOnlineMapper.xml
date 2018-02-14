@@ -16,7 +16,7 @@
 
 
 	<insert id="insertUserOnline" parameterType="com.glaf.base.online.domain.UserOnline">
-		insert into SYS_USER_ONLINE
+		insert into USER_ONLINE
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			ID_
 			<if test="actorId != null">
@@ -65,7 +65,7 @@
 
 
 	<update id="updateUserOnline" parameterType="com.glaf.base.online.domain.UserOnline">
-		update SYS_USER_ONLINE
+		update USER_ONLINE
 		set
 		<trim prefix="" suffix="" suffixOverrides=",">
 			<if test="loginDate != null">
@@ -88,7 +88,7 @@
 
 
 	<update id="updateUserOnlineCheckDate" parameterType="com.glaf.base.online.domain.UserOnline">
-		update SYS_USER_ONLINE
+		update USER_ONLINE
 		set
 		<trim prefix="" suffix="" suffixOverrides=",">
 			<if test="checkDate != null">
@@ -106,13 +106,13 @@
 
 	<delete id="deleteUserOnlineById" parameterType="long">
 		delete from
-		SYS_USER_ONLINE
+		USER_ONLINE
 		where ID_ = #{id}
 	</delete>
 
 
 	<delete id="deleteUserOnlines" parameterType="com.glaf.base.online.query.UserOnlineQuery">
-		delete from SYS_USER_ONLINE
+		delete from USER_ONLINE
 		where (
 		ID_ IN
 		<foreach item="x_id" index="index" collection="ids" open="("
@@ -125,7 +125,7 @@
 
 	<select id="getUserOnlineById" parameterType="long"
 		resultMap="userOnlineResultMap">
-		select * from SYS_USER_ONLINE where ID_ = #{id}
+		select * from USER_ONLINE where ID_ = #{id}
 	</select>
 
 
@@ -153,7 +153,7 @@
 
 	<sql id="selectUserOnlinesSql">
 
-		from SYS_USER_ONLINE E
+		from USER_ONLINE E
 
 		<where>
 			1 = 1

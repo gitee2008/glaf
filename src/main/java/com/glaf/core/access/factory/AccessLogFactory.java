@@ -127,7 +127,7 @@ public class AccessLogFactory {
 	private AccessLogFactory() {
 		try {
 			IDatabaseService databaseService = (IDatabaseService) ContextFactory.getBean("databaseService");
-			Database database = databaseService.getDatabaseByMapping("log_storage_db");
+			Database database = databaseService.getDatabaseByMapping("log");
 			if (database != null) {
 				systemName = database.getName();
 				checkLogTable(systemName, AccessLogDomainFactory.TABLENAME);
@@ -271,6 +271,7 @@ public class AccessLogFactory {
 					while (retry < 3 && !success) {
 						try {
 							retry++;
+							Environment.setCurrentSystemName(systemName);
 							getAccessLogService().bulkInsert(rows);
 							success = true;
 							rows.clear();
@@ -292,6 +293,7 @@ public class AccessLogFactory {
 				while (retry < 3 && !success) {
 					try {
 						retry++;
+						Environment.setCurrentSystemName(systemName);
 						getAccessLogService().bulkInsert(rows);
 						success = true;
 						rows.clear();

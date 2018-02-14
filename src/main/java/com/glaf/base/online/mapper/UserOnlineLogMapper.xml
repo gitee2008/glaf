@@ -19,7 +19,7 @@
 
 
 	<insert id="insertUserOnlineLog" parameterType="com.glaf.base.online.domain.UserOnlineLog">
-		insert into SYS_USER_ONLINE_LOG
+		insert into USER_ONLINE_LOG
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			ID_
 			<if test="actorId != null">
@@ -82,7 +82,7 @@
 	<update id="updateUserOnlineLogLogoutDate" parameterType="com.glaf.base.online.domain.UserOnlineLog">
 
 		update
-		SYS_USER_ONLINE_LOG
+		USER_ONLINE_LOG
 		set LOGOUTDATE_ = #{logoutDate, jdbcType=TIMESTAMP}
 		where
 		ID_ = #{id, jdbcType=BIGINT}
@@ -92,7 +92,7 @@
 
 	<delete id="deleteUserOnlineLogById" parameterType="long">
 		delete from
-		SYS_USER_ONLINE_LOG
+		USER_ONLINE_LOG
 		where ID_ = #{id}
 	</delete>
 
@@ -100,13 +100,13 @@
 	<delete id="deleteUserOnlineLogByActorId" parameterType="string">
 		delete
 		from
-		SYS_USER_ONLINE_LOG
+		USER_ONLINE_LOG
 		where ACTORID_ = #{actorId}
 	</delete>
 
 
 	<delete id="deleteUserOnlineLogs" parameterType="com.glaf.base.online.query.UserOnlineLogQuery">
-		delete from SYS_USER_ONLINE_LOG
+		delete from USER_ONLINE_LOG
 		where (
 		ID_ IN
 		<foreach item="x_id" index="index" collection="ids" open="("
@@ -119,13 +119,13 @@
 
 	<select id="getUserOnlineLogById" parameterType="long"
 		resultMap="userOnlineLogResultMap">
-		select * from SYS_USER_ONLINE_LOG where ID_ = #{id}
+		select * from USER_ONLINE_LOG where ID_ = #{id}
 	</select>
 
 
 	<select id="getUserOnlinesByActorId" parameterType="string"
 		resultMap="userOnlineLogResultMap">
-		select * from SYS_USER_ONLINE_LOG where ACTORID_ =
+		select * from USER_ONLINE_LOG where ACTORID_ =
 		#{actorId}
 	</select>
 
@@ -154,7 +154,7 @@
 
 	<sql id="selectUserOnlineLogsSql">
 
-		from SYS_USER_ONLINE_LOG E
+		from USER_ONLINE_LOG E
 
 		<where>
 			1 = 1

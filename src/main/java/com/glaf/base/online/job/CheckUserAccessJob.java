@@ -62,7 +62,7 @@ public class CheckUserAccessJob extends BaseJob {
 			AccessLogQuery query = new AccessLogQuery();
 			for (UserOnline userOnline : list) {
 				String userId = userOnline.getActorId();
-				if (StringUtils.equals(userId, "admin") || StringUtils.equals(userId, "root")) {
+				if (StringUtils.equals(userId, "admin")) {
 					continue;
 				}
 				try {

@@ -501,18 +501,17 @@ public class SysUserController {
 		}
 
 		/**
-		 * 只允许root或admin账户才能重置其他用户的密码
+		 * 只允许admin账户才能重置其他用户的密码
 		 */
-		if (loginContext.isSystemAdministrator() && (StringUtils.equalsIgnoreCase(loginContext.getActorId(), "admin")
-				|| StringUtils.equalsIgnoreCase(loginContext.getActorId(), "root"))) {
+		if (loginContext.isSystemAdministrator()
+				&& (StringUtils.equalsIgnoreCase(loginContext.getActorId(), "admin"))) {
 			String userId = ParamUtil.getParameter(request, "userId");
 			SysUser bean = sysUserService.findById(userId);
 			if (bean != null) {
 				/**
-				 * root或admin系统管理员的密码不允许重置
+				 * admin系统管理员的密码不允许重置
 				 */
-				if (!(StringUtils.equalsIgnoreCase(bean.getUserId(), "admin")
-						|| StringUtils.equalsIgnoreCase(bean.getUserId(), "root"))) {
+				if (!(StringUtils.equalsIgnoreCase(bean.getUserId(), "admin"))) {
 					String newPwd = ParamUtil.getParameter(request, "newPwd");
 					if (bean != null && StringUtils.isNotEmpty(newPwd)) {
 						logger.info(loginContext.getActorId() + "重置" + bean.getName() + "的密码。");

@@ -345,8 +345,10 @@ public class IdentityFactory {
 		if (list != null && !list.isEmpty()) {
 			for (Object object : list) {
 				if (object instanceof String) {
-					managedTenantIds.add(object.toString());
-					buffer.append(object.toString()).append(",");
+					if (!managedTenantIds.contains(object.toString())) {
+						managedTenantIds.add(object.toString());
+						buffer.append(object.toString()).append(",");
+					}
 				}
 			}
 		}

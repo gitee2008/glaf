@@ -51,6 +51,12 @@ public class SysAccess implements Serializable, JSONable {
 	@Column(name = "ROLEID", nullable = false)
 	protected String roleId;
 
+	/**
+	 * 所属租户
+	 */
+	@Column(name = "TENANTID")
+	protected String tenantId;
+
 	public SysAccess() {
 
 	}
@@ -86,6 +92,10 @@ public class SysAccess implements Serializable, JSONable {
 		return this.roleId;
 	}
 
+	public String getTenantId() {
+		return tenantId;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -109,6 +119,10 @@ public class SysAccess implements Serializable, JSONable {
 
 	public void setRoleId(String roleId) {
 		this.roleId = roleId;
+	}
+
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 
 	public JSONObject toJsonObject() {

@@ -135,6 +135,10 @@ public class TenantUserController {
 
 		JSONObject result = new JSONObject();
 		int total = sysUserService.getSysUserCountByQueryCriteria(query);
+		if (loginContext.isTenantAdmin()) {
+			total = total - 1;
+		}
+
 		if (total > 0) {
 			result.put("total", total);
 			result.put("totalCount", total);
@@ -156,9 +160,11 @@ public class TenantUserController {
 			if (list != null && !list.isEmpty()) {
 				JSONArray rowsJSON = new JSONArray();
 
-				result.put("rows", rowsJSON);
-
 				for (SysUser sysUser : list) {
+					if (loginContext.isTenantAdmin()
+							&& StringUtils.equals(sysUser.getActorId(), loginContext.getActorId())) {
+						continue;
+					}
 					JSONObject rowJSON = sysUser.toJsonObject();
 					rowJSON.put("id", sysUser.getId());
 					rowJSON.put("userId", sysUser.getUserId());
@@ -166,6 +172,8 @@ public class TenantUserController {
 					rowJSON.remove("token");
 					rowsJSON.add(rowJSON);
 				}
+
+				result.put("rows", rowsJSON);
 
 			}
 		} else {
@@ -336,8 +344,6 @@ public class TenantUserController {
 		SysUser bean = sysUserService.findByAccount(user.getUserId());
 		request.setAttribute("bean", bean);
 
-		 
-
 		List<Dictory> dictories = dictoryService.getDictoryList(SysConstants.USER_HEADSHIP);
 		modelMap.put("dictories", dictories);
 
@@ -432,11 +438,10 @@ public class TenantUserController {
 		}
 
 		/**
-		 * 只允许root或admin账户才能重置其他用户的密码
+		 * 只允许admin账户才能重置其他用户的密码
 		 */
 		if (loginContext.isTenantAdmin() || (loginContext.isSystemAdministrator()
-				&& (StringUtils.equalsIgnoreCase(loginContext.getActorId(), "admin")
-						|| StringUtils.equalsIgnoreCase(loginContext.getActorId(), "root")))) {
+				&& (StringUtils.equalsIgnoreCase(loginContext.getActorId(), "admin")))) {
 			String userId = ParamUtil.getParameter(request, "userId");
 			userId = RequestUtils.decodeString(userId);
 			SysUser user = sysUserService.findById(userId);
@@ -447,10 +452,9 @@ public class TenantUserController {
 					}
 				}
 				/**
-				 * root或admin系统管理员的密码不允许重置
+				 * admin系统管理员的密码不允许重置
 				 */
-				if (!(StringUtils.equalsIgnoreCase(user.getUserId(), "admin")
-						|| StringUtils.equalsIgnoreCase(user.getUserId(), "root"))) {
+				if (!(StringUtils.equalsIgnoreCase(user.getUserId(), "admin"))) {
 					String newPwd = ParamUtil.getParameter(request, "newPwd");
 					if (user != null && StringUtils.isNotEmpty(newPwd)) {
 						logger.info(loginContext.getActorId() + "重置" + user.getName() + "的密码。");

@@ -187,7 +187,7 @@ public class SysUser implements Serializable, User, JSONable {
 	 * 用户同步标记
 	 */
 	@Column(name = "SYNCFLAG", columnDefinition = "int default 0")
-	protected Integer syncFlag;
+	protected int syncFlag;
 
 	/**
 	 * 用户同步时间
@@ -444,7 +444,7 @@ public class SysUser implements Serializable, User, JSONable {
 		return sex;
 	}
 
-	public Integer getSyncFlag() {
+	public int getSyncFlag() {
 		return syncFlag;
 	}
 
@@ -707,7 +707,7 @@ public class SysUser implements Serializable, User, JSONable {
 		this.sex = sex;
 	}
 
-	public void setSyncFlag(Integer syncFlag) {
+	public void setSyncFlag(int syncFlag) {
 		this.syncFlag = syncFlag;
 	}
 

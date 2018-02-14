@@ -62,7 +62,7 @@ public class UserOnlineController {
 		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		if (loginContext.isSystemAdministrator()) {
 			String actorId = request.getParameter("actorId");
-			if (!(StringUtils.equals(actorId, "admin") || StringUtils.equals(actorId, "root"))) {
+			if (!(StringUtils.equals(actorId, "admin"))) {
 				try {
 					userOnlineService.logout(actorId);
 					String cacheKey = Constants.CACHE_LOGIN_CONTEXT_KEY + actorId;

@@ -125,7 +125,7 @@ public class ExecutionLogFactory {
 		}
 		try {
 			IDatabaseService databaseService = (IDatabaseService) ContextFactory.getBean("databaseService");
-			Database database = databaseService.getDatabaseByMapping("log_storage_db");
+			Database database = databaseService.getDatabaseByMapping("log");
 			if (database != null) {
 				systemName = database.getName();
 				checkLogTable(systemName, ExecutionLogDomainFactory.TABLENAME);

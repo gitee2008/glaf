@@ -29,13 +29,13 @@ import com.glaf.core.base.*;
 import com.glaf.base.online.util.*;
 
 @Entity
-@Table(name = "SYS_USER_ONLINE")
+@Table(name = "USER_ONLINE")
 public class UserOnline implements Serializable, JSONable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "ID_", nullable = false)
-	protected Long id;
+	protected long id;
 
 	@Column(name = "ACTORID_", length = 50)
 	protected String actorId;
@@ -55,7 +55,7 @@ public class UserOnline implements Serializable, JSONable {
 	protected Date checkDate;
 
 	@Column(name = "CHECKDATEMS_")
-	protected Long checkDateMs;
+	protected long checkDateMs;
 
 	public UserOnline() {
 
@@ -70,10 +70,7 @@ public class UserOnline implements Serializable, JSONable {
 		if (getClass() != obj.getClass())
 			return false;
 		UserOnline other = (UserOnline) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
+		if (id != other.id)
 			return false;
 		return true;
 	}
@@ -86,11 +83,11 @@ public class UserOnline implements Serializable, JSONable {
 		return checkDate;
 	}
 
-	public Long getCheckDateMs() {
+	public long getCheckDateMs() {
 		return checkDateMs;
 	}
 
-	public Long getId() {
+	public long getId() {
 		return this.id;
 	}
 
@@ -110,7 +107,7 @@ public class UserOnline implements Serializable, JSONable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
 		return result;
 	}
 
@@ -126,11 +123,11 @@ public class UserOnline implements Serializable, JSONable {
 		this.checkDate = checkDate;
 	}
 
-	public void setCheckDateMs(Long checkDateMs) {
+	public void setCheckDateMs(long checkDateMs) {
 		this.checkDateMs = checkDateMs;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -156,8 +153,7 @@ public class UserOnline implements Serializable, JSONable {
 
 	@Override
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this,
-				ToStringStyle.MULTI_LINE_STYLE);
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 	}
 
 }

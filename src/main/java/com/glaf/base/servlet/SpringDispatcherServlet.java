@@ -97,7 +97,7 @@ public class SpringDispatcherServlet extends DispatcherServlet {
 			}
 
 			if (actorId != null && ContextUtils.denyAccess(actorId)) {
-				if (!(StringUtils.equals(actorId, "admin") || StringUtils.equals(actorId, "root"))) {
+				if (!(StringUtils.equals(actorId, "admin"))) {
 					// 如果登录用户恶意刷新，直接重定向
 					response.sendRedirect("http://www.example.com");
 					return;

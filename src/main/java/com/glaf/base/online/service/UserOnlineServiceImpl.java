@@ -88,7 +88,7 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 		List<UserOnline> list = this.list(query);
 		if (list != null && !list.isEmpty()) {
 			for (UserOnline bean : list) {
-				if (bean.getCheckDateMs() != null) {
+				if (bean.getCheckDateMs() != 0) {
 					long ts = System.currentTimeMillis() - bean.getCheckDateMs();
 					if (ts / 1000 > timeoutSeconds) {// 如果超时，从在线用户列表中删除
 						userOnlineMapper.deleteUserOnlineById(bean.getId());
@@ -249,7 +249,7 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 			String cacheKey = "useronline_" + userOnline.getActorId();
 			CacheFactory.remove("useronline", cacheKey);
 		}
-		if (userOnline.getId() == null) {
+		if (userOnline.getId() == 0) {
 			userOnline.setId(idGenerator.nextId());
 			userOnline.setCheckDateMs(System.currentTimeMillis());
 			userOnline.setCheckDate(new Date(userOnline.getCheckDateMs()));
