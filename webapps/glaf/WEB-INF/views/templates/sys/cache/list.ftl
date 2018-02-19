@@ -20,11 +20,11 @@
 				singleSelect:true,
 				idField:'key',
 				columns:[[
-	                {title:'序号',field:'index', width:80, sortable:true},
-					{title:'区域',field:'region', width:120},
-					{title:'名称',field:'name', width:180},
-					{title:'大小（字节）',field:'size', width:150},
-					{title:'创建日期',field:'date', width:180}
+	                {title:'序号', field:'index', width:60, sortable:true},
+					{title:'区域', field:'region', width:120, sortable:true},
+					{title:'名称', field:'name', width:280, sortable:true},
+					{title:'大小（字节）', field:'size', width:90, sortable:true},
+					{title:'创建日期', field:'date', width:120, sortable:true}
 				]],
 				rownumbers:false,
 				pagination:false

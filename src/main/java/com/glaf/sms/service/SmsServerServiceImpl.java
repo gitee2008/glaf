@@ -30,13 +30,20 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
+import com.glaf.core.cache.CacheFactory;
+import com.glaf.core.config.SystemConfig;
 import com.glaf.core.dao.EntityDAO;
 import com.glaf.core.id.IdGenerator;
 import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.util.DBUtils;
+
 import com.glaf.sms.domain.SmsServer;
 import com.glaf.sms.mapper.SmsServerMapper;
 import com.glaf.sms.query.SmsServerQuery;
+import com.glaf.sms.util.SmsServerJsonFactory;
 
 @Service("com.glaf.sms.service.smsServerService")
 @Transactional(readOnly = true)
@@ -59,6 +66,7 @@ public class SmsServerServiceImpl implements SmsServerService {
 
 	@Transactional
 	public void bulkInsert(List<SmsServer> list) {
+		CacheFactory.clear("sms_server");
 		for (SmsServer smsServer : list) {
 			if (StringUtils.isEmpty(smsServer.getId())) {
 				smsServer.setId(idGenerator.getNextId("SMS_SERVER"));
@@ -97,6 +105,7 @@ public class SmsServerServiceImpl implements SmsServerService {
 	@Transactional
 	public void deleteById(String id) {
 		if (id != null) {
+			CacheFactory.clear("sms_server");
 			smsServerMapper.deleteSmsServerById(id);
 		}
 	}
@@ -104,6 +113,7 @@ public class SmsServerServiceImpl implements SmsServerService {
 	@Transactional
 	public void deleteByIds(List<String> ids) {
 		if (ids != null && !ids.isEmpty()) {
+			CacheFactory.clear("sms_server");
 			for (String id : ids) {
 				smsServerMapper.deleteSmsServerById(id);
 			}
@@ -114,7 +124,24 @@ public class SmsServerServiceImpl implements SmsServerService {
 		if (id == null) {
 			return null;
 		}
+		String cacheKey = "sms_server_" + id;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString("sms_server", cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONObject json = JSON.parseObject(text);
+					return SmsServerJsonFactory.jsonToObject(json);
+				} catch (Exception ex) {
+				}
+			}
+		}
 		SmsServer smsServer = smsServerMapper.getSmsServerById(id);
+		if (smsServer != null) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				JSONObject json = smsServer.toJsonObject();
+				CacheFactory.put("sms_server", cacheKey, json.toJSONString());
+			}
+		}
 		return smsServer;
 	}
 
@@ -145,6 +172,7 @@ public class SmsServerServiceImpl implements SmsServerService {
 
 	@Transactional
 	public void save(SmsServer smsServer) {
+		CacheFactory.clear("sms_server");
 		if (StringUtils.isEmpty(smsServer.getId())) {
 			smsServer.setId(idGenerator.getNextId("SMS_SERVER"));
 			smsServer.setCreateTime(new java.util.Date());
@@ -158,11 +186,6 @@ public class SmsServerServiceImpl implements SmsServerService {
 				smsServerMapper.updateSmsServer(smsServer);
 			}
 		}
-	}
-	
-	@Transactional
-	public void update(SmsServer smsServer) {
-		smsServerMapper.updateSmsServer(smsServer);
 	}
 
 	@javax.annotation.Resource
@@ -188,6 +211,12 @@ public class SmsServerServiceImpl implements SmsServerService {
 	@javax.annotation.Resource
 	public void setSqlSessionTemplate(SqlSessionTemplate sqlSessionTemplate) {
 		this.sqlSessionTemplate = sqlSessionTemplate;
+	}
+
+	@Transactional
+	public void update(SmsServer smsServer) {
+		CacheFactory.clear("sms_server");
+		smsServerMapper.updateSmsServer(smsServer);
 	}
 
 }

@@ -322,8 +322,8 @@ public class ChartController {
 		}
 
 		List<Integer> scales = new ArrayList<Integer>();
-		for (int i = 1; i <= 30; i++) {
-			scales.add(30 * i);
+		for (int i = 1; i <= 60; i++) {
+			scales.add(90 + 10 * i);
 		}
 
 		request.setAttribute("scales", scales);

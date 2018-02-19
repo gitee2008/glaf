@@ -21,8 +21,8 @@
 				idField:'tablename',
 				columns:[[
 					{field:'ck', checkbox:true, width:60},
-	                {title:'序号',field:'startIndex',width:80},
-					{title:'表名',field:'tablename', width:180},
+	                {title:'序号',field:'startIndex',width:60},
+					{title:'表名',field:'tablename', width:380},
 					{title:'Category',field:'cat', width:120},
 					{title:'Schema',field:'schem', width:120}
 				]],

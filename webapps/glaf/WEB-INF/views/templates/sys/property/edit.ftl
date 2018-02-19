@@ -69,7 +69,7 @@
 	</#list>
   </table>
 	<div align="center">
-	    <input type="button"  name="save" value=" 保存 " class="btn btn-primary" onclick="javascript:saveForm('');"/>
+	    <input type="button"  name="save" value=" 保存 " class="btn btnGray" onclick="javascript:saveForm('');"/>
 	</div>
 </form>
  <br/>

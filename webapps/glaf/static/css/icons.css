@@ -30,6 +30,9 @@
 	background: url('../images/table_row_add.png') no-repeat;
 }
 
+.icon_chart_line {
+	background: url('../images/chart_line.png') no-repeat;
+}
 
 .icon-stop {
 	background: url('../images/sign_stop.png') no-repeat;

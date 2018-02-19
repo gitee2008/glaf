@@ -21,10 +21,10 @@
 				idField: 'id',
 				columns:[[
 				    {title:'序号', field:'startIndex', align:'left', width:60, sortable:false},
-					{title:'标题', field:'title', align:'left', width:180},
+					{title:'标题', field:'title', align:'left', width:250},
 					{title:'表名', field:'tableName', align:'left', width:120, formatter:formatterTable},
 					{title:'创建日期', field:'createTime', align:'center', width:90},
-					{title:'功能键', field:'functionKey', align:'left', width:250, formatter:formatterKeys}
+					{title:'功能键', field:'functionKey', align:'left', width:280, formatter:formatterKeys}
 				]],
 				rownumbers: false,
 				pagination: true,

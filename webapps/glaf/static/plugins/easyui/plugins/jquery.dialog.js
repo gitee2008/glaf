@@ -1,5 +1,5 @@
 /**
- * EasyUI for jQuery 1.5.4
+ * EasyUI for jQuery 1.5.4.1
  * 
  * Copyright (c) 2009-2018 www.jeasyui.com. All rights reserved.
  *
@@ -64,7 +64,7 @@ $(_2).siblings("div.dialog-button").remove();
 _3.inited=true;
 var _a=_3.closed;
 _4.show();
-$(_2).window("resize");
+$(_2).window("resize",{});
 if(_a){
 _4.hide();
 }
