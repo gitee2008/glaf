@@ -26,6 +26,7 @@
 		<result property="property" column="PROPERTY_" jdbcType="VARCHAR" />
 		<result property="verify" column="VERIFY_" jdbcType="VARCHAR" />
 		<result property="ticketFlag" column="TICKETFLAG_" jdbcType="VARCHAR" />
+		<result property="limit" column="LIMIT_" jdbcType="INTEGER" />
 		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
 		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
 		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
@@ -97,6 +98,9 @@
 			</if>
 			<if test="ticketFlag != null">
 				,TICKETFLAG_
+			</if>
+			<if test="limit != null">
+				,LIMIT_
 			</if>
 			<if test="locked != null">
 				,LOCKED_
@@ -178,6 +182,9 @@
 			<if test="ticketFlag != null">
 				,#{ticketFlag, jdbcType=VARCHAR}
 			</if>
+			<if test="limit != null">
+				,#{limit, jdbcType=INTEGER}
+			</if>
 			<if test="locked != null">
 				,#{locked, jdbcType=INTEGER}
 			</if>
@@ -220,6 +227,7 @@
 		,PROPERTY_
 		,VERIFY_
 		,TICKETFLAG_
+		,LIMIT_
 		,LOCKED_
 		,CREATEBY_
 		,CREATETIME_
@@ -261,8 +269,8 @@
 			,#{sysTenant.verify,
 			jdbcType=VARCHAR}
 			,#{sysTenant.ticketFlag, jdbcType=VARCHAR}
-			,#{sysTenant.locked,
-			jdbcType=INTEGER}
+			,#{sysTenant.limit,jdbcType=INTEGER}
+			,#{sysTenant.locked,jdbcType=INTEGER}
 			,#{sysTenant.createBy,
 			jdbcType=VARCHAR}
 			,#{sysTenant.createTime,
@@ -302,6 +310,7 @@
 			,PROPERTY_
 			,VERIFY_
 			,TICKETFLAG_
+			,LIMIT_
 			,LOCKED_
 			,CREATEBY_
 			,CREATETIME_
@@ -344,6 +353,7 @@
 			jdbcType=VARCHAR}
 			,#{sysTenant.verify, jdbcType=VARCHAR}
 			,#{sysTenant.ticketFlag, jdbcType=VARCHAR}
+			,#{sysTenant.limit,jdbcType=INTEGER}
 			,#{sysTenant.locked,
 			jdbcType=INTEGER}
 			,#{sysTenant.createBy,

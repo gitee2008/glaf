@@ -4,8 +4,7 @@
 
 <mapper namespace="com.glaf.global.ChartDataMapper">
 
-	<select id="getHealthDietaryStatisticsData" resultType="java.util.HashMap"
-		parameterType="java.util.HashMap">
+	<select id="getHealthDietaryStatisticsData" resultType="java.util.HashMap" parameterType="java.util.HashMap">
 
 		select TITLE_ as c , VALUE_ as v from health_dietary_statistics
 
@@ -32,8 +31,7 @@
 	</select>
 
 
-	<select id="getHealthDietaryStatisticsData2" resultType="java.util.HashMap"
-		parameterType="java.util.HashMap">
+	<select id="getHealthDietaryStatisticsData2" resultType="java.util.HashMap" parameterType="java.util.HashMap">
 
 		select TITLE_ as c , VALUE_ as v from health_dietary_statistics
 

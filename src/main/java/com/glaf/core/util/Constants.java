@@ -51,9 +51,9 @@ public final class Constants {
 	public static final String CACHE_USER_REGION = "user";
 
 	public static final String CACHE_TENANT_REGION = "tenant";
-	
+
 	public static final String CACHE_MENU_REGION = "menu";
-	
+
 	public static final String CACHE_PROPERTY_REGION = "property";
 
 	public static final String CACHE_LOGIN_CONTEXT_REGION = "login_context";
@@ -131,6 +131,8 @@ public final class Constants {
 	public final static int TM_RUNTIME_TYPE = 10;
 
 	public final static int TM_USER_TYPE = 5;
+
+	public static final int UNLIMIT = 9999;
 
 	public static final String TS = "TS";
 

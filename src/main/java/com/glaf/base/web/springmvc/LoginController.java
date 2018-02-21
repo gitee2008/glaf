@@ -423,6 +423,10 @@ public class LoginController {
 			return this.doLogin(request, response, modelMap);
 		}
 
+		if (SystemConfig.getBoolean("enableAutoReg")) {
+			request.setAttribute("enableAutoReg", true);
+		}
+
 		String login_html = SystemConfig.getString("login_html");
 		if (StringUtils.isNotEmpty(login_html) && (StringUtils.endsWithIgnoreCase(login_html, ".html")
 				|| StringUtils.endsWithIgnoreCase(login_html, ".htm"))) {

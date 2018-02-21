@@ -72,6 +72,7 @@
 		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
 		<result property="tenantType" column="TENANTTYPE_" jdbcType="INTEGER" />
 		<result property="databaseId" column="DATABASEID_" jdbcType="BIGINT" />
+		<result property="limit" column="LIMIT_" jdbcType="INTEGER" />
 		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
 	</resultMap>
 
@@ -542,13 +543,16 @@
 	</select>
 
 
-	<select id="getManagedTenantIds" resultType="string"
-		parameterType="string">
+	<select id="getManagedTenantIds" resultType="string" parameterType="string">
 
 		SELECT t.TENANTID_
 		FROM SYS_TENANT_GRANT t
-		WHERE
-		t.GRANTEE_ = #{userId}
+		WHERE t.GRANTEE_ = #{userId}
+		union
+		SELECT DISTINCT t.TENANTID_ from SYS_TENANT t
+		INNER JOIN SYS_TREE_PERMISSION p
+		ON t.AREAID_ = p.NODEID_
+		where p.USERID_ = #{userId}
 
 	</select>
 

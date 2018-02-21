@@ -55,11 +55,17 @@ public class TenantJsonFactory {
 		if (jsonObject.containsKey("tenantId")) {
 			model.setTenantId(jsonObject.getString("tenantId"));
 		}
+
 		if (jsonObject.containsKey("tenantType")) {
 			model.setTenantType(jsonObject.getInteger("tenantType"));
 		}
+
 		if (jsonObject.containsKey("databaseId")) {
 			model.setDatabaseId(jsonObject.getLong("databaseId"));
+		}
+
+		if (jsonObject.containsKey("limit")) {
+			model.setLimit(jsonObject.getInteger("limit"));
 		}
 
 		if (jsonObject.containsKey("locked")) {
@@ -85,6 +91,7 @@ public class TenantJsonFactory {
 		jsonObject.put("id", model.getId());
 		jsonObject.put("_id_", model.getId());
 		jsonObject.put("_oid_", model.getId());
+
 		if (model.getName() != null) {
 			jsonObject.put("name", model.getName());
 		}
@@ -92,8 +99,12 @@ public class TenantJsonFactory {
 		if (model.getTenantId() != null) {
 			jsonObject.put("tenantId", model.getTenantId());
 		}
+
 		jsonObject.put("tenantType", model.getTenantType());
+
 		jsonObject.put("databaseId", model.getDatabaseId());
+
+		jsonObject.put("limit", model.getLimit());
 
 		jsonObject.put("locked", model.getLocked());
 
@@ -105,6 +116,7 @@ public class TenantJsonFactory {
 		jsonObject.put("id", model.getId());
 		jsonObject.put("_id_", model.getId());
 		jsonObject.put("_oid_", model.getId());
+
 		if (model.getName() != null) {
 			jsonObject.put("name", model.getName());
 		}
@@ -112,8 +124,12 @@ public class TenantJsonFactory {
 		if (model.getTenantId() != null) {
 			jsonObject.put("tenantId", model.getTenantId());
 		}
+
 		jsonObject.put("tenantType", model.getTenantType());
+
 		jsonObject.put("databaseId", model.getDatabaseId());
+
+		jsonObject.put("limit", model.getLimit());
 
 		jsonObject.put("locked", model.getLocked());
 

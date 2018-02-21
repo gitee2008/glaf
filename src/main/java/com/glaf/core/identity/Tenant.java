@@ -29,6 +29,8 @@ public interface Tenant extends java.io.Serializable {
 
 	long getId();
 
+	int getLimit();
+
 	int getLocked();
 
 	String getName();
@@ -42,6 +44,8 @@ public interface Tenant extends java.io.Serializable {
 	void setDatabaseId(long databaseId);
 
 	void setId(long id);
+
+	void setLimit(int limit);
 
 	void setLocked(int locked);
 

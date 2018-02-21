@@ -135,6 +135,8 @@ public class LoginContext implements java.io.Serializable, Cloneable, JSONable {
 
 	protected String tenantId;
 
+	protected int limit;
+
 	public LoginContext() {
 
 	}
@@ -303,6 +305,13 @@ public class LoginContext implements java.io.Serializable, Cloneable, JSONable {
 		return indexUrl;
 	}
 
+	public int getLimit() {
+		if (tenant != null) {
+			limit = tenant.getLimit();
+		}
+		return limit;
+	}
+
 	public Collection<String> getManagedTenantIds() {
 		return managedTenantIds;
 	}
@@ -421,19 +430,6 @@ public class LoginContext implements java.io.Serializable, Cloneable, JSONable {
 		return hasPermission;
 	}
 
-	public boolean isTenantAdmin() {
-		boolean TenantAdmin = false;
-
-		Collection<String> roles = this.getRoles();
-		if (roles != null) {
-			if (roles.contains("TenantAdmin")) {
-				TenantAdmin = true;
-			}
-		}
-
-		return TenantAdmin;
-	}
-
 	public boolean isSystemAdministrator() {
 		boolean isSystemAdministrator = false;
 
@@ -449,6 +445,19 @@ public class LoginContext implements java.io.Serializable, Cloneable, JSONable {
 		}
 
 		return isSystemAdministrator;
+	}
+
+	public boolean isTenantAdmin() {
+		boolean TenantAdmin = false;
+
+		Collection<String> roles = this.getRoles();
+		if (roles != null) {
+			if (roles.contains("TenantAdmin")) {
+				TenantAdmin = true;
+			}
+		}
+
+		return TenantAdmin;
 	}
 
 	public LoginContext jsonToObject(JSONObject jsonObject) {

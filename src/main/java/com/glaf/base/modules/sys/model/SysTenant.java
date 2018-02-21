@@ -168,6 +168,12 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 	protected String ticketFlag;
 
 	/**
+	 * 是否限制
+	 */
+	@Column(name = "LIMIT_")
+	protected int limit;
+
+	/**
 	 * 是否锁定
 	 */
 	@Column(name = "LOCKED_")
@@ -273,6 +279,10 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 
 	public int getLevel() {
 		return level;
+	}
+
+	public int getLimit() {
+		return limit;
 	}
 
 	public int getLocked() {
@@ -400,6 +410,10 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 
 	public void setLevel(int level) {
 		this.level = level;
+	}
+
+	public void setLimit(int limit) {
+		this.limit = limit;
 	}
 
 	public void setLocked(int locked) {

@@ -29,6 +29,8 @@ public class TenantImpl implements Tenant {
 
 	protected long databaseId;
 
+	protected int limit;
+
 	protected int locked;
 
 	protected String name;
@@ -47,6 +49,10 @@ public class TenantImpl implements Tenant {
 
 	public long getId() {
 		return id;
+	}
+
+	public int getLimit() {
+		return limit;
 	}
 
 	public int getLocked() {
@@ -75,6 +81,10 @@ public class TenantImpl implements Tenant {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public void setLimit(int limit) {
+		this.limit = limit;
 	}
 
 	public void setLocked(int locked) {
