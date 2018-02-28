@@ -30,8 +30,8 @@
 				]],
 				rownumbers:false,
 				pagination:true,
-				pageSize: 10,
-				pageList: [10,15,20,25,30,40,50,100,200,500],
+				pageSize: 20,
+				pageList: [20,25,30,40,50,100,200,500],
 				onDblClickRow: onMyRowClick 
 			});
 	});

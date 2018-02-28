@@ -105,7 +105,7 @@
 			  shade: 0.8,
 			  fixed: false, //不固定
 			  shadeClose: true,
-			  content: [link, 'no']
+			  content: [link, 'yes']
 			});
 	    }
 	}		 

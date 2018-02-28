@@ -3,6 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>增加机构</title>
 <#include "/inc/init_easyui_import.ftl"/>
+<script type="text/javascript" src="${contextPath}/static/scripts/global.js"></script>
 <script type="text/javascript">
  
    var contextPath = "${contextPath}";
@@ -19,7 +20,7 @@
 				   type: "POST",
 				   url: '${contextPath}/sys/organization/saveAdd',
 				   data: params,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },
@@ -40,6 +41,18 @@
    	function setValue(obj){
 	  obj.value=obj[obj.selectedIndex].value;
 	} 
+
+	function chooseParent(){
+		var selected = jQuery("#parentId").val();
+        var link = '${contextPath}/sys/organization/showTreeRadio?elementId=parentId&elementName=parentName&selected='+selected;
+        var x=100;
+        var y=100;
+        if(is_ie) {
+        	x=document.body.scrollLeft+event.clientX-event.offsetX-200;
+        	y=document.body.scrollTop+event.clientY-event.offsetY-200;
+        }
+        openWindow(link,self,x, y, 795, 580);
+	}
 
 </script>
 </head>
@@ -63,17 +76,11 @@
 	  <tr>
         <td class="input-box2">上级机构</td>
         <td>
-		<select id="parentId" name="parentId" onChange="javascript:setValue(this);" class="x-text">
-		  <option value="0">/根节点</option>
-          <#list  trees as tree>
-			<#if tree.locked == 0>
-              <option value="${tree.id}">${tree.blank}${tree.name}</option>
-			</#if>
-		  </#list>
-        </select>
-		<script language="javascript">								
-		  document.all.parentId.value="${parentId}";
-	    </script>		
+		    <input type="hidden" id="parentId" name="parentId" value="">
+		 	<input id="parentName" name="parentName" type="text" size="37" class="x-text" datatype="string" nullable="no" 
+			       maxsize="200" chname="上级机构名称" readonly onclick="javascript:chooseParent();">
+			 &nbsp;<img src="${contextPath}/static/images/orm_root.gif" border="0" onclick="javascript:chooseParent();"
+			            style="cursor:pointer;">
 		</td>
       </tr>
       <tr>
@@ -82,7 +89,7 @@
       </tr>
       <tr>
         <td class="input-box2" valign="top">描　述</td>
-        <td><textarea name="description" cols="38" rows="8" class="x-textarea" datatype="string" nullable="yes" maxsize="1000" chname="描述"></textarea></td>
+        <td><textarea name="description" cols="39" rows="8" class="x-textarea" datatype="string" nullable="yes" maxsize="1000" chname="描述"></textarea></td>
       </tr>
       <tr>
         <td class="input-box2" valign="top">代　码</td>

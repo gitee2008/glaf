@@ -3,6 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>增加用户</title>
 <#include "/inc/init_easyui_import.ftl"/>
+<script type="text/javascript" src="${contextPath}/static/scripts/global.js"></script>
 <script language="javascript">
 
     var contextPath = "${contextPath}";
@@ -62,9 +63,21 @@
 	function setValue(obj){
 	  obj.value=obj[obj.selectedIndex].value;
 	} 
+
+	function chooseOrganization(){
+		var selected = jQuery("#organizationId").val();
+        var link = '${contextPath}/sys/organization/showTreeRadio?elementId=organizationId&elementName=organizationName&selected='+selected;
+        var x=100;
+        var y=100;
+        if(is_ie) {
+        	x=document.body.scrollLeft+event.clientX-event.offsetX-200;
+        	y=document.body.scrollTop+event.clientY-event.offsetY-200;
+        }
+        openWindow(link,self,x, y, 795, 580);
+	}
+
 </script>
 </head>
-
 <body>
 <div class="nav-title"><span class="Title">用户管理</span>&gt;&gt;增加用户</div>
 <form id="iForm" name="iForm" action="${contextPath}/sys/user/saveAdd" method="post"  > 
@@ -84,17 +97,11 @@
 	  <tr>
         <td class="input-box2" valign="top">机  构</td>
         <td>
-		<select id="organizationId" name="organizationId">
-           <option value="0">/根节点</option>
-           <#list  trees as tree>
-			<#if tree.locked == 0>
-              <option value="${tree.id}">${tree.blank}${tree.name}</option>
-			</#if>
-		  </#list>
-        </select>
-		<script language="javascript">								
-          document.all.organizationId.value="${user.organizationId}";	
-	    </script>	
+			<input type="hidden" id="organizationId" name="organizationId" value="${organizationId}">
+		 	<input id="organizationName" name="organizationName" type="text" size="30" class="x-text" datatype="string" nullable="no" 
+			       maxsize="200" chname="机构名称" readonly onclick="javascript:chooseOrganization();" value="${organizationName}"> &nbsp;
+			<img src="${contextPath}/static/images/orm_root.gif" border="0" onclick="javascript:chooseOrganization();"
+			     style="cursor:pointer;">	
 	   </td>
       </tr>
       <tr>

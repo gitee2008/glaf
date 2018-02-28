@@ -1,140 +1,87 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
-<title>登录</title>
-<link rel="stylesheet" href="${request.contextPath}/static/html/login/css/style.css">
-<script type="text/javascript">
-</script>
-</head>
-<body class="p-login p-login-3" id="pagebody">
-	<div class="g-scroll">
-		<div class="g-loginbox">
-			<div class="g-bd">
-				<div class="m-loginbg">
-					<img id="bg" draggable="false"
-						src="${request.contextPath}/static/html/login/img/bg4.jpg"
-						style="margin-left: 0px; margin-top: -50px;" width="100%">
-				</div>
-				<div class="m-bgwrap"></div>
-				<div class="m-loginboxbg"></div>
-				<div class="m-loginbox">
-					<div class="lbinner" id="mailbox">
-						<form  id="iForm" name="iForm" method="post" action="">
-						    <input type="hidden" id="y" name="y">
-						    <input type="hidden" id="x_y" name="x_y">
-							<input type="hidden" id="x_z" name="x_z">
-							<div class="line1 f-cb">
-								<span class="domain"><img
-									src="${request.contextPath}/static/html/login/img/user.png" width="16"
-									style="vertical-align: middle;" />&nbsp;&nbsp;用户名</span> <input
-									type="text" name="x" class="ipt ipt-user" id="x"
-									autocomplete="off" value="${x}" maxlength="40" style=""
-									onclick="hiddenUserWarn()" onblur="validUser()"> <input
-									type="text" class="ipt ipt-user ipt-replace" id="replaceun"
-									autocomplete="off" value="用户名" maxlength="40"
-									style="display: none;">
-							</div>
-							<div class="line1 f-cb">
-								<span class="domain"><img
-									src="${request.contextPath}/static/html/login/img/lock.png" width="16"
-									style="vertical-align: middle;" />&nbsp;&nbsp;密&nbsp;&nbsp;码</span> <input
-									type="password" name="yy" class="ipt ipt-user" id="yy"
-									autocomplete="off" value="" maxlength="40" style=""
-									onclick="hiddenPswWarn()" onblur="validPsw()"> <input
-									type="password" class="ipt ipt-pwd" id="replacepw"
-									autocomplete="off" value="" name="replacepw" maxlength="40"
-									style="display:none;">
-							</div>
-							<div class="line3 f-cb">
-								 <a class="u-loginbtn" id="loginBt" href="#"
-									onclick="return false;">登 录</a>
-							</div>
-							<div class="line4">
-								<a class="u-loginbtn" id="regBt" href="#"
-									onclick="return false;">注 册</a>
-							</div>
-						</form>
-					</div>
-					<div class="m-popup m-popup-warn m-popup-warn-block">
-						<div class="inner">
-							<div class="tt">
-								<span class="u-ico u-ico-warn"></span>帐号或密码错误
-							</div>
-							
-						</div>
-						<div class="arrow"></div>
-					</div>
-					<div class="m-popup m-popup-warn m-popup-warn-username">
-						<div class="inner">
-							<div class="tt">
-								<span class="u-ico u-ico-warn"></span>帐号输入错误，请重新输入
-							</div>
-						</div>
-						<div class="arrow"></div>
-					</div>
-					<div class="m-popup m-popup-warn m-popup-warn-password">
-						<div class="inner">
-							<div class="tt">
-								<span class="u-ico u-ico-warn"></span>请输入密码
-							</div>
-						</div>
-						<div class="arrow"></div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-  </div>	
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>登录</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.7 -->
+  <link rel="stylesheet" href="${request.contextPath}/static/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="${request.contextPath}/static/AdminLTE/bower_components/font-awesome/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="${request.contextPath}/static/AdminLTE/bower_components/Ionicons/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="${request.contextPath}/static/AdminLTE/dist/css/AdminLTE.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="${request.contextPath}/static/AdminLTE/plugins/iCheck/square/blue.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
 
   <script type="text/javascript" src="${request.contextPath}/static/scripts/jquery.min.js"></script>
+  <!-- Bootstrap 3.3.7 -->
+  <script src="${request.contextPath}/static/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!-- iCheck -->
+  <script src="${request.contextPath}/static/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+
   <script type="text/javascript" src="${request.contextPath}/static/scripts/jquery.form.js"></script>
   <script type="text/javascript" src="${request.contextPath}/static/scripts/jsencrypt.min.js"></script>
-  <script type="text/javascript" src="${request.contextPath}/static/scripts/RSA.min.js"></script>
   <script type="text/javascript" src="${request.contextPath}/static/scripts/map.js"></script>
-  <script type="text/javascript" src="${request.contextPath}/static/html/login/spread.js"></script>
   <script type="text/javascript">
-	   var map = new Map();
-	   var contextPath="${request.contextPath}";
+	var map = new Map();
+	var contextPath="${request.contextPath}";
   </script>
-  <script type="text/javascript">
-		//向上滚动效果 
-		$(".u-top").click(function() {
-			var href = $(this).attr("href");
-			var pos = $(href).offset().top;
-			$(href).animate({
-				scrollTop : pos - 50
-			}, 1000);
-			return false;
-		});
-		//向下滚动效果
-		$(".u-jumpNext").click(function() {
-			var href = $(this).attr("href");
-			var pos = $(href).offset().top;
-			$(".g-scroll").animate({
-				scrollTop : pos + 50
-			}, 1000);
-			return false;
-		});
-		function hiddenUserWarn() {
-			$(".m-popup-warn-username").removeClass("m-popup-warn-show");
-			$(".m-popup-warn-block").removeClass("m-popup-warn-show");
-		}
-		function validUser() {
-			if ($("#x").val() == "")
-				$(".m-popup-warn-username").addClass("m-popup-warn-show");
-		}
-		function hiddenPswWarn() {
-			$(".m-popup-warn-password").removeClass("m-popup-warn-show");
-			$(".m-popup-warn-block").removeClass("m-popup-warn-show");
-		}
-		function validPsw() {
-			if ($("#yy").val() == "")
-				$(".m-popup-warn-password").addClass("m-popup-warn-show");
-		}
-		
-	</script>
-    <script type="text/javascript" src="${request.contextPath}/static/scripts/login.js"></script> 
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <b>幼儿园卫生保健系统</b>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">请输入您的用户名及密码</p>
+    <form id="iForm" name="iForm" action="${request.contextPath}/login/doLogin" method="post">
+	  <input type="hidden" id="y" name="y">
+	  <input type="hidden" id="x_y" name="x_y">
+	  <input type="hidden" id="x_z" name="x_z">
+      <div class="form-group has-feedback">
+        <input type="text" id="x" name="x" class="form-control" placeholder="用户名">
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input type="password" id="yy" name="yy" class="form-control" placeholder="密码">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <!-- <div class="col-xs-8">
+          <div class="checkbox icheck">
+            <label>
+              <input type="checkbox"> 记住密码
+            </label>
+          </div>
+        </div> -->
+        <!-- /.col -->
+		<div class="col-xs-8"></div>
+        <div class="col-xs-4">
+          <button type="submit" id="loginBt" onclick="return false;" class="btn btn-primary btn-block btn-flat">登录</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+    <a href="#">忘记密码</a><br>
+	<#if enableAutoReg == true>
+    <a href="${request.contextPath}/register" class="text-center">注册</a>
+    </#if>
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+<script type="text/javascript" src="${request.contextPath}/static/scripts/loginV2.js"></script>
 </body>
 </html>

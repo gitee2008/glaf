@@ -228,7 +228,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td width="20%" align="left">允许上次票据</td>
+		<td width="20%" align="left">允许上传票据</td>
 		<td align="left">
             <select id="ticketFlag" name="ticketFlag">
 			    <option value="Y">是</option>
