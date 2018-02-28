@@ -244,7 +244,7 @@ public class MyBatisEntityDAO implements EntityDAO {
 		page.setPageSize(pageSize);
 		page.setCurrentPage(pageNo);
 
-		//logger.debug("params:" + queryParams);
+		// logger.debug("params:" + queryParams);
 		logger.debug("rows size:" + rows.size());
 
 		return page;
@@ -303,7 +303,7 @@ public class MyBatisEntityDAO implements EntityDAO {
 		long newValue = oldValue + conf.getInt("dbid_step", 100);
 		dbid.setName("next.dbid");
 		dbid.setTitle("系统内置主键");
-		dbid.setValue(Long.toString(newValue));
+		dbid.setValue(Long.toString(newValue + 1));
 		dbid.setVersion(dbid.getVersion() + 1);
 		getSqlSession().update("updateNextDbId", dbid);
 		return new IdBlock(oldValue, newValue - 1);
@@ -324,7 +324,7 @@ public class MyBatisEntityDAO implements EntityDAO {
 		long newValue = oldValue + conf.getInt("dbid_step_" + name, 100);
 		dbid.setName(name);
 		dbid.setTitle("系统内置主键");
-		dbid.setValue(Long.toString(newValue));
+		dbid.setValue(Long.toString(newValue + 1));
 		dbid.setVersion(dbid.getVersion() + 1);
 		getSqlSession().update("updateNextDbId", dbid);
 		return new IdBlock(oldValue, newValue - 1);

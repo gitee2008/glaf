@@ -17,6 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.logging.Log;
@@ -32,6 +35,20 @@ import com.glaf.core.util.StringTools;
 @Service("idGenerator")
 @Transactional
 public class MyBatisDbIdGenerator implements IdGenerator {
+	public class RefreshTask implements Runnable {
+
+		public void run() {
+			try {
+				lastIdMap.clear();
+				nextIdMap.clear();
+				//logger.info("clear IdGenerator cache.");
+			} catch (Exception ex) {
+				logger.error(ex);
+			}
+		}
+
+	}
+
 	protected final static Log logger = LogFactory.getLog(MyBatisDbIdGenerator.class);
 
 	protected static ConcurrentMap<String, AtomicLong> lastIdMap = new ConcurrentHashMap<>();
@@ -39,6 +56,12 @@ public class MyBatisDbIdGenerator implements IdGenerator {
 	protected static ConcurrentMap<String, AtomicLong> nextIdMap = new ConcurrentHashMap<>();
 
 	protected static ThreadLocal<Map<String, Integer>> threadLocalVaribles = new ThreadLocal<Map<String, Integer>>();
+
+	protected static ScheduledExecutorService scheduledThreadPool = Executors.newSingleThreadScheduledExecutor();
+
+	public static void clear() {
+		threadLocalVaribles.remove();
+	}
 
 	protected volatile EntityDAO entityDAO;
 
@@ -48,10 +71,12 @@ public class MyBatisDbIdGenerator implements IdGenerator {
 
 	public MyBatisDbIdGenerator() {
 		logger.info("----------------MyBatis3DbIdGenerator--------------");
-	}
-
-	public static void clear() {
-		threadLocalVaribles.remove();
+		try {
+			RefreshTask command = new RefreshTask();
+			scheduledThreadPool.scheduleAtFixedRate(command, 60, 30, TimeUnit.SECONDS);
+		} catch (Exception ex) {
+			logger.error(ex);
+		}
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)

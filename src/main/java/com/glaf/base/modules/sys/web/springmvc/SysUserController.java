@@ -21,12 +21,10 @@ package com.glaf.base.modules.sys.web.springmvc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -42,7 +40,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import com.glaf.core.base.TreeModel;
 import com.glaf.core.cache.CacheUtils;
 import com.glaf.core.config.ViewProperties;
 import com.glaf.core.domain.ServerEntity;
@@ -57,7 +54,6 @@ import com.glaf.core.util.StringTools;
 import com.glaf.core.util.Tools;
 
 import com.glaf.base.modules.sys.SysConstants;
-import com.glaf.base.modules.sys.business.UpdateTreeBean;
 import com.glaf.base.modules.sys.model.Dictory;
 import com.glaf.base.modules.sys.model.SysOrganization;
 import com.glaf.base.modules.sys.model.SysRole;
@@ -66,7 +62,6 @@ import com.glaf.base.modules.sys.query.SysUserQuery;
 import com.glaf.base.modules.sys.service.DictoryService;
 import com.glaf.base.modules.sys.service.SysOrganizationService;
 import com.glaf.base.modules.sys.service.SysRoleService;
-import com.glaf.base.modules.sys.service.SysTreeService;
 import com.glaf.base.modules.sys.service.SysUserService;
 import com.glaf.base.utils.ParamUtil;
 import com.glaf.base.utils.RequestUtil;
@@ -79,8 +74,6 @@ public class SysUserController {
 	protected DictoryService dictoryService;
 
 	protected SysRoleService sysRoleService;
-
-	protected SysTreeService sysTreeService;
 
 	protected SysUserService sysUserService;
 
@@ -264,34 +257,13 @@ public class SysUserController {
 	 */
 	@RequestMapping("/prepareAdd")
 	public ModelAndView prepareAdd(HttpServletRequest request, ModelMap modelMap) {
-		List<SysOrganization> list = sysOrganizationService.getSysOrganizationList();
-		if (list != null && !list.isEmpty()) {
-			Map<Long, TreeModel> treeMap = new HashMap<Long, TreeModel>();
-			List<TreeModel> treeModels = new ArrayList<TreeModel>();
-			for (SysOrganization model2 : list) {
-				treeModels.add(model2);
-				treeMap.put(model2.getId(), model2);
+		long organizationId = RequestUtils.getLong(request, "organizationId");
+		if (organizationId > 0) {
+			SysOrganization organization = sysOrganizationService.findById(organizationId);
+			request.setAttribute("organization", organization);
+			if (organization != null) {
+				request.setAttribute("organizationName", organization.getName());
 			}
-			StringTokenizer token = null;
-			StringBuilder blank = new StringBuilder();
-			UpdateTreeBean bean = new UpdateTreeBean();
-			List<SysOrganization> modelList = new ArrayList<SysOrganization>();
-			for (SysOrganization model2 : list) {
-				String treeId = bean.getTreeId(treeMap, model2);
-				if (treeId != null && treeId.indexOf("|") != -1) {
-					token = new StringTokenizer(treeId, "|");
-					if (token != null) {
-						model2.setLevel(token.countTokens());
-						blank.delete(0, blank.length());
-						for (int i = 0; i < model2.getLevel(); i++) {
-							blank.append("&nbsp;&nbsp;&nbsp;&nbsp;");
-						}
-						model2.setBlank(blank.toString());
-					}
-				}
-				modelList.add(model2);
-			}
-			request.setAttribute("trees", modelList);
 		}
 
 		List<Dictory> dictories = dictoryService.getDictoryList(SysConstants.USER_HEADSHIP);
@@ -318,43 +290,22 @@ public class SysUserController {
 	@RequestMapping("/prepareModify")
 	public ModelAndView prepareModify(HttpServletRequest request, ModelMap modelMap) {
 		RequestUtils.setRequestParameterToAttribute(request);
-
-		List<SysOrganization> list = sysOrganizationService.getSysOrganizationList();
-		if (list != null && !list.isEmpty()) {
-			Map<Long, TreeModel> treeMap = new HashMap<Long, TreeModel>();
-			List<TreeModel> treeModels = new ArrayList<TreeModel>();
-			for (SysOrganization model2 : list) {
-				treeModels.add(model2);
-				treeMap.put(model2.getId(), model2);
-			}
-			StringTokenizer token = null;
-			StringBuilder blank = new StringBuilder();
-			UpdateTreeBean bean = new UpdateTreeBean();
-			List<SysOrganization> modelList = new ArrayList<SysOrganization>();
-			for (SysOrganization model2 : list) {
-				String treeId = bean.getTreeId(treeMap, model2);
-				if (treeId != null && treeId.indexOf("|") != -1) {
-					token = new StringTokenizer(treeId, "|");
-					if (token != null) {
-						model2.setLevel(token.countTokens());
-						blank.delete(0, blank.length());
-						for (int i = 0; i < model2.getLevel(); i++) {
-							blank.append("&nbsp;&nbsp;&nbsp;&nbsp;");
-						}
-						model2.setBlank(blank.toString());
-					}
-				}
-				modelList.add(model2);
-			}
-			request.setAttribute("trees", modelList);
-		}
-
+		long organizationId = RequestUtils.getLong(request, "organizationId");
 		String userId = ParamUtil.getParameter(request, "userId");
 		userId = RequestUtils.decodeString(userId);
 		SysUser bean = sysUserService.findById(userId);
 		if (bean != null) {
+			organizationId = bean.getOrganizationId();
 			request.setAttribute("user", bean);
 			request.setAttribute("userId_encode", RequestUtils.encodeString(bean.getActorId()));
+		}
+
+		if (organizationId > 0) {
+			SysOrganization organization = sysOrganizationService.findById(organizationId);
+			request.setAttribute("organization", organization);
+			if (organization != null) {
+				request.setAttribute("organizationName", organization.getName());
+			}
 		}
 
 		List<Dictory> dictories = dictoryService.getDictoryList(SysConstants.USER_HEADSHIP);
@@ -813,11 +764,6 @@ public class SysUserController {
 	@javax.annotation.Resource
 	public void setSysRoleService(SysRoleService sysRoleService) {
 		this.sysRoleService = sysRoleService;
-	}
-
-	@javax.annotation.Resource
-	public void setSysTreeService(SysTreeService sysTreeService) {
-		this.sysTreeService = sysTreeService;
 	}
 
 	@javax.annotation.Resource

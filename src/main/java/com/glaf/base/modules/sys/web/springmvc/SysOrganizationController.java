@@ -42,21 +42,16 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-
-import com.glaf.base.modules.sys.business.UpdateTreeBean;
 import com.glaf.base.modules.sys.model.SysOrganization;
 import com.glaf.base.modules.sys.model.SysRole;
-import com.glaf.base.modules.sys.model.SysTree;
 import com.glaf.base.modules.sys.model.SysUser;
 import com.glaf.base.modules.sys.query.SysOrganizationQuery;
 import com.glaf.base.modules.sys.service.DictoryService;
 import com.glaf.base.modules.sys.service.SysOrganizationService;
 import com.glaf.base.modules.sys.service.SysRoleService;
-import com.glaf.base.modules.sys.service.SysTreeService;
 import com.glaf.base.modules.sys.service.SysUserService;
 import com.glaf.base.modules.sys.util.SysRoleJsonFactory;
 import com.glaf.base.utils.ParamUtil;
-
 import com.glaf.core.base.BaseTree;
 import com.glaf.core.base.ColumnModel;
 import com.glaf.core.base.TableModel;
@@ -82,8 +77,6 @@ public class SysOrganizationController {
 
 	protected SysUserService sysUserService;
 
-	protected SysTreeService sysTreeService;
-
 	protected SysOrganizationService sysOrganizationService;
 
 	/**
@@ -106,28 +99,6 @@ public class SysOrganizationController {
 			}
 		}
 		return ResponseUtils.responseResult(false);
-	}
-
-	/**
-	 * 显示下级所有部门节点,包括无效的部门
-	 * 
-	 * @param request
-	 * @param modelMap
-	 * @return
-	 */
-	@RequestMapping("/getSubOrganizationAll")
-	public ModelAndView getSubOrganizationAll(HttpServletRequest request, ModelMap modelMap) {
-		RequestUtils.setRequestParameterToAttribute(request);
-		long id = ParamUtil.getLongParameter(request, "id", 0);
-		List<SysTree> list = sysTreeService.getSysTreeList(id);
-		request.setAttribute("list", list);
-
-		String x_view = ViewProperties.getString("organization.getSubOrganizationAll");
-		if (StringUtils.isNotEmpty(x_view)) {
-			return new ModelAndView(x_view, modelMap);
-		}
-
-		return new ModelAndView("/sys/organization/suborganizationall_list", modelMap);
 	}
 
 	@RequestMapping("/json")
@@ -249,36 +220,6 @@ public class SysOrganizationController {
 	public ModelAndView prepareAdd(HttpServletRequest request, ModelMap modelMap) {
 		RequestUtils.setRequestParameterToAttribute(request);
 
-		List<SysOrganization> list = sysOrganizationService.getSysOrganizationList();
-		if (list != null && !list.isEmpty()) {
-			Map<Long, TreeModel> treeMap = new HashMap<Long, TreeModel>();
-			List<TreeModel> treeModels = new ArrayList<TreeModel>();
-			for (SysOrganization model2 : list) {
-				treeModels.add(model2);
-				treeMap.put(model2.getId(), model2);
-			}
-			StringTokenizer token = null;
-			StringBuilder blank = new StringBuilder();
-			UpdateTreeBean bean = new UpdateTreeBean();
-			List<SysOrganization> modelList = new ArrayList<SysOrganization>();
-			for (SysOrganization model2 : list) {
-				String treeId = bean.getTreeId(treeMap, model2);
-				if (treeId != null && treeId.indexOf("|") != -1) {
-					token = new StringTokenizer(treeId, "|");
-					if (token != null) {
-						model2.setLevel(token.countTokens());
-						blank.delete(0, blank.length());
-						for (int i = 0; i < model2.getLevel(); i++) {
-							blank.append("&nbsp;&nbsp;&nbsp;&nbsp;");
-						}
-						model2.setBlank(blank.toString());
-					}
-				}
-				modelList.add(model2);
-			}
-			request.setAttribute("trees", modelList);
-		}
-
 		String x_view = ViewProperties.getString("organization.prepareAdd");
 		if (StringUtils.isNotEmpty(x_view)) {
 			return new ModelAndView(x_view, modelMap);
@@ -303,34 +244,12 @@ public class SysOrganizationController {
 		SysOrganization o = sysOrganizationService.findById(id);
 		request.setAttribute("organization", o);
 
-		List<SysOrganization> list = sysOrganizationService.getSysOrganizationList();
-		if (list != null && !list.isEmpty()) {
-			Map<Long, TreeModel> treeMap = new HashMap<Long, TreeModel>();
-			List<TreeModel> treeModels = new ArrayList<TreeModel>();
-			for (SysOrganization model2 : list) {
-				treeModels.add(model2);
-				treeMap.put(model2.getId(), model2);
+		if (o != null && o.getParentId() > 0) {
+			SysOrganization parent = sysOrganizationService.findById(o.getParentId());
+			request.setAttribute("parent", parent);
+			if (parent != null) {
+				request.setAttribute("parentName", parent.getName());
 			}
-			StringTokenizer token = null;
-			StringBuilder blank = new StringBuilder();
-			UpdateTreeBean bean = new UpdateTreeBean();
-			List<SysOrganization> modelList = new ArrayList<SysOrganization>();
-			for (SysOrganization model2 : list) {
-				String treeId = bean.getTreeId(treeMap, model2);
-				if (treeId != null && treeId.indexOf("|") != -1) {
-					token = new StringTokenizer(treeId, "|");
-					if (token != null) {
-						model2.setLevel(token.countTokens());
-						blank.delete(0, blank.length());
-						for (int i = 0; i < model2.getLevel(); i++) {
-							blank.append("&nbsp;&nbsp;&nbsp;&nbsp;");
-						}
-						model2.setBlank(blank.toString());
-					}
-				}
-				modelList.add(model2);
-			}
-			request.setAttribute("trees", modelList);
 		}
 
 		String x_view = ViewProperties.getString("organization.prepareModify");
@@ -367,11 +286,11 @@ public class SysOrganizationController {
 			bean.setCreateBy(RequestUtils.getActorId(request));
 			bean.setLocked(0);
 			sysOrganizationService.create(bean);
-			return ResponseUtils.responseResult(true);
+			return ResponseUtils.responseJsonResult(true, "添加机构成功。");
 		} catch (Exception ex) {
 			logger.error(ex);
 		}
-		return ResponseUtils.responseResult(false);
+		return ResponseUtils.responseJsonResult(false, "添加机构失败。");
 	}
 
 	/**
@@ -471,11 +390,6 @@ public class SysOrganizationController {
 	}
 
 	@javax.annotation.Resource
-	public void setSysTreeService(SysTreeService sysTreeService) {
-		this.sysTreeService = sysTreeService;
-	}
-
-	@javax.annotation.Resource
 	public void setSysUserService(SysUserService sysUserService) {
 		this.sysUserService = sysUserService;
 	}
@@ -530,6 +444,30 @@ public class SysOrganizationController {
 		}
 
 		return new ModelAndView("/sys/organization/showSort", modelMap);
+	}
+
+	/**
+	 * 显示tree页面
+	 * 
+	 * @param request
+	 * @param modelMap
+	 * @return
+	 */
+	@RequestMapping("/showTreeRadio")
+	public ModelAndView showTree(HttpServletRequest request, ModelMap modelMap) {
+		RequestUtils.setRequestParameterToAttribute(request);
+		long parentId = ParamUtil.getIntParameter(request, "parentId", 0);
+		if (parentId > 0) {
+			List<SysOrganization> list = sysOrganizationService.getSysOrganizationList(parentId);
+			request.setAttribute("trees", list);
+		}
+
+		String x_view = ViewProperties.getString("sys.organization.showTreeRadio");
+		if (StringUtils.isNotEmpty(x_view)) {
+			return new ModelAndView(x_view, modelMap);
+		}
+
+		return new ModelAndView("/sys/organization/showTreeRadio", modelMap);
 	}
 
 	@ResponseBody

@@ -53,7 +53,6 @@ import com.glaf.base.modules.sys.service.DictoryService;
 import com.glaf.base.modules.sys.service.SysOrganizationService;
 import com.glaf.base.modules.sys.service.SysRoleService;
 import com.glaf.base.modules.sys.service.SysTenantService;
-import com.glaf.base.modules.sys.service.SysTreeService;
 import com.glaf.base.modules.sys.service.SysUserService;
 import com.glaf.base.utils.ParamUtil;
 import com.glaf.base.utils.RequestUtil;
@@ -80,8 +79,6 @@ public class TenantUserController {
 	protected EntityService entityService;
 
 	protected SysRoleService sysRoleService;
-
-	protected SysTreeService sysTreeService;
 
 	protected SysUserService sysUserService;
 
@@ -761,11 +758,6 @@ public class TenantUserController {
 	@javax.annotation.Resource
 	public void setSysTenantService(SysTenantService sysTenantService) {
 		this.sysTenantService = sysTenantService;
-	}
-
-	@javax.annotation.Resource
-	public void setSysTreeService(SysTreeService sysTreeService) {
-		this.sysTreeService = sysTreeService;
 	}
 
 	@javax.annotation.Resource

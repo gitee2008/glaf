@@ -48,7 +48,6 @@ import com.glaf.base.modules.sys.model.SysTenant;
 import com.glaf.base.modules.sys.model.SysUser;
 import com.glaf.base.modules.sys.service.SysRoleService;
 import com.glaf.base.modules.sys.service.SysTenantService;
-import com.glaf.base.modules.sys.service.SysTreeService;
 import com.glaf.base.modules.sys.service.SysUserService;
 import com.glaf.core.base.DataFile;
 import com.glaf.core.config.Configuration;
@@ -74,8 +73,6 @@ public class UserRegisterController {
 	protected SysUserService sysUserService;
 
 	protected SysRoleService sysRoleService;
-
-	protected SysTreeService sysTreeService;
 
 	protected SysTenantService sysTenantService;
 
@@ -325,11 +322,6 @@ public class UserRegisterController {
 	@javax.annotation.Resource
 	public void setSysTenantService(SysTenantService sysTenantService) {
 		this.sysTenantService = sysTenantService;
-	}
-
-	@javax.annotation.Resource
-	public void setSysTreeService(SysTreeService sysTreeService) {
-		this.sysTreeService = sysTreeService;
 	}
 
 	@javax.annotation.Resource

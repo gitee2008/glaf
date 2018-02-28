@@ -83,6 +83,7 @@ public class MyMainController {
 				|| StringUtils.startsWithIgnoreCase(indexUrl, "https://"))) {
 			indexUrl = request.getContextPath() + indexUrl;
 		}
+
 		request.setAttribute("indexUrl", indexUrl);
 		request.setAttribute("tabmax", SystemConfig.getString("tabmax"));
 

@@ -41,7 +41,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.glaf.base.modules.sys.model.Group;
 import com.glaf.base.modules.sys.query.GroupQuery;
 import com.glaf.base.modules.sys.service.GroupService;
-import com.glaf.base.modules.sys.service.SysTreeService;
 import com.glaf.base.modules.sys.service.SysUserService;
 import com.glaf.base.utils.ParamUtil;
 import com.glaf.core.config.ViewProperties;
@@ -60,8 +59,6 @@ public class GroupController {
 	private static final Log logger = LogFactory.getLog(GroupController.class);
 
 	protected GroupService groupService;
-
-	protected SysTreeService sysTreeService;
 
 	protected SysUserService sysUserService;
 
@@ -456,11 +453,6 @@ public class GroupController {
 	@javax.annotation.Resource
 	public void setGroupService(GroupService groupService) {
 		this.groupService = groupService;
-	}
-
-	@javax.annotation.Resource
-	public void setSysTreeService(SysTreeService sysTreeService) {
-		this.sysTreeService = sysTreeService;
 	}
 
 	@javax.annotation.Resource

@@ -168,7 +168,7 @@ public class CacheFactory {
 		try {
 			Cache cache = getCache();
 			if (cache != null && key != null && value != null) {
-				remove(region, key);
+				//remove(region, key);
 				String _region = SystemConfig.getRegionName(region);
 				String cacheKey = _region + "_" + key;
 				cacheKey = DigestUtils.md5Hex(cacheKey.getBytes());
@@ -176,6 +176,7 @@ public class CacheFactory {
 				if (value.length() < limitSize) {
 					String val = com.glaf.core.util.Hex.byte2hex(value.getBytes("UTF-8"));
 					cache.put(_region, cacheKey, val);
+					logger.debug("put object into cache.");
 					if (!regions.contains(_region)) {
 						regions.add(_region);
 					}
@@ -190,6 +191,7 @@ public class CacheFactory {
 				}
 			}
 		} catch (Throwable ex) {
+			ex.printStackTrace();
 		}
 	}
 
@@ -201,6 +203,7 @@ public class CacheFactory {
 				String cacheKey = _region + "_" + key;
 				cacheKey = DigestUtils.md5Hex(cacheKey.getBytes());
 				cache.remove(_region, cacheKey);
+				logger.debug("remove object from cache.");
 				CacheItem item = cacheKeyMap.get(cacheKey);
 				if (item != null) {
 					items.remove(item);

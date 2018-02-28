@@ -31,15 +31,14 @@ import com.alibaba.fastjson.JSON;
 
 import com.glaf.core.cache.CacheFactory;
 import com.glaf.core.context.ContextFactory;
-
 import com.glaf.core.service.EntityService;
 import com.glaf.core.util.Constants;
 import com.glaf.core.util.StringTools;
+
 import com.glaf.base.modules.sys.model.SysRole;
 import com.glaf.base.modules.sys.model.SysUser;
 import com.glaf.base.modules.sys.service.SysApplicationService;
 import com.glaf.base.modules.sys.service.SysRoleService;
-import com.glaf.base.modules.sys.service.SysTreeService;
 import com.glaf.base.modules.sys.service.SysUserService;
 import com.glaf.base.modules.sys.util.SysRoleJsonFactory;
 import com.glaf.base.utils.ContextUtil;
@@ -53,8 +52,6 @@ public class BaseIdentityFactory {
 	protected static volatile SysApplicationService sysApplicationService;
 
 	protected static volatile SysRoleService sysRoleService;
-
-	protected static volatile SysTreeService sysTreeService;
 
 	protected static volatile SysUserService sysUserService;
 
@@ -152,14 +149,6 @@ public class BaseIdentityFactory {
 			sysRoleService = ContextFactory.getBean("sysRoleService");
 		}
 		return sysRoleService;
-	}
-
-	public static SysTreeService getSysTreeService() {
-		if (sysTreeService == null) {
-			sysTreeService = ContextFactory.getBean("sysTreeService");
-		}
-
-		return sysTreeService;
 	}
 
 	public static SysUserService getSysUserService() {
@@ -285,10 +274,6 @@ public class BaseIdentityFactory {
 
 	public static void setSysRoleService(SysRoleService sysRoleService) {
 		BaseIdentityFactory.sysRoleService = sysRoleService;
-	}
-
-	public static void setSysTreeService(SysTreeService sysTreeService) {
-		BaseIdentityFactory.sysTreeService = sysTreeService;
 	}
 
 	public static void setSysUserService(SysUserService sysUserService) {

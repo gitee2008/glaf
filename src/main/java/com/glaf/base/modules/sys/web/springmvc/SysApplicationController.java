@@ -240,7 +240,7 @@ public class SysApplicationController {
 		query.setDeleteFlag(0);
 
 		int start = 0;
-		int limit = 10;
+		int limit = 20;
 		String orderName = null;
 		String order = null;
 
@@ -255,7 +255,7 @@ public class SysApplicationController {
 		}
 
 		if (limit <= 0) {
-			limit = PageResult.DEFAULT_PAGE_SIZE;
+			limit = 20;
 		}
 
 		JSONObject result = new JSONObject();

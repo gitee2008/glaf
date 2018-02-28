@@ -34,7 +34,7 @@ public class TreeRepository implements Serializable {
 
 	private static Log log = LogFactory.getLog(TreeRepository.class);
 
-	protected Map<String, TreeComponent> trees = new LinkedHashMap<String, TreeComponent>();
+	protected Map<String, TreeComponent> treeMaps = new LinkedHashMap<String, TreeComponent>();
 
 	/**
 	 * Adds a new component.
@@ -43,7 +43,7 @@ public class TreeRepository implements Serializable {
 	 *            The tree component to add.
 	 */
 	public void addTree(TreeComponent component) {
-		if (trees.containsKey(component.getId())) {
+		if (treeMaps.containsKey(component.getId())) {
 			//if (log.isDebugEnabled()) {
 			//	log.warn("Tree '" + component.getTitle() + "[" + component.getId() + "]' already exists in repository");
 			//}
@@ -55,7 +55,7 @@ public class TreeRepository implements Serializable {
 				}
 			}
 		}
-		trees.put(component.getId(), component);
+		treeMaps.put(component.getId(), component);
 	}
 
 	/**
@@ -63,12 +63,12 @@ public class TreeRepository implements Serializable {
 	 */
 	public List<TreeComponent> getTopTrees() {
 		List<TreeComponent> topTrees = new java.util.ArrayList<TreeComponent>();
-		if (trees == null) {
+		if (treeMaps == null) {
 			log.warn("No trees found in repository!");
 			return topTrees;
 		}
 
-		for (Iterator<?> it = trees.keySet().iterator(); it.hasNext();) {
+		for (Iterator<?> it = treeMaps.keySet().iterator(); it.hasNext();) {
 			String id = (String) it.next();
 			TreeComponent component = getTree(id);
 			if (component.getParent() == null) {
@@ -94,11 +94,11 @@ public class TreeRepository implements Serializable {
 	}
 
 	public TreeComponent getTree(String id) {
-		return (TreeComponent) trees.get(id);
+		return (TreeComponent) treeMaps.get(id);
 	}
 
 	public Set<String> getTreeIds() {
-		return trees.keySet();
+		return treeMaps.keySet();
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class TreeRepository implements Serializable {
 	 * TreeRepository
 	 */
 	public void removeAllTrees() {
-		trees.clear();
+		treeMaps.clear();
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class TreeRepository implements Serializable {
 	 * @param id
 	 */
 	public void removeTree(String id) {
-		trees.remove(id);
+		treeMaps.remove(id);
 	}
 
 }

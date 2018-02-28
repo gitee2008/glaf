@@ -125,11 +125,13 @@ public class SystemCacheMgrController {
 		JSONObject result = new JSONObject();
 		String region = request.getParameter("region");
 		String key = request.getParameter("key");
-		if (CacheFactory.getString(region, key) != null) {
-			result.put("size", CacheFactory.getString(region, key).length());
-			result.put("value", CacheFactory.getString(region, key));
+		String value = CacheFactory.getString(region, key);
+		if (value != null) {
+			result.put("size", value.length());
+			result.put("value", value);
 		}
-		logger.debug("key:" + key);
+		logger.debug("region:" + region + "\tkey:" + key);
+		logger.debug("value:" + value);
 		// logger.debug(result.toJSONString());
 		return result.toJSONString().getBytes("UTF-8");
 	}

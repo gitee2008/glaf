@@ -55,18 +55,20 @@ public class J2CacheImpl implements Cache {
 		}
 		if (object != null) {
 			logger.debug("get object from j2cache.");
-			if (object instanceof CacheObject) {
+			if (object instanceof net.oschina.j2cache.CacheObject) {
 				CacheObject cacheObject = (CacheObject) object;
-				if (cacheObject.getValue() != null) {
-					if (cacheObject.getValue() instanceof String) {
-						String str = (String) cacheObject.getValue();
+				Object value = cacheObject.getValue();
+				if (value != null) {
+					//logger.debug("value class:" + value.getClass().getName());
+					if (value instanceof String) {
+						String str = (String) value;
 						try {
 							return new String(com.glaf.core.util.Hex.hex2byte(str), "UTF-8");
 						} catch (IOException ex) {
 							return new String(com.glaf.core.util.Hex.hex2byte(str));
 						}
-					} else if (cacheObject.getValue() instanceof byte[]) {
-						byte[] bytes = (byte[]) cacheObject.getValue();
+					} else if (value instanceof byte[]) {
+						byte[] bytes = (byte[]) value;
 						try {
 							String str = new String(bytes, "UTF-8");
 							return str;
@@ -74,7 +76,12 @@ public class J2CacheImpl implements Cache {
 							String str = new String(bytes);
 							return str;
 						}
+					} else {
+						return cacheObject.asString();
 					}
+				} else {
+					logger.debug("value is null.");
+					return cacheObject.asString();
 				}
 			} else {
 				return object.toString();
@@ -87,14 +94,15 @@ public class J2CacheImpl implements Cache {
 	public void put(String region, String key, String value) {
 		if (value != null) {
 			try {
-				cacheChannel.set(region, key, com.glaf.core.util.Hex.byte2hex(value.getBytes("UTF-8")));
+				cacheChannel.set(region, key, com.glaf.core.util.Hex.byte2hex(value.getBytes("UTF-8")), 1800L);
 				if (!regions.contains(region)) {
 					regions.add(region);
 				}
 				logger.debug("put object into j2cache.");
 			} catch (Exception ex) {
+				//logger.error("put j2cache error", ex);
 				try {
-					cacheChannel.set(region, key, com.glaf.core.util.Hex.byte2hex(value.getBytes()));
+					cacheChannel.set(region, key, com.glaf.core.util.Hex.byte2hex(value.getBytes()), 1800L);
 				} catch (Exception e) {
 				}
 			}

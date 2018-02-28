@@ -277,10 +277,10 @@ public class MyBatisEntityDAOImpl extends SqlSessionDaoSupport implements Entity
 			dbid = (Dbid) getSqlSession().selectOne("getNextDbId", "next.dbid");
 		}
 		long oldValue = Long.parseLong(dbid.getValue());
-		long newValue = oldValue + conf.getInt("dbid_step", 100);
+		long newValue = oldValue + conf.getInt("dbid_step", 1000);
 		dbid.setName("next.dbid");
 		dbid.setTitle("系统内置主键");
-		dbid.setValue(Long.toString(newValue));
+		dbid.setValue(Long.toString(newValue + 1));
 		dbid.setVersion(dbid.getVersion() + 1);
 		getSqlSession().update("updateNextDbId", dbid);
 		return new IdBlock(oldValue, newValue - 1);
@@ -307,15 +307,15 @@ public class MyBatisEntityDAOImpl extends SqlSessionDaoSupport implements Entity
 				|| StringUtils.equalsIgnoreCase(name, "sys_organization") || StringUtils.startsWith(name, "tenant_")) {
 			setup = 1;
 		} else if (StringUtils.equalsIgnoreCase(name, "HEALTH_DIETARY_ITEM")) {
-			setup = 200;
+			setup = 500;
 		} else if (StringUtils.equalsIgnoreCase(name, "SYS_SCHEDULER_EXECUTION")) {
-			setup = 200;
+			setup = 500;
 		}
 		long oldValue = Long.parseLong(dbid.getValue());
 		long newValue = oldValue + conf.getInt("dbid_step_" + name, setup);
 		dbid.setName(name);
 		dbid.setTitle("系统内置主键");
-		dbid.setValue(Long.toString(newValue));
+		dbid.setValue(Long.toString(newValue + 1));
 		dbid.setVersion(dbid.getVersion() + 1);
 		getSqlSession().update("updateNextDbId", dbid);
 		if (newValue - oldValue > 1) {

@@ -126,7 +126,7 @@ public class PublicInfoMgrController {
 				request.setAttribute("dataFiles", dataFiles);
 			}
 		}
-		
+
 		request.setAttribute("serviceUrl", RequestUtils.getServiceUrl(request));
 
 		String view = request.getParameter("view");
@@ -141,7 +141,7 @@ public class PublicInfoMgrController {
 
 		return new ModelAndView("/base/info/edit", modelMap);
 	}
-	
+
 	@RequestMapping("/edit2")
 	public ModelAndView edit2(HttpServletRequest request, ModelMap modelMap) {
 		RequestUtils.setRequestParameterToAttribute(request);
@@ -167,7 +167,7 @@ public class PublicInfoMgrController {
 				request.setAttribute("dataFiles", dataFiles);
 			}
 		}
-		
+
 		request.setAttribute("serviceUrl", RequestUtils.getServiceUrl(request));
 
 		String view = request.getParameter("view");
@@ -279,10 +279,9 @@ public class PublicInfoMgrController {
 	public byte[] publish(HttpServletRequest request) {
 		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		/**
-		 * 只有系统管理员及信息审核员才能发布信息
+		 * 只有系统管理员及租户管理员才能发布信息
 		 */
-		if (loginContext.isSystemAdministrator() || loginContext.isTenantAdmin()
-				|| loginContext.hasPermission("Auditor", "and")) {
+		if (loginContext.isSystemAdministrator() || loginContext.isTenantAdmin()) {
 			String id = request.getParameter("id");
 			int publishFlag = RequestUtils.getInt(request, "publishFlag");
 			PublicInfo publicInfo = null;
@@ -313,10 +312,9 @@ public class PublicInfoMgrController {
 		PublicInfo publicInfo = null;
 
 		/**
-		 * 只有系统管理员及信息审核员才能发布信息
+		 * 只有系统管理员及租户管理员才能发布信息
 		 */
-		if (loginContext.isSystemAdministrator() || loginContext.isTenantAdmin()
-				|| loginContext.hasPermission("Auditor", "and")) {
+		if (loginContext.isSystemAdministrator() || loginContext.isTenantAdmin()) {
 			try {
 				if (StringUtils.isNotEmpty(id)) {
 					publicInfo = publicInfoService.getPublicInfo(id);

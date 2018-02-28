@@ -18,7 +18,7 @@
 
 package com.glaf.core.tree.component;
 
-public abstract class TreeBase implements Component {
+public abstract class TreeBase implements Component, java.lang.Comparable<TreeBase> {
 	// ~ Instance fields
 	// ========================================================
 
@@ -109,6 +109,27 @@ public abstract class TreeBase implements Component {
 	protected int locked;
 
 	protected int level;
+
+	protected int sortNo;
+
+	public int compareTo(TreeBase o) {
+		if (o == null) {
+			return -1;
+		}
+
+		TreeBase obj = o;
+
+		int l = this.sortNo - obj.getSortNo();
+
+		int ret = 0;
+
+		if (l > 0) {
+			ret = 1;
+		} else if (l < 0) {
+			ret = -1;
+		}
+		return ret;
+	}
 
 	// ~ Methods
 	// ================================================================
@@ -269,6 +290,10 @@ public abstract class TreeBase implements Component {
 	 */
 	public String getRoles() {
 		return roles;
+	}
+
+	public int getSortNo() {
+		return sortNo;
 	}
 
 	/**
@@ -496,6 +521,10 @@ public abstract class TreeBase implements Component {
 	 */
 	public void setRoles(String roles) {
 		this.roles = roles;
+	}
+
+	public void setSortNo(int sortNo) {
+		this.sortNo = sortNo;
 	}
 
 	/**

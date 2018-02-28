@@ -42,7 +42,7 @@ public class TreeComponent extends TreeBase implements Serializable, Component {
 
 	protected Map<String, Object> dataMap;
 	private boolean last;
-	protected List<TreeComponent> menuComponents = Collections
+	protected List<TreeComponent> components = Collections
 			.synchronizedList(new java.util.concurrent.CopyOnWriteArrayList<TreeComponent>());
 	protected TreeComponent parentTree;
 	protected TreeModel treeModel;
@@ -50,8 +50,8 @@ public class TreeComponent extends TreeBase implements Serializable, Component {
 	protected String parentId;
 
 	public void addTreeComponent(TreeComponent component) {
-		if (component != null && component.getId() != null && !menuComponents.contains(component)) {
-			menuComponents.add(component);
+		if (component != null && component.getId() != null && !components.contains(component)) {
+			components.add(component);
 			component.setParent(this);
 		}
 	}
@@ -85,7 +85,10 @@ public class TreeComponent extends TreeBase implements Serializable, Component {
 	}
 
 	public List<TreeComponent> getComponents() {
-		return menuComponents;
+		if (components != null) {
+			java.util.Collections.sort(components);
+		}
+		return components;
 	}
 
 	public Map<String, Object> getDataMap() {
@@ -104,7 +107,7 @@ public class TreeComponent extends TreeBase implements Serializable, Component {
 	}
 
 	public TreeComponent[] getTreeComponents() {
-		return (TreeComponent[]) menuComponents.toArray(_menuComponent);
+		return (TreeComponent[]) components.toArray(_menuComponent);
 	}
 
 	/**
@@ -197,7 +200,7 @@ public class TreeComponent extends TreeBase implements Serializable, Component {
 	public void setTreeComponents(TreeComponent[] menuComponents) {
 		for (int i = 0; i < menuComponents.length; i++) {
 			TreeComponent component = menuComponents[i];
-			this.menuComponents.add(component);
+			this.components.add(component);
 		}
 	}
 

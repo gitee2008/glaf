@@ -18,6 +18,9 @@
 
 package com.glaf.core.cache.ehcache3;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
+import java.net.URL;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -25,20 +28,22 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.ehcache.Cache;
 import org.ehcache.CacheManager;
-import org.ehcache.config.units.MemoryUnit;
+import org.ehcache.config.CacheConfiguration;
+import org.ehcache.config.Configuration;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.CacheManagerBuilder;
+import org.ehcache.xml.XmlConfiguration;
 import org.slf4j.Logger;
 
-import static org.ehcache.config.builders.CacheConfigurationBuilder.newCacheConfigurationBuilder;
-import static org.ehcache.config.builders.CacheManagerBuilder.newCacheManagerBuilder;
-import static org.ehcache.config.builders.ResourcePoolsBuilder.heap;
-
-import static org.slf4j.LoggerFactory.getLogger;
+import com.glaf.core.cache.CacheProperties;
 
 public class EHCache3Impl implements com.glaf.core.cache.Cache {
 
 	protected static final Logger LOGGER = getLogger(EHCache3Impl.class);
 
 	protected static AtomicBoolean running = new AtomicBoolean(false);
+
+	private final static String DEFAULT_TPL = "default";
 
 	protected static ConcurrentMap<String, CacheManager> cacheMgrConcurrentMap = new ConcurrentHashMap<String, CacheManager>();
 
@@ -54,6 +59,7 @@ public class EHCache3Impl implements com.glaf.core.cache.Cache {
 		return cache.get(key);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Cache<String, String> getCache(String region) {
 		if (cacheConcurrentMap.get(region) != null) {
 			return cacheConcurrentMap.get(region);
@@ -64,8 +70,15 @@ public class EHCache3Impl implements com.glaf.core.cache.Cache {
 				try {
 					running.set(true);
 					if (cache == null) {
-						cache = getCacheManager(region).createCache(region, newCacheConfigurationBuilder(String.class,
-								String.class, heap(100).offheap(10, MemoryUnit.MB)));
+						cache = getCacheManager(region).getCache(region, String.class, String.class);
+						if (cache == null) {
+							CacheConfiguration defaultCacheConfig = getCacheManager(region).getRuntimeConfiguration()
+									.getCacheConfigurations().get(DEFAULT_TPL);
+							CacheConfiguration<String, String> cacheCfg = CacheConfigurationBuilder
+									.newCacheConfigurationBuilder(defaultCacheConfig).build();
+							cache = getCacheManager(region).createCache(region, cacheCfg);
+							LOGGER.info("Could not find configuration [" + region + "]; using defaults.");
+						}
 						cacheConcurrentMap.put(region, cache);
 					}
 				} finally {
@@ -86,8 +99,14 @@ public class EHCache3Impl implements com.glaf.core.cache.Cache {
 			try {
 				running.set(true);
 				if (cacheManager == null) {
-					cacheManager = newCacheManagerBuilder().withCache(region, newCacheConfigurationBuilder(String.class,
-							String.class, heap(100).offheap(10, MemoryUnit.MB))).build(true);
+					String configXml = CacheProperties.getString("configXml");
+					if (configXml == null || configXml.trim().length() == 0) {
+						configXml = "/ehcache3.xml";
+					}
+					URL myUrl = getClass().getResource(configXml);
+					Configuration xmlConfig = new XmlConfiguration(myUrl);
+					cacheManager = CacheManagerBuilder.newCacheManager(xmlConfig);
+					cacheManager.init();
 					cacheMgrConcurrentMap.put(region, cacheManager);
 				}
 			} finally {
@@ -99,7 +118,7 @@ public class EHCache3Impl implements com.glaf.core.cache.Cache {
 
 	public void put(String region, String key, String value) {
 		Cache<String, String> cache = getCache(region);
-		cache.putIfAbsent(key, value);
+		cache.put(key, value);
 	}
 
 	public void remove(String region, String key) {

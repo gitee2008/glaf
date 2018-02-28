@@ -19,7 +19,7 @@
 package com.glaf.core.tree.helper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,8 +36,8 @@ public class TreeRepositoryBuilder {
 	protected static Log logger = LogFactory.getLog(TreeRepositoryBuilder.class);
 
 	public TreeRepository build(List<TreeModel> treeModels) {
-		Map<String, TreeModel> treeMap = new java.util.HashMap<String, TreeModel>();
-		Map<String, TreeModel> lockedMap = new java.util.HashMap<String, TreeModel>();
+		Map<String, TreeModel> treeMap = new LinkedHashMap<String, TreeModel>();
+		Map<String, TreeModel> lockedMap = new LinkedHashMap<String, TreeModel>();
 
 		for (int i = 0, len = treeModels.size(); i < len; i++) {
 			TreeModel treeModel = (TreeModel) treeModels.get(i);
@@ -95,6 +95,7 @@ public class TreeRepositoryBuilder {
 			component.setTreeId(treeModel.getTreeId());
 			component.setCls(treeModel.getIconCls());
 			component.setLevel(treeModel.getLevel());
+			component.setSortNo(treeModel.getSortNo());
 			component.setDataMap(treeModel.getDataMap());
 			repository.addTree(component);
 			// logger.debug("add tree: " + component.getTitle());
@@ -132,6 +133,7 @@ public class TreeRepositoryBuilder {
 					parentTree.setTreeId(parent.getTreeId());
 					parentTree.setCls(parent.getIconCls());
 					parentTree.setLevel(parent.getLevel());
+					parentTree.setSortNo(parent.getSortNo());
 					parentTree.setDataMap(parent.getDataMap());
 					// repository.addTree(parentTree);
 				}
@@ -145,8 +147,8 @@ public class TreeRepositoryBuilder {
 	protected TreeRepository buildM(List<TreeModel> treeModels) {
 		// Collections.sort(treeModels);
 		List<TreeModel> nodes = new java.util.ArrayList<TreeModel>();
-		Map<String, TreeModel> treeMap = new java.util.HashMap<String, TreeModel>();
-		Map<String, TreeModel> lockedMap = new java.util.HashMap<String, TreeModel>();
+		Map<String, TreeModel> treeMap = new LinkedHashMap<String, TreeModel>();
+		Map<String, TreeModel> lockedMap = new LinkedHashMap<String, TreeModel>();
 
 		for (int i = 0, len = treeModels.size(); i < len; i++) {
 			TreeModel treeModel = (TreeModel) treeModels.get(i);
@@ -239,7 +241,7 @@ public class TreeRepositoryBuilder {
 	}
 
 	public TreeRepository buildMenu(List<TreeModel> treeModels) {
-		Map<String, TreeComponent> treeMap = new HashMap<String, TreeComponent>();
+		Map<String, TreeComponent> treeMap = new LinkedHashMap<String, TreeComponent>();
 		List<TreeComponent> treeComponents = new ArrayList<TreeComponent>();
 		for (int i = 0, len = treeModels.size(); i < len; i++) {
 			TreeModel tree = (TreeModel) treeModels.get(i);
@@ -277,8 +279,8 @@ public class TreeRepositoryBuilder {
 	}
 
 	public TreeRepository buildTree(List<TreeComponent> treeModels) {
-		Map<String, TreeComponent> treeMap = new java.util.HashMap<String, TreeComponent>();
-		Map<String, TreeComponent> lockedMap = new java.util.HashMap<String, TreeComponent>();
+		Map<String, TreeComponent> treeMap = new LinkedHashMap<String, TreeComponent>();
+		Map<String, TreeComponent> lockedMap = new LinkedHashMap<String, TreeComponent>();
 
 		for (int i = 0, len = treeModels.size(); i < len; i++) {
 			TreeComponent treeModel = (TreeComponent) treeModels.get(i);
@@ -383,7 +385,7 @@ public class TreeRepositoryBuilder {
 	protected TreeRepository buildTreeM(List<TreeComponent> treeModels) {
 		// Collections.sort(treeModels);
 		List<TreeComponent> nodes = new java.util.ArrayList<TreeComponent>();
-		Map<String, TreeComponent> treeMap = new java.util.HashMap<String, TreeComponent>();
+		Map<String, TreeComponent> treeMap = new LinkedHashMap<String, TreeComponent>();
 
 		for (int i = 0, len = treeModels.size(); i < len; i++) {
 			TreeComponent treeModel = (TreeComponent) treeModels.get(i);

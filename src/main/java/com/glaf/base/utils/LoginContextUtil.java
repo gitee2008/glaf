@@ -49,6 +49,9 @@ public class LoginContextUtil {
 		String actorId = RequestUtils.getActorId(request);
 		SysUserService sysUserService = ContextFactory.getBean("sysUserService");
 		String indexUrl = sysUserService.getUserIndexUrl(actorId);
+		if (StringUtils.equals(actorId, "admin")) {
+			indexUrl = "/sys/tenant";
+		}
 		if (StringUtils.isEmpty(indexUrl)) {
 			indexUrl = SystemConfig.getString("index_portal_link", "/static/html/main.html");
 		}
