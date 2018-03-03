@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.heathcare.mapper.PersonLinkmanMapper">
+
+	<resultMap id="personLinkmanResultMap" type="com.glaf.heathcare.domain.PersonLinkman">
+		<id property="id" column="ID_" jdbcType="VARCHAR" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="personId" column="PERSONID_" jdbcType="VARCHAR" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="relationship" column="RELATIONSHIP_"
+			jdbcType="VARCHAR" />
+		<result property="company" column="COMPANY_" jdbcType="VARCHAR" />
+		<result property="mobile" column="MOBILE_" jdbcType="VARCHAR" />
+		<result property="mail" column="MAIL_" jdbcType="VARCHAR" />
+		<result property="wardship" column="WARDSHIP_" jdbcType="VARCHAR" />
+		<result property="remark" column="REMARK_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY_" jdbcType="VARCHAR" />
+		<result property="updateTime" column="UPDATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertPersonLinkman" parameterType="com.glaf.heathcare.domain.PersonLinkman">
+		insert into HEALTH_PERSON_LINKMAN
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="personId != null">
+				,PERSONID_
+			</if>
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="relationship != null">
+				,RELATIONSHIP_
+			</if>
+			<if test="company != null">
+				,COMPANY_
+			</if>
+			<if test="mobile != null">
+				,MOBILE_
+			</if>
+			<if test="mail != null">
+				,MAIL_
+			</if>
+			<if test="wardship != null">
+				,WARDSHIP_
+			</if>
+			<if test="remark != null">
+				,REMARK_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+			<if test="updateBy != null">
+				,UPDATEBY_
+			</if>
+			<if test="updateTime != null">
+				,UPDATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR}
+
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="personId != null">
+				,#{personId, jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="relationship != null">
+				,#{relationship, jdbcType=VARCHAR}
+			</if>
+			<if test="company != null">
+				,#{company, jdbcType=VARCHAR}
+			</if>
+			<if test="mobile != null">
+				,#{mobile, jdbcType=VARCHAR}
+			</if>
+			<if test="mail != null">
+				,#{mail, jdbcType=VARCHAR}
+			</if>
+			<if test="wardship != null">
+				,#{wardship, jdbcType=VARCHAR}
+			</if>
+			<if test="remark != null">
+				,#{remark, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy != null">
+				,#{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				,#{updateTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertPersonLinkman" parameterType="java.util.List">
+		insert into HEALTH_PERSON_LINKMAN (
+		ID_
+		,TENANTID_
+		,PERSONID_
+		,NAME_
+		,RELATIONSHIP_
+		,COMPANY_
+		,MOBILE_
+		,MAIL_
+		,WARDSHIP_
+		,REMARK_
+		,CREATEBY_
+		,CREATETIME_
+		,UPDATEBY_
+		,UPDATETIME_
+		) values
+		<foreach collection="list" item="personLinkman" index="index"
+			separator=",">
+			(
+			#{personLinkman.id, jdbcType=VARCHAR}
+			,#{personLinkman.tenantId, jdbcType=VARCHAR}
+			,#{personLinkman.personId, jdbcType=VARCHAR}
+			,#{personLinkman.name,
+			jdbcType=VARCHAR}
+			,#{personLinkman.relationship, jdbcType=VARCHAR}
+			,#{personLinkman.company, jdbcType=VARCHAR}
+			,#{personLinkman.mobile,
+			jdbcType=VARCHAR}
+			,#{personLinkman.mail, jdbcType=VARCHAR}
+			,#{personLinkman.wardship, jdbcType=VARCHAR}
+			,#{personLinkman.remark,
+			jdbcType=VARCHAR}
+			,#{personLinkman.createBy, jdbcType=VARCHAR}
+			,#{personLinkman.createTime, jdbcType=TIMESTAMP}
+			,#{personLinkman.updateBy, jdbcType=VARCHAR}
+			,#{personLinkman.updateTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertPersonLinkman_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="personLinkman" index="index">
+			insert
+			into HEALTH_PERSON_LINKMAN (
+			ID_
+			,TENANTID_
+			,PERSONID_
+			,NAME_
+			,RELATIONSHIP_
+			,COMPANY_
+			,MOBILE_
+			,MAIL_
+			,WARDSHIP_
+			,REMARK_
+			,CREATEBY_
+			,CREATETIME_
+			,UPDATEBY_
+			,UPDATETIME_
+			) values (
+			#{personLinkman.id,
+			jdbcType=VARCHAR}
+			,#{personLinkman.tenantId,
+			jdbcType=VARCHAR}
+			,#{personLinkman.personId, jdbcType=VARCHAR}
+			,#{personLinkman.name,
+			jdbcType=VARCHAR}
+			,#{personLinkman.relationship, jdbcType=VARCHAR}
+			,#{personLinkman.company, jdbcType=VARCHAR}
+			,#{personLinkman.mobile,
+			jdbcType=VARCHAR}
+			,#{personLinkman.mail, jdbcType=VARCHAR}
+			,#{personLinkman.wardship, jdbcType=VARCHAR}
+			,#{personLinkman.remark,
+			jdbcType=VARCHAR}
+			,#{personLinkman.createBy, jdbcType=VARCHAR}
+			,#{personLinkman.createTime, jdbcType=TIMESTAMP}
+			,#{personLinkman.updateBy, jdbcType=VARCHAR}
+			,#{personLinkman.updateTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updatePersonLinkman" parameterType="com.glaf.heathcare.domain.PersonLinkman">
+		update HEALTH_PERSON_LINKMAN
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="name != null">
+				NAME_ = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="relationship != null">
+				RELATIONSHIP_ = #{relationship, jdbcType=VARCHAR},
+			</if>
+			<if test="company != null">
+				COMPANY_ = #{company, jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				MOBILE_ = #{mobile, jdbcType=VARCHAR},
+			</if>
+			<if test="mail != null">
+				MAIL_ = #{mail, jdbcType=VARCHAR},
+			</if>
+			<if test="wardship != null">
+				WARDSHIP_ = #{wardship, jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				REMARK_ = #{remark, jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY_ = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATETIME_ = #{updateTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<delete id="deletePersonLinkmanById" parameterType="string">
+		delete from
+		HEALTH_PERSON_LINKMAN
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getPersonLinkmanById" parameterType="string"
+		resultMap="personLinkmanResultMap">
+		select * from HEALTH_PERSON_LINKMAN where ID_ = #{id}
+	</select>
+
+
+	<select id="getPersonLinkmans" parameterType="com.glaf.heathcare.query.PersonLinkmanQuery"
+		resultMap="personLinkmanResultMap">
+		select distinct E.*
+		<include refid="selectPersonLinkmansSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getPersonLinkmanCount" parameterType="com.glaf.heathcare.query.PersonLinkmanQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectPersonLinkmansSql" />
+	</select>
+
+
+	<sql id="selectPersonLinkmansSql">
+
+		from HEALTH_PERSON_LINKMAN E
+
+		<where>
+			1 = 1
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="personId != null and personId != '' ">
+				and E.PERSONID_ = #{personId}
+			</if>
+
+			<if test="personIds != null and personIds.size() &gt; 0">
+				and E.PERSONID_ IN
+				<foreach item="x_personId" index="index" collection="personIds"
+					open="(" separator="," close=")">
+					#{x_personId}
+				</foreach>
+			</if>
+
+			<if test="name != null and name != '' ">
+				and E.NAME_ = #{name}
+			</if>
+
+			<if test="nameLike != null and nameLike != '' ">
+				and E.NAME_ like #{nameLike}
+			</if>
+
+			<if test="relationship != null and relationship != '' ">
+				and E.RELATIONSHIP_ = #{relationship}
+			</if>
+
+			<if test="company != null and company != '' ">
+				and E.COMPANY_ = #{company}
+			</if>
+
+			<if test="companyLike != null and companyLike != '' ">
+				and E.COMPANY_ like #{companyLike}
+			</if>
+
+			<if test="mobile != null and mobile != '' ">
+				and E.MOBILE_ = #{mobile}
+			</if>
+
+			<if test="mobileLike != null and mobileLike != '' ">
+				and E.MOBILE_ like #{mobileLike}
+			</if>
+
+			<if test="mail != null and mail != '' ">
+				and E.MAIL_ = #{mail}
+			</if>
+
+			<if test="mailLike != null and mailLike != '' ">
+				and E.MAIL_ like #{mailLike}
+			</if>
+
+			<if test="wardship != null and wardship != '' ">
+				and E.WARDSHIP_ = #{wardship}
+			</if>
+
+			<if test="remarkLike != null and remarkLike != '' ">
+				and E.REMARK_ like #{remarkLike}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

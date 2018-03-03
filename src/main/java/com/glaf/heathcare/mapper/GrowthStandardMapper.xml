@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.heathcare.mapper.GrowthStandardMapper">
+
+	<resultMap id="growthStandardResultMap" type="com.glaf.heathcare.domain.GrowthStandard">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="age" column="AGE_" jdbcType="INTEGER" />
+		<result property="month" column="MONTH_" jdbcType="INTEGER" />
+		<result property="ageOfTheMoon" column="AGEOFTHEMOON_"
+			jdbcType="INTEGER" />
+		<result property="complexKey" column="COMPLEXKEY_" jdbcType="VARCHAR" />
+		<result property="sex" column="SEX_" jdbcType="VARCHAR" />
+		<result property="height" column="HEIGHT_" jdbcType="DOUBLE" />
+		<result property="weight" column="WEIGHT_" jdbcType="DOUBLE" />
+		<result property="percent3" column="PERCENT3_" jdbcType="DOUBLE" />
+		<result property="percent15" column="PERCENT15_" jdbcType="DOUBLE" />
+		<result property="percent50" column="PERCENT50_" jdbcType="DOUBLE" />
+		<result property="percent85" column="PERCENT85_" jdbcType="DOUBLE" />
+		<result property="percent97" column="PERCENT97_" jdbcType="DOUBLE" />
+		<result property="oneDSDeviation" column="ONEDSDEVIATION_"
+			jdbcType="DOUBLE" />
+		<result property="twoDSDeviation" column="TWODSDEVIATION_"
+			jdbcType="DOUBLE" />
+		<result property="threeDSDeviation" column="THREEDSDEVIATION_"
+			jdbcType="DOUBLE" />
+		<result property="fourDSDeviation" column="FOURDSDEVIATION_"
+			jdbcType="DOUBLE" />
+		<result property="median" column="MEDIAN_" jdbcType="DOUBLE" />
+		<result property="negativeOneDSDeviation" column="NEGATIVEONEDSDEVIATION_"
+			jdbcType="DOUBLE" />
+		<result property="negativeTwoDSDeviation" column="NEGATIVETWODSDEVIATION_"
+			jdbcType="DOUBLE" />
+		<result property="negativeThreeDSDeviation" column="NEGATIVETHREEDSDEVIATION_"
+			jdbcType="DOUBLE" />
+		<result property="negativeFourDSDeviation" column="NEGATIVEFOURDSDEVIATION_"
+			jdbcType="DOUBLE" />
+		<result property="standardType" column="STANDARDTYPE_"
+			jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertGrowthStandard" parameterType="com.glaf.heathcare.domain.GrowthStandard">
+		insert into HEALTH_GROWTH_STANDARD
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="age != null">
+				,AGE_
+			</if>
+			<if test="month != null">
+				,MONTH_
+			</if>
+			<if test="ageOfTheMoon != null">
+				,AGEOFTHEMOON_
+			</if>
+			<if test="complexKey != null">
+				,COMPLEXKEY_
+			</if>
+			<if test="sex != null">
+				,SEX_
+			</if>
+			<if test="height != null">
+				,HEIGHT_
+			</if>
+			<if test="weight != null">
+				,WEIGHT_
+			</if>
+			<if test="percent3 != null">
+				,PERCENT3_
+			</if>
+			<if test="percent15 != null">
+				,PERCENT15_
+			</if>
+			<if test="percent50 != null">
+				,PERCENT50_
+			</if>
+			<if test="percent85 != null">
+				,PERCENT85_
+			</if>
+			<if test="percent97 != null">
+				,PERCENT97_
+			</if>
+			<if test="oneDSDeviation != null">
+				,ONEDSDEVIATION_
+			</if>
+			<if test="twoDSDeviation != null">
+				,TWODSDEVIATION_
+			</if>
+			<if test="threeDSDeviation != null">
+				,THREEDSDEVIATION_
+			</if>
+			<if test="fourDSDeviation != null">
+				,FOURDSDEVIATION_
+			</if>
+			<if test="median != null">
+				,MEDIAN_
+			</if>
+			<if test="negativeOneDSDeviation != null">
+				,NEGATIVEONEDSDEVIATION_
+			</if>
+			<if test="negativeTwoDSDeviation != null">
+				,NEGATIVETWODSDEVIATION_
+			</if>
+			<if test="negativeThreeDSDeviation != null">
+				,NEGATIVETHREEDSDEVIATION_
+			</if>
+			<if test="negativeFourDSDeviation != null">
+				,NEGATIVEFOURDSDEVIATION_
+			</if>
+			<if test="standardType != null">
+				,STANDARDTYPE_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="age != null">
+				,#{age, jdbcType=INTEGER}
+			</if>
+			<if test="month != null">
+				,#{month, jdbcType=INTEGER}
+			</if>
+			<if test="ageOfTheMoon != null">
+				,#{ageOfTheMoon, jdbcType=INTEGER}
+			</if>
+			<if test="complexKey != null">
+				,#{complexKey, jdbcType=VARCHAR}
+			</if>
+			<if test="sex != null">
+				,#{sex, jdbcType=VARCHAR}
+			</if>
+			<if test="height != null">
+				,#{height, jdbcType=DOUBLE}
+			</if>
+			<if test="weight != null">
+				,#{weight, jdbcType=DOUBLE}
+			</if>
+			<if test="percent3 != null">
+				,#{percent3, jdbcType=DOUBLE}
+			</if>
+			<if test="percent15 != null">
+				,#{percent15, jdbcType=DOUBLE}
+			</if>
+			<if test="percent50 != null">
+				,#{percent50, jdbcType=DOUBLE}
+			</if>
+			<if test="percent85 != null">
+				,#{percent85, jdbcType=DOUBLE}
+			</if>
+			<if test="percent97 != null">
+				,#{percent97, jdbcType=DOUBLE}
+			</if>
+			<if test="oneDSDeviation != null">
+				,#{oneDSDeviation, jdbcType=DOUBLE}
+			</if>
+			<if test="twoDSDeviation != null">
+				,#{twoDSDeviation, jdbcType=DOUBLE}
+			</if>
+			<if test="threeDSDeviation != null">
+				,#{threeDSDeviation, jdbcType=DOUBLE}
+			</if>
+			<if test="fourDSDeviation != null">
+				,#{fourDSDeviation, jdbcType=DOUBLE}
+			</if>
+			<if test="median != null">
+				,#{median, jdbcType=DOUBLE}
+			</if>
+			<if test="negativeOneDSDeviation != null">
+				,#{negativeOneDSDeviation, jdbcType=DOUBLE}
+			</if>
+			<if test="negativeTwoDSDeviation != null">
+				,#{negativeTwoDSDeviation, jdbcType=DOUBLE}
+			</if>
+			<if test="negativeThreeDSDeviation != null">
+				,#{negativeThreeDSDeviation, jdbcType=DOUBLE}
+			</if>
+			<if test="negativeFourDSDeviation != null">
+				,#{negativeFourDSDeviation, jdbcType=DOUBLE}
+			</if>
+			<if test="standardType != null">
+				,#{standardType, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertGrowthStandard" parameterType="java.util.List">
+		insert into HEALTH_GROWTH_STANDARD (
+		ID_
+		,AGE_
+		,MONTH_
+		,AGEOFTHEMOON_
+		,COMPLEXKEY_
+		,SEX_
+		,HEIGHT_
+		,WEIGHT_
+		,PERCENT3_
+		,PERCENT15_
+		,PERCENT50_
+		,PERCENT85_
+		,PERCENT97_
+		,ONEDSDEVIATION_
+		,TWODSDEVIATION_
+		,THREEDSDEVIATION_
+		,FOURDSDEVIATION_
+		,MEDIAN_
+		,NEGATIVEONEDSDEVIATION_
+		,NEGATIVETWODSDEVIATION_
+		,NEGATIVETHREEDSDEVIATION_
+		,NEGATIVEFOURDSDEVIATION_
+		,STANDARDTYPE_
+		,TYPE_
+		,CREATEBY_
+		,CREATETIME_
+		)
+		values
+		<foreach collection="list" item="growthStandard" index="index"
+			separator=",">
+			(
+			#{growthStandard.id, jdbcType=BIGINT}
+			,#{growthStandard.age, jdbcType=INTEGER}
+			,#{growthStandard.month,
+			jdbcType=INTEGER}
+			,#{growthStandard.ageOfTheMoon, jdbcType=INTEGER}
+			,#{growthStandard.complexKey, jdbcType=VARCHAR}
+			,#{growthStandard.sex, jdbcType=VARCHAR}
+			,#{growthStandard.height,
+			jdbcType=DOUBLE}
+			,#{growthStandard.weight,
+			jdbcType=DOUBLE}
+			,#{growthStandard.percent3, jdbcType=DOUBLE}
+			,#{growthStandard.percent15, jdbcType=DOUBLE}
+			,#{growthStandard.percent50, jdbcType=DOUBLE}
+			,#{growthStandard.percent85, jdbcType=DOUBLE}
+			,#{growthStandard.percent97, jdbcType=DOUBLE}
+			,#{growthStandard.oneDSDeviation, jdbcType=DOUBLE}
+			,#{growthStandard.twoDSDeviation, jdbcType=DOUBLE}
+			,#{growthStandard.threeDSDeviation, jdbcType=DOUBLE}
+			,#{growthStandard.fourDSDeviation, jdbcType=DOUBLE}
+			,#{growthStandard.median, jdbcType=DOUBLE}
+			,#{growthStandard.negativeOneDSDeviation, jdbcType=DOUBLE}
+			,#{growthStandard.negativeTwoDSDeviation, jdbcType=DOUBLE}
+			,#{growthStandard.negativeThreeDSDeviation, jdbcType=DOUBLE}
+			,#{growthStandard.negativeFourDSDeviation, jdbcType=DOUBLE}
+			,#{growthStandard.standardType, jdbcType=VARCHAR}
+			,#{growthStandard.type, jdbcType=VARCHAR}
+			,#{growthStandard.createBy,
+			jdbcType=VARCHAR}
+			,#{growthStandard.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertGrowthStandard_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="growthStandard" index="index">
+			insert
+			into HEALTH_GROWTH_STANDARD (
+			ID_
+			,AGE_
+			,MONTH_
+			,AGEOFTHEMOON_
+			,COMPLEXKEY_
+			,SEX_
+			,HEIGHT_
+			,WEIGHT_
+			,PERCENT3_
+			,PERCENT15_
+			,PERCENT50_
+			,PERCENT85_
+			,PERCENT97_
+			,ONEDSDEVIATION_
+			,TWODSDEVIATION_
+			,THREEDSDEVIATION_
+			,FOURDSDEVIATION_
+			,MEDIAN_
+			,NEGATIVEONEDSDEVIATION_
+			,NEGATIVETWODSDEVIATION_
+			,NEGATIVETHREEDSDEVIATION_
+			,NEGATIVEFOURDSDEVIATION_
+			,STANDARDTYPE_
+			,TYPE_
+			,CREATEBY_
+			,CREATETIME_
+			)
+			values (
+			#{growthStandard.id,
+			jdbcType=BIGINT}
+			,#{growthStandard.age,
+			jdbcType=INTEGER}
+			,#{growthStandard.month,
+			jdbcType=INTEGER}
+			,#{growthStandard.ageOfTheMoon, jdbcType=INTEGER}
+			,#{growthStandard.complexKey, jdbcType=VARCHAR}
+			,#{growthStandard.sex, jdbcType=VARCHAR}
+			,#{growthStandard.height,
+			jdbcType=DOUBLE}
+			,#{growthStandard.weight,
+			jdbcType=DOUBLE}
+			,#{growthStandard.percent3, jdbcType=DOUBLE}
+			,#{growthStandard.percent15, jdbcType=DOUBLE}
+			,#{growthStandard.percent50, jdbcType=DOUBLE}
+			,#{growthStandard.percent85, jdbcType=DOUBLE}
+			,#{growthStandard.percent97, jdbcType=DOUBLE}
+			,#{growthStandard.oneDSDeviation, jdbcType=DOUBLE}
+			,#{growthStandard.twoDSDeviation, jdbcType=DOUBLE}
+			,#{growthStandard.threeDSDeviation, jdbcType=DOUBLE}
+			,#{growthStandard.fourDSDeviation, jdbcType=DOUBLE}
+			,#{growthStandard.median, jdbcType=DOUBLE}
+			,#{growthStandard.negativeOneDSDeviation, jdbcType=DOUBLE}
+			,#{growthStandard.negativeTwoDSDeviation, jdbcType=DOUBLE}
+			,#{growthStandard.negativeThreeDSDeviation, jdbcType=DOUBLE}
+			,#{growthStandard.negativeFourDSDeviation, jdbcType=DOUBLE}
+			,#{growthStandard.standardType, jdbcType=VARCHAR}
+			,#{growthStandard.type, jdbcType=VARCHAR}
+			,#{growthStandard.createBy,
+			jdbcType=VARCHAR}
+			,#{growthStandard.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateGrowthStandard" parameterType="com.glaf.heathcare.domain.GrowthStandard">
+		update HEALTH_GROWTH_STANDARD
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="height != null">
+				HEIGHT_ = #{height, jdbcType=DOUBLE},
+			</if>
+			<if test="weight != null">
+				WEIGHT_ = #{weight, jdbcType=DOUBLE},
+			</if>
+			<if test="percent3 != null">
+				PERCENT3_ = #{percent3, jdbcType=DOUBLE},
+			</if>
+			<if test="percent15 != null">
+				PERCENT15_ = #{percent15, jdbcType=DOUBLE},
+			</if>
+			<if test="percent50 != null">
+				PERCENT50_ = #{percent50, jdbcType=DOUBLE},
+			</if>
+			<if test="percent85 != null">
+				PERCENT85_ = #{percent85, jdbcType=DOUBLE},
+			</if>
+			<if test="percent97 != null">
+				PERCENT97_ = #{percent97, jdbcType=DOUBLE},
+			</if>
+			<if test="oneDSDeviation != null">
+				ONEDSDEVIATION_ = #{oneDSDeviation, jdbcType=DOUBLE},
+			</if>
+			<if test="twoDSDeviation != null">
+				TWODSDEVIATION_ = #{twoDSDeviation, jdbcType=DOUBLE},
+			</if>
+			<if test="threeDSDeviation != null">
+				THREEDSDEVIATION_ = #{threeDSDeviation, jdbcType=DOUBLE},
+			</if>
+			<if test="fourDSDeviation != null">
+				FOURDSDEVIATION_ = #{fourDSDeviation, jdbcType=DOUBLE},
+			</if>
+			<if test="median != null">
+				MEDIAN_ = #{median, jdbcType=DOUBLE},
+			</if>
+			<if test="negativeOneDSDeviation != null">
+				NEGATIVEONEDSDEVIATION_ = #{negativeOneDSDeviation,
+				jdbcType=DOUBLE},
+			</if>
+			<if test="negativeTwoDSDeviation != null">
+				NEGATIVETWODSDEVIATION_ = #{negativeTwoDSDeviation,
+				jdbcType=DOUBLE},
+			</if>
+			<if test="negativeThreeDSDeviation != null">
+				NEGATIVETHREEDSDEVIATION_ = #{negativeThreeDSDeviation,
+				jdbcType=DOUBLE},
+			</if>
+			<if test="negativeFourDSDeviation != null">
+				NEGATIVEFOURDSDEVIATION_ = #{negativeFourDSDeviation,
+				jdbcType=DOUBLE},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteGrowthStandardById" parameterType="long">
+		delete from
+		HEALTH_GROWTH_STANDARD
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getGrowthStandardById" parameterType="long"
+		resultMap="growthStandardResultMap">
+		select * from HEALTH_GROWTH_STANDARD where ID_ = #{id}
+	</select>
+	
+	
+	<select id="getGrowthStandardByComplexKey" parameterType="string"
+		resultMap="growthStandardResultMap">
+		select * from HEALTH_GROWTH_STANDARD where COMPLEXKEY_ = #{complexKey}
+	</select>
+
+
+	<select id="getGrowthStandards" parameterType="com.glaf.heathcare.query.GrowthStandardQuery"
+		resultMap="growthStandardResultMap">
+		select distinct E.*
+		<include refid="selectGrowthStandardsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.TYPE_ asc, E.AGEOFTHEMOON_ asc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getGrowthStandardCount" parameterType="com.glaf.heathcare.query.GrowthStandardQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectGrowthStandardsSql" />
+	</select>
+
+
+	<sql id="selectGrowthStandardsSql">
+
+		from HEALTH_GROWTH_STANDARD E
+
+		<where>
+			1 = 1
+
+			<if test="age != null">
+				and E.AGE_ = #{age}
+			</if>
+
+			<if test="ageOfTheMoon != null">
+				and E.AGEOFTHEMOON_ = #{ageOfTheMoon}
+			</if>
+
+			<if test="ageOfTheMoonGreaterThanOrEqual != null">
+				and E.AGEOFTHEMOON_ &gt;=
+				#{ageOfTheMoonGreaterThanOrEqual}
+			</if>
+
+			<if test="ageOfTheMoonLessThanOrEqual != null">
+				and E.AGEOFTHEMOON_ &lt;=
+				#{ageOfTheMoonLessThanOrEqual}
+			</if>
+
+			<if test="month != null">
+				and E.MONTH_ = #{month}
+			</if>
+
+			<if test="sex != null and sex != '' ">
+				and E.SEX_ = #{sex}
+			</if>
+
+			<if test="standardType != null and standardType != '' ">
+				and E.STANDARDTYPE_ = #{standardType}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

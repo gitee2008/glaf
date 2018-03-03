@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.heathcare.mapper.GoodsPurchasePlanMapper">
+
+	<resultMap id="goodsPurchasePlanResultMap" type="com.glaf.heathcare.domain.GoodsPurchasePlan">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="goodsId" column="GOODSID_" jdbcType="BIGINT" />
+		<result property="goodsName" column="GOODSNAME_" jdbcType="VARCHAR" />
+		<result property="goodsNodeId" column="GOODSNODEID_" jdbcType="BIGINT" />
+		<result property="purchaseTime" column="PURCHASE_TIME_"
+			jdbcType="TIMESTAMP" />
+		<result property="semester" column="SEMESTER_" jdbcType="INTEGER" />
+		<result property="year" column="YEAR_" jdbcType="INTEGER" />
+		<result property="month" column="MONTH_" jdbcType="INTEGER" />
+		<result property="day" column="DAY_" jdbcType="INTEGER" />
+		<result property="week" column="WEEK_" jdbcType="INTEGER" />
+		<result property="fullDay" column="FULLDAY_" jdbcType="INTEGER" />
+		<result property="quantity" column="QUANTITY_" jdbcType="DOUBLE" />
+		<result property="unit" column="UNIT_" jdbcType="VARCHAR" />
+		<result property="price" column="PRICE_" jdbcType="DOUBLE" />
+		<result property="totalPrice" column="TOTALPRICE_" jdbcType="DOUBLE" />
+		<result property="proposerId" column="PROPOSERID_" jdbcType="VARCHAR" />
+		<result property="proposerName" column="PROPOSERNAME_"
+			jdbcType="VARCHAR" />
+		<result property="remark" column="REMARK_" jdbcType="VARCHAR" />
+		<result property="sysFlag" column="SYSFLAG_" jdbcType="VARCHAR" />
+		<result property="weeklyFlag" column="WEEKLYFLAG_" jdbcType="VARCHAR" />
+		<result property="businessStatus" column="BUSINESSSTATUS_"
+			jdbcType="INTEGER" />
+		<result property="confirmTime" column="CONFIRMTIME_" jdbcType="TIMESTAMP" />
+		<result property="confirmBy" column="CONFIRMBY_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertGoodsPurchasePlan" parameterType="com.glaf.heathcare.domain.GoodsPurchasePlan">
+		insert into GOODS_PURCHASE_PLAN${tableSuffix}
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="goodsId != null">
+				,GOODSID_
+			</if>
+			<if test="goodsName != null">
+				,GOODSNAME_
+			</if>
+			<if test="goodsNodeId != null">
+				,GOODSNODEID_
+			</if>
+			<if test="purchaseTime != null">
+				,PURCHASE_TIME_
+			</if>
+			<if test="semester != null">
+				,SEMESTER_
+			</if>
+			<if test="year != null">
+				,YEAR_
+			</if>
+			<if test="month != null">
+				,MONTH_
+			</if>
+			<if test="day != null">
+				,DAY_
+			</if>
+			<if test="week != null">
+				,WEEK_
+			</if>
+			<if test="fullDay != null">
+				,FULLDAY_
+			</if>
+			<if test="quantity != null">
+				,QUANTITY_
+			</if>
+			<if test="unit != null">
+				,UNIT_
+			</if>
+			<if test="price != null">
+				,PRICE_
+			</if>
+			<if test="totalPrice != null">
+				,TOTALPRICE_
+			</if>
+			<if test="proposerId != null">
+				,PROPOSERID_
+			</if>
+			<if test="proposerName != null">
+				,PROPOSERNAME_
+			</if>
+			<if test="remark != null">
+				,REMARK_
+			</if>
+			<if test="sysFlag != null">
+				,SYSFLAG_
+			</if>
+			<if test="weeklyFlag != null">
+				,WEEKLYFLAG_
+			</if>
+			<if test="businessStatus != null">
+				,BUSINESSSTATUS_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="goodsId != null">
+				,#{goodsId, jdbcType=BIGINT}
+			</if>
+			<if test="goodsName != null">
+				,#{goodsName, jdbcType=VARCHAR}
+			</if>
+			<if test="goodsNodeId != null">
+				,#{goodsNodeId, jdbcType=BIGINT}
+			</if>
+			<if test="purchaseTime != null">
+				,#{purchaseTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="semester != null">
+				,#{semester, jdbcType=INTEGER}
+			</if>
+			<if test="year != null">
+				,#{year, jdbcType=INTEGER}
+			</if>
+			<if test="month != null">
+				,#{month, jdbcType=INTEGER}
+			</if>
+			<if test="day != null">
+				,#{day, jdbcType=INTEGER}
+			</if>
+			<if test="week != null">
+				,#{week, jdbcType=INTEGER}
+			</if>
+			<if test="fullDay != null">
+				,#{fullDay, jdbcType=INTEGER}
+			</if>
+			<if test="quantity != null">
+				,#{quantity, jdbcType=DOUBLE}
+			</if>
+			<if test="unit != null">
+				,#{unit, jdbcType=VARCHAR}
+			</if>
+			<if test="price != null">
+				,#{price, jdbcType=DOUBLE}
+			</if>
+			<if test="totalPrice != null">
+				,#{totalPrice, jdbcType=DOUBLE}
+			</if>
+			<if test="proposerId != null">
+				,#{proposerId, jdbcType=VARCHAR}
+			</if>
+			<if test="proposerName != null">
+				,#{proposerName, jdbcType=VARCHAR}
+			</if>
+			<if test="remark != null">
+				,#{remark, jdbcType=VARCHAR}
+			</if>
+			<if test="sysFlag != null">
+				,#{sysFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="weeklyFlag != null">
+				,#{weeklyFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="businessStatus != null">
+				,#{businessStatus, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertGoodsPurchasePlan" parameterType="com.glaf.core.base.ListModel">
+		insert into GOODS_PURCHASE_PLAN${tableSuffix} (
+		ID_
+		,TENANTID_
+		,GOODSID_
+		,GOODSNAME_
+		,GOODSNODEID_
+		,PURCHASE_TIME_
+		,SEMESTER_
+		,YEAR_
+		,MONTH_
+		,DAY_
+		,WEEK_
+		,FULLDAY_
+		,QUANTITY_
+		,UNIT_
+		,PRICE_
+		,TOTALPRICE_
+		,PROPOSERID_
+		,PROPOSERNAME_
+		,REMARK_
+		,SYSFLAG_
+		,WEEKLYFLAG_
+		,BUSINESSSTATUS_
+		,CREATEBY_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="goodsPurchasePlan" index="index"
+			separator=",">
+			(
+			#{goodsPurchasePlan.id, jdbcType=BIGINT}
+			,#{goodsPurchasePlan.tenantId, jdbcType=VARCHAR}
+			,#{goodsPurchasePlan.goodsId,
+			jdbcType=BIGINT}
+			,#{goodsPurchasePlan.goodsName,
+			jdbcType=VARCHAR}
+			,#{goodsPurchasePlan.goodsNodeId, jdbcType=BIGINT}
+			,#{goodsPurchasePlan.purchaseTime, jdbcType=TIMESTAMP}
+			,#{goodsPurchasePlan.semester, jdbcType=INTEGER}
+			,#{goodsPurchasePlan.year,
+			jdbcType=INTEGER}
+			,#{goodsPurchasePlan.month,
+			jdbcType=INTEGER}
+			,#{goodsPurchasePlan.day, jdbcType=INTEGER}
+			,#{goodsPurchasePlan.week,
+			jdbcType=INTEGER}
+			,#{goodsPurchasePlan.fullDay,
+			jdbcType=INTEGER}
+			,#{goodsPurchasePlan.quantity, jdbcType=DOUBLE}
+			,#{goodsPurchasePlan.unit,
+			jdbcType=VARCHAR}
+			,#{goodsPurchasePlan.price,
+			jdbcType=DOUBLE}
+			,#{goodsPurchasePlan.totalPrice, jdbcType=DOUBLE}
+			,#{goodsPurchasePlan.proposerId, jdbcType=VARCHAR}
+			,#{goodsPurchasePlan.proposerName, jdbcType=VARCHAR}
+			,#{goodsPurchasePlan.remark, jdbcType=VARCHAR}
+			,#{goodsPurchasePlan.sysFlag,
+			jdbcType=VARCHAR}
+			,#{goodsPurchasePlan.weeklyFlag, jdbcType=VARCHAR}
+			,#{goodsPurchasePlan.businessStatus, jdbcType=INTEGER}
+			,#{goodsPurchasePlan.createBy,
+			jdbcType=VARCHAR}
+			,#{goodsPurchasePlan.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertGoodsPurchasePlan_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="goodsPurchasePlan" index="index">
+			insert
+			into GOODS_PURCHASE_PLAN${tableSuffix} (
+			ID_
+			,TENANTID_
+			,GOODSID_
+			,GOODSNAME_
+			,GOODSNODEID_
+			,PURCHASE_TIME_
+			,SEMESTER_
+			,YEAR_
+			,MONTH_
+			,DAY_
+			,WEEK_
+			,FULLDAY_
+			,QUANTITY_
+			,UNIT_
+			,PRICE_
+			,TOTALPRICE_
+			,PROPOSERID_
+			,PROPOSERNAME_
+			,REMARK_
+			,SYSFLAG_
+			,WEEKLYFLAG_
+			,BUSINESSSTATUS_
+			,CREATEBY_
+			,CREATETIME_
+			)
+			values
+			(
+			#{goodsPurchasePlan.id,
+			jdbcType=BIGINT}
+			,#{goodsPurchasePlan.tenantId,
+			jdbcType=VARCHAR}
+			,#{goodsPurchasePlan.goodsId,
+			jdbcType=BIGINT}
+			,#{goodsPurchasePlan.goodsName,
+			jdbcType=VARCHAR}
+			,#{goodsPurchasePlan.goodsNodeId, jdbcType=BIGINT}
+			,#{goodsPurchasePlan.purchaseTime, jdbcType=TIMESTAMP}
+			,#{goodsPurchasePlan.semester, jdbcType=INTEGER}
+			,#{goodsPurchasePlan.year,
+			jdbcType=INTEGER}
+			,#{goodsPurchasePlan.month,
+			jdbcType=INTEGER}
+			,#{goodsPurchasePlan.day, jdbcType=INTEGER}
+			,#{goodsPurchasePlan.week,
+			jdbcType=INTEGER}
+			,#{goodsPurchasePlan.fullDay,
+			jdbcType=INTEGER}
+			,#{goodsPurchasePlan.quantity, jdbcType=DOUBLE}
+			,#{goodsPurchasePlan.unit,
+			jdbcType=VARCHAR}
+			,#{goodsPurchasePlan.price,
+			jdbcType=DOUBLE}
+			,#{goodsPurchasePlan.totalPrice, jdbcType=DOUBLE}
+			,#{goodsPurchasePlan.proposerId, jdbcType=VARCHAR}
+			,#{goodsPurchasePlan.proposerName, jdbcType=VARCHAR}
+			,#{goodsPurchasePlan.remark, jdbcType=VARCHAR}
+			,#{goodsPurchasePlan.sysFlag,
+			jdbcType=VARCHAR}
+			,#{goodsPurchasePlan.weeklyFlag, jdbcType=VARCHAR}
+			,#{goodsPurchasePlan.businessStatus, jdbcType=INTEGER}
+			,#{goodsPurchasePlan.createBy,
+			jdbcType=VARCHAR}
+			,#{goodsPurchasePlan.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateGoodsPurchasePlan" parameterType="com.glaf.heathcare.domain.GoodsPurchasePlan">
+		update GOODS_PURCHASE_PLAN${tableSuffix}
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="quantity != null">
+				QUANTITY_ = #{quantity, jdbcType=DOUBLE},
+			</if>
+			<if test="unit != null">
+				UNIT_ = #{unit, jdbcType=VARCHAR},
+			</if>
+			<if test="price != null">
+				PRICE_ = #{price, jdbcType=DOUBLE},
+			</if>
+			<if test="totalPrice != null">
+				TOTALPRICE_ = #{totalPrice, jdbcType=DOUBLE},
+			</if>
+			<if test="remark != null">
+				REMARK_ = #{remark, jdbcType=VARCHAR},
+			</if>
+			<if test="sysFlag != null">
+				SYSFLAG_ = #{sysFlag, jdbcType=VARCHAR},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<update id="updateGoodsPurchasePlanStatus" parameterType="com.glaf.heathcare.domain.GoodsPurchasePlan">
+		update GOODS_PURCHASE_PLAN${tableSuffix}
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="businessStatus != null">
+				BUSINESSSTATUS_ = #{businessStatus, jdbcType=INTEGER},
+			</if>
+			<if test="confirmBy != null">
+				CONFIRMBY_ = #{confirmBy, jdbcType=VARCHAR},
+			</if>
+			<if test="confirmTime != null">
+				CONFIRMTIME_ = #{confirmTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteGoodsPurchasePlanById" parameterType="com.glaf.heathcare.query.GoodsPurchasePlanQuery">
+		delete from
+		GOODS_PURCHASE_PLAN${tableSuffix}
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getGoodsPurchasePlanById" parameterType="com.glaf.heathcare.query.GoodsPurchasePlanQuery"
+		resultMap="goodsPurchasePlanResultMap">
+		select * from GOODS_PURCHASE_PLAN${tableSuffix} where ID_ = #{id}
+	</select>
+
+
+	<select id="getGoodsPurchasePlans" parameterType="com.glaf.heathcare.query.GoodsPurchasePlanQuery"
+		resultMap="goodsPurchasePlanResultMap">
+		select distinct E.*
+		<include refid="selectGoodsPurchasePlansSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.PURCHASE_TIME_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getGoodsPurchasePlanCount" parameterType="com.glaf.heathcare.query.GoodsPurchasePlanQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectGoodsPurchasePlansSql" />
+	</select>
+
+
+	<sql id="selectGoodsPurchasePlansSql">
+
+		from GOODS_PURCHASE_PLAN${tableSuffix} E
+
+		<where>
+			1 = 1
+
+			<if test="ids != null and ids.size() &gt; 0">
+				and E.ID_ IN
+				<foreach item="x_id" index="index" collection="ids" open="("
+					separator="," close=")">
+					#{x_id}
+				</foreach>
+			</if>
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="tenantIds != null and tenantIds.size() &gt; 0">
+				and E.TENANTID_ IN
+				<foreach item="x_tenantId" index="index" collection="tenantIds"
+					open="(" separator="," close=")">
+					#{x_tenantId}
+				</foreach>
+			</if>
+
+			<if test="goodsId != null">
+				and E.GOODSID_ = #{goodsId}
+			</if>
+
+			<if test="goodsIds != null and goodsIds.size() &gt; 0">
+				and E.GOODSID_ IN
+				<foreach item="x_goodsId" index="index" collection="goodsIds"
+					open="(" separator="," close=")">
+					#{x_goodsId}
+				</foreach>
+			</if>
+
+			<if test="goodsNameLike != null and goodsNameLike != '' ">
+				and E.GOODSNAME_ like #{goodsNameLike}
+			</if>
+
+			<if test="goodsNodeId != null">
+				and E.GOODSNODEID_ = #{goodsNodeId}
+			</if>
+
+			<if test="purchaseTimeGreaterThanOrEqual != null">
+				and E.PURCHASE_TIME_ &gt;=
+				#{purchaseTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="purchaseTimeLessThanOrEqual != null">
+				and E.PURCHASE_TIME_ &lt;= #{purchaseTimeLessThanOrEqual}
+			</if>
+
+			<if test="semester != null">
+				and E.SEMESTER_ = #{semester}
+			</if>
+
+			<if test="year != null">
+				and E.YEAR_ = #{year}
+			</if>
+
+			<if test="month != null">
+				and E.MONTH_ = #{month}
+			</if>
+
+			<if test="day != null">
+				and E.DAY_ = #{day}
+			</if>
+
+			<if test="fullDay != null">
+				and E.FULLDAY_ = #{fullDay}
+			</if>
+
+			<if test="fullDayGreaterThanOrEqual != null">
+				and E.FULLDAY_ &gt;= #{fullDayGreaterThanOrEqual}
+			</if>
+
+			<if test="fullDayLessThanOrEqual != null">
+				and E.FULLDAY_ &lt;= #{fullDayLessThanOrEqual}
+			</if>
+
+			<if test="week != null and week &gt; 0 ">
+				and E.WEEK_ = #{week}
+			</if>
+
+			<if test="quantityGreaterThanOrEqual != null">
+				and E.QUANTITY_ &gt;= #{quantityGreaterThanOrEqual}
+			</if>
+
+			<if test="quantityLessThanOrEqual != null">
+				and E.QUANTITY_ &lt;= #{quantityLessThanOrEqual}
+			</if>
+
+			<if test="unit != null and unit != '' ">
+				and E.UNIT_ = #{unit}
+			</if>
+
+			<if test="priceGreaterThanOrEqual != null">
+				and E.PRICE_ &gt;= #{priceGreaterThanOrEqual}
+			</if>
+
+			<if test="priceLessThanOrEqual != null">
+				and E.PRICE_ &lt;= #{priceLessThanOrEqual}
+			</if>
+
+			<if test="totalPriceGreaterThanOrEqual != null">
+				and E.TOTALPRICE_ &gt;= #{totalPriceGreaterThanOrEqual}
+			</if>
+
+			<if test="totalPriceLessThanOrEqual != null">
+				and E.TOTALPRICE_ &lt;= #{totalPriceLessThanOrEqual}
+			</if>
+
+			<if test="proposerId != null and proposerId != '' ">
+				and E.PROPOSERID_ = #{proposerId}
+			</if>
+
+			<if test="proposerIds != null and proposerIds.size() &gt; 0">
+				and E.PROPOSERID_ IN
+				<foreach item="x_proposerId" index="index" collection="proposerIds"
+					open="(" separator="," close=")">
+					#{x_proposerId}
+				</foreach>
+			</if>
+
+			<if test="proposerNameLike != null and proposerNameLike != '' ">
+				and E.PROPOSERNAME_ like #{proposerNameLike}
+			</if>
+
+			<if test="remarkLike != null and remarkLike != '' ">
+				and E.REMARK_ like #{remarkLike}
+			</if>
+
+			<if test="sysFlag != null and sysFlag != '' ">
+				and E.SYSFLAG_ = #{sysFlag}
+			</if>
+
+			<if test="weeklyFlag != null and weeklyFlag != '' ">
+				and E.WEEKLYFLAG_ = #{weeklyFlag}
+			</if>
+
+			<if test="businessStatus != null">
+				and E.BUSINESSSTATUS_ = #{businessStatus}
+			</if>
+
+			<if test="confirmBy != null and confirmBy != '' ">
+				and E.CONFIRMBY_ = #{confirmBy}
+			</if>
+
+			<if test="confirmTimeGreaterThanOrEqual != null">
+				and E.CONFIRMTIME_ &gt;= #{confirmTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="confirmTimeLessThanOrEqual != null">
+				and E.CONFIRMTIME_ &lt;= #{confirmTimeLessThanOrEqual}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

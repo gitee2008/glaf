@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.heathcare.mapper.GradeInfoMapper">
+
+	<resultMap id="gradeInfoResultMap" type="com.glaf.heathcare.domain.GradeInfo">
+		<id property="id" column="ID_" jdbcType="VARCHAR" />
+		<result property="organizationId" column="ORGANIZATIONID_"
+			jdbcType="BIGINT" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="code" column="CODE_" jdbcType="VARCHAR" />
+		<result property="level" column="LEVEL_" jdbcType="INTEGER" />
+		<result property="principal" column="PRINCIPAL_" jdbcType="VARCHAR" />
+		<result property="telephone" column="TELEPHONE_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="year" column="YEAR_" jdbcType="INTEGER" />
+		<result property="remark" column="REMARK_" jdbcType="VARCHAR" />
+		<result property="sortNo" column="SORTNO_" jdbcType="INTEGER" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="deleteFlag" column="DELETEFLAG_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY_" jdbcType="VARCHAR" />
+		<result property="updateTime" column="UPDATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertGradeInfo" parameterType="com.glaf.heathcare.domain.GradeInfo">
+		insert into HEALTH_GRADE_INFO
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="organizationId != null">
+				,ORGANIZATIONID_
+			</if>
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="code != null">
+				,CODE_
+			</if>
+			<if test="level != null">
+				,LEVEL_
+			</if>
+			<if test="principal != null">
+				,PRINCIPAL_
+			</if>
+			<if test="telephone != null">
+				,TELEPHONE_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="year != null">
+				,YEAR_
+			</if>
+			<if test="remark != null">
+				,REMARK_
+			</if>
+			<if test="sortNo != null">
+				,SORTNO_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="deleteFlag != null">
+				,DELETEFLAG_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+			<if test="updateBy != null">
+				,UPDATEBY_
+			</if>
+			<if test="updateTime != null">
+				,UPDATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR}
+
+			<if test="organizationId != null">
+				,#{organizationId, jdbcType=BIGINT}
+			</if>
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="code != null">
+				,#{code, jdbcType=VARCHAR}
+			</if>
+			<if test="level != null">
+				,#{level, jdbcType=INTEGER}
+			</if>
+			<if test="principal != null">
+				,#{principal, jdbcType=VARCHAR}
+			</if>
+			<if test="telephone != null">
+				,#{telephone, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="year != null">
+				,#{year, jdbcType=INTEGER}
+			</if>
+			<if test="remark != null">
+				,#{remark, jdbcType=VARCHAR}
+			</if>
+			<if test="sortNo != null">
+				,#{sortNo, jdbcType=INTEGER}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="deleteFlag != null">
+				,#{deleteFlag, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy != null">
+				,#{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				,#{updateTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertGradeInfo" parameterType="java.util.List">
+		insert into HEALTH_GRADE_INFO (
+		ID_
+		,ORGANIZATIONID_
+		,TENANTID_
+		,NAME_
+		,CODE_
+		,LEVEL_
+		,PRINCIPAL_
+		,TELEPHONE_
+		,TYPE_
+		,YEAR_
+		,REMARK_
+		,SORTNO_
+		,CREATEBY_
+		,CREATETIME_
+		,UPDATEBY_
+		,UPDATETIME_
+		,LOCKED_
+		,DELETEFLAG_
+		)
+		values
+		<foreach collection="list" item="gradeInfo" index="index"
+			separator=",">
+			(
+			#{gradeInfo.id, jdbcType=VARCHAR}
+			,#{gradeInfo.organizationId, jdbcType=BIGINT}
+			,#{gradeInfo.tenantId,
+			jdbcType=VARCHAR}
+			,#{gradeInfo.name,
+			jdbcType=VARCHAR}
+			,#{gradeInfo.code, jdbcType=VARCHAR}
+			,#{gradeInfo.level,
+			jdbcType=INTEGER}
+			,#{gradeInfo.principal,
+			jdbcType=VARCHAR}
+			,#{gradeInfo.telephone, jdbcType=VARCHAR}
+			,#{gradeInfo.type,
+			jdbcType=VARCHAR}
+			,#{gradeInfo.year,
+			jdbcType=INTEGER}
+			,#{gradeInfo.remark, jdbcType=VARCHAR}
+			,#{gradeInfo.sortNo,
+			jdbcType=INTEGER}
+			,#{gradeInfo.createBy,
+			jdbcType=VARCHAR}
+			,#{gradeInfo.createTime, jdbcType=TIMESTAMP}
+			,#{gradeInfo.updateBy,
+			jdbcType=VARCHAR}
+			,#{gradeInfo.updateTime,
+			jdbcType=TIMESTAMP}
+			,#{gradeInfo.locked, jdbcType=INTEGER}
+			,#{gradeInfo.deleteFlag,
+			jdbcType=INTEGER}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertGradeInfo_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="gradeInfo" index="index">
+			insert into
+			HEALTH_GRADE_INFO (
+			ID_
+			,ORGANIZATIONID_
+			,TENANTID_
+			,NAME_
+			,CODE_
+			,LEVEL_
+			,PRINCIPAL_
+			,TELEPHONE_
+			,TYPE_
+			,YEAR_
+			,REMARK_
+			,SORTNO_
+			,CREATEBY_
+			,CREATETIME_
+			,UPDATEBY_
+			,UPDATETIME_
+			,LOCKED_
+			,DELETEFLAG_
+			) values (
+			#{gradeInfo.id,
+			jdbcType=VARCHAR}
+			,#{gradeInfo.organizationId,
+			jdbcType=BIGINT}
+			,#{gradeInfo.tenantId,
+			jdbcType=VARCHAR}
+			,#{gradeInfo.name,
+			jdbcType=VARCHAR}
+			,#{gradeInfo.code,
+			jdbcType=VARCHAR}
+			,#{gradeInfo.level,
+			jdbcType=INTEGER}
+			,#{gradeInfo.principal,
+			jdbcType=VARCHAR}
+			,#{gradeInfo.telephone,
+			jdbcType=VARCHAR}
+			,#{gradeInfo.type,
+			jdbcType=VARCHAR}
+			,#{gradeInfo.year,
+			jdbcType=INTEGER}
+			,#{gradeInfo.remark,
+			jdbcType=VARCHAR}
+			,#{gradeInfo.sortNo,
+			jdbcType=INTEGER}
+			,#{gradeInfo.createBy,
+			jdbcType=VARCHAR}
+			,#{gradeInfo.createTime,
+			jdbcType=TIMESTAMP}
+			,#{gradeInfo.updateBy,
+			jdbcType=VARCHAR}
+			,#{gradeInfo.updateTime,
+			jdbcType=TIMESTAMP}
+			,#{gradeInfo.locked,
+			jdbcType=INTEGER}
+			,#{gradeInfo.deleteFlag, jdbcType=INTEGER}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateGradeInfo" parameterType="com.glaf.heathcare.domain.GradeInfo">
+		update HEALTH_GRADE_INFO
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="name != null">
+				NAME_ = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				CODE_ = #{code, jdbcType=VARCHAR},
+			</if>
+			<if test="level != null">
+				LEVEL_ = #{level, jdbcType=INTEGER},
+			</if>
+			<if test="principal != null">
+				PRINCIPAL_ = #{principal, jdbcType=VARCHAR},
+			</if>
+			<if test="telephone != null">
+				TELEPHONE_ = #{telephone, jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				TYPE_ = #{type, jdbcType=VARCHAR},
+			</if>
+			<if test="year != null">
+				YEAR_ = #{year, jdbcType=INTEGER},
+			</if>
+			<if test="remark != null">
+				REMARK_ = #{remark, jdbcType=VARCHAR},
+			</if>
+			<if test="sortNo != null">
+				SORTNO_ = #{sortNo, jdbcType=INTEGER},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+			<if test="deleteFlag != null">
+				DELETEFLAG_ = #{deleteFlag, jdbcType=INTEGER},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY_ = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATETIME_ = #{updateTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<delete id="deleteGradeInfoById" parameterType="string">
+		delete from
+		HEALTH_GRADE_INFO
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getGradeInfoById" parameterType="string" resultMap="gradeInfoResultMap">
+		select * from HEALTH_GRADE_INFO where ID_ = #{id}
+	</select>
+
+
+	<select id="getGradeInfos" parameterType="com.glaf.heathcare.query.GradeInfoQuery"
+		resultMap="gradeInfoResultMap">
+		select distinct E.*
+		<include refid="selectGradeInfosSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.LOCKED_ asc, E.SORTNO_ asc, E.LEVEL_ asc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getGradeInfoCount" parameterType="com.glaf.heathcare.query.GradeInfoQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectGradeInfosSql" />
+	</select>
+
+
+	<sql id="selectGradeInfosSql">
+
+		from HEALTH_GRADE_INFO E
+
+		<where>
+			1 = 1
+
+			<if test="organizationId != null">
+				and E.ORGANIZATIONID_ = #{organizationId}
+			</if>
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="gradeIds != null and gradeIds.size() &gt; 0">
+				and E.ID_ IN
+				<foreach item="x_gradeId" index="index" collection="gradeIds"
+					open="(" separator="," close=")">
+					#{x_gradeId}
+				</foreach>
+			</if>
+
+			<if test="nameLike != null and nameLike != '' ">
+				and E.NAME_ like #{nameLike}
+			</if>
+
+			<if test="code != null and code != '' ">
+				and E.CODE_ = #{code}
+			</if>
+
+			<if test="codeLike != null and codeLike != '' ">
+				and E.CODE_ like #{codeLike}
+			</if>
+
+			<if test="level != null">
+				and E.LEVEL_ = #{level}
+			</if>
+
+			<if test="principalLike != null and principalLike != '' ">
+				and E.PRINCIPAL_ like #{principalLike}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="year != null">
+				and E.YEAR_ = #{year}
+			</if>
+
+			<if test="remarkLike != null and remarkLike != '' ">
+				and E.REMARK_ like #{remarkLike}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+			<if test="updateTimeGreaterThanOrEqual != null">
+				and E.UPDATETIME_ &gt;= #{updateTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="updateTimeLessThanOrEqual != null">
+				and E.UPDATETIME_ &lt;= #{updateTimeLessThanOrEqual}
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+
+			<if test="deleteFlag != null">
+				and E.DELETEFLAG_ = #{deleteFlag}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

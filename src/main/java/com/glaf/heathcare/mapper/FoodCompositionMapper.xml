@@ -1,0 +1,992 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.heathcare.mapper.FoodCompositionMapper">
+
+	<resultMap id="foodCompositionResultMap" type="com.glaf.heathcare.domain.FoodComposition">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="nodeId" column="NODEID_" jdbcType="BIGINT" />
+		<result property="treeId" column="TREEID_" jdbcType="VARCHAR" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="alias" column="ALIAS_" jdbcType="VARCHAR" />
+		<result property="code" column="CODE_" jdbcType="VARCHAR" />
+		<result property="discriminator" column="DISCRIMINATOR_"
+			jdbcType="VARCHAR" />
+		<result property="description" column="DESCRIPTION_" jdbcType="VARCHAR" />
+		<result property="radical" column="RADICAL_" jdbcType="DOUBLE" />
+		<result property="heatEnergy" column="HEATENERGY_" jdbcType="DOUBLE" />
+		<result property="protein" column="PROTEIN_" jdbcType="DOUBLE" />
+		<result property="fat" column="FAT_" jdbcType="DOUBLE" />
+		<result property="carbohydrate" column="CARBOHYDRATE_"
+			jdbcType="DOUBLE" />
+		<result property="vitaminA" column="VITAMINA_" jdbcType="DOUBLE" />
+		<result property="vitaminB1" column="VITAMINB1_" jdbcType="DOUBLE" />
+		<result property="vitaminB2" column="VITAMINB2_" jdbcType="DOUBLE" />
+		<result property="vitaminB6" column="VITAMINB6_" jdbcType="DOUBLE" />
+		<result property="vitaminB12" column="VITAMINB12_" jdbcType="DOUBLE" />
+		<result property="vitaminC" column="VITAMINC_" jdbcType="DOUBLE" />
+		<result property="vitaminE" column="VITAMINE_" jdbcType="DOUBLE" />
+		<result property="carotene" column="CAROTENE_" jdbcType="DOUBLE" />
+		<result property="retinol" column="RETINOL_" jdbcType="DOUBLE" />
+		<result property="nicotinicCid" column="NICOTINICCID_"
+			jdbcType="DOUBLE" />
+		<result property="calcium" column="CALCIUM_" jdbcType="DOUBLE" />
+		<result property="iron" column="IRON_" jdbcType="DOUBLE" />
+		<result property="zinc" column="ZINC_" jdbcType="DOUBLE" />
+		<result property="iodine" column="IODINE_" jdbcType="DOUBLE" />
+		<result property="phosphorus" column="PHOSPHORUS_" jdbcType="DOUBLE" />
+		<result property="copper" column="COPPER_" jdbcType="DOUBLE" />
+		<result property="magnesium" column="MAGNESIUM_" jdbcType="DOUBLE" />
+		<result property="manganese" column="MANGANESE_" jdbcType="DOUBLE" />
+		<result property="potassium" column="POTASSIUM_" jdbcType="DOUBLE" />
+		<result property="selenium" column="SELENIUM_" jdbcType="DOUBLE" />
+		<result property="sortNo" column="SORTNO_" jdbcType="INTEGER" />
+		<result property="sysFlag" column="SYSFLAG_" jdbcType="VARCHAR" />
+		<result property="useFlag" column="USEFLAG_" jdbcType="VARCHAR" />
+		<result property="dailyFlag" column="DAILYFLAG_" jdbcType="VARCHAR" />
+		<result property="colorFlag" column="COLORFLAG_" jdbcType="VARCHAR" />
+		<result property="cerealFlag" column="CEREALFLAG_" jdbcType="VARCHAR" />
+		<result property="beansFlag" column="BEANSFLAG_" jdbcType="VARCHAR" />
+		<result property="enableFlag" column="ENABLEFLAG_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY_" jdbcType="VARCHAR" />
+		<result property="updateTime" column="UPDATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertFoodComposition" parameterType="com.glaf.heathcare.domain.FoodComposition">
+		insert into HEALTH_FOOD_COMPOSITION
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="nodeId != null">
+				,NODEID_
+			</if>
+			<if test="treeId != null">
+				,TREEID_
+			</if>
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="alias != null">
+				,ALIAS_
+			</if>
+			<if test="code != null">
+				,CODE_
+			</if>
+			<if test="discriminator != null">
+				,DISCRIMINATOR_
+			</if>
+			<if test="description != null">
+				,DESCRIPTION_
+			</if>
+			<if test="radical != null">
+				,RADICAL_
+			</if>
+			<if test="heatEnergy != null">
+				,HEATENERGY_
+			</if>
+			<if test="protein != null">
+				,PROTEIN_
+			</if>
+			<if test="fat != null">
+				,FAT_
+			</if>
+			<if test="carbohydrate != null">
+				,CARBOHYDRATE_
+			</if>
+			<if test="vitaminA != null">
+				,VITAMINA_
+			</if>
+			<if test="vitaminB1 != null">
+				,VITAMINB1_
+			</if>
+			<if test="vitaminB2 != null">
+				,VITAMINB2_
+			</if>
+			<if test="vitaminB6 != null">
+				,VITAMINB6_
+			</if>
+			<if test="vitaminB12 != null">
+				,VITAMINB12_
+			</if>
+			<if test="vitaminC != null">
+				,VITAMINC_
+			</if>
+			<if test="vitaminE != null">
+				,VITAMINE_
+			</if>
+			<if test="carotene != null">
+				,CAROTENE_
+			</if>
+			<if test="retinol != null">
+				,RETINOL_
+			</if>
+			<if test="nicotinicCid != null">
+				,NICOTINICCID_
+			</if>
+			<if test="calcium != null">
+				,CALCIUM_
+			</if>
+			<if test="iron != null">
+				,IRON_
+			</if>
+			<if test="zinc != null">
+				,ZINC_
+			</if>
+			<if test="iodine != null">
+				,IODINE_
+			</if>
+			<if test="phosphorus != null">
+				,PHOSPHORUS_
+			</if>
+			<if test="copper != null">
+				,COPPER_
+			</if>
+			<if test="magnesium != null">
+				,MAGNESIUM_
+			</if>
+			<if test="manganese != null">
+				,MANGANESE_
+			</if>
+			<if test="potassium != null">
+				,POTASSIUM_
+			</if>
+			<if test="selenium != null">
+				,SELENIUM_
+			</if>
+			<if test="sortNo != null">
+				,SORTNO_
+			</if>
+			<if test="sysFlag != null">
+				,SYSFLAG_
+			</if>
+			<if test="useFlag != null">
+				,USEFLAG_
+			</if>
+			<if test="dailyFlag != null">
+				,DAILYFLAG_
+			</if>
+			<if test="colorFlag != null">
+				,COLORFLAG_
+			</if>
+			<if test="cerealFlag != null">
+				,CEREALFLAG_
+			</if>
+			<if test="beansFlag != null">
+				,BEANSFLAG_
+			</if>
+			<if test="enableFlag != null">
+				,ENABLEFLAG_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+			<if test="updateBy != null">
+				,UPDATEBY_
+			</if>
+			<if test="updateTime != null">
+				,UPDATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="nodeId != null">
+				,#{nodeId, jdbcType=BIGINT}
+			</if>
+			<if test="treeId != null">
+				,#{treeId, jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="alias != null">
+				,#{alias, jdbcType=VARCHAR}
+			</if>
+			<if test="code != null">
+				,#{code, jdbcType=VARCHAR}
+			</if>
+			<if test="discriminator != null">
+				,#{discriminator, jdbcType=VARCHAR}
+			</if>
+			<if test="description != null">
+				,#{description, jdbcType=VARCHAR}
+			</if>
+			<if test="radical != null">
+				,#{radical, jdbcType=DOUBLE}
+			</if>
+			<if test="heatEnergy != null">
+				,#{heatEnergy, jdbcType=DOUBLE}
+			</if>
+			<if test="protein != null">
+				,#{protein, jdbcType=DOUBLE}
+			</if>
+			<if test="fat != null">
+				,#{fat, jdbcType=DOUBLE}
+			</if>
+			<if test="carbohydrate != null">
+				,#{carbohydrate, jdbcType=DOUBLE}
+			</if>
+			<if test="vitaminA != null">
+				,#{vitaminA, jdbcType=DOUBLE}
+			</if>
+			<if test="vitaminB1 != null">
+				,#{vitaminB1, jdbcType=DOUBLE}
+			</if>
+			<if test="vitaminB2 != null">
+				,#{vitaminB2, jdbcType=DOUBLE}
+			</if>
+			<if test="vitaminB6 != null">
+				,#{vitaminB6, jdbcType=DOUBLE}
+			</if>
+			<if test="vitaminB12 != null">
+				,#{vitaminB12, jdbcType=DOUBLE}
+			</if>
+			<if test="vitaminC != null">
+				,#{vitaminC, jdbcType=DOUBLE}
+			</if>
+			<if test="vitaminE != null">
+				,#{vitaminE, jdbcType=DOUBLE}
+			</if>
+			<if test="carotene != null">
+				,#{carotene, jdbcType=DOUBLE}
+			</if>
+			<if test="retinol != null">
+				,#{retinol, jdbcType=DOUBLE}
+			</if>
+			<if test="nicotinicCid != null">
+				,#{nicotinicCid, jdbcType=DOUBLE}
+			</if>
+			<if test="calcium != null">
+				,#{calcium, jdbcType=DOUBLE}
+			</if>
+			<if test="iron != null">
+				,#{iron, jdbcType=DOUBLE}
+			</if>
+			<if test="zinc != null">
+				,#{zinc, jdbcType=DOUBLE}
+			</if>
+			<if test="iodine != null">
+				,#{iodine, jdbcType=DOUBLE}
+			</if>
+			<if test="phosphorus != null">
+				,#{phosphorus, jdbcType=DOUBLE}
+			</if>
+			<if test="copper != null">
+				,#{copper, jdbcType=DOUBLE}
+			</if>
+			<if test="magnesium != null">
+				,#{magnesium, jdbcType=DOUBLE}
+			</if>
+			<if test="manganese != null">
+				,#{manganese, jdbcType=DOUBLE}
+			</if>
+			<if test="potassium != null">
+				,#{potassium, jdbcType=DOUBLE}
+			</if>
+			<if test="selenium != null">
+				,#{selenium, jdbcType=DOUBLE}
+			</if>
+			<if test="sortNo != null">
+				,#{sortNo, jdbcType=INTEGER}
+			</if>
+			<if test="sysFlag != null">
+				,#{sysFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="useFlag != null">
+				,#{useFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="dailyFlag != null">
+				,#{dailyFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="colorFlag != null">
+				,#{colorFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="cerealFlag != null">
+				,#{cerealFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="beansFlag != null">
+				,#{beansFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="enableFlag != null">
+				,#{enableFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy != null">
+				,#{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				,#{updateTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertFoodComposition" parameterType="java.util.List">
+		insert into HEALTH_FOOD_COMPOSITION (
+		ID_
+		,TENANTID_
+		,NODEID_
+		,TREEID_
+		,NAME_
+		,ALIAS_
+		,CODE_
+		,DISCRIMINATOR_
+		,DESCRIPTION_
+		,RADICAL_
+		,HEATENERGY_
+		,PROTEIN_
+		,FAT_
+		,CARBOHYDRATE_
+		,VITAMINA_
+		,VITAMINB1_
+		,VITAMINB2_
+		,VITAMINB6_
+		,VITAMINB12_
+		,VITAMINC_
+		,VITAMINE_
+		,CAROTENE_
+		,RETINOL_
+		,NICOTINICCID_
+		,CALCIUM_
+		,IRON_
+		,ZINC_
+		,IODINE_
+		,PHOSPHORUS_
+		,COPPER_
+		,MAGNESIUM_
+		,MANGANESE_
+		,POTASSIUM_
+		,SELENIUM_
+		,SORTNO_
+		,SYSFLAG_
+		,USEFLAG_
+		,DAILYFLAG_
+		,COLORFLAG_
+		,CEREALFLAG_
+		,BEANSFLAG_
+		,ENABLEFLAG_
+		,CREATEBY_
+		,CREATETIME_
+		,UPDATEBY_
+		,UPDATETIME_
+		)
+		values
+		<foreach collection="list" item="foodComposition" index="index"
+			separator=",">
+			(
+			#{foodComposition.id, jdbcType=BIGINT}
+			,#{foodComposition.tenantId, jdbcType=VARCHAR}
+			,#{foodComposition.nodeId, jdbcType=BIGINT}
+			,#{foodComposition.treeId, jdbcType=VARCHAR}
+			,#{foodComposition.name,
+			jdbcType=VARCHAR}
+			,#{foodComposition.alias, jdbcType=VARCHAR}
+			,#{foodComposition.code, jdbcType=VARCHAR}
+			,#{foodComposition.discriminator, jdbcType=VARCHAR}
+			,#{foodComposition.description, jdbcType=VARCHAR}
+			,#{foodComposition.radical, jdbcType=DOUBLE}
+			,#{foodComposition.heatEnergy, jdbcType=DOUBLE}
+			,#{foodComposition.protein, jdbcType=DOUBLE}
+			,#{foodComposition.fat,
+			jdbcType=DOUBLE}
+			,#{foodComposition.carbohydrate, jdbcType=DOUBLE}
+			,#{foodComposition.vitaminA, jdbcType=DOUBLE}
+			,#{foodComposition.vitaminB1, jdbcType=DOUBLE}
+			,#{foodComposition.vitaminB2, jdbcType=DOUBLE}
+			,#{foodComposition.vitaminB6, jdbcType=DOUBLE}
+			,#{foodComposition.vitaminB12, jdbcType=DOUBLE}
+			,#{foodComposition.vitaminC, jdbcType=DOUBLE}
+			,#{foodComposition.vitaminE, jdbcType=DOUBLE}
+			,#{foodComposition.carotene, jdbcType=DOUBLE}
+			,#{foodComposition.retinol, jdbcType=DOUBLE}
+			,#{foodComposition.nicotinicCid, jdbcType=DOUBLE}
+			,#{foodComposition.calcium, jdbcType=DOUBLE}
+			,#{foodComposition.iron,
+			jdbcType=DOUBLE}
+			,#{foodComposition.zinc, jdbcType=DOUBLE}
+			,#{foodComposition.iodine, jdbcType=DOUBLE}
+			,#{foodComposition.phosphorus, jdbcType=DOUBLE}
+			,#{foodComposition.copper, jdbcType=DOUBLE}
+			,#{foodComposition.magnesium, jdbcType=DOUBLE}
+			,#{foodComposition.manganese, jdbcType=DOUBLE}
+			,#{foodComposition.potassium, jdbcType=DOUBLE}
+			,#{foodComposition.selenium, jdbcType=DOUBLE}
+			,#{foodComposition.sortNo, jdbcType=INTEGER}
+			,#{foodComposition.sysFlag, jdbcType=VARCHAR}
+			,#{foodComposition.useFlag, jdbcType=VARCHAR}
+			,#{foodComposition.dailyFlag, jdbcType=VARCHAR}
+			,#{foodComposition.colorFlag, jdbcType=VARCHAR}
+			,#{foodComposition.cerealFlag, jdbcType=VARCHAR}
+			,#{foodComposition.beansFlag, jdbcType=VARCHAR}
+			,#{foodComposition.enableFlag, jdbcType=VARCHAR}
+			,#{foodComposition.createBy, jdbcType=VARCHAR}
+			,#{foodComposition.createTime, jdbcType=TIMESTAMP}
+			,#{foodComposition.updateBy, jdbcType=VARCHAR}
+			,#{foodComposition.updateTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertFoodComposition_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="foodComposition" index="index">
+			insert into HEALTH_FOOD_COMPOSITION (
+			ID_
+			,TENANTID_
+			,NODEID_
+			,TREEID_
+			,NAME_
+			,ALIAS_
+			,CODE_
+			,DISCRIMINATOR_
+			,DESCRIPTION_
+			,RADICAL_
+			,HEATENERGY_
+			,PROTEIN_
+			,FAT_
+			,CARBOHYDRATE_
+			,VITAMINA_
+			,VITAMINB1_
+			,VITAMINB2_
+			,VITAMINB6_
+			,VITAMINB12_
+			,VITAMINC_
+			,VITAMINE_
+			,CAROTENE_
+			,RETINOL_
+			,NICOTINICCID_
+			,CALCIUM_
+			,IRON_
+			,ZINC_
+			,IODINE_
+			,PHOSPHORUS_
+			,COPPER_
+			,MAGNESIUM_
+			,MANGANESE_
+			,POTASSIUM_
+			,SELENIUM_
+			,SORTNO_
+			,SYSFLAG_
+			,USEFLAG_
+			,DAILYFLAG_
+			,COLORFLAG_
+			,CEREALFLAG_
+			,BEANSFLAG_
+			,ENABLEFLAG_
+			,CREATEBY_
+			,CREATETIME_
+			,UPDATEBY_
+			,UPDATETIME_
+			)
+			values (
+			#{foodComposition.id,
+			jdbcType=BIGINT}
+			,#{foodComposition.tenantId,
+			jdbcType=VARCHAR}
+			,#{foodComposition.nodeId,
+			jdbcType=BIGINT}
+			,#{foodComposition.treeId,
+			jdbcType=VARCHAR}
+			,#{foodComposition.name,
+			jdbcType=VARCHAR}
+			,#{foodComposition.alias,
+			jdbcType=VARCHAR}
+			,#{foodComposition.code,
+			jdbcType=VARCHAR}
+			,#{foodComposition.discriminator, jdbcType=VARCHAR}
+			,#{foodComposition.description, jdbcType=VARCHAR}
+			,#{foodComposition.radical, jdbcType=DOUBLE}
+			,#{foodComposition.heatEnergy, jdbcType=DOUBLE}
+			,#{foodComposition.protein, jdbcType=DOUBLE}
+			,#{foodComposition.fat,
+			jdbcType=DOUBLE}
+			,#{foodComposition.carbohydrate, jdbcType=DOUBLE}
+			,#{foodComposition.vitaminA, jdbcType=DOUBLE}
+			,#{foodComposition.vitaminB1, jdbcType=DOUBLE}
+			,#{foodComposition.vitaminB2, jdbcType=DOUBLE}
+			,#{foodComposition.vitaminB6, jdbcType=DOUBLE}
+			,#{foodComposition.vitaminB12, jdbcType=DOUBLE}
+			,#{foodComposition.vitaminC, jdbcType=DOUBLE}
+			,#{foodComposition.vitaminE, jdbcType=DOUBLE}
+			,#{foodComposition.carotene, jdbcType=DOUBLE}
+			,#{foodComposition.retinol, jdbcType=DOUBLE}
+			,#{foodComposition.nicotinicCid, jdbcType=DOUBLE}
+			,#{foodComposition.calcium, jdbcType=DOUBLE}
+			,#{foodComposition.iron,
+			jdbcType=DOUBLE}
+			,#{foodComposition.zinc, jdbcType=DOUBLE}
+			,#{foodComposition.iodine, jdbcType=DOUBLE}
+			,#{foodComposition.phosphorus, jdbcType=DOUBLE}
+			,#{foodComposition.copper, jdbcType=DOUBLE}
+			,#{foodComposition.magnesium, jdbcType=DOUBLE}
+			,#{foodComposition.manganese, jdbcType=DOUBLE}
+			,#{foodComposition.potassium, jdbcType=DOUBLE}
+			,#{foodComposition.selenium, jdbcType=DOUBLE}
+			,#{foodComposition.sortNo, jdbcType=INTEGER}
+			,#{foodComposition.sysFlag, jdbcType=VARCHAR}
+			,#{foodComposition.useFlag, jdbcType=VARCHAR}
+			,#{foodComposition.dailyFlag, jdbcType=VARCHAR}
+			,#{foodComposition.colorFlag, jdbcType=VARCHAR}
+			,#{foodComposition.cerealFlag, jdbcType=VARCHAR}
+			,#{foodComposition.beansFlag, jdbcType=VARCHAR}
+			,#{foodComposition.enableFlag, jdbcType=VARCHAR}
+			,#{foodComposition.createBy, jdbcType=VARCHAR}
+			,#{foodComposition.createTime, jdbcType=TIMESTAMP}
+			,#{foodComposition.updateBy, jdbcType=VARCHAR}
+			,#{foodComposition.updateTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateFoodComposition" parameterType="com.glaf.heathcare.domain.FoodComposition">
+		update HEALTH_FOOD_COMPOSITION
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="name != null">
+				NAME_ = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="alias != null">
+				ALIAS_ = #{alias, jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				CODE_ = #{code, jdbcType=VARCHAR},
+			</if>
+			<if test="discriminator != null">
+				DISCRIMINATOR_ = #{discriminator, jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				DESCRIPTION_ = #{description, jdbcType=VARCHAR},
+			</if>
+			<if test="radical != null">
+				RADICAL_ = #{radical, jdbcType=DOUBLE},
+			</if>
+			<if test="heatEnergy != null">
+				HEATENERGY_ = #{heatEnergy, jdbcType=DOUBLE},
+			</if>
+			<if test="protein != null">
+				PROTEIN_ = #{protein, jdbcType=DOUBLE},
+			</if>
+			<if test="fat != null">
+				FAT_ = #{fat, jdbcType=DOUBLE},
+			</if>
+			<if test="carbohydrate != null">
+				CARBOHYDRATE_ = #{carbohydrate, jdbcType=DOUBLE},
+			</if>
+			<if test="vitaminA != null">
+				VITAMINA_ = #{vitaminA, jdbcType=DOUBLE},
+			</if>
+			<if test="vitaminB1 != null">
+				VITAMINB1_ = #{vitaminB1, jdbcType=DOUBLE},
+			</if>
+			<if test="vitaminB2 != null">
+				VITAMINB2_ = #{vitaminB2, jdbcType=DOUBLE},
+			</if>
+			<if test="vitaminB6 != null">
+				VITAMINB6_ = #{vitaminB6, jdbcType=DOUBLE},
+			</if>
+			<if test="vitaminB12 != null">
+				VITAMINB12_ = #{vitaminB12, jdbcType=DOUBLE},
+			</if>
+			<if test="vitaminC != null">
+				VITAMINC_ = #{vitaminC, jdbcType=DOUBLE},
+			</if>
+			<if test="vitaminE != null">
+				VITAMINE_ = #{vitaminE, jdbcType=DOUBLE},
+			</if>
+			<if test="carotene != null">
+				CAROTENE_ = #{carotene, jdbcType=DOUBLE},
+			</if>
+			<if test="retinol != null">
+				RETINOL_ = #{retinol, jdbcType=DOUBLE},
+			</if>
+			<if test="nicotinicCid != null">
+				NICOTINICCID_ = #{nicotinicCid, jdbcType=DOUBLE},
+			</if>
+			<if test="calcium != null">
+				CALCIUM_ = #{calcium, jdbcType=DOUBLE},
+			</if>
+			<if test="iron != null">
+				IRON_ = #{iron, jdbcType=DOUBLE},
+			</if>
+			<if test="zinc != null">
+				ZINC_ = #{zinc, jdbcType=DOUBLE},
+			</if>
+			<if test="iodine != null">
+				IODINE_ = #{iodine, jdbcType=DOUBLE},
+			</if>
+			<if test="phosphorus != null">
+				PHOSPHORUS_ = #{phosphorus, jdbcType=DOUBLE},
+			</if>
+			<if test="copper != null">
+				COPPER_ = #{copper, jdbcType=DOUBLE},
+			</if>
+			<if test="magnesium != null">
+				MAGNESIUM_ = #{magnesium, jdbcType=DOUBLE},
+			</if>
+			<if test="manganese != null">
+				MANGANESE_ = #{manganese, jdbcType=DOUBLE},
+			</if>
+			<if test="potassium != null">
+				POTASSIUM_ = #{potassium, jdbcType=DOUBLE},
+			</if>
+			<if test="selenium != null">
+				SELENIUM_ = #{selenium, jdbcType=DOUBLE},
+			</if>
+			<if test="sortNo != null">
+				SORTNO_ = #{sortNo, jdbcType=INTEGER},
+			</if>
+			<if test="dailyFlag != null">
+				DAILYFLAG_ = #{dailyFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="colorFlag != null">
+				COLORFLAG_ = #{colorFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="cerealFlag != null">
+				CEREALFLAG_ = #{cerealFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="beansFlag != null">
+				BEANSFLAG_ = #{beansFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="enableFlag != null">
+				ENABLEFLAG_ = #{enableFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY_ = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATETIME_ = #{updateTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteFoodCompositionById" parameterType="long">
+		delete from
+		HEALTH_FOOD_COMPOSITION
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deleteFoodCompositions" parameterType="com.glaf.heathcare.query.FoodCompositionQuery">
+		delete from HEALTH_FOOD_COMPOSITION
+		where (
+		ID_ IN
+		<foreach item="x_id" index="index" collection="ids" open="("
+			separator="," close=")">
+			#{x_id}
+		</foreach>
+		)
+	</delete>
+
+
+	<select id="getFoodCompositionById" parameterType="long"
+		resultMap="foodCompositionResultMap">
+		select * from HEALTH_FOOD_COMPOSITION where ID_ = #{id}
+	</select>
+
+
+	<select id="getFoodCompositionByName" parameterType="string"
+		resultMap="foodCompositionResultMap">
+		select * from HEALTH_FOOD_COMPOSITION where NAME_ = #{name}
+	</select>
+
+
+	<select id="getFoodCompositions" parameterType="com.glaf.heathcare.query.FoodCompositionQuery"
+		resultMap="foodCompositionResultMap">
+		select distinct E.*
+		<include refid="selectFoodCompositionsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.NODEID_ asc, E.SORTNO_ asc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getFoodCompositionCount" parameterType="com.glaf.heathcare.query.FoodCompositionQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectFoodCompositionsSql" />
+	</select>
+
+
+	<sql id="selectFoodCompositionsSql">
+
+		from HEALTH_FOOD_COMPOSITION E
+
+		<where>
+			1 = 1
+
+			<if test="ids != null and ids.size() &gt; 0">
+				and E.ID_ IN
+				<foreach item="x_id" index="index" collection="ids" open="("
+					separator="," close=")">
+					#{x_id}
+				</foreach>
+			</if>
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="nodeId != null">
+				and E.NODEID_ = #{nodeId}
+			</if>
+
+			<if test="nodeIds != null and nodeIds.size() &gt; 0">
+				and E.NODEID_ IN
+				<foreach item="x_nodeId" index="index" collection="nodeIds"
+					open="(" separator="," close=")">
+					#{x_nodeId}
+				</foreach>
+			</if>
+
+			<if test="treeId != null and treeId != '' ">
+				and E.TREEID_ = #{treeId}
+			</if>
+
+			<if test="treeIdLike != null and treeIdLike != '' ">
+				and E.TREEID_ like #{treeIdLike}
+			</if>
+
+			<if test="name != null and name != '' ">
+				and E.NAME_ = #{name}
+			</if>
+
+			<if test="nameLike != null and nameLike != '' ">
+				and E.NAME_ like #{nameLike}
+			</if>
+
+			<if test="alias != null and alias != '' ">
+				and E.ALIAS_ = #{alias}
+			</if>
+
+			<if test="aliasLike != null and aliasLike != '' ">
+				and E.ALIAS_ like #{aliasLike}
+			</if>
+
+			<if test="code != null and code != '' ">
+				and E.CODE_ = #{code}
+			</if>
+
+			<if test="codeLike != null and codeLike != '' ">
+				and E.CODE_ like #{codeLike}
+			</if>
+
+			<if test="discriminator != null and discriminator != '' ">
+				and E.DISCRIMINATOR_ = #{discriminator}
+			</if>
+
+			<if test="descriptionLike != null and descriptionLike != '' ">
+				and E.DESCRIPTION_ like #{descriptionLike}
+			</if>
+
+			<if test="radicalGreaterThanOrEqual != null">
+				and E.RADICAL_ &gt;= #{radicalGreaterThanOrEqual}
+			</if>
+
+			<if test="radicalLessThanOrEqual != null">
+				and E.RADICAL_ &lt;= #{radicalLessThanOrEqual}
+			</if>
+
+			<if test="heatEnergyGreaterThanOrEqual != null">
+				and E.HEATENERGY_ &gt;= #{heatEnergyGreaterThanOrEqual}
+			</if>
+
+			<if test="heatEnergyLessThanOrEqual != null">
+				and E.HEATENERGY_ &lt;= #{heatEnergyLessThanOrEqual}
+			</if>
+
+			<if test="proteinGreaterThanOrEqual != null">
+				and E.PROTEIN_ &gt;= #{proteinGreaterThanOrEqual}
+			</if>
+
+			<if test="proteinLessThanOrEqual != null">
+				and E.PROTEIN_ &lt;= #{proteinLessThanOrEqual}
+			</if>
+
+			<if test="fatGreaterThanOrEqual != null">
+				and E.FAT_ &gt;= #{fatGreaterThanOrEqual}
+			</if>
+
+			<if test="fatLessThanOrEqual != null">
+				and E.FAT_ &lt;= #{fatLessThanOrEqual}
+			</if>
+
+			<if test="carbohydrateGreaterThanOrEqual != null">
+				and E.CARBOHYDRATE_ &gt;=
+				#{carbohydrateGreaterThanOrEqual}
+			</if>
+
+			<if test="carbohydrateLessThanOrEqual != null">
+				and E.CARBOHYDRATE_ &lt;= #{carbohydrateLessThanOrEqual}
+			</if>
+
+			<if test="vitaminAGreaterThanOrEqual != null">
+				and E.VITAMINA_ &gt;= #{vitaminAGreaterThanOrEqual}
+			</if>
+
+			<if test="vitaminALessThanOrEqual != null">
+				and E.VITAMINA_ &lt;= #{vitaminALessThanOrEqual}
+			</if>
+
+			<if test="vitaminB1GreaterThanOrEqual != null">
+				and E.VITAMINB1_ &gt;= #{vitaminB1GreaterThanOrEqual}
+			</if>
+
+			<if test="vitaminB1LessThanOrEqual != null">
+				and E.VITAMINB1_ &lt;= #{vitaminB1LessThanOrEqual}
+			</if>
+
+			<if test="vitaminB2GreaterThanOrEqual != null">
+				and E.VITAMINB2_ &gt;= #{vitaminB2GreaterThanOrEqual}
+			</if>
+
+			<if test="vitaminB2LessThanOrEqual != null">
+				and E.VITAMINB2_ &lt;= #{vitaminB2LessThanOrEqual}
+			</if>
+
+			<if test="vitaminB6GreaterThanOrEqual != null">
+				and E.VITAMINB6_ &gt;= #{vitaminB6GreaterThanOrEqual}
+			</if>
+
+			<if test="vitaminB6LessThanOrEqual != null">
+				and E.VITAMINB6_ &lt;= #{vitaminB6LessThanOrEqual}
+			</if>
+
+			<if test="vitaminB12GreaterThanOrEqual != null">
+				and E.VITAMINB12_ &gt;= #{vitaminB12GreaterThanOrEqual}
+			</if>
+
+			<if test="vitaminB12LessThanOrEqual != null">
+				and E.VITAMINB12_ &lt;= #{vitaminB12LessThanOrEqual}
+			</if>
+
+			<if test="vitaminCGreaterThanOrEqual != null">
+				and E.VITAMINC_ &gt;= #{vitaminCGreaterThanOrEqual}
+			</if>
+
+			<if test="vitaminCLessThanOrEqual != null">
+				and E.VITAMINC_ &lt;= #{vitaminCLessThanOrEqual}
+			</if>
+
+			<if test="caroteneGreaterThanOrEqual != null">
+				and E.CAROTENE_ &gt;= #{caroteneGreaterThanOrEqual}
+			</if>
+
+			<if test="caroteneLessThanOrEqual != null">
+				and E.CAROTENE_ &lt;= #{caroteneLessThanOrEqual}
+			</if>
+
+			<if test="retinolGreaterThanOrEqual != null">
+				and E.RETINOL_ &gt;= #{retinolGreaterThanOrEqual}
+			</if>
+
+			<if test="retinolLessThanOrEqual != null">
+				and E.RETINOL_ &lt;= #{retinolLessThanOrEqual}
+			</if>
+
+			<if test="nicotinicCidGreaterThanOrEqual != null">
+				and E.NICOTINICCID_ &gt;=
+				#{nicotinicCidGreaterThanOrEqual}
+			</if>
+
+			<if test="nicotinicCidLessThanOrEqual != null">
+				and E.NICOTINICCID_ &lt;= #{nicotinicCidLessThanOrEqual}
+			</if>
+
+			<if test="calciumGreaterThanOrEqual != null">
+				and E.CALCIUM_ &gt;= #{calciumGreaterThanOrEqual}
+			</if>
+
+			<if test="calciumLessThanOrEqual != null">
+				and E.CALCIUM_ &lt;= #{calciumLessThanOrEqual}
+			</if>
+
+			<if test="ironGreaterThanOrEqual != null">
+				and E.IRON_ &gt;= #{ironGreaterThanOrEqual}
+			</if>
+
+			<if test="ironLessThanOrEqual != null">
+				and E.IRON_ &lt;= #{ironLessThanOrEqual}
+			</if>
+
+			<if test="zincGreaterThanOrEqual != null">
+				and E.ZINC_ &gt;= #{zincGreaterThanOrEqual}
+			</if>
+
+			<if test="zincLessThanOrEqual != null">
+				and E.ZINC_ &lt;= #{zincLessThanOrEqual}
+			</if>
+
+			<if test="sysFlag != null and sysFlag != '' ">
+				and E.SYSFLAG_ = #{sysFlag}
+			</if>
+
+			<if test="useFlag != null and useFlag != '' ">
+				and E.USEFLAG_ = #{useFlag}
+			</if>
+
+			<if test="dailyFlag != null and dailyFlag != '' ">
+				and E.DAILYFLAG_ = #{dailyFlag}
+			</if>
+
+			<if test="enableFlag != null and enableFlag != '' ">
+				and E.ENABLEFLAG_ = #{enableFlag}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+			<if test="updateTimeGreaterThanOrEqual != null">
+				and E.UPDATETIME_ &gt;= #{updateTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="updateTimeLessThanOrEqual != null">
+				and E.UPDATETIME_ &lt;= #{updateTimeLessThanOrEqual}
+			</if>
+
+			<if test="dataRequest != null and dataRequest.filter != null ">
+				<include refid="com.glaf.global.GlobalMapper.dataRequestFilterCondition" />
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

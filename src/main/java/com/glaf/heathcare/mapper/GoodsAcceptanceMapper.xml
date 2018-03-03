@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.heathcare.mapper.GoodsAcceptanceMapper">
+
+	<resultMap id="goodsAcceptanceResultMap" type="com.glaf.heathcare.domain.GoodsAcceptance">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="goodsId" column="GOODSID_" jdbcType="BIGINT" />
+		<result property="goodsName" column="GOODSNAME_" jdbcType="VARCHAR" />
+		<result property="goodsNodeId" column="GOODSNODEID_" jdbcType="BIGINT" />
+		<result property="acceptanceTime" column="ACCEPTANCE_TIME_"
+			jdbcType="TIMESTAMP" />
+		<result property="semester" column="SEMESTER_" jdbcType="INTEGER" />
+		<result property="year" column="YEAR_" jdbcType="INTEGER" />
+		<result property="month" column="MONTH_" jdbcType="INTEGER" />
+		<result property="day" column="DAY_" jdbcType="INTEGER" />
+		<result property="week" column="WEEK_" jdbcType="INTEGER" />
+		<result property="fullDay" column="FULLDAY_" jdbcType="INTEGER" />
+		<result property="quantity" column="QUANTITY_" jdbcType="DOUBLE" />
+		<result property="totalPrice" column="TOTALPRICE_" jdbcType="DOUBLE" />
+		<result property="unit" column="UNIT_" jdbcType="VARCHAR" />
+		<result property="receiverId" column="RECEIVERID_" jdbcType="VARCHAR" />
+		<result property="receiverName" column="RECEIVERNAME_"
+			jdbcType="VARCHAR" />
+		<result property="remark" column="REMARK_" jdbcType="VARCHAR" />
+		<result property="businessStatus" column="BUSINESSSTATUS_"
+			jdbcType="INTEGER" />
+		<result property="confirmTime" column="CONFIRMTIME_" jdbcType="TIMESTAMP" />
+		<result property="confirmBy" column="CONFIRMBY_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertGoodsAcceptance" parameterType="com.glaf.heathcare.domain.GoodsAcceptance">
+		insert into GOODS_ACCEPTANCE${tableSuffix}
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="goodsId != null">
+				,GOODSID_
+			</if>
+			<if test="goodsName != null">
+				,GOODSNAME_
+			</if>
+			<if test="goodsNodeId != null">
+				,GOODSNODEID_
+			</if>
+			<if test="acceptanceTime != null">
+				,ACCEPTANCE_TIME_
+			</if>
+			<if test="semester != null">
+				,SEMESTER_
+			</if>
+			<if test="year != null">
+				,YEAR_
+			</if>
+			<if test="month != null">
+				,MONTH_
+			</if>
+			<if test="day != null">
+				,DAY_
+			</if>
+			<if test="week != null">
+				,WEEK_
+			</if>
+			<if test="fullDay != null">
+				,FULLDAY_
+			</if>
+			<if test="quantity != null">
+				,QUANTITY_
+			</if>
+			<if test="totalPrice != null">
+				,TOTALPRICE_
+			</if>
+			<if test="unit != null">
+				,UNIT_
+			</if>
+			<if test="receiverId != null">
+				,RECEIVERID_
+			</if>
+			<if test="receiverName != null">
+				,RECEIVERNAME_
+			</if>
+			<if test="remark != null">
+				,REMARK_
+			</if>
+			<if test="businessStatus != null">
+				,BUSINESSSTATUS_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="goodsId != null">
+				,#{goodsId, jdbcType=BIGINT}
+			</if>
+			<if test="goodsName != null">
+				,#{goodsName, jdbcType=VARCHAR}
+			</if>
+			<if test="goodsNodeId != null">
+				,#{goodsNodeId, jdbcType=BIGINT}
+			</if>
+			<if test="acceptanceTime != null">
+				,#{acceptanceTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="semester != null">
+				,#{semester, jdbcType=INTEGER}
+			</if>
+			<if test="year != null">
+				,#{year, jdbcType=INTEGER}
+			</if>
+			<if test="month != null">
+				,#{month, jdbcType=INTEGER}
+			</if>
+			<if test="day != null">
+				,#{day, jdbcType=INTEGER}
+			</if>
+			<if test="week != null">
+				,#{week, jdbcType=INTEGER}
+			</if>
+			<if test="fullDay != null">
+				,#{fullDay, jdbcType=INTEGER}
+			</if>
+			<if test="quantity != null">
+				,#{quantity, jdbcType=DOUBLE}
+			</if>
+			<if test="totalPrice != null">
+				,#{totalPrice, jdbcType=DOUBLE}
+			</if>
+			<if test="unit != null">
+				,#{unit, jdbcType=VARCHAR}
+			</if>
+			<if test="receiverId != null">
+				,#{receiverId, jdbcType=VARCHAR}
+			</if>
+			<if test="receiverName != null">
+				,#{receiverName, jdbcType=VARCHAR}
+			</if>
+			<if test="remark != null">
+				,#{remark, jdbcType=VARCHAR}
+			</if>
+			<if test="businessStatus != null">
+				,#{businessStatus, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertGoodsAcceptance" parameterType="com.glaf.core.base.ListModel">
+		insert into GOODS_ACCEPTANCE${tableSuffix} (
+		ID_
+		,TENANTID_
+		,GOODSID_
+		,GOODSNAME_
+		,GOODSNODEID_
+		,ACCEPTANCE_TIME_
+		,SEMESTER_
+		,YEAR_
+		,MONTH_
+		,DAY_
+		,WEEK_
+		,FULLDAY_
+		,QUANTITY_
+		,TOTALPRICE_
+		,UNIT_
+		,RECEIVERID_
+		,RECEIVERNAME_
+		,REMARK_
+		,BUSINESSSTATUS_
+		,CREATEBY_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="goodsAcceptance" index="index"
+			separator=",">
+			(
+			#{goodsAcceptance.id, jdbcType=BIGINT}
+			,#{goodsAcceptance.tenantId, jdbcType=VARCHAR}
+			,#{goodsAcceptance.goodsId, jdbcType=BIGINT}
+			,#{goodsAcceptance.goodsName, jdbcType=VARCHAR}
+			,#{goodsAcceptance.goodsNodeId, jdbcType=BIGINT}
+			,#{goodsAcceptance.acceptanceTime, jdbcType=TIMESTAMP}
+			,#{goodsAcceptance.semester, jdbcType=INTEGER}
+			,#{goodsAcceptance.year,
+			jdbcType=INTEGER}
+			,#{goodsAcceptance.month,
+			jdbcType=INTEGER}
+			,#{goodsAcceptance.day, jdbcType=INTEGER}
+			,#{goodsAcceptance.week,
+			jdbcType=INTEGER}
+			,#{goodsAcceptance.fullDay,
+			jdbcType=INTEGER}
+			,#{goodsAcceptance.quantity, jdbcType=DOUBLE}
+			,#{goodsAcceptance.totalPrice, jdbcType=DOUBLE}
+			,#{goodsAcceptance.unit,
+			jdbcType=VARCHAR}
+			,#{goodsAcceptance.receiverId,
+			jdbcType=VARCHAR}
+			,#{goodsAcceptance.receiverName, jdbcType=VARCHAR}
+			,#{goodsAcceptance.remark, jdbcType=VARCHAR}
+			,#{goodsAcceptance.businessStatus, jdbcType=INTEGER}
+			,#{goodsAcceptance.createBy,
+			jdbcType=VARCHAR}
+			,#{goodsAcceptance.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertGoodsAcceptance_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="goodsAcceptance" index="index">
+			insert
+			into GOODS_ACCEPTANCE${tableSuffix} (
+			ID_
+			,TENANTID_
+			,GOODSID_
+			,GOODSNAME_
+			,GOODSNODEID_
+			,ACCEPTANCE_TIME_
+			,SEMESTER_
+			,YEAR_
+			,MONTH_
+			,DAY_
+			,WEEK_
+			,FULLDAY_
+			,QUANTITY_
+			,TOTALPRICE_
+			,UNIT_
+			,RECEIVERID_
+			,RECEIVERNAME_
+			,REMARK_
+			,BUSINESSSTATUS_
+			,CREATEBY_
+			,CREATETIME_
+			) values (
+			#{goodsAcceptance.id,
+			jdbcType=BIGINT}
+			,#{goodsAcceptance.tenantId, jdbcType=VARCHAR}
+			,#{goodsAcceptance.goodsId, jdbcType=BIGINT}
+			,#{goodsAcceptance.goodsName, jdbcType=VARCHAR}
+			,#{goodsAcceptance.goodsNodeId, jdbcType=BIGINT}
+			,#{goodsAcceptance.acceptanceTime, jdbcType=TIMESTAMP}
+			,#{goodsAcceptance.semester, jdbcType=INTEGER}
+			,#{goodsAcceptance.year,
+			jdbcType=INTEGER}
+			,#{goodsAcceptance.month,
+			jdbcType=INTEGER}
+			,#{goodsAcceptance.day, jdbcType=INTEGER}
+			,#{goodsAcceptance.week,
+			jdbcType=INTEGER}
+			,#{goodsAcceptance.fullDay,
+			jdbcType=INTEGER}
+			,#{goodsAcceptance.quantity, jdbcType=DOUBLE}
+			,#{goodsAcceptance.totalPrice, jdbcType=DOUBLE}
+			,#{goodsAcceptance.unit,
+			jdbcType=VARCHAR}
+			,#{goodsAcceptance.receiverId,
+			jdbcType=VARCHAR}
+			,#{goodsAcceptance.receiverName, jdbcType=VARCHAR}
+			,#{goodsAcceptance.remark, jdbcType=VARCHAR}
+			,#{goodsAcceptance.businessStatus, jdbcType=INTEGER}
+			,#{goodsAcceptance.createBy,
+			jdbcType=VARCHAR}
+			,#{goodsAcceptance.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateGoodsAcceptance" parameterType="com.glaf.heathcare.domain.GoodsAcceptance">
+		update GOODS_ACCEPTANCE${tableSuffix}
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="quantity != null">
+				QUANTITY_ = #{quantity, jdbcType=DOUBLE},
+			</if>
+			<if test="totalPrice != null">
+				TOTALPRICE_ = #{totalPrice, jdbcType=DOUBLE},
+			</if>
+			<if test="unit != null">
+				UNIT_ = #{unit, jdbcType=VARCHAR},
+			</if>
+			<if test="receiverId != null">
+				RECEIVERID_ = #{receiverId, jdbcType=VARCHAR},
+			</if>
+			<if test="receiverName != null">
+				RECEIVERNAME_ = #{receiverName, jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				REMARK_ = #{remark, jdbcType=VARCHAR},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<update id="updateGoodsAcceptanceStatus" parameterType="com.glaf.heathcare.domain.GoodsAcceptance">
+		update GOODS_ACCEPTANCE${tableSuffix}
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="businessStatus != null">
+				BUSINESSSTATUS_ = #{businessStatus, jdbcType=INTEGER},
+			</if>
+			<if test="confirmBy != null">
+				CONFIRMBY_ = #{confirmBy, jdbcType=VARCHAR},
+			</if>
+			<if test="confirmTime != null">
+				CONFIRMTIME_ = #{confirmTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteGoodsAcceptanceById" parameterType="com.glaf.heathcare.query.GoodsAcceptanceQuery">
+		delete from
+		GOODS_ACCEPTANCE${tableSuffix}
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getGoodsAcceptanceById" parameterType="com.glaf.heathcare.query.GoodsAcceptanceQuery"
+		resultMap="goodsAcceptanceResultMap">
+		select * from GOODS_ACCEPTANCE${tableSuffix} where ID_ =
+		#{id}
+	</select>
+
+
+	<select id="getGoodsAcceptances" parameterType="com.glaf.heathcare.query.GoodsAcceptanceQuery"
+		resultMap="goodsAcceptanceResultMap">
+		select distinct E.*
+		<include refid="selectGoodsAcceptancesSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ACCEPTANCE_TIME_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getGoodsAcceptanceCount" parameterType="com.glaf.heathcare.query.GoodsAcceptanceQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectGoodsAcceptancesSql" />
+	</select>
+
+
+	<sql id="selectGoodsAcceptancesSql">
+
+		from GOODS_ACCEPTANCE${tableSuffix} E
+
+		<where>
+			1 = 1
+
+			<if test="ids != null and ids.size() &gt; 0">
+				and E.ID_ IN
+				<foreach item="x_id" index="index" collection="ids" open="("
+					separator="," close=")">
+					#{x_id}
+				</foreach>
+			</if>
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="tenantIds != null and tenantIds.size() &gt; 0">
+				and E.TENANTID_ IN
+				<foreach item="x_tenantId" index="index" collection="tenantIds"
+					open="(" separator="," close=")">
+					#{x_tenantId}
+				</foreach>
+			</if>
+
+			<if test="goodsId != null">
+				and E.GOODSID_ = #{goodsId}
+			</if>
+
+			<if test="goodsIds != null and goodsIds.size() &gt; 0">
+				and E.GOODSID_ IN
+				<foreach item="x_goodsId" index="index" collection="goodsIds"
+					open="(" separator="," close=")">
+					#{x_goodsId}
+				</foreach>
+			</if>
+
+			<if test="goodsNameLike != null and goodsNameLike != '' ">
+				and E.GOODSNAME_ like #{goodsNameLike}
+			</if>
+
+			<if test="goodsNodeId != null">
+				and E.GOODSNODEID_ = #{goodsNodeId}
+			</if>
+
+			<if test="acceptanceTimeGreaterThanOrEqual != null">
+				and E.ACCEPTANCE_TIME_ &gt;=
+				#{acceptanceTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="acceptanceTimeLessThanOrEqual != null">
+				and E.ACCEPTANCE_TIME_ &lt;= #{acceptanceTimeLessThanOrEqual}
+			</if>
+
+			<if test="semester != null">
+				and E.SEMESTER_ = #{semester}
+			</if>
+
+			<if test="year != null">
+				and E.YEAR_ = #{year}
+			</if>
+
+			<if test="month != null">
+				and E.MONTH_ = #{month}
+			</if>
+
+			<if test="week != null and week &gt; 0 ">
+				and E.WEEK_ = #{week}
+			</if>
+
+			<if test="day != null">
+				and E.DAY_ = #{day}
+			</if>
+
+			<if test="fullDay != null">
+				and E.FULLDAY_ = #{fullDay}
+			</if>
+
+			<if test="fullDayGreaterThanOrEqual != null">
+				and E.FULLDAY_ &gt;= #{fullDayGreaterThanOrEqual}
+			</if>
+
+			<if test="fullDayLessThanOrEqual != null">
+				and E.FULLDAY_ &lt;= #{fullDayLessThanOrEqual}
+			</if>
+
+			<if test="quantityGreaterThanOrEqual != null">
+				and E.QUANTITY_ &gt;= #{quantityGreaterThanOrEqual}
+			</if>
+
+			<if test="quantityLessThanOrEqual != null">
+				and E.QUANTITY_ &lt;= #{quantityLessThanOrEqual}
+			</if>
+
+			<if test="unit != null and unit != '' ">
+				and E.UNIT_ = #{unit}
+			</if>
+
+			<if test="receiverId != null and receiverId != '' ">
+				and E.RECEIVERID_ = #{receiverId}
+			</if>
+
+			<if test="receiverIds != null and receiverIds.size() &gt; 0">
+				and E.RECEIVERID_ IN
+				<foreach item="x_receiverId" index="index" collection="receiverIds"
+					open="(" separator="," close=")">
+					#{x_receiverId}
+				</foreach>
+			</if>
+
+			<if test="receiverNameLike != null and receiverNameLike != '' ">
+				and E.RECEIVERNAME_ like #{receiverNameLike}
+			</if>
+
+			<if test="remarkLike != null and remarkLike != '' ">
+				and E.REMARK_ like #{remarkLike}
+			</if>
+
+			<if test="businessStatus != null">
+				and E.BUSINESSSTATUS_ = #{businessStatus}
+			</if>
+
+			<if test="confirmBy != null and confirmBy != '' ">
+				and E.CONFIRMBY_ = #{confirmBy}
+			</if>
+
+			<if test="confirmTimeGreaterThanOrEqual != null">
+				and E.CONFIRMTIME_ &gt;= #{confirmTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="confirmTimeLessThanOrEqual != null">
+				and E.CONFIRMTIME_ &lt;= #{confirmTimeLessThanOrEqual}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

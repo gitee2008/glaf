@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.heathcare.mapper.PersonInspectionMapper">
+
+	<resultMap id="personInspectionResultMap" type="com.glaf.heathcare.domain.PersonInspection">
+		<id property="id" column="ID_" jdbcType="VARCHAR" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="gradeId" column="GRADEID_" jdbcType="VARCHAR" />
+		<result property="personId" column="PERSONID_" jdbcType="VARCHAR" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="day" column="DAY_" jdbcType="INTEGER" />
+		<result property="section" column="SECTION_" jdbcType="VARCHAR" />
+		<result property="status" column="STATUS_" jdbcType="INTEGER" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="inspectionFlag" column="INSPECTIONFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="treat" column="TREAT_" jdbcType="VARCHAR" />
+		<result property="remark" column="REMARK_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertPersonInspection" parameterType="com.glaf.heathcare.domain.PersonInspection">
+		insert into HEALTH_PERSON_INSPECTION
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="gradeId != null">
+				,GRADEID_
+			</if>
+			<if test="personId != null">
+				,PERSONID_
+			</if>
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="day != null">
+				,DAY_
+			</if>
+			<if test="section != null">
+				,SECTION_
+			</if>
+			<if test="status != null">
+				,STATUS_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="inspectionFlag != null">
+				,INSPECTIONFLAG_
+			</if>
+			<if test="treat != null">
+				,TREAT_
+			</if>
+			<if test="remark != null">
+				,REMARK_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR}
+
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="gradeId != null">
+				,#{gradeId, jdbcType=VARCHAR}
+			</if>
+			<if test="personId != null">
+				,#{personId, jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="day != null">
+				,#{day, jdbcType=INTEGER}
+			</if>
+			<if test="section != null">
+				,#{section, jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				,#{status, jdbcType=INTEGER}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="inspectionFlag != null">
+				,#{inspectionFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="treat != null">
+				,#{treat, jdbcType=VARCHAR}
+			</if>
+			<if test="remark != null">
+				,#{remark, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertPersonInspection" parameterType="java.util.List">
+		insert into HEALTH_PERSON_INSPECTION (
+		ID_
+		,TENANTID_
+		,GRADEID_
+		,PERSONID_
+		,NAME_
+		,DAY_
+		,SECTION_
+		,STATUS_
+		,TYPE_
+		,INSPECTIONFLAG_
+		,TREAT_
+		,REMARK_
+		,CREATEBY_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="personInspection" index="index"
+			separator=",">
+			(
+			#{personInspection.id, jdbcType=VARCHAR}
+			,#{personInspection.tenantId, jdbcType=VARCHAR}
+			,#{personInspection.gradeId, jdbcType=VARCHAR}
+			,#{personInspection.personId, jdbcType=VARCHAR}
+			,#{personInspection.name,
+			jdbcType=VARCHAR}
+			,#{personInspection.day,
+			jdbcType=INTEGER}
+			,#{personInspection.section, jdbcType=VARCHAR}
+			,#{personInspection.status,
+			jdbcType=INTEGER}
+			,#{personInspection.type, jdbcType=VARCHAR}
+			,#{personInspection.inspectionFlag, jdbcType=VARCHAR}
+			,#{personInspection.treat, jdbcType=VARCHAR}
+			,#{personInspection.remark, jdbcType=VARCHAR}
+			,#{personInspection.createBy, jdbcType=VARCHAR}
+			,#{personInspection.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertPersonInspection_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="personInspection" index="index">
+			insert
+			into HEALTH_PERSON_INSPECTION (
+			ID_
+			,TENANTID_
+			,GRADEID_
+			,PERSONID_
+			,NAME_
+			,DAY_
+			,SECTION_
+			,STATUS_
+			,TYPE_
+			,INSPECTIONFLAG_
+			,TREAT_
+			,REMARK_
+			,CREATEBY_
+			,CREATETIME_
+			) values (
+			#{personInspection.id,
+			jdbcType=VARCHAR}
+			,#{personInspection.tenantId,
+			jdbcType=VARCHAR}
+			,#{personInspection.gradeId, jdbcType=VARCHAR}
+			,#{personInspection.personId, jdbcType=VARCHAR}
+			,#{personInspection.name,
+			jdbcType=VARCHAR}
+			,#{personInspection.day,
+			jdbcType=INTEGER}
+			,#{personInspection.section, jdbcType=VARCHAR}
+			,#{personInspection.status,
+			jdbcType=INTEGER}
+			,#{personInspection.type, jdbcType=VARCHAR}
+			,#{personInspection.inspectionFlag, jdbcType=VARCHAR}
+			,#{personInspection.treat, jdbcType=VARCHAR}
+			,#{personInspection.remark, jdbcType=VARCHAR}
+			,#{personInspection.createBy, jdbcType=VARCHAR}
+			,#{personInspection.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updatePersonInspection" parameterType="com.glaf.heathcare.domain.PersonInspection">
+		update HEALTH_PERSON_INSPECTION
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="status != null">
+				STATUS_ = #{status, jdbcType=INTEGER},
+			</if>
+			<if test="treat != null">
+				TREAT_ = #{treat, jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				REMARK_ = #{remark, jdbcType=VARCHAR},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<delete id="deletePersonInspectionById" parameterType="string">
+		delete
+		from
+		HEALTH_PERSON_INSPECTION
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deletePersonInspections" parameterType="com.glaf.heathcare.query.PersonInspectionQuery">
+		delete from HEALTH_PERSON_INSPECTION
+		where (
+		ID_ IN
+		<foreach item="x_id" index="index" collection="ids" open="("
+			separator="," close=")">
+			#{x_id}
+		</foreach>
+		)
+	</delete>
+
+
+	<select id="getPersonInspectionById" parameterType="string"
+		resultMap="personInspectionResultMap">
+		select * from HEALTH_PERSON_INSPECTION where ID_ = #{id}
+	</select>
+
+
+	<select id="getPersonInspections" parameterType="com.glaf.heathcare.query.PersonInspectionQuery"
+		resultMap="personInspectionResultMap">
+		select distinct E.*
+		<include refid="selectPersonInspectionsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.CREATETIME_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getPersonInspectionCount" parameterType="com.glaf.heathcare.query.PersonInspectionQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectPersonInspectionsSql" />
+	</select>
+
+
+	<sql id="selectPersonInspectionsSql">
+
+		from HEALTH_PERSON_INSPECTION E
+
+		<where>
+			1 = 1
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="tenantIds != null and tenantIds.size() &gt; 0">
+				and E.TENANTID_ IN
+				<foreach item="x_tenantId" index="index" collection="tenantIds"
+					open="(" separator="," close=")">
+					#{x_tenantId}
+				</foreach>
+			</if>
+
+			<if test="gradeId != null and gradeId != '' ">
+				and E.GRADEID_ = #{gradeId}
+			</if>
+
+			<if test="gradeIds != null and gradeIds.size() &gt; 0">
+				and E.GRADEID_ IN
+				<foreach item="x_gradeId" index="index" collection="gradeIds"
+					open="(" separator="," close=")">
+					#{x_gradeId}
+				</foreach>
+			</if>
+
+			<if test="personId != null and personId != '' ">
+				and E.PERSONID_ = #{personId}
+			</if>
+
+			<if test="personIds != null and personIds.size() &gt; 0">
+				and E.PERSONID_ IN
+				<foreach item="x_personId" index="index" collection="personIds"
+					open="(" separator="," close=")">
+					#{x_personId}
+				</foreach>
+			</if>
+
+			<if test="name != null and name != '' ">
+				and E.NAME_ = #{name}
+			</if>
+
+			<if test="nameLike != null and nameLike != '' ">
+				and E.NAME_ like #{nameLike}
+			</if>
+
+			<if test="day != null">
+				and E.DAY_ = #{day}
+			</if>
+
+			<if test="days != null and days.size() &gt; 0">
+				and E.DAY_ IN
+				<foreach item="x_day" index="index" collection="days" open="("
+					separator="," close=")">
+					#{x_day}
+				</foreach>
+			</if>
+
+			<if test="section != null and section != '' ">
+				and E.SECTION_ = #{section}
+			</if>
+
+			<if test="status != null">
+				and E.STATUS_ = #{status}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="inspectionFlag != null and inspectionFlag != '' ">
+				and E.INSPECTIONFLAG_ = #{inspectionFlag}
+			</if>
+
+			<if test="remarkLike != null and remarkLike != '' ">
+				and E.REMARK_ like #{remarkLike}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createBys != null and createBys.size() &gt; 0">
+				and E.CREATEBY_ IN
+				<foreach item="x_createBy" index="index" collection="createBys"
+					open="(" separator="," close=")">
+					#{x_createBy}
+				</foreach>
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

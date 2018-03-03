@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.heathcare.mapper.PersonTransferSchoolMapper">
+
+	<resultMap id="personTransferSchoolResultMap"
+		type="com.glaf.heathcare.domain.PersonTransferSchool">
+		<id property="id" column="ID_" jdbcType="VARCHAR" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="fromTenantId" column="FROM_TENANTID_"
+			jdbcType="VARCHAR" />
+		<result property="fromSchool" column="FROM_SCHOOL_" jdbcType="VARCHAR" />
+		<result property="toTenantId" column="TO_TENANTID_" jdbcType="VARCHAR" />
+		<result property="toSchool" column="TO_SCHOOL_" jdbcType="VARCHAR" />
+		<result property="personId" column="PERSONID_" jdbcType="VARCHAR" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="sex" column="SEX_" jdbcType="VARCHAR" />
+		<result property="checkDate" column="CHECKDATE_" jdbcType="TIMESTAMP" />
+		<result property="checkOrganization" column="CHECKORGANIZATION_"
+			jdbcType="VARCHAR" />
+		<result property="checkOrganizationId" column="CHECKORGANIZATIONID_"
+			jdbcType="BIGINT" />
+		<result property="checkResult" column="CHECKRESULT_" jdbcType="VARCHAR" />
+		<result property="remark" column="REMARK_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertPersonTransferSchool" parameterType="com.glaf.heathcare.domain.PersonTransferSchool">
+		insert into HEALTH_PERSON_TRANSFER_SCHOOL
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="fromTenantId != null">
+				,FROM_TENANTID_
+			</if>
+			<if test="fromSchool != null">
+				,FROM_SCHOOL_
+			</if>
+			<if test="toTenantId != null">
+				,TO_TENANTID_
+			</if>
+			<if test="toSchool != null">
+				,TO_SCHOOL_
+			</if>
+			<if test="personId != null">
+				,PERSONID_
+			</if>
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="sex != null">
+				,SEX_
+			</if>
+			<if test="checkDate != null">
+				,CHECKDATE_
+			</if>
+			<if test="checkOrganization != null">
+				,CHECKORGANIZATION_
+			</if>
+			<if test="checkOrganizationId != null">
+				,CHECKORGANIZATIONID_
+			</if>
+			<if test="checkResult != null">
+				,CHECKRESULT_
+			</if>
+			<if test="remark != null">
+				,REMARK_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR}
+
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="fromTenantId != null">
+				,#{fromTenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="fromSchool != null">
+				,#{fromSchool, jdbcType=VARCHAR}
+			</if>
+			<if test="toTenantId != null">
+				,#{toTenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="toSchool != null">
+				,#{toSchool, jdbcType=VARCHAR}
+			</if>
+			<if test="personId != null">
+				,#{personId, jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="sex != null">
+				,#{sex, jdbcType=VARCHAR}
+			</if>
+			<if test="checkDate != null">
+				,#{checkDate, jdbcType=TIMESTAMP}
+			</if>
+			<if test="checkOrganization != null">
+				,#{checkOrganization, jdbcType=VARCHAR}
+			</if>
+			<if test="checkOrganizationId != null">
+				,#{checkOrganizationId, jdbcType=BIGINT}
+			</if>
+			<if test="checkResult != null">
+				,#{checkResult, jdbcType=VARCHAR}
+			</if>
+			<if test="remark != null">
+				,#{remark, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertPersonTransferSchool" parameterType="java.util.List">
+		insert into HEALTH_PERSON_TRANSFER_SCHOOL (
+		ID_
+		,TENANTID_
+		,FROM_TENANTID_
+		,FROM_SCHOOL_
+		,TO_TENANTID_
+		,TO_SCHOOL_
+		,PERSONID_
+		,NAME_
+		,SEX_
+		,CHECKDATE_
+		,CHECKORGANIZATION_
+		,CHECKORGANIZATIONID_
+		,CHECKRESULT_
+		,REMARK_
+		,CREATEBY_
+		,CREATETIME_
+		)
+		values
+		<foreach collection="list" item="personTransferSchool" index="index"
+			separator=",">
+			(
+			#{personTransferSchool.id, jdbcType=VARCHAR}
+			,#{personTransferSchool.tenantId, jdbcType=VARCHAR}
+			,#{personTransferSchool.fromTenantId, jdbcType=VARCHAR}
+			,#{personTransferSchool.fromSchool, jdbcType=VARCHAR}
+			,#{personTransferSchool.toTenantId, jdbcType=VARCHAR}
+			,#{personTransferSchool.toSchool, jdbcType=VARCHAR}
+			,#{personTransferSchool.personId, jdbcType=VARCHAR}
+			,#{personTransferSchool.name, jdbcType=VARCHAR}
+			,#{personTransferSchool.sex, jdbcType=VARCHAR}
+			,#{personTransferSchool.checkDate, jdbcType=TIMESTAMP}
+			,#{personTransferSchool.checkOrganization, jdbcType=VARCHAR}
+			,#{personTransferSchool.checkOrganizationId, jdbcType=BIGINT}
+			,#{personTransferSchool.checkResult, jdbcType=VARCHAR}
+			,#{personTransferSchool.remark, jdbcType=VARCHAR}
+			,#{personTransferSchool.createBy, jdbcType=VARCHAR}
+			,#{personTransferSchool.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertPersonTransferSchool_oracle"
+		parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="personTransferSchool" index="index">
+			insert into HEALTH_PERSON_TRANSFER_SCHOOL (
+			ID_
+			,TENANTID_
+			,FROM_TENANTID_
+			,FROM_SCHOOL_
+			,TO_TENANTID_
+			,TO_SCHOOL_
+			,PERSONID_
+			,NAME_
+			,SEX_
+			,CHECKDATE_
+			,CHECKORGANIZATION_
+			,CHECKORGANIZATIONID_
+			,CHECKRESULT_
+			,REMARK_
+			,CREATEBY_
+			,CREATETIME_
+			)
+			values (
+			#{personTransferSchool.id,
+			jdbcType=VARCHAR}
+			,#{personTransferSchool.tenantId, jdbcType=VARCHAR}
+			,#{personTransferSchool.fromTenantId, jdbcType=VARCHAR}
+			,#{personTransferSchool.fromSchool, jdbcType=VARCHAR}
+			,#{personTransferSchool.toTenantId, jdbcType=VARCHAR}
+			,#{personTransferSchool.toSchool, jdbcType=VARCHAR}
+			,#{personTransferSchool.personId, jdbcType=VARCHAR}
+			,#{personTransferSchool.name, jdbcType=VARCHAR}
+			,#{personTransferSchool.sex, jdbcType=VARCHAR}
+			,#{personTransferSchool.checkDate, jdbcType=TIMESTAMP}
+			,#{personTransferSchool.checkOrganization, jdbcType=VARCHAR}
+			,#{personTransferSchool.checkOrganizationId, jdbcType=BIGINT}
+			,#{personTransferSchool.checkResult, jdbcType=VARCHAR}
+			,#{personTransferSchool.remark, jdbcType=VARCHAR}
+			,#{personTransferSchool.createBy, jdbcType=VARCHAR}
+			,#{personTransferSchool.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updatePersonTransferSchool" parameterType="com.glaf.heathcare.domain.PersonTransferSchool">
+		update HEALTH_PERSON_TRANSFER_SCHOOL
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="fromTenantId != null">
+				FROM_TENANTID_ = #{fromTenantId, jdbcType=VARCHAR},
+			</if>
+			<if test="fromSchool != null">
+				FROM_SCHOOL_ = #{fromSchool, jdbcType=VARCHAR},
+			</if>
+			<if test="toTenantId != null">
+				TO_TENANTID_ = #{toTenantId, jdbcType=VARCHAR},
+			</if>
+			<if test="toSchool != null">
+				TO_SCHOOL_ = #{toSchool, jdbcType=VARCHAR},
+			</if>
+			<if test="checkDate != null">
+				CHECKDATE_ = #{checkDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="checkOrganization != null">
+				CHECKORGANIZATION_ = #{checkOrganization,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="checkOrganizationId != null">
+				CHECKORGANIZATIONID_ = #{checkOrganizationId,
+				jdbcType=BIGINT},
+			</if>
+			<if test="checkResult != null">
+				CHECKRESULT_ = #{checkResult, jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				REMARK_ = #{remark, jdbcType=VARCHAR},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<delete id="deletePersonTransferSchoolById" parameterType="string">
+		delete from HEALTH_PERSON_TRANSFER_SCHOOL
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getPersonTransferSchoolById" parameterType="string"
+		resultMap="personTransferSchoolResultMap">
+		select * from HEALTH_PERSON_TRANSFER_SCHOOL where ID_ =
+		#{id}
+	</select>
+
+
+	<select id="getPersonTransferSchools" parameterType="com.glaf.heathcare.query.PersonTransferSchoolQuery"
+		resultMap="personTransferSchoolResultMap">
+		select distinct E.*
+		<include refid="selectPersonTransferSchoolsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.CREATETIME_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getPersonTransferSchoolCount" parameterType="com.glaf.heathcare.query.PersonTransferSchoolQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectPersonTransferSchoolsSql" />
+	</select>
+
+
+	<sql id="selectPersonTransferSchoolsSql">
+
+		from HEALTH_PERSON_TRANSFER_SCHOOL E
+
+		<where>
+			1 = 1
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="tenantIds != null and tenantIds.size() &gt; 0">
+				and E.TENANTID_ IN
+				<foreach item="x_tenantId" index="index" collection="tenantIds"
+					open="(" separator="," close=")">
+					#{x_tenantId}
+				</foreach>
+			</if>
+
+			<if test="fromTenantId != null and fromTenantId != '' ">
+				and E.FROM_TENANTID_ = #{fromTenantId}
+			</if>
+
+			<if test="fromSchoolLike != null and fromSchoolLike != '' ">
+				and E.FROM_SCHOOL_ like #{fromSchoolLike}
+			</if>
+
+			<if test="toTenantId != null and toTenantId != '' ">
+				and E.TO_TENANTID_ = #{toTenantId}
+			</if>
+
+			<if test="toSchoolLike != null and toSchoolLike != '' ">
+				and E.TO_SCHOOL_ like #{toSchoolLike}
+			</if>
+
+			<if test="personId != null and personId != '' ">
+				and E.PERSONID_ = #{personId}
+			</if>
+
+			<if test="personIds != null and personIds.size() &gt; 0">
+				and E.PERSONID_ IN
+				<foreach item="x_personId" index="index" collection="personIds"
+					open="(" separator="," close=")">
+					#{x_personId}
+				</foreach>
+			</if>
+
+			<if test="name != null and name != '' ">
+				and E.NAME_ = #{name}
+			</if>
+
+			<if test="nameLike != null and nameLike != '' ">
+				and E.NAME_ like #{nameLike}
+			</if>
+
+			<if test="checkDateGreaterThanOrEqual != null">
+				and E.CHECKDATE_ &gt;= #{checkDateGreaterThanOrEqual}
+			</if>
+
+			<if test="checkDateLessThanOrEqual != null">
+				and E.CHECKDATE_ &lt;= #{checkDateLessThanOrEqual}
+			</if>
+
+			<if test="remarkLike != null and remarkLike != '' ">
+				and E.REMARK_ like #{remarkLike}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.heathcare.mapper.VaccinationMapper">
+
+	<resultMap id="vaccinationResultMap" type="com.glaf.heathcare.domain.Vaccination">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="gradeId" column="GRADEID_" jdbcType="VARCHAR" />
+		<result property="personId" column="PERSONID_" jdbcType="VARCHAR" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="sex" column="SEX_" jdbcType="VARCHAR" />
+		<result property="vaccine" column="VACCINE_" jdbcType="VARCHAR" />
+		<result property="sortNo" column="SORTNO_" jdbcType="INTEGER" />
+		<result property="inoculateDate" column="INOCULATEDATE_"
+			jdbcType="TIMESTAMP" />
+		<result property="doctor" column="DOCTOR_" jdbcType="VARCHAR" />
+		<result property="year" column="YEAR_" jdbcType="INTEGER" />
+		<result property="month" column="MONTH_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertVaccination" parameterType="com.glaf.heathcare.domain.Vaccination">
+		insert into HEALTH_VACCINATION
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="gradeId != null">
+				,GRADEID_
+			</if>
+			<if test="personId != null">
+				,PERSONID_
+			</if>
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="sex != null">
+				,SEX_
+			</if>
+			<if test="vaccine != null">
+				,VACCINE_
+			</if>
+			<if test="sortNo != null">
+				,SORTNO_
+			</if>
+			<if test="inoculateDate != null">
+				,INOCULATEDATE_
+			</if>
+			<if test="doctor != null">
+				,DOCTOR_
+			</if>
+			<if test="year != null">
+				,YEAR_
+			</if>
+			<if test="month != null">
+				,MONTH_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="gradeId != null">
+				,#{gradeId, jdbcType=VARCHAR}
+			</if>
+			<if test="personId != null">
+				,#{personId, jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="sex != null">
+				,#{sex, jdbcType=VARCHAR}
+			</if>
+			<if test="vaccine != null">
+				,#{vaccine, jdbcType=VARCHAR}
+			</if>
+			<if test="sortNo != null">
+				,#{sortNo, jdbcType=INTEGER}
+			</if>
+			<if test="inoculateDate != null">
+				,#{inoculateDate, jdbcType=TIMESTAMP}
+			</if>
+			<if test="doctor != null">
+				,#{doctor, jdbcType=VARCHAR}
+			</if>
+			<if test="year != null">
+				,#{year, jdbcType=INTEGER}
+			</if>
+			<if test="month != null">
+				,#{month, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertVaccination" parameterType="java.util.List">
+		insert into HEALTH_VACCINATION (
+		ID_
+		,TENANTID_
+		,GRADEID_
+		,PERSONID_
+		,NAME_
+		,SEX_
+		,VACCINE_
+		,SORTNO_
+		,INOCULATEDATE_
+		,DOCTOR_
+		,YEAR_
+		,MONTH_
+		,CREATEBY_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="vaccination" index="index"
+			separator=",">
+			(
+			#{vaccination.id, jdbcType=BIGINT}
+			,#{vaccination.tenantId, jdbcType=VARCHAR}
+			,#{vaccination.gradeId, jdbcType=VARCHAR}
+			,#{vaccination.personId, jdbcType=VARCHAR}
+			,#{vaccination.name, jdbcType=VARCHAR}
+			,#{vaccination.sex, jdbcType=VARCHAR}
+			,#{vaccination.vaccine, jdbcType=VARCHAR}
+			,#{vaccination.sortNo, jdbcType=INTEGER}
+			,#{vaccination.inoculateDate, jdbcType=TIMESTAMP}
+			,#{vaccination.doctor, jdbcType=VARCHAR}
+			,#{vaccination.year, jdbcType=INTEGER}
+			,#{vaccination.month, jdbcType=INTEGER}
+			,#{vaccination.createBy, jdbcType=VARCHAR}
+			,#{vaccination.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertVaccination_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="vaccination" index="index">
+			insert into HEALTH_VACCINATION (
+			ID_
+			,TENANTID_
+			,GRADEID_
+			,PERSONID_
+			,NAME_
+			,SEX_
+			,VACCINE_
+			,SORTNO_
+			,INOCULATEDATE_
+			,DOCTOR_
+			,YEAR_
+			,MONTH_
+			,CREATEBY_
+			,CREATETIME_
+			) values (
+			#{vaccination.id, jdbcType=BIGINT}
+			,#{vaccination.tenantId, jdbcType=VARCHAR}
+			,#{vaccination.gradeId, jdbcType=VARCHAR}
+			,#{vaccination.personId, jdbcType=VARCHAR}
+			,#{vaccination.name, jdbcType=VARCHAR}
+			,#{vaccination.sex, jdbcType=VARCHAR}
+			,#{vaccination.vaccine, jdbcType=VARCHAR}
+			,#{vaccination.sortNo, jdbcType=INTEGER}
+			,#{vaccination.inoculateDate, jdbcType=TIMESTAMP}
+			,#{vaccination.doctor, jdbcType=VARCHAR}
+			,#{vaccination.year, jdbcType=INTEGER}
+			,#{vaccination.month, jdbcType=INTEGER}
+			,#{vaccination.createBy, jdbcType=VARCHAR}
+			,#{vaccination.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateVaccination" parameterType="com.glaf.heathcare.domain.Vaccination">
+		update HEALTH_VACCINATION
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="vaccine != null">
+				VACCINE_ = #{vaccine, jdbcType=VARCHAR},
+			</if>
+			<if test="sortNo != null">
+				SORTNO_ = #{sortNo, jdbcType=INTEGER},
+			</if>
+			<if test="inoculateDate != null">
+				INOCULATEDATE_ = #{inoculateDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="doctor != null">
+				DOCTOR_ = #{doctor, jdbcType=VARCHAR},
+			</if>
+			<if test="year != null">
+				YEAR_ = #{year, jdbcType=INTEGER},
+			</if>
+			<if test="month != null">
+				MONTH_ = #{month, jdbcType=INTEGER},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteVaccinationById" parameterType="long">
+		delete from HEALTH_VACCINATION
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getVaccinationById" parameterType="long"
+		resultMap="vaccinationResultMap">
+		select * from HEALTH_VACCINATION where ID_ = #{id}
+	</select>
+
+
+	<select id="getVaccinations" parameterType="com.glaf.heathcare.query.VaccinationQuery"
+		resultMap="vaccinationResultMap">
+		select distinct E.*
+		<include refid="selectVaccinationsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getVaccinationCount" parameterType="com.glaf.heathcare.query.VaccinationQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectVaccinationsSql" />
+	</select>
+
+
+	<sql id="selectVaccinationsSql">
+
+		from HEALTH_VACCINATION E
+
+		<where>
+			1 = 1
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="tenantIds != null and tenantIds.size() &gt; 0">
+				and E.TENANTID_ IN
+				<foreach item="x_tenantId" index="index" collection="tenantIds"
+					open="(" separator="," close=")">
+					#{x_tenantId}
+				</foreach>
+			</if>
+
+			<if test="gradeId != null and gradeId != '' ">
+				and E.GRADEID_ = #{gradeId}
+			</if>
+
+			<if test="gradeIds != null and gradeIds.size() &gt; 0">
+				and E.GRADEID_ IN
+				<foreach item="x_gradeId" index="index" collection="gradeIds"
+					open="(" separator="," close=")">
+					#{x_gradeId}
+				</foreach>
+			</if>
+
+			<if test="personId != null and personId != '' ">
+				and E.PERSONID_ = #{personId}
+			</if>
+
+			<if test="personIds != null and personIds.size() &gt; 0">
+				and E.PERSONID_ IN
+				<foreach item="x_personId" index="index" collection="personIds"
+					open="(" separator="," close=")">
+					#{x_personId}
+				</foreach>
+			</if>
+
+			<if test="name != null and name != '' ">
+				and E.NAME_ = #{name}
+			</if>
+
+			<if test="nameLike != null and nameLike != '' ">
+				and E.NAME_ like #{nameLike}
+			</if>
+
+			<if test="vaccine != null and vaccine != '' ">
+				and E.VACCINE_ = #{vaccine}
+			</if>
+
+			<if test="vaccineLike != null and vaccineLike != '' ">
+				and E.VACCINE_ like #{vaccineLike}
+			</if>
+
+			<if test="inoculateDateGreaterThanOrEqual != null">
+				and E.INOCULATEDATE_ &gt;=
+				#{inoculateDateGreaterThanOrEqual}
+			</if>
+
+			<if test="inoculateDateLessThanOrEqual != null">
+				and E.INOCULATEDATE_ &lt;=
+				#{inoculateDateLessThanOrEqual}
+			</if>
+
+			<if test="doctor != null and doctor != '' ">
+				and E.DOCTOR_ = #{doctor}
+			</if>
+
+			<if test="doctorLike != null and doctorLike != '' ">
+				and E.DOCTOR_ like #{doctorLike}
+			</if>
+
+			<if test="year != null">
+				and E.YEAR_ = #{year}
+			</if>
+
+			<if test="month != null">
+				and E.MONTH_ = #{month}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

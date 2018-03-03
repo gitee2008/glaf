@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.heathcare.mapper.GrowthRateCountMapper">
+
+	<resultMap id="growthRateCountResultMap" type="com.glaf.heathcare.domain.GrowthRateCount">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="checkId" column="CHECKID_" jdbcType="VARCHAR" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="gradeId" column="GRADEID_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR"/>
+		<result property="increase" column="INCREASE_" jdbcType="INTEGER" />
+		<result property="increasePercent" column="INCREASEPERCENT_"
+			jdbcType="DOUBLE" />
+		<result property="standard" column="STANDARD_" jdbcType="INTEGER" />
+		<result property="standardPercent" column="STANDARDPERCENT_"
+			jdbcType="DOUBLE" />
+	</resultMap>
+
+
+	<insert id="insertGrowthRateCount" parameterType="com.glaf.heathcare.domain.GrowthRateCount">
+		insert into HEALTH_GROWTH_RATE_COUNT
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="checkId != null">
+				,CHECKID_
+			</if>
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="gradeId != null">
+				,GRADEID_
+			</if>
+			<if test="type != null">
+				,TYPE_ 
+			</if>
+			<if test="increase != null">
+				,INCREASE_
+			</if>
+			<if test="increasePercent != null">
+				,INCREASEPERCENT_
+			</if>
+			<if test="standard != null">
+				,STANDARD_
+			</if>
+			<if test="standardPercent != null">
+				,STANDARDPERCENT_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="checkId != null">
+				,#{checkId, jdbcType=VARCHAR}
+			</if>
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="gradeId != null">
+				,#{gradeId, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="increase != null">
+				,#{increase, jdbcType=INTEGER}
+			</if>
+			<if test="increasePercent != null">
+				,#{increasePercent, jdbcType=DOUBLE}
+			</if>
+			<if test="standard != null">
+				,#{standard, jdbcType=INTEGER}
+			</if>
+			<if test="standardPercent != null">
+				,#{standardPercent, jdbcType=DOUBLE}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertGrowthRateCount" parameterType="java.util.List">
+		insert into HEALTH_GROWTH_RATE_COUNT (
+		ID_
+		,CHECKID_
+		,TENANTID_
+		,GRADEID_
+		,TYPE_ 
+		,INCREASE_
+		,INCREASEPERCENT_
+		,STANDARD_
+		,STANDARDPERCENT_
+		) values
+		<foreach collection="list" item="growthRateCount" index="index"
+			separator=",">
+			(
+			#{growthRateCount.id, jdbcType=BIGINT}
+			,#{growthRateCount.checkId, jdbcType=VARCHAR}
+			,#{growthRateCount.tenantId, jdbcType=VARCHAR}
+			,#{growthRateCount.gradeId, jdbcType=VARCHAR}
+			,#{growthRateCount.type, jdbcType=VARCHAR}
+			,#{growthRateCount.increase, jdbcType=INTEGER}
+			,#{growthRateCount.increasePercent, jdbcType=DOUBLE}
+			,#{growthRateCount.standard, jdbcType=INTEGER}
+			,#{growthRateCount.standardPercent, jdbcType=DOUBLE}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertGrowthRateCount_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="growthRateCount" index="index">
+			insert into HEALTH_GROWTH_RATE_COUNT (
+			ID_
+			,CHECKID_
+			,TENANTID_
+			,GRADEID_
+			,TYPE_ 
+			,INCREASE_
+			,INCREASEPERCENT_
+			,STANDARD_
+			,STANDARDPERCENT_
+			)
+			values (
+			#{growthRateCount.id, jdbcType=BIGINT}
+			,#{growthRateCount.checkId, jdbcType=VARCHAR}
+			,#{growthRateCount.tenantId, jdbcType=VARCHAR}
+			,#{growthRateCount.gradeId, jdbcType=VARCHAR}
+			,#{growthRateCount.type, jdbcType=VARCHAR}
+			,#{growthRateCount.increase, jdbcType=INTEGER}
+			,#{growthRateCount.increasePercent, jdbcType=DOUBLE}
+			,#{growthRateCount.standard, jdbcType=INTEGER}
+			,#{growthRateCount.standardPercent, jdbcType=DOUBLE}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<delete id="deleteGrowthRateCountById" parameterType="long">
+		delete from
+		HEALTH_GROWTH_RATE_COUNT
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deleteGrowthRateCountByCheckId" parameterType="com.glaf.heathcare.query.GrowthRateCountQuery">
+		delete from HEALTH_GROWTH_RATE_COUNT
+		where CHECKID_ = #{checkId}
+	</delete>
+
+
+	<select id="getGrowthRateCountById" parameterType="long"
+		resultMap="growthRateCountResultMap">
+		select * from HEALTH_GROWTH_RATE_COUNT where ID_ = #{id}
+	</select>
+
+
+	<select id="getGrowthRateCounts" parameterType="com.glaf.heathcare.query.GrowthRateCountQuery"
+		resultMap="growthRateCountResultMap">
+		select distinct E.*
+		<include refid="selectGrowthRateCountsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getGrowthRateCountCount" parameterType="com.glaf.heathcare.query.GrowthRateCountQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectGrowthRateCountsSql" />
+	</select>
+
+
+	<sql id="selectGrowthRateCountsSql">
+
+		from HEALTH_GROWTH_RATE_COUNT E
+
+		<where>
+			1 = 1
+
+			<if test="checkId != null and checkId != '' ">
+				and E.CHECKID_ = #{checkId}
+			</if>
+
+			<if test="checkIds != null and checkIds.size() &gt; 0">
+				and E.CHECKID_ IN
+				<foreach item="x_checkId" index="index" collection="checkIds"
+					open="(" separator="," close=")">
+					#{x_checkId}
+				</foreach>
+			</if>
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="tenantIds != null and tenantIds.size() &gt; 0">
+				and E.TENANTID_ IN
+				<foreach item="x_tenantId" index="index" collection="tenantIds"
+					open="(" separator="," close=")">
+					#{x_tenantId}
+				</foreach>
+			</if>
+
+			<if test="gradeId != null and gradeId != '' ">
+				and E.GRADEID_ = #{gradeId}
+			</if>
+
+			<if test="gradeIds != null and gradeIds.size() &gt; 0">
+				and E.GRADEID_ IN
+				<foreach item="x_gradeId" index="index" collection="gradeIds"
+					open="(" separator="," close=")">
+					#{x_gradeId}
+				</foreach>
+			</if>
+			
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+            </if>
+		</where>
+	</sql>
+
+</mapper>

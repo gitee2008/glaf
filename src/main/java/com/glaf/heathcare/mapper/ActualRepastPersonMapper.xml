@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.heathcare.mapper.ActualRepastPersonMapper">
+
+	<resultMap id="actualRepastPersonResultMap" type="com.glaf.heathcare.domain.ActualRepastPerson">
+		<id property="id" column="ID_" jdbcType="VARCHAR" />
+		<result property="organizationId" column="ORGANIZATIONID_"
+			jdbcType="BIGINT" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="male" column="MALE_" jdbcType="INTEGER" />
+		<result property="female" column="FEMALE_" jdbcType="INTEGER" />
+		<result property="age" column="AGE_" jdbcType="INTEGER" />
+		<result property="classType" column="CLASSTYPE_" jdbcType="VARCHAR" />
+		<result property="sortNo" column="SORTNO_" jdbcType="INTEGER" />
+		<result property="year" column="YEAR_" jdbcType="INTEGER" />
+		<result property="month" column="MONTH_" jdbcType="INTEGER" />
+		<result property="day" column="DAY_" jdbcType="INTEGER" />
+		<result property="week" column="WEEK_" jdbcType="INTEGER" />
+		<result property="fullDay" column="FULLDAY_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY_" jdbcType="VARCHAR" />
+		<result property="updateTime" column="UPDATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertActualRepastPerson" parameterType="com.glaf.heathcare.domain.ActualRepastPerson">
+		insert into HEALTH_REPAST_PERSON
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="organizationId != null">
+				,ORGANIZATIONID_
+			</if>
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="male != null">
+				,MALE_
+			</if>
+			<if test="female != null">
+				,FEMALE_
+			</if>
+			<if test="age != null">
+				,AGE_
+			</if>
+			<if test="classType != null">
+				,CLASSTYPE_
+			</if>
+			<if test="sortNo != null">
+				,SORTNO_
+			</if>
+			<if test="year != null">
+				,YEAR_
+			</if>
+			<if test="month != null">
+				,MONTH_
+			</if>
+			<if test="day != null">
+				,DAY_
+			</if>
+			<if test="week != null">
+				,WEEK_
+			</if>
+			<if test="fullDay != null">
+				,FULLDAY_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+			<if test="updateBy != null">
+				,UPDATEBY_
+			</if>
+			<if test="updateTime != null">
+				,UPDATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR}
+
+			<if test="organizationId != null">
+				,#{organizationId, jdbcType=BIGINT}
+			</if>
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="male != null">
+				,#{male, jdbcType=INTEGER}
+			</if>
+			<if test="female != null">
+				,#{female, jdbcType=INTEGER}
+			</if>
+			<if test="age != null">
+				,#{age, jdbcType=INTEGER}
+			</if>
+			<if test="classType != null">
+				,#{classType, jdbcType=VARCHAR}
+			</if>
+			<if test="sortNo != null">
+				,#{sortNo, jdbcType=INTEGER}
+			</if>
+			<if test="year != null">
+				,#{year, jdbcType=INTEGER}
+			</if>
+			<if test="month != null">
+				,#{month, jdbcType=INTEGER}
+			</if>
+			<if test="day != null">
+				,#{day, jdbcType=INTEGER}
+			</if>
+			<if test="week != null">
+				,#{week, jdbcType=INTEGER}
+			</if>
+			<if test="fullDay != null">
+				,#{fullDay, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy != null">
+				,#{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				,#{updateTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertActualRepastPerson" parameterType="java.util.List">
+		insert into HEALTH_REPAST_PERSON (
+		ID_
+		,ORGANIZATIONID_
+		,TENANTID_
+		,MALE_
+		,FEMALE_
+		,AGE_
+		,CLASSTYPE_
+		,SORTNO_
+		,YEAR_
+		,MONTH_
+		,DAY_
+		,WEEK_
+		,FULLDAY_
+		,CREATEBY_
+		,CREATETIME_
+		,UPDATEBY_
+		,UPDATETIME_
+		) values
+		<foreach collection="list" item="actualRepastPerson" index="index"
+			separator=",">
+			(
+			#{actualRepastPerson.id, jdbcType=VARCHAR}
+			,#{actualRepastPerson.organizationId, jdbcType=BIGINT}
+			,#{actualRepastPerson.tenantId, jdbcType=VARCHAR}
+			,#{actualRepastPerson.male, jdbcType=INTEGER}
+			,#{actualRepastPerson.female, jdbcType=INTEGER}
+			,#{actualRepastPerson.age, jdbcType=INTEGER}
+			,#{actualRepastPerson.classType, jdbcType=VARCHAR}
+			,#{actualRepastPerson.sortNo, jdbcType=INTEGER}
+			,#{actualRepastPerson.year, jdbcType=INTEGER}
+			,#{actualRepastPerson.month, jdbcType=INTEGER}
+			,#{actualRepastPerson.day, jdbcType=INTEGER}
+			,#{actualRepastPerson.week, jdbcType=INTEGER}
+			,#{actualRepastPerson.fullDay, jdbcType=INTEGER}
+			,#{actualRepastPerson.createBy, jdbcType=VARCHAR}
+			,#{actualRepastPerson.createTime, jdbcType=TIMESTAMP}
+			,#{actualRepastPerson.updateBy, jdbcType=VARCHAR}
+			,#{actualRepastPerson.updateTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertActualRepastPerson_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="actualRepastPerson" index="index">
+			insert into HEALTH_REPAST_PERSON (
+			ID_
+			,ORGANIZATIONID_
+			,TENANTID_
+			,MALE_
+			,FEMALE_
+			,AGE_
+			,CLASSTYPE_
+			,SORTNO_
+			,YEAR_
+			,MONTH_
+			,DAY_
+			,WEEK_
+			,FULLDAY_
+			,CREATEBY_
+			,CREATETIME_
+			,UPDATEBY_
+			,UPDATETIME_
+			) values (
+			#{actualRepastPerson.id, jdbcType=VARCHAR}
+			,#{actualRepastPerson.organizationId, jdbcType=BIGINT}
+			,#{actualRepastPerson.tenantId, jdbcType=VARCHAR}
+			,#{actualRepastPerson.male, jdbcType=INTEGER}
+			,#{actualRepastPerson.female, jdbcType=INTEGER}
+			,#{actualRepastPerson.age, jdbcType=INTEGER}
+			,#{actualRepastPerson.classType, jdbcType=VARCHAR}
+			,#{actualRepastPerson.sortNo, jdbcType=INTEGER}
+			,#{actualRepastPerson.year, jdbcType=INTEGER}
+			,#{actualRepastPerson.month, jdbcType=INTEGER}
+			,#{actualRepastPerson.day, jdbcType=INTEGER}
+			,#{actualRepastPerson.week, jdbcType=INTEGER}
+			,#{actualRepastPerson.fullDay, jdbcType=INTEGER}
+			,#{actualRepastPerson.createBy, jdbcType=VARCHAR}
+			,#{actualRepastPerson.createTime, jdbcType=TIMESTAMP}
+			,#{actualRepastPerson.updateBy, jdbcType=VARCHAR}
+			,#{actualRepastPerson.updateTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateActualRepastPerson" parameterType="com.glaf.heathcare.domain.ActualRepastPerson">
+		update HEALTH_REPAST_PERSON
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="male != null">
+				MALE_ = #{male, jdbcType=INTEGER},
+			</if>
+			<if test="female != null">
+				FEMALE_ = #{female, jdbcType=INTEGER},
+			</if>
+			<if test="age != null">
+				AGE_ = #{age, jdbcType=INTEGER},
+			</if>
+			<if test="classType != null">
+				CLASSTYPE_ = #{classType, jdbcType=VARCHAR},
+			</if>
+			<if test="sortNo != null">
+				SORTNO_ = #{sortNo, jdbcType=INTEGER},
+			</if>
+			<if test="updateBy != null">
+				UPDATEBY_ = #{updateBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				UPDATETIME_ = #{updateTime, jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=VARCHAR}
+
+	</update>
+
+
+	<delete id="deleteActualRepastPersonById" parameterType="string">
+		delete
+		from HEALTH_REPAST_PERSON
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deleteActualRepastPersons" parameterType="com.glaf.heathcare.query.ActualRepastPersonQuery">
+		delete from HEALTH_REPAST_PERSON
+		where (
+		ID_ IN
+		<foreach item="x_id" index="index" collection="ids" open="("
+			separator="," close=")">
+			#{x_id}
+		</foreach>
+		)
+	</delete>
+
+
+	<select id="getActualRepastPersonById" parameterType="string"
+		resultMap="actualRepastPersonResultMap">
+		select * from HEALTH_REPAST_PERSON where ID_ = #{id}
+	</select>
+
+
+	<select id="getActualRepastPersons" parameterType="com.glaf.heathcare.query.ActualRepastPersonQuery"
+		resultMap="actualRepastPersonResultMap">
+		select distinct E.*
+		<include refid="selectActualRepastPersonsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.FULLDAY_ desc, E.AGE_ asc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getActualRepastPersonCount" parameterType="com.glaf.heathcare.query.ActualRepastPersonQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectActualRepastPersonsSql" />
+	</select>
+
+
+	<sql id="selectActualRepastPersonsSql">
+
+		from HEALTH_REPAST_PERSON E
+
+		<where>
+			1 = 1
+
+			<if test="organizationId != null">
+				and E.ORGANIZATIONID_ = #{organizationId}
+			</if>
+
+			<if test="organizationIds != null and organizationIds.size() &gt; 0">
+				and E.ORGANIZATIONID_ IN
+				<foreach item="x_organizationId" index="index" collection="organizationIds"
+					open="(" separator="," close=")">
+					#{x_organizationId}
+				</foreach>
+			</if>
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="tenantIds != null and tenantIds.size() &gt; 0">
+				and E.TENANTID_ IN
+				<foreach item="x_tenantId" index="index" collection="tenantIds"
+					open="(" separator="," close=")">
+					#{x_tenantId}
+				</foreach>
+			</if>
+
+			<if test="year != null">
+				and E.YEAR_ = #{year}
+			</if>
+
+			<if test="month != null">
+				and E.MONTH_ = #{month}
+			</if>
+
+			<if test="months != null and months.size() &gt; 0">
+				and E.MONTH_ IN
+				<foreach item="x_month" index="index" collection="months"
+					open="(" separator="," close=")">
+					#{x_month}
+				</foreach>
+			</if>
+
+			<if test="day != null">
+				and E.DAY_ = #{day}
+			</if>
+
+			<if test="dayGreaterThanOrEqual != null">
+				and E.DAY_ &gt;= #{dayGreaterThanOrEqual}
+			</if>
+
+			<if test="dayLessThanOrEqual != null">
+				and E.DAY_ &lt;= #{dayLessThanOrEqual}
+			</if>
+
+			<if test="days != null and days.size() &gt; 0">
+				and E.DAY_ IN
+				<foreach item="x_day" index="index" collection="days" open="("
+					separator="," close=")">
+					#{x_day}
+				</foreach>
+			</if>
+
+			<if test="week != null">
+				and E.WEEK_ = #{week}
+			</if>
+
+			<if test="weekGreaterThanOrEqual != null">
+				and E.WEEK_ &gt;= #{weekGreaterThanOrEqual}
+			</if>
+
+			<if test="weekLessThanOrEqual != null">
+				and E.WEEK_ &lt;= #{weekLessThanOrEqual}
+			</if>
+
+			<if test="weeks != null and weeks.size() &gt; 0">
+				and E.WEEK_ IN
+				<foreach item="x_week" index="index" collection="weeks"
+					open="(" separator="," close=")">
+					#{x_week}
+				</foreach>
+			</if>
+
+			<if test="fullDay != null">
+				and E.FULLDAY_ = #{fullDay}
+			</if>
+
+			<if test="fullDayGreaterThanOrEqual != null">
+				and E.FULLDAY_ &gt;= #{fullDayGreaterThanOrEqual}
+			</if>
+
+			<if test="fullDayLessThanOrEqual != null">
+				and E.FULLDAY_ &lt;= #{fullDayLessThanOrEqual}
+			</if>
+
+			<if test="fullDays != null and fullDays.size() &gt; 0">
+				and E.FULLDAY_ IN
+				<foreach item="x_fullDay" index="index" collection="fullDays"
+					open="(" separator="," close=")">
+					#{x_fullDay}
+				</foreach>
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.heathcare.mapper.FoodInTakeMapper">
+
+	<resultMap id="foodInTakeResultMap" type="com.glaf.heathcare.domain.FoodInTake">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="gradeId" column="GRADEID_" jdbcType="VARCHAR" />
+		<result property="foodId" column="FOODID_" jdbcType="BIGINT" />
+		<result property="foodName" column="FOODNAME_" jdbcType="VARCHAR" />
+		<result property="foodNodeId" column="FOODNODEID_" jdbcType="BIGINT" />
+		<result property="typeId" column="TYPEID_" jdbcType="BIGINT" />
+		<result property="mealTime" column="MEALTIME_" jdbcType="TIMESTAMP" />
+		<result property="person" column="PERSON_" jdbcType="INTEGER" />
+		<result property="semester" column="SEMESTER_" jdbcType="INTEGER" />
+		<result property="year" column="YEAR_" jdbcType="INTEGER" />
+		<result property="month" column="MONTH_" jdbcType="INTEGER" />
+		<result property="fullDay" column="FULLDAY_" jdbcType="INTEGER" />
+		<result property="allocationWeight" column="ALLOCATIONWEIGHT_"
+			jdbcType="DOUBLE" />
+		<result property="remainWeight" column="REMAINWEIGHT_"
+			jdbcType="DOUBLE" />
+		<result property="mealWeight" column="MEALWEIGHT_" jdbcType="DOUBLE" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertFoodInTake" parameterType="com.glaf.heathcare.domain.FoodInTake">
+		insert into HEALTH_FOOD_INTAKE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="gradeId != null">
+				,GRADEID_
+			</if>
+			<if test="foodId != null">
+				,FOODID_
+			</if>
+			<if test="foodName != null">
+				,FOODNAME_
+			</if>
+			<if test="foodNodeId != null">
+				,FOODNODEID_
+			</if>
+			<if test="typeId != null">
+				,TYPEID_
+			</if>
+			<if test="mealTime != null">
+				,MEALTIME_
+			</if>
+			<if test="person != null">
+				,PERSON_
+			</if>
+			<if test="semester != null">
+				,SEMESTER_
+			</if>
+			<if test="year != null">
+				,YEAR_
+			</if>
+			<if test="month != null">
+				,MONTH_
+			</if>
+			<if test="fullDay != null">
+				,FULLDAY_
+			</if>
+			<if test="allocationWeight != null">
+				,ALLOCATIONWEIGHT_
+			</if>
+			<if test="remainWeight != null">
+				,REMAINWEIGHT_
+			</if>
+			<if test="mealWeight != null">
+				,MEALWEIGHT_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="gradeId != null">
+				,#{gradeId, jdbcType=VARCHAR}
+			</if>
+			<if test="foodId != null">
+				,#{foodId, jdbcType=BIGINT}
+			</if>
+			<if test="foodName != null">
+				,#{foodName, jdbcType=VARCHAR}
+			</if>
+			<if test="foodNodeId != null">
+				,#{foodNodeId, jdbcType=BIGINT}
+			</if>
+			<if test="typeId != null">
+				,#{typeId, jdbcType=BIGINT}
+			</if>
+			<if test="mealTime != null">
+				,#{mealTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="person != null">
+				,#{person, jdbcType=INTEGER}
+			</if>
+			<if test="semester != null">
+				,#{semester, jdbcType=INTEGER}
+			</if>
+			<if test="year != null">
+				,#{year, jdbcType=INTEGER}
+			</if>
+			<if test="month != null">
+				,#{month, jdbcType=INTEGER}
+			</if>
+			<if test="fullDay != null">
+				,#{fullDay, jdbcType=INTEGER}
+			</if>
+			<if test="allocationWeight != null">
+				,#{allocationWeight, jdbcType=DOUBLE}
+			</if>
+			<if test="remainWeight != null">
+				,#{remainWeight, jdbcType=DOUBLE}
+			</if>
+			<if test="mealWeight != null">
+				,#{mealWeight, jdbcType=DOUBLE}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertFoodInTake" parameterType="java.util.List">
+		insert into HEALTH_FOOD_INTAKE (
+		ID_
+		,TENANTID_
+		,GRADEID_
+		,FOODID_
+		,FOODNAME_
+		,FOODNODEID_
+		,TYPEID_
+		,MEALTIME_
+		,PERSON_
+		,SEMESTER_
+		,YEAR_
+		,MONTH_
+		,FULLDAY_
+		,ALLOCATIONWEIGHT_
+		,REMAINWEIGHT_
+		,MEALWEIGHT_
+		,CREATEBY_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="foodInTake" index="index"
+			separator=",">
+			(
+			#{foodInTake.id, jdbcType=BIGINT}
+			,#{foodInTake.tenantId,
+			jdbcType=VARCHAR}
+			,#{foodInTake.gradeId, jdbcType=VARCHAR}
+			,#{foodInTake.foodId, jdbcType=BIGINT}
+			,#{foodInTake.foodName,
+			jdbcType=VARCHAR}
+			,#{foodInTake.foodNodeId,
+			jdbcType=BIGINT}
+			,#{foodInTake.typeId, jdbcType=BIGINT}
+			,#{foodInTake.mealTime,
+			jdbcType=TIMESTAMP}
+			,#{foodInTake.person,
+			jdbcType=INTEGER}
+			,#{foodInTake.semester, jdbcType=INTEGER}
+			,#{foodInTake.year,
+			jdbcType=INTEGER}
+			,#{foodInTake.month,
+			jdbcType=INTEGER}
+			,#{foodInTake.fullDay, jdbcType=INTEGER}
+			,#{foodInTake.allocationWeight, jdbcType=DOUBLE}
+			,#{foodInTake.remainWeight, jdbcType=DOUBLE}
+			,#{foodInTake.mealWeight, jdbcType=DOUBLE}
+			,#{foodInTake.createBy,
+			jdbcType=VARCHAR}
+			,#{foodInTake.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertFoodInTake_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="foodInTake" index="index">
+			insert into
+			HEALTH_FOOD_INTAKE (
+			ID_
+			,TENANTID_
+			,GRADEID_
+			,FOODID_
+			,FOODNAME_
+			,FOODNODEID_
+			,TYPEID_
+			,MEALTIME_
+			,PERSON_
+			,SEMESTER_
+			,YEAR_
+			,MONTH_
+			,FULLDAY_
+			,ALLOCATIONWEIGHT_
+			,REMAINWEIGHT_
+			,MEALWEIGHT_
+			,CREATEBY_
+			,CREATETIME_
+			)
+			values (
+			#{foodInTake.id, jdbcType=BIGINT}
+			,#{foodInTake.tenantId,
+			jdbcType=VARCHAR}
+			,#{foodInTake.gradeId,
+			jdbcType=VARCHAR}
+			,#{foodInTake.foodId, jdbcType=BIGINT}
+			,#{foodInTake.foodName, jdbcType=VARCHAR}
+			,#{foodInTake.foodNodeId,
+			jdbcType=BIGINT}
+			,#{foodInTake.typeId, jdbcType=BIGINT}
+			,#{foodInTake.mealTime, jdbcType=TIMESTAMP}
+			,#{foodInTake.person,
+			jdbcType=INTEGER}
+			,#{foodInTake.semester, jdbcType=INTEGER}
+			,#{foodInTake.year, jdbcType=INTEGER}
+			,#{foodInTake.month,
+			jdbcType=INTEGER}
+			,#{foodInTake.fullDay, jdbcType=INTEGER}
+			,#{foodInTake.allocationWeight, jdbcType=DOUBLE}
+			,#{foodInTake.remainWeight, jdbcType=DOUBLE}
+			,#{foodInTake.mealWeight, jdbcType=DOUBLE}
+			,#{foodInTake.createBy,
+			jdbcType=VARCHAR}
+			,#{foodInTake.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateFoodInTake" parameterType="com.glaf.heathcare.domain.FoodInTake">
+		update HEALTH_FOOD_INTAKE
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="mealTime != null">
+				MEALTIME_ = #{mealTime, jdbcType=TIMESTAMP},
+			</if>
+			<if test="person != null">
+				PERSON_ = #{person, jdbcType=INTEGER},
+			</if>
+			<if test="allocationWeight != null">
+				ALLOCATIONWEIGHT_ = #{allocationWeight, jdbcType=DOUBLE},
+			</if>
+			<if test="remainWeight != null">
+				REMAINWEIGHT_ = #{remainWeight, jdbcType=DOUBLE},
+			</if>
+			<if test="mealWeight != null">
+				MEALWEIGHT_ = #{mealWeight, jdbcType=DOUBLE},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteFoodInTakeById" parameterType="long">
+		delete from
+		HEALTH_FOOD_INTAKE
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getFoodInTakeById" parameterType="long"
+		resultMap="foodInTakeResultMap">
+		select * from HEALTH_FOOD_INTAKE where ID_ = #{id}
+	</select>
+
+
+	<select id="getFoodInTakes" parameterType="com.glaf.heathcare.query.FoodInTakeQuery"
+		resultMap="foodInTakeResultMap">
+		select distinct E.*
+		<include refid="selectFoodInTakesSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getFoodInTakeCount" parameterType="com.glaf.heathcare.query.FoodInTakeQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectFoodInTakesSql" />
+	</select>
+
+
+	<sql id="selectFoodInTakesSql">
+
+		from HEALTH_FOOD_INTAKE E
+
+		<where>
+			1 = 1
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="tenantIds != null and tenantIds.size() &gt; 0">
+				and E.TENANTID_ IN
+				<foreach item="x_tenantId" index="index" collection="tenantIds"
+					open="(" separator="," close=")">
+					#{x_tenantId}
+				</foreach>
+			</if>
+
+			<if test="gradeId != null and gradeId != '' ">
+				and E.GRADEID_ = #{gradeId}
+			</if>
+
+			<if test="gradeIds != null and gradeIds.size() &gt; 0">
+				and E.GRADEID_ IN
+				<foreach item="x_gradeId" index="index" collection="gradeIds"
+					open="(" separator="," close=")">
+					#{x_gradeId}
+				</foreach>
+			</if>
+
+			<if test="foodId != null">
+				and E.FOODID_ = #{foodId}
+			</if>
+
+			<if test="foodIds != null and foodIds.size() &gt; 0">
+				and E.FOODID_ IN
+				<foreach item="x_foodId" index="index" collection="foodIds"
+					open="(" separator="," close=")">
+					#{x_foodId}
+				</foreach>
+			</if>
+
+			<if test="foodNameLike != null and foodNameLike != '' ">
+				and E.FOODNAME_ like #{foodNameLike}
+			</if>
+
+			<if test="foodNodeId != null">
+				and E.FOODNODEID_ = #{foodNodeId}
+			</if>
+
+			<if test="foodNodeIds != null and foodNodeIds.size() &gt; 0">
+				and E.FOODNODEID_ IN
+				<foreach item="x_foodNodeId" index="index" collection="foodNodeIds"
+					open="(" separator="," close=")">
+					#{x_foodNodeId}
+				</foreach>
+			</if>
+
+			<if test="typeId != null">
+				and E.TYPEID_ = #{typeId}
+			</if>
+
+			<if test="typeIds != null and typeIds.size() &gt; 0">
+				and E.TYPEID_ IN
+				<foreach item="x_typeId" index="index" collection="typeIds"
+					open="(" separator="," close=")">
+					#{x_typeId}
+				</foreach>
+			</if>
+
+			<if test="semester != null">
+				and E.SEMESTER_ = #{semester}
+			</if>
+
+			<if test="year != null">
+				and E.YEAR_ = #{year}
+			</if>
+
+			<if test="month != null">
+				and E.MONTH_ = #{month}
+			</if>
+
+			<if test="fullDay != null">
+				and E.FULLDAY_ = #{fullDay}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

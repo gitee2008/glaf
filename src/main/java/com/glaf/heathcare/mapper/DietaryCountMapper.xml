@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.heathcare.mapper.DietaryCountMapper">
+
+	<resultMap id="dietaryCountResultMap" type="com.glaf.heathcare.domain.DietaryCount">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="parentId" column="PARENTID_" jdbcType="BIGINT" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="heatEnergy" column="HEATENERGY_" jdbcType="DOUBLE" />
+		<result property="heatEnergyCarbohydrate" column="HEATENERGYCARBOHYDRATE_"
+			jdbcType="DOUBLE" />
+		<result property="heatEnergyFat" column="HEATENERGYFAT_"
+			jdbcType="DOUBLE" />
+		<result property="protein" column="PROTEIN_" jdbcType="DOUBLE" />
+		<result property="proteinAnimal" column="PROTEINANIMAL_"
+			jdbcType="DOUBLE" />
+		<result property="proteinAnimalBeans" column="PROTEINANIMALBEANS_"
+			jdbcType="DOUBLE" />
+		<result property="fat" column="FAT_" jdbcType="DOUBLE" />
+		<result property="carbohydrate" column="CARBOHYDRATE_"
+			jdbcType="DOUBLE" />
+		<result property="vitaminA" column="VITAMINA_" jdbcType="DOUBLE" />
+		<result property="vitaminB1" column="VITAMINB1_" jdbcType="DOUBLE" />
+		<result property="vitaminB2" column="VITAMINB2_" jdbcType="DOUBLE" />
+		<result property="vitaminB6" column="VITAMINB6_" jdbcType="DOUBLE" />
+		<result property="vitaminB12" column="VITAMINB12_" jdbcType="DOUBLE" />
+		<result property="vitaminC" column="VITAMINC_" jdbcType="DOUBLE" />
+		<result property="vitaminE" column="VITAMINE_" jdbcType="DOUBLE" />
+		<result property="carotene" column="CAROTENE_" jdbcType="DOUBLE" />
+		<result property="retinol" column="RETINOL_" jdbcType="DOUBLE" />
+		<result property="nicotinicCid" column="NICOTINICCID_"
+			jdbcType="DOUBLE" />
+		<result property="calcium" column="CALCIUM_" jdbcType="DOUBLE" />
+		<result property="iron" column="IRON_" jdbcType="DOUBLE" />
+		<result property="zinc" column="ZINC_" jdbcType="DOUBLE" />
+		<result property="iodine" column="IODINE_" jdbcType="DOUBLE" />
+		<result property="phosphorus" column="PHOSPHORUS_" jdbcType="DOUBLE" />
+		<result property="mealType" column="MEALTYPE_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="nodeId" column="NODEID_" jdbcType="BIGINT" />
+		<result property="semester" column="SEMESTER_" jdbcType="INTEGER" />
+		<result property="year" column="YEAR_" jdbcType="INTEGER" />
+		<result property="month" column="MONTH_" jdbcType="INTEGER" />
+		<result property="day" column="DAY_" jdbcType="INTEGER" />
+		<result property="dayOfWeek" column="DAYOFWEEK_" jdbcType="INTEGER" />
+		<result property="week" column="WEEK_" jdbcType="INTEGER" />
+		<result property="fullDay" column="FULLDAY_" jdbcType="INTEGER" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertDietaryCount" parameterType="com.glaf.heathcare.domain.DietaryCount">
+		insert into HEALTH_DIETARY_COUNT${tableSuffix}
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="parentId != null">
+				,PARENTID_
+			</if>
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="heatEnergy != null">
+				,HEATENERGY_
+			</if>
+			<if test="heatEnergyCarbohydrate != null">
+				,HEATENERGYCARBOHYDRATE_
+			</if>
+			<if test="heatEnergyFat != null">
+				,HEATENERGYFAT_
+			</if>
+			<if test="protein != null">
+				,PROTEIN_
+			</if>
+			<if test="proteinAnimal != null">
+				,PROTEINANIMAL_
+			</if>
+			<if test="proteinAnimalBeans != null">
+				,PROTEINANIMALBEANS_
+			</if>
+			<if test="fat != null">
+				,FAT_
+			</if>
+			<if test="carbohydrate != null">
+				,CARBOHYDRATE_
+			</if>
+			<if test="vitaminA != null">
+				,VITAMINA_
+			</if>
+			<if test="vitaminB1 != null">
+				,VITAMINB1_
+			</if>
+			<if test="vitaminB2 != null">
+				,VITAMINB2_
+			</if>
+			<if test="vitaminB6 != null">
+				,VITAMINB6_
+			</if>
+			<if test="vitaminB12 != null">
+				,VITAMINB12_
+			</if>
+			<if test="vitaminC != null">
+				,VITAMINC_
+			</if>
+			<if test="vitaminE != null">
+				,VITAMINE_
+			</if>
+			<if test="carotene != null">
+				,CAROTENE_
+			</if>
+			<if test="retinol != null">
+				,RETINOL_
+			</if>
+			<if test="nicotinicCid != null">
+				,NICOTINICCID_
+			</if>
+			<if test="calcium != null">
+				,CALCIUM_
+			</if>
+			<if test="iron != null">
+				,IRON_
+			</if>
+			<if test="zinc != null">
+				,ZINC_
+			</if>
+			<if test="iodine != null">
+				,IODINE_
+			</if>
+			<if test="phosphorus != null">
+				,PHOSPHORUS_
+			</if>
+			<if test="mealType != null">
+				,MEALTYPE_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="nodeId != null">
+				,NODEID_
+			</if>
+			<if test="semester != null">
+				,SEMESTER_
+			</if>
+			<if test="year != null">
+				,YEAR_
+			</if>
+			<if test="month != null">
+				,MONTH_
+			</if>
+			<if test="day != null">
+				,DAY_
+			</if>
+			<if test="dayOfWeek != null">
+				,DAYOFWEEK_
+			</if>
+			<if test="week != null">
+				,WEEK_
+			</if>
+			<if test="fullDay != null">
+				,FULLDAY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="parentId != null">
+				,#{parentId, jdbcType=BIGINT}
+			</if>
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="heatEnergy != null">
+				,#{heatEnergy, jdbcType=DOUBLE}
+			</if>
+			<if test="heatEnergyCarbohydrate != null">
+				,#{heatEnergyCarbohydrate, jdbcType=DOUBLE}
+			</if>
+			<if test="heatEnergyFat != null">
+				,#{heatEnergyFat, jdbcType=DOUBLE}
+			</if>
+			<if test="protein != null">
+				,#{protein, jdbcType=DOUBLE}
+			</if>
+			<if test="proteinAnimal != null">
+				,#{proteinAnimal, jdbcType=DOUBLE}
+			</if>
+			<if test="proteinAnimalBeans != null">
+				,#{proteinAnimalBeans, jdbcType=DOUBLE}
+			</if>
+			<if test="fat != null">
+				,#{fat, jdbcType=DOUBLE}
+			</if>
+			<if test="carbohydrate != null">
+				,#{carbohydrate, jdbcType=DOUBLE}
+			</if>
+			<if test="vitaminA != null">
+				,#{vitaminA, jdbcType=DOUBLE}
+			</if>
+			<if test="vitaminB1 != null">
+				,#{vitaminB1, jdbcType=DOUBLE}
+			</if>
+			<if test="vitaminB2 != null">
+				,#{vitaminB2, jdbcType=DOUBLE}
+			</if>
+			<if test="vitaminB6 != null">
+				,#{vitaminB6, jdbcType=DOUBLE}
+			</if>
+			<if test="vitaminB12 != null">
+				,#{vitaminB12, jdbcType=DOUBLE}
+			</if>
+			<if test="vitaminC != null">
+				,#{vitaminC, jdbcType=DOUBLE}
+			</if>
+			<if test="vitaminE != null">
+				,#{vitaminE, jdbcType=DOUBLE}
+			</if>
+			<if test="carotene != null">
+				,#{carotene, jdbcType=DOUBLE}
+			</if>
+			<if test="retinol != null">
+				,#{retinol, jdbcType=DOUBLE}
+			</if>
+			<if test="nicotinicCid != null">
+				,#{nicotinicCid, jdbcType=DOUBLE}
+			</if>
+			<if test="calcium != null">
+				,#{calcium, jdbcType=DOUBLE}
+			</if>
+			<if test="iron != null">
+				,#{iron, jdbcType=DOUBLE}
+			</if>
+			<if test="zinc != null">
+				,#{zinc, jdbcType=DOUBLE}
+			</if>
+			<if test="iodine != null">
+				,#{iodine, jdbcType=DOUBLE}
+			</if>
+			<if test="phosphorus != null">
+				,#{phosphorus, jdbcType=DOUBLE}
+			</if>
+			<if test="mealType != null">
+				,#{mealType, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="nodeId != null">
+				,#{nodeId, jdbcType=BIGINT}
+			</if>
+			<if test="semester != null">
+				,#{semester, jdbcType=INTEGER}
+			</if>
+			<if test="year != null">
+				,#{year, jdbcType=INTEGER}
+			</if>
+			<if test="month != null">
+				,#{month, jdbcType=INTEGER}
+			</if>
+			<if test="day != null">
+				,#{day, jdbcType=INTEGER}
+			</if>
+			<if test="dayOfWeek != null">
+				,#{dayOfWeek, jdbcType=INTEGER}
+			</if>
+			<if test="week != null">
+				,#{week, jdbcType=INTEGER}
+			</if>
+			<if test="fullDay != null">
+				,#{fullDay, jdbcType=INTEGER}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertDietaryCount" parameterType="com.glaf.core.base.ListModel">
+		insert into HEALTH_DIETARY_COUNT${tableSuffix} (
+		ID_
+		,PARENTID_
+		,TENANTID_
+		,HEATENERGY_
+		,HEATENERGYCARBOHYDRATE_
+		,HEATENERGYFAT_
+		,PROTEIN_
+		,PROTEINANIMAL_
+		,PROTEINANIMALBEANS_
+		,FAT_
+		,CARBOHYDRATE_
+		,VITAMINA_
+		,VITAMINB1_
+		,VITAMINB2_
+		,VITAMINB6_
+		,VITAMINB12_
+		,VITAMINC_
+		,VITAMINE_
+		,CAROTENE_
+		,RETINOL_
+		,NICOTINICCID_
+		,CALCIUM_
+		,IRON_
+		,ZINC_
+		,IODINE_
+		,PHOSPHORUS_
+		,MEALTYPE_ 
+		,TYPE_
+		,NODEID_
+		,SEMESTER_
+		,YEAR_
+		,MONTH_
+		,DAY_
+		,DAYOFWEEK_
+		,WEEK_
+		,FULLDAY_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="dietaryCount" index="index"
+			separator=",">
+			(
+			#{dietaryCount.id, jdbcType=BIGINT}
+			,#{dietaryCount.parentId, jdbcType=BIGINT}
+			,#{dietaryCount.tenantId,
+			jdbcType=VARCHAR}
+			,#{dietaryCount.heatEnergy, jdbcType=DOUBLE}
+			,#{dietaryCount.heatEnergyCarbohydrate, jdbcType=DOUBLE}
+			,#{dietaryCount.heatEnergyFat, jdbcType=DOUBLE}
+			,#{dietaryCount.protein, jdbcType=DOUBLE}
+			,#{dietaryCount.proteinAnimal, jdbcType=DOUBLE}
+			,#{dietaryCount.proteinAnimalBeans, jdbcType=DOUBLE}
+			,#{dietaryCount.fat,
+			jdbcType=DOUBLE}
+			,#{dietaryCount.carbohydrate,
+			jdbcType=DOUBLE}
+			,#{dietaryCount.vitaminA, jdbcType=DOUBLE}
+			,#{dietaryCount.vitaminB1,
+			jdbcType=DOUBLE}
+			,#{dietaryCount.vitaminB2,
+			jdbcType=DOUBLE}
+			,#{dietaryCount.vitaminB6, jdbcType=DOUBLE}
+			,#{dietaryCount.vitaminB12, jdbcType=DOUBLE}
+			,#{dietaryCount.vitaminC, jdbcType=DOUBLE}
+			,#{dietaryCount.vitaminE,
+			jdbcType=DOUBLE}
+			,#{dietaryCount.carotene,
+			jdbcType=DOUBLE}
+			,#{dietaryCount.retinol, jdbcType=DOUBLE}
+			,#{dietaryCount.nicotinicCid, jdbcType=DOUBLE}
+			,#{dietaryCount.calcium, jdbcType=DOUBLE}
+			,#{dietaryCount.iron,
+			jdbcType=DOUBLE}
+			,#{dietaryCount.zinc, jdbcType=DOUBLE}
+			,#{dietaryCount.iodine, jdbcType=DOUBLE}
+			,#{dietaryCount.phosphorus,
+			jdbcType=DOUBLE}
+			,#{dietaryCount.mealType, jdbcType=VARCHAR}
+			,#{dietaryCount.type, jdbcType=VARCHAR}
+			,#{dietaryCount.nodeId,
+			jdbcType=BIGINT}
+			,#{dietaryCount.semester,
+			jdbcType=INTEGER}
+			,#{dietaryCount.year,
+			jdbcType=INTEGER}
+			,#{dietaryCount.month,
+			jdbcType=INTEGER}
+			,#{dietaryCount.day,
+			jdbcType=INTEGER}
+			,#{dietaryCount.dayOfWeek,
+			jdbcType=INTEGER}
+			,#{dietaryCount.week,
+			jdbcType=INTEGER}
+			,#{dietaryCount.fullDay,
+			jdbcType=INTEGER}
+			,#{dietaryCount.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertDietaryCount_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="dietaryCount" index="index">
+			insert
+			into HEALTH_DIETARY_COUNT${tableSuffix} (
+			ID_
+			,PARENTID_
+			,TENANTID_
+			,HEATENERGY_
+			,HEATENERGYCARBOHYDRATE_
+			,HEATENERGYFAT_
+			,PROTEIN_
+			,PROTEINANIMAL_
+			,PROTEINANIMALBEANS_
+			,FAT_
+			,CARBOHYDRATE_
+			,VITAMINA_
+			,VITAMINB1_
+			,VITAMINB2_
+			,VITAMINB6_
+			,VITAMINB12_
+			,VITAMINC_
+			,VITAMINE_
+			,CAROTENE_
+			,RETINOL_
+			,NICOTINICCID_
+			,CALCIUM_
+			,IRON_
+			,ZINC_
+			,IODINE_
+			,PHOSPHORUS_
+			,MEALTYPE_ 
+			,TYPE_
+			,NODEID_
+			,SEMESTER_
+			,YEAR_
+			,MONTH_
+			,DAY_
+			,DAYOFWEEK_
+			,WEEK_
+			,FULLDAY_
+			,CREATETIME_
+			)
+			values (
+			#{dietaryCount.id,
+			jdbcType=BIGINT}
+			,#{dietaryCount.parentId,
+			jdbcType=BIGINT}
+			,#{dietaryCount.tenantId,
+			jdbcType=VARCHAR}
+			,#{dietaryCount.heatEnergy, jdbcType=DOUBLE}
+			,#{dietaryCount.heatEnergyCarbohydrate, jdbcType=DOUBLE}
+			,#{dietaryCount.heatEnergyFat, jdbcType=DOUBLE}
+			,#{dietaryCount.protein, jdbcType=DOUBLE}
+			,#{dietaryCount.proteinAnimal, jdbcType=DOUBLE}
+			,#{dietaryCount.proteinAnimalBeans, jdbcType=DOUBLE}
+			,#{dietaryCount.fat,
+			jdbcType=DOUBLE}
+			,#{dietaryCount.carbohydrate,
+			jdbcType=DOUBLE}
+			,#{dietaryCount.vitaminA, jdbcType=DOUBLE}
+			,#{dietaryCount.vitaminB1,
+			jdbcType=DOUBLE}
+			,#{dietaryCount.vitaminB2,
+			jdbcType=DOUBLE}
+			,#{dietaryCount.vitaminB6, jdbcType=DOUBLE}
+			,#{dietaryCount.vitaminB12, jdbcType=DOUBLE}
+			,#{dietaryCount.vitaminC, jdbcType=DOUBLE}
+			,#{dietaryCount.vitaminE,
+			jdbcType=DOUBLE}
+			,#{dietaryCount.carotene,
+			jdbcType=DOUBLE}
+			,#{dietaryCount.retinol, jdbcType=DOUBLE}
+			,#{dietaryCount.nicotinicCid, jdbcType=DOUBLE}
+			,#{dietaryCount.calcium, jdbcType=DOUBLE}
+			,#{dietaryCount.iron,
+			jdbcType=DOUBLE}
+			,#{dietaryCount.zinc, jdbcType=DOUBLE}
+			,#{dietaryCount.iodine, jdbcType=DOUBLE}
+			,#{dietaryCount.phosphorus,
+			jdbcType=DOUBLE}
+			,#{dietaryCount.mealType, jdbcType=VARCHAR}
+			,#{dietaryCount.type, jdbcType=VARCHAR}
+			,#{dietaryCount.nodeId,
+			jdbcType=BIGINT}
+			,#{dietaryCount.semester,
+			jdbcType=INTEGER}
+			,#{dietaryCount.year,
+			jdbcType=INTEGER}
+			,#{dietaryCount.month,
+			jdbcType=INTEGER}
+			,#{dietaryCount.day,
+			jdbcType=INTEGER}
+			,#{dietaryCount.dayOfWeek,
+			jdbcType=INTEGER}
+			,#{dietaryCount.week,
+			jdbcType=INTEGER}
+			,#{dietaryCount.fullDay,
+			jdbcType=INTEGER}
+			,#{dietaryCount.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<delete id="deleteDietaryCountById" parameterType="com.glaf.heathcare.query.DietaryCountQuery">
+		delete from
+		HEALTH_DIETARY_COUNT${tableSuffix}
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deleteDietaryCounts" parameterType="com.glaf.heathcare.query.DietaryCountQuery">
+		delete from HEALTH_DIETARY_COUNT${tableSuffix}
+		where (
+		ID_ IN
+		<foreach item="x_id" index="index" collection="ids" open="("
+			separator="," close=")">
+			#{x_id}
+		</foreach>
+		)
+	</delete>
+
+
+	<select id="getDietaryCountById" parameterType="com.glaf.heathcare.query.DietaryCountQuery"
+		resultMap="dietaryCountResultMap">
+		select * from HEALTH_DIETARY_COUNT${tableSuffix} where ID_ =
+		#{id}
+	</select>
+
+
+	<select id="getDietaryCounts" parameterType="com.glaf.heathcare.query.DietaryCountQuery"
+		resultMap="dietaryCountResultMap">
+		select distinct E.*
+		<include refid="selectDietaryCountsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.FULLDAY_ desc, E.NODEID_ asc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getDietaryCountCount" parameterType="com.glaf.heathcare.query.DietaryCountQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectDietaryCountsSql" />
+	</select>
+
+
+	<sql id="selectDietaryCountsSql">
+
+		from HEALTH_DIETARY_COUNT${tableSuffix} E
+
+		<where>
+			1 = 1
+
+			<if test="parentId != null">
+				and E.PARENTID_ = #{parentId}
+			</if>
+
+			<if test="parentIds != null and parentIds.size() &gt; 0">
+				and E.PARENTID_ IN
+				<foreach item="x_parentId" index="index" collection="parentIds"
+					open="(" separator="," close=")">
+					#{x_parentId}
+				</foreach>
+			</if>
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="tenantIds != null and tenantIds.size() &gt; 0">
+				and E.TENANTID_ IN
+				<foreach item="x_tenantId" index="index" collection="tenantIds"
+					open="(" separator="," close=")">
+					#{x_tenantId}
+				</foreach>
+			</if>
+
+			<if test="heatEnergyGreaterThanOrEqual != null">
+				and E.HEATENERGY_ &gt;= #{heatEnergyGreaterThanOrEqual}
+			</if>
+
+			<if test="heatEnergyLessThanOrEqual != null">
+				and E.HEATENERGY_ &lt;= #{heatEnergyLessThanOrEqual}
+			</if>
+
+			<if test="proteinGreaterThanOrEqual != null">
+				and E.PROTEIN_ &gt;= #{proteinGreaterThanOrEqual}
+			</if>
+
+			<if test="proteinLessThanOrEqual != null">
+				and E.PROTEIN_ &lt;= #{proteinLessThanOrEqual}
+			</if>
+
+			<if test="fatGreaterThanOrEqual != null">
+				and E.FAT_ &gt;= #{fatGreaterThanOrEqual}
+			</if>
+
+			<if test="fatLessThanOrEqual != null">
+				and E.FAT_ &lt;= #{fatLessThanOrEqual}
+			</if>
+
+			<if test="carbohydrateGreaterThanOrEqual != null">
+				and E.CARBOHYDRATE_ &gt;=
+				#{carbohydrateGreaterThanOrEqual}
+			</if>
+
+			<if test="carbohydrateLessThanOrEqual != null">
+				and E.CARBOHYDRATE_ &lt;= #{carbohydrateLessThanOrEqual}
+			</if>
+
+			<if test="vitaminAGreaterThanOrEqual != null">
+				and E.VITAMINA_ &gt;= #{vitaminAGreaterThanOrEqual}
+			</if>
+
+			<if test="vitaminALessThanOrEqual != null">
+				and E.VITAMINA_ &lt;= #{vitaminALessThanOrEqual}
+			</if>
+
+			<if test="vitaminB1GreaterThanOrEqual != null">
+				and E.VITAMINB1_ &gt;= #{vitaminB1GreaterThanOrEqual}
+			</if>
+
+			<if test="vitaminB1LessThanOrEqual != null">
+				and E.VITAMINB1_ &lt;= #{vitaminB1LessThanOrEqual}
+			</if>
+
+			<if test="vitaminB2GreaterThanOrEqual != null">
+				and E.VITAMINB2_ &gt;= #{vitaminB2GreaterThanOrEqual}
+			</if>
+
+			<if test="vitaminB2LessThanOrEqual != null">
+				and E.VITAMINB2_ &lt;= #{vitaminB2LessThanOrEqual}
+			</if>
+
+			<if test="vitaminB6GreaterThanOrEqual != null">
+				and E.VITAMINB6_ &gt;= #{vitaminB6GreaterThanOrEqual}
+			</if>
+
+			<if test="vitaminB6LessThanOrEqual != null">
+				and E.VITAMINB6_ &lt;= #{vitaminB6LessThanOrEqual}
+			</if>
+
+			<if test="vitaminB12GreaterThanOrEqual != null">
+				and E.VITAMINB12_ &gt;= #{vitaminB12GreaterThanOrEqual}
+			</if>
+
+			<if test="vitaminB12LessThanOrEqual != null">
+				and E.VITAMINB12_ &lt;= #{vitaminB12LessThanOrEqual}
+			</if>
+
+			<if test="vitaminCGreaterThanOrEqual != null">
+				and E.VITAMINC_ &gt;= #{vitaminCGreaterThanOrEqual}
+			</if>
+
+			<if test="vitaminCLessThanOrEqual != null">
+				and E.VITAMINC_ &lt;= #{vitaminCLessThanOrEqual}
+			</if>
+
+			<if test="caroteneGreaterThanOrEqual != null">
+				and E.CAROTENE_ &gt;= #{caroteneGreaterThanOrEqual}
+			</if>
+
+			<if test="caroteneLessThanOrEqual != null">
+				and E.CAROTENE_ &lt;= #{caroteneLessThanOrEqual}
+			</if>
+
+			<if test="retinolGreaterThanOrEqual != null">
+				and E.RETINOL_ &gt;= #{retinolGreaterThanOrEqual}
+			</if>
+
+			<if test="retinolLessThanOrEqual != null">
+				and E.RETINOL_ &lt;= #{retinolLessThanOrEqual}
+			</if>
+
+			<if test="nicotinicCidGreaterThanOrEqual != null">
+				and E.NICOTINICCID_ &gt;=
+				#{nicotinicCidGreaterThanOrEqual}
+			</if>
+
+			<if test="nicotinicCidLessThanOrEqual != null">
+				and E.NICOTINICCID_ &lt;= #{nicotinicCidLessThanOrEqual}
+			</if>
+
+			<if test="calciumGreaterThanOrEqual != null">
+				and E.CALCIUM_ &gt;= #{calciumGreaterThanOrEqual}
+			</if>
+
+			<if test="calciumLessThanOrEqual != null">
+				and E.CALCIUM_ &lt;= #{calciumLessThanOrEqual}
+			</if>
+
+			<if test="ironGreaterThanOrEqual != null">
+				and E.IRON_ &gt;= #{ironGreaterThanOrEqual}
+			</if>
+
+			<if test="ironLessThanOrEqual != null">
+				and E.IRON_ &lt;= #{ironLessThanOrEqual}
+			</if>
+
+			<if test="zincGreaterThanOrEqual != null">
+				and E.ZINC_ &gt;= #{zincGreaterThanOrEqual}
+			</if>
+
+			<if test="zincLessThanOrEqual != null">
+				and E.ZINC_ &lt;= #{zincLessThanOrEqual}
+			</if>
+
+			<if test="iodineGreaterThanOrEqual != null">
+				and E.IODINE_ &gt;= #{iodineGreaterThanOrEqual}
+			</if>
+
+			<if test="iodineLessThanOrEqual != null">
+				and E.IODINE_ &lt;= #{iodineLessThanOrEqual}
+			</if>
+
+			<if test="phosphorusGreaterThanOrEqual != null">
+				and E.PHOSPHORUS_ &gt;= #{phosphorusGreaterThanOrEqual}
+			</if>
+
+			<if test="phosphorusLessThanOrEqual != null">
+				and E.PHOSPHORUS_ &lt;= #{phosphorusLessThanOrEqual}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="nodeId != null">
+				and E.NODEID_ = #{nodeId}
+			</if>
+
+			<if test="nodeIds != null and nodeIds.size() &gt; 0">
+				and E.NODEID_ IN
+				<foreach item="x_nodeId" index="index" collection="nodeIds"
+					open="(" separator="," close=")">
+					#{x_nodeId}
+				</foreach>
+			</if>
+
+			<if test="semester != null">
+				and E.SEMESTER_ = #{semester}
+			</if>
+
+			<if test="year != null">
+				and E.YEAR_ = #{year}
+			</if>
+
+			<if test="month != null">
+				and E.MONTH_ = #{month}
+			</if>
+
+			<if test="day != null">
+				and E.DAY_ = #{day}
+			</if>
+
+			<if test="dayOfWeek != null">
+				and E.DAYOFWEEK_ = #{dayOfWeek}
+			</if>
+
+			<if test="week != null">
+				and E.WEEK_ = #{week}
+			</if>
+
+			<if test="fullDay != null">
+				and E.FULLDAY_ = #{fullDay}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

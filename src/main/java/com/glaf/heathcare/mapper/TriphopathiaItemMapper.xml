@@ -1,0 +1,641 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.heathcare.mapper.TriphopathiaItemMapper">
+
+	<resultMap id="triphopathiaItemResultMap" type="com.glaf.heathcare.domain.TriphopathiaItem">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="triphopathiaId" column="TRIPHOPATHIAID_"
+			jdbcType="BIGINT" />
+		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="gradeId" column="GRADEID_" jdbcType="VARCHAR" />
+		<result property="personId" column="PERSONID_" jdbcType="VARCHAR" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="sex" column="SEX_" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="height" column="HEIGHT_" jdbcType="DOUBLE" />
+		<result property="heightLevel" column="HEIGHTLEVEL_" jdbcType="INTEGER" />
+		<result property="heightEvaluate" column="HEIGHTEVALUATE_"
+			jdbcType="VARCHAR" />
+		<result property="weight" column="WEIGHT_" jdbcType="DOUBLE" />
+		<result property="weightLevel" column="WEIGHTLEVEL_" jdbcType="INTEGER" />
+		<result property="weightEvaluate" column="WEIGHTEVALUATE_"
+			jdbcType="VARCHAR" />
+		<result property="weightHeightPercent" column="WEIGHTHEIGHTPERCENT_"
+			jdbcType="DOUBLE" />
+		<result property="bmi" column="BMI_" jdbcType="DOUBLE" />
+		<result property="bmiIndex" column="BMIINDEX_" jdbcType="DOUBLE" />
+		<result property="bmiEvaluate" column="BMIEVALUATE_" jdbcType="VARCHAR" />
+		<result property="symptom" column="SYMPTOM_" jdbcType="VARCHAR" />
+		<result property="suggest" column="SUGGEST_" jdbcType="VARCHAR" />
+		<result property="result" column="RESULT_" jdbcType="VARCHAR" />
+		<result property="evaluate" column="EVALUATE_" jdbcType="VARCHAR" />
+		<result property="ageOfTheMoon" column="AGEOFTHEMOON_"
+			jdbcType="INTEGER" />
+		<result property="remark" column="REMARK_" jdbcType="VARCHAR" />
+		<result property="checkDate" column="CHECKDATE_" jdbcType="TIMESTAMP" />
+		<result property="checkDoctor" column="CHECKDOCTOR_" jdbcType="VARCHAR" />
+		<result property="checkDoctorId" column="CHECKDOCTORID_"
+			jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertTriphopathiaItem" parameterType="com.glaf.heathcare.domain.TriphopathiaItem">
+		insert into HEALTH_TRIPHOPATHIA_ITEM
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="triphopathiaId != null">
+				,TRIPHOPATHIAID_
+			</if>
+			<if test="tenantId != null">
+				,TENANTID_
+			</if>
+			<if test="gradeId != null">
+				,GRADEID_
+			</if>
+			<if test="personId != null">
+				,PERSONID_
+			</if>
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="sex != null">
+				,SEX_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="height != null">
+				,HEIGHT_
+			</if>
+			<if test="heightLevel != null">
+				,HEIGHTLEVEL_
+			</if>
+			<if test="heightEvaluate != null">
+				,HEIGHTEVALUATE_
+			</if>
+			<if test="weight != null">
+				,WEIGHT_
+			</if>
+			<if test="weightLevel != null">
+				,WEIGHTLEVEL_
+			</if>
+			<if test="weightEvaluate != null">
+				,WEIGHTEVALUATE_
+			</if>
+			<if test="weightHeightPercent != null">
+				,WEIGHTHEIGHTPERCENT_
+			</if>
+			<if test="bmi != null">
+				,BMI_
+			</if>
+			<if test="bmiIndex != null">
+				,BMIINDEX_
+			</if>
+			<if test="bmiEvaluate != null">
+				,BMIEVALUATE_
+			</if>
+			<if test="symptom != null">
+				,SYMPTOM_
+			</if>
+			<if test="suggest != null">
+				,SUGGEST_
+			</if>
+			<if test="result != null">
+				,RESULT_
+			</if>
+			<if test="evaluate != null">
+				,EVALUATE_
+			</if>
+			<if test="ageOfTheMoon != null">
+				,AGEOFTHEMOON_
+			</if>
+			<if test="remark != null">
+				,REMARK_
+			</if>
+			<if test="checkDate != null">
+				,CHECKDATE_
+			</if>
+			<if test="checkDoctor != null">
+				,CHECKDOCTOR_
+			</if>
+			<if test="checkDoctorId != null">
+				,CHECKDOCTORID_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="triphopathiaId != null">
+				,#{triphopathiaId, jdbcType=BIGINT}
+			</if>
+			<if test="tenantId != null">
+				,#{tenantId, jdbcType=VARCHAR}
+			</if>
+			<if test="gradeId != null">
+				,#{gradeId, jdbcType=VARCHAR}
+			</if>
+			<if test="personId != null">
+				,#{personId, jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="sex != null">
+				,#{sex, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="height != null">
+				,#{height, jdbcType=DOUBLE}
+			</if>
+			<if test="heightLevel != null">
+				,#{heightLevel, jdbcType=INTEGER}
+			</if>
+			<if test="heightEvaluate != null">
+				,#{heightEvaluate, jdbcType=VARCHAR}
+			</if>
+			<if test="weight != null">
+				,#{weight, jdbcType=DOUBLE}
+			</if>
+			<if test="weightLevel != null">
+				,#{weightLevel, jdbcType=INTEGER}
+			</if>
+			<if test="weightEvaluate != null">
+				,#{weightEvaluate, jdbcType=VARCHAR}
+			</if>
+			<if test="weightHeightPercent != null">
+				,#{weightHeightPercent, jdbcType=DOUBLE}
+			</if>
+			<if test="bmi != null">
+				,#{bmi, jdbcType=DOUBLE}
+			</if>
+			<if test="bmiIndex != null">
+				,#{bmiIndex, jdbcType=DOUBLE}
+			</if>
+			<if test="bmiEvaluate != null">
+				,#{bmiEvaluate, jdbcType=VARCHAR}
+			</if>
+			<if test="symptom != null">
+				,#{symptom, jdbcType=VARCHAR}
+			</if>
+			<if test="suggest != null">
+				,#{suggest, jdbcType=VARCHAR}
+			</if>
+			<if test="result != null">
+				,#{result, jdbcType=VARCHAR}
+			</if>
+			<if test="evaluate != null">
+				,#{evaluate, jdbcType=VARCHAR}
+			</if>
+			<if test="ageOfTheMoon != null">
+				,#{ageOfTheMoon, jdbcType=INTEGER}
+			</if>
+			<if test="remark != null">
+				,#{remark, jdbcType=VARCHAR}
+			</if>
+			<if test="checkDate != null">
+				,#{checkDate, jdbcType=TIMESTAMP}
+			</if>
+			<if test="checkDoctor != null">
+				,#{checkDoctor, jdbcType=VARCHAR}
+			</if>
+			<if test="checkDoctorId != null">
+				,#{checkDoctorId, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="bulkInsertTriphopathiaItem" parameterType="java.util.List">
+		insert into HEALTH_TRIPHOPATHIA_ITEM (
+		ID_
+		,TRIPHOPATHIAID_
+		,TENANTID_
+		,GRADEID_
+		,PERSONID_
+		,NAME_
+		,SEX_
+		,TYPE_
+		,HEIGHT_
+		,HEIGHTLEVEL_
+		,HEIGHTEVALUATE_
+		,WEIGHT_
+		,WEIGHTLEVEL_
+		,WEIGHTEVALUATE_
+		,WEIGHTHEIGHTPERCENT_
+		,BMI_
+		,BMIINDEX_
+		,BMIEVALUATE_
+		,SYMPTOM_
+		,SUGGEST_
+		,RESULT_
+		,EVALUATE_
+		,AGEOFTHEMOON_
+		,REMARK_
+		,CHECKDATE_
+		,CHECKDOCTOR_
+		,CHECKDOCTORID_
+		,CREATEBY_
+		,CREATETIME_
+		) values
+		<foreach collection="list" item="triphopathiaItem" index="index"
+			separator=",">
+			(
+			#{triphopathiaItem.id, jdbcType=BIGINT}
+			,#{triphopathiaItem.triphopathiaId, jdbcType=BIGINT}
+			,#{triphopathiaItem.tenantId, jdbcType=VARCHAR}
+			,#{triphopathiaItem.gradeId,
+			jdbcType=VARCHAR}
+			,#{triphopathiaItem.personId, jdbcType=VARCHAR}
+			,#{triphopathiaItem.name, jdbcType=VARCHAR}
+			,#{triphopathiaItem.sex,
+			jdbcType=VARCHAR}
+			,#{triphopathiaItem.type, jdbcType=VARCHAR}
+			,#{triphopathiaItem.height, jdbcType=DOUBLE}
+			,#{triphopathiaItem.heightLevel,
+			jdbcType=INTEGER}
+			,#{triphopathiaItem.heightEvaluate, jdbcType=VARCHAR}
+			,#{triphopathiaItem.weight, jdbcType=DOUBLE}
+			,#{triphopathiaItem.weightLevel,
+			jdbcType=INTEGER}
+			,#{triphopathiaItem.weightEvaluate, jdbcType=VARCHAR}
+			,#{triphopathiaItem.weightHeightPercent, jdbcType=DOUBLE}
+			,#{triphopathiaItem.bmi, jdbcType=DOUBLE}
+			,#{triphopathiaItem.bmiIndex,
+			jdbcType=DOUBLE}
+			,#{triphopathiaItem.bmiEvaluate, jdbcType=VARCHAR}
+			,#{triphopathiaItem.symptom, jdbcType=VARCHAR}
+			,#{triphopathiaItem.suggest,
+			jdbcType=VARCHAR}
+			,#{triphopathiaItem.result, jdbcType=VARCHAR}
+			,#{triphopathiaItem.evaluate, jdbcType=VARCHAR}
+			,#{triphopathiaItem.ageOfTheMoon, jdbcType=INTEGER}
+			,#{triphopathiaItem.remark, jdbcType=VARCHAR}
+			,#{triphopathiaItem.checkDate,
+			jdbcType=TIMESTAMP}
+			,#{triphopathiaItem.checkDoctor, jdbcType=VARCHAR}
+			,#{triphopathiaItem.checkDoctorId, jdbcType=VARCHAR}
+			,#{triphopathiaItem.createBy, jdbcType=VARCHAR}
+			,#{triphopathiaItem.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="bulkInsertTriphopathiaItem_oracle" parameterType="java.util.List">
+		INSERT ALL
+		<foreach collection="list" item="triphopathiaItem" index="index">
+			insert
+			into HEALTH_TRIPHOPATHIA_ITEM (
+			ID_
+			,TRIPHOPATHIAID_
+			,TENANTID_
+			,GRADEID_
+			,PERSONID_
+			,NAME_
+			,SEX_
+			,TYPE_
+			,HEIGHT_
+			,HEIGHTLEVEL_
+			,HEIGHTEVALUATE_
+			,WEIGHT_
+			,WEIGHTLEVEL_
+			,WEIGHTEVALUATE_
+			,WEIGHTHEIGHTPERCENT_
+			,BMI_
+			,BMIINDEX_
+			,BMIEVALUATE_
+			,SYMPTOM_
+			,SUGGEST_
+			,RESULT_
+			,EVALUATE_
+			,AGEOFTHEMOON_
+			,REMARK_
+			,CHECKDATE_
+			,CHECKDOCTOR_
+			,CHECKDOCTORID_
+			,CREATEBY_
+			,CREATETIME_
+			) values (
+			#{triphopathiaItem.id,
+			jdbcType=BIGINT}
+			,#{triphopathiaItem.triphopathiaId, jdbcType=BIGINT}
+			,#{triphopathiaItem.tenantId,
+			jdbcType=VARCHAR}
+			,#{triphopathiaItem.gradeId, jdbcType=VARCHAR}
+			,#{triphopathiaItem.personId,
+			jdbcType=VARCHAR}
+			,#{triphopathiaItem.name,
+			jdbcType=VARCHAR}
+			,#{triphopathiaItem.sex,
+			jdbcType=VARCHAR}
+			,#{triphopathiaItem.type,
+			jdbcType=VARCHAR}
+			,#{triphopathiaItem.height,
+			jdbcType=DOUBLE}
+			,#{triphopathiaItem.heightLevel, jdbcType=INTEGER}
+			,#{triphopathiaItem.heightEvaluate, jdbcType=VARCHAR}
+			,#{triphopathiaItem.weight, jdbcType=DOUBLE}
+			,#{triphopathiaItem.weightLevel,
+			jdbcType=INTEGER}
+			,#{triphopathiaItem.weightEvaluate, jdbcType=VARCHAR}
+			,#{triphopathiaItem.weightHeightPercent, jdbcType=DOUBLE}
+			,#{triphopathiaItem.bmi, jdbcType=DOUBLE}
+			,#{triphopathiaItem.bmiIndex,
+			jdbcType=DOUBLE}
+			,#{triphopathiaItem.bmiEvaluate, jdbcType=VARCHAR}
+			,#{triphopathiaItem.symptom, jdbcType=VARCHAR}
+			,#{triphopathiaItem.suggest,
+			jdbcType=VARCHAR}
+			,#{triphopathiaItem.result, jdbcType=VARCHAR}
+			,#{triphopathiaItem.evaluate, jdbcType=VARCHAR}
+			,#{triphopathiaItem.ageOfTheMoon, jdbcType=INTEGER}
+			,#{triphopathiaItem.remark, jdbcType=VARCHAR}
+			,#{triphopathiaItem.checkDate,
+			jdbcType=TIMESTAMP}
+			,#{triphopathiaItem.checkDoctor, jdbcType=VARCHAR}
+			,#{triphopathiaItem.checkDoctorId, jdbcType=VARCHAR}
+			,#{triphopathiaItem.createBy, jdbcType=VARCHAR}
+			,#{triphopathiaItem.createTime, jdbcType=TIMESTAMP}
+			)
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+
+	<update id="updateTriphopathiaItem" parameterType="com.glaf.heathcare.domain.TriphopathiaItem">
+		update HEALTH_TRIPHOPATHIA_ITEM
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="height != null">
+				HEIGHT_ = #{height, jdbcType=DOUBLE},
+			</if>
+			<if test="heightLevel != null">
+				HEIGHTLEVEL_ = #{heightLevel, jdbcType=INTEGER},
+			</if>
+			<if test="heightEvaluate != null">
+				HEIGHTEVALUATE_ = #{heightEvaluate, jdbcType=VARCHAR},
+			</if>
+			<if test="weight != null">
+				WEIGHT_ = #{weight, jdbcType=DOUBLE},
+			</if>
+			<if test="weightLevel != null">
+				WEIGHTLEVEL_ = #{weightLevel, jdbcType=INTEGER},
+			</if>
+			<if test="weightEvaluate != null">
+				WEIGHTEVALUATE_ = #{weightEvaluate, jdbcType=VARCHAR},
+			</if>
+			<if test="weightHeightPercent != null">
+				WEIGHTHEIGHTPERCENT_ = #{weightHeightPercent,
+				jdbcType=DOUBLE},
+			</if>
+			<if test="bmi != null">
+				BMI_ = #{bmi, jdbcType=DOUBLE},
+			</if>
+			<if test="bmiIndex != null">
+				BMIINDEX_ = #{bmiIndex, jdbcType=DOUBLE},
+			</if>
+			<if test="bmiEvaluate != null">
+				BMIEVALUATE_ = #{bmiEvaluate, jdbcType=VARCHAR},
+			</if>
+			<if test="symptom != null">
+				SYMPTOM_ = #{symptom, jdbcType=VARCHAR},
+			</if>
+			<if test="suggest != null">
+				SUGGEST_ = #{suggest, jdbcType=VARCHAR},
+			</if>
+			<if test="result != null">
+				RESULT_ = #{result, jdbcType=VARCHAR},
+			</if>
+			<if test="evaluate != null">
+				EVALUATE_ = #{evaluate, jdbcType=VARCHAR},
+			</if>
+			<if test="ageOfTheMoon != null">
+				AGEOFTHEMOON_ = #{ageOfTheMoon, jdbcType=INTEGER},
+			</if>
+			<if test="remark != null">
+				REMARK_ = #{remark, jdbcType=VARCHAR},
+			</if>
+			<if test="checkDate != null">
+				CHECKDATE_ = #{checkDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="checkDoctor != null">
+				CHECKDOCTOR_ = #{checkDoctor, jdbcType=VARCHAR},
+			</if>
+			<if test="checkDoctorId != null">
+				CHECKDOCTORID_ = #{checkDoctorId, jdbcType=VARCHAR},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteTriphopathiaItemById" parameterType="long">
+		delete
+		from
+		HEALTH_TRIPHOPATHIA_ITEM
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getTriphopathiaItemById" parameterType="long"
+		resultMap="triphopathiaItemResultMap">
+		select * from HEALTH_TRIPHOPATHIA_ITEM where ID_ = #{id}
+	</select>
+
+
+	<select id="getTriphopathiaItems" parameterType="com.glaf.heathcare.query.TriphopathiaItemQuery"
+		resultMap="triphopathiaItemResultMap">
+		select distinct E.*
+		<include refid="selectTriphopathiaItemsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.ID_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getTriphopathiaItemCount" parameterType="com.glaf.heathcare.query.TriphopathiaItemQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectTriphopathiaItemsSql" />
+	</select>
+
+
+	<sql id="selectTriphopathiaItemsSql">
+
+		from HEALTH_TRIPHOPATHIA_ITEM E
+
+		<where>
+			1 = 1
+			
+			<if test="triphopathiaId != null">
+				and E.TRIPHOPATHIAID_ = #{triphopathiaId}
+            </if>
+            
+            <if test="triphopathiaIds != null and triphopathiaIds.size() &gt; 0">
+			    and E.TRIPHOPATHIAID_ IN
+                <foreach item="x_triphopathiaId" index="index" collection="triphopathiaIds" 
+                     open="(" separator="," close=")">
+                  #{x_triphopathiaId}
+                </foreach>
+			</if>
+
+			<if test="tenantId != null and tenantId != '' ">
+				and E.TENANTID_ = #{tenantId}
+			</if>
+
+			<if test="tenantIds != null and tenantIds.size() &gt; 0">
+				and E.TENANTID_ IN
+				<foreach item="x_tenantId" index="index" collection="tenantIds"
+					open="(" separator="," close=")">
+					#{x_tenantId}
+				</foreach>
+			</if>
+
+			<if test="gradeId != null and gradeId != '' ">
+				and E.GRADEID_ = #{gradeId}
+			</if>
+
+			<if test="gradeIds != null and gradeIds.size() &gt; 0">
+				and E.GRADEID_ IN
+				<foreach item="x_gradeId" index="index" collection="gradeIds"
+					open="(" separator="," close=")">
+					#{x_gradeId}
+				</foreach>
+			</if>
+
+			<if test="personId != null and personId != '' ">
+				and E.PERSONID_ = #{personId}
+			</if>
+
+			<if test="personIds != null and personIds.size() &gt; 0">
+				and E.PERSONID_ IN
+				<foreach item="x_personId" index="index" collection="personIds"
+					open="(" separator="," close=")">
+					#{x_personId}
+				</foreach>
+			</if>
+
+			<if test="name != null and name != '' ">
+				and E.NAME_ = #{name}
+			</if>
+
+			<if test="nameLike != null and nameLike != '' ">
+				and E.NAME_ like #{nameLike}
+			</if>
+
+			<if test="sex != null and sex != '' ">
+				and E.SEX_ = #{sex}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="heightGreaterThanOrEqual != null">
+				and E.HEIGHT_ &gt;= #{heightGreaterThanOrEqual}
+			</if>
+
+			<if test="heightLessThanOrEqual != null">
+				and E.HEIGHT_ &lt;= #{heightLessThanOrEqual}
+			</if>
+
+			<if test="heightLevel != null">
+				and E.HEIGHTLEVEL_ = #{heightLevel}
+			</if>
+
+			<if test="weightGreaterThanOrEqual != null">
+				and E.WEIGHT_ &gt;= #{weightGreaterThanOrEqual}
+			</if>
+
+			<if test="weightLessThanOrEqual != null">
+				and E.WEIGHT_ &lt;= #{weightLessThanOrEqual}
+			</if>
+
+			<if test="weightLevel != null">
+				and E.WEIGHTLEVEL_ = #{weightLevel}
+			</if>
+
+			<if test="weightLevelGreaterThanOrEqual != null">
+				and E.WEIGHTLEVEL_ &gt;= #{weightLevelGreaterThanOrEqual}
+			</if>
+
+			<if test="weightLevelLessThanOrEqual != null">
+				and E.WEIGHTLEVEL_ &lt;= #{weightLevelLessThanOrEqual}
+			</if>
+
+			<if test="weightHeightPercentGreaterThanOrEqual != null">
+				and E.WEIGHTHEIGHTPERCENT_ &gt;=
+				#{weightHeightPercentGreaterThanOrEqual}
+			</if>
+
+			<if test="weightHeightPercentLessThanOrEqual != null">
+				and E.WEIGHTHEIGHTPERCENT_ &lt;=
+				#{weightHeightPercentLessThanOrEqual}
+			</if>
+
+			<if test="bmiGreaterThanOrEqual != null">
+				and E.BMI_ &gt;= #{bmiGreaterThanOrEqual}
+			</if>
+
+			<if test="bmiLessThanOrEqual != null">
+				and E.BMI_ &lt;= #{bmiLessThanOrEqual}
+			</if>
+
+			<if test="bmiIndexGreaterThanOrEqual != null">
+				and E.BMIINDEX_ &gt;= #{bmiIndexGreaterThanOrEqual}
+			</if>
+
+			<if test="bmiIndexLessThanOrEqual != null">
+				and E.BMIINDEX_ &lt;= #{bmiIndexLessThanOrEqual}
+			</if>
+
+			<if test="ageOfTheMoon != null">
+				and E.AGEOFTHEMOON_ = #{ageOfTheMoon}
+			</if>
+
+			<if test="checkDoctorId != null and checkDoctorId != '' ">
+				and E.CHECKDOCTORID_ = #{checkDoctorId}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>
