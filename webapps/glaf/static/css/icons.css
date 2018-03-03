@@ -6,6 +6,10 @@
 	background: url('../images/add.png') no-repeat;
 }
 
+.icon-analyzer {
+	background: url('../images/analyzer.png') no-repeat;
+}
+
 .icon-copy {
 	background: url('../images/copy.png') no-repeat;
 }
@@ -298,6 +302,10 @@
 
 .icon_cubes {
 	background: url('../images/cubes_yellow.png') no-repeat;
+}
+
+.icon_chart {
+	background: url('../images/chart.png') no-repeat;
 }
 
 .icon_check {

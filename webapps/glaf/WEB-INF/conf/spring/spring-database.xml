@@ -8,7 +8,7 @@
 	<bean id="dataSource" class="com.glaf.core.jdbc.datasource.MultiRoutingDataSource"/> 
 
 
-	<!-- <bean id="hibernateSessionFactory"
+	<bean id="hibernateSessionFactory"
 		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 		<property name="packagesToScan" value="com.glaf" />
 		<property name="annotatedPackages" value="com.glaf" />
@@ -21,7 +21,7 @@
 				<prop key="hibernate.auto_quote_keyword">true</prop>
 			</props>
 		</property>
-	</bean> -->
+	</bean>
 
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

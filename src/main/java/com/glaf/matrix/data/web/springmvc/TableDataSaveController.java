@@ -289,7 +289,7 @@ public class TableDataSaveController {
 							}
 							break;
 						case 4:// 两周内可以修改
-							if ((DateUtils.getNowYearMonthDay() - DateUtils.getYearMonthDay(createDate)) <= 14) {
+							if (DateUtils.getDaysBetween(createDate, new Date()) <= 14) {
 								canUpdate = true;
 							}
 							break;

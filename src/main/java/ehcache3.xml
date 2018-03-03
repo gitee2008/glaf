@@ -4,12 +4,12 @@
         xmlns='http://www.ehcache.org/v3'
         xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core.xsd">
 
-    <!-- Don't remote default cache configuration -->
+    <!-- Don't remove default cache configuration -->
     <cache-template name="default">
         <key-type>java.lang.String</key-type>
-        <value-type>java.io.Serializable</value-type>
+        <value-type>java.lang.String</value-type>
         <expiry>
-            <ttl unit="seconds">3600</ttl>
+            <ttl unit="seconds">1800</ttl>
         </expiry>
         <resources>
             <heap>1000</heap>

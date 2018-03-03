@@ -41,7 +41,7 @@ public class MyBatisDbIdGenerator implements IdGenerator {
 			try {
 				lastIdMap.clear();
 				nextIdMap.clear();
-				//logger.info("clear IdGenerator cache.");
+				// logger.info("clear IdGenerator cache.");
 			} catch (Exception ex) {
 				logger.error(ex);
 			}
@@ -73,7 +73,7 @@ public class MyBatisDbIdGenerator implements IdGenerator {
 		logger.info("----------------MyBatis3DbIdGenerator--------------");
 		try {
 			RefreshTask command = new RefreshTask();
-			scheduledThreadPool.scheduleAtFixedRate(command, 60, 30, TimeUnit.SECONDS);
+			scheduledThreadPool.scheduleAtFixedRate(command, 60, 15, TimeUnit.SECONDS);
 		} catch (Exception ex) {
 			logger.error(ex);
 		}

@@ -325,13 +325,13 @@ public class SysApplicationController {
 	 */
 	@RequestMapping("/save")
 	@ResponseBody
-	public byte[] save(HttpServletRequest req) {
-		long id = RequestUtils.getLong(req, "id");
+	public byte[] save(HttpServletRequest request) {
+		long id = RequestUtils.getLong(request, "id");
 		SysApplication app = null;
 		if (id > 0) {
 			app = sysApplicationService.findById(id);
 		}
-		Map<String, Object> params = RequestUtils.getParameterMap(req);
+		Map<String, Object> params = RequestUtils.getParameterMap(request);
 		logger.debug("params:" + params);
 		if (app == null) {
 			SysApplication bean = new SysApplication();
@@ -339,34 +339,35 @@ public class SysApplicationController {
 				Tools.populate(bean, params);
 			} catch (Exception ex) {
 			}
-			bean.setName(ParamUtil.getParameter(req, "name"));
-			bean.setCode(ParamUtil.getParameter(req, "code"));
-			bean.setDesc(ParamUtil.getParameter(req, "desc"));
-			bean.setUrl(ParamUtil.getParameter(req, "url"));
-			bean.setImagePath(ParamUtil.getParameter(req, "imagePath"));
-			bean.setLocked(ParamUtil.getIntParameter(req, "locked", 0));
-			bean.setShowMenu(ParamUtil.getIntParameter(req, "showMenu", 0));
-			bean.setShowType(req.getParameter("showType"));
+			bean.setName(ParamUtil.getParameter(request, "name"));
+			bean.setCode(ParamUtil.getParameter(request, "code"));
+			bean.setDesc(ParamUtil.getParameter(request, "desc"));
+			bean.setUrl(ParamUtil.getParameter(request, "url"));
+			bean.setImagePath(ParamUtil.getParameter(request, "imagePath"));
+			bean.setLocked(ParamUtil.getIntParameter(request, "locked", 0));
+			bean.setShowMenu(ParamUtil.getIntParameter(request, "showMenu", 0));
+			bean.setShowType(request.getParameter("showType"));
 			try {
 				sysApplicationService.create(bean);
 				return ResponseUtils.responseResult(true);
 			} catch (Exception ex) {
 				logger.error(ex);
+				return ResponseUtils.responseResult(false);
 			}
 		} else {
 			try {
 				Tools.populate(app, params);
 			} catch (Exception ex) {
 			}
-			app.setName(ParamUtil.getParameter(req, "name"));
-			app.setCode(ParamUtil.getParameter(req, "code"));
-			app.setDesc(ParamUtil.getParameter(req, "desc"));
-			app.setUrl(ParamUtil.getParameter(req, "url"));
-			app.setImagePath(ParamUtil.getParameter(req, "imagePath"));
-			app.setShowMenu(ParamUtil.getIntParameter(req, "showMenu", 0));
-			app.setShowType(req.getParameter("showType"));
-			app.setUpdateBy(RequestUtils.getActorId(req));
-			app.setLocked(ParamUtil.getIntParameter(req, "locked", 0));
+			app.setName(ParamUtil.getParameter(request, "name"));
+			app.setCode(ParamUtil.getParameter(request, "code"));
+			app.setDesc(ParamUtil.getParameter(request, "desc"));
+			app.setUrl(ParamUtil.getParameter(request, "url"));
+			app.setImagePath(ParamUtil.getParameter(request, "imagePath"));
+			app.setShowMenu(ParamUtil.getIntParameter(request, "showMenu", 0));
+			app.setShowType(request.getParameter("showType"));
+			app.setUpdateBy(RequestUtils.getActorId(request));
+			app.setLocked(ParamUtil.getIntParameter(request, "locked", 0));
 		}
 		try {
 			sysApplicationService.update(app);
@@ -388,20 +389,20 @@ public class SysApplicationController {
 	 */
 	@RequestMapping("/saveAdd")
 	@ResponseBody
-	public byte[] saveAdd(HttpServletRequest req) {
+	public byte[] saveAdd(HttpServletRequest request) {
 		SysApplication bean = new SysApplication();
-		Map<String, Object> dataMap = RequestUtils.getParameterMap(req);
+		Map<String, Object> dataMap = RequestUtils.getParameterMap(request);
 		try {
 			Tools.populate(bean, dataMap);
 		} catch (Exception ex) {
 		}
-		bean.setName(ParamUtil.getParameter(req, "name"));
-		bean.setCode(ParamUtil.getParameter(req, "code"));
-		bean.setDesc(ParamUtil.getParameter(req, "desc"));
-		bean.setUrl(ParamUtil.getParameter(req, "url"));
-		bean.setImagePath(ParamUtil.getParameter(req, "imagePath"));
-		bean.setShowMenu(ParamUtil.getIntParameter(req, "showMenu", 0));
-		bean.setShowType(req.getParameter("showType"));
+		bean.setName(ParamUtil.getParameter(request, "name"));
+		bean.setCode(ParamUtil.getParameter(request, "code"));
+		bean.setDesc(ParamUtil.getParameter(request, "desc"));
+		bean.setUrl(ParamUtil.getParameter(request, "url"));
+		bean.setImagePath(ParamUtil.getParameter(request, "imagePath"));
+		bean.setShowMenu(ParamUtil.getIntParameter(request, "showMenu", 0));
+		bean.setShowType(request.getParameter("showType"));
 
 		try {
 			sysApplicationService.create(bean);
@@ -421,25 +422,25 @@ public class SysApplicationController {
 	 */
 	@RequestMapping("/saveModify")
 	@ResponseBody
-	public byte[] saveModify(HttpServletRequest req) {
-		long id = ParamUtil.getIntParameter(req, "id", 0);
+	public byte[] saveModify(HttpServletRequest request) {
+		long id = ParamUtil.getIntParameter(request, "id", 0);
 		SysApplication bean = sysApplicationService.findById(id);
 		if (bean != null) {
-			Map<String, Object> dataMap = RequestUtils.getParameterMap(req);
+			Map<String, Object> dataMap = RequestUtils.getParameterMap(request);
 			try {
 				Tools.populate(bean, dataMap);
 			} catch (Exception ex) {
 			}
-			bean.setName(ParamUtil.getParameter(req, "name"));
-			bean.setCode(ParamUtil.getParameter(req, "code"));
-			bean.setDesc(ParamUtil.getParameter(req, "desc"));
-			bean.setUrl(ParamUtil.getParameter(req, "url"));
-			bean.setSort(ParamUtil.getIntParameter(req, "sort", 0));
-			bean.setImagePath(ParamUtil.getParameter(req, "imagePath"));
-			bean.setShowMenu(ParamUtil.getIntParameter(req, "showMenu", 0));
-			bean.setShowType(req.getParameter("showType"));
-			bean.setUpdateBy(RequestUtils.getActorId(req));
-			bean.setLocked(ParamUtil.getIntParameter(req, "locked", 0));
+			bean.setName(ParamUtil.getParameter(request, "name"));
+			bean.setCode(ParamUtil.getParameter(request, "code"));
+			bean.setDesc(ParamUtil.getParameter(request, "desc"));
+			bean.setUrl(ParamUtil.getParameter(request, "url"));
+			bean.setSort(ParamUtil.getIntParameter(request, "sort", 0));
+			bean.setImagePath(ParamUtil.getParameter(request, "imagePath"));
+			bean.setShowMenu(ParamUtil.getIntParameter(request, "showMenu", 0));
+			bean.setShowType(request.getParameter("showType"));
+			bean.setUpdateBy(RequestUtils.getActorId(request));
+			bean.setLocked(ParamUtil.getIntParameter(request, "locked", 0));
 		}
 		try {
 			sysApplicationService.update(bean);

@@ -13,7 +13,7 @@
 				   type: "POST",
 				   url: '${contextPath}/sys/application/save',
 				   data: params,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },
@@ -21,11 +21,13 @@
 					   if(data != null && data.message != null){
 						   alert(data.message);
 					   } else {
-						   alert('操作成功完成！');
-					   }
-					   if(refresh){
-					       window.parent.location.reload();
-					       window.close();
+						   if(data.statusCode == 200){
+						       alert('操作成功完成！');
+							   if(refresh){
+							      window.parent.location.reload();
+					              window.close();
+							   }
+						   }
 					   }
 				   }
 			 });
@@ -38,7 +40,7 @@
 				   type: "POST",
 				   url: '${contextPath}/sys/application/save',
 				   data: params,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },
@@ -46,12 +48,12 @@
 					   if(data != null && data.message != null){
 						   alert(data.message);
 					   } else {
-						   alert('操作成功完成！');
-					   }
-					   if(data.statusCode == 200){
-						   window.parent.location.reload();
-					       window.close();
-					   }  
+						   if(data.statusCode == 200){
+							   alert('操作成功完成！');
+						       window.parent.location.reload();
+					           window.close();
+					       }
+					   }    
 				   }
 			 });
 	}

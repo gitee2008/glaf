@@ -143,7 +143,7 @@ public class TableDataDeleteController {
 								}
 								break;
 							case 4:// 两周内可以删除
-								if ((DateUtils.getNowYearMonthDay() - DateUtils.getYearMonthDay(createDate)) <= 14) {
+								if (DateUtils.getDaysBetween(createDate, new Date()) <= 14) {
 									canDelete = true;
 								}
 								break;

@@ -132,4 +132,11 @@ public class SqlParameter implements java.io.Serializable, Parameter {
 		this.stringVal = stringVal;
 	}
 
+	@Override
+	public String toString() {
+		return "SqlParameter [id=" + id + ", name=" + name + ", autoTypeConvert=" + autoTypeConvert + ", dateVal="
+				+ dateVal + ", doubleVal=" + doubleVal + ", intVal=" + intVal + ", longVal=" + longVal + ", stringVal="
+				+ stringVal + "]";
+	}
+
 }

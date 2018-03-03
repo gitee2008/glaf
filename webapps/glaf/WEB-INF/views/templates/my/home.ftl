@@ -36,9 +36,9 @@
     <!-- Logo -->
     <a href="index2.html" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>RH</b></span>
+      <span class="logo-mini"><b>GLAF</b></span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>仁禾科技</b></span>
+      <span class="logo-lg"><b>GLAF应用开发平台</b></span>
     </a>
 
     <!-- Header Navbar: style can be found in header.less -->
@@ -455,8 +455,11 @@
 <script src="${request.contextPath}/static/AdminLTE/dist/js/demo.js"></script>
 <script type="text/javascript">
 
-    var x_height = Math.floor(window.screen.height * 0.82);
-    var x_width = Math.floor(window.screen.width * 0.84);
+    //var x_height = Math.floor(window.screen.height * 0.82);
+    //var x_width = Math.floor(window.screen.width * 0.84);
+    
+    var x_height = $(window).height()-53;
+    var x_width = $(window).width()-243;
 
 	function openUrl(url){
 		var mainContent = document.getElementById("mainContent");

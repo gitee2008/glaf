@@ -1,6 +1,0 @@
-<taskListeners>
-
-	<taskListener element="extensionTaskInstanceListener"
-		class="com.glaf.flowable.tasklistener.ExtensionTaskCreateListener" />
-
-</taskListeners>
