@@ -48,7 +48,7 @@ public class MyShiroFilterFactoryBean extends ShiroFilterFactoryBean {
 				|| StringUtils.equalsIgnoreCase(System.getProperty("RunEnvironment"), "product")
 				|| StringUtils.equalsIgnoreCase(System.getenv("RunEnvironment"), "product")) {
 			filterChainDefinitionMap.put("/sys/**", "authc,perms[SystemAdministrator]");
-			filterChainDefinitionMap.put("/dataset/**", "authc,perms[SystemAdministrator]");
+			filterChainDefinitionMap.put("/system/**", "authc,perms[SystemAdministrator]");
 			filterChainDefinitionMap.put("/sql/query/**", "authc,perms[SystemAdministrator]");
 			filterChainDefinitionMap.put("/sql/definition/**", "authc,perms[SystemAdministrator]");
 			filterChainDefinitionMap.put("/sys/**", "authc,perms[SystemAdministrator]");

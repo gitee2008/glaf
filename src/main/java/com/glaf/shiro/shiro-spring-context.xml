@@ -18,13 +18,6 @@
 		<property name="cacheManager" ref="ehCacheManager" />
 	</bean>
 
-	<!--<bean id="shiroCacheManager" class="com.glaf.shiro.cache.guava.GuavaCacheManager"> 
-		<property name="cacheSize" value="100000" /> <property name="expireMinutes" 
-		value="720" /> </bean> -->
-
-	<!--<bean id="shiroCacheManager" class="com.glaf.shiro.cache.zookeeper.ZooKeeperCacheManager"> 
-		</bean> -->
-
 	<!--<bean id="shiroCacheManager" class="com.glaf.shiro.cache.redis.RedisCacheManager"> 
 		</bean> -->
 

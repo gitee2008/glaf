@@ -26,6 +26,4 @@
 
 	<import resource="classpath*:com/glaf/**/*-spring-context.xml" />
 
-	<!-- <import resource="spring-shiro.xml" /> --> 
-
 </beans>
