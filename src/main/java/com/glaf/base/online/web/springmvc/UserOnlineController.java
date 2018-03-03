@@ -58,7 +58,7 @@ public class UserOnlineController {
 
 	@RequestMapping("/doKickOut")
 	@ResponseBody
-	public void doKickOut(HttpServletRequest request, HttpServletResponse response) {
+	public byte[] doKickOut(HttpServletRequest request) {
 		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		if (loginContext.isSystemAdministrator()) {
 			String actorId = request.getParameter("actorId");
@@ -70,15 +70,17 @@ public class UserOnlineController {
 					cacheKey = Constants.CACHE_USER_KEY + actorId;
 					CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 					logger.info("用户" + actorId + "已经下线！");
+					return ResponseUtils.responseJsonResult(true);
 				} catch (Exception ex) {
 				}
 			}
 		}
+		return ResponseUtils.responseJsonResult(false);
 	}
 
 	@RequestMapping("/doRemain")
 	@ResponseBody
-	public void doRemain(HttpServletRequest request, HttpServletResponse response) {
+	public byte[] doRemain(HttpServletRequest request, HttpServletResponse response) {
 		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		if (loginContext != null) {
 			String actorId = loginContext.getActorId();
@@ -87,6 +89,7 @@ public class UserOnlineController {
 				if (userOnline != null) {
 					// 如果有在线信息，更新检查时间
 					userOnlineService.remain(loginContext.getActorId());
+					return ResponseUtils.responseJsonResult(true);
 				} else {
 					// 如果被踢出的用户不是系统管理员，注销用户
 					if (!loginContext.isSystemAdministrator()) {
@@ -101,6 +104,7 @@ public class UserOnlineController {
 							CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 							// com.glaf.shiro.ShiroSecurity.logout();
 							logger.info("用户" + actorId + "已经下线！");
+							return ResponseUtils.responseJsonResult(true);
 						} catch (Exception ex) {
 						}
 					}
@@ -108,11 +112,12 @@ public class UserOnlineController {
 			} catch (Exception ex) {
 			}
 		}
+		return ResponseUtils.responseJsonResult(false);
 	}
 
 	@RequestMapping("/json")
 	@ResponseBody
-	public byte[] json(HttpServletRequest request, ModelMap modelMap) throws IOException {
+	public byte[] json(HttpServletRequest request) throws IOException {
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
 		UserOnlineQuery query = new UserOnlineQuery();
 		Tools.populate(query, params);
