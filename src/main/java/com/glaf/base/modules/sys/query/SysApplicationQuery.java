@@ -34,6 +34,7 @@ public class SysApplicationQuery extends DataQuery {
 	protected Integer sortGreaterThanOrEqual;
 	protected Integer sortLessThan;
 	protected Integer sortLessThanOrEqual;
+	protected String sysFlag;
 	protected String treeIdLeftLike;
 	protected String treeIdRightLike;
 	protected String urlLike;
@@ -149,6 +150,10 @@ public class SysApplicationQuery extends DataQuery {
 		return sortLessThanOrEqual;
 	}
 
+	public String getSysFlag() {
+		return sysFlag;
+	}
+
 	public String getTreeIdLeftLike() {
 		if (treeIdLeftLike != null && treeIdLeftLike.trim().length() > 0) {
 			if (!treeIdLeftLike.endsWith("%")) {
@@ -261,6 +266,10 @@ public class SysApplicationQuery extends DataQuery {
 		this.sortLessThanOrEqual = sortLessThanOrEqual;
 	}
 
+	public void setSysFlag(String sysFlag) {
+		this.sysFlag = sysFlag;
+	}
+
 	public void setTreeIdLeftLike(String treeIdLeftLike) {
 		this.treeIdLeftLike = treeIdLeftLike;
 	}
@@ -294,6 +303,14 @@ public class SysApplicationQuery extends DataQuery {
 			throw new RuntimeException("sort is null");
 		}
 		this.sortLessThanOrEqual = sortLessThanOrEqual;
+		return this;
+	}
+
+	public SysApplicationQuery sysFlag(String sysFlag) {
+		if (sysFlag == null) {
+			throw new RuntimeException("sysFlag is null");
+		}
+		this.sysFlag = sysFlag;
 		return this;
 	}
 

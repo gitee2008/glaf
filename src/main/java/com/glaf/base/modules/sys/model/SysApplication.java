@@ -108,6 +108,12 @@ public class SysApplication implements Serializable, JSONable, TreeModel {
 	protected String showType;
 
 	/**
+	 * 系统标识
+	 */
+	@Column(name = "SYSFLAG_", length = 1)
+	protected String sysFlag;
+
+	/**
 	 * 序号
 	 */
 	@Column(name = "SORTNO")
@@ -306,6 +312,10 @@ public class SysApplication implements Serializable, JSONable, TreeModel {
 		return sort;
 	}
 
+	public String getSysFlag() {
+		return sysFlag;
+	}
+
 	public String getTreeId() {
 		return treeId;
 	}
@@ -441,6 +451,10 @@ public class SysApplication implements Serializable, JSONable, TreeModel {
 
 	public void setSortNo(int sortNo) {
 		this.sort = sortNo;
+	}
+
+	public void setSysFlag(String sysFlag) {
+		this.sysFlag = sysFlag;
 	}
 
 	public void setTreeId(String treeId) {

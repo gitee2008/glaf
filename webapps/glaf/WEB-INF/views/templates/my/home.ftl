@@ -34,11 +34,17 @@
   <header class="main-header">
 
     <!-- Logo -->
-    <a href="index2.html" class="logo">
+    <a href="#" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>GLAF</b></span>
+      <span class="logo-mini"><b>GH</b></span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>GLAF应用开发平台</b></span>
+      <span class="logo-lg">
+	  <#if res_logo?exists>
+      <img src="${request.contextPath}/${res_logo}">
+	  <#else>
+	  <b>GLAF</b>
+	  </#if>
+	  </span>
     </a>
 
     <!-- Header Navbar: style can be found in header.less -->
@@ -47,6 +53,7 @@
       <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
         <span class="sr-only">收缩导航</span>
       </a>
+	  <span class="logo-lg" style="font-family:微软雅黑; font-weight:bold; font-size:20px; margin-top:8px; color:#ffffff; line-height: 45px;">${sys_title}</span>
       <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
@@ -222,7 +229,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="${request.contextPath}/my/main"><i class="fa fa-circle-o"></i>框架1</a></li>
+            <li><a href="${request.contextPath}/my/home"><i class="fa fa-circle-o"></i>框架1</a></li>
             <li class="active"><a href="${request.contextPath}/my/home"><i class="fa fa-circle-o"></i>当前</a></li>
           </ul>
         </li> -->

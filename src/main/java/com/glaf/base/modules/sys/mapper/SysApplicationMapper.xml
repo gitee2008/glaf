@@ -20,6 +20,7 @@
 		<result property="sort" column="SORTNO" jdbcType="INTEGER" />
 		<result property="showMenu" column="SHOWMENU" jdbcType="INTEGER" />
 		<result property="showType" column="SHOWTYPE" jdbcType="VARCHAR" />
+		<result property="sysFlag" column="SYSFLAG_" jdbcType="VARCHAR" />
 		<result property="parentId" column="PARENTID" jdbcType="BIGINT" />
 		<result property="locked" column="LOCKED" jdbcType="INTEGER" />
 		<result property="imagePath" column="IMAGEPATH" jdbcType="VARCHAR" />
@@ -78,6 +79,9 @@
 			</if>
 			<if test="showType != null">
 				,SHOWTYPE
+			</if>
+			<if test="sysFlag != null">
+				,SYSFLAG_
 			</if>
 			<if test="parentId != null">
 				,PARENTID
@@ -149,6 +153,9 @@
 			</if>
 			<if test="showType != null">
 				,#{showType, jdbcType=VARCHAR}
+			</if>
+			<if test="sysFlag != null">
+				,#{sysFlag, jdbcType=VARCHAR}
 			</if>
 			<if test="parentId != null">
 				,#{parentId, jdbcType=BIGINT}
@@ -455,6 +462,10 @@
 
 			<if test="showMenu != null">
 				and E.SHOWMENU = #{showMenu}
+			</if>
+
+			<if test="sysFlag != null and sysFlag != '' ">
+				and E.SYSFLAG_ = #{sysFlag}
 			</if>
 
 			<if test="locked != null">

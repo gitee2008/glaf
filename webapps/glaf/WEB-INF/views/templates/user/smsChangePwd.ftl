@@ -43,7 +43,7 @@
 						   alert('操作成功完成！');
 					   }
 					   if(data.statusCode == 200){
-						   window.location.href="${contextPath}/my/main";
+						   window.location.href="${contextPath}/my/home";
 					   }  
 				   }
 			 });

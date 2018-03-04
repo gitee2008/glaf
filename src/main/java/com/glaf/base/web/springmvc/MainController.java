@@ -45,7 +45,7 @@ public class MainController {
 			return;
 		}
 
-		response.sendRedirect(request.getContextPath() + "/my/main");
+		response.sendRedirect(request.getContextPath() + "/my/home");
 	}
 
 }

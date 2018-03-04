@@ -109,6 +109,9 @@ public class MyHomeController {
 			}
 		}
 
+		String res_logo = SystemConfig.getString("res_logo");
+		request.setAttribute("res_logo", res_logo);
+
 		long parentId = RequestUtils.getLong(request, "parentId", 3);
 
 		List<SysApplication> apps = null;

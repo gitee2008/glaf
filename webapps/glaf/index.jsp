@@ -6,7 +6,7 @@
   if (user != null) {
 %>
 <script type="text/javascript">
-   location.href="<%=request.getContextPath()%>/my/main";
+   location.href="<%=request.getContextPath()%>/my/home";
 </script>
 <% } else {%>
 <script type="text/javascript">

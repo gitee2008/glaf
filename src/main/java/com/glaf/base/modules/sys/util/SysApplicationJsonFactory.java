@@ -85,6 +85,9 @@ public class SysApplicationJsonFactory {
 		if (jsonObject.containsKey("showType")) {
 			model.setShowType(jsonObject.getString("showType"));
 		}
+		if (jsonObject.containsKey("sysFlag")) {
+			model.setSysFlag(jsonObject.getString("sysFlag"));
+		}
 		if (jsonObject.containsKey("sort")) {
 			model.setSort(jsonObject.getInteger("sort"));
 		}
@@ -158,6 +161,9 @@ public class SysApplicationJsonFactory {
 		if (model.getShowType() != null) {
 			jsonObject.put("showType", model.getShowType());
 		}
+		if (model.getSysFlag() != null) {
+			jsonObject.put("sysFlag", model.getSysFlag());
+		}
 		jsonObject.put("sort", model.getSort());
 		if (model.getUrl() != null) {
 			jsonObject.put("url", model.getUrl());
@@ -220,6 +226,9 @@ public class SysApplicationJsonFactory {
 		jsonObject.put("showMenu", model.getShowMenu());
 		if (model.getShowType() != null) {
 			jsonObject.put("showType", model.getShowType());
+		}
+		if (model.getSysFlag() != null) {
+			jsonObject.put("sysFlag", model.getSysFlag());
 		}
 		jsonObject.put("sort", model.getSort());
 		if (model.getUrl() != null) {

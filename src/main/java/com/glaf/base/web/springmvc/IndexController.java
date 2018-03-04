@@ -44,7 +44,7 @@ public class IndexController {
 			return;
 		}
 
-		response.sendRedirect(request.getContextPath() + "/my/main");
+		response.sendRedirect(request.getContextPath() + "/my/home");
 	}
 
 }

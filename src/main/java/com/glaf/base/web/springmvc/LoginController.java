@@ -318,7 +318,7 @@ public class LoginController {
 			}
 
 			try {
-				response.sendRedirect(request.getContextPath() + "/my/main");
+				response.sendRedirect(request.getContextPath() + "/my/home");
 			} catch (IOException e) {
 			}
 			return null;
