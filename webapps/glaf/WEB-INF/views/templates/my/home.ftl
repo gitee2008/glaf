@@ -28,7 +28,7 @@
   <![endif]-->
 
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini fixed">
 <div class="wrapper">
 
   <header class="main-header">
@@ -315,6 +315,7 @@
     <div class="tab-content">
       <!-- Home tab content -->
       <div class="tab-pane" id="control-sidebar-home-tab">
+      	<!-- 
         <h3 class="control-sidebar-heading">Tasks Progress</h3>
         <ul class="control-sidebar-menu">
           <li>
@@ -366,6 +367,7 @@
             </a>
           </li>
         </ul>
+        -->
         <!-- /.control-sidebar-menu -->
 
       </div>
@@ -373,6 +375,7 @@
 
       <!-- Settings tab content -->
       <div class="tab-pane" id="control-sidebar-settings-tab">
+      <!-- 
         <form method="post">
           <h3 class="control-sidebar-heading">General Settings</h3>
 
@@ -386,7 +389,6 @@
               Some information about this general settings option
             </p>
           </div>
-          <!-- /.form-group -->
 
           <div class="form-group">
             <label class="control-sidebar-subheading">
@@ -398,7 +400,6 @@
               Other sets of options are available
             </p>
           </div>
-          <!-- /.form-group -->
 
           <div class="form-group">
             <label class="control-sidebar-subheading">
@@ -410,7 +411,6 @@
               Allow the user to show his name in blog posts
             </p>
           </div>
-          <!-- /.form-group -->
 
           <h3 class="control-sidebar-heading">Chat Settings</h3>
 
@@ -420,7 +420,6 @@
               <input type="checkbox" class="pull-right" checked>
             </label>
           </div>
-          <!-- /.form-group -->
 
           <div class="form-group">
             <label class="control-sidebar-subheading">
@@ -428,7 +427,6 @@
               <input type="checkbox" class="pull-right">
             </label>
           </div>
-          <!-- /.form-group -->
 
           <div class="form-group">
             <label class="control-sidebar-subheading">
@@ -436,8 +434,8 @@
               <a href="javascript:void(0)" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
             </label>
           </div>
-          <!-- /.form-group -->
         </form>
+        -->
       </div>
       <!-- /.tab-pane -->
     </div>
@@ -456,8 +454,9 @@
 <script src="${request.contextPath}/static/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="${request.contextPath}/static/AdminLTE/dist/js/adminlte.min.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<!-- AdminLTE dashboard demo (This is only for demo purposes) 
 <script src="${request.contextPath}/static/AdminLTE/dist/js/pages/dashboard2.js"></script>
+-->
 <!-- AdminLTE for demo purposes -->
 <script src="${request.contextPath}/static/AdminLTE/dist/js/demo.js"></script>
 <script type="text/javascript">
@@ -465,8 +464,9 @@
     //var x_height = Math.floor(window.screen.height * 0.82);
     //var x_width = Math.floor(window.screen.width * 0.84);
     
-    var x_height = $(window).height()-53;
-    var x_width = $(window).width()-243;
+    var x_height = $(window).height()- $(".main-header").outerHeight() - $(".main-footer").outerHeight() -5;
+    var x_width = $(window).width() - $(".main-sidebar").outerWidth() -5 ;
+    x_width = '100%';
 
 	function openUrl(url){
 		var mainContent = document.getElementById("mainContent");
