@@ -10,10 +10,18 @@
 		<setting name="logImpl" value="LOG4J" />
 	</settings>
 
-	<plugins>
+	<!-- <plugins>
 		<plugin interceptor="com.glaf.core.entity.mybatis.MyBatisOffsetLimitInterceptor">
 			<property name="dialectClass" value="com.glaf.core.dialect.MySQLDialect" />
 		</plugin>
-	</plugins>
+	</plugins> -->
+
+	<!-- 配置分页插件 -->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!-- 设置数据库类型 oracle,mysql,mariadb,sqlite,hsqldb,postgresql六种数据库-->
+            <!-- <property name="helperDialect" value="mysql"/> -->
+        </plugin>
+    </plugins>
 
 </configuration>
