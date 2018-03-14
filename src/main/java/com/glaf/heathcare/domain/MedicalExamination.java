@@ -464,6 +464,12 @@ public class MedicalExamination implements Serializable, JSONable {
 	protected String birthDefect;
 
 	/**
+	 * 既往史
+	 */
+	@Column(name = "PREVIOUSHISTORY_", length = 500)
+	protected String previousHistory;
+
+	/**
 	 * 健康评价
 	 */
 	@Column(name = "HEALTHEVALUATE_", length = 500)
@@ -924,6 +930,10 @@ public class MedicalExamination implements Serializable, JSONable {
 		return pharyngealRemark;
 	}
 
+	public String getPreviousHistory() {
+		return previousHistory;
+	}
+
 	public String getPudendum() {
 		return this.pudendum;
 	}
@@ -1294,6 +1304,10 @@ public class MedicalExamination implements Serializable, JSONable {
 
 	public void setPharyngealRemark(String pharyngealRemark) {
 		this.pharyngealRemark = pharyngealRemark;
+	}
+
+	public void setPreviousHistory(String previousHistory) {
+		this.previousHistory = previousHistory;
 	}
 
 	public void setPudendum(String pudendum) {

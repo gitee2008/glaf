@@ -27,6 +27,8 @@ import com.glaf.base.modules.InitDataBean;
 import com.glaf.base.modules.sys.business.SqlUpdateBean;
 import com.glaf.base.modules.sys.model.SysUser;
 import com.glaf.base.modules.sys.service.SysUserService;
+import com.glaf.base.modules.sys.util.PinyinUtils;
+
 import com.glaf.core.context.ContextFactory;
 import com.glaf.core.util.security.AESUtils;
 
@@ -92,5 +94,37 @@ public class InitBaseDataServlet extends HttpServlet {
 			logger.error("初始化数据失败！");
 		}
 		logger.info("耗时：" + (System.currentTimeMillis() - startTime) + " ms.");
+
+		try {
+			logger.info("------------update tree pinyin-------------------");
+			PinyinUtils.processSysTree();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			logger.error("更新树结构错误！");
+		}
+
+		try {
+			logger.info("------------update department pinyin---------------");
+			PinyinUtils.processSysDepartment();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			logger.error("更新部门数据错误！");
+		}
+
+		try {
+			logger.info("------------update tenant pinyin-------------------");
+			PinyinUtils.processSysTenant();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			logger.error("更新租户错误！");
+		}
+
+		try {
+			logger.info("------------update user pinyin---------------");
+			PinyinUtils.processSysUser();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			logger.error("更新用户数据错误！");
+		}
 	}
 }

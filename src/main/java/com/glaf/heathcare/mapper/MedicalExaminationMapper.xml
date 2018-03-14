@@ -104,6 +104,8 @@
 		<result property="tonsil" column="TONSIL_" jdbcType="VARCHAR" />
 		<result property="bone" column="BONE_" jdbcType="VARCHAR" />
 		<result property="birthDefect" column="BIRTHDEFECT_" jdbcType="VARCHAR" />
+		<result property="previousHistory" column="PREVIOUSHISTORY_"
+			jdbcType="VARCHAR" />
 		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
 		<result property="healthEvaluate" column="HEALTHEVALUATE_"
 			jdbcType="VARCHAR" />
@@ -277,6 +279,9 @@
 			</if>
 			<if test="birthDefect != null">
 				,BIRTHDEFECT_
+			</if>
+			<if test="previousHistory != null">
+				,PREVIOUSHISTORY_
 			</if>
 			<if test="type != null">
 				,TYPE_
@@ -478,6 +483,9 @@
 			<if test="birthDefect != null">
 				,#{birthDefect, jdbcType=VARCHAR}
 			</if>
+			<if test="previousHistory != null">
+				,#{previousHistory, jdbcType=VARCHAR}
+			</if>
 			<if test="type != null">
 				,#{type, jdbcType=VARCHAR}
 			</if>
@@ -596,6 +604,7 @@
 		,BONE_
 		,BONEREMARK_
 		,BIRTHDEFECT_
+		,PREVIOUSHISTORY_
 		,HEMOGLOBIN_
 		,HEMOGLOBIN_VALUE_
 		,ALT_
@@ -686,6 +695,7 @@
 			,#{medicalExamination.bone, jdbcType=VARCHAR}
 			,#{medicalExamination.boneRemark, jdbcType=VARCHAR}
 			,#{medicalExamination.birthDefect, jdbcType=VARCHAR}
+			,#{person.previousHistory, jdbcType=VARCHAR}
 			,#{medicalExamination.hemoglobin, jdbcType=VARCHAR}
 			,#{medicalExamination.hemoglobinValue, jdbcType=DOUBLE}
 			,#{medicalExamination.alt, jdbcType=VARCHAR}
@@ -781,6 +791,7 @@
 			,BONE_
 			,BONEREMARK_
 			,BIRTHDEFECT_
+			,PREVIOUSHISTORY_
 			,HEMOGLOBIN_
 			,HEMOGLOBIN_VALUE_
 			,ALT_
@@ -868,6 +879,7 @@
 			,#{medicalExamination.bone, jdbcType=VARCHAR}
 			,#{medicalExamination.boneRemark, jdbcType=VARCHAR}
 			,#{medicalExamination.birthDefect, jdbcType=VARCHAR}
+			,#{person.previousHistory, jdbcType=VARCHAR}
 			,#{medicalExamination.hemoglobin, jdbcType=VARCHAR}
 			,#{medicalExamination.hemoglobinValue, jdbcType=DOUBLE}
 			,#{medicalExamination.alt, jdbcType=VARCHAR}
@@ -1107,6 +1119,9 @@
 			</if>
 			<if test="birthDefect != null">
 				BIRTHDEFECT_ = #{birthDefect, jdbcType=VARCHAR},
+			</if>
+			<if test="previousHistory != null">
+				PREVIOUSHISTORY_ = #{previousHistory, jdbcType=VARCHAR},
 			</if>
 			<if test="healthEvaluate != null">
 				HEALTHEVALUATE_ = #{healthEvaluate, jdbcType=VARCHAR},

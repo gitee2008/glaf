@@ -243,7 +243,7 @@ public class SysTenantServiceImpl implements SysTenantService {
 		}
 
 		user.setUserType(8);// 租户用户
-		user.setAccountType(10000);// 注册用户即为租户管理员
+		user.setAccountType(10000);// 注册用户即为管理员
 		user.setEvection(0);
 		user.setCreateBy("web");
 		user.setCreateDate(new Date());
@@ -295,7 +295,7 @@ public class SysTenantServiceImpl implements SysTenantService {
 			SysUser bean = new SysUser();
 			bean.setActorId(userId);
 			bean.setPasswordHash(userId);
-			bean.setName("租户管理员");
+			bean.setName("管理员");
 			bean.setAccountType(10000);
 			bean.setUserType(8);
 			bean.setEvection(0);

@@ -76,8 +76,7 @@ public class ColumnTransformController {
 			while (token.hasMoreTokens()) {
 				String x = token.nextToken();
 				if (StringUtils.isNotEmpty(x)) {
-					ColumnTransform columnTransform = columnTransformService
-							.getColumnTransform(Long.valueOf(x));
+					ColumnTransform columnTransform = columnTransformService.getColumnTransform(Long.valueOf(x));
 					if (columnTransform != null
 							&& (StringUtils.equals(columnTransform.getCreateBy(), loginContext.getActorId())
 									|| loginContext.isSystemAdministrator())) {
@@ -87,11 +86,9 @@ public class ColumnTransformController {
 			}
 			return ResponseUtils.responseResult(true);
 		} else if (id != null) {
-			ColumnTransform columnTransform = columnTransformService
-					.getColumnTransform(Long.valueOf(id));
-			if (columnTransform != null
-					&& (StringUtils.equals(columnTransform.getCreateBy(), loginContext.getActorId())
-							|| loginContext.isSystemAdministrator())) {
+			ColumnTransform columnTransform = columnTransformService.getColumnTransform(Long.valueOf(id));
+			if (columnTransform != null && (StringUtils.equals(columnTransform.getCreateBy(), loginContext.getActorId())
+					|| loginContext.isSystemAdministrator())) {
 				columnTransformService.deleteById(id);
 				return ResponseUtils.responseResult(true);
 			}
@@ -214,8 +211,7 @@ public class ColumnTransformController {
 				}
 			}
 
-			List<ColumnTransform> list = columnTransformService
-					.getColumnTransformsByQueryCriteria(start, limit, query);
+			List<ColumnTransform> list = columnTransformService.getColumnTransformsByQueryCriteria(start, limit, query);
 
 			if (list != null && !list.isEmpty()) {
 				JSONArray rowsJSON = new JSONArray();
@@ -272,12 +268,13 @@ public class ColumnTransformController {
 		User user = RequestUtils.getUser(request);
 		String actorId = user.getActorId();
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
-		ColumnTransform columnTransform = new ColumnTransform();
 		try {
-			Tools.populate(columnTransform, params);
 			TableTransform tableTransform = tableTransformService
 					.getTableTransform(request.getParameter("transformId"));
-			if (tableTransform != null) {
+			if (tableTransform != null && StringUtils.isNotEmpty(tableTransform.getTableName())) {
+				ColumnTransform columnTransform = new ColumnTransform();
+				Tools.populate(columnTransform, params);
+
 				columnTransform.setId(RequestUtils.getLong(request, "id"));
 				columnTransform.setName(request.getParameter("name"));
 				columnTransform.setTitle(request.getParameter("title"));
@@ -344,8 +341,7 @@ public class ColumnTransformController {
 		columnTransform.setSqlCriteria(request.getParameter("sqlCriteria"));
 		columnTransform.setCondition(request.getParameter("condition"));
 		columnTransform.setExpression(request.getParameter("expression"));
-		columnTransform
-				.setTransformIfTargetColumnNotEmpty(request.getParameter("transformIfTargetColumnNotEmpty"));
+		columnTransform.setTransformIfTargetColumnNotEmpty(request.getParameter("transformIfTargetColumnNotEmpty"));
 		columnTransform.setSort(RequestUtils.getInt(request, "sort"));
 		columnTransform.setLocked(RequestUtils.getInt(request, "locked"));
 		columnTransform.setType(request.getParameter("type"));

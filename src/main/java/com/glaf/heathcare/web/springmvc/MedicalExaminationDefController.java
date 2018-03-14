@@ -326,6 +326,14 @@ public class MedicalExaminationDefController {
 	@ResponseBody
 	@RequestMapping("/saveMedicalExaminationDef")
 	public byte[] saveMedicalExaminationDef(HttpServletRequest request) {
+		String type = request.getParameter("type");
+		if (StringUtils.isEmpty(type)) {
+			return ResponseUtils.responseJsonResult(false, "类型必须输入。");
+		}
+		String title = request.getParameter("title");
+		if (StringUtils.isEmpty(title)) {
+			return ResponseUtils.responseJsonResult(false, "名称必须输入。");
+		}
 		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		String actorId = loginContext.getActorId();
 		long id = RequestUtils.getLong(request, "id");

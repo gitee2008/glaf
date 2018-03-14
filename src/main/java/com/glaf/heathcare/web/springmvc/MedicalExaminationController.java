@@ -1328,6 +1328,7 @@ public class MedicalExaminationController {
 			medicalExamination.setBone(request.getParameter("bone"));
 			medicalExamination.setBoneRemark(request.getParameter("boneRemark"));
 			medicalExamination.setBirthDefect(request.getParameter("birthDefect"));
+			medicalExamination.setPreviousHistory(request.getParameter("previousHistory"));
 			medicalExamination.setHemoglobin(request.getParameter("hemoglobin"));
 			medicalExamination.setHemoglobinValue(RequestUtils.getDouble(request, "hemoglobinValue"));
 			medicalExamination.setAlt(request.getParameter("alt"));

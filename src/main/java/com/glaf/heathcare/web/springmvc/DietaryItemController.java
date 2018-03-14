@@ -487,6 +487,10 @@ public class DietaryItemController {
 		 */
 		if (loginContext.isSystemAdministrator() || loginContext.getRoles().contains("HealthPhysician")
 				|| loginContext.getRoles().contains("TenantAdmin")) {
+			String name = request.getParameter("name");
+			if (StringUtils.isEmpty(name)) {
+				return ResponseUtils.responseJsonResult(false, "名称必须输入。");
+			}
 			String actorId = loginContext.getActorId();
 			Map<String, Object> params = RequestUtils.getParameterMap(request);
 			logger.debug("params:" + params);

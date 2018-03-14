@@ -291,15 +291,6 @@ public class GoodsInStockController {
 				RequestUtils.getLong(request, "id"));
 		if (goodsInStock != null) {
 			request.setAttribute("goodsInStock", goodsInStock);
-			request.setAttribute("status_enc",
-					RSAUtils.encryptString(String.valueOf(goodsInStock.getBusinessStatus())));
-			logger.debug("status_enc:" + request.getAttribute("status_enc"));
-			logger.debug("status->" + RSAUtils.decryptString((String) request.getAttribute("status_enc")));
-			if (goodsInStock.getBusinessStatus() != 9) {
-				if (StringUtils.equals(request.getParameter("audit"), "true")) {
-					request.setAttribute("status_enc", RSAUtils.encryptString(String.valueOf("2")));
-				}
-			}
 			if (goodsInStock.getGoodsId() > 0) {
 				FoodComposition foodComposition = foodCompositionService.getFoodComposition(goodsInStock.getGoodsId());
 				if (foodComposition != null) {

@@ -103,6 +103,7 @@ public class MedicalExaminationDomainFactory {
 		columnMap.put("bone", "BONE_");
 		columnMap.put("boneRemark", "BONEREMARK_");
 		columnMap.put("birthDefect", "BIRTHDEFECT_");
+		columnMap.put("previousHistory", "PREVIOUSHISTORY_");
 		columnMap.put("hemoglobin", "HEMOGLOBIN_");
 		columnMap.put("hemoglobinValue", "HEMOGLOBIN_VALUE_");
 		columnMap.put("alt", "ALT_");
@@ -190,6 +191,7 @@ public class MedicalExaminationDomainFactory {
 		javaTypeMap.put("bone", "String");
 		javaTypeMap.put("boneRemark", "String");
 		javaTypeMap.put("birthDefect", "String");
+		javaTypeMap.put("previousHistory", "String");
 		javaTypeMap.put("hemoglobin", "String");
 		javaTypeMap.put("hemoglobinValue", "Double");
 		javaTypeMap.put("alt", "String");
@@ -645,6 +647,13 @@ public class MedicalExaminationDomainFactory {
 		birthDefect.setJavaType("String");
 		birthDefect.setLength(200);
 		tableDefinition.addColumn(birthDefect);
+
+		ColumnDefinition previousHistory = new ColumnDefinition();
+		previousHistory.setName("previousHistory");
+		previousHistory.setColumnName("PREVIOUSHISTORY_");
+		previousHistory.setJavaType("String");
+		previousHistory.setLength(500);
+		tableDefinition.addColumn(previousHistory);
 
 		ColumnDefinition hemoglobin = new ColumnDefinition();
 		hemoglobin.setName("hemoglobin");

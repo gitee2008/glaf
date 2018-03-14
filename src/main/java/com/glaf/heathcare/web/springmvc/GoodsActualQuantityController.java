@@ -56,13 +56,16 @@ import com.glaf.core.util.Tools;
 
 import com.glaf.heathcare.SysConfig;
 import com.glaf.heathcare.bean.DayFoodActualQuantityStatisticsBean;
+import com.glaf.heathcare.domain.ActualRepastPerson;
 import com.glaf.heathcare.domain.FoodComposition;
 import com.glaf.heathcare.domain.GoodsActualQuantity;
 import com.glaf.heathcare.domain.GoodsOutStock;
 import com.glaf.heathcare.domain.GoodsPlanQuantity;
+import com.glaf.heathcare.query.ActualRepastPersonQuery;
 import com.glaf.heathcare.query.GoodsActualQuantityQuery;
 import com.glaf.heathcare.query.GoodsOutStockQuery;
 import com.glaf.heathcare.query.GoodsPlanQuantityQuery;
+import com.glaf.heathcare.service.ActualRepastPersonService;
 import com.glaf.heathcare.service.DietaryService;
 import com.glaf.heathcare.service.FoodCompositionService;
 import com.glaf.heathcare.service.GoodsActualQuantityService;
@@ -81,6 +84,8 @@ public class GoodsActualQuantityController {
 	protected static final Log logger = LogFactory.getLog(GoodsActualQuantityController.class);
 
 	protected DietaryService dietaryService;
+
+	protected ActualRepastPersonService actualRepastPersonService;
 
 	protected FoodCompositionService foodCompositionService;
 
@@ -381,6 +386,7 @@ public class GoodsActualQuantityController {
 	public byte[] json(HttpServletRequest request, ModelMap modelMap) throws IOException {
 		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
+		logger.debug("params:" + params);
 		JSONObject result = new JSONObject();
 
 		GoodsActualQuantityQuery query = new GoodsActualQuantityQuery();
@@ -398,19 +404,31 @@ public class GoodsActualQuantityController {
 			}
 		}
 
+		String avgQuantity = request.getParameter("avgQuantity");
+		ActualRepastPersonQuery query2 = new ActualRepastPersonQuery();
+
 		Date usageTime = RequestUtils.getDate(request, "usageTime");
 		if (usageTime != null) {
 			query.fullDay(DateUtils.getYearMonthDay(usageTime));
+			query2.fullDay(DateUtils.getYearMonthDay(usageTime));
 		}
 
-		Date usageTime_start = RequestUtils.getDate(request, "startTime");
-		if (usageTime_start != null) {
-			query.usageTimeGreaterThanOrEqual(usageTime_start);
+		Date startTime = RequestUtils.getDate(request, "startTime");
+		if (startTime != null) {
+			query.usageTimeGreaterThanOrEqual(startTime);
+			query2.fullDayGreaterThanOrEqual(DateUtils.getYearMonthDay(startTime));
 		}
 
-		Date usageTime_end = RequestUtils.getEndDate(request, "endTime");
-		if (usageTime_end != null) {
-			query.usageTimeLessThanOrEqual(usageTime_end);
+		Date endTime = RequestUtils.getEndDate(request, "endTime");
+		if (endTime != null) {
+			query.usageTimeLessThanOrEqual(endTime);
+			query2.fullDayLessThanOrEqual(DateUtils.getYearMonthDay(endTime));
+		}
+
+		String showToday = request.getParameter("showToday");
+		if (StringUtils.isNotEmpty(showToday)) {
+			query.fullDay(DateUtils.getNowYearMonthDay());
+			query2.fullDay(DateUtils.getNowYearMonthDay());
 		}
 
 		int start = 0;
@@ -434,6 +452,21 @@ public class GoodsActualQuantityController {
 
 		int total = goodsActualQuantityService.getGoodsActualQuantityCountByQueryCriteria(query);
 		if (total > 0) {
+			Map<Integer, Integer> personCntMap = new HashMap<Integer, Integer>();
+			if (StringUtils.equals(avgQuantity, "on")) {
+				List<ActualRepastPerson> rows = actualRepastPersonService.list(query2);
+				if (rows != null && !rows.isEmpty()) {
+					for (ActualRepastPerson p : rows) {
+						Integer cnt = personCntMap.get(p.getFullDay());
+						if (cnt == null) {
+							cnt = new Integer(0);
+						}
+						cnt = cnt + p.getFemale() + p.getMale();
+						personCntMap.put(p.getFullDay(), cnt);
+					}
+				}
+			}
+
 			result.put("total", total);
 			result.put("totalCount", total);
 			result.put("totalRecords", total);
@@ -463,11 +496,20 @@ public class GoodsActualQuantityController {
 					JSONObject rowJSON = goodsActualQuantity.toJsonObject();
 					rowJSON.put("id", goodsActualQuantity.getId());
 					rowJSON.put("rowId", goodsActualQuantity.getId());
+					rowJSON.put("quantity", goodsActualQuantity.getQuantity() + "KG");
 					rowJSON.put("goodsActualQuantityId", goodsActualQuantity.getId());
 					rowJSON.put("startIndex", ++start);
 					User user = userMap.get(goodsActualQuantity.getConfirmBy());
 					if (user != null) {
 						rowJSON.put("confirmName", user.getName());
+					}
+					if (StringUtils.equals(avgQuantity, "on")) {
+						Integer cnt = personCntMap.get(goodsActualQuantity.getFullDay());
+						if (cnt != null && cnt.intValue() > 0) {
+							double avg = goodsActualQuantity.getQuantity() * 1000 / cnt;
+							avg = Math.round(avg * 10D) / 10D;
+							rowJSON.put("quantity", avg + "g");
+						}
 					}
 					rowsJSON.add(rowJSON);
 				}
@@ -523,6 +565,7 @@ public class GoodsActualQuantityController {
 	@ResponseBody
 	public byte[] reviewJson(HttpServletRequest request, ModelMap modelMap) throws IOException {
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
+		logger.debug("params:" + params);
 		JSONObject result = new JSONObject();
 
 		GoodsActualQuantityQuery query = new GoodsActualQuantityQuery();
@@ -532,19 +575,31 @@ public class GoodsActualQuantityController {
 		String tenantId = request.getParameter("tenantId");
 		query.tenantId(tenantId);
 
+		String avgQuantity = request.getParameter("avgQuantity");
+		ActualRepastPersonQuery query2 = new ActualRepastPersonQuery();
+
 		Date usageTime = RequestUtils.getDate(request, "usageTime");
 		if (usageTime != null) {
 			query.fullDay(DateUtils.getYearMonthDay(usageTime));
+			query2.fullDay(DateUtils.getYearMonthDay(usageTime));
 		}
 
-		Date usageTime_start = RequestUtils.getDate(request, "startTime");
-		if (usageTime_start != null) {
-			query.usageTimeGreaterThanOrEqual(usageTime_start);
+		Date startTime = RequestUtils.getDate(request, "startTime");
+		if (startTime != null) {
+			query.usageTimeGreaterThanOrEqual(startTime);
+			query2.fullDayGreaterThanOrEqual(DateUtils.getYearMonthDay(startTime));
 		}
 
-		Date usageTime_end = RequestUtils.getEndDate(request, "endTime");
-		if (usageTime_end != null) {
-			query.usageTimeLessThanOrEqual(usageTime_end);
+		Date endTime = RequestUtils.getEndDate(request, "endTime");
+		if (endTime != null) {
+			query.usageTimeLessThanOrEqual(endTime);
+			query2.fullDayLessThanOrEqual(DateUtils.getYearMonthDay(endTime));
+		}
+
+		String showToday = request.getParameter("showToday");
+		if (StringUtils.isNotEmpty(showToday)) {
+			query.fullDay(DateUtils.getNowYearMonthDay());
+			query2.fullDay(DateUtils.getNowYearMonthDay());
 		}
 
 		int start = 0;
@@ -568,6 +623,21 @@ public class GoodsActualQuantityController {
 
 		int total = goodsActualQuantityService.getGoodsActualQuantityCountByQueryCriteria(query);
 		if (total > 0) {
+			Map<Integer, Integer> personCntMap = new HashMap<Integer, Integer>();
+			if (StringUtils.equals(avgQuantity, "on")) {
+				List<ActualRepastPerson> rows = actualRepastPersonService.list(query2);
+				if (rows != null && !rows.isEmpty()) {
+					for (ActualRepastPerson p : rows) {
+						Integer cnt = personCntMap.get(p.getFullDay());
+						if (cnt == null) {
+							cnt = new Integer(0);
+						}
+						cnt = cnt + p.getFemale() + p.getMale();
+						personCntMap.put(p.getFullDay(), cnt);
+					}
+				}
+			}
+
 			result.put("total", total);
 			result.put("totalCount", total);
 			result.put("totalRecords", total);
@@ -597,11 +667,20 @@ public class GoodsActualQuantityController {
 					JSONObject rowJSON = goodsActualQuantity.toJsonObject();
 					rowJSON.put("id", goodsActualQuantity.getId());
 					rowJSON.put("rowId", goodsActualQuantity.getId());
+					rowJSON.put("quantity", goodsActualQuantity.getQuantity() + "KG");
 					rowJSON.put("goodsActualQuantityId", goodsActualQuantity.getId());
 					rowJSON.put("startIndex", ++start);
 					User user = userMap.get(goodsActualQuantity.getConfirmBy());
 					if (user != null) {
 						rowJSON.put("confirmName", user.getName());
+					}
+					if (StringUtils.equals(avgQuantity, "on")) {
+						Integer cnt = personCntMap.get(goodsActualQuantity.getFullDay());
+						if (cnt != null && cnt.intValue() > 0) {
+							double avg = goodsActualQuantity.getQuantity() * 1000 / cnt;
+							avg = Math.round(avg);
+							rowJSON.put("quantity", avg + "g");
+						}
 					}
 					rowsJSON.add(rowJSON);
 				}
@@ -775,6 +854,11 @@ public class GoodsActualQuantityController {
 		return ResponseUtils.responseJsonResult(false);
 	}
 
+	@javax.annotation.Resource(name = "com.glaf.heathcare.service.actualRepastPersonService")
+	public void setActualRepastPersonService(ActualRepastPersonService actualRepastPersonService) {
+		this.actualRepastPersonService = actualRepastPersonService;
+	}
+
 	@javax.annotation.Resource(name = "com.glaf.heathcare.service.dietaryService")
 	public void setDietaryService(DietaryService dietaryService) {
 		this.dietaryService = dietaryService;
@@ -883,6 +967,29 @@ public class GoodsActualQuantityController {
 		return new ModelAndView("/heathcare/goodsActualQuantity/showDayExport");
 	}
 
+	@RequestMapping("/showExport")
+	public ModelAndView showExport(HttpServletRequest request, ModelMap modelMap) {
+		RequestUtils.setRequestParameterToAttribute(request);
+
+		List<Integer> weeks = new ArrayList<Integer>();
+		for (int i = 1; i <= 20; i++) {
+			weeks.add(i);
+		}
+		request.setAttribute("weeks", weeks);
+
+		String view = request.getParameter("view");
+		if (StringUtils.isNotEmpty(view)) {
+			return new ModelAndView(view);
+		}
+
+		String x_view = ViewProperties.getString("goodsActualQuantity.showExport");
+		if (StringUtils.isNotEmpty(x_view)) {
+			return new ModelAndView(x_view);
+		}
+
+		return new ModelAndView("/heathcare/goodsActualQuantity/showExport");
+	}
+
 	@RequestMapping("/showSectionExport")
 	public ModelAndView showSectionExport(HttpServletRequest request, ModelMap modelMap) {
 		RequestUtils.setRequestParameterToAttribute(request);
@@ -921,29 +1028,6 @@ public class GoodsActualQuantityController {
 		}
 
 		return new ModelAndView("/heathcare/goodsActualQuantity/showSectionExport");
-	}
-
-	@RequestMapping("/showExport")
-	public ModelAndView showExport(HttpServletRequest request, ModelMap modelMap) {
-		RequestUtils.setRequestParameterToAttribute(request);
-
-		List<Integer> weeks = new ArrayList<Integer>();
-		for (int i = 1; i <= 20; i++) {
-			weeks.add(i);
-		}
-		request.setAttribute("weeks", weeks);
-
-		String view = request.getParameter("view");
-		if (StringUtils.isNotEmpty(view)) {
-			return new ModelAndView(view);
-		}
-
-		String x_view = ViewProperties.getString("goodsActualQuantity.showExport");
-		if (StringUtils.isNotEmpty(x_view)) {
-			return new ModelAndView(x_view);
-		}
-
-		return new ModelAndView("/heathcare/goodsActualQuantity/showExport");
 	}
 
 	@RequestMapping("/view")

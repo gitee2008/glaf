@@ -341,6 +341,14 @@ public class PersonController {
 	@RequestMapping("/savePerson")
 	public byte[] savePerson(HttpServletRequest request) {
 		logger.debug("params:" + RequestUtils.getParameterMap(request));
+		String name = request.getParameter("name");
+		if (StringUtils.isEmpty(name)) {
+			return ResponseUtils.responseJsonResult(false, "姓名必须输入。");
+		}
+		Date birthday = RequestUtils.getDate(request, "birthday");
+		if (birthday == null) {
+			return ResponseUtils.responseJsonResult(false, "出生日期必须输入。");
+		}
 		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		String actorId = loginContext.getActorId();
 		String id = request.getParameter("id");
@@ -353,6 +361,7 @@ public class PersonController {
 			if (person == null) {
 				person = new Person();
 				person.setTenantId(loginContext.getTenantId());
+
 			} else {
 				if (!loginContext.isSystemAdministrator()) {
 					if (loginContext.isTenantAdmin()) {
@@ -371,7 +380,6 @@ public class PersonController {
 			if (StringUtils.isNotEmpty(idCardNo) && StringUtils.isNumeric(idCardNo)) {
 				String bd = idCardNo.substring(6, 14);
 				// logger.debug("birth day:" + bd);
-				Date birthday = RequestUtils.getDate(request, "birthday");
 				if (!StringUtils.equals(bd, DateUtils.getYearMonthDay(birthday) + "")) {
 					return ResponseUtils.responseJsonResult(false, "身份证日期与出生日期不匹配。");
 				}

@@ -217,6 +217,9 @@ public class MedicalExaminationJsonFactory {
 		if (jsonObject.containsKey("birthDefect")) {
 			model.setBirthDefect(jsonObject.getString("birthDefect"));
 		}
+		if (jsonObject.containsKey("previousHistory")) {
+			model.setPreviousHistory(jsonObject.getString("previousHistory"));
+		}
 		if (jsonObject.containsKey("hemoglobin")) {
 			model.setHemoglobin(jsonObject.getString("hemoglobin"));
 		}
@@ -451,8 +454,14 @@ public class MedicalExaminationJsonFactory {
 		if (model.getBirthDefect() != null) {
 			jsonObject.put("birthDefect", model.getBirthDefect());
 		}
+		if (model.getPreviousHistory() != null) {
+			jsonObject.put("previousHistory", model.getPreviousHistory());
+		}
 		if (model.getHemoglobin() != null) {
 			jsonObject.put("hemoglobin", model.getHemoglobin());
+		}
+		if (model.getHemoglobinHtml() != null) {
+			jsonObject.put("hemoglobinHtml", model.getHemoglobinHtml());
 		}
 		jsonObject.put("hemoglobinValue", model.getHemoglobinValue());
 		if (model.getAlt() != null) {
@@ -675,6 +684,9 @@ public class MedicalExaminationJsonFactory {
 		}
 		if (model.getBirthDefect() != null) {
 			jsonObject.put("birthDefect", model.getBirthDefect());
+		}
+		if (model.getPreviousHistory() != null) {
+			jsonObject.put("previousHistory", model.getPreviousHistory());
 		}
 		if (model.getHemoglobin() != null) {
 			jsonObject.put("hemoglobin", model.getHemoglobin());

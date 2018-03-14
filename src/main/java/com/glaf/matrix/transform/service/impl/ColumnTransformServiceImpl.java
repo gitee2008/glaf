@@ -64,7 +64,7 @@ public class ColumnTransformServiceImpl implements ColumnTransformService {
 				columnTransform.setId(idGenerator.nextId("SYS_COLUMN_TRANSFORM"));
 			}
 			if (StringUtils.isEmpty(columnTransform.getTargetColumnName())) {
-				columnTransform.setTargetColumnName(columnTransform.getTableName() + "_COL_"
+				columnTransform.setTargetColumnName(columnTransform.getTableName().toUpperCase() + "_COL_"
 						+ idGenerator.nextId(columnTransform.getTableName() + "_COL"));
 			}
 		}
@@ -163,12 +163,16 @@ public class ColumnTransformServiceImpl implements ColumnTransformService {
 			columnTransform.setId(idGenerator.nextId("SYS_COLUMN_TRANSFORM"));
 			columnTransform.setCreateTime(new Date());
 			if (StringUtils.isEmpty(columnTransform.getTargetColumnName())) {
-				columnTransform.setTargetColumnName(columnTransform.getTableName() + "_COL_"
+				columnTransform.setTargetColumnName(columnTransform.getTableName().toUpperCase() + "_COL_"
 						+ idGenerator.nextId(columnTransform.getTableName() + "_COL"));
 			}
 			logger.debug(columnTransform.toJsonObject().toJSONString());
 			columnTransformMapper.insertColumnTransform(columnTransform);
 		} else {
+			if (StringUtils.isEmpty(columnTransform.getTargetColumnName())) {
+				columnTransform.setTargetColumnName(columnTransform.getTableName().toUpperCase() + "_COL_"
+						+ idGenerator.nextId(columnTransform.getTableName() + "_COL"));
+			}
 			columnTransformMapper.updateColumnTransform(columnTransform);
 		}
 	}

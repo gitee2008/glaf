@@ -217,7 +217,6 @@ public class RedisFileStorageFactory {
 						}
 					}
 				}
-
 			} catch (Exception ex) {
 				logger.error("redis get error", ex);
 			} finally {
@@ -581,7 +580,7 @@ public class RedisFileStorageFactory {
 
 	public void startScheduler() {
 		RefreshTask command = new RefreshTask();
-		scheduledThreadPool.scheduleAtFixedRate(command, 1, 5, TimeUnit.MINUTES);// 每5分钟检查一次
+		scheduledThreadPool.scheduleAtFixedRate(command, 60, 30, TimeUnit.SECONDS);// 每30秒检查一次
 	}
 
 }

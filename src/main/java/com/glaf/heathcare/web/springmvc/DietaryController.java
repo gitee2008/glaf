@@ -948,6 +948,10 @@ public class DietaryController {
 		 * 角色HealthPhysician和TenantAdmin可以增加食谱
 		 */
 		if (loginContext.getRoles().contains("HealthPhysician") || loginContext.getRoles().contains("TenantAdmin")) {
+			String name = request.getParameter("name");
+			if (StringUtils.isEmpty(name)) {
+				return ResponseUtils.responseJsonResult(false, "名称必须输入。");
+			}
 			Map<String, Object> params = RequestUtils.getParameterMap(request);
 			String actorId = loginContext.getActorId();
 			long id = RequestUtils.getLong(request, "id");

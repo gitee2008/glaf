@@ -55,7 +55,7 @@ import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.ResponseUtils;
 import com.glaf.core.util.StringTools;
 import com.glaf.core.util.Tools;
-
+import com.glaf.core.util.security.RSAUtils;
 import com.glaf.heathcare.SysConfig;
 import com.glaf.heathcare.domain.FoodComposition;
 import com.glaf.heathcare.domain.GoodsPurchase;
@@ -217,6 +217,16 @@ public class GoodsPurchaseController {
 							.getFoodCompositions(foodComposition.getNodeId());
 					request.setAttribute("foods", foods);
 					request.setAttribute("nodeId", foodComposition.getNodeId());
+				}
+			}
+
+			request.setAttribute("status_enc",
+					RSAUtils.encryptString(String.valueOf(goodsPurchase.getBusinessStatus())));
+			logger.debug("status_enc:" + request.getAttribute("status_enc"));
+			logger.debug("status->" + RSAUtils.decryptString((String) request.getAttribute("status_enc")));
+			if (goodsPurchase.getBusinessStatus() != 9) {
+				if (StringUtils.equals(request.getParameter("audit"), "true")) {
+					request.setAttribute("status_enc", RSAUtils.encryptString(String.valueOf("2")));
 				}
 			}
 		}

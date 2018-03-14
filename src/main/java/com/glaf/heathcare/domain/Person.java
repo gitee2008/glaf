@@ -56,6 +56,9 @@ public class Person implements Serializable, JSONable {
 	@Column(name = "GRADEID_", length = 50)
 	protected String gradeId;
 
+	@javax.persistence.Transient
+	protected String gradeName;
+
 	/**
 	 * 姓名
 	 */
@@ -313,32 +316,6 @@ public class Person implements Serializable, JSONable {
 
 	}
 
-	public int getAgeOfTheMoon() {
-		int ageOfTheMoon = 0;
-		if (birthday != null) {
-			Calendar startDate = Calendar.getInstance();
-			startDate.setTime(birthday);
-			Calendar endDate = Calendar.getInstance();
-			endDate.setTime(new java.util.Date());
-			int days = DateUtils.getDaysBetween(startDate, endDate);
-			ageOfTheMoon = (int) Math.ceil(days / 30.0D);
-		}
-		return ageOfTheMoon;
-	}
-	
-	public int getJoinAgeOfTheMoon() {
-		int ageOfTheMoon = 36;
-		if (birthday != null && joinDate!= null) {
-			Calendar startDate = Calendar.getInstance();
-			startDate.setTime(birthday);
-			Calendar endDate = Calendar.getInstance();
-			endDate.setTime(joinDate);
-			int days = DateUtils.getDaysBetween(startDate, endDate);
-			ageOfTheMoon = (int) Math.ceil(days / 30.0D);
-		}
-		return ageOfTheMoon;
-	}
-
 	public void addLinkman(PersonLinkman linkman) {
 		if (linkmans == null) {
 			linkmans = new ArrayList<PersonLinkman>();
@@ -361,6 +338,19 @@ public class Person implements Serializable, JSONable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public int getAgeOfTheMoon() {
+		int ageOfTheMoon = 0;
+		if (birthday != null) {
+			Calendar startDate = Calendar.getInstance();
+			startDate.setTime(birthday);
+			Calendar endDate = Calendar.getInstance();
+			endDate.setTime(new java.util.Date());
+			int days = DateUtils.getDaysBetween(startDate, endDate);
+			ageOfTheMoon = (int) Math.ceil(days / 30.0D);
+		}
+		return ageOfTheMoon;
 	}
 
 	public String getAllergy() {
@@ -445,6 +435,10 @@ public class Person implements Serializable, JSONable {
 		return this.gradeId;
 	}
 
+	public String getGradeName() {
+		return gradeName;
+	}
+
 	public String getHealthCondition() {
 		return healthCondition;
 	}
@@ -463,6 +457,19 @@ public class Person implements Serializable, JSONable {
 
 	public String getIdCardNo() {
 		return this.idCardNo;
+	}
+
+	public int getJoinAgeOfTheMoon() {
+		int ageOfTheMoon = 36;
+		if (birthday != null && joinDate != null) {
+			Calendar startDate = Calendar.getInstance();
+			startDate.setTime(birthday);
+			Calendar endDate = Calendar.getInstance();
+			endDate.setTime(joinDate);
+			int days = DateUtils.getDaysBetween(startDate, endDate);
+			ageOfTheMoon = (int) Math.ceil(days / 30.0D);
+		}
+		return ageOfTheMoon;
 	}
 
 	public Date getJoinDate() {
@@ -650,6 +657,10 @@ public class Person implements Serializable, JSONable {
 
 	public void setGradeId(String gradeId) {
 		this.gradeId = gradeId;
+	}
+
+	public void setGradeName(String gradeName) {
+		this.gradeName = gradeName;
 	}
 
 	public void setHealthCondition(String healthCondition) {

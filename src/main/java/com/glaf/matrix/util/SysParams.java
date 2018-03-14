@@ -80,6 +80,31 @@ public class SysParams {
 					DateUtils.getDate(DateUtils.getDateBefore(now, 1)) + " 23:00:00");
 			parameter.put("today_previous_hour_end", DateUtils.getDate(DateUtils.getDateBefore(now, 1)) + " 23:59:59");
 		}
+
+		calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1);
+		switch (calendar.get(Calendar.MONTH) + 1) {
+		case 1:
+		case 3:
+		case 5:
+		case 7:
+		case 8:
+		case 10:
+		case 12:
+			calendar.set(Calendar.DAY_OF_MONTH, 31);
+			break;
+		case 2:
+			if (calendar.get(Calendar.YEAR) % 4 == 0) {
+				calendar.set(Calendar.DAY_OF_MONTH, 29);
+			} else {
+				calendar.set(Calendar.DAY_OF_MONTH, 28);
+			}
+			break;
+		default:
+			calendar.set(Calendar.DAY_OF_MONTH, 30);
+			break;
+		}
+
+		parameter.put("the_end_of_last_month", DateUtils.getDate(calendar.getTime()) + " 23:59:59");
 	}
 
 }

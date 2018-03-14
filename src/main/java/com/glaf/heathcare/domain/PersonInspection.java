@@ -30,7 +30,7 @@ import com.glaf.core.util.DateUtils;
 import com.glaf.heathcare.util.*;
 
 /**
- * 考勤情况
+ * 晨检及全日观察情况
  *
  */
 
@@ -66,6 +66,9 @@ public class PersonInspection implements Serializable, JSONable {
 	 */
 	@Column(name = "NAME_", length = 100)
 	protected String name;
+
+	@javax.persistence.Transient
+	protected String sex;
 
 	/**
 	 * 年月日
@@ -190,6 +193,10 @@ public class PersonInspection implements Serializable, JSONable {
 		return this.section;
 	}
 
+	public String getSex() {
+		return sex;
+	}
+
 	public int getStatus() {
 		return this.status;
 	}
@@ -256,6 +263,10 @@ public class PersonInspection implements Serializable, JSONable {
 
 	public void setSection(String section) {
 		this.section = section;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
 	}
 
 	public void setStatus(int status) {

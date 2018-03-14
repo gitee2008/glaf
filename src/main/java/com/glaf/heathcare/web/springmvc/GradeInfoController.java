@@ -508,6 +508,10 @@ public class GradeInfoController {
 	public byte[] saveGradeInfo(HttpServletRequest request) {
 		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		if (loginContext.isTenantAdmin() || loginContext.isSystemAdministrator()) {
+			String name = request.getParameter("name");
+			if (StringUtils.isEmpty(name)) {
+				return ResponseUtils.responseJsonResult(false, "班级名称必须输入。");
+			}
 			String actorId = loginContext.getActorId();
 			Map<String, Object> params = RequestUtils.getParameterMap(request);
 			String id = request.getParameter("id");

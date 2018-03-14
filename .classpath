@@ -247,5 +247,7 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-task-service.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-variable-service-api.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-variable-service.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/imgscalr-lib.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/pinyin4j.jar"/>
 	<classpathentry kind="output" path="webapps/glaf/WEB-INF/classes"/>
 </classpath>
