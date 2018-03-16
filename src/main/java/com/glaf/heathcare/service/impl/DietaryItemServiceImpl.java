@@ -81,6 +81,7 @@ public class DietaryItemServiceImpl implements DietaryItemService {
 		for (FoodComposition fd : foods) {
 			typeIdMap.put(fd.getId(), fd.getNodeId());
 		}
+		long lastModified = System.currentTimeMillis();
 		for (DietaryItem dietaryItem : list) {
 			if (StringUtils.isNotEmpty(tenantId)) {
 				dietaryItem.setTableSuffix(String.valueOf(IdentityFactory.getTenantHash(tenantId)));
@@ -89,6 +90,7 @@ public class DietaryItemServiceImpl implements DietaryItemService {
 				dietaryItem.setId(idGenerator.nextId("HEALTH_DIETARY_ITEM"));
 			}
 			dietaryItem.setTypeId(typeIdMap.get(dietaryItem.getFoodId()));
+			dietaryItem.setLastModified(lastModified);
 		}
 		if (StringUtils.equals(DBUtils.ORACLE, DBConnectionFactory.getDatabaseType())) {
 			dietaryItemMapper.bulkInsertDietaryItem_oracle(list);
@@ -315,8 +317,10 @@ public class DietaryItemServiceImpl implements DietaryItemService {
 		if (dietaryItem.getId() == 0) {
 			dietaryItem.setId(idGenerator.nextId("HEALTH_DIETARY_ITEM"));
 			dietaryItem.setCreateTime(new Date());
+			dietaryItem.setLastModified(System.currentTimeMillis());
 			dietaryItemMapper.insertDietaryItem(dietaryItem);
 		} else {
+			dietaryItem.setLastModified(System.currentTimeMillis());
 			dietaryItemMapper.updateDietaryItem(dietaryItem);
 		}
 		CacheFactory.clear("dietary_template");
@@ -339,8 +343,10 @@ public class DietaryItemServiceImpl implements DietaryItemService {
 		if (dietaryItem.getId() == 0) {
 			dietaryItem.setId(idGenerator.nextId("HEALTH_DIETARY_ITEM"));
 			dietaryItem.setCreateTime(new Date());
+			dietaryItem.setLastModified(System.currentTimeMillis());
 			dietaryItemMapper.insertDietaryItem(dietaryItem);
 		} else {
+			dietaryItem.setLastModified(System.currentTimeMillis());
 			dietaryItemMapper.updateDietaryItem(dietaryItem);
 		}
 		CacheFactory.clear("dietary_template");

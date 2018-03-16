@@ -441,6 +441,9 @@ public class GoodsPurchaseController {
 		query.businessStatus(9);
 
 		String tenantId = request.getParameter("tenantId");
+		if (StringUtils.isEmpty(tenantId)) {
+			tenantId = loginContext.getTenantId();
+		}
 		query.tenantId(tenantId);
 
 		String purchaseTime = request.getParameter("purchaseTime");
@@ -576,6 +579,18 @@ public class GoodsPurchaseController {
 		}
 
 		return new ModelAndView("/heathcare/goodsPurchase/review_list", modelMap);
+	}
+
+	@RequestMapping("/reviewlist2")
+	public ModelAndView reviewlist2(HttpServletRequest request, ModelMap modelMap) {
+		RequestUtils.setRequestParameterToAttribute(request);
+
+		String view = request.getParameter("view");
+		if (StringUtils.isNotEmpty(view)) {
+			return new ModelAndView(view, modelMap);
+		}
+
+		return new ModelAndView("/heathcare/goodsPurchase/review_list2", modelMap);
 	}
 
 	@ResponseBody

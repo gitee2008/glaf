@@ -500,12 +500,17 @@ public class GoodsAcceptanceController {
 	@RequestMapping("/reviewJson")
 	@ResponseBody
 	public byte[] reviewJson(HttpServletRequest request, ModelMap modelMap) throws IOException {
+		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
 		JSONObject result = new JSONObject();
 		GoodsAcceptanceQuery query = new GoodsAcceptanceQuery();
 		Tools.populate(query, params);
 		query.deleteFlag(0);
+
 		String tenantId = request.getParameter("tenantId");
+		if (StringUtils.isEmpty(tenantId)) {
+			tenantId = loginContext.getTenantId();
+		}
 		query.tenantId(tenantId);
 
 		Date acceptanceTime = RequestUtils.getDate(request, "acceptanceTime");

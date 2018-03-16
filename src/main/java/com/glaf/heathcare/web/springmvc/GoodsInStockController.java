@@ -459,6 +459,7 @@ public class GoodsInStockController {
 	@RequestMapping("/reviewJson")
 	@ResponseBody
 	public byte[] reviewJson(HttpServletRequest request, ModelMap modelMap) throws IOException {
+		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
 		logger.debug("params:" + params);
 		JSONObject result = new JSONObject();
@@ -468,6 +469,9 @@ public class GoodsInStockController {
 		query.businessStatus(9);
 
 		String tenantId = request.getParameter("tenantId");
+		if (StringUtils.isEmpty(tenantId)) {
+			tenantId = loginContext.getTenantId();
+		}
 		query.tenantId(tenantId);
 
 		Date inStockTime = RequestUtils.getDate(request, "inStockTime");

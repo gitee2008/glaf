@@ -127,6 +127,12 @@ public class DietaryItem implements java.lang.Comparable<DietaryItem>, Serializa
 	protected Date createTime;
 
 	/**
+	 * 修改时间戳
+	 */
+	@Column(name = "LASTMODIFIED_")
+	protected long lastModified;
+
+	/**
 	 * 表后缀
 	 */
 	@javax.persistence.Transient
@@ -208,6 +214,10 @@ public class DietaryItem implements java.lang.Comparable<DietaryItem>, Serializa
 		return this.id;
 	}
 
+	public long getLastModified() {
+		return lastModified;
+	}
+
 	public String getName() {
 		return this.name;
 	}
@@ -218,7 +228,7 @@ public class DietaryItem implements java.lang.Comparable<DietaryItem>, Serializa
 
 	public String getQuantity2() {
 		quantity = Math.round(quantity);
-		return quantity > 0 ? String.valueOf((int)quantity) : "";
+		return quantity > 0 ? String.valueOf((int) quantity) : "";
 	}
 
 	public String getTableSuffix() {
@@ -286,6 +296,10 @@ public class DietaryItem implements java.lang.Comparable<DietaryItem>, Serializa
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public void setLastModified(long lastModified) {
+		this.lastModified = lastModified;
 	}
 
 	public void setName(String name) {

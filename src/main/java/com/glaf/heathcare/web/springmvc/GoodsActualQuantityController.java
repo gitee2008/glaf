@@ -564,6 +564,7 @@ public class GoodsActualQuantityController {
 	@RequestMapping("/reviewJson")
 	@ResponseBody
 	public byte[] reviewJson(HttpServletRequest request, ModelMap modelMap) throws IOException {
+		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
 		logger.debug("params:" + params);
 		JSONObject result = new JSONObject();
@@ -573,6 +574,9 @@ public class GoodsActualQuantityController {
 		query.deleteFlag(0);
 
 		String tenantId = request.getParameter("tenantId");
+		if (StringUtils.isEmpty(tenantId)) {
+			tenantId = loginContext.getTenantId();
+		}
 		query.tenantId(tenantId);
 
 		String avgQuantity = request.getParameter("avgQuantity");
@@ -704,6 +708,18 @@ public class GoodsActualQuantityController {
 		}
 
 		return new ModelAndView("/heathcare/goodsActualQuantity/review_list", modelMap);
+	}
+
+	@RequestMapping("/reviewlist2")
+	public ModelAndView reviewlist2(HttpServletRequest request, ModelMap modelMap) {
+		RequestUtils.setRequestParameterToAttribute(request);
+
+		String view = request.getParameter("view");
+		if (StringUtils.isNotEmpty(view)) {
+			return new ModelAndView(view, modelMap);
+		}
+
+		return new ModelAndView("/heathcare/goodsActualQuantity/review_list2", modelMap);
 	}
 
 	@ResponseBody

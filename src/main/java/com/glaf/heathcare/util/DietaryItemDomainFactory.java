@@ -61,6 +61,7 @@ public class DietaryItemDomainFactory {
 		columnMap.put("fullDay", "FULLDAY_");
 		columnMap.put("createBy", "CREATEBY_");
 		columnMap.put("createTime", "CREATETIME_");
+		columnMap.put("lastModified", "LASTMODIFIED_");
 
 		javaTypeMap.put("id", "Long");
 		javaTypeMap.put("tenantId", "String");
@@ -76,6 +77,7 @@ public class DietaryItemDomainFactory {
 		javaTypeMap.put("fullDay", "Integer");
 		javaTypeMap.put("createBy", "String");
 		javaTypeMap.put("createTime", "Date");
+		javaTypeMap.put("lastModified", "Long");
 	}
 
 	public static void alterTables(long databaseId) {
@@ -273,6 +275,12 @@ public class DietaryItemDomainFactory {
 		createTime.setColumnName("CREATETIME_");
 		createTime.setJavaType("Date");
 		tableDefinition.addColumn(createTime);
+
+		ColumnDefinition lastModified = new ColumnDefinition();
+		lastModified.setName("lastModified");
+		lastModified.setColumnName("LASTMODIFIED_");
+		lastModified.setJavaType("Long");
+		tableDefinition.addColumn(lastModified);
 
 		return tableDefinition;
 	}

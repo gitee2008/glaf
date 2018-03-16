@@ -76,6 +76,9 @@ public class DietaryItemJsonFactory {
 		if (jsonObject.containsKey("createTime")) {
 			model.setCreateTime(jsonObject.getDate("createTime"));
 		}
+		if (jsonObject.containsKey("lastModified")) {
+			model.setLastModified(jsonObject.getLong("lastModified"));
+		}
 
 		return model;
 	}
@@ -108,6 +111,7 @@ public class DietaryItemJsonFactory {
 			jsonObject.put("unit", model.getUnit());
 		}
 		jsonObject.put("fullDay", model.getFullDay());
+		jsonObject.put("lastModified", model.getLastModified());
 		if (model.getCreateBy() != null) {
 			jsonObject.put("createBy", model.getCreateBy());
 		}
@@ -147,6 +151,7 @@ public class DietaryItemJsonFactory {
 			jsonObject.put("unit", model.getUnit());
 		}
 		jsonObject.put("fullDay", model.getFullDay());
+		jsonObject.put("lastModified", model.getLastModified());
 		if (model.getCreateBy() != null) {
 			jsonObject.put("createBy", model.getCreateBy());
 		}

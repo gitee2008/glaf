@@ -19,6 +19,8 @@
 		<result property="fullDay" column="FULLDAY_" jdbcType="INTEGER" />
 		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
 		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="lastModified" column="LASTMODIFIED_"
+			jdbcType="BIGINT" />
 	</resultMap>
 
 
@@ -65,6 +67,9 @@
 			<if test="createTime != null">
 				,CREATETIME_
 			</if>
+			<if test="lastModified != null">
+				,LASTMODIFIED_
+			</if>
 		</trim>
 
 		<trim prefix=" values (" suffix=")" suffixOverrides=",">
@@ -108,6 +113,9 @@
 			<if test="createTime != null">
 				,#{createTime, jdbcType=TIMESTAMP}
 			</if>
+			<if test="lastModified != null">
+				,#{lastModified, jdbcType=BIGINT}
+			</if>
 		</trim>
 	</insert>
 
@@ -128,6 +136,7 @@
 		,FULLDAY_
 		,CREATEBY_
 		,CREATETIME_
+		,LASTMODIFIED_
 		)
 		values
 		<foreach collection="list" item="dietaryItem" index="index"
@@ -157,6 +166,7 @@
 			jdbcType=VARCHAR}
 			,#{dietaryItem.createTime,
 			jdbcType=TIMESTAMP}
+			,#{dietaryItem.lastModified, jdbcType=BIGINT}
 			)
 		</foreach>
 	</insert>
@@ -181,6 +191,7 @@
 			,FULLDAY_
 			,CREATEBY_
 			,CREATETIME_
+			,LASTMODIFIED_
 			) values
 			(
 			#{dietaryItem.id,
@@ -209,6 +220,7 @@
 			jdbcType=VARCHAR}
 			,#{dietaryItem.createTime,
 			jdbcType=TIMESTAMP}
+			,#{dietaryItem.lastModified, jdbcType=BIGINT}
 			)
 		</foreach>
 		SELECT * FROM dual
@@ -239,6 +251,9 @@
 			</if>
 			<if test="unit != null">
 				UNIT_ = #{unit, jdbcType=VARCHAR},
+			</if>
+			<if test="lastModified != null">
+				LASTMODIFIED_ = #{lastModified, jdbcType=BIGINT},
 			</if>
 		</trim>
 		where
