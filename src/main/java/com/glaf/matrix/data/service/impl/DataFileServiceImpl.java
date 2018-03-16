@@ -446,10 +446,6 @@ public class DataFileServiceImpl implements IDataFileService {
 
 		dataFile.setCreateDate(new Date());
 
-		if (dataFile.getFileId() == null) {
-			dataFile.setFileId(dataFile.getId());
-		}
-
 		String filePath = dataFile.getPath();
 		if (filePath != null && filePath.length() > 0) {
 			if (filePath.startsWith("//")) {

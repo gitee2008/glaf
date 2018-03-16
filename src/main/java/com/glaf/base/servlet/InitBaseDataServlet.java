@@ -104,11 +104,11 @@ public class InitBaseDataServlet extends HttpServlet {
 		}
 
 		try {
-			logger.info("------------update department pinyin---------------");
-			PinyinUtils.processSysDepartment();
+			logger.info("------------update organization pinyin---------------");
+			PinyinUtils.processSysOrganization();
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			logger.error("更新部门数据错误！");
+			logger.error("更新机构数据错误！");
 		}
 
 		try {

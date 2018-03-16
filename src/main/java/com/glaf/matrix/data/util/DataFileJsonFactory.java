@@ -57,9 +57,6 @@ public class DataFileJsonFactory {
 		if (jsonObject.containsKey("businessKey")) {
 			model.setBusinessKey(jsonObject.getString("businessKey"));
 		}
-		if (jsonObject.containsKey("fileId")) {
-			model.setFileId(jsonObject.getString("fileId"));
-		}
 		if (jsonObject.containsKey("masterDataId")) {
 			model.setMasterDataId(jsonObject.getString("masterDataId"));
 		}
@@ -131,9 +128,6 @@ public class DataFileJsonFactory {
 		if (model.getBusinessKey() != null) {
 			jsonObject.put("businessKey", model.getBusinessKey());
 		}
-		if (model.getFileId() != null) {
-			jsonObject.put("fileId", model.getFileId());
-		}
 		if (model.getMasterDataId() != null) {
 			jsonObject.put("masterDataId", model.getMasterDataId());
 		}
@@ -184,9 +178,6 @@ public class DataFileJsonFactory {
 		jsonObject.put("_oid_", model.getId());
 		if (model.getBusinessKey() != null) {
 			jsonObject.put("businessKey", model.getBusinessKey());
-		}
-		if (model.getFileId() != null) {
-			jsonObject.put("fileId", model.getFileId());
 		}
 		if (model.getMasterDataId() != null) {
 			jsonObject.put("masterDataId", model.getMasterDataId());

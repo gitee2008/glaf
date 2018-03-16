@@ -26,7 +26,7 @@
           jQuery.ajax({
 				   type: "POST",
 				   url: '${contextPath}/dataFile/deleteById?fileId='+fileId,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },
@@ -103,10 +103,10 @@
 	<!-- The container for the uploaded files -->
 	<div id="files" class="files">
 	  <#list dataFiles as file>
-	    <div id="div_${file.fileId}">${file.filename}&nbsp;
-		<a href='javascript:downById("${file.fileId}");'>下载&nbsp;<img src="${contextPath}/static/images/download.png"></a>
+	    <div id="div_${file.id}">${file.filename}&nbsp;
+		<a href='javascript:downById("${file.id}");'>下载&nbsp;<img src="${contextPath}/static/images/download.png"></a>
 		<#if canUpdate == true>
-		<a href='javascript:deleteById("${file.fileId}");'>删除&nbsp;<img src="${contextPath}/static/images/remove.png"></a>
+		<a href='javascript:deleteById("${file.id}");'>删除&nbsp;<img src="${contextPath}/static/images/remove.png"></a>
 		</#if>
 		</div>
 	  </#list>

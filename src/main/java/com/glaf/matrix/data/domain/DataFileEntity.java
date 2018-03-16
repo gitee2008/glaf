@@ -55,8 +55,6 @@ public class DataFileEntity implements DataFile, Serializable, JSONable {
 
 	protected String deviceId;
 
-	protected String fileId;
-
 	protected String filename;
 
 	protected long lastModified = -1;
@@ -141,10 +139,6 @@ public class DataFileEntity implements DataFile, Serializable, JSONable {
 
 	public String getDeviceId() {
 		return deviceId;
-	}
-
-	public String getFileId() {
-		return fileId;
 	}
 
 	public String getFilename() {
@@ -256,10 +250,6 @@ public class DataFileEntity implements DataFile, Serializable, JSONable {
 
 	public void setDeviceId(String deviceId) {
 		this.deviceId = deviceId;
-	}
-
-	public void setFileId(String fileId) {
-		this.fileId = fileId;
 	}
 
 	public void setFilename(String filename) {

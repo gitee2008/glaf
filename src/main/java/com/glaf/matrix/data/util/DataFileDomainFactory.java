@@ -240,12 +240,6 @@ public class DataFileDomainFactory {
 		databaseId.setJavaType("Long");
 		tableDefinition.addColumn(databaseId);
 
-		ColumnDefinition fileId = new ColumnDefinition();
-		fileId.setColumnName("FILEID_");
-		fileId.setJavaType("String");
-		fileId.setLength(80);
-		tableDefinition.addColumn(fileId);
-
 		ColumnDefinition businessKey = new ColumnDefinition();
 		businessKey.setColumnName("BUSINESSKEY_");
 		businessKey.setJavaType("String");

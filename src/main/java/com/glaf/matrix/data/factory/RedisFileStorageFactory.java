@@ -503,7 +503,7 @@ public class RedisFileStorageFactory {
 					}
 					rnum = rand.nextInt(2);
 					jedis.set(getKey(region, fileId), data);
-					jedis.expire(getKey(region, fileId), 7200 - rnum);// 2小时以内
+					jedis.expire(getKey(region, fileId), 86400 - rnum);// 24小时以内
 					logger.debug(key + "->" + region + ":" + fileId + " set into redis.");
 					long ts = System.currentTimeMillis() - start;
 					logger.debug("redis存储用时:" + ts);
@@ -562,8 +562,8 @@ public class RedisFileStorageFactory {
 					rnum = rand.nextInt(9);
 					jedis.set(getJsonKey(region, fileId), dataFile.toJsonObject().toJSONString());
 					jedis.set(getKey(region, fileId), dataFile.getData());
-					jedis.expire(getJsonKey(region, fileId), 7200 - rnum);// 2小时以内
-					jedis.expire(getKey(region, fileId), 7200 - rnum);// 2小时以内
+					jedis.expire(getJsonKey(region, fileId), 86400 - rnum);// 24小时以内
+					jedis.expire(getKey(region, fileId), 86400 - rnum);// 24小时以内
 				}
 			} catch (Exception ex) {
 				logger.error("redis set error", ex);

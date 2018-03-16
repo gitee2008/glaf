@@ -72,7 +72,7 @@ public class PinyinUtils {
 		return pinyinName;
 	}
 
-	public static void processSysDepartment() {
+	public static void processSysOrganization() {
 		Connection conn = null;
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
@@ -80,7 +80,7 @@ public class PinyinUtils {
 			conn = DBConnectionFactory.getConnection();
 			conn.setAutoCommit(false);
 			TableDefinition tableDefinition = new TableDefinition();
-			tableDefinition.setTableName("SYS_DEPARTMENT");
+			tableDefinition.setTableName("SYS_ORGANIZATION");
 
 			ColumnDefinition idColumn = new ColumnDefinition();
 			idColumn.setColumnName("ID");
@@ -97,7 +97,7 @@ public class PinyinUtils {
 			conn.commit();
 
 			Map<Long, String> dataMap = new HashMap<Long, String>();
-			String sql = " select id, name from SYS_DEPARTMENT ";
+			String sql = " select id, name from SYS_ORGANIZATION ";
 			psmt = conn.prepareStatement(sql);
 			rs = psmt.executeQuery();
 			while (rs.next()) {
@@ -108,7 +108,7 @@ public class PinyinUtils {
 
 			conn.setAutoCommit(false);
 
-			psmt = conn.prepareStatement(" update SYS_DEPARTMENT set SHORT_PINYIN = ? where ID = ? ");
+			psmt = conn.prepareStatement(" update SYS_ORGANIZATION set SHORT_PINYIN = ? where ID = ? ");
 			Set<Entry<Long, String>> entrySet = dataMap.entrySet();
 			for (Entry<Long, String> entry : entrySet) {
 				Long key = entry.getKey();
@@ -140,12 +140,12 @@ public class PinyinUtils {
 			tableDefinition.setTableName("SYS_TENANT");
 
 			ColumnDefinition idColumn = new ColumnDefinition();
-			idColumn.setColumnName("ID");
+			idColumn.setColumnName("ID_");
 			idColumn.setJavaType("Long");
 			tableDefinition.setIdColumn(idColumn);
 
 			ColumnDefinition short_hypyColumn = new ColumnDefinition();
-			short_hypyColumn.setColumnName("SHORT_PINYIN");
+			short_hypyColumn.setColumnName("SHORT_PINYIN_");
 			short_hypyColumn.setJavaType("String");
 			short_hypyColumn.setLength(200);
 			tableDefinition.addColumn(short_hypyColumn);
@@ -154,7 +154,7 @@ public class PinyinUtils {
 			conn.commit();
 
 			Map<Long, String> dataMap = new HashMap<Long, String>();
-			String sql = " select id, name from SYS_TENANT ";
+			String sql = " select ID_, NAME_ from SYS_TENANT ";
 			psmt = conn.prepareStatement(sql);
 			rs = psmt.executeQuery();
 			while (rs.next()) {
@@ -165,7 +165,7 @@ public class PinyinUtils {
 
 			logger.debug("size:" + dataMap.size());
 			conn.setAutoCommit(false);
-			psmt = conn.prepareStatement(" update SYS_TENANT set SHORT_PINYIN = ? where ID = ? ");
+			psmt = conn.prepareStatement(" update SYS_TENANT set SHORT_PINYIN_ = ? where ID_ = ? ");
 			Set<Entry<Long, String>> entrySet = dataMap.entrySet();
 			for (Entry<Long, String> entry : entrySet) {
 				Long key = entry.getKey();

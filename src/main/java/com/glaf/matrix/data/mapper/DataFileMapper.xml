@@ -9,7 +9,6 @@
 		<result property="databaseId" column="DATABASEID_" jdbcType="BIGINT" />
 		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
 		<result property="businessKey" column="BUSINESSKEY_" jdbcType="VARCHAR" />
-		<result property="fileId" column="FILEID_" jdbcType="VARCHAR" />
 		<result property="masterDataId" column="MASTERDATAID_"
 			jdbcType="VARCHAR" />
 		<result property="serviceKey" column="SERVICEKEY_" jdbcType="VARCHAR" />
@@ -80,9 +79,6 @@
 			<if test="deviceId != null">
 				,DEVICEID_
 			</if>
-			<if test="fileId != null">
-				,FILEID_
-			</if>
 			<if test="filename != null">
 				,FILENAME_
 			</if>
@@ -150,9 +146,6 @@
 			</if>
 			<if test="deviceId != null">
 				,#{deviceId, jdbcType=VARCHAR}
-			</if>
-			<if test="fileId != null">
-				,#{fileId, jdbcType=VARCHAR}
 			</if>
 			<if test="filename != null">
 				,#{filename, jdbcType=VARCHAR}
@@ -225,9 +218,6 @@
 			<if test="deviceId != null">
 				,DEVICEID_
 			</if>
-			<if test="fileId != null">
-				,FILEID_
-			</if>
 			<if test="filename != null">
 				,FILENAME_
 			</if>
@@ -295,9 +285,6 @@
 			<if test="deviceId != null">
 				,#{deviceId, jdbcType=VARCHAR}
 			</if>
-			<if test="fileId != null">
-				,#{fileId, jdbcType=VARCHAR}
-			</if>
 			<if test="filename != null">
 				,#{filename, jdbcType=VARCHAR}
 			</if>
@@ -360,9 +347,6 @@
 			</if>
 			<if test="deviceId != null">
 				DEVICEID_ = #{deviceId, jdbcType=VARCHAR},
-			</if>
-			<if test="fileId != null">
-				FILEID_ = #{fileId, jdbcType=VARCHAR},
 			</if>
 			<if test="filename != null">
 				FILENAME_ = #{filename, jdbcType=VARCHAR},
@@ -456,7 +440,7 @@
 	<delete id="deleteDataFilesByFileId" parameterType="com.glaf.matrix.data.query.DataFileQuery">
 
 		delete from
-		DATA_FILE${tableSuffix} where FILEID_ = #{fileId}
+		DATA_FILE${tableSuffix} where ID_ = #{fileId}
 
 	</delete>
 
@@ -483,18 +467,18 @@
 	<select id="getDataFileById" parameterType="com.glaf.matrix.data.query.DataFileQuery"
 		resultMap="dataFileResultMap">
 		select
-		ID_, BUSINESSKEY_ , FILEID_ , SERVICEKEY_ , NAME_ ,
-		TYPE_ ,
-		FILENAME_ , MASTERDATAID_, DATABASEID_, TENANTID_,
-		OBJECTID_ ,
-		OBJECTVALUE_ ,
-		SIZE_ ,
-		LASTMODIFIED_ ,
+		ID_, BUSINESSKEY_, SERVICEKEY_, NAME_,
+		TYPE_,
+		FILENAME_, MASTERDATAID_, DATABASEID_, TENANTID_,
+		OBJECTID_,
+		OBJECTVALUE_,
+		SIZE_,
+		LASTMODIFIED_,
 		CONTENTTYPE_, PATH_,
-		LOCKED_ ,
-		STATUS_ ,
-		DELETEFLAG_ ,
-		CREATEBY_ ,
+		LOCKED_,
+		STATUS_,
+		DELETEFLAG_,
+		CREATEBY_,
 		CREATEDATE_, DEVICEID_
 		from
 		DATA_FILE${tableSuffix}
@@ -507,46 +491,42 @@
 	<select id="getDataFilesByFileId" parameterType="com.glaf.matrix.data.query.DataFileQuery"
 		resultMap="dataFileResultMap">
 		select
-		ID_, BUSINESSKEY_ , FILEID_ , SERVICEKEY_ , NAME_ ,
-		TYPE_ , FILENAME_ , MASTERDATAID_, DATABASEID_, TENANTID_,
-		OBJECTID_ ,
-		OBJECTVALUE_ , SIZE_ ,
-		LASTMODIFIED_ ,
-		CONTENTTYPE_, PATH_,
-		LOCKED_ ,
-		STATUS_ , DELETEFLAG_ ,
-		CREATEBY_ ,
-		CREATEDATE_, DEVICEID_
+		ID_, BUSINESSKEY_, SERVICEKEY_, NAME_,
+		TYPE_,
+		FILENAME_, MASTERDATAID_, DATABASEID_, TENANTID_,
+		OBJECTID_,
+		OBJECTVALUE_, SIZE_,
+		LASTMODIFIED_, CONTENTTYPE_, PATH_,
+		LOCKED_,
+		STATUS_, DELETEFLAG_,
+		CREATEBY_, CREATEDATE_, DEVICEID_
 		from
 		DATA_FILE${tableSuffix}
-		where FILEID_ = #{fileId}
-		order by
-		CREATEDATE_
-		desc
+		where ID_ = #{fileId}
+		order by CREATEDATE_ desc
 	</select>
 
 
 	<select id="getDataFilesByFilename" parameterType="com.glaf.matrix.data.query.DataFileQuery"
 		resultMap="dataFileResultMap">
 		select
-		ID_, BUSINESSKEY_ , FILEID_ , SERVICEKEY_ , NAME_ ,
-		TYPE_ , FILENAME_ , MASTERDATAID_, DATABASEID_,
-		OBJECTID_ , TENANTID_,
-		OBJECTVALUE_ , SIZE_ ,
-		LASTMODIFIED_ ,
+		ID_, BUSINESSKEY_, SERVICEKEY_, NAME_,
+		TYPE_,
+		FILENAME_, MASTERDATAID_, DATABASEID_,
+		OBJECTID_, TENANTID_,
+		OBJECTVALUE_, SIZE_ ,
+		LASTMODIFIED_,
 		CONTENTTYPE_, PATH_,
-		LOCKED_ ,
-		STATUS_ , DELETEFLAG_ ,
-		CREATEBY_ ,
+		LOCKED_,
+		STATUS_, DELETEFLAG_,
+		CREATEBY_,
 		CREATEDATE_, DEVICEID_
 		from
 		DATA_FILE${tableSuffix}
 		where FILENAME_ =
 		#{filename}
-		order
-		by
-		CREATEDATE_
-		desc
+		order by
+		CREATEDATE_ desc
 	</select>
 
 
@@ -566,7 +546,7 @@
 		DATA_, SIZE_, TENANTID_,
 		LASTMODIFIED_ from
 		DATA_FILE${tableSuffix}
-		where FILEID_ = #{fileId}
+		where ID_ = #{fileId}
 	</select>
 
 
@@ -586,24 +566,24 @@
 		DATA_, SIZE_, TENANTID_,
 		LASTMODIFIED_ from
 		DATA_FILE${tableSuffix}
-		where FILEID_ = #{fileId}
+		where ID_ = #{fileId}
 	</select>
 
 
 	<select id="getDataFiles" parameterType="com.glaf.matrix.data.query.DataFileQuery"
 		resultMap="dataFileResultMap">
 		select
-		E.ID_, E.BUSINESSKEY_ , E.FILEID_ , E.SERVICEKEY_ , E.NAME_ ,
-		E.TYPE_ , E.MASTERDATAID_, E.DATABASEID_, TENANTID_,
+		E.ID_, E.BUSINESSKEY_, E.SERVICEKEY_, E.NAME_,
+		E.TYPE_,
+		E.MASTERDATAID_, E.DATABASEID_, TENANTID_,
 		E.FILENAME_ ,
 		E.PATH_,
-		E.OBJECTID_ ,
-		E.OBJECTVALUE_ , E.SIZE_ ,
-		E.LASTMODIFIED_ ,
+		E.OBJECTID_,
+		E.OBJECTVALUE_, E.SIZE_ ,
+		E.LASTMODIFIED_,
 		E.CONTENTTYPE_,
-		E.LOCKED_ ,
-		E.STATUS_ , E.DELETEFLAG_
-		, E.CREATEBY_ ,
+		E.LOCKED_,
+		E.STATUS_, E.DELETEFLAG_, E.CREATEBY_,
 		E.CREATEDATE_,
 		E.DEVICEID_
 		<include refid="selectDataFilesSql" />
@@ -656,10 +636,6 @@
 
 			<if test="businessKeyIsNull != null and businessKeyIsNull =='true' ">
 				and E.BUSINESSKEY_ is null
-			</if>
-
-			<if test="fileId != null">
-				and E.FILEID_ = #{fileId}
 			</if>
 
 			<if test="serviceKey != null">

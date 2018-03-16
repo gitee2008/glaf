@@ -18,7 +18,7 @@
                 <div class="filelist">
                     <ul>
 					   <#list dataFiles as dataFile>
-                        <li><a href="${contextPath}/matrix/binary/download?fileId=${dataFile.fileId}" >${dataFile.filename}</a></li>
+                        <li><a href="${contextPath}/matrix/binary/download?fileId=${dataFile.id}" >${dataFile.filename}</a></li>
                        </#list>
                     </ul>
                 </div>

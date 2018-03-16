@@ -75,13 +75,6 @@ public interface DataFile extends JSONable {
 	String getDeviceId();
 
 	/**
-	 * 文件编号
-	 * 
-	 * @return
-	 */
-	String getFileId();
-
-	/**
 	 * 文件名称
 	 * 
 	 * @return
@@ -196,13 +189,6 @@ public interface DataFile extends JSONable {
 	 * @param deviceId
 	 */
 	void setDeviceId(String deviceId);
-
-	/**
-	 * 设置文件编号
-	 * 
-	 * @param fileId
-	 */
-	void setFileId(String fileId);
 
 	/**
 	 * 设置文件名称

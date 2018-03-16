@@ -218,7 +218,6 @@ public class DataFileController {
 								dataFile.setId(fileId);
 								dataFile.setLastModified(System.currentTimeMillis());
 								dataFile.setCreateBy(loginContext.getActorId());
-								dataFile.setFileId(fileId);
 								dataFile.setFilename(filename);
 								dataFile.setName(mFile.getName());
 								dataFile.setContentType(mFile.getContentType());
@@ -236,8 +235,8 @@ public class DataFileController {
 
 								JSONObject json = new JSONObject();
 								json.put("name", dataFile.getFilename());
-								json.put("id", dataFile.getFileId());
-								json.put("fileId", dataFile.getFileId());
+								json.put("id", dataFile.getId());
+								json.put("fileId", dataFile.getId());
 								rowsJSON.add(json);
 
 								if (onlyOneAttachment) {

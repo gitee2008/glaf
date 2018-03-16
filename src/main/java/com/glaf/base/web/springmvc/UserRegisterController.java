@@ -219,7 +219,6 @@ public class UserRegisterController {
 							dataFile.setId(tenant.getTenantId() + "_tc_image");
 							dataFile.setLastModified(System.currentTimeMillis());
 							dataFile.setCreateBy(user.getActorId());
-							dataFile.setFileId(tenant.getTenantId() + "_tc_image");
 							dataFile.setFilename(filename);
 							dataFile.setName("trading_certificate");
 							dataFile.setContentType(mFile.getContentType());

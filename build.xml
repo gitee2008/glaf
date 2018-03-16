@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="saas" basedir="." default="jar">
+<project name="SAAS" basedir="." default="jar">
 	<!-- Project settings -->
-	<property name="project.title" value="GLAF saas System" />
+	<property name="project.title" value="GLAF SAAS System" />
 	<property name="project.distname" value="glaf-saas" />
 
 	<!-- 路径设置 -->
@@ -47,9 +47,17 @@
 			<fileset dir="." includes="*.bat,*.xml, src/**/*.*,mapping/**/*.xml,jar-conf/**/*.*, db/**/*.*" excludes="**/*.cvs,**/*.bak,**/*.tmp,**/*.scc,**/*.svn" />
 		</jar>
 
-		<jar jarfile="glaf-saas.jar">
-		    <fileset dir="bin" includes="com/glaf/**/*.class,com/glaf/**/*.xml,com/glaf/**/*.properties" excludes="**/test/**"/>
+		<jar jarfile="glaf-framework.jar">
+		    <fileset dir="bin" 
+			         includes="com/glaf/**/*.class,com/glaf/**/*.xml,com/glaf/**/*.properties" 
+					 excludes="com/glaf/heathcare/**/*.*, **/test/**"/>
 		    <fileset dir="jar-conf" includes="**/*.xml,**/*.properties"/>
+        </jar>
+
+		<jar jarfile="glaf-heathcare.jar">
+		    <fileset dir="bin" 
+			         includes="com/glaf/heathcare/**/*.class,com/glaf/heathcare/**/*.xml,com/glaf/heathcare/**/*.properties" 
+					 excludes="**/test/**"/>
         </jar>
 
 	</target>

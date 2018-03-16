@@ -80,7 +80,6 @@ public class StorageManager {
 		dataFile.setServiceKey("ueditor");
 		dataFile.setCreateBy(createBy);
 		dataFile.setLastModified(System.currentTimeMillis());
-		dataFile.setFileId(fileId);
 		dataFile.setFilename(fileName);
 		dataFile.setName(name);
 		dataFile.setPath(path);

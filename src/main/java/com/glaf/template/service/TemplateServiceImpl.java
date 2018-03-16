@@ -188,7 +188,6 @@ public class TemplateServiceImpl implements ITemplateService {
 								logger.debug("reload template config:" + filename);
 								DataFile blob = new DataFileEntity();
 								blob.setData(template.getData());
-								blob.setFileId(template.getTemplateId());
 								blob.setBusinessKey(template.getTemplateId());
 								blob.setLastModified(template.getLastModified());
 								blob.setFilename(FileUtils.getFileName(template.getDataFile()));
@@ -211,7 +210,6 @@ public class TemplateServiceImpl implements ITemplateService {
 							template.setCreateBy("system");
 							DataFile blob = new DataFileEntity();
 							blob.setData(template.getData());
-							blob.setFileId(template.getTemplateId());
 							blob.setBusinessKey(template.getTemplateId());
 							blob.setLastModified(template.getLastModified());
 							blob.setFilename(FileUtils.getFileName(template.getDataFile()));
@@ -274,7 +272,6 @@ public class TemplateServiceImpl implements ITemplateService {
 		if (template.getData() != null) {
 			DataFile blob = new DataFileEntity();
 			blob.setData(template.getData());
-			blob.setFileId(template.getTemplateId());
 			blob.setBusinessKey(template.getTemplateId());
 			blob.setLastModified(template.getLastModified());
 			if (template.getDataFile() != null) {

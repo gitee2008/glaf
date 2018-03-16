@@ -175,7 +175,6 @@ public class StatsHistoryServiceImpl implements StatsHistoryService {
 			dataFile.setCreateBy(statsHistory.getCreateBy());
 			dataFile.setCreateDate(statsHistory.getCreateTime());
 			dataFile.setData(statsHistory.getData());
-			dataFile.setFileId(statsHistory.getId());
 			dataFile.setFilename(statsHistory.getFilename());
 			dataFile.setName(statsHistory.getName());
 			dataFile.setServiceKey("stats_his");

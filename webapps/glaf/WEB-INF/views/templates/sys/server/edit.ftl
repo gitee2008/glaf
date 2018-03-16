@@ -183,7 +183,7 @@
 		<td align="left">
              <select id="type" name="type" onchange="javascript:changePort();">
 			    <option value="">----请选择----</option>
-				<option value="gnoem">云众联</option>
+				<option value="mongodb">MongoDB</option>
 			    <option value="rabbitmq">RabbitMQ</option>
 				<option value="redis">Redis</option>
 				<option value="http">HTTP</option>

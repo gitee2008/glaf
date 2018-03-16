@@ -30,7 +30,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
- 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -171,9 +170,9 @@ public class ImageController {
 
 							DataFile dataFile = new DataFileEntity();
 							dataFile.setId(fileId);
+							dataFile.setCreateDate(new java.util.Date());
 							dataFile.setLastModified(System.currentTimeMillis());
 							dataFile.setCreateBy(loginContext.getActorId());
-							dataFile.setFileId(fileId);
 							dataFile.setFilename(filename);
 							dataFile.setName(mFile.getName());
 							dataFile.setContentType(mFile.getContentType());
@@ -191,8 +190,8 @@ public class ImageController {
 
 							JSONObject json = new JSONObject();
 							json.put("name", dataFile.getFilename());
-							json.put("id", dataFile.getFileId());
-							json.put("fileId", dataFile.getFileId());
+							json.put("id", dataFile.getId());
+							json.put("fileId", dataFile.getId());
 							rowsJSON.add(json);
 						}
 					}
@@ -201,7 +200,8 @@ public class ImageController {
 				result.put("files", rowsJSON);
 
 			} catch (Exception ex) {
-				logger.debug(ex);
+				ex.printStackTrace();
+				logger.error(ex);
 			}
 		}
 		// logger.debug("json:" + result.toJSONString());

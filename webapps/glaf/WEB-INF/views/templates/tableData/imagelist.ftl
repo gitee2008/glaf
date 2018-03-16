@@ -13,7 +13,7 @@
         <div class="wrapper">
 		    <#if upload == "true">
 		    <p>
-			    <iframe id="newFrame" name="newFrame" width="100%" height="350" border="0" frameborder="0"
+			    <iframe id="newFrame" name="newFrame" width="680" height="350" border="0" frameborder="0"
 		          src="${contextPath}/matrix/image/showUpload?serviceKey=${serviceKey}&businessKey_enc=${businessKey_enc}&status_enc=${status_enc}"></iframe>
 			</p>
 			</#if>
@@ -22,7 +22,7 @@
                 <div class="jcarousel">
                     <ul>
 					   <#list dataFiles as dataFile>
-                        <li><img src="${contextPath}/matrix/image/download?fileId=${dataFile.fileId}" width="600" height="400" ></li>
+                        <li><img src="${contextPath}/matrix/image/download?fileId=${dataFile.id}" width="600" height="400" ></li>
                        </#list>
                     </ul>
                 </div>
