@@ -71,6 +71,7 @@
 						{title:'&nbsp;身高评价', field:'heightEvaluate', width:120, align:"center"},
 						{title:'体重(千克)&nbsp;&nbsp;', field:'weight', width:90, align:"right"},
 						{title:'&nbsp;体重评价', field:'weightEvaluate', width:120, align:"center"},
+						{title:'综合评价', field:'bmiEvaluate', width:120, align:"center"},
 						{title:'出生日期', field:'birthday', width:90, align:"center"},
 					    {title:'体检日期', field:'checkDate', width:90, align:"center"},
 						{title:'月龄&nbsp;', field:'checkAgeOfMonth', width:70, align:"center"},

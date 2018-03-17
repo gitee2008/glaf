@@ -102,7 +102,7 @@
 				</#if>>
 		 &nbsp;阶段&nbsp;
 		 <select id="section" name="section" onchange="javascript:submitReq();">
-			<option value="am">晨间检查</option>
+			<option value="am">晨检</option>
 			<option value="pm">午间巡视</option>
 			<option value="day">全日观察</option>
 	     </select>
@@ -119,7 +119,7 @@
 	  <tr>
 	  <td class="table-head" width="20%" align="left">姓名</td>
 	  <td class="table-head" width="20%" align="left">检查情况</td>
-	  <td class="table-head" width="60%" align="left">处理及备注</td>
+	  <td class="table-head" width="60%" align="left">处理及原因</td>
 	  </tr>
 	</thead>
     <tbody>
@@ -148,10 +148,10 @@
 				   class="easyui-validatebox  x-text"
 				   value="${person.treat}" >
 			<br><br>
-			备&nbsp;&nbsp;注&nbsp;
+			具体原因&nbsp;
 		    <input id="remark_${person.id}" name="remark_${person.id}" style="width:250px;" 
 				   class="easyui-validatebox  x-text"
-				   value="${person.memo}" > 
+				   value="${person.remark}" > 
 		   </div>
 		</td>
 	</tr>

@@ -479,6 +479,12 @@
 	    jQuery('#dlg').dialog('close');
 	}
 
+	function doExport1(){
+		var gradeId = jQuery("#gradeId").val();
+		var link="${contextPath}/heathcare/reportMain/exportXls?reportId=PersonExport&gradeId="+gradeId;
+        window.open(link);
+	}
+
 	function switchXY(){
        document.iForm.submit();
 	}
@@ -514,7 +520,9 @@
 					<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-edit'"
 					   onclick="javascript:editSelected();">修改</a>  
 					<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-remove'"
-					   onclick="javascript:deleteSelections();">删除</a> 
+					   onclick="javascript:deleteSelections();">删除</a>
+					<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_export_xls'"
+	                   onclick="javascript:doExport1();">导出</a>
 				</td>
 				<td> 
 				    <input id="nameLike" name="nameLike" type="text" class="x-searchtext"

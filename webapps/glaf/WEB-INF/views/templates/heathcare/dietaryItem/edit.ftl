@@ -23,6 +23,12 @@
 			return;
 	    }
 
+		if(document.getElementById("name").value==""){
+			alert("名称不能为空。");
+			document.getElementById("name").focus();
+			return;
+		}
+
 		if(document.getElementById("quantity").value=="" || document.getElementById("quantity").value * 1.0 <= 0){
 			alert("请输入数量。");
 			document.getElementById("quantity").focus();
@@ -34,7 +40,7 @@
 		jQuery.ajax({
 				   type: "POST",
 				   url: link,
-				   dataType:  'json',
+				   dataType: 'json',
 				   data: params,
 				   error: function(data){
 					   alert('服务器处理错误！');

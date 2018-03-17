@@ -7,6 +7,16 @@
 <script type="text/javascript">
 
 	function saveData(){
+		if(document.getElementById("type").value==""){
+			alert("类型不能为空。");
+			document.getElementById("type").focus();
+			return;
+		}
+		if(document.getElementById("title").value==""){
+			alert("主题不能为空。");
+			document.getElementById("title").focus();
+			return;
+		}
 		var params = jQuery("#iForm").formSerialize();
 		jQuery.ajax({
 				   type: "POST",
@@ -30,6 +40,16 @@
 	}
 
 	function saveAsData(){
+		if(document.getElementById("type").value==""){
+			alert("类型不能为空。");
+			document.getElementById("type").focus();
+			return;
+		}
+		if(document.getElementById("title").value==""){
+			alert("主题不能为空。");
+			document.getElementById("title").focus();
+			return;
+		}
 		document.getElementById("id").value="";
 		var params = jQuery("#iForm").formSerialize();
 		jQuery.ajax({

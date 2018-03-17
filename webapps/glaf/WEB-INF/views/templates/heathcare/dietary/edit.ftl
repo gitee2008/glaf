@@ -13,6 +13,11 @@
 			document.getElementById("name").focus();
 			return;
 		}
+		if(document.getElementById("name").value==""){
+			alert("名称不能为空。");
+			document.getElementById("name").focus();
+			return;
+		}
         if(document.getElementById("typeId").value==""){
 			alert("餐点不能为空。");
 			document.getElementById("typeId").focus();
@@ -56,6 +61,11 @@
 			document.getElementById("typeId").focus();
 			return;
 		}
+		if(document.getElementById("name").value==""){
+			alert("名称不能为空。");
+			document.getElementById("name").focus();
+			return;
+		}
 		if(document.getElementById("dateString").value==""){
 			alert("请选择日期。");
 			document.getElementById("dateString").focus();
@@ -72,7 +82,7 @@
 				   type: "POST",
 				   url: '${contextPath}/heathcare/dietary/saveDietary',
 				   data: params,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },
@@ -103,10 +113,8 @@
 
 </script>
 </head>
-
 <body>
-<div style="margin:0;"></div>  
-
+<div style="margin:0px;"></div>  
 <div class="easyui-layout" data-options="fit:true">  
   <div data-options="region:'north', split:false, border:true" style="height:42px" class="toolbar-backgroud"> 
     <div style="margin:4px;"> 

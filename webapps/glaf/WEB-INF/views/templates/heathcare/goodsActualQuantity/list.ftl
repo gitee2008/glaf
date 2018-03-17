@@ -7,7 +7,7 @@
 <script type="text/javascript">
 
     function getLink(){
-	    var link_ = "${contextPath}/heathcare/goodsActualQuantity/json?startTime=${startTime}&endTime=${endTime}";
+	    var link_ = "${contextPath}/heathcare/goodsActualQuantity/json?startTime=${startTime}&endTime=${endTime}&avgQuantity=${avgQuantity}";
 		//alert(link_);
 	    return link_;
 	}
@@ -21,7 +21,7 @@
 				nowrap: false,
 				striped: true,
 				collapsible: true,
-				url: '${contextPath}/heathcare/goodsActualQuantity/json?startTime=${startTime}&endTime=${endTime}',
+				url: '${contextPath}/heathcare/goodsActualQuantity/json?startTime=${startTime}&endTime=${endTime}&avgQuantity=${avgQuantity}',
 				remoteSort: false,
 				singleSelect: true,
 				idField: 'id',
@@ -31,7 +31,7 @@
 					</#if>
 				    {title:'序号', field:'startIndex', width:60, sortable:false},
 					{title:'物品名称', field:'goodsName', width:220, align:'left', sortable:true, formatter:formatterName},
-					{title:'重量(千克)', field:'quantity', width:120, align:'right', sortable:true},
+					{title:'重量', field:'quantity', width:120, align:'right', sortable:true},
 					{title:'单价', field:'price', width:120, align:'right', sortable:true},
 					{title:'总价', field:'totalPrice', width:120, align:'right', sortable:true},
 					{title:'使用时间', field:'usageTime', width:100, align:'center'},
@@ -514,6 +514,12 @@
 		document.iForm.submit();
 	}
 
+    function showToday(){
+	   var avgQuantity = jQuery("#avgQuantity").val();
+	   //alert(avgQuantity);
+       var link = "${contextPath}/heathcare/goodsActualQuantity/json?showToday=true&avgQuantity="+avgQuantity;
+	   loadGridData(link);
+	}
 
 	function showExport(){
 	   var link = "${contextPath}/heathcare/goodsActualQuantity/showExport";
@@ -593,7 +599,7 @@
     <form id="iForm" name="iForm" method="post" action="">
       <table valign="top">
        <tr valign="top">
-	    <td valign="top" width="32%">   
+	    <td valign="top" width="55%">   
 			<img src="${contextPath}/static/images/window.png">
 			&nbsp;<span class="x_content_title">实际用量表列表</span>
 			<#if audit == true>
@@ -625,7 +631,8 @@
 			   onclick="javascript:checkAll();">全选</a>
 			</#if>
 		</td>
-		<td valign="middle" width="60%">
+		<td valign="middle" width="45%">
+		  &nbsp;<input type="checkbox" id="avgQuantity" name="avgQuantity" <#if avgQuantity == "on">checked</#if> style="font-size:14px;">均量（单位为克g）
 		  &nbsp;日期&nbsp;开始&nbsp;
 		  <input id="startTime" name="startTime" type="text" class="easyui-datebox x-text" style="width:100px"
 		         <#if startTime?exists> value="${startTime}"</#if>>
@@ -635,6 +642,10 @@
 		  &nbsp;
 		  <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-search'"
 	         onclick="javascript:doSearch();">查找</a>
+		  &nbsp;
+		  <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-list'"
+	         onclick="javascript:showToday();">当天</a>
+		  <br>
           &nbsp;
           <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_export_xls'"
 	         onclick="javascript:doWeeklyExport1();">食物用量表</a>

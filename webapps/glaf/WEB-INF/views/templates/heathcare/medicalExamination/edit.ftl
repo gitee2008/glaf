@@ -95,10 +95,7 @@
 		<td width="38%" align="left">
             <select id="type" name="type">
 				<option value="">----请选择----</option> 
-				<option value="3">开学体检</option>
 				<option value="5">定期体检</option>
-				<option value="6">常规体检</option>
-				<option value="7">专项体检</option>
 			</select>
 			<script type="text/javascript">
 			     document.getElementById("type").value="${type}";
@@ -120,11 +117,7 @@
 		<td width="38%" align="left">
             <select id="type" name="type">
 				<option value="">----请选择----</option> 
-				<option value="3">开学体检</option>
-				<option value="4">自行体检</option>
 				<option value="5">定期体检</option>
-				<option value="6">常规体检</option>
-				<option value="7">专项体检</option>
 			</select>
 			<script type="text/javascript">
 			     document.getElementById("type").value="${type}";
@@ -242,13 +235,13 @@
 		<td width="12%" align="left">左视力</td>
 		<td width="38%" align="left">
 			<input id="eyesightLeft" name="eyesightLeft" type="text"
-			       class="easyui-numberbox x-text"  precision="2" style="width:60px; text-align:right;"
+			       class="easyui-numberbox x-text"  precision="1" style="width:60px; text-align:right;"
 				   value="${medicalExamination.eyesightLeft}"/>
 		</td>
 		<td width="12%" align="left">右视力</td>
 		<td width="38%" align="left">
 			<input id="eyesightRight" name="eyesightRight" type="text"
-			       class="easyui-numberbox x-text"  precision="2" style="width:60px; text-align:right;"
+			       class="easyui-numberbox x-text"  precision="1" style="width:60px; text-align:right;"
 				   value="${medicalExamination.eyesightRight}"/>
 		</td>
 	</tr>
@@ -567,58 +560,6 @@
 		</td>
 	</tr>
 	<tr>
-		<td width="12%" align="left">淋巴结</td>
-		<td width="38%" align="left">
-		    <select id="lymphoid" name="lymphoid">
-				<option value="">----请选择----</option> 
-				<option value="Y">未见异常</option>
-				<option value="N">异常</option>
-				<option value="O">未检查</option>
-			</select>
-			<script type="text/javascript">
-			     document.getElementById("lymphoid").value="${medicalExamination.lymphoid}";
-			</script>
-		</td>
-		<td width="12%" align="left">前囟</td>
-		<td width="38%" align="left">
-		    <select id="bregma" name="bregma">
-				<option value="">----请选择----</option> 
-				<option value="Y">未见异常</option>
-				<option value="N">异常</option>
-				<option value="O">未检查</option>
-			</select>
-			<script type="text/javascript">
-			     document.getElementById("bregma").value="${medicalExamination.bregma}";
-			</script>
-		</td>
-	</tr>
-	<tr>
-		<td width="12%" align="left">口腔</td>
-		<td width="38%" align="left">
-		    <select id="oralogy" name="oralogy">
-				<option value="">----请选择----</option> 
-				<option value="Y">未见异常</option>
-				<option value="N">异常</option>
-				<option value="O">未检查</option>
-			</select>
-			<script type="text/javascript">
-			     document.getElementById("oralogy").value="${medicalExamination.oralogy}";
-			</script>
-		</td>
-		<td width="12%" align="left">扁桃体</td>
-		<td width="38%" align="left">
-		    <select id="tonsil" name="tonsil">
-				<option value="">----请选择----</option> 
-				<option value="Y">未见异常</option>
-				<option value="N">异常</option>
-				<option value="O">未检查</option>
-			</select>
-			<script type="text/javascript">
-			     document.getElementById("tonsil").value="${medicalExamination.tonsil}";
-			</script>
-		</td>
-	</tr>
-	<tr>
 		<td width="12%" align="left">乙肝表面抗体</td>
 		<td width="38%" align="left">
 		    <select id="hbsab" name="hbsab">
@@ -657,17 +598,9 @@
 			     document.getElementById("hvaigm").value="${medicalExamination.hvaigm}";
 			</script>
 		</td>
-		<td width="12%" align="left">骨骼</td>
+		<td width="12%" align="left"></td>
 		<td width="38%" align="left">
-            <select id="bone" name="bone">
-				<option value="">----请选择----</option> 
-				<option value="Y">未见异常</option>
-				<option value="N">异常</option>
-				<option value="O">未检查</option>
-			</select>
-			<script type="text/javascript">
-			     document.getElementById("bone").value="${medicalExamination.bone}";
-			</script>
+            
 		</td>
 	</tr>
 	<tr>
@@ -685,6 +618,14 @@
 		</td>
 	</tr>
 	<tr>
+		<td width="12%" align="left">既往史</td>
+		<td align="left" colspan="3">
+             <input id="previousHistory" name="previousHistory" type="text" 
+			       class="easyui-validatebox  x-text" style="width:592px"
+				   value="${medicalExamination.previousHistory}"/>
+		</td>
+	</tr>
+	<tr>
 		<td width="12%" align="left">过敏史</td>
 		<td align="left" colspan="3">
             <input id="allergy" name="allergy" type="text" 
@@ -692,14 +633,14 @@
 				   value="${medicalExamination.allergy}"/>
 		</td>
 	</tr>
-	<tr>
+	<!-- <tr>
 		<td width="12%" align="left">先天缺陷</td>
 		<td width="88%" align="left" colspan="3">
             <input id="birthDefect" name="birthDefect" type="text" 
 			       class="easyui-validatebox  x-text" style="width:592px"
 				   value="${medicalExamination.birthDefect}"/>
 		</td>
-	</tr>
+	</tr> -->
 	<tr>
 		<td width="12%" align="left">体检时间</td>
 		<td width="38%" align="left">

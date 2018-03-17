@@ -21,16 +21,16 @@
 			});
 
 		Highcharts.chart('container', {
-
+            chart: {
+				type: 'spline'
+			},
             colors:[ 
-			      '#333333', 
+			      '#330033', 
                   '#ff6666', 
-				  '#ffcc00',
 				  '#00cc33',
-                  '#ffcc00',  
-                  '#ff6699',  
-				  '#333333',
-				  '#0066ff'
+				  '#ff6666',
+                  '#330033',  
+                  '#0099CC'
                 ],
 
 			title: {
@@ -59,11 +59,17 @@
 			},
 
 			plotOptions: {
-					spline: {
-						marker: {
-							enable: false
+				spline: {
+					lineWidth: 1,
+					states: {
+						hover: {
+							lineWidth: 2
 						}
+					},
+					marker: {
+						enabled: false
 					}
+				}
 			},
 
 			series: ${seriesData},

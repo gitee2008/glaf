@@ -11,6 +11,16 @@
 
   <#if privilege_write == true>
 	function saveData(){
+		if(document.getElementById("name").value==""){
+			alert("姓名不能为空。");
+			document.getElementById("name").focus();
+			return;
+		}
+		if(document.getElementById("birthday").value==""){
+			alert("出生日期不能为空。");
+			document.getElementById("birthday").focus();
+			return;
+		}
 		var params = jQuery("#iForm").formSerialize();
 		jQuery.ajax({
 				   type: "POST",
@@ -34,13 +44,23 @@
 	}
 
 	function saveAsData(){
+		if(document.getElementById("name").value==""){
+			alert("姓名不能为空。");
+			document.getElementById("name").focus();
+			return;
+		}
+		if(document.getElementById("birthday").value==""){
+			alert("出生日期不能为空。");
+			document.getElementById("birthday").focus();
+			return;
+		}
 		document.getElementById("id").value="";
 		var params = jQuery("#iForm").formSerialize();
 		jQuery.ajax({
 				   type: "POST",
 				   url: '${contextPath}/heathcare/person/savePerson',
 				   data: params,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },
@@ -58,13 +78,10 @@
 	}
   </#if>
 
-
 </script>
 </head>
-
 <body>
 <div style="margin:0;"></div>  
-
 <div class="easyui-layout" data-options="fit:true">  
   <div data-options="region:'north',split:true,border:true" style="height:42px" class="toolbar-backgroud"> 
     <div style="margin:4px;"> 

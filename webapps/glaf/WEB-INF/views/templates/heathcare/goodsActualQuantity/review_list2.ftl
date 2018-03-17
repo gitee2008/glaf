@@ -233,8 +233,6 @@
 		  <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-list'"
 	         onclick="javascript:showToday();">当天</a>
 		  &nbsp;
-		  <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_chart'"
-	         onclick="javascript:showChart();">图表</a>
 		</td>
        </tr>
       </table>

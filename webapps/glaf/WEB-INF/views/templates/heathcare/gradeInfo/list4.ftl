@@ -504,6 +504,32 @@
 	    }
 	}
 
+	function doExport1(){
+		var rows = jQuery('#mydatagrid').datagrid('getSelections');
+	    if(rows == null || rows.length !=1){
+		   alert("请选择其中一个班级。");
+		   return;
+	    }
+	    var selected = jQuery('#mydatagrid').datagrid('getSelected');
+	    if (selected ){
+			var startTime = jQuery("#startTime").val();
+			var endTime = jQuery("#endTime").val();
+			if(startTime > endTime){
+				alert("开始时间不能大于结束时间。");
+				return;
+			}
+			var link="${contextPath}/heathcare/reportMain/exportXls?gradeId="+selected.id+"&reportId=PersonInspection";
+			if(startTime != ""){
+				link = link + "&startTime=" + startTime ;
+			}
+			if(endTime != ""){
+				link = link  + "&endTime="+endTime;
+			}
+			window.open(link);
+		}
+	}
+
+
 </script>
 </head>
 <body style="margin:1px;">  
@@ -511,19 +537,29 @@
 <div class="easyui-layout" data-options="fit:true">  
    <div data-options="region:'north', split:false, border:true" style="height:42px; margin-top:5px;" class="toolbar-backgroud"> 
     <div style="margin:4px;"> 
-		<img src="${contextPath}/static/images/window.png">&nbsp;<span class="x_content_title">班级信息列表</span>
-		<!-- <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-user'"
-		   onclick="javascript:selectPerson();">学生</a> --> 
-		<!-- <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_vt'"
-		   onclick="javascript:absenceList();">考勤</a> --> 
-		<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_check'"
-		   onclick="javascript:inspectionList();">健康检查</a> 
-		<!-- <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_ss'"
-		   onclick="javascript:sicknessList();">疾病记录</a> 
-		<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_ss'"
-		   onclick="javascript:checkList();">体检记录</a> 
-		<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_money'"
-		   onclick="javascript:payList();">缴费记录</a> -->
+	 <form id="iForm" name="iForm" method="post" action="">
+      <table valign="middle">
+       <tr>
+	    <td valign="middle">   
+		   <img src="${contextPath}/static/images/window.png">
+	       &nbsp;<span class="x_content_title">班级信息列表</span>
+		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_check'"
+		      onclick="javascript:inspectionList();">健康检查</a> 
+		</td>
+		<td valign="middle">
+		  &nbsp;日期&nbsp;开始&nbsp;
+		  <input id="startTime" name="startTime" type="text" class="easyui-datebox x-text" style="width:100px"
+		         <#if startTime?exists> value="${startTime}"</#if>>
+		  &nbsp;结束&nbsp;
+		  <input id="endTime" name="endTime" type="text" class="easyui-datebox x-text" style="width:100px"
+		         <#if endTime?exists> value="${endTime}"</#if>>
+		  &nbsp;
+		  <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_export_xls'"
+	       onclick="javascript:doExport1();">导出</a>
+		</td>
+       </tr>
+      </table>
+	</form>
    </div> 
   </div> 
   <div data-options="region:'center',border:true">

@@ -177,13 +177,13 @@
 		<td width="10%" align="left">左视力</td>
 		<td width="40%" align="left">
 			<input id="eyesightLeft" name="eyesightLeft" type="text"
-			       class="easyui-numberbox  x-text" precision="2" style="width:60px; text-align:right;"
+			       class="easyui-numberbox  x-text" precision="1" style="width:60px; text-align:right;"
 				   value="${medicalExamination.eyesightLeft}"/>
 		</td>
 		<td width="10%" align="left">右视力</td>
 		<td width="40%" align="left">
 			<input id="eyesightRight" name="eyesightRight" type="text"
-			       class="easyui-numberbox  x-text" precision="2" style="width:60px; text-align:right;"
+			       class="easyui-numberbox  x-text" precision="1" style="width:60px; text-align:right;"
 				   value="${medicalExamination.eyesightRight}"/>
 		</td>
 	</tr>

@@ -223,12 +223,12 @@
 			<td width="10%" align="left" class="table-content"> 
 			     <br>&nbsp;左&nbsp;
 				 <input id="eyesightLeft" name="eyesightLeft" type="text"
-			            class="easyui-numberbox  x-small-text" precision="1" style="width:50px; text-align:right;"
+			            class="easyui-numberbox x-small-text" precision="1" style="width:50px; text-align:right;"
 				        value="${medicalExamination.eyesightLeft}"/>
 				  <br><br>
 				  &nbsp;右&nbsp;
 				  <input id="eyesightRight" name="eyesightRight" type="text"
-			             class="easyui-numberbox  x-small-text" precision="1" style="width:50px; text-align:right;"
+			             class="easyui-numberbox x-small-text" precision="1" style="width:50px; text-align:right;"
 				         value="${medicalExamination.eyesightRight}"/>
 				  <br><br>
 			</td>
