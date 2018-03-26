@@ -26,6 +26,8 @@ public interface Cache {
 
 	void put(String region, String key, String value);
 
+	void put(String region, String key, String value, long timeToLiveInSeconds);
+
 	void remove(String region, String key);
 
 	void shutdown();

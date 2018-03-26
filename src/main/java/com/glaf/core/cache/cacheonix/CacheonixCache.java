@@ -151,6 +151,16 @@ public class CacheonixCache implements com.glaf.core.cache.Cache {
 		}
 	}
 
+	public void put(String region, String key, Object value, long timeToLiveInSeconds) {
+		Cache<String, byte[]> cache = this.getCache(region);
+		cache.remove(key);
+		if (value != null) {
+			byte[] data = SerializationUtils.serialize(value);
+			cache.put(key, data, timeToLiveInSeconds, TimeUnit.SECONDS);
+			logger.debug("put data into cacheonix.");
+		}
+	}
+
 	@Override
 	public void put(String region, String key, String value) {
 		Cache<String, byte[]> cache = this.getCache(region);
@@ -158,6 +168,17 @@ public class CacheonixCache implements com.glaf.core.cache.Cache {
 		if (value != null) {
 			byte[] data = SerializationUtils.serialize(value);
 			cache.put(key, data, expireMinutes, TimeUnit.MINUTES);
+			logger.debug("put data into cacheonix.");
+		}
+	}
+
+	@Override
+	public void put(String region, String key, String value, long timeToLiveInSeconds) {
+		Cache<String, byte[]> cache = this.getCache(region);
+		cache.remove(key);
+		if (value != null) {
+			byte[] data = SerializationUtils.serialize(value);
+			cache.put(key, data, timeToLiveInSeconds, TimeUnit.SECONDS);
 			logger.debug("put data into cacheonix.");
 		}
 	}

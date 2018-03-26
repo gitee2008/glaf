@@ -6,6 +6,7 @@ public class CacheItem implements java.io.Serializable {
 	protected String name;
 	protected String key;
 	protected long lastModified;
+	protected long timeToLiveInSeconds;
 	protected int size;
 
 	public CacheItem() {
@@ -54,6 +55,10 @@ public class CacheItem implements java.io.Serializable {
 		return size;
 	}
 
+	public long getTimeToLiveInSeconds() {
+		return timeToLiveInSeconds;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -80,6 +85,10 @@ public class CacheItem implements java.io.Serializable {
 
 	public void setSize(int size) {
 		this.size = size;
+	}
+
+	public void setTimeToLiveInSeconds(long timeToLiveInSeconds) {
+		this.timeToLiveInSeconds = timeToLiveInSeconds;
 	}
 
 }

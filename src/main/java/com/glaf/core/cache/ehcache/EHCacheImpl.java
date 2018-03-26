@@ -229,6 +229,24 @@ public class EHCacheImpl implements Cache {
 		}
 	}
 
+	@Override
+	public void put(String region, String key, String value, long timeToLiveInSeconds) {
+		try {
+			Element element = new Element(key, value);
+			if (timeToLiveInSeconds > 0) {
+				element.setTimeToLive((int) timeToLiveInSeconds);
+			}
+			getCache(region).put(element);
+			logger.debug("put cache data into ehcahe.");
+		} catch (IllegalArgumentException e) {
+			throw new CacheException(e);
+		} catch (IllegalStateException e) {
+			throw new CacheException(e);
+		} catch (net.sf.ehcache.CacheException e) {
+			throw new CacheException(e);
+		}
+	}
+
 	public void remove(String key) {
 		try {
 			getCache().remove(key);

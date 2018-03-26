@@ -57,7 +57,7 @@ import com.glaf.core.util.StringTools;
 
 import com.glaf.matrix.transform.domain.ColumnTransform;
 import com.glaf.matrix.transform.domain.TableTransform;
- 
+
 import com.glaf.matrix.transform.service.TableTransformService;
 import com.glaf.matrix.data.helper.MyBatisHelper;
 import com.glaf.matrix.data.helper.SqlCriteriaHelper;
@@ -102,8 +102,7 @@ public class TableTransformBean implements java.lang.Runnable {
 		SqlExecutor sqlExecutor2 = null;
 		ResultSet rs = null;
 		try {
-			TableTransform tableTransform = tableTransformService
-					.getTableTransform(transformId);
+			TableTransform tableTransform = tableTransformService.getTableTransform(transformId);
 			logger.debug("transformId:" + transformId);
 			// logger.debug("tableTransform:" + tableTransform);
 			String tableName = tableTransform.getTableName();
@@ -455,6 +454,14 @@ public class TableTransformBean implements java.lang.Runnable {
 												String text2 = Jsoup.parse(strValue).text();
 												dataMap.put(targetColumn, text2);
 												dataMap.put(targetColumn.toLowerCase(), text2);
+											}
+										} else if (StringUtils.equals(type, "removeBlank")) {
+											strValue = ParamUtils.getString(dataMap, name);
+											if (StringUtils.isNotEmpty(strValue)) {
+												strValue = StringTools.replace(strValue, " ", "");
+												strValue = StringTools.replace(strValue, " ", "");
+												dataMap.put(targetColumn, strValue);
+												dataMap.put(targetColumn.toLowerCase(), strValue);
 											}
 										} else {
 											Object object = ParamUtils.getObject(dataMap, name);

@@ -1,1 +1,0 @@
-<img src="${request.contextPath}/flowable/image?processDefinitionId=${processDefinitionId}" border="0">

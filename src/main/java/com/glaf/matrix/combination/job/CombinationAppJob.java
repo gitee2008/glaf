@@ -56,7 +56,7 @@ public class CombinationAppJob extends BaseJob {
 	public void runJob(JobExecutionContext context) throws JobExecutionException {
 		logger.info("-----------------------CombinationAppJob-------------------------");
 		if (F_STEP > 0) {
-			if ((System.currentTimeMillis() - lastExecuteTime.get()) < DateUtils.MINUTE * 5) {
+			if ((System.currentTimeMillis() - lastExecuteTime.get()) < DateUtils.SECOND * 30) {
 				logger.info("间隔时间未到，不执行。");
 				return;
 			}

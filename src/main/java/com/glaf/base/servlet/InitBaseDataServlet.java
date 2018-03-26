@@ -24,6 +24,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.glaf.base.modules.BaseDataManager;
 import com.glaf.base.modules.InitDataBean;
+import com.glaf.base.modules.InitSqlBean;
 import com.glaf.base.modules.sys.business.SqlUpdateBean;
 import com.glaf.base.modules.sys.model.SysUser;
 import com.glaf.base.modules.sys.service.SysUserService;
@@ -94,6 +95,16 @@ public class InitBaseDataServlet extends HttpServlet {
 			logger.error("初始化数据失败！");
 		}
 		logger.info("耗时：" + (System.currentTimeMillis() - startTime) + " ms.");
+
+		if ("true".equals(System.getProperty("execute_init_sql_on_startup"))) {
+			try {
+				InitSqlBean bean = new InitSqlBean();
+				bean.execute();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				logger.error("初始化SQL数据失败！");
+			}
+		}
 
 		try {
 			logger.info("------------update tree pinyin-------------------");

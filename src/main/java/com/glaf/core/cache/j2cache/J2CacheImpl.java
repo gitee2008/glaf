@@ -59,7 +59,7 @@ public class J2CacheImpl implements Cache {
 				CacheObject cacheObject = (CacheObject) object;
 				Object value = cacheObject.getValue();
 				if (value != null) {
-					//logger.debug("value class:" + value.getClass().getName());
+					// logger.debug("value class:" + value.getClass().getName());
 					if (value instanceof String) {
 						String str = (String) value;
 						try {
@@ -100,9 +100,33 @@ public class J2CacheImpl implements Cache {
 				}
 				logger.debug("put object into j2cache.");
 			} catch (Exception ex) {
-				//logger.error("put j2cache error", ex);
+				// logger.error("put j2cache error", ex);
 				try {
 					cacheChannel.set(region, key, com.glaf.core.util.Hex.byte2hex(value.getBytes()), 1800L);
+				} catch (Exception e) {
+				}
+			}
+		}
+	}
+
+	@Override
+	public void put(String region, String key, String value, long timeToLiveInSeconds) {
+		if (value != null) {
+			if (timeToLiveInSeconds == 0) {
+				timeToLiveInSeconds = 1800L;
+			}
+			try {
+				cacheChannel.set(region, key, com.glaf.core.util.Hex.byte2hex(value.getBytes("UTF-8")),
+						timeToLiveInSeconds);
+				if (!regions.contains(region)) {
+					regions.add(region);
+				}
+				logger.debug("put object into j2cache.");
+			} catch (Exception ex) {
+				// logger.error("put j2cache error", ex);
+				try {
+					cacheChannel.set(region, key, com.glaf.core.util.Hex.byte2hex(value.getBytes()),
+							timeToLiveInSeconds);
 				} catch (Exception e) {
 				}
 			}

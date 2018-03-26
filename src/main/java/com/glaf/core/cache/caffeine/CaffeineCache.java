@@ -147,6 +147,13 @@ public class CaffeineCache implements com.glaf.core.cache.Cache {
 		cache.put(key, value);
 	}
 
+	@Override
+	public void put(String region, String key, String value, long timeToLiveInSeconds) {
+		Cache<Object, Object> cache = this.getCache(region);
+		cache.invalidate(key);
+		cache.put(key, value);
+	}
+
 	public void remove(String key) {
 		getCache().invalidate(key);
 	}
