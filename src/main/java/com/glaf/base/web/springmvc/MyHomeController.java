@@ -49,19 +49,10 @@ import com.glaf.core.tree.component.TreeRepository;
 import com.glaf.core.tree.helper.TreeRepositoryBuilder;
 import com.glaf.core.util.RequestUtils;
 
-import com.glaf.ui.model.UserTheme;
-import com.glaf.ui.query.UserThemeQuery;
-import com.glaf.ui.service.ThemeService;
-import com.glaf.ui.service.UserThemeService;
-
 @Controller("/my/home")
 @RequestMapping("/my/home")
 public class MyHomeController {
 	protected static final Log logger = LogFactory.getLog(MyHomeController.class);
-
-	protected ThemeService themeService;
-
-	protected UserThemeService userThemeService;
 
 	protected TenantConfigService tenantConfigService;
 
@@ -78,22 +69,7 @@ public class MyHomeController {
 			return null;
 		}
 		RequestUtils.setRequestParameterToAttribute(request);
-		UserThemeQuery userThemeQuery = new UserThemeQuery();
-		String userId = RequestUtils.getActorId(request);
-		userThemeQuery.setActorId(userId);
-		List<UserTheme> userThemes = null;
-		try {
-			userThemes = userThemeService.list(userThemeQuery);
-		} catch (Exception ex) {
-		}
-		UserTheme userTheme = new UserTheme();
-		if (userThemes != null && userThemes.size() > 0) {
-			userTheme = userThemes.get(0);
-		}
-		request.setAttribute("userTheme", userTheme);
-
 		String context = request.getContextPath();
-
 		request.setAttribute("contextPath", context);
 		String theme = RequestUtils.getTheme(request);
 		request.setAttribute("theme", theme);
@@ -216,16 +192,6 @@ public class MyHomeController {
 	@javax.annotation.Resource
 	public void setTenantConfigService(TenantConfigService tenantConfigService) {
 		this.tenantConfigService = tenantConfigService;
-	}
-
-	@javax.annotation.Resource
-	public void setThemeService(ThemeService themeService) {
-		this.themeService = themeService;
-	}
-
-	@javax.annotation.Resource
-	public void setUserThemeService(UserThemeService userThemeService) {
-		this.userThemeService = userThemeService;
 	}
 
 }
