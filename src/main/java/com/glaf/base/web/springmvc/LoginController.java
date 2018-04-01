@@ -395,6 +395,7 @@ public class LoginController {
 			com.glaf.shiro.ShiroSecurity.logout();
 			if (request.getSession(false) != null) {
 				// 退出系统，清除session对象
+				RequestUtils.removeLoginUser(request, response);
 				request.getSession().removeAttribute(Constants.LOGIN_INFO);
 				request.getSession().invalidate();
 			}

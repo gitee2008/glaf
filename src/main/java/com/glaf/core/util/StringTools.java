@@ -576,6 +576,21 @@ public final class StringTools {
 		return r;
 	}
 
+	public static String getDigit3Id(int id) {
+		String value = String.valueOf(id);
+		switch (value.length()) {
+		case 1:
+			value = "00" + value;
+			break;
+		case 2:
+			value = "0" + value;
+			break;
+		default:
+			break;
+		}
+		return value;
+	}
+
 	public static String getDigit4Id(int id) {
 		String value = String.valueOf(id);
 		switch (value.length()) {

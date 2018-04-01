@@ -493,7 +493,7 @@ public class TenantUserController {
 					bean.setOrganizationId(RequestUtils.getLong(request, "organizationId"));
 					bean.setTenantId(sysTenant.getTenantId());
 					bean.setUserId(String.valueOf(sysTenant.getId()
-							+ StringTools.getDigit4Id(entityService.nextId("tenant_" + sysTenant.getId()).intValue())));
+							+ StringTools.getDigit3Id(entityService.nextId("tenant_" + sysTenant.getId()).intValue())));
 					bean.setName(ParamUtil.getParameter(request, "name"));
 					String password = ParamUtil.getParameter(request, "password");
 					bean.setPasswordHash(password);

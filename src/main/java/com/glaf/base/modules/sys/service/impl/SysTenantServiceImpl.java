@@ -290,7 +290,7 @@ public class SysTenantServiceImpl implements SysTenantService {
 			organization.setCreateBy("system");
 			sysOrganizationService.create(organization);
 		}
-		String userId = String.valueOf(sysTenant.getId() + "0000");
+		String userId = String.valueOf(sysTenant.getId() + "000");
 		if (sysUserService.findByAccount(userId) == null) {
 			SysUser bean = new SysUser();
 			bean.setActorId(userId);

@@ -39,17 +39,12 @@ public class PermissionFilter extends OncePerRequestFilter {
 		includes.add("/ip.jsp");
 		includes.add("/key.jsp");
 		includes.add("/init.jsp");
-		includes.add("/ping.jsp");
 		includes.add("/cache.jsp");
 		includes.add("/clear.jsp");
-		includes.add("/main.jsp");
 		includes.add("/login.jsp");
 		includes.add("/index.jsp");
 		includes.add("/test.jsp");
-		includes.add("/insert.jsp");
 		includes.add("/update.jsp");
-		includes.add("/unauthorized.jsp");
-		includes.add("/inc/globaljs.jsp");
 	}
 
 	@Override
