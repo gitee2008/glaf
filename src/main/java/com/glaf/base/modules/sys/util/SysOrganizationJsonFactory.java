@@ -103,6 +103,12 @@ public class SysOrganizationJsonFactory {
 			model.setLevel(jsonObject.getInteger("level"));
 		}
 
+		if (jsonObject.containsKey("parent")) {
+			JSONObject parentJson = jsonObject.getJSONObject("parent");
+			SysOrganization parent = jsonToObject(parentJson);
+			model.setParent(parent);
+		}
+
 		return model;
 	}
 
@@ -183,6 +189,13 @@ public class SysOrganizationJsonFactory {
 
 		jsonObject.put("level", model.getLevel());
 
+		if (model.getParent() != null) {
+			if (model.getParent() instanceof SysOrganization) {
+				JSONObject parent = toJsonObject((SysOrganization) model.getParent());
+				jsonObject.put("parent", parent);
+			}
+		}
+
 		return jsonObject;
 	}
 
@@ -250,6 +263,14 @@ public class SysOrganizationJsonFactory {
 			jsonObject.put("url", model.getUrl());
 		}
 		jsonObject.put("level", model.getLevel());
+
+		if (model.getParent() != null) {
+			if (model.getParent() instanceof SysOrganization) {
+				ObjectNode parent = toObjectNode((SysOrganization) model.getParent());
+				jsonObject.set("parent", parent);
+			}
+		}
+
 		return jsonObject;
 	}
 

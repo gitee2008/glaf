@@ -68,13 +68,12 @@ public class MyHomeController {
 			response.sendRedirect(request.getContextPath() + "/login");
 			return null;
 		}
+		
 		RequestUtils.setRequestParameterToAttribute(request);
 		String context = request.getContextPath();
 		request.setAttribute("contextPath", context);
 		String theme = RequestUtils.getTheme(request);
 		request.setAttribute("theme", theme);
-		String homeTheme = RequestUtils.getHomeTheme(request);
-		request.setAttribute("homeTheme", homeTheme);
 		request.setAttribute("sys_title", SystemConfig.getString("res_system_name"));
 		request.setAttribute("username", loginContext.getUser().getName());
 

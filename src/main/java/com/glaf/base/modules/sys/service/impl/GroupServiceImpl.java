@@ -29,6 +29,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.glaf.base.modules.sys.mapper.GroupLeaderMapper;
 import com.glaf.base.modules.sys.mapper.GroupMapper;
 import com.glaf.base.modules.sys.mapper.GroupUserMapper;
@@ -37,8 +40,13 @@ import com.glaf.base.modules.sys.model.GroupLeader;
 import com.glaf.base.modules.sys.model.GroupUser;
 import com.glaf.base.modules.sys.query.GroupQuery;
 import com.glaf.base.modules.sys.service.GroupService;
+import com.glaf.base.modules.sys.util.GroupJsonFactory;
+import com.glaf.core.cache.CacheFactory;
+import com.glaf.core.config.SystemConfig;
 import com.glaf.core.dao.EntityDAO;
 import com.glaf.core.id.IdGenerator;
+import com.glaf.core.util.Constants;
+import com.glaf.core.util.JsonUtils;
 import com.glaf.core.util.PageResult;
 import com.glaf.core.util.UUID32;
 
@@ -70,6 +78,10 @@ public class GroupServiceImpl implements GroupService {
 	@Transactional
 	public void deleteById(String groupId) {
 		if (groupId != null) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				CacheFactory.clear(Constants.CACHE_GROUP_REGION);
+			}
+
 			groupMapper.deleteGroupById(groupId);
 		}
 	}
@@ -77,6 +89,9 @@ public class GroupServiceImpl implements GroupService {
 	@Transactional
 	public void deleteByIds(List<String> groupIds) {
 		if (groupIds != null && !groupIds.isEmpty()) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				CacheFactory.clear(Constants.CACHE_GROUP_REGION);
+			}
 			GroupQuery query = new GroupQuery();
 			query.rowIds(groupIds);
 			groupMapper.deleteGroups(query);
@@ -87,7 +102,27 @@ public class GroupServiceImpl implements GroupService {
 		if (groupId == null) {
 			return null;
 		}
+
+		String cacheKey = Constants.CACHE_GROUP_KEY + groupId;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_GROUP_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONObject json = JSON.parseObject(text);
+					return GroupJsonFactory.jsonToObject(json);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
+
 		Group group = groupMapper.getGroupById(groupId);
+		if (group != null) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				JSONObject json = group.toJsonObject();
+				CacheFactory.put(Constants.CACHE_GROUP_REGION, cacheKey, json.toJSONString());
+			}
+		}
 		return group;
 	}
 
@@ -160,7 +195,24 @@ public class GroupServiceImpl implements GroupService {
 	 * @return
 	 */
 	public List<Group> getGroupsByUserId(String tenantId, String userId) {
-		return groupMapper.getGroupsByUserId(userId);
+		String cacheKey = Constants.CACHE_GROUP_KEY + "_" + tenantId + "_" + userId;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_GROUP_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONArray jsonArray = JSON.parseArray(text);
+					return GroupJsonFactory.arrayToList(jsonArray);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
+		List<Group> groups = groupMapper.getGroupsByUserId(userId);
+		if (groups != null) {
+			JSONArray jsonArray = GroupJsonFactory.listToArray(groups);
+			CacheFactory.put(Constants.CACHE_GROUP_REGION, cacheKey, jsonArray.toJSONString());
+		}
+		return groups;
 	}
 
 	/**
@@ -171,11 +223,28 @@ public class GroupServiceImpl implements GroupService {
 	 * @return
 	 */
 	public List<Group> getGroupsByUserIdAndType(String tenantId, String userId, String type) {
+		String cacheKey = Constants.CACHE_GROUP_KEY + "_" + tenantId + "_" + userId + "_" + type;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_GROUP_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONArray jsonArray = JSON.parseArray(text);
+					return GroupJsonFactory.arrayToList(jsonArray);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
 		GroupQuery query = new GroupQuery();
 		query.tenantId(tenantId);
 		query.setUserId(userId);
 		query.setType(type);
-		return groupMapper.getGroupsByUserIdAndType(query);
+		List<Group> groups = groupMapper.getGroupsByUserIdAndType(query);
+		if (groups != null) {
+			JSONArray jsonArray = GroupJsonFactory.listToArray(groups);
+			CacheFactory.put(Constants.CACHE_GROUP_REGION, cacheKey, jsonArray.toJSONString());
+		}
+		return groups;
 	}
 
 	/**
@@ -189,11 +258,48 @@ public class GroupServiceImpl implements GroupService {
 	}
 
 	public List<String> getLeaderUserIdsByGroupId(String tenantId, String groupId) {
-		return groupLeaderMapper.getUserIdsByGroupId(groupId);
+		String cacheKey = Constants.CACHE_GROUP_KEY + "_x_" + tenantId + "_" + groupId;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_GROUP_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONArray jsonArray = JSON.parseArray(text);
+					return JsonUtils.arrayToList(jsonArray);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
+		List<String> list = groupLeaderMapper.getUserIdsByGroupId(groupId);
+		if (list != null) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				JSONArray array = JsonUtils.listToArray(list);
+				CacheFactory.put(Constants.CACHE_GROUP_REGION, cacheKey, array.toJSONString());
+			}
+		}
+		return list;
 	}
 
 	public List<String> getUserIdsByGroupId(String tenantId, String groupId) {
-		return groupUserMapper.getUserIdsByGroupId(groupId);
+		String cacheKey = Constants.CACHE_GROUP_KEY + "_y_" + tenantId + "_" + groupId;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_GROUP_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONArray jsonArray = JSON.parseArray(text);
+					return JsonUtils.arrayToList(jsonArray);
+				} catch (Exception ex) {
+				}
+			}
+		}
+		List<String> list = groupUserMapper.getUserIdsByGroupId(groupId);
+		if (list != null) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				JSONArray array = JsonUtils.listToArray(list);
+				CacheFactory.put(Constants.CACHE_GROUP_REGION, cacheKey, array.toJSONString());
+			}
+		}
+		return list;
 	}
 
 	/**
@@ -223,6 +329,9 @@ public class GroupServiceImpl implements GroupService {
 
 	@Transactional
 	public void save(Group group) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear(Constants.CACHE_GROUP_REGION);
+		}
 		if (StringUtils.isEmpty(group.getGroupId())) {
 			group.setGroupId(UUID32.getUUID());
 			group.setSort(1);
@@ -247,6 +356,9 @@ public class GroupServiceImpl implements GroupService {
 	 */
 	@Transactional
 	public void saveGroupLeaders(String tenantId, String groupId, Set<String> userIds) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear(Constants.CACHE_GROUP_REGION);
+		}
 		groupLeaderMapper.deleteGroupLeadersByGroupId(groupId);
 		if (userIds != null && !userIds.isEmpty()) {
 			for (String userId : userIds) {
@@ -268,6 +380,9 @@ public class GroupServiceImpl implements GroupService {
 	 */
 	@Transactional
 	public void saveGroupUsers(String tenantId, String groupId, Set<String> userIds) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear(Constants.CACHE_GROUP_REGION);
+		}
 		groupUserMapper.deleteGroupUsersByGroupId(groupId);
 		if (userIds != null && !userIds.isEmpty()) {
 			for (String userId : userIds) {
@@ -289,6 +404,9 @@ public class GroupServiceImpl implements GroupService {
 	 */
 	@Transactional
 	public void saveOrUpdateGroupLeaders(String tenantId, String groupId, Set<String> userIds) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear(Constants.CACHE_GROUP_REGION);
+		}
 		if (userIds != null && !userIds.isEmpty()) {
 			GroupQuery query = new GroupQuery();
 			query.setGroupId(groupId);
@@ -309,6 +427,9 @@ public class GroupServiceImpl implements GroupService {
 
 	@Transactional
 	public void saveOrUpdateGroupUsers(String tenantId, String groupId, Set<String> userIds) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear(Constants.CACHE_GROUP_REGION);
+		}
 		if (userIds != null && !userIds.isEmpty()) {
 			GroupQuery query = new GroupQuery();
 			query.setGroupId(groupId);
@@ -359,6 +480,9 @@ public class GroupServiceImpl implements GroupService {
 
 	@Transactional
 	public void update(Group group) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear(Constants.CACHE_GROUP_REGION);
+		}
 		group.setUpdateDate(new Date());
 		groupMapper.updateGroup(group);
 	}

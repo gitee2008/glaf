@@ -148,8 +148,8 @@ public class SysUserJsonFactory {
 			if (array != null && !array.isEmpty()) {
 				for (int i = 0; i < array.size(); i++) {
 					JSONObject json = array.getJSONObject(i);
-					SysRole r = SysRoleJsonFactory.jsonToObject(json);
-					model.getRoles().add(r);
+					SysRole role = SysRoleJsonFactory.jsonToObject(json);
+					model.getRoles().add(role);
 				}
 			}
 		}
@@ -159,8 +159,8 @@ public class SysUserJsonFactory {
 			if (array != null && !array.isEmpty()) {
 				for (int i = 0; i < array.size(); i++) {
 					JSONObject json = array.getJSONObject(i);
-					SysUserRole r = SysUserRoleJsonFactory.jsonToObject(json);
-					model.getUserRoles().add(r);
+					SysUserRole userrole = SysUserRoleJsonFactory.jsonToObject(json);
+					model.getUserRoles().add(userrole);
 				}
 			}
 		}

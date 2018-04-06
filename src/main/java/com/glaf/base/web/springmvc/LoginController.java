@@ -50,7 +50,6 @@ import com.glaf.base.online.service.UserOnlineService;
 import com.glaf.base.utils.ContextUtil;
 import com.glaf.base.utils.ParamUtil;
 
-import com.glaf.core.cache.CacheFactory;
 import com.glaf.core.config.Environment;
 import com.glaf.core.config.SystemConfig;
 import com.glaf.core.domain.SystemProperty;
@@ -235,7 +234,7 @@ public class LoginController {
 			// 登录成功，修改最近一次登录时间
 			bean.setLastLoginDate(new Date());
 			bean.setLastLoginIP(ipAddr);
-			bean.setLockLoginTime(new Date());
+			bean.setLockLoginTime(null);
 			bean.setLoginRetry(0);
 			sysUserService.updateUserLoginInfo(bean);
 
@@ -388,10 +387,10 @@ public class LoginController {
 		String actorId = RequestUtils.getActorId(request);
 		try {
 			userOnlineService.logout(actorId);
-			String cacheKey = Constants.CACHE_LOGIN_CONTEXT_KEY + actorId;
-			CacheFactory.remove(Constants.CACHE_LOGIN_CONTEXT_REGION, cacheKey);
-			cacheKey = Constants.CACHE_USER_KEY + actorId;
-			CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
+			// String cacheKey = Constants.CACHE_LOGIN_CONTEXT_KEY + actorId;
+			// CacheFactory.remove(Constants.CACHE_LOGIN_CONTEXT_REGION, cacheKey);
+			// cacheKey = Constants.CACHE_USER_KEY + actorId;
+			// CacheFactory.remove(Constants.CACHE_USER_REGION, cacheKey);
 			com.glaf.shiro.ShiroSecurity.logout();
 			if (request.getSession(false) != null) {
 				// 退出系统，清除session对象

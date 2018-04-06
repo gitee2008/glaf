@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.session.RowBounds;
@@ -31,13 +32,19 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.glaf.base.modules.sys.SysConstants;
 import com.glaf.base.modules.sys.mapper.SysOrganizationMapper;
 import com.glaf.base.modules.sys.model.SysOrganization;
 import com.glaf.base.modules.sys.query.SysOrganizationQuery;
 import com.glaf.base.modules.sys.service.SysOrganizationService;
-
+import com.glaf.base.modules.sys.util.SysOrganizationJsonFactory;
+import com.glaf.core.cache.CacheFactory;
+import com.glaf.core.config.SystemConfig;
 import com.glaf.core.id.IdGenerator;
+import com.glaf.core.util.Constants;
 import com.glaf.core.util.PageResult;
 
 @Service("sysOrganizationService")
@@ -61,6 +68,9 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 
 	@Transactional
 	public boolean create(SysOrganization bean) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear(Constants.CACHE_ORGANIZATION_REGION);
+		}
 		if (bean.getId() == 0) {
 			bean.setId(idGenerator.nextId("SYS_ORGANIZATION"));
 		}
@@ -79,18 +89,27 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 
 	@Transactional
 	public boolean delete(long organizationId) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear(Constants.CACHE_ORGANIZATION_REGION);
+		}
 		this.deleteById(organizationId);
 		return true;
 	}
 
 	@Transactional
 	public boolean delete(SysOrganization bean) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear(Constants.CACHE_ORGANIZATION_REGION);
+		}
 		this.deleteById(bean.getId());
 		return true;
 	}
 
 	@Transactional
 	public boolean deleteAll(long[] organizationIds) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear(Constants.CACHE_ORGANIZATION_REGION);
+		}
 		if (organizationIds != null && organizationIds.length > 0) {
 			for (long organizationId : organizationIds) {
 				this.deleteById(organizationId);
@@ -101,6 +120,9 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 
 	@Transactional
 	public void deleteById(long organizationId) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear(Constants.CACHE_ORGANIZATION_REGION);
+		}
 		if (organizationId > 0) {
 			SysOrganization organization = this.getSysOrganization(organizationId);
 			if (organization != null) {
@@ -110,21 +132,40 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 	}
 
 	public SysOrganization findByCode(String code) {
+		String cacheKey = Constants.CACHE_ORGANIZATION_CODE_KEY + code;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_ORGANIZATION_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONObject json = JSON.parseObject(text);
+					return SysOrganizationJsonFactory.jsonToObject(json);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
+
 		SysOrganizationQuery query = new SysOrganizationQuery();
 		query.code(code);
 		query.setDeleteFlag(0);
 		query.setOrderBy(" E.ID asc ");
 
+		SysOrganization organization = null;
 		List<SysOrganization> list = this.list(query);
 		if (list != null && !list.isEmpty()) {
-			return list.get(0);
+			organization = list.get(0);
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				CacheFactory.put(Constants.CACHE_ORGANIZATION_REGION, cacheKey,
+						organization.toJsonObject().toJSONString());
+			}
 		}
 
-		return null;
+		return organization;
 	}
 
 	public SysOrganization findById(long organizationId) {
-		return this.getSysOrganization(organizationId);
+		SysOrganization organization = this.getSysOrganization(organizationId);
+		return organization;
 	}
 
 	public SysOrganization findByName(String name) {
@@ -141,9 +182,9 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 		return null;
 	}
 
-	public SysOrganization findByNo(String organizationno) {
+	public SysOrganization findByNo(String organizationNo) {
 		SysOrganizationQuery query = new SysOrganizationQuery();
-		query.no(organizationno);
+		query.no(organizationNo);
 		query.setDeleteFlag(0);
 		query.setOrderBy(" E.ID asc ");
 
@@ -165,11 +206,30 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 		if (organizationId <= 0) {
 			return null;
 		}
-		SysOrganization sysOrganization = sysOrganizationMapper.getSysOrganizationById(organizationId);
-		if (sysOrganization != null) {
 
+		String cacheKey = Constants.CACHE_ORGANIZATION_KEY + organizationId;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_ORGANIZATION_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONObject json = JSON.parseObject(text);
+					return SysOrganizationJsonFactory.jsonToObject(json);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
 		}
-		return sysOrganization;
+
+		SysOrganization organization = sysOrganizationMapper.getSysOrganizationById(organizationId);
+		if (organization != null && organization.getParentId() > 0) {
+			SysOrganization parent = this.getSysOrganization(organization.getParentId());
+			organization.setParent(parent);
+			if (organization != null && SystemConfig.getBoolean("use_query_cache")) {
+				CacheFactory.put(Constants.CACHE_ORGANIZATION_REGION, cacheKey,
+						organization.toJsonObject().toJSONString());
+			}
+		}
+		return organization;
 	}
 
 	public int getSysOrganizationCountByQueryCriteria(SysOrganizationQuery query) {
@@ -204,10 +264,30 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 	}
 
 	public List<SysOrganization> getSysOrganizationList(long parentId) {
+		String cacheKey = Constants.CACHE_ORGANIZATION_KEY + parentId;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_ORGANIZATION_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONArray jsonArray = JSON.parseArray(text);
+					return SysOrganizationJsonFactory.arrayToList(jsonArray);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
+
 		SysOrganizationQuery query = new SysOrganizationQuery();
 		query.setDeleteFlag(0);
 		query.parentId(parentId);
-		return this.list(query);
+		List<SysOrganization> list = this.list(query);
+		if (list != null) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				JSONArray array = SysOrganizationJsonFactory.listToArray(list);
+				CacheFactory.put(Constants.CACHE_ORGANIZATION_REGION, cacheKey, array.toJSONString());
+			}
+		}
+		return list;
 	}
 
 	@Override
@@ -242,9 +322,29 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 	 * @return List
 	 */
 	public List<SysOrganization> getSysOrganizationList(String tenantId) {
+		String cacheKey = Constants.CACHE_ORGANIZATION_KEY + tenantId;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_ORGANIZATION_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONArray jsonArray = JSON.parseArray(text);
+					return SysOrganizationJsonFactory.arrayToList(jsonArray);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
+
 		SysOrganizationQuery query = new SysOrganizationQuery();
 		query.tenantId(tenantId);
-		return this.list(query);
+		List<SysOrganization> list = this.list(query);
+		if (list != null) {
+			if (SystemConfig.getBoolean("use_query_cache")) {
+				JSONArray array = SysOrganizationJsonFactory.listToArray(list);
+				CacheFactory.put(Constants.CACHE_ORGANIZATION_REGION, cacheKey, array.toJSONString());
+			}
+		}
+		return list;
 	}
 
 	public List<SysOrganization> getSysOrganizationsByQueryCriteria(int start, int pageSize,
@@ -267,11 +367,14 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 		if (organizationId <= 0) {
 			return null;
 		}
-		SysOrganization sysOrganization = sysOrganizationMapper.getSysOrganizationById(organizationId);
-		if (sysOrganization != null) {
-
+		SysOrganization organization = this.getSysOrganization(organizationId);
+		if (organization != null) {
+			if (organization.getParentId() > 0) {
+				SysOrganization parent = this.getSysOrganizationWithAncestor(organization.getParentId());
+				organization.setParent(parent);
+			}
 		}
-		return sysOrganization;
+		return organization;
 	}
 
 	/**
@@ -292,15 +395,32 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 	}
 
 	public SysOrganization getTopOrganizationByTenantId(String tenantId) {
+		String cacheKey = Constants.CACHE_ORGANIZATION_KEY + tenantId;
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			String text = CacheFactory.getString(Constants.CACHE_ORGANIZATION_REGION, cacheKey);
+			if (StringUtils.isNotEmpty(text)) {
+				try {
+					JSONObject json = JSON.parseObject(text);
+					return SysOrganizationJsonFactory.jsonToObject(json);
+				} catch (Exception ex) {
+					// Ignore error
+				}
+			}
+		}
 		SysOrganizationQuery query = new SysOrganizationQuery();
 		query.setParentId(0L);
 		query.setTenantId(tenantId);
 
 		List<SysOrganization> list = this.list(query);
+		SysOrganization organization = null;
 		if (list != null && !list.isEmpty()) {
-			return list.get(0);
+			organization = list.get(0);
+			if (organization != null && SystemConfig.getBoolean("use_query_cache")) {
+				CacheFactory.put(Constants.CACHE_ORGANIZATION_REGION, cacheKey,
+						organization.toJsonObject().toJSONString());
+			}
 		}
-		return null;
+		return organization;
 	}
 
 	public List<SysOrganization> list(SysOrganizationQuery query) {
@@ -420,6 +540,9 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 
 	@Transactional
 	public boolean update(SysOrganization bean) {
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear(Constants.CACHE_ORGANIZATION_REGION);
+		}
 		bean.setUpdateDate(new Date());
 		sysOrganizationMapper.updateSysOrganization(bean);
 		return true;

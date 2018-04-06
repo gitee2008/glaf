@@ -85,16 +85,12 @@ class ConfigManager {
 
 		if ("consul".equalsIgnoreCase(value)) {
 			className = "com.glaf.core.config.consul.ConsulConfigProvider";
-		} else if ("mongodb".equalsIgnoreCase(value)) {
-			className = "com.glaf.core.config.mongodb.MongodbConfigProvider";
-		} else if ("redis".equalsIgnoreCase(value)) {
-			className = "com.glaf.core.config.redis.RedisConfigProvider";
 		} else if ("zookeeper".equalsIgnoreCase(value)) {
 			className = "com.glaf.core.config.zookeeper.ZooKeeperConfigProvider";
 		}
 
 		if (!StringUtils.startsWith(className, "com.glaf")) {
-			className = "com.glaf.core.config.redis.RedisConfigProvider";
+			className = "com.glaf.core.config.redis.ConsulConfigProvider";
 		}
 
 		return (ConfigProvider) Class.forName(className).newInstance();

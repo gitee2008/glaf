@@ -18,11 +18,12 @@
 
 package com.glaf.core.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
+
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -35,6 +36,114 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
 public class JsonUtils {
+
+	public static List<String> arrayToList(JSONArray array) {
+		List<String> list = new ArrayList<String>();
+		if (array != null && !array.isEmpty()) {
+			int len = array.size();
+			for (int index = 0; index < len; index++) {
+				list.add(array.getString(index));
+			}
+		}
+		return list;
+	}
+
+	public static Map<String, Object> decode(String str) {
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
+		if (StringUtils.isNotEmpty(str) && (str.length() > 0 && str.charAt(0) == '{') && str.endsWith("}")) {
+			try {
+				JSONObject jsonObject = (JSONObject) JSON.parse(str);
+				Iterator<Entry<String, Object>> iterator = jsonObject.entrySet().iterator();
+				while (iterator.hasNext()) {
+					Entry<String, Object> entry = iterator.next();
+					String key = (String) entry.getKey();
+					Object value = entry.getValue();
+					if (value != null) {
+						if (value instanceof Object[]) {
+							Object[] array = (Object[]) value;
+							Collection<Object> collection = new java.util.ArrayList<Object>();
+							for (int i = 0; i < array.length; i++) {
+								collection.add(array[i]);
+							}
+							dataMap.put(key, collection);
+						} else if (value instanceof JSONArray) {
+							JSONArray array = (JSONArray) value;
+							Collection<Object> collection = new java.util.ArrayList<Object>();
+							for (int i = 0, len = array.size(); i < len; i++) {
+								collection.add(array.get(i));
+							}
+							dataMap.put(key, collection);
+						} else if (value instanceof Collection<?>) {
+							Collection<?> collection = (Collection<?>) value;
+							dataMap.put(key, collection);
+						} else if (value instanceof Map<?, ?>) {
+							Map<?, ?> map = (Map<?, ?>) value;
+							dataMap.put(key, map);
+						} else {
+							if ((!key.startsWith("x_filter_")) && key.toLowerCase().endsWith("date")) {
+								String datetime = value.toString();
+								try {
+									java.util.Date date = DateUtils.toDate(datetime);
+									dataMap.put(key, date);
+								} catch (Exception ex) {
+
+									dataMap.put(key, value);
+								}
+							} else {
+								dataMap.put(key, value);
+							}
+						}
+					}
+				}
+			} catch (JSONException ex) {
+
+			}
+		}
+		return dataMap;
+	}
+
+	public static Map<String, String> decodeStringMap(String str) {
+		Map<String, String> dataMap = new LinkedHashMap<String, String>();
+		if (StringUtils.isNotEmpty(str) && (str.length() > 0 && str.charAt(0) == '{') && str.endsWith("}")) {
+			try {
+				JSONObject jsonObject = (JSONObject) JSON.parse(str);
+				Iterator<Entry<String, Object>> iterator = jsonObject.entrySet().iterator();
+				while (iterator.hasNext()) {
+					Entry<String, Object> entry = iterator.next();
+					String key = (String) entry.getKey();
+					Object value = entry.getValue();
+					if (value != null) {
+						if (value instanceof Object[]) {
+							Object[] array = (Object[]) value;
+							Collection<Object> collection = new java.util.ArrayList<Object>();
+							for (int i = 0; i < array.length; i++) {
+								collection.add(array[i]);
+							}
+
+						} else if (value instanceof JSONArray) {
+							JSONArray array = (JSONArray) value;
+							Collection<Object> collection = new java.util.ArrayList<Object>();
+							for (int i = 0, len = array.size(); i < len; i++) {
+								collection.add(array.get(i));
+							}
+
+						} else if (value instanceof Collection<?>) {
+
+						} else if (value instanceof Map<?, ?>) {
+
+						} else {
+
+							dataMap.put(key, value.toString());
+
+						}
+					}
+				}
+			} catch (JSONException ex) {
+
+			}
+		}
+		return dataMap;
+	}
 
 	public static String encode(Map<String, Object> params) {
 		JSONObject jsonObject = null;
@@ -69,7 +178,7 @@ public class JsonUtils {
 						}
 					}
 				} catch (JSONException ex) {
-					
+
 				}
 			}
 			str = jsonObject.toString();
@@ -77,109 +186,14 @@ public class JsonUtils {
 		return str;
 	}
 
-	public static Map<String, Object> decode(String str) {
-		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
-		if (StringUtils.isNotEmpty(str)
-				&& (str.length() > 0 && str.charAt(0) == '{')
-				&& str.endsWith("}")) {
-			try {
-				JSONObject jsonObject = (JSONObject) JSON.parse(str);
-				Iterator<Entry<String, Object>> iterator = jsonObject
-						.entrySet().iterator();
-				while (iterator.hasNext()) {
-					Entry<String, Object> entry = iterator.next();
-					String key = (String) entry.getKey();
-					Object value = entry.getValue();
-					if (value != null) {
-						if (value instanceof Object[]) {
-							Object[] array = (Object[]) value;
-							Collection<Object> collection = new java.util.ArrayList<Object>();
-							for (int i = 0; i < array.length; i++) {
-								collection.add(array[i]);
-							}
-							dataMap.put(key, collection);
-						} else if (value instanceof JSONArray) {
-							JSONArray array = (JSONArray) value;
-							Collection<Object> collection = new java.util.ArrayList<Object>();
-							for (int i = 0, len = array.size(); i < len; i++) {
-								collection.add(array.get(i));
-							}
-							dataMap.put(key, collection);
-						} else if (value instanceof Collection<?>) {
-							Collection<?> collection = (Collection<?>) value;
-							dataMap.put(key, collection);
-						} else if (value instanceof Map<?, ?>) {
-							Map<?, ?> map = (Map<?, ?>) value;
-							dataMap.put(key, map);
-						} else {
-							if ((!key.startsWith("x_filter_"))
-									&& key.toLowerCase().endsWith("date")) {
-								String datetime = value.toString();
-								try {
-									java.util.Date date = DateUtils
-											.toDate(datetime);
-									dataMap.put(key, date);
-								} catch (Exception ex) {
-									
-									dataMap.put(key, value);
-								}
-							} else {
-								dataMap.put(key, value);
-							}
-						}
-					}
-				}
-			} catch (JSONException ex) {
-				
+	public static JSONArray listToArray(List<String> list) {
+		JSONArray array = new JSONArray();
+		if (list != null && !list.isEmpty()) {
+			for (String str : list) {
+				array.add(str);
 			}
 		}
-		return dataMap;
-	}
-
-	public static Map<String, String> decodeStringMap(String str) {
-		Map<String, String> dataMap = new LinkedHashMap<String, String>();
-		if (StringUtils.isNotEmpty(str)
-				&& (str.length() > 0 && str.charAt(0) == '{')
-				&& str.endsWith("}")) {
-			try {
-				JSONObject jsonObject = (JSONObject) JSON.parse(str);
-				Iterator<Entry<String, Object>> iterator = jsonObject
-						.entrySet().iterator();
-				while (iterator.hasNext()) {
-					Entry<String, Object> entry = iterator.next();
-					String key = (String) entry.getKey();
-					Object value = entry.getValue();
-					if (value != null) {
-						if (value instanceof Object[]) {
-							Object[] array = (Object[]) value;
-							Collection<Object> collection = new java.util.ArrayList<Object>();
-							for (int i = 0; i < array.length; i++) {
-								collection.add(array[i]);
-							}
-
-						} else if (value instanceof JSONArray) {
-							JSONArray array = (JSONArray) value;
-							Collection<Object> collection = new java.util.ArrayList<Object>();
-							for (int i = 0, len = array.size(); i < len; i++) {
-								collection.add(array.get(i));
-							}
-
-						} else if (value instanceof Collection<?>) {
-
-						} else if (value instanceof Map<?, ?>) {
-
-						} else {
-
-							dataMap.put(key, value.toString());
-
-						}
-					}
-				}
-			} catch (JSONException ex) {
-				
-			}
-		}
-		return dataMap;
+		return array;
 	}
 
 	public static JSONObject toJSONObject(Map<String, Object> params) {
@@ -214,61 +228,11 @@ public class JsonUtils {
 						}
 					}
 				} catch (JSONException ex) {
-					
+
 				}
 			}
 		}
 		return jsonObject;
-	}
-
-	public static void main(String[] args) throws Exception {
-		Map<String, Object> dataMap = new java.util.HashMap<String, Object>();
-		dataMap.put("key01", "广州");
-		dataMap.put("key02", 12345);
-		dataMap.put("key03", 789.85D);
-		dataMap.put("date", new Date());
-		Collection<Object> actorIds = new HashSet<Object>();
-		actorIds.add("sales01");
-		actorIds.add("sales02");
-		actorIds.add("sales03");
-		actorIds.add("sales04");
-		actorIds.add("sales05");
-		dataMap.put("actorIds", actorIds.toArray());
-		dataMap.put("x_sale_actor_actorIds", actorIds);
-
-		Map<String, Object> xxxMap = new java.util.HashMap<String, Object>();
-		xxxMap.put("0", "----请选择----");
-		xxxMap.put("1", "火车");
-		xxxMap.put("2", "飞机");
-		xxxMap.put("3", "汽车");
-
-		dataMap.put("trans", xxxMap);
-
-		String str = JsonUtils.encode(dataMap);
-		System.out.println(str);
-		Map<?, ?> p = JsonUtils.decode(str);
-		System.out.println(p);
-		System.out.println(p.get("date").getClass().getName());
-
-		String xx = "{name:\"trans\",nodeType:\"select\",children:{\"1\":\"火车\",\"3\":\"汽车\",\"2\":\"飞机\",\"0\":\"----请选择----\"}}";
-		Map<String, Object> xMap = JsonUtils.decode(xx);
-		System.out.println(xMap);
-		Set<Entry<String, Object>> entrySet = xMap.entrySet();
-		for (Entry<String, Object> entry : entrySet) {
-			String key = entry.getKey();
-			Object value = entry.getValue();
-			System.out.println(key + " = " + value);
-			System.out.println(key.getClass().getName() + "  "
-					+ value.getClass().getName());
-			if (value instanceof JSONObject) {
-				JSONObject json = (JSONObject) value;
-				Iterator<?> iter = json.keySet().iterator();
-				while (iter.hasNext()) {
-					String kk = (String) iter.next();
-					System.out.println(kk + " = " + json.get(kk));
-				}
-			}
-		}
 	}
 
 }

@@ -312,7 +312,7 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 		String treeIdLike = null;
 		SysApplication parent = findById(parentId);
 		logger.debug("parentId:" + parentId);
-		logger.debug("parent:" + parent);
+		//logger.debug("parent:" + parent);
 		if (parent != null && parent.getTreeId() != null) {
 			treeIdLike = parent.getTreeId() + "%";
 		}

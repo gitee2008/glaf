@@ -72,7 +72,7 @@ public class AuthorizeBean {
 	public SysUser getUser(String account) {
 		SysUser sysUser = null;
 		if (account != null) {
-			String cacheKey = Constants.CACHE_USER_KEY + account;
+			String cacheKey = Constants.CACHE_USER_ALL_KEY + account;
 			if (SystemConfig.getBoolean("use_query_cache")) {
 				String text = CacheFactory.getString(Constants.CACHE_USER_REGION, cacheKey);
 				if (StringUtils.isNotEmpty(text)) {
