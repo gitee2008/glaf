@@ -208,6 +208,9 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 	@javax.persistence.Transient
 	protected MultipartFile file;
 
+	@javax.persistence.Transient
+	protected boolean isSystemAdministrator;
+
 	public SysTenant() {
 
 	}
@@ -360,6 +363,10 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 		return result;
 	}
 
+	public boolean isSystemAdministrator() {
+		return isSystemAdministrator;
+	}
+
 	public SysTenant jsonToObject(JSONObject jsonObject) {
 		return SysTenantJsonFactory.jsonToObject(jsonObject);
 	}
@@ -438,6 +445,10 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 
 	public void setProvinceId(long provinceId) {
 		this.provinceId = provinceId;
+	}
+
+	public void setSystemAdministrator(boolean isSystemAdministrator) {
+		this.isSystemAdministrator = isSystemAdministrator;
 	}
 
 	public void setTelephone(String telephone) {

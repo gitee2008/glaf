@@ -547,7 +547,7 @@ public class TableDataBean {
 					int hash = IdentityFactory.getTenantHash(loginContext.getTenantId());
 					String sql = " update DATA_FILE" + (hash > 0 ? hash : "")
 							+ " set STATUS_ = 1 where SERVICEKEY_ = ? and CREATEBY_ = ? and STATUS_ = 0 ";
-					Database database = getDatabaseService().getDatabaseByMapping("file_storage_db");
+					Database database = getDatabaseService().getDatabaseByMapping("file");
 					conn = DBConnectionFactory.getConnection(database.getName());
 					conn.setAutoCommit(false);
 					psmt = conn.prepareStatement(sql);
@@ -599,7 +599,7 @@ public class TableDataBean {
 					int hash = IdentityFactory.getTenantHash(loginContext.getTenantId());
 					String sql = " update DATA_FILE" + (hash > 0 ? hash : "")
 							+ " set STATUS_ = 1, BUSINESSKEY_ = ? where SERVICEKEY_ = ? and CREATEBY_ = ? and STATUS_ = 0 ";
-					Database database = getDatabaseService().getDatabaseByMapping("file_storage_db");
+					Database database = getDatabaseService().getDatabaseByMapping("file");
 					conn = DBConnectionFactory.getConnection(database.getName());
 					conn.setAutoCommit(false);
 					psmt = conn.prepareStatement(sql);

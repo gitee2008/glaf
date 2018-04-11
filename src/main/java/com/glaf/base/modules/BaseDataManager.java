@@ -46,7 +46,6 @@ import com.glaf.core.base.ConnectionDefinition;
 import com.glaf.core.config.Configuration;
 import com.glaf.core.config.DBConfiguration;
 import com.glaf.core.config.Environment;
-import com.glaf.core.config.GlobalConfig;
 import com.glaf.core.config.SystemProperties;
 import com.glaf.core.context.ContextFactory;
 import com.glaf.core.domain.ColumnDefinition;
@@ -946,8 +945,6 @@ public class BaseDataManager {
 				long start = System.currentTimeMillis();
 
 				initBaseData();
-
-				logger.debug("redis config:" + GlobalConfig.getConfigProperties("redis.properties"));
 
 				long ts = System.currentTimeMillis() - start;
 				logger.info("重新装载基础数据用时（毫秒）：" + ts);

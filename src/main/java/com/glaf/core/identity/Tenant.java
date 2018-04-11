@@ -39,6 +39,8 @@ public interface Tenant extends java.io.Serializable {
 
 	int getTenantType();
 
+	boolean isSystemAdministrator();
+
 	Tenant jsonToObject(JSONObject jsonObject);
 
 	void setDatabaseId(long databaseId);
@@ -50,6 +52,8 @@ public interface Tenant extends java.io.Serializable {
 	void setLocked(int locked);
 
 	void setName(String name);
+
+	void setSystemAdministrator(boolean isSystemAdministrator);
 
 	void setTenantId(String tenantId);
 

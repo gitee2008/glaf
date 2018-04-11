@@ -93,6 +93,12 @@ public class ContextUtil {
 		}
 	}
 
+	public static void remove(Object key) {
+		if (key != null) {
+			dataMap.remove(key);
+		}
+	}
+
 	public static void setContextPath(String contextPath) {
 		dataMap.put("__contextPath__", contextPath);
 	}
