@@ -28,7 +28,6 @@ import java.security.InvalidParameterException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.Provider;
 import java.security.PublicKey;
@@ -46,7 +45,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +68,7 @@ public final class RSAUtils {
 	private static final int KEY_SIZE = 1024;
 
 	/** 默认的安全服务提供者 */
-	private static final Provider DEFAULT_PROVIDER = new BouncyCastleProvider();
+	private static Provider DEFAULT_PROVIDER;
 
 	private static volatile KeyPairGenerator keyPairGen = null;
 
@@ -81,9 +79,13 @@ public final class RSAUtils {
 
 	static {
 		try {
+			String provider = "org.bouncycastle.jce.provider.BouncyCastleProvider";
+			DEFAULT_PROVIDER = (Provider) Class.forName(provider).newInstance();
+			java.security.Security.addProvider(DEFAULT_PROVIDER);
+
 			keyPairGen = KeyPairGenerator.getInstance(ALGORITHOM, DEFAULT_PROVIDER);
 			keyFactory = KeyFactory.getInstance(ALGORITHOM, DEFAULT_PROVIDER);
-		} catch (NoSuchAlgorithmException ex) {
+		} catch (Exception ex) {
 			LOGGER.error(ex.getMessage());
 		}
 	}
