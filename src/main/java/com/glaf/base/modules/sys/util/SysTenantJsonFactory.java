@@ -112,6 +112,9 @@ public class SysTenantJsonFactory {
 		if (jsonObject.containsKey("limit")) {
 			model.setLimit(jsonObject.getInteger("limit"));
 		}
+		if (jsonObject.containsKey("disableDataConstraint")) {
+			model.setDisableDataConstraint(jsonObject.getString("disableDataConstraint"));
+		}
 		if (jsonObject.containsKey("createBy")) {
 			model.setCreateBy(jsonObject.getString("createBy"));
 		}
@@ -193,6 +196,11 @@ public class SysTenantJsonFactory {
 		}
 		jsonObject.put("limit", model.getLimit());
 		jsonObject.put("locked", model.getLocked());
+
+		if (model.getDisableDataConstraint() != null) {
+			jsonObject.put("disableDataConstraint", model.getDisableDataConstraint());
+		}
+
 		if (model.getCreateBy() != null) {
 			jsonObject.put("createBy", model.getCreateBy());
 		}
@@ -265,6 +273,11 @@ public class SysTenantJsonFactory {
 			jsonObject.put("ticketFlag", model.getTicketFlag());
 		}
 		jsonObject.put("locked", model.getLocked());
+
+		if (model.getDisableDataConstraint() != null) {
+			jsonObject.put("disableDataConstraint", model.getDisableDataConstraint());
+		}
+
 		if (model.getCreateBy() != null) {
 			jsonObject.put("createBy", model.getCreateBy());
 		}

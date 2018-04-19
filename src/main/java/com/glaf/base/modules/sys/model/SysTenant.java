@@ -33,9 +33,7 @@ import com.glaf.core.util.DateUtils;
 import com.glaf.base.modules.sys.util.*;
 
 /**
- * 
  * 实体对象
- *
  */
 
 @Entity
@@ -180,6 +178,12 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 	protected int locked;
 
 	/**
+	 * 数据约束
+	 */
+	@Column(name = "DISABLEDATACONSTRAINT_", length = 1)
+	protected String disableDataConstraint;
+
+	/**
 	 * 创建人
 	 */
 	@Column(name = "CREATEBY_", length = 50)
@@ -270,6 +274,10 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 
 	public long getDatabaseId() {
 		return this.databaseId;
+	}
+
+	public String getDisableDataConstraint() {
+		return disableDataConstraint;
 	}
 
 	public MultipartFile getFile() {
@@ -405,6 +413,10 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 
 	public void setDatabaseId(long databaseId) {
 		this.databaseId = databaseId;
+	}
+
+	public void setDisableDataConstraint(String disableDataConstraint) {
+		this.disableDataConstraint = disableDataConstraint;
 	}
 
 	public void setFile(MultipartFile file) {

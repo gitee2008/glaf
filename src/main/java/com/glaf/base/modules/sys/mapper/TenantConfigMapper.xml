@@ -2,29 +2,31 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.glaf.base.modules.sys.mapper.TenantConfigMapper">
+<mapper
+	namespace="com.glaf.base.modules.sys.mapper.TenantConfigMapper">
 
-	<resultMap id="tenantConfigResultMap" type="com.glaf.base.modules.sys.model.TenantConfig">
+	<resultMap id="tenantConfigResultMap"
+		type="com.glaf.base.modules.sys.model.TenantConfig">
 		<id property="id" column="ID_" jdbcType="BIGINT" />
-		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
+		<result property="tenantId" column="TENANTID_"
+			jdbcType="VARCHAR" />
 		<result property="sysName" column="SYSNAME_" jdbcType="VARCHAR" />
 		<result property="typeId" column="TYPEID_" jdbcType="BIGINT" />
-		<result property="breakfastTime" column="BREAKFASTTIME_"
+		<result property="shareFlag" column="SHAREFLAG_"
 			jdbcType="VARCHAR" />
-		<result property="breakfastMidTime" column="BREAKFASMIDTTIME_"
+		<result property="createBy" column="CREATEBY_"
 			jdbcType="VARCHAR" />
-		<result property="lunchTime" column="LUNCHTIME_" jdbcType="VARCHAR" />
-		<result property="snackTime" column="SNACKTIME_" jdbcType="VARCHAR" />
-		<result property="dinnerTime" column="DINNERTIME_" jdbcType="VARCHAR" />
-		<result property="shareFlag" column="SHAREFLAG_" jdbcType="VARCHAR" />
-		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
-		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
-		<result property="updateBy" column="UPDATEBY_" jdbcType="VARCHAR" />
-		<result property="updateTime" column="UPDATETIME_" jdbcType="TIMESTAMP" />
+		<result property="createTime" column="CREATETIME_"
+			jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY_"
+			jdbcType="VARCHAR" />
+		<result property="updateTime" column="UPDATETIME_"
+			jdbcType="TIMESTAMP" />
 	</resultMap>
 
 
-	<insert id="insertTenantConfig" parameterType="com.glaf.base.modules.sys.model.TenantConfig">
+	<insert id="insertTenantConfig"
+		parameterType="com.glaf.base.modules.sys.model.TenantConfig">
 		insert into SYS_TENANT_CONFIG
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			ID_
@@ -36,21 +38,6 @@
 			</if>
 			<if test="typeId != null">
 				,TYPEID_
-			</if>
-			<if test="breakfastTime != null">
-				,BREAKFASTTIME_
-			</if>
-			<if test="breakfastMidTime != null">
-				,BREAKFASMIDTTIME_
-			</if>
-			<if test="lunchTime != null">
-				,LUNCHTIME_
-			</if>
-			<if test="snackTime != null">
-				,SNACKTIME_
-			</if>
-			<if test="dinnerTime != null">
-				,DINNERTIME_
 			</if>
 			<if test="shareFlag != null">
 				,SHAREFLAG_
@@ -81,21 +68,6 @@
 			<if test="typeId != null">
 				,#{typeId, jdbcType=BIGINT}
 			</if>
-			<if test="breakfastTime != null">
-				,#{breakfastTime, jdbcType=VARCHAR}
-			</if>
-			<if test="breakfastMidTime != null">
-				,#{breakfastMidTime, jdbcType=VARCHAR}
-			</if>
-			<if test="lunchTime != null">
-				,#{lunchTime, jdbcType=VARCHAR}
-			</if>
-			<if test="snackTime != null">
-				,#{snackTime, jdbcType=VARCHAR}
-			</if>
-			<if test="dinnerTime != null">
-				,#{dinnerTime, jdbcType=VARCHAR}
-			</if>
 			<if test="shareFlag != null">
 				,#{shareFlag, jdbcType=VARCHAR}
 			</if>
@@ -115,17 +87,13 @@
 	</insert>
 
 
-	<insert id="bulkInsertTenantConfig" parameterType="java.util.List">
+	<insert id="bulkInsertTenantConfig"
+		parameterType="java.util.List">
 		insert into SYS_TENANT_CONFIG (
 		ID_
 		,TENANTID_
 		,SYSNAME_
 		,TYPEID_
-		,BREAKFASTTIME_
-		,BREAKFASMIDTTIME_
-		,LUNCHTIME_
-		,SNACKTIME_
-		,DINNERTIME_
 		,SHAREFLAG_
 		,CREATEBY_
 		,CREATETIME_
@@ -140,11 +108,6 @@
 			,#{tenantConfig.sysName,
 			jdbcType=VARCHAR}
 			,#{tenantConfig.typeId, jdbcType=BIGINT}
-			,#{tenantConfig.breakfastTime, jdbcType=VARCHAR}
-			,#{tenantConfig.breakfastMidTime, jdbcType=VARCHAR}
-			,#{tenantConfig.lunchTime, jdbcType=VARCHAR}
-			,#{tenantConfig.snackTime, jdbcType=VARCHAR}
-			,#{tenantConfig.dinnerTime, jdbcType=VARCHAR}
 			,#{tenantConfig.shareFlag, jdbcType=VARCHAR}
 			,#{tenantConfig.createBy, jdbcType=VARCHAR}
 			,#{tenantConfig.createTime, jdbcType=TIMESTAMP}
@@ -155,7 +118,8 @@
 	</insert>
 
 
-	<insert id="bulkInsertTenantConfig_oracle" parameterType="java.util.List">
+	<insert id="bulkInsertTenantConfig_oracle"
+		parameterType="java.util.List">
 		INSERT ALL
 		<foreach collection="list" item="tenantConfig" index="index">
 			insert
@@ -164,11 +128,6 @@
 			,TENANTID_
 			,SYSNAME_
 			,TYPEID_
-			,BREAKFASTTIME_
-			,BREAKFASMIDTTIME_
-			,LUNCHTIME_
-			,SNACKTIME_
-			,DINNERTIME_
 			,SHAREFLAG_
 			,CREATEBY_
 			,CREATETIME_
@@ -180,12 +139,8 @@
 			jdbcType=VARCHAR}
 			,#{tenantConfig.sysName, jdbcType=VARCHAR}
 			,#{tenantConfig.typeId, jdbcType=BIGINT}
-			,#{tenantConfig.breakfastTime, jdbcType=VARCHAR}
-			,#{tenantConfig.breakfastMidTime, jdbcType=VARCHAR}
-			,#{tenantConfig.lunchTime, jdbcType=VARCHAR}
-			,#{tenantConfig.snackTime, jdbcType=VARCHAR}
-			,#{tenantConfig.dinnerTime, jdbcType=VARCHAR}
-			,#{tenantConfig.shareFlag, jdbcType=VARCHAR}
+			,#{tenantConfig.shareFlag,
+			jdbcType=VARCHAR}
 			,#{tenantConfig.createBy, jdbcType=VARCHAR}
 			,#{tenantConfig.createTime, jdbcType=TIMESTAMP}
 			,#{tenantConfig.updateBy, jdbcType=VARCHAR}
@@ -196,7 +151,8 @@
 	</insert>
 
 
-	<update id="updateTenantConfig" parameterType="com.glaf.base.modules.sys.model.TenantConfig">
+	<update id="updateTenantConfig"
+		parameterType="com.glaf.base.modules.sys.model.TenantConfig">
 		update SYS_TENANT_CONFIG
 		set
 		<trim prefix="" suffix="" suffixOverrides=",">
@@ -205,22 +161,6 @@
 			</if>
 			<if test="typeId != null">
 				TYPEID_ = #{typeId, jdbcType=BIGINT},
-			</if>
-			<if test="breakfastTime != null">
-				BREAKFASTTIME_ = #{breakfastTime, jdbcType=VARCHAR},
-			</if>
-			<if test="breakfastMidTime != null">
-				BREAKFASMIDTTIME_ = #{breakfastMidTime,
-				jdbcType=VARCHAR},
-			</if>
-			<if test="lunchTime != null">
-				LUNCHTIME_ = #{lunchTime, jdbcType=VARCHAR},
-			</if>
-			<if test="snackTime != null">
-				SNACKTIME_ = #{snackTime, jdbcType=VARCHAR},
-			</if>
-			<if test="dinnerTime != null">
-				DINNERTIME_ = #{dinnerTime, jdbcType=VARCHAR},
 			</if>
 			<if test="shareFlag != null">
 				SHAREFLAG_ = #{shareFlag, jdbcType=VARCHAR},
@@ -258,7 +198,8 @@
 	</select>
 
 
-	<select id="getTenantConfigs" parameterType="com.glaf.base.modules.sys.query.TenantConfigQuery"
+	<select id="getTenantConfigs"
+		parameterType="com.glaf.base.modules.sys.query.TenantConfigQuery"
 		resultMap="tenantConfigResultMap">
 		select distinct E.*
 		<include refid="selectTenantConfigsSql" />
@@ -273,7 +214,8 @@
 	</select>
 
 
-	<select id="getTenantConfigCount" parameterType="com.glaf.base.modules.sys.query.TenantConfigQuery"
+	<select id="getTenantConfigCount"
+		parameterType="com.glaf.base.modules.sys.query.TenantConfigQuery"
 		resultType="int">
 		select count(*)
 		<include refid="selectTenantConfigsSql" />
@@ -293,8 +235,8 @@
 
 			<if test="tenantIds != null and tenantIds.size() &gt; 0">
 				and E.TENANTID_ IN
-				<foreach item="x_tenantId" index="index" collection="tenantIds"
-					open="(" separator="," close=")">
+				<foreach item="x_tenantId" index="index"
+					collection="tenantIds" open="(" separator="," close=")">
 					#{x_tenantId}
 				</foreach>
 			</if>

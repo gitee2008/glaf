@@ -384,6 +384,16 @@ public interface SysUserService {
 	 * @param userIds
 	 */
 	@Transactional
+	void saveAddRoleUsers(String tenantId, String roleId, int authorized, List<String> userIds);
+
+	/**
+	 * 保存角色用户
+	 * 
+	 * @param tenantId
+	 * @param roleId
+	 * @param userIds
+	 */
+	@Transactional
 	void saveRoleUsers(String tenantId, String roleId, int authorized, List<String> userIds);
 
 	/**

@@ -256,7 +256,9 @@ public class SysTenantController {
 			sysTenant.setProperty(request.getParameter("property"));
 			sysTenant.setVerify(request.getParameter("verify"));
 			sysTenant.setTicketFlag(request.getParameter("ticketFlag"));
+			sysTenant.setLimit(RequestUtils.getInt(request, "limit"));
 			sysTenant.setLocked(RequestUtils.getInt(request, "locked"));
+			sysTenant.setDisableDataConstraint(request.getParameter("disableDataConstraint"));
 			sysTenant.setUpdateBy(actorId);
 			this.sysTenantService.save(sysTenant);
 

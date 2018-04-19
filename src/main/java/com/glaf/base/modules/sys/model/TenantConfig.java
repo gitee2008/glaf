@@ -63,36 +63,6 @@ public class TenantConfig implements Serializable, JSONable {
 	protected long typeId;
 
 	/**
-	 * 早餐时间
-	 */
-	@Column(name = "BREAKFASTTIME_", length = 10)
-	protected String breakfastTime;
-
-	/**
-	 * 早点时间
-	 */
-	@Column(name = "BREAKFASMIDTTIME_", length = 10)
-	protected String breakfastMidTime;
-
-	/**
-	 * 午餐时间
-	 */
-	@Column(name = "LUNCHTIME_", length = 10)
-	protected String lunchTime;
-
-	/**
-	 * 午点时间
-	 */
-	@Column(name = "SNACKTIME_", length = 10)
-	protected String snackTime;
-
-	/**
-	 * 晚餐时间
-	 */
-	@Column(name = "DINNERTIME_", length = 10)
-	protected String dinnerTime;
-
-	/**
 	 * 是否分享
 	 */
 	@Column(name = "SHAREFLAG_", length = 1)
@@ -142,14 +112,6 @@ public class TenantConfig implements Serializable, JSONable {
 		return true;
 	}
 
-	public String getBreakfastMidTime() {
-		return this.breakfastMidTime;
-	}
-
-	public String getBreakfastTime() {
-		return this.breakfastTime;
-	}
-
 	public String getCreateBy() {
 		return this.createBy;
 	}
@@ -165,24 +127,12 @@ public class TenantConfig implements Serializable, JSONable {
 		return "";
 	}
 
-	public String getDinnerTime() {
-		return this.dinnerTime;
-	}
-
 	public long getId() {
 		return this.id;
 	}
 
-	public String getLunchTime() {
-		return this.lunchTime;
-	}
-
 	public String getShareFlag() {
 		return shareFlag;
-	}
-
-	public String getSnackTime() {
-		return this.snackTime;
 	}
 
 	public String getSysName() {
@@ -224,14 +174,6 @@ public class TenantConfig implements Serializable, JSONable {
 		return TenantConfigJsonFactory.jsonToObject(jsonObject);
 	}
 
-	public void setBreakfastMidTime(String breakfastMidTime) {
-		this.breakfastMidTime = breakfastMidTime;
-	}
-
-	public void setBreakfastTime(String breakfastTime) {
-		this.breakfastTime = breakfastTime;
-	}
-
 	public void setCreateBy(String createBy) {
 		this.createBy = createBy;
 	}
@@ -240,24 +182,12 @@ public class TenantConfig implements Serializable, JSONable {
 		this.createTime = createTime;
 	}
 
-	public void setDinnerTime(String dinnerTime) {
-		this.dinnerTime = dinnerTime;
-	}
-
 	public void setId(long id) {
 		this.id = id;
 	}
 
-	public void setLunchTime(String lunchTime) {
-		this.lunchTime = lunchTime;
-	}
-
 	public void setShareFlag(String shareFlag) {
 		this.shareFlag = shareFlag;
-	}
-
-	public void setSnackTime(String snackTime) {
-		this.snackTime = snackTime;
 	}
 
 	public void setSysName(String sysName) {

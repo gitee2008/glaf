@@ -12,7 +12,7 @@
 				   type: "POST",
 				   url: '${contextPath}/tenant/config/saveTenantConfig',
 				   data: params,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },
@@ -48,74 +48,6 @@
             <input id="sysName" name="sysName" type="text" 
 			       class="easyui-validatebox  x-text" style="width:485px;" maxlength="60"
 				   value="${tenantConfig.sysName}"/>
-		</td>
-	</tr>
-	<tr>
-		<td width="20%" align="left">食谱分享</td>
-		<td align="left">
-          <select id="shareFlag" name="shareFlag">
-			<option value="">----请选择----</option>
-			<option value="Y">是</option>
-			<option value="N">否</option>
-		  </select>
-		  <script type="text/javascript">
-			   document.getElementById("shareFlag").value="${tenantConfig.shareFlag}";
-		  </script>
-		  （提示：如果设置为分享别人可以看到，也可以查看其他人分享的数据。）
-		</td>
-	</tr>
-	<tr>
-		<td width="20%" align="left">餐点</td>
-		<td align="left">
-          <select id="typeId" name="typeId">
-			<option value="">----请选择----</option>
-			<#list dicts as dict>
-			<option value="${dict.id}">${dict.name}</option>
-			</#list> 
-		  </select>
-		  <script type="text/javascript">
-			   document.getElementById("typeId").value="${tenantConfig.typeId}";
-		  </script>
-		</td>
-	</tr>
-	<tr>
-		<td width="20%" align="left">早餐时间</td>
-		<td align="left">
-            <input id="breakfastTime" name="breakfastTime" type="text" 
-			       class="easyui-timespinner easyui-validatebox  x-text" style=" width:85px;"
-				   value="${tenantConfig.breakfastTime}"/>
-		</td>
-	</tr>
-	<tr>
-		<td width="20%" align="left">早点时间</td>
-		<td align="left">
-            <input id="breakfastMidTime" name="breakfastMidTime" type="text" 
-			       class="easyui-timespinner easyui-validatebox  x-text" style=" width:85px;"
-				   value="${tenantConfig.breakfastMidTime}"/>
-		</td>
-	</tr>
-	<tr>
-		<td width="20%" align="left">午餐时间</td>
-		<td align="left">
-            <input id="lunchTime" name="lunchTime" type="text" 
-			       class="easyui-timespinner easyui-validatebox  x-text" style=" width:85px;"
-				   value="${tenantConfig.lunchTime}"/>
-		</td>
-	</tr>
-	<tr>
-		<td width="20%" align="left">午点时间</td>
-		<td align="left">
-            <input id="snackTime" name="snackTime" type="text" 
-			       class="easyui-timespinner easyui-validatebox  x-text" style=" width:85px;"
-				   value="${tenantConfig.snackTime}"/>
-		</td>
-	</tr>
-	<tr>
-		<td width="20%" align="left">晚餐时间</td>
-		<td align="left">
-            <input id="dinnerTime" name="dinnerTime" type="text" 
-			       class="easyui-timespinner easyui-validatebox  x-text" style=" width:85px;"			
-				   value="${tenantConfig.dinnerTime}"/>
 		</td>
 	</tr>
 	<tr>

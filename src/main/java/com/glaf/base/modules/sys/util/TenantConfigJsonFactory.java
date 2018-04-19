@@ -56,21 +56,7 @@ public class TenantConfigJsonFactory {
 		if (jsonObject.containsKey("typeId")) {
 			model.setTypeId(jsonObject.getLong("typeId"));
 		}
-		if (jsonObject.containsKey("breakfastTime")) {
-			model.setBreakfastTime(jsonObject.getString("breakfastTime"));
-		}
-		if (jsonObject.containsKey("breakfastMidTime")) {
-			model.setBreakfastMidTime(jsonObject.getString("breakfastMidTime"));
-		}
-		if (jsonObject.containsKey("lunchTime")) {
-			model.setLunchTime(jsonObject.getString("lunchTime"));
-		}
-		if (jsonObject.containsKey("snackTime")) {
-			model.setSnackTime(jsonObject.getString("snackTime"));
-		}
-		if (jsonObject.containsKey("dinnerTime")) {
-			model.setDinnerTime(jsonObject.getString("dinnerTime"));
-		}
+
 		if (jsonObject.containsKey("shareFlag")) {
 			model.setShareFlag(jsonObject.getString("shareFlag"));
 		}
@@ -113,21 +99,7 @@ public class TenantConfigJsonFactory {
 			jsonObject.put("sysName", model.getSysName());
 		}
 		jsonObject.put("typeId", model.getTypeId());
-		if (model.getBreakfastTime() != null) {
-			jsonObject.put("breakfastTime", model.getBreakfastTime());
-		}
-		if (model.getBreakfastMidTime() != null) {
-			jsonObject.put("breakfastMidTime", model.getBreakfastMidTime());
-		}
-		if (model.getLunchTime() != null) {
-			jsonObject.put("lunchTime", model.getLunchTime());
-		}
-		if (model.getSnackTime() != null) {
-			jsonObject.put("snackTime", model.getSnackTime());
-		}
-		if (model.getDinnerTime() != null) {
-			jsonObject.put("dinnerTime", model.getDinnerTime());
-		}
+
 		if (model.getShareFlag() != null) {
 			jsonObject.put("shareFlag", model.getShareFlag());
 		}
@@ -162,21 +134,7 @@ public class TenantConfigJsonFactory {
 			jsonObject.put("sysName", model.getSysName());
 		}
 		jsonObject.put("typeId", model.getTypeId());
-		if (model.getBreakfastTime() != null) {
-			jsonObject.put("breakfastTime", model.getBreakfastTime());
-		}
-		if (model.getBreakfastMidTime() != null) {
-			jsonObject.put("breakfastMidTime", model.getBreakfastMidTime());
-		}
-		if (model.getLunchTime() != null) {
-			jsonObject.put("lunchTime", model.getLunchTime());
-		}
-		if (model.getSnackTime() != null) {
-			jsonObject.put("snackTime", model.getSnackTime());
-		}
-		if (model.getDinnerTime() != null) {
-			jsonObject.put("dinnerTime", model.getDinnerTime());
-		}
+
 		if (model.getShareFlag() != null) {
 			jsonObject.put("shareFlag", model.getShareFlag());
 		}

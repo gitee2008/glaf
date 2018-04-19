@@ -2,40 +2,58 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.glaf.base.modules.sys.mapper.SysTenantMapper">
+<mapper
+	namespace="com.glaf.base.modules.sys.mapper.SysTenantMapper">
 
-	<resultMap id="sysTenantResultMap" type="com.glaf.base.modules.sys.model.SysTenant">
+	<resultMap id="sysTenantResultMap"
+		type="com.glaf.base.modules.sys.model.SysTenant">
 		<id property="id" column="ID_" jdbcType="BIGINT" />
 		<result property="name" column="NAME_" jdbcType="VARCHAR" />
 		<result property="code" column="CODE_" jdbcType="VARCHAR" />
-		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
-		<result property="tenantType" column="TENANTTYPE_" jdbcType="INTEGER" />
-		<result property="databaseId" column="DATABASEID_" jdbcType="BIGINT" />
+		<result property="tenantId" column="TENANTID_"
+			jdbcType="VARCHAR" />
+		<result property="tenantType" column="TENANTTYPE_"
+			jdbcType="INTEGER" />
+		<result property="databaseId" column="DATABASEID_"
+			jdbcType="BIGINT" />
 		<result property="level" column="LEVEL_" jdbcType="INTEGER" />
-		<result property="province" column="PROVINCE_" jdbcType="VARCHAR" />
-		<result property="provinceId" column="PROVINCEID_" jdbcType="BIGINT" />
+		<result property="province" column="PROVINCE_"
+			jdbcType="VARCHAR" />
+		<result property="provinceId" column="PROVINCEID_"
+			jdbcType="BIGINT" />
 		<result property="city" column="CITY_" jdbcType="VARCHAR" />
 		<result property="cityId" column="CITYID_" jdbcType="BIGINT" />
 		<result property="area" column="AREA_" jdbcType="VARCHAR" />
 		<result property="areaId" column="AREAID_" jdbcType="BIGINT" />
 		<result property="town" column="TOWN_" jdbcType="VARCHAR" />
 		<result property="townId" column="TOWNID_" jdbcType="BIGINT" />
-		<result property="principal" column="PRINCIPAL_" jdbcType="VARCHAR" />
-		<result property="telephone" column="TELEPHONE_" jdbcType="VARCHAR" />
+		<result property="principal" column="PRINCIPAL_"
+			jdbcType="VARCHAR" />
+		<result property="telephone" column="TELEPHONE_"
+			jdbcType="VARCHAR" />
 		<result property="address" column="ADDRESS_" jdbcType="VARCHAR" />
-		<result property="property" column="PROPERTY_" jdbcType="VARCHAR" />
+		<result property="property" column="PROPERTY_"
+			jdbcType="VARCHAR" />
 		<result property="verify" column="VERIFY_" jdbcType="VARCHAR" />
-		<result property="ticketFlag" column="TICKETFLAG_" jdbcType="VARCHAR" />
+		<result property="ticketFlag" column="TICKETFLAG_"
+			jdbcType="VARCHAR" />
 		<result property="limit" column="LIMIT_" jdbcType="INTEGER" />
 		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
-		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
-		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
-		<result property="updateBy" column="UPDATEBY_" jdbcType="VARCHAR" />
-		<result property="updateTime" column="UPDATETIME_" jdbcType="TIMESTAMP" />
+		<result property="disableDataConstraint"
+			column="DISABLEDATACONSTRAINT_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_"
+			jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_"
+			jdbcType="TIMESTAMP" />
+		<result property="updateBy" column="UPDATEBY_"
+			jdbcType="VARCHAR" />
+		<result property="updateTime" column="UPDATETIME_"
+			jdbcType="TIMESTAMP" />
 	</resultMap>
 
 
-	<insert id="insertSysTenant" parameterType="com.glaf.base.modules.sys.model.SysTenant">
+	<insert id="insertSysTenant"
+		parameterType="com.glaf.base.modules.sys.model.SysTenant">
 		insert into SYS_TENANT
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			ID_
@@ -104,6 +122,9 @@
 			</if>
 			<if test="locked != null">
 				,LOCKED_
+			</if>
+			<if test="disableDataConstraint != null">
+				,DISABLEDATACONSTRAINT_
 			</if>
 			<if test="createBy != null">
 				,CREATEBY_
@@ -188,6 +209,9 @@
 			<if test="locked != null">
 				,#{locked, jdbcType=INTEGER}
 			</if>
+			<if test="disableDataConstraint != null">
+				,#{disableDataConstraint, jdbcType=VARCHAR}
+			</if>
 			<if test="createBy != null">
 				,#{createBy, jdbcType=VARCHAR}
 			</if>
@@ -229,6 +253,7 @@
 		,TICKETFLAG_
 		,LIMIT_
 		,LOCKED_
+		,DISABLEDATACONSTRAINT_
 		,CREATEBY_
 		,CREATETIME_
 		,UPDATEBY_
@@ -271,6 +296,7 @@
 			,#{sysTenant.ticketFlag, jdbcType=VARCHAR}
 			,#{sysTenant.limit,jdbcType=INTEGER}
 			,#{sysTenant.locked,jdbcType=INTEGER}
+			,#{sysTenant.disableDataConstraint, jdbcType=VARCHAR}
 			,#{sysTenant.createBy,
 			jdbcType=VARCHAR}
 			,#{sysTenant.createTime,
@@ -284,7 +310,8 @@
 	</insert>
 
 
-	<insert id="bulkInsertSysTenant_oracle" parameterType="java.util.List">
+	<insert id="bulkInsertSysTenant_oracle"
+		parameterType="java.util.List">
 		INSERT ALL
 		<foreach collection="list" item="sysTenant" index="index">
 			insert into
@@ -312,6 +339,7 @@
 			,TICKETFLAG_
 			,LIMIT_
 			,LOCKED_
+			,DISABLEDATACONSTRAINT_
 			,CREATEBY_
 			,CREATETIME_
 			,UPDATEBY_
@@ -348,14 +376,18 @@
 			,#{sysTenant.principal,
 			jdbcType=VARCHAR}
 			,#{sysTenant.telephone, jdbcType=VARCHAR}
-			,#{sysTenant.address, jdbcType=VARCHAR}
+			,#{sysTenant.address,
+			jdbcType=VARCHAR}
 			,#{sysTenant.property,
 			jdbcType=VARCHAR}
 			,#{sysTenant.verify, jdbcType=VARCHAR}
-			,#{sysTenant.ticketFlag, jdbcType=VARCHAR}
+			,#{sysTenant.ticketFlag,
+			jdbcType=VARCHAR}
 			,#{sysTenant.limit,jdbcType=INTEGER}
 			,#{sysTenant.locked,
 			jdbcType=INTEGER}
+			,#{sysTenant.disableDataConstraint,
+			jdbcType=VARCHAR}
 			,#{sysTenant.createBy,
 			jdbcType=VARCHAR}
 			,#{sysTenant.createTime,
@@ -370,7 +402,8 @@
 	</insert>
 
 
-	<update id="updateSysTenant" parameterType="com.glaf.base.modules.sys.model.SysTenant">
+	<update id="updateSysTenant"
+		parameterType="com.glaf.base.modules.sys.model.SysTenant">
 		update SYS_TENANT
 		set
 		<trim prefix="" suffix="" suffixOverrides=",">
@@ -385,6 +418,9 @@
 			</if>
 			<if test="level != null">
 				LEVEL_ = #{level, jdbcType=INTEGER},
+			</if>
+			<if test="limit != null">
+				LIMIT_ = #{limit, jdbcType=INTEGER},
 			</if>
 			<if test="province != null">
 				PROVINCE_ = #{province, jdbcType=VARCHAR},
@@ -431,6 +467,10 @@
 			<if test="locked != null">
 				LOCKED_ = #{locked, jdbcType=INTEGER},
 			</if>
+			<if test="disableDataConstraint != null">
+				DISABLEDATACONSTRAINT_ = #{disableDataConstraint,
+				jdbcType=VARCHAR},
+			</if>
 			<if test="updateBy != null">
 				UPDATEBY_ = #{updateBy, jdbcType=VARCHAR},
 			</if>
@@ -451,7 +491,8 @@
 	</delete>
 
 
-	<select id="getSysTenantById" parameterType="long" resultMap="sysTenantResultMap">
+	<select id="getSysTenantById" parameterType="long"
+		resultMap="sysTenantResultMap">
 		select * from SYS_TENANT where ID_ = #{id}
 	</select>
 
@@ -462,7 +503,8 @@
 	</select>
 
 
-	<select id="getSysTenants" parameterType="com.glaf.base.modules.sys.query.SysTenantQuery"
+	<select id="getSysTenants"
+		parameterType="com.glaf.base.modules.sys.query.SysTenantQuery"
 		resultMap="sysTenantResultMap">
 		select distinct E.*
 		<include refid="selectSysTenantsSql" />
@@ -477,7 +519,8 @@
 	</select>
 
 
-	<select id="getSysTenantCount" parameterType="com.glaf.base.modules.sys.query.SysTenantQuery"
+	<select id="getSysTenantCount"
+		parameterType="com.glaf.base.modules.sys.query.SysTenantQuery"
 		resultType="int">
 		select count(*)
 		<include refid="selectSysTenantsSql" />
@@ -513,8 +556,8 @@
 
 			<if test="tenantIds != null and tenantIds.size() &gt; 0">
 				and E.TENANTID_ IN
-				<foreach item="x_tenantId" index="index" collection="tenantIds"
-					open="(" separator="," close=")">
+				<foreach item="x_tenantId" index="index"
+					collection="tenantIds" open="(" separator="," close=")">
 					#{x_tenantId}
 				</foreach>
 			</if>
@@ -529,8 +572,8 @@
 
 			<if test="databaseIds != null and databaseIds.size() &gt; 0">
 				and E.DATABASEID_ IN
-				<foreach item="x_databaseId" index="index" collection="databaseIds"
-					open="(" separator="," close=")">
+				<foreach item="x_databaseId" index="index"
+					collection="databaseIds" open="(" separator="," close=")">
 					#{x_databaseId}
 				</foreach>
 			</if>

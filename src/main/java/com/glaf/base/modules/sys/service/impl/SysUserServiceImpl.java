@@ -879,6 +879,51 @@ public class SysUserServiceImpl implements SysUserService {
 	 * @param userIds
 	 */
 	@Transactional
+	public void saveAddRoleUsers(String tenantId, String roleId, int authorized, List<String> userIds) {
+
+		if (SystemConfig.getBoolean("use_query_cache")) {
+			CacheFactory.clear(Constants.CACHE_USER_REGION);
+			CacheFactory.clear(Constants.CACHE_USER_ROLE_REGION);
+			CacheFactory.clear(Constants.CACHE_USER_ROLE_CODE_REGION);
+		}
+
+		for (String userId : userIds) {
+			SysUser user = sysUserMapper.getSysUserByAccount(userId);
+			if (user != null) {
+				SysUserRole userRole = new SysUserRole();
+				userRole.setId(idGenerator.getNextId());
+				userRole.setUserId(user.getActorId());
+				userRole.setRoleId(roleId);
+				userRole.setTenantId(tenantId);
+				userRole.setAuthorized(authorized);
+				userRole.setCreateDate(new Date());
+				userRole.setCreateBy(Authentication.getAuthenticatedActorId());
+				sysUserRoleMapper.insertSysUserRole(userRole);
+
+				Membership membership = new Membership();
+				membership.setActorId(user.getActorId());
+				membership.setModifyDate(new java.util.Date());
+				membership.setModifyBy(Authentication.getAuthenticatedActorId());
+				membership.setRoleId(roleId);
+				membership.setNodeId(user.getOrganizationId());
+				membership.setObjectId("SysUserRole");
+				membership.setObjectValue(roleId);
+				membership.setType("SysUserRole");
+				membership.setTenantId(tenantId);
+				membership.setAttribute(String.valueOf(authorized));
+				membershipService.save(membership);
+			}
+		}
+
+	}
+
+	/**
+	 * 保存角色用户
+	 * 
+	 * @param roleId
+	 * @param userIds
+	 */
+	@Transactional
 	public void saveRoleUsers(String tenantId, String roleId, int authorized, List<String> userIds) {
 
 		if (SystemConfig.getBoolean("use_query_cache")) {
