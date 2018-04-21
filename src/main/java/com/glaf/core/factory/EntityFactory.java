@@ -31,6 +31,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import com.glaf.core.context.ContextFactory;
 import com.glaf.core.entity.SqlExecutor;
 import com.glaf.core.id.Dbid;
 import com.glaf.core.jdbc.DBConnectionFactory;
@@ -54,7 +55,7 @@ public class EntityFactory {
 	protected SqlSessionFactory sqlSessionFactory;
 
 	private EntityFactory() {
-		sqlSessionFactory = MyBatisSessionFactory.getSessionFactory();
+
 	}
 
 	/**
@@ -64,8 +65,7 @@ public class EntityFactory {
 	 * @param parameterObject
 	 */
 	@SuppressWarnings("unchecked")
-	public void delete(String systemName, String statementId,
-			Object parameterObject) {
+	public void delete(String systemName, String statementId, Object parameterObject) {
 		SqlSession sqlSession = null;
 		Connection conn = null;
 		try {
@@ -92,7 +92,6 @@ public class EntityFactory {
 			sqlSession.commit(true);
 			conn.commit();
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -110,8 +109,7 @@ public class EntityFactory {
 	 * @param parameterObject
 	 */
 	@SuppressWarnings("unchecked")
-	public void deleteAll(String systemName, String statementId,
-			List<Object> rows) {
+	public void deleteAll(String systemName, String statementId, List<Object> rows) {
 		SqlSession sqlSession = null;
 		Connection conn = null;
 		try {
@@ -140,7 +138,6 @@ public class EntityFactory {
 			sqlSession.commit(true);
 			conn.commit();
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -172,7 +169,6 @@ public class EntityFactory {
 			sqlSession.commit(true);
 			conn.commit();
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -214,7 +210,6 @@ public class EntityFactory {
 			sqlSession.commit(true);
 			conn.commit();
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -232,8 +227,7 @@ public class EntityFactory {
 	 * @param parameterObject
 	 * @return
 	 */
-	public Object getById(String systemName, String statementId,
-			Object parameterObject) {
+	public Object getById(String systemName, String statementId, Object parameterObject) {
 		SqlSession sqlSession = null;
 		Connection conn = null;
 		try {
@@ -245,7 +239,6 @@ public class EntityFactory {
 			sqlSession = getSqlSessionFactory().openSession(conn);
 			return sqlSession.selectOne(statementId, parameterObject);
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -263,8 +256,7 @@ public class EntityFactory {
 	 * @param parameterObject
 	 * @return
 	 */
-	public int getCount(String systemName, String statementId,
-			Object parameterObject) {
+	public int getCount(String systemName, String statementId, Object parameterObject) {
 		int totalCount = 0;
 		SqlSession sqlSession = null;
 		Connection conn = null;
@@ -300,7 +292,6 @@ public class EntityFactory {
 			}
 			return totalCount;
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -319,8 +310,7 @@ public class EntityFactory {
 	 * @param sqlExecutor
 	 * @return
 	 */
-	public List<Object> getList(String systemName, int pageNo, int pageSize,
-			SqlExecutor sqlExecutor) {
+	public List<Object> getList(String systemName, int pageNo, int pageSize, SqlExecutor sqlExecutor) {
 		List<Object> rows = null;
 		SqlSession sqlSession = null;
 		Connection conn = null;
@@ -337,15 +327,12 @@ public class EntityFactory {
 			RowBounds rowBounds = new RowBounds(begin, pageSize);
 
 			if (parameter != null) {
-				rows = sqlSession.selectList(sqlExecutor.getStatementId(),
-						parameter, rowBounds);
+				rows = sqlSession.selectList(sqlExecutor.getStatementId(), parameter, rowBounds);
 			} else {
-				rows = sqlSession.selectList(sqlExecutor.getStatementId(),
-						null, rowBounds);
+				rows = sqlSession.selectList(sqlExecutor.getStatementId(), null, rowBounds);
 			}
 			return rows;
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -363,8 +350,7 @@ public class EntityFactory {
 	 * @param parameterObject
 	 * @return
 	 */
-	public List<Object> getList(String systemName, String statementId,
-			Object parameterObject) {
+	public List<Object> getList(String systemName, String statementId, Object parameterObject) {
 		SqlSession sqlSession = null;
 		Connection conn = null;
 		try {
@@ -376,7 +362,6 @@ public class EntityFactory {
 			sqlSession = getSqlSessionFactory().openSession(conn);
 			return sqlSession.selectList(statementId, parameterObject);
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -412,7 +397,6 @@ public class EntityFactory {
 			long oldValue = sqlSession.selectOne("getMaxId", params);
 			return oldValue;
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -461,7 +445,6 @@ public class EntityFactory {
 			sqlSession.update("updateNextDbId", dbid);
 			return newValue;
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -481,8 +464,8 @@ public class EntityFactory {
 	 * @param queryExecutor
 	 * @return
 	 */
-	public Paging getPage(String systemName, int pageNo, int pageSize,
-			SqlExecutor countExecutor, SqlExecutor queryExecutor) {
+	public Paging getPage(String systemName, int pageNo, int pageSize, SqlExecutor countExecutor,
+			SqlExecutor queryExecutor) {
 		Paging page = new Paging();
 		SqlSession sqlSession = null;
 		Connection conn = null;
@@ -505,8 +488,7 @@ public class EntityFactory {
 
 			Object parameter = countExecutor.getParameter();
 			if (parameter != null) {
-				object = sqlSession.selectOne(countExecutor.getStatementId(),
-						parameter);
+				object = sqlSession.selectOne(countExecutor.getStatementId(), parameter);
 			} else {
 				object = sqlSession.selectOne(countExecutor.getStatementId());
 			}
@@ -552,11 +534,9 @@ public class EntityFactory {
 			RowBounds rowBounds = new RowBounds(begin, pageSize);
 
 			if (queryParams != null) {
-				rows = sqlSession.selectList(queryExecutor.getStatementId(),
-						queryParams, rowBounds);
+				rows = sqlSession.selectList(queryExecutor.getStatementId(), queryParams, rowBounds);
 			} else {
-				rows = sqlSession.selectList(queryExecutor.getStatementId(),
-						null, rowBounds);
+				rows = sqlSession.selectList(queryExecutor.getStatementId(), null, rowBounds);
 			}
 
 			page.setRows(rows);
@@ -567,7 +547,6 @@ public class EntityFactory {
 			logger.debug("rows size:" + rows.size());
 
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -581,7 +560,7 @@ public class EntityFactory {
 
 	public SqlSessionFactory getSqlSessionFactory() {
 		if (sqlSessionFactory == null) {
-			sqlSessionFactory = MyBatisSessionFactory.getSessionFactory();
+			sqlSessionFactory = ContextFactory.getBean("sqlSessionFactory");
 		}
 		return sqlSessionFactory;
 	}
@@ -591,8 +570,7 @@ public class EntityFactory {
 	 * 
 	 * @return
 	 */
-	public int getTableUserMaxId(String systemName, String tablename,
-			String idColumn, String createBy) {
+	public int getTableUserMaxId(String systemName, String tablename, String idColumn, String createBy) {
 		SqlSession sqlSession = null;
 		Connection conn = null;
 		try {
@@ -618,7 +596,6 @@ public class EntityFactory {
 				}
 			}
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -636,8 +613,7 @@ public class EntityFactory {
 	 * @param statementId
 	 * @param parameterObject
 	 */
-	public void insert(String systemName, String statementId,
-			Object parameterObject) {
+	public void insert(String systemName, String statementId, Object parameterObject) {
 		SqlSession sqlSession = null;
 		Connection conn = null;
 		try {
@@ -652,7 +628,6 @@ public class EntityFactory {
 			sqlSession.commit(true);
 			conn.commit();
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -669,8 +644,7 @@ public class EntityFactory {
 	 * @param statementId
 	 * @param parameterObject
 	 */
-	public void insertAll(String systemName, String statementId,
-			List<Object> rows) {
+	public void insertAll(String systemName, String statementId, List<Object> rows) {
 		SqlSession sqlSession = null;
 		Connection conn = null;
 		try {
@@ -687,7 +661,6 @@ public class EntityFactory {
 			sqlSession.commit(true);
 			conn.commit();
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -705,8 +678,7 @@ public class EntityFactory {
 	 * @param parameterObject
 	 * @return
 	 */
-	public Object selectOne(String systemName, String statementId,
-			Object parameterObject) {
+	public Object selectOne(String systemName, String statementId, Object parameterObject) {
 		SqlSession sqlSession = null;
 		Connection conn = null;
 		try {
@@ -718,7 +690,6 @@ public class EntityFactory {
 			sqlSession = getSqlSessionFactory().openSession(conn);
 			return sqlSession.selectOne(statementId, parameterObject);
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -735,8 +706,7 @@ public class EntityFactory {
 	 * @param statementId
 	 * @param parameterObject
 	 */
-	public void update(String systemName, String statementId,
-			Object parameterObject) {
+	public void update(String systemName, String statementId, Object parameterObject) {
 		SqlSession sqlSession = null;
 		Connection conn = null;
 		try {
@@ -751,7 +721,6 @@ public class EntityFactory {
 			sqlSession.commit(true);
 			conn.commit();
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -768,8 +737,7 @@ public class EntityFactory {
 	 * @param statementId
 	 * @param parameterObject
 	 */
-	public void updateAll(String systemName, String statementId,
-			List<Object> rows) {
+	public void updateAll(String systemName, String statementId, List<Object> rows) {
 		SqlSession sqlSession = null;
 		Connection conn = null;
 		try {
@@ -786,7 +754,6 @@ public class EntityFactory {
 			sqlSession.commit(true);
 			conn.commit();
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {

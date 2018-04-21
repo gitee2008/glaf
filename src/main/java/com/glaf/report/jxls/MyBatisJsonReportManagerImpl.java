@@ -33,7 +33,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.glaf.core.factory.MyBatisSessionFactory;
+import com.glaf.core.factory.EntityFactory;
 import com.glaf.core.util.Tools;
 
 public class MyBatisJsonReportManagerImpl implements ReportManager {
@@ -53,7 +53,7 @@ public class MyBatisJsonReportManagerImpl implements ReportManager {
 	public List<?> exec(String json) throws SQLException {
 		List<?> rows = null;
 		SqlSession session = null;
-		SqlSessionFactory sqlSessionFactory = MyBatisSessionFactory.getSessionFactory();
+		SqlSessionFactory sqlSessionFactory = EntityFactory.getInstance().getSqlSessionFactory();
 		Object parameter = beans;
 		JSONObject jsonObject = JSON.parseObject(json);
 		try {

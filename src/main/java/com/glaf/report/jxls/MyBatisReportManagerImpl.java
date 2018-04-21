@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import com.glaf.core.factory.MyBatisSessionFactory;
+import com.glaf.core.factory.EntityFactory;
 
 public class MyBatisReportManagerImpl implements ReportManager {
 	protected final Log log = LogFactory.getLog(getClass());
@@ -49,7 +49,7 @@ public class MyBatisReportManagerImpl implements ReportManager {
 	public List<?> exec(String statementId) throws SQLException {
 		List<?> rows = null;
 		SqlSession session = null;
-		SqlSessionFactory sqlSessionFactory = MyBatisSessionFactory.getSessionFactory();
+		SqlSessionFactory sqlSessionFactory = EntityFactory.getInstance().getSqlSessionFactory();
 		try {
 			session = sqlSessionFactory.openSession(connection);
 			rows = session.selectList(statementId, beans);
