@@ -2148,14 +2148,10 @@ public class DBUtils {
 
 		sql = sql.toLowerCase();
 
-		if (sql.indexOf("userinfo") != -1) {
-			isLegal = false;
-		}
-
-		if (sql.indexOf("sys_user") != -1) {
-			isLegal = false;
-		}
 		if (sql.indexOf("sys_key") != -1) {
+			isLegal = false;
+		}
+		if (sql.indexOf("sys_database") != -1) {
 			isLegal = false;
 		}
 		if (sql.indexOf("sys_server") != -1) {
@@ -2172,11 +2168,7 @@ public class DBUtils {
 	}
 
 	public static boolean isAllowedTable(String tableName) {
-		if (StringUtils.equalsIgnoreCase(tableName, "USERINFO")) {
-			return false;
-		} else if (StringUtils.equalsIgnoreCase(tableName, "SYS_USER")) {
-			return false;
-		} else if (StringUtils.equalsIgnoreCase(tableName, "SYS_DATABASE")) {
+		if (StringUtils.equalsIgnoreCase(tableName, "SYS_DATABASE")) {
 			return false;
 		} else if (StringUtils.equalsIgnoreCase(tableName, "SYS_SERVER")) {
 			return false;

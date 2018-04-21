@@ -27,6 +27,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -60,6 +61,8 @@ public class QueryHelper {
 	protected static Configuration conf = BaseConfiguration.create();
 
 	protected static TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry();
+
+	public final static String newline = System.getProperty("line.separator");
 
 	public QueryHelper() {
 
@@ -275,6 +278,60 @@ public class QueryHelper {
 			JdbcUtils.close(rs);
 			JdbcUtils.close(psmt);
 		}
+	}
+
+	public String getInsertScript(Connection conn, String targetTable, String dbType, String sql,
+			Map<String, Object> paramMap) {
+		List<ColumnDefinition> columns = getColumns(conn, sql, paramMap);
+		List<Map<String, Object>> list = getResultList(conn, sql, paramMap);
+		StringBuilder buffer = new StringBuilder();
+		if (list != null && !list.isEmpty()) {
+			Object value = null;
+			CaseInsensitiveHashMap lowMap = new CaseInsensitiveHashMap();
+			for (Map<String, Object> dataMap : list) {
+				lowMap.clear();
+				lowMap.putAll(dataMap);
+				buffer.append(" insert into ").append(targetTable).append("( ");
+				for (ColumnDefinition column : columns) {
+					buffer.append(column.getColumnLabel().toLowerCase()).append(", ");
+				}
+				buffer.delete(buffer.length() - 2, buffer.length());
+				buffer.append(") values ( ");
+				for (ColumnDefinition column : columns) {
+					value = lowMap.get(column.getColumnLabel().toLowerCase());
+					if (value != null) {
+						if (value instanceof Short) {
+							buffer.append(value).append(", ");
+						} else if (value instanceof Integer) {
+							buffer.append(value).append(", ");
+						} else if (value instanceof Long) {
+							buffer.append(value).append(", ");
+						} else if (value instanceof Double) {
+							buffer.append(value).append(", ");
+						} else if (value instanceof java.math.BigInteger) {
+							buffer.append(value).append(", ");
+						} else if (value instanceof java.math.BigDecimal) {
+							buffer.append(value).append(", ");
+						} else if (value instanceof Date) {
+							if (StringUtils.equals(dbType, "oracle")) {
+								buffer.append("to_date('").append(DateUtils.getDateTime((Date) value))
+										.append("','YYYY-MM-DD HH24:MI:SS'), ");
+							} else {
+								buffer.append("'").append(DateUtils.getDateTime((Date) value)).append("', ");
+							}
+						} else {
+							buffer.append("'").append(value).append("', ");
+						}
+					} else {
+						buffer.append("null, ");
+					}
+				}
+				buffer.delete(buffer.length() - 2, buffer.length());
+				buffer.append("); ");
+				buffer.append(newline);
+			}
+		}
+		return buffer.toString();
 	}
 
 	@SuppressWarnings("unchecked")
