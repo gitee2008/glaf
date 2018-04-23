@@ -106,6 +106,9 @@ public class SysTenantJsonFactory {
 		if (jsonObject.containsKey("ticketFlag")) {
 			model.setTicketFlag(jsonObject.getString("ticketFlag"));
 		}
+		if (jsonObject.containsKey("type")) {
+			model.setType(jsonObject.getString("type"));
+		}
 		if (jsonObject.containsKey("locked")) {
 			model.setLocked(jsonObject.getInteger("locked"));
 		}
@@ -194,6 +197,9 @@ public class SysTenantJsonFactory {
 		if (model.getTicketFlag() != null) {
 			jsonObject.put("ticketFlag", model.getTicketFlag());
 		}
+		if (model.getType() != null) {
+			jsonObject.put("type", model.getType());
+		}
 		jsonObject.put("limit", model.getLimit());
 		jsonObject.put("locked", model.getLocked());
 
@@ -271,6 +277,9 @@ public class SysTenantJsonFactory {
 		}
 		if (model.getTicketFlag() != null) {
 			jsonObject.put("ticketFlag", model.getTicketFlag());
+		}
+		if (model.getType() != null) {
+			jsonObject.put("type", model.getType());
 		}
 		jsonObject.put("locked", model.getLocked());
 

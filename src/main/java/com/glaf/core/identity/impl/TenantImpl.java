@@ -39,6 +39,8 @@ public class TenantImpl implements Tenant {
 
 	protected int tenantType;
 
+	protected String type;
+
 	protected boolean isSystemAdministrator;
 
 	public TenantImpl() {
@@ -71,6 +73,10 @@ public class TenantImpl implements Tenant {
 
 	public int getTenantType() {
 		return tenantType;
+	}
+
+	public String getType() {
+		return type;
 	}
 
 	public boolean isSystemAdministrator() {
@@ -111,6 +117,10 @@ public class TenantImpl implements Tenant {
 
 	public void setTenantType(int tenantType) {
 		this.tenantType = tenantType;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public JSONObject toJsonObject() {

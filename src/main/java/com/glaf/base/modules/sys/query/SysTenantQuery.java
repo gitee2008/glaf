@@ -46,6 +46,7 @@ public class SysTenantQuery extends DataQuery {
 	protected String property;
 	protected String verify;
 	protected String ticketFlag;
+	protected String type;
 	protected Integer level;
 	protected Integer levelGreaterThanOrEqual;
 	protected Integer levelLessThanOrEqual;
@@ -357,6 +358,10 @@ public class SysTenantQuery extends DataQuery {
 		return townIds;
 	}
 
+	public String getType() {
+		return type;
+	}
+
 	public Date getUpdateTimeGreaterThanOrEqual() {
 		return updateTimeGreaterThanOrEqual;
 	}
@@ -563,6 +568,10 @@ public class SysTenantQuery extends DataQuery {
 		this.townIds = townIds;
 	}
 
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public void setUpdateTimeGreaterThanOrEqual(Date updateTimeGreaterThanOrEqual) {
 		this.updateTimeGreaterThanOrEqual = updateTimeGreaterThanOrEqual;
 	}
@@ -628,6 +637,14 @@ public class SysTenantQuery extends DataQuery {
 			throw new RuntimeException("townIds is null");
 		}
 		this.townIds = townIds;
+		return this;
+	}
+
+	public SysTenantQuery type(String type) {
+		if (type == null) {
+			throw new RuntimeException("type is null");
+		}
+		this.type = type;
 		return this;
 	}
 

@@ -57,6 +57,12 @@ public class SysApplication implements Serializable, JSONable, TreeModel {
 	protected String code;
 
 	/**
+	 * 描述
+	 */
+	@Column(name = "APPDESC", length = 500)
+	protected String desc;
+
+	/**
 	 * 鉴别符
 	 */
 	@Column(name = "DISCRIMINATOR", length = 10)
@@ -82,12 +88,6 @@ public class SysApplication implements Serializable, JSONable, TreeModel {
 
 	@Column(name = "LEVEL")
 	protected int level;
-
-	/**
-	 * 描述
-	 */
-	@Column(name = "APPDESC", length = 500)
-	protected String desc;
 
 	/**
 	 * 是否启用

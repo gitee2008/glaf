@@ -111,7 +111,7 @@ public class SysTenantController {
 		query.setLoginContext(loginContext);
 
 		int start = 0;
-		int limit = 10;
+		int limit = 100;
 		String orderName = null;
 		String order = null;
 
@@ -126,7 +126,7 @@ public class SysTenantController {
 		}
 
 		if (limit <= 0) {
-			limit = Paging.DEFAULT_PAGE_SIZE;
+			limit = 100;
 		}
 
 		JSONObject result = new JSONObject();
@@ -256,6 +256,7 @@ public class SysTenantController {
 			sysTenant.setProperty(request.getParameter("property"));
 			sysTenant.setVerify(request.getParameter("verify"));
 			sysTenant.setTicketFlag(request.getParameter("ticketFlag"));
+			sysTenant.setType(request.getParameter("type"));
 			sysTenant.setLimit(RequestUtils.getInt(request, "limit"));
 			sysTenant.setLocked(RequestUtils.getInt(request, "locked"));
 			sysTenant.setDisableDataConstraint(request.getParameter("disableDataConstraint"));

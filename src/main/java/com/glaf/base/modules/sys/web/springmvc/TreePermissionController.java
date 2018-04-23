@@ -92,6 +92,39 @@ public class TreePermissionController {
 	}
 
 	@ResponseBody
+	@RequestMapping("/saveTenantTreePermission")
+	public byte[] saveTenantTreePermission(HttpServletRequest request) {
+		User user = RequestUtils.getUser(request);
+		String actorId = user.getActorId();
+		String tenantId = request.getParameter("tenantId");
+		String privilege = request.getParameter("privilege");
+		String type = request.getParameter("type");
+		String objectIds = request.getParameter("nodeIds");
+
+		if (StringUtils.isNotEmpty(tenantId)) {
+			try {
+				List<TreePermission> treePermissions = new ArrayList<TreePermission>();
+				List<Long> nodeIds = StringTools.splitToLong(objectIds);
+				for (Long nodeId : nodeIds) {
+					TreePermission tp = new TreePermission();
+					tp.setNodeId(nodeId);
+					tp.setType(type);
+					tp.setPrivilege(privilege);
+					tp.setTenantId(tenantId);
+					tp.setCreateBy(actorId);
+					treePermissions.add(tp);
+				}
+				treePermissionService.saveTenantAll(tenantId, type, privilege, treePermissions);
+				return ResponseUtils.responseJsonResult(true);
+			} catch (Exception ex) {
+				// ex.printStackTrace();
+				logger.error(ex);
+			}
+		}
+		return ResponseUtils.responseJsonResult(false);
+	}
+
+	@ResponseBody
 	@RequestMapping("/saveTreePermission")
 	public byte[] saveTreePermission(HttpServletRequest request) {
 		User user = RequestUtils.getUser(request);
@@ -117,7 +150,7 @@ public class TreePermissionController {
 				treePermissionService.saveAll(userId, type, privilege, treePermissions);
 				return ResponseUtils.responseJsonResult(true);
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				// ex.printStackTrace();
 				logger.error(ex);
 			}
 		}

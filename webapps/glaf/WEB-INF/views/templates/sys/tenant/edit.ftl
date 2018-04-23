@@ -16,7 +16,7 @@
 				   type: "POST",
 				   url: '${contextPath}/sys/tenant/saveSysTenant',
 				   data: params,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },
@@ -38,7 +38,7 @@
 				   type: "POST",
 				   url: '${contextPath}/sys/tenant/saveSysTenant',
 				   data: params,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },
@@ -110,10 +110,7 @@
 		<td align="left">
 			<select id="level" name="level">
 			    <option value="0">----请选择----</option>
-				<option value="9999">省级示范</option>
-				<option value="999">市级示范</option>
-				<option value="99">县/区级示范</option>
-				<option value="1">非示范</option>
+				
 			</select>
             <script type="text/javascript">
                 document.getElementById("level").value="${sysTenant.level}";
@@ -125,13 +122,7 @@
 		<td align="left">
 			<select id="property" name="property">
 			    <option value="0">----请选择----</option>
-				<option value="Public">公立</option>
-				<option value="Private">私立</option>
-				<option value="Gov_Ent">政企联办</option>
-				<option value="Gov_Pri">民办公助</option>
-				<option value="Collectivity">集体</option>
-				<option value="Enterprise">企业</option>
-				<option value="Other">其他</option>
+				
 			</select>
             <script type="text/javascript">
                 document.getElementById("property").value="${sysTenant.property}";

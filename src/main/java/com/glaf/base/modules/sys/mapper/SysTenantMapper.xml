@@ -37,6 +37,7 @@
 		<result property="verify" column="VERIFY_" jdbcType="VARCHAR" />
 		<result property="ticketFlag" column="TICKETFLAG_"
 			jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
 		<result property="limit" column="LIMIT_" jdbcType="INTEGER" />
 		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
 		<result property="disableDataConstraint"
@@ -116,6 +117,9 @@
 			</if>
 			<if test="ticketFlag != null">
 				,TICKETFLAG_
+			</if>
+			<if test="type != null">
+				,TYPE_
 			</if>
 			<if test="limit != null">
 				,LIMIT_
@@ -203,6 +207,9 @@
 			<if test="ticketFlag != null">
 				,#{ticketFlag, jdbcType=VARCHAR}
 			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
 			<if test="limit != null">
 				,#{limit, jdbcType=INTEGER}
 			</if>
@@ -251,6 +258,7 @@
 		,PROPERTY_
 		,VERIFY_
 		,TICKETFLAG_
+		,TYPE_
 		,LIMIT_
 		,LOCKED_
 		,DISABLEDATACONSTRAINT_
@@ -294,6 +302,7 @@
 			,#{sysTenant.verify,
 			jdbcType=VARCHAR}
 			,#{sysTenant.ticketFlag, jdbcType=VARCHAR}
+			,#{sysTenant.type, jdbcType=VARCHAR}
 			,#{sysTenant.limit,jdbcType=INTEGER}
 			,#{sysTenant.locked,jdbcType=INTEGER}
 			,#{sysTenant.disableDataConstraint, jdbcType=VARCHAR}
@@ -337,6 +346,7 @@
 			,PROPERTY_
 			,VERIFY_
 			,TICKETFLAG_
+			,TYPE_
 			,LIMIT_
 			,LOCKED_
 			,DISABLEDATACONSTRAINT_
@@ -383,6 +393,7 @@
 			,#{sysTenant.verify, jdbcType=VARCHAR}
 			,#{sysTenant.ticketFlag,
 			jdbcType=VARCHAR}
+			,#{sysTenant.type, jdbcType=VARCHAR}
 			,#{sysTenant.limit,jdbcType=INTEGER}
 			,#{sysTenant.locked,
 			jdbcType=INTEGER}
@@ -463,6 +474,9 @@
 			</if>
 			<if test="ticketFlag != null">
 				TICKETFLAG_ = #{ticketFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				TYPE_ = #{type, jdbcType=VARCHAR},
 			</if>
 			<if test="locked != null">
 				LOCKED_ = #{locked, jdbcType=INTEGER},
@@ -660,6 +674,10 @@
 
 			<if test="ticketFlag != null and ticketFlag != '' ">
 				and E.TICKETFLAG_ = #{ticketFlag}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
 			</if>
 
 			<if test="locked != null">

@@ -166,6 +166,12 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 	protected String ticketFlag;
 
 	/**
+	 * 类型
+	 */
+	@Column(name = "TYPE_", length = 50)
+	protected String type;
+
+	/**
 	 * 是否限制
 	 */
 	@Column(name = "LIMIT_")
@@ -344,6 +350,10 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 		return townId;
 	}
 
+	public String getType() {
+		return type;
+	}
+
 	public String getUpdateBy() {
 		return this.updateBy;
 	}
@@ -485,6 +495,10 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 
 	public void setTownId(long townId) {
 		this.townId = townId;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public void setUpdateBy(String updateBy) {

@@ -39,6 +39,8 @@ public interface Tenant extends java.io.Serializable {
 
 	int getTenantType();
 
+	String getType();
+
 	boolean isSystemAdministrator();
 
 	Tenant jsonToObject(JSONObject jsonObject);
@@ -58,6 +60,8 @@ public interface Tenant extends java.io.Serializable {
 	void setTenantId(String tenantId);
 
 	void setTenantType(int tenantType);
+
+	void setType(String type);
 
 	JSONObject toJsonObject();
 

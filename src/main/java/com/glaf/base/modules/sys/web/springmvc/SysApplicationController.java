@@ -49,8 +49,13 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.glaf.base.modules.sys.SysConstants;
 import com.glaf.base.modules.sys.business.UpdateTreeBean;
 import com.glaf.base.modules.sys.model.SysApplication;
+import com.glaf.base.modules.sys.model.SysTenant;
+import com.glaf.base.modules.sys.model.TreePermission;
 import com.glaf.base.modules.sys.query.SysApplicationQuery;
+import com.glaf.base.modules.sys.query.TreePermissionQuery;
 import com.glaf.base.modules.sys.service.SysApplicationService;
+import com.glaf.base.modules.sys.service.SysTenantService;
+import com.glaf.base.modules.sys.service.TreePermissionService;
 import com.glaf.base.utils.ParamUtil;
 
 import com.glaf.core.base.BaseTree;
@@ -61,6 +66,7 @@ import com.glaf.core.config.ViewProperties;
 import com.glaf.core.factory.DataServiceFactory;
 import com.glaf.core.security.LoginContext;
 import com.glaf.core.tree.helper.JacksonTreeHelper;
+import com.glaf.core.tree.helper.TreeHelper;
 import com.glaf.core.tree.helper.TreeUpdateBean;
 import com.glaf.core.util.FileUtils;
 import com.glaf.core.util.PageResult;
@@ -75,7 +81,11 @@ import com.glaf.core.util.ZipUtils;
 public class SysApplicationController {
 	private static final Log logger = LogFactory.getLog(SysApplicationController.class);
 
-	private SysApplicationService sysApplicationService;
+	protected SysApplicationService sysApplicationService;
+
+	protected SysTenantService sysTenantService;
+
+	protected TreePermissionService treePermissionService;
 
 	/**
 	 * 批量删除信息
@@ -317,6 +327,92 @@ public class SysApplicationController {
 		return new ModelAndView("/sys/app/list", modelMap);
 	}
 
+	@ResponseBody
+	@RequestMapping("/permissionTreeJson")
+	public byte[] permissionTreeJson(HttpServletRequest request) throws IOException {
+		logger.debug("params:" + RequestUtils.getParameterMap(request));
+		JSONArray array = new JSONArray();
+		Long parentId = RequestUtils.getLong(request, "id", 3);
+		List<SysApplication> sysApplications = null;
+		if (parentId != null) {
+			sysApplications = sysApplicationService.getApplicationListWithChildren(parentId);
+		}
+		if (sysApplications != null && !sysApplications.isEmpty()) {
+			String tenantId = request.getParameter("tenantId");
+			String type = request.getParameter("type");
+			List<Long> selected = new ArrayList<Long>();
+			if (StringUtils.isNotEmpty(type) && StringUtils.isNotEmpty(tenantId)) {
+				TreePermissionQuery query = new TreePermissionQuery();
+				query.tenantId(tenantId);
+				query.type(type);
+				List<TreePermission> perms = treePermissionService.list(query);
+				if (perms != null && !perms.isEmpty()) {
+					for (TreePermission p : perms) {
+						selected.add(p.getNodeId());
+					}
+				}
+			}
+
+			Map<Long, TreeModel> treeMap = new HashMap<Long, TreeModel>();
+			List<TreeModel> treeModels = new ArrayList<TreeModel>();
+			List<Long> sysApplicationIds = new ArrayList<Long>();
+			for (SysApplication sysApplication : sysApplications) {
+				if (sysApplication.getLocked() != 0) {
+					continue;
+				}
+				if (!StringUtils.equals(sysApplication.getSysFlag(), type)) {
+					continue;
+				}
+				Map<String, Object> dataMap = new HashMap<String, Object>();
+				TreeModel tree = new BaseTree();
+				tree.setId(sysApplication.getId());
+				tree.setParentId(sysApplication.getParentId());
+				tree.setCode(sysApplication.getCode());
+				tree.setName(sysApplication.getName());
+				tree.setSortNo(sysApplication.getSortNo());
+				tree.setIconCls("tree_folder");
+				if (selected.contains(sysApplication.getId())) {
+					if (selected.contains(sysApplication.getId())) {
+						tree.setChecked(true);
+						dataMap.put("checked", true);
+					} else {
+						dataMap.put("checked", false);
+					}
+				}
+				tree.setDataMap(dataMap);
+				treeModels.add(tree);
+				sysApplicationIds.add(sysApplication.getId());
+				treeMap.put(sysApplication.getId(), tree);
+			}
+			// logger.debug("treeModels:" + treeModels.size());
+			TreeHelper treeHelper = new TreeHelper();
+			JSONArray jsonArray = treeHelper.getTreeJSONArray(treeModels);
+			for (int i = 0, len = jsonArray.size(); i < len; i++) {
+				JSONObject json = jsonArray.getJSONObject(i);
+				json.put("isParent", true);
+			}
+			// logger.debug(jsonArray.toJSONString());
+			return jsonArray.toJSONString().getBytes("UTF-8");
+		}
+		return array.toJSONString().getBytes("UTF-8");
+	}
+
+	/**
+	 * 显示授权页面
+	 * 
+	 * @param request
+	 * @param modelMap
+	 * @return
+	 */
+	@RequestMapping("/privilege")
+	public ModelAndView privilege(HttpServletRequest request, ModelMap modelMap) {
+		RequestUtils.setRequestParameterToAttribute(request);
+		String tenantId = request.getParameter("tenantId");
+		SysTenant tenant = sysTenantService.getSysTenantByTenantId(tenantId);
+		request.setAttribute("tenant", tenant);
+		return new ModelAndView("/sys/app/privilege", modelMap);
+	}
+
 	/**
 	 * 提交增加信息
 	 * 
@@ -499,6 +595,16 @@ public class SysApplicationController {
 		this.sysApplicationService = sysApplicationService;
 	}
 
+	@javax.annotation.Resource
+	public void setSysTenantService(SysTenantService sysTenantService) {
+		this.sysTenantService = sysTenantService;
+	}
+
+	@javax.annotation.Resource
+	public void setTreePermissionService(TreePermissionService treePermissionService) {
+		this.treePermissionService = treePermissionService;
+	}
+
 	/**
 	 * 显示所有列表
 	 * 
@@ -575,18 +681,6 @@ public class SysApplicationController {
 		}
 		// 显示列表页面
 		return new ModelAndView("/sys/app/app_list", modelMap);
-	}
-
-	@RequestMapping("/showPermission")
-	public ModelAndView showPermission(HttpServletRequest request, ModelMap modelMap) {
-		RequestUtils.setRequestParameterToAttribute(request);
-
-		String x_view = ViewProperties.getString("application.showPermission");
-		if (StringUtils.isNotEmpty(x_view)) {
-			return new ModelAndView(x_view, modelMap);
-		}
-
-		return new ModelAndView("/sys/app/permission_frame", modelMap);
 	}
 
 	/**
@@ -666,5 +760,4 @@ public class SysApplicationController {
 		}
 
 	}
-
 }

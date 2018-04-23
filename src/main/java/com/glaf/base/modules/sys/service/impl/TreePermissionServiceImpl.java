@@ -130,6 +130,25 @@ public class TreePermissionServiceImpl implements TreePermissionService {
 		return nodeIds;
 	}
 
+	/**
+	 * 获取某个租户某种类型权限的节点集合
+	 * 
+	 * @param tenantId
+	 * @param type
+	 * @return
+	 */
+	public List<Long> getTenantNodeIds(String tenantId, String type) {
+		TreePermissionQuery query = new TreePermissionQuery();
+		query.tenantId(tenantId);
+		query.type(type);
+		List<TreePermission> list = treePermissionMapper.getTreePermissions(query);
+		List<Long> nodeIds = new ArrayList<Long>();
+		for (TreePermission p : list) {
+			nodeIds.add(p.getNodeId());
+		}
+		return nodeIds;
+	}
+
 	public TreePermission getTreePermission(Long id) {
 		if (id == null) {
 			return null;
@@ -182,6 +201,23 @@ public class TreePermissionServiceImpl implements TreePermissionService {
 		TableModel table = new TableModel();
 		table.setTableName("SYS_TREE_PERMISSION");
 		table.addStringColumn("USERID_", userId);
+		table.addStringColumn("TYPE_", type);
+		table.addStringColumn("PRIVILEGE_", privilege);
+		tableDataService.deleteTableData(table);
+
+		this.bulkInsert(treePermissions);
+	}
+
+	/**
+	 * 保存记录
+	 * 
+	 * @return
+	 */
+	@Transactional
+	public void saveTenantAll(String tenantId, String type, String privilege, List<TreePermission> treePermissions) {
+		TableModel table = new TableModel();
+		table.setTableName("SYS_TREE_PERMISSION");
+		table.addStringColumn("TENANTID_", tenantId);
 		table.addStringColumn("TYPE_", type);
 		table.addStringColumn("PRIVILEGE_", privilege);
 		tableDataService.deleteTableData(table);

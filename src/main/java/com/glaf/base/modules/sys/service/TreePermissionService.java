@@ -56,6 +56,15 @@ public interface TreePermissionService {
 	List<Long> getNodeIds(String userId, String privilege);
 
 	/**
+	 * 获取某个租户某种类型权限的节点集合
+	 * 
+	 * @param tenantId
+	 * @param type
+	 * @return
+	 */
+	List<Long> getTenantNodeIds(String tenantId, String type);
+
+	/**
 	 * 根据主键获取一条记录
 	 * 
 	 * @return
@@ -91,4 +100,6 @@ public interface TreePermissionService {
 	@Transactional
 	void saveAll(String userId, String type, String privilege, List<TreePermission> treePermissions);
 
+	@Transactional
+	void saveTenantAll(String tenantId, String type, String privilege, List<TreePermission> treePermissions);
 }
