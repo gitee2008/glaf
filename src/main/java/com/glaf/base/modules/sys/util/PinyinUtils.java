@@ -35,6 +35,7 @@ import com.glaf.core.domain.TableDefinition;
 import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.util.DBUtils;
 import com.glaf.core.util.JdbcUtils;
+import com.glaf.core.util.StringTools;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
@@ -51,9 +52,25 @@ public class PinyinUtils {
 	 *            汉字
 	 * @return 拼音
 	 */
-	public static String converterToFirstSpell(String chines) {
+	public static String converterToFirstSpell(String chines, boolean wipeOut) {
 		String pinyinName = "";
 		if (StringUtils.isNotEmpty(chines)) {
+			if (wipeOut) {
+				chines = StringTools.replace(chines, "-", "");
+				chines = StringTools.replace(chines, "_", "");
+				chines = StringTools.replace(chines, "|", "");
+				chines = StringTools.replace(chines, "、", "");
+				chines = StringTools.replace(chines, "（", "");
+				chines = StringTools.replace(chines, "）", "");
+				chines = StringTools.replace(chines, "(", "");
+				chines = StringTools.replace(chines, ")", "");
+				chines = StringTools.replace(chines, "，", "");
+				chines = StringTools.replace(chines, ",", "");
+				chines = StringTools.replace(chines, "[", "");
+				chines = StringTools.replace(chines, "]", "");
+				chines = StringTools.replace(chines, "【", "");
+				chines = StringTools.replace(chines, "】", "");
+			}
 			char[] nameChar = chines.toCharArray();
 			HanyuPinyinOutputFormat defaultFormat = new HanyuPinyinOutputFormat();
 			defaultFormat.setCaseType(HanyuPinyinCaseType.UPPERCASE);
@@ -70,6 +87,63 @@ public class PinyinUtils {
 			}
 		}
 		return pinyinName;
+	}
+
+	public static void processFoodComposition() {
+		Connection conn = null;
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		try {
+			conn = DBConnectionFactory.getConnection();
+			conn.setAutoCommit(false);
+			TableDefinition tableDefinition = new TableDefinition();
+			tableDefinition.setTableName("HEALTH_FOOD_COMPOSITION");
+
+			ColumnDefinition idColumn = new ColumnDefinition();
+			idColumn.setColumnName("ID_");
+			idColumn.setJavaType("Long");
+			tableDefinition.setIdColumn(idColumn);
+
+			ColumnDefinition short_hypyColumn = new ColumnDefinition();
+			short_hypyColumn.setColumnName("NAMEPINYIN_");
+			short_hypyColumn.setJavaType("String");
+			short_hypyColumn.setLength(200);
+			tableDefinition.addColumn(short_hypyColumn);
+
+			DBUtils.alterTable(conn, tableDefinition);
+			conn.commit();
+
+			Map<Long, String> dataMap = new HashMap<Long, String>();
+			String sql = " select ID_, NAME_ from HEALTH_FOOD_COMPOSITION ";
+			psmt = conn.prepareStatement(sql);
+			rs = psmt.executeQuery();
+			while (rs.next()) {
+				dataMap.put(rs.getLong(1), rs.getString(2));
+			}
+			JdbcUtils.close(rs);
+			JdbcUtils.close(psmt);
+
+			conn.setAutoCommit(false);
+
+			psmt = conn.prepareStatement(" update HEALTH_FOOD_COMPOSITION set NAMEPINYIN_ = ? where ID_ = ? ");
+			Set<Entry<Long, String>> entrySet = dataMap.entrySet();
+			for (Entry<Long, String> entry : entrySet) {
+				Long key = entry.getKey();
+				String value = entry.getValue();
+				psmt.setString(1, converterToFirstSpell(value, true));
+				psmt.setLong(2, key);
+				psmt.executeUpdate();
+			}
+			conn.commit();
+
+		} catch (Exception ex) {
+			// ex.printStackTrace();
+			logger.error(ex);
+		} finally {
+			JdbcUtils.close(rs);
+			JdbcUtils.close(psmt);
+			JdbcUtils.close(conn);
+		}
 	}
 
 	public static void processSysOrganization() {
@@ -113,7 +187,7 @@ public class PinyinUtils {
 			for (Entry<Long, String> entry : entrySet) {
 				Long key = entry.getKey();
 				String value = entry.getValue();
-				psmt.setString(1, converterToFirstSpell(value));
+				psmt.setString(1, converterToFirstSpell(value, true));
 				psmt.setLong(2, key);
 				psmt.executeUpdate();
 			}
@@ -170,7 +244,7 @@ public class PinyinUtils {
 			for (Entry<Long, String> entry : entrySet) {
 				Long key = entry.getKey();
 				String value = entry.getValue();
-				psmt.setString(1, converterToFirstSpell(value));
+				psmt.setString(1, converterToFirstSpell(value, true));
 				psmt.setLong(2, key);
 				psmt.executeUpdate();
 			}
@@ -227,7 +301,7 @@ public class PinyinUtils {
 			for (Entry<Long, String> entry : entrySet) {
 				Long key = entry.getKey();
 				String value = entry.getValue();
-				psmt.setString(1, converterToFirstSpell(value));
+				psmt.setString(1, converterToFirstSpell(value, true));
 				psmt.setLong(2, key);
 				psmt.executeUpdate();
 			}
@@ -284,7 +358,7 @@ public class PinyinUtils {
 			for (Entry<String, String> entry : entrySet) {
 				String key = entry.getKey();
 				String value = entry.getValue();
-				psmt.setString(1, converterToFirstSpell(value));
+				psmt.setString(1, converterToFirstSpell(value, true));
 				psmt.setString(2, key);
 				psmt.executeUpdate();
 			}

@@ -408,8 +408,8 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 			}
 		}
 		SysOrganizationQuery query = new SysOrganizationQuery();
-		query.setParentId(0L);
 		query.setTenantId(tenantId);
+		query.setOrderBy(" E.ID asc ");
 
 		List<SysOrganization> list = this.list(query);
 		SysOrganization organization = null;

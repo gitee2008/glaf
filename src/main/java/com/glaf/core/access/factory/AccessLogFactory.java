@@ -310,7 +310,7 @@ public class AccessLogFactory {
 
 			Environment.setCurrentSystemName(currentName);
 			lastUpdate = System.currentTimeMillis();
-			logger.debug("->accessLogs.size:" + accessLogs.size());
+			//logger.debug("->accessLogs.size:" + accessLogs.size());
 		}
 	}
 

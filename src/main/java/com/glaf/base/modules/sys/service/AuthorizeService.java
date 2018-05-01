@@ -41,8 +41,7 @@ public interface AuthorizeService {
 	 * @param userId
 	 * @return
 	 */
-	@Transactional
-	SysUser login(String userId);
+	SysUser getUser(String userId);
 
 	/**
 	 * 用户登陆

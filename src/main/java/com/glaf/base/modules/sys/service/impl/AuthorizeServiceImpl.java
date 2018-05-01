@@ -43,26 +43,30 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 	/**
 	 * 用户登陆
 	 * 
-	 * @param userId
+	 * @param userIdOrMobile
+	 *            用户账号或手机号码
 	 * @param password
 	 * @return
 	 */
 	@Transactional
-	public SysUser authorize(String userId, String password) {
-		SysUser bean = sysUserService.findByAccount(userId);
-		if (bean != null) {
-			if (bean.getLocked() == 1) {// 帐号禁止
+	public SysUser authorize(String userIdOrMobile, String password) {
+		SysUser user = sysUserService.findByAccount(userIdOrMobile);
+		if (user == null) {
+			user = sysUserService.findByMobile(userIdOrMobile);
+		}
+		if (user != null) {
+			if (user.getLocked() == 1) {// 帐号禁止
 				return null;
 			}
-			if (!bean.isSystemAdministrator()) {
+			if (!user.isSystemAdministrator()) {
 				/**
 				 * 当登录重试次数大于系统默认的重试次数并且登录时间间隔没有达到系统默认的时间间隔，登录失败
 				 */
-				if (bean.getLoginRetry() > conf.getInt("login.retryCount", 10)) {
-					if (bean.getLockLoginTime() != null) {
-						if (System.currentTimeMillis() - bean.getLockLoginTime().getTime() < 60 * 1000
+				if (user.getLoginRetry() > conf.getInt("login.retryCount", 10)) {
+					if (user.getLockLoginTime() != null) {
+						if (System.currentTimeMillis() - user.getLockLoginTime().getTime() < 60 * 1000
 								* conf.getInt("login.retryMinutes", 30)) {
-							sysUserService.loginFailure(userId);
+							sysUserService.loginFailure(user.getUserId());
 							return null;
 						}
 					} else {
@@ -70,68 +74,68 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 					}
 				}
 			}
-			boolean success = sysUserService.checkPassword(userId, password);
+			boolean success = sysUserService.checkPassword(user.getUserId(), password);
 			if (!success) {// 密码不匹配
-				logger.debug(userId + "密码不匹配!");
-				sysUserService.loginFailure(userId);
-				bean = null;
+				logger.debug(user.getUserId() + "密码不匹配!");
+				sysUserService.loginFailure(user.getUserId());
+				user = null;
 			}
 		}
-		return bean;
+		return user;
 	}
 
-	/**
-	 * 用户登陆
-	 * 
-	 * @param userId
-	 * @param pwd
-	 * @return
-	 */
-	@Transactional
-	public SysUser login(String userId) {
-		SysUser bean = sysUserService.findByAccountWithAll(userId);
-		if (bean != null) {
+	public SysUser getUser(String userIdOrMobile) {
+		SysUser user = sysUserService.findByAccount(userIdOrMobile);
+		if (user == null) {
+			user = sysUserService.findByMobile(userIdOrMobile);
 		}
-		return bean;
+		return user;
 	}
 
 	/**
 	 * 用户登陆
 	 * 
-	 * @param userId
+	 * @param userIdOrMobile
+	 *            用户账号或手机号码
 	 * @param password
 	 * @return
 	 */
 	@Transactional
-	public SysUser login(String userId, String password) {
-		SysUser bean = sysUserService.findByAccountWithAll(userId);
-		if (bean != null) {
-			if (bean.getLocked() == 1) {// 帐号禁止
-				return null;
-			}
-			if (!bean.isSystemAdministrator()) {
-				/**
-				 * 当登录重试次数大于系统默认的重试次数并且登录时间间隔没有达到系统默认的时间间隔，登录失败
-				 */
-				if (bean.getLoginRetry() > conf.getInt("login.retryCount", 5)) {
-					if (bean.getLockLoginTime() != null) {
-						if (System.currentTimeMillis() - bean.getLockLoginTime().getTime() < 60 * 1000
-								* conf.getInt("login.retryMinutes", 30)) {
-							sysUserService.loginFailure(userId);
-							return null;
+	public SysUser login(String userIdOrMobile, String password) {
+		SysUser user = sysUserService.findByAccount(userIdOrMobile);
+		if (user == null) {
+			user = sysUserService.findByMobile(userIdOrMobile);
+		}
+		if (user != null) {
+			user = sysUserService.findByAccountWithAll(user.getUserId());
+			if (user != null) {
+				if (user.getLocked() == 1) {// 帐号禁止
+					return null;
+				}
+				if (!user.isSystemAdministrator()) {
+					/**
+					 * 当登录重试次数大于系统默认的重试次数并且登录时间间隔没有达到系统默认的时间间隔，登录失败
+					 */
+					if (user.getLoginRetry() > conf.getInt("login.retryCount", 5)) {
+						if (user.getLockLoginTime() != null) {
+							if (System.currentTimeMillis() - user.getLockLoginTime().getTime() < 60 * 1000
+									* conf.getInt("login.retryMinutes", 30)) {
+								sysUserService.loginFailure(user.getUserId());
+								return null;
+							}
 						}
 					}
 				}
-			}
-			boolean success = sysUserService.checkPassword(userId, password);
-			if (!success) {// 密码不匹配
-				sysUserService.loginFailure(userId);
-				bean = null;
-			} else if (bean.getAccountType() != 1) {
+				boolean success = sysUserService.checkPassword(user.getUserId(), password);
+				if (!success) {// 密码不匹配
+					sysUserService.loginFailure(user.getUserId());
+					user = null;
+				} else if (user.getAccountType() != 1) {
 
+				}
 			}
 		}
-		return bean;
+		return user;
 	}
 
 	@Resource

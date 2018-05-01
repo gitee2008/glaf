@@ -980,7 +980,7 @@ public class BaseDataManager {
 
 	public void startScheduler() {
 		RefreshTask command = new RefreshTask();
-		scheduledThreadPool.scheduleAtFixedRate(command, 15, 30, TimeUnit.MINUTES);
+		scheduledThreadPool.scheduleAtFixedRate(command, 15, 60, TimeUnit.MINUTES);
 	}
 
 }

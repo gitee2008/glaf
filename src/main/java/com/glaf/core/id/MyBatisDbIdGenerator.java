@@ -73,7 +73,7 @@ public class MyBatisDbIdGenerator implements IdGenerator {
 		logger.info("----------------MyBatis3DbIdGenerator--------------");
 		try {
 			RefreshTask command = new RefreshTask();
-			scheduledThreadPool.scheduleAtFixedRate(command, 60, 15, TimeUnit.SECONDS);
+			scheduledThreadPool.scheduleAtFixedRate(command, 60, 10, TimeUnit.SECONDS);
 		} catch (Exception ex) {
 			logger.error(ex);
 		}
@@ -97,15 +97,19 @@ public class MyBatisDbIdGenerator implements IdGenerator {
 		Long nextId2 = idBlock.getNextId();
 		Long lastId2 = idBlock.getLastId();
 		if (nextId2 < lastId2) {
+			logger.debug("----------------NEXTID------------------------");
 			AtomicLong lastId2x = lastIdMap.get(name);
 			AtomicLong nextId2x = nextIdMap.get(name);
-			lastId2x.set(lastId2);
-			nextId2x.set(nextId2);
-			lastIdMap.put(name, lastId2x);
-			nextIdMap.put(name, nextId2x);
-			logger.debug("----------------NEXTID------------------------");
-			logger.debug("nextId:" + nextId2x.get());
-			logger.debug("lastId:" + lastId2x.get());
+			if (lastId2x != null) {
+				lastId2x.set(lastId2);
+				lastIdMap.put(name, lastId2x);
+				logger.debug("nextId:" + nextId2x.get());
+			}
+			if (nextId2x != null) {
+				nextId2x.set(nextId2);
+				nextIdMap.put(name, nextId2x);
+				logger.debug("lastId:" + lastId2x.get());
+			}
 		}
 	}
 

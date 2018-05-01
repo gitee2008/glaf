@@ -279,16 +279,20 @@ public class SysTenantServiceImpl implements SysTenantService {
 		}
 		SysOrganization organization = sysOrganizationService.getTopOrganizationByTenantId(sysTenant.getTenantId());
 		if (organization == null) {
-			organization = new SysOrganization();
-			organization.setId(sysTenant.getId());
-			organization.setTenantId(sysTenant.getTenantId());
-			organization.setCode(sysTenant.getCode());
-			organization.setName(sysTenant.getName());
-			organization.setDescription(sysTenant.getName());
-			organization.setPrincipal(sysTenant.getPrincipal());
-			organization.setTelphone(sysTenant.getTelephone());
-			organization.setCreateBy("system");
-			sysOrganizationService.create(organization);
+			try {
+				organization = new SysOrganization();
+				organization.setId(idGenerator.nextId("SYS_ORGANIZATION"));
+				organization.setTenantId(sysTenant.getTenantId());
+				organization.setCode(sysTenant.getCode());
+				organization.setName(sysTenant.getName());
+				organization.setDescription(sysTenant.getName());
+				organization.setPrincipal(sysTenant.getPrincipal());
+				organization.setTelphone(sysTenant.getTelephone());
+				organization.setCreateBy("system");
+				sysOrganizationService.create(organization);
+			} catch (java.lang.Throwable ex) {
+
+			}
 		}
 		String userId = String.valueOf(sysTenant.getId() + "000");
 		if (sysUserService.findByAccount(userId) == null) {
@@ -306,7 +310,7 @@ public class SysTenantServiceImpl implements SysTenantService {
 			sysUserService.create(bean);
 			List<String> userIds = new ArrayList<String>();
 			userIds.add(userId);
-			sysUserService.saveRoleUsers(sysTenant.getTenantId(), "TenantAdmin", 9, userIds);
+			sysUserService.saveAddRoleUsers(sysTenant.getTenantId(), "TenantAdmin", 9, userIds);
 		}
 	}
 

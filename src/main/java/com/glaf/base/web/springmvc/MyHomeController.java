@@ -36,10 +36,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.glaf.base.modules.sys.model.SysApplication;
+import com.glaf.base.modules.sys.model.SysTenant;
 import com.glaf.base.modules.sys.model.TenantConfig;
 import com.glaf.base.modules.sys.service.SysApplicationService;
+import com.glaf.base.modules.sys.service.SysTenantService;
 import com.glaf.base.modules.sys.service.TenantConfigService;
-
+import com.glaf.base.modules.sys.service.TreePermissionService;
 import com.glaf.core.base.BaseTree;
 import com.glaf.core.base.TreeModel;
 import com.glaf.core.config.SystemConfig;
@@ -54,9 +56,13 @@ import com.glaf.core.util.RequestUtils;
 public class MyHomeController {
 	protected static final Log logger = LogFactory.getLog(MyHomeController.class);
 
+	protected SysApplicationService sysApplicationService;
+
+	protected SysTenantService sysTenantService;
+
 	protected TenantConfigService tenantConfigService;
 
-	protected SysApplicationService sysApplicationService;
+	protected TreePermissionService treePermissionService;
 
 	@RequestMapping
 	public ModelAndView home(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap)
@@ -68,7 +74,7 @@ public class MyHomeController {
 			response.sendRedirect(request.getContextPath() + "/login");
 			return null;
 		}
-		
+
 		RequestUtils.setRequestParameterToAttribute(request);
 		String context = request.getContextPath();
 		request.setAttribute("contextPath", context);
@@ -90,10 +96,17 @@ public class MyHomeController {
 		long parentId = RequestUtils.getLong(request, "parentId", 3);
 
 		List<SysApplication> apps = null;
+		List<Long> nodeIds = null;
 		if (loginContext.isSystemAdministrator()) {
 			apps = sysApplicationService.getApplicationListWithChildren(parentId);
 		} else {
 			apps = sysApplicationService.getSysApplicationByUserId(loginContext.getActorId());
+
+			SysTenant tenant = sysTenantService.getSysTenantByTenantId(loginContext.getTenantId());
+			if (tenant != null && StringUtils.isNotEmpty(tenant.getType())) {
+				nodeIds = treePermissionService.getTenantNodeIds(tenant.getTenantId(), tenant.getType());
+			}
+
 		}
 
 		List<SysApplication> allApps = sysApplicationService.getAllSysApplications();
@@ -124,6 +137,13 @@ public class MyHomeController {
 				if (app.getId() == root.getId()) {
 					continue;
 				}
+
+				if (nodeIds != null && !nodeIds.isEmpty()) {
+					if (!nodeIds.contains(app.getId())) {
+						continue;
+					}
+				}
+
 				if (!lockedMap.containsKey(app.getId())) {
 					if (app.getLocked() == 0 && app.getDeleteFlag() == 0) {
 						myapps2.add(app);
@@ -189,8 +209,18 @@ public class MyHomeController {
 	}
 
 	@javax.annotation.Resource
+	public void setSysTenantService(SysTenantService sysTenantService) {
+		this.sysTenantService = sysTenantService;
+	}
+
+	@javax.annotation.Resource
 	public void setTenantConfigService(TenantConfigService tenantConfigService) {
 		this.tenantConfigService = tenantConfigService;
+	}
+
+	@javax.annotation.Resource
+	public void setTreePermissionService(TreePermissionService treePermissionService) {
+		this.treePermissionService = treePermissionService;
 	}
 
 }

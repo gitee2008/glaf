@@ -53,6 +53,7 @@ public class ReportDefinitionReader {
 			String templateFile = element.elementText("templateFile");
 			String templateType = element.elementText("templateType");
 			String prepareClass = element.elementText("prepareClass");
+			String perms = element.elementText("perms");
 
 			ReportDefinition rdf = new ReportDefinition();
 			rdf.setReportId(reportId);
@@ -61,6 +62,7 @@ public class ReportDefinitionReader {
 			rdf.setTemplateType(templateType);
 			rdf.setPrepareClass(prepareClass);
 			rdf.setProperties(this.readProperties(element));
+			rdf.setPerms(perms);
 
 			List<?> datasets = element.elements("dataset");
 			Iterator<?> iter = datasets.iterator();

@@ -43,6 +43,7 @@ import com.glaf.base.handler.LoginHandler;
 import com.glaf.base.handler.PasswordLoginHandler;
 import com.glaf.base.modules.sys.model.IdentityToken;
 import com.glaf.base.modules.sys.model.SysUser;
+import com.glaf.base.modules.sys.service.AuthorizeService;
 import com.glaf.base.modules.sys.service.IdentityTokenService;
 import com.glaf.base.modules.sys.service.SysUserService;
 import com.glaf.base.online.domain.UserOnline;
@@ -72,6 +73,8 @@ import com.glaf.core.web.callback.LoginCallback;
 @RequestMapping("/login")
 public class LoginController {
 	private static final Log logger = LogFactory.getLog(LoginController.class);
+
+	protected AuthorizeService authorizeService;
 
 	protected SysUserService sysUserService;
 
@@ -333,7 +336,7 @@ public class LoginController {
 		if (StringUtils.isNotEmpty(userId)) {
 			OutputStream output = null;
 			try {
-				User user = IdentityFactory.getUser(userId);
+				User user = authorizeService.getUser(userId);
 				if (user != null && ContextUtil.increaseUser(userId) < 500) {
 					IdentityToken identityToken = new IdentityToken();
 					java.util.Random random = new java.util.Random();
@@ -450,6 +453,11 @@ public class LoginController {
 
 		// 显示登陆页面
 		return new ModelAndView(view, modelMap);
+	}
+
+	@javax.annotation.Resource
+	public void setAuthorizeService(AuthorizeService authorizeService) {
+		this.authorizeService = authorizeService;
 	}
 
 	@javax.annotation.Resource(name = "identityTokenService")

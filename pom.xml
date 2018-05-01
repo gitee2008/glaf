@@ -962,7 +962,7 @@
 		<dependency>
 			<groupId>net.oschina.j2cache</groupId>
 			<artifactId>j2cache-core</artifactId>
-			<version>2.3.9-release</version>
+			<version>2.3.11-release</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jxls</groupId>

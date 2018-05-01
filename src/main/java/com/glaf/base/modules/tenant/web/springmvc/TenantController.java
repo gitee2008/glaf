@@ -109,6 +109,7 @@ public class TenantController {
 		query.deleteFlag(0);
 		query.setActorId(loginContext.getActorId());
 		query.setLoginContext(loginContext);
+		query.setType(null);
 
 		List<Long> selected = new ArrayList<Long>();
 		selected.add(0L);

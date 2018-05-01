@@ -52,6 +52,11 @@ public class ReportDefinition implements java.io.Serializable {
 	protected String prepareClass;
 
 	/**
+	 * 权限点（或的关系），多个用半角的"|"分隔
+	 */
+	protected String perms;
+
+	/**
 	 * 模板字节流
 	 */
 	protected byte[] data;
@@ -89,6 +94,10 @@ public class ReportDefinition implements java.io.Serializable {
 		return dataSetList;
 	}
 
+	public String getPerms() {
+		return perms;
+	}
+
 	public String getPrepareClass() {
 		return prepareClass;
 	}
@@ -119,6 +128,10 @@ public class ReportDefinition implements java.io.Serializable {
 
 	public void setDataSetList(List<ReportDataSet> dataSetList) {
 		this.dataSetList = dataSetList;
+	}
+
+	public void setPerms(String perms) {
+		this.perms = perms;
 	}
 
 	public void setPrepareClass(String prepareClass) {

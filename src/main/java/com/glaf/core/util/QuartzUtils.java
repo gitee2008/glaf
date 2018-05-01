@@ -258,11 +258,9 @@ public class QuartzUtils {
 				}
 			} catch (org.quartz.SchedulerException ex) {
 				logger.error(ex);
-
 				throw new RuntimeException(ex);
 			} catch (Exception ex) {
 				logger.error(ex);
-
 				throw new RuntimeException(ex);
 			}
 		}
@@ -334,11 +332,9 @@ public class QuartzUtils {
 				}
 			} catch (org.quartz.SchedulerException ex) {
 				logger.error(ex);
-
 				throw new RuntimeException(ex);
 			} catch (Exception ex) {
 				logger.error(ex);
-
 				throw new RuntimeException(ex);
 			}
 		}
@@ -363,7 +359,6 @@ public class QuartzUtils {
 			try {
 				stop(model.getId());
 			} catch (Exception ex) {
-
 				logger.error(ex);
 			}
 		}
@@ -374,7 +369,6 @@ public class QuartzUtils {
 				getQuartzScheduler().shutdown(false);
 			}
 		} catch (Exception ex) {
-
 			logger.error(ex);
 		}
 	}
@@ -396,7 +390,6 @@ public class QuartzUtils {
 						jobCache.put(model.getId(), model.getId());
 						Thread.sleep(1000);
 					} catch (Exception ex) {
-
 						logger.error(ex);
 					}
 				}
@@ -433,7 +426,6 @@ public class QuartzUtils {
 					logger.info(model.getTaskName() + " has stop.");
 				}
 			} catch (org.quartz.SchedulerException ex) {
-
 				logger.error(ex);
 				throw new RuntimeException(ex);
 			}
@@ -452,7 +444,6 @@ public class QuartzUtils {
 				stop(model.getId());
 				jobCache.remove(model.getId());
 			} catch (Exception ex) {
-
 				logger.error(ex);
 			}
 		}
