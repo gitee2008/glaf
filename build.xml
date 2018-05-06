@@ -50,7 +50,7 @@
 		<jar jarfile="glaf-framework.jar">
 		    <fileset dir="bin" 
 			         includes="com/glaf/**/*.class,com/glaf/**/*.xml,com/glaf/**/*.properties" 
-					 excludes="com/glaf/heathcare/**/*.*, **/test/**"/>
+					 excludes="**/test/**"/>
 		    <fileset dir="jar-conf" includes="**/*.xml,**/*.properties"/>
         </jar>
 	</target>

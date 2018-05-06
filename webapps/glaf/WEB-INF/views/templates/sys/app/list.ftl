@@ -68,12 +68,6 @@
 				pagePosition: 'both'
 			});
 
-			var p = jQuery('#mydatagrid').datagrid('getPager');
-			jQuery(p).pagination({
-				onBeforeRefresh:function(){
-					//alert('before refresh');
-				}
-		    });
 
 			$('#mydatagrid').datagrid({
 				onDblClickRow: function(index, row){
@@ -81,6 +75,28 @@
 				}
 			});
 
+			var pgx = $("#mydatagrid").datagrid("getPager");
+			if(pgx){
+			   $(pgx).pagination({
+				   onBeforeRefresh:function(){
+					   //alert('before refresh');
+				   },
+				   onRefresh:function(pageNumber,pageSize){
+					   //alert(pageNumber);
+					   //alert(pageSize);
+					   loadGridData(getLink()+"&page="+pageNumber+"&rows="+pageSize);
+					},
+				   onChangePageSize:function(){
+					   //alert('pagesize changed');
+					   loadGridData(getLink());
+					},
+				   onSelectPage:function(pageNumber, pageSize){
+					   //alert(pageNumber);
+					   //alert(pageSize);
+					   loadGridData(getLink()+"&page="+pageNumber+"&rows="+pageSize);
+					}
+			   });
+			}
 	});
 
 		 

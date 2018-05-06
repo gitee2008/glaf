@@ -12,7 +12,7 @@
 				   type: "POST",
 				   url: '${contextPath}/sys/dictory/saveModify',
 				   data: params,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },

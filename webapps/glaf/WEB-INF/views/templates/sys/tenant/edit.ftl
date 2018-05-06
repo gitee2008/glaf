@@ -110,7 +110,10 @@
 		<td align="left">
 			<select id="level" name="level">
 			    <option value="0">----请选择----</option>
-				
+				<option value="9999">省级示范</option>
+				<option value="999">市级示范</option>
+				<option value="99">县/区级示范</option>
+				<option value="1">非示范</option>
 			</select>
             <script type="text/javascript">
                 document.getElementById("level").value="${sysTenant.level}";
@@ -122,10 +125,31 @@
 		<td align="left">
 			<select id="property" name="property">
 			    <option value="0">----请选择----</option>
-				
+				<option value="Public">公立</option>
+				<option value="Private">私立</option>
+				<option value="Gov_Ent">政企联办</option>
+				<option value="Gov_Pri">民办公助</option>
+				<option value="Collectivity">集体</option>
+				<option value="Enterprise">企业</option>
+				<option value="Other">其他</option>
 			</select>
             <script type="text/javascript">
                 document.getElementById("property").value="${sysTenant.property}";
+            </script>
+		</td>
+	</tr>
+	<tr>
+		<td width="20%" align="left">系统类型</td>
+		<td align="left">
+			<select id="type" name="type">
+			    <option value="">----请选择----</option>
+				<option value="NS">托幼机构</option>
+				<option value="ED">教育机构</option>
+				<option value="BH">卫生保健机构</option>
+				<option value="Other">其他</option>
+			</select>
+            <script type="text/javascript">
+                document.getElementById("type").value="${sysTenant.type}";
             </script>
 		</td>
 	</tr>
@@ -228,6 +252,20 @@
 			<script type="text/javascript">
 				document.getElementById("ticketFlag").value="${sysTenant.ticketFlag}";
 			</script> 
+		</td>
+	</tr>
+	<tr>
+		<td width="20%" align="left">限制数据录入时间</td>
+		<td align="left">
+		  <input type="radio" name="limit" value="0" <#if sysTenant.limit == 0>checked</#if>>是&nbsp;&nbsp;
+	      <input type="radio" name="limit" value="9999" <#if sysTenant.limit == 9999>checked</#if>>否&nbsp;&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td width="20%" align="left">禁用数据约束</td>
+		<td align="left">
+		  <input type="radio" name="disableDataConstraint" value="Y" <#if sysTenant.disableDataConstraint == 'Y'>checked</#if>>是&nbsp;&nbsp;
+	      <input type="radio" name="disableDataConstraint" value="N" <#if sysTenant.disableDataConstraint == 'N'>checked</#if>>否&nbsp;&nbsp;
 		</td>
 	</tr>
 	<tr>

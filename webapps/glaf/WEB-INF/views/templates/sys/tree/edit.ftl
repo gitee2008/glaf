@@ -13,7 +13,7 @@
 				   type: "POST",
 				   url: '${contextPath}/sys/tree/save',
 				   data: params,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },
@@ -38,7 +38,7 @@
 				   type: "POST",
 				   url: '${contextPath}/sys/tree/save',
 				   data: params,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },

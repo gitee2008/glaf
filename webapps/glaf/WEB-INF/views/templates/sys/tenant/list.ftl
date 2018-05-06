@@ -25,20 +25,20 @@
 				        {title:'序号', field:'startIndex', width:60, sortable:false},
 						{title:'编号', field:'id', width:90},
 						{title:'名称', field:'name', width:180},
-						{title:'代码', field:'code', width:120},
-						{title:'等级', field:'level', width:120, formatter:formatterLevel},
-						{title:'性质', field:'property', width:120, formatter:formatterProperty},
+						{title:'代码', field:'code', width:100},
+						{title:'等级', field:'level', width:100, formatter:formatterLevel},
+						{title:'性质', field:'property', width:100, formatter:formatterProperty},
 						{title:'负责人', field:'principal', width:90},
 						{title:'电话', field:'telephone', width:90},
 						{title:'创建人', field:'createBy', width:90},
 						{title:'创建日期', field:'createTime', width:90},
 						{title:'是否有效', field:'locked', width:90, formatter:formatterStatus},
-						{title:'功能键', field:'functionKey', width:120, formatter:formatterKeys}
+						{title:'功能键', field:'functionKey', width:160, formatter:formatterKeys}
 				]],
 				rownumbers: false,
 				pagination: true,
-				pageSize: 10,
-				pageList: [10,15,20,25,30,40,50,100],
+				pageSize: 100,
+				pageList: [10,15,20,25,30,40,50,100,200,500,1000],
 				pagePosition: 'both',
 				onDblClickRow: onMyRowClick 
 			});
@@ -52,8 +52,12 @@
 	});
 
 	function formatterKeys(val, row){
-		var str = "<a href='javascript:editRow(\""+row.id+"\");'>修改</a>&nbsp;<a href='javascript:users(\""+row.tenantId+"\");'>用户</a>&nbsp;<a href='javascript:tcImage(\""+row.tenantId+"\");'>营业执照</a>&nbsp;";
+		var str = "<a href='javascript:editRow(\""+row.id+"\");'>修改</a>&nbsp;<a href='javascript:users(\""+row.tenantId+"\");'>用户</a>&nbsp;<a href='javascript:apps(\""+row.tenantId+"\",\""+row.type+"\");'>模块</a>&nbsp;<a href='javascript:tcImage(\""+row.tenantId+"\");'>营业执照</a>&nbsp;<a href='javascript:exp(\""+row.tenantId+"\");'>导出</a>&nbsp;";
 	    return str;
+	}
+
+	function exp(tenantId){
+		window.open('${contextPath}/sys/tenantExport/export?tenantId='+tenantId);
 	}
 	
 	function formatterLevel(val, row){
@@ -116,6 +120,24 @@
 			maxmin: true,
 			shadeClose: true,
 			title: "用户列表",
+			closeBtn: [0, true],
+			shade: [0.8, '#000'],
+			border: [10, 0.3, '#000'],
+			offset: ['20px',''],
+			fadeIn: 100,
+			area: ['980px', (jQuery(window).height() - 50) +'px'],
+            iframe: {src: link}
+		});
+	}
+
+
+	function apps(tenantId, type){
+	    var link="${contextPath}/sys/application/privilege?tenantId="+tenantId+"&type="+type+"&privilege=rw";
+		jQuery.layer({
+			type: 2,
+			maxmin: true,
+			shadeClose: true,
+			title: "租户模块设置",
 			closeBtn: [0, true],
 			shade: [0.8, '#000'],
 			border: [10, 0.3, '#000'],
