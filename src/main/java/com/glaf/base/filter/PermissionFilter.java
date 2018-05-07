@@ -45,6 +45,8 @@ public class PermissionFilter extends OncePerRequestFilter {
 		includes.add("/index.jsp");
 		includes.add("/test.jsp");
 		includes.add("/update.jsp");
+		includes.add("/config/index.jsp");
+		includes.add("/config/saveDataSource.jsp");
 	}
 
 	@Override
