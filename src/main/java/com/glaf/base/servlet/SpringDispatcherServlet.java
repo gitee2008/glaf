@@ -38,6 +38,7 @@ import com.glaf.core.config.Environment;
 import com.glaf.core.config.SystemConfig;
 import com.glaf.core.context.ThreadHolderFactory;
 import com.glaf.core.id.MyBatisDbIdGenerator;
+import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.util.ContextUtils;
 import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.ThreadContextHolder;
@@ -54,6 +55,8 @@ public class SpringDispatcherServlet extends DispatcherServlet {
 
 	protected static final Semaphore semaphore = new Semaphore(20);
 
+	protected static boolean checkDB = false;
+
 	private static final long serialVersionUID = 1L;
 
 	public SpringDispatcherServlet() {
@@ -62,6 +65,12 @@ public class SpringDispatcherServlet extends DispatcherServlet {
 
 	@Override
 	protected void doService(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		if (checkDB) {
+			if (!DBConnectionFactory.checkConnection()) {
+				checkDB = true;
+				return;
+			}
+		}
 		long start = System.currentTimeMillis();
 		String uri = request.getRequestURI();
 		String ipAddr = RequestUtils.getIPAddress(request);
@@ -212,6 +221,12 @@ public class SpringDispatcherServlet extends DispatcherServlet {
 
 	@Override
 	protected WebApplicationContext initWebApplicationContext() {
+		if (checkDB) {
+			if (!DBConnectionFactory.checkConnection()) {
+				checkDB = true;
+				return null;
+			}
+		}
 		WebApplicationContext wac = super.initWebApplicationContext();
 		return wac;
 	}

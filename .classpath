@@ -155,7 +155,7 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/spring-session.RELEASE.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/spring-tx.RELEASE.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/spring-web.RELEASE.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/spring-webmvc.RELEASE.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/spring-webmvc.RELEASE.jar" sourcepath="C:/Users/Administrator/.m2/repository/org/springframework/spring-webmvc/5.0.5.RELEASE/spring-webmvc-5.0.5.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/sshd-core.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/stax2.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/staxon-gson.jar"/>

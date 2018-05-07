@@ -31,6 +31,7 @@ import com.glaf.base.modules.sys.service.SysUserService;
 import com.glaf.base.modules.sys.util.PinyinUtils;
 
 import com.glaf.core.context.ContextFactory;
+import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.util.security.AESUtils;
 
 public class InitBaseDataServlet extends HttpServlet {
@@ -41,6 +42,9 @@ public class InitBaseDataServlet extends HttpServlet {
 	private BaseDataManager bdm = BaseDataManager.getInstance();// 基础信息管理
 
 	public void init() {
+		if (!DBConnectionFactory.checkConnection()) {
+			return;
+		}
 		long startTime = System.currentTimeMillis();
 		try {
 			AESUtils.initAndLoadKey();
