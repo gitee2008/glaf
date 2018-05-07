@@ -192,7 +192,6 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/spring-jcl.RELEASE.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/spring-messaging.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/j2cache-core.jar" sourcepath="lib/j2cache-core-sources.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/cacheonix-core.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/j2cache-core.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/snappy-java.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/caffeine.jar"/>
