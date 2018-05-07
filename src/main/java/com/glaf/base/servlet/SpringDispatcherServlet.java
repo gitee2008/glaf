@@ -221,12 +221,6 @@ public class SpringDispatcherServlet extends DispatcherServlet {
 
 	@Override
 	protected WebApplicationContext initWebApplicationContext() {
-		if (checkDB) {
-			if (!DBConnectionFactory.checkConnection()) {
-				checkDB = true;
-				return null;
-			}
-		}
 		WebApplicationContext wac = super.initWebApplicationContext();
 		return wac;
 	}
