@@ -204,7 +204,7 @@ public class SpringDispatcherServlet extends DispatcherServlet {
 					accessLog.setMethod(request.getMethod());
 					accessLog.setContent(json.toJSONString());
 					AccessLogFactory.getInstance().addLog(accessLog);
-				} else if (StringUtils.contains(uri, "/heathcare/") || StringUtils.contains(uri, "/tableData")) {
+				} else if (StringUtils.contains(uri, "/tableData")) {
 					AccessLog accessLog = new AccessLog();
 					accessLog.setIp(RequestUtils.getIPAddress(request));
 					accessLog.setTimeMillis((int) time);
