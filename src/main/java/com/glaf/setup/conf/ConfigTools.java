@@ -143,7 +143,7 @@ public class ConfigTools {
 		}
 		path = getJavaFileSystemPath(path);
 		java.io.File directory = new java.io.File(path + sp);
-		if (!directory.exists()) { // 如果目录不存在，新建一个
+		if (!directory.exists()) {
 			boolean isOK = directory.mkdirs();
 			if (isOK) {
 				throw new RuntimeException(directory.getAbsolutePath() + " create error ");

@@ -45,39 +45,41 @@ public class DatabaseConfig {
 		File file = new File(configPath);
 		if (file.isDirectory()) {
 			String[] filelist = file.list();
-			for (int i = 0; i < filelist.length; i++) {
-				String name = filelist[i];
-				if (!name.toLowerCase().endsWith(".properties")) {
-					continue;
-				}
-				String filename = configPath + sp + name;
-				Properties properties = null;
-				FileInputStream inputStream = null;
-				try {
-					inputStream = new FileInputStream(filename);
-					properties = PropertiesLoader.loadProperties(inputStream);
-					Database database = new Database();
-					database.setUrl(properties.getProperty("jdbc.url"));
-					int port = 0;
-					if (properties.getProperty("port") != null
-							&& StringUtils.isNumeric(properties.getProperty("port"))) {
-						port = Integer.parseInt(properties.getProperty("port"));
+			if (filelist != null) {
+				for (int i = 0; i < filelist.length; i++) {
+					String name = filelist[i];
+					if (!name.toLowerCase().endsWith(".properties")) {
+						continue;
 					}
-					database.setPort(port);
-					database.setDatabaseName(properties.getProperty("databaseName"));
-					database.setDriverClassName(properties.getProperty("jdbc.driver"));
-					database.setSubject(properties.getProperty("subject"));
-					database.setName(properties.getProperty("jdbc.name"));
-					Set<Entry<Object, Object>> entrySet = properties.entrySet();
-					for (Entry<Object, Object> entry : entrySet) {
-						String key = (String) entry.getKey();
-						Object value = entry.getValue();
-						if (value != null) {
-							database.getDataMap().put(key, value);
+					String filename = configPath + sp + name;
+					Properties properties = null;
+					FileInputStream inputStream = null;
+					try {
+						inputStream = new FileInputStream(filename);
+						properties = PropertiesLoader.loadProperties(inputStream);
+						Database database = new Database();
+						database.setUrl(properties.getProperty("jdbc.url"));
+						int port = 0;
+						if (properties.getProperty("port") != null
+								&& StringUtils.isNumeric(properties.getProperty("port"))) {
+							port = Integer.parseInt(properties.getProperty("port"));
 						}
+						database.setPort(port);
+						database.setDatabaseName(properties.getProperty("databaseName"));
+						database.setDriverClassName(properties.getProperty("jdbc.driver"));
+						database.setSubject(properties.getProperty("subject"));
+						database.setName(properties.getProperty("jdbc.name"));
+						Set<Entry<Object, Object>> entrySet = properties.entrySet();
+						for (Entry<Object, Object> entry : entrySet) {
+							String key = (String) entry.getKey();
+							Object value = entry.getValue();
+							if (value != null) {
+								database.getDataMap().put(key, value);
+							}
+						}
+						rows.add(database);
+					} catch (IOException ex) {
 					}
-					rows.add(database);
-				} catch (IOException ex) {
 				}
 			}
 		}
@@ -111,13 +113,15 @@ public class DatabaseConfig {
 			File file = new File(path);
 			if (file.isDirectory()) {
 				String[] filelist = file.list();
-				for (int i = 0; i < filelist.length; i++) {
-					String name = filelist[i];
-					if (!name.toLowerCase().endsWith(".jar")) {
-						continue;
+				if (filelist != null) {
+					for (int i = 0; i < filelist.length; i++) {
+						String name = filelist[i];
+						if (!name.toLowerCase().endsWith(".jar")) {
+							continue;
+						}
+						String filename = path + sp + name;
+						ucl.addURL("file:" + filename);
 					}
-					String filename = path + sp + name;
-					ucl.addURL("file:" + filename);
 				}
 			}
 		} catch (Exception ex) {
