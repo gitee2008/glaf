@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.glaf.sms.bean;
+package com.glaf.sms.send;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -32,8 +32,8 @@ import com.glaf.sms.domain.SmsVerifyMessage;
 import com.glaf.sms.service.SmsServerService;
 import com.glaf.sms.service.SmsVerifyMessageService;
 
-public class SmsVerifyMessageSender {
-	protected static final Log logger = LogFactory.getLog(SmsVerifyMessageSender.class);
+public class CustomSmsSender implements SmsSender {
+	protected static final Log logger = LogFactory.getLog(CustomSmsSender.class);
 
 	protected SmsServerService smsServerService;
 
@@ -61,8 +61,8 @@ public class SmsVerifyMessageSender {
 		this.smsVerifyMessageService = smsVerifyMessageService;
 	}
 
-	public void sendSMS(SmsVerifyMessage smsVerifyMessage) {
-		SmsServer server = getSmsServerService().getSmsServer("REG");
+	public void sendSms(SmsServer server, SmsVerifyMessage smsVerifyMessage) {
+		//SmsServer server = getSmsServerService().getSmsServer("REG");
 		if (server != null) {
 			StringBuilder buff = new StringBuilder();
 			buff.append(server.getServerIP());

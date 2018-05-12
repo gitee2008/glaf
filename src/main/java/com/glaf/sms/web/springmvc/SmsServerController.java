@@ -241,6 +241,11 @@ public class SmsServerController {
 			smsServer.setResponseResult(request.getParameter("responseResult"));
 			smsServer.setFrequence(RequestUtils.getInt(request, "frequence"));
 			smsServer.setRetryTimes(RequestUtils.getInt(request, "retryTimes"));
+			smsServer.setAccessKeyId(request.getParameter("accessKeyId"));
+			smsServer.setAccessKeySecret(request.getParameter("accessKeySecret"));
+			smsServer.setSignName(request.getParameter("signName"));
+			smsServer.setTemplateCode(request.getParameter("templateCode"));
+			smsServer.setProvider(request.getParameter("provider"));
 			smsServer.setKey(request.getParameter("key"));
 			smsServer.setType(request.getParameter("type"));
 
@@ -265,16 +270,16 @@ public class SmsServerController {
 		return ResponseUtils.responseJsonResult(false);
 	}
 
+	@javax.annotation.Resource(name = "com.glaf.sms.service.smsServerService")
+	public void setSmsServerService(SmsServerService smsServerService) {
+		this.smsServerService = smsServerService;
+	}
+
 	@RequestMapping("/view")
 	public ModelAndView view(HttpServletRequest request) {
 		RequestUtils.setRequestParameterToAttribute(request);
 
 		return new ModelAndView("/sms/smsClientManagement");
-	}
-
-	@javax.annotation.Resource(name = "com.glaf.sms.service.smsServerService")
-	public void setSmsServerService(SmsServerService smsServerService) {
-		this.smsServerService = smsServerService;
 	}
 
 }

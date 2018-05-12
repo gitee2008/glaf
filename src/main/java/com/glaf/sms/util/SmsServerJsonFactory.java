@@ -32,6 +32,16 @@ import com.glaf.sms.domain.SmsServer;
  */
 public class SmsServerJsonFactory {
 
+	public static java.util.List<SmsServer> arrayToList(JSONArray array) {
+		java.util.List<SmsServer> list = new java.util.ArrayList<SmsServer>();
+		for (int i = 0, len = array.size(); i < len; i++) {
+			JSONObject jsonObject = array.getJSONObject(i);
+			SmsServer model = jsonToObject(jsonObject);
+			list.add(model);
+		}
+		return list;
+	}
+
 	public static SmsServer jsonToObject(JSONObject jsonObject) {
 		SmsServer model = new SmsServer();
 		if (jsonObject.containsKey("id")) {
@@ -67,6 +77,21 @@ public class SmsServerJsonFactory {
 		if (jsonObject.containsKey("key")) {
 			model.setKey(jsonObject.getString("key"));
 		}
+		if (jsonObject.containsKey("accessKeyId")) {
+			model.setAccessKeyId(jsonObject.getString("accessKeyId"));
+		}
+		if (jsonObject.containsKey("accessKeySecret")) {
+			model.setAccessKeySecret(jsonObject.getString("accessKeySecret"));
+		}
+		if (jsonObject.containsKey("signName")) {
+			model.setSignName(jsonObject.getString("signName"));
+		}
+		if (jsonObject.containsKey("templateCode")) {
+			model.setTemplateCode(jsonObject.getString("templateCode"));
+		}
+		if (jsonObject.containsKey("provider")) {
+			model.setProvider(jsonObject.getString("provider"));
+		}
 		if (jsonObject.containsKey("type")) {
 			model.setType(jsonObject.getString("type"));
 		}
@@ -81,6 +106,17 @@ public class SmsServerJsonFactory {
 		}
 
 		return model;
+	}
+
+	public static JSONArray listToArray(java.util.List<SmsServer> list) {
+		JSONArray array = new JSONArray();
+		if (list != null && !list.isEmpty()) {
+			for (SmsServer model : list) {
+				JSONObject jsonObject = model.toJsonObject();
+				array.add(jsonObject);
+			}
+		}
+		return array;
 	}
 
 	public static JSONObject toJsonObject(SmsServer model) {
@@ -100,6 +136,21 @@ public class SmsServerJsonFactory {
 		}
 		if (model.getKey() != null) {
 			jsonObject.put("key", model.getKey());
+		}
+		if (model.getAccessKeyId() != null) {
+			jsonObject.put("accessKeyId", model.getAccessKeyId());
+		}
+		if (model.getAccessKeySecret() != null) {
+			jsonObject.put("accessKeySecret", model.getAccessKeySecret());
+		}
+		if (model.getSignName() != null) {
+			jsonObject.put("signName", model.getSignName());
+		}
+		if (model.getTemplateCode() != null) {
+			jsonObject.put("templateCode", model.getTemplateCode());
+		}
+		if (model.getProvider() != null) {
+			jsonObject.put("provider", model.getProvider());
 		}
 		if (model.getRequestBody() != null) {
 			jsonObject.put("requestBody", model.getRequestBody());
@@ -145,6 +196,21 @@ public class SmsServerJsonFactory {
 		if (model.getKey() != null) {
 			jsonObject.put("key", model.getKey());
 		}
+		if (model.getAccessKeyId() != null) {
+			jsonObject.put("accessKeyId", model.getAccessKeyId());
+		}
+		if (model.getAccessKeySecret() != null) {
+			jsonObject.put("accessKeySecret", model.getAccessKeySecret());
+		}
+		if (model.getSignName() != null) {
+			jsonObject.put("signName", model.getSignName());
+		}
+		if (model.getTemplateCode() != null) {
+			jsonObject.put("templateCode", model.getTemplateCode());
+		}
+		if (model.getProvider() != null) {
+			jsonObject.put("provider", model.getProvider());
+		}
 		if (model.getRequestBody() != null) {
 			jsonObject.put("requestBody", model.getRequestBody());
 		}
@@ -169,27 +235,6 @@ public class SmsServerJsonFactory {
 			jsonObject.put("createTime_datetime", DateUtils.getDateTime(model.getCreateTime()));
 		}
 		return jsonObject;
-	}
-
-	public static JSONArray listToArray(java.util.List<SmsServer> list) {
-		JSONArray array = new JSONArray();
-		if (list != null && !list.isEmpty()) {
-			for (SmsServer model : list) {
-				JSONObject jsonObject = model.toJsonObject();
-				array.add(jsonObject);
-			}
-		}
-		return array;
-	}
-
-	public static java.util.List<SmsServer> arrayToList(JSONArray array) {
-		java.util.List<SmsServer> list = new java.util.ArrayList<SmsServer>();
-		for (int i = 0, len = array.size(); i < len; i++) {
-			JSONObject jsonObject = array.getJSONObject(i);
-			SmsServer model = jsonToObject(jsonObject);
-			list.add(model);
-		}
-		return list;
 	}
 
 	private SmsServerJsonFactory() {

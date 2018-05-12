@@ -113,6 +113,36 @@ public class SmsServer implements Serializable, JSONable {
 	protected String key;
 
 	/**
+	 * 访问Key
+	 */
+	@Column(name = "ACCESSKEYID_", length = 200)
+	protected String accessKeyId;
+
+	/**
+	 * 访问密锁
+	 */
+	@Column(name = "ACCESSKEYSECRET_", length = 200)
+	protected String accessKeySecret;
+
+	/**
+	 * 签名
+	 */
+	@Column(name = "SIGNNAME_", length = 200)
+	protected String signName;
+
+	/**
+	 * 模板代码
+	 */
+	@Column(name = "TEMPLATECODE_", length = 500)
+	protected String templateCode;
+
+	/**
+	 * 厂家
+	 */
+	@Column(name = "PROVIDER_", length = 50)
+	protected String provider;
+
+	/**
 	 * 类型
 	 */
 	@Column(name = "TYPE_", length = 50)
@@ -158,6 +188,14 @@ public class SmsServer implements Serializable, JSONable {
 		return true;
 	}
 
+	public String getAccessKeyId() {
+		return accessKeyId;
+	}
+
+	public String getAccessKeySecret() {
+		return accessKeySecret;
+	}
+
 	public String getCreateBy() {
 		return this.createBy;
 	}
@@ -197,6 +235,10 @@ public class SmsServer implements Serializable, JSONable {
 		return this.port;
 	}
 
+	public String getProvider() {
+		return provider;
+	}
+
 	public String getRequestBody() {
 		return requestBody;
 	}
@@ -217,8 +259,16 @@ public class SmsServer implements Serializable, JSONable {
 		return this.serverIP;
 	}
 
+	public String getSignName() {
+		return signName;
+	}
+
 	public String getSubject() {
 		return this.subject;
+	}
+
+	public String getTemplateCode() {
+		return templateCode;
 	}
 
 	public String getType() {
@@ -235,6 +285,14 @@ public class SmsServer implements Serializable, JSONable {
 
 	public SmsServer jsonToObject(JSONObject jsonObject) {
 		return SmsServerJsonFactory.jsonToObject(jsonObject);
+	}
+
+	public void setAccessKeyId(String accessKeyId) {
+		this.accessKeyId = accessKeyId;
+	}
+
+	public void setAccessKeySecret(String accessKeySecret) {
+		this.accessKeySecret = accessKeySecret;
 	}
 
 	public void setCreateBy(String createBy) {
@@ -269,6 +327,10 @@ public class SmsServer implements Serializable, JSONable {
 		this.port = port;
 	}
 
+	public void setProvider(String provider) {
+		this.provider = provider;
+	}
+
 	public void setRequestBody(String requestBody) {
 		this.requestBody = requestBody;
 	}
@@ -289,8 +351,16 @@ public class SmsServer implements Serializable, JSONable {
 		this.serverIP = serverIP;
 	}
 
+	public void setSignName(String signName) {
+		this.signName = signName;
+	}
+
 	public void setSubject(String subject) {
 		this.subject = subject;
+	}
+
+	public void setTemplateCode(String templateCode) {
+		this.templateCode = templateCode;
 	}
 
 	public void setType(String type) {

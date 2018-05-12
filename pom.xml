@@ -186,6 +186,21 @@
 			<artifactId>spring-batch-test</artifactId>
 			<version>${spring.batch.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-core</artifactId>
+			<version>2.0.3.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-data-redis</artifactId>
+			<version>2.0.3.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-jdbc</artifactId>
+			<version>2.0.3.RELEASE</version>
+		</dependency>
 		<!-- 条码工具 -->
 		<dependency>
 			<groupId>net.sf.barcode4j</groupId>
@@ -234,6 +249,16 @@
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
 			<version>1.1.9</version>
+		</dependency>
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-core</artifactId>
+			<version>4.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+			<version>1.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.zaxxer</groupId>

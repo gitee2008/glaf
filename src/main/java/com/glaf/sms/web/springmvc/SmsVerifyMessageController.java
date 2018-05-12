@@ -44,9 +44,9 @@ import com.glaf.core.util.ParamUtils;
 import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.ResponseUtils;
 import com.glaf.core.util.Tools;
-import com.glaf.sms.bean.SmsVerifyMessageSender;
 import com.glaf.sms.domain.SmsVerifyMessage;
 import com.glaf.sms.query.SmsVerifyMessageQuery;
+import com.glaf.sms.send.SmsSendFactory;
 import com.glaf.sms.service.SmsVerifyMessageService;
 
 /**
@@ -95,16 +95,19 @@ public class SmsVerifyMessageController {
 
 								this.smsVerifyMessageService.save(smsVerifyMessage);
 
-								SmsVerifyMessageSender sender = new SmsVerifyMessageSender();
-								sender.setSmsVerifyMessageService(smsVerifyMessageService);
-								sender.sendSMS(smsVerifyMessage);
+								//VerifyMessageSmsSender sender = new VerifyMessageSmsSender();
+								//sender.setSmsVerifyMessageService(smsVerifyMessageService);
+								//sender.sendSms(smsVerifyMessage);
+								
+								SmsSendFactory.sendSms("Login", smsVerifyMessage);
 
 								return ResponseUtils.responseJsonResult(true);
 							} else {
 								if (smsVerifyMessage.getStatus() != 9) {
-									SmsVerifyMessageSender sender = new SmsVerifyMessageSender();
-									sender.setSmsVerifyMessageService(smsVerifyMessageService);
-									sender.sendSMS(smsVerifyMessage);
+									//VerifyMessageSmsSender sender = new VerifyMessageSmsSender();
+									//sender.setSmsVerifyMessageService(smsVerifyMessageService);
+									//sender.sendSms(smsVerifyMessage);
+									SmsSendFactory.sendSms("Login", smsVerifyMessage);
 
 									return ResponseUtils.responseJsonResult(true);
 								}
@@ -153,16 +156,19 @@ public class SmsVerifyMessageController {
 
 							this.smsVerifyMessageService.save(smsVerifyMessage);
 
-							SmsVerifyMessageSender sender = new SmsVerifyMessageSender();
-							sender.setSmsVerifyMessageService(smsVerifyMessageService);
-							sender.sendSMS(smsVerifyMessage);
+							//VerifyMessageSmsSender sender = new VerifyMessageSmsSender();
+							//sender.setSmsVerifyMessageService(smsVerifyMessageService);
+							//sender.sendSms(smsVerifyMessage);
+							SmsSendFactory.sendSms("REG", smsVerifyMessage);
 
 							return ResponseUtils.responseJsonResult(true);
 						} else {
 							if (smsVerifyMessage.getStatus() != 9) {
-								SmsVerifyMessageSender sender = new SmsVerifyMessageSender();
-								sender.setSmsVerifyMessageService(smsVerifyMessageService);
-								sender.sendSMS(smsVerifyMessage);
+								//VerifyMessageSmsSender sender = new VerifyMessageSmsSender();
+								//sender.setSmsVerifyMessageService(smsVerifyMessageService);
+								//sender.sendSms(smsVerifyMessage);
+								
+								SmsSendFactory.sendSms("REG", smsVerifyMessage);
 
 								return ResponseUtils.responseJsonResult(true);
 							}

@@ -4,28 +4,46 @@
 
 <mapper namespace="com.glaf.sms.mapper.SmsServerMapper">
 
-	<resultMap id="smsServerResultMap" type="com.glaf.sms.domain.SmsServer">
+	<resultMap id="smsServerResultMap"
+		type="com.glaf.sms.domain.SmsServer">
 		<id property="id" column="ID_" jdbcType="VARCHAR" />
 		<result property="subject" column="SUBJECT_" jdbcType="VARCHAR" />
-		<result property="serverIP" column="SERVERIP_" jdbcType="VARCHAR" />
+		<result property="serverIP" column="SERVERIP_"
+			jdbcType="VARCHAR" />
 		<result property="port" column="PORT_" jdbcType="INTEGER" />
 		<result property="path" column="PATH_" jdbcType="VARCHAR" />
-		<result property="requestBody" column="REQUESTBODY_" jdbcType="VARCHAR" />
+		<result property="requestBody" column="REQUESTBODY_"
+			jdbcType="VARCHAR" />
 		<result property="responseBody" column="RESPONSEBODY_"
 			jdbcType="VARCHAR" />
 		<result property="responseResult" column="RESPONSERESULT_"
 			jdbcType="VARCHAR" />
-		<result property="frequence" column="FREQUENCE_" jdbcType="INTEGER" />
-		<result property="retryTimes" column="RETRYTIMES_" jdbcType="INTEGER" />
+		<result property="frequence" column="FREQUENCE_"
+			jdbcType="INTEGER" />
+		<result property="retryTimes" column="RETRYTIMES_"
+			jdbcType="INTEGER" />
 		<result property="key" column="KEY_" jdbcType="VARCHAR" />
+		<result property="accessKeyId" column="ACCESSKEYID_"
+			jdbcType="VARCHAR" />
+		<result property="accessKeySecret" column="ACCESSKEYSECRET_"
+			jdbcType="VARCHAR" />
+		<result property="signName" column="SIGNNAME_"
+			jdbcType="VARCHAR" />
+		<result property="templateCode" column="TEMPLATECODE_"
+			jdbcType="VARCHAR" />
+		<result property="provider" column="PROVIDER_"
+			jdbcType="VARCHAR" />
 		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
 		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
-		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
-		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />
+		<result property="createBy" column="CREATEBY_"
+			jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_"
+			jdbcType="TIMESTAMP" />
 	</resultMap>
 
 
-	<insert id="insertSmsServer" parameterType="com.glaf.sms.domain.SmsServer">
+	<insert id="insertSmsServer"
+		parameterType="com.glaf.sms.domain.SmsServer">
 		insert into SMS_SERVER
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			ID_
@@ -58,6 +76,21 @@
 			</if>
 			<if test="key != null">
 				,KEY_
+			</if>
+			<if test="accessKeyId != null">
+				,ACCESSKEYID_
+			</if>
+			<if test="accessKeySecret != null">
+				,ACCESSKEYSECRET_
+			</if>
+			<if test="signName != null">
+				,SIGNNAME_
+			</if>
+			<if test="templateCode != null">
+				,TEMPLATECODE_
+			</if>
+			<if test="provider != null">
+				,PROVIDER_
 			</if>
 			<if test="type != null">
 				,TYPE_
@@ -106,6 +139,21 @@
 			<if test="key != null">
 				,#{key, jdbcType=VARCHAR}
 			</if>
+			<if test="accessKeyId != null">
+				,#{accessKeyId, jdbcType=VARCHAR}
+			</if>
+			<if test="accessKeySecret != null">
+				,#{accessKeySecret, jdbcType=VARCHAR}
+			</if>
+			<if test="signName != null">
+				,#{signName, jdbcType=VARCHAR}
+			</if>
+			<if test="templateCode != null">
+				,#{templateCode, jdbcType=VARCHAR}
+			</if>
+			<if test="provider != null">
+				,#{provider, jdbcType=VARCHAR}
+			</if>
 			<if test="type != null">
 				,#{type, jdbcType=VARCHAR}
 			</if>
@@ -135,6 +183,11 @@
 		,FREQUENCE_
 		,RETRYTIMES_
 		,KEY_
+		,ACCESSKEYID_
+		,ACCESSKEYSECRET_
+		,SIGNNAME_
+		,TEMPLATECODE_
+		,PROVIDER_
 		,TYPE_
 		,LOCKED_
 		,CREATEBY_
@@ -158,11 +211,18 @@
 			,#{smsServer.retryTimes,
 			jdbcType=INTEGER}
 			,#{smsServer.key, jdbcType=VARCHAR}
+			,#{smsServer.accessKeyId, jdbcType=VARCHAR}
+			,#{smsServer.accessKeySecret, jdbcType=VARCHAR}
+			,#{smsServer.signName, jdbcType=VARCHAR}
+			,#{smsServer.templateCode,
+			jdbcType=VARCHAR}
+			,#{smsServer.provider, jdbcType=VARCHAR}
 			,#{smsServer.type,
 			jdbcType=VARCHAR}
 			,#{smsServer.locked,
 			jdbcType=INTEGER}
-			,#{smsServer.createBy, jdbcType=VARCHAR}
+			,#{smsServer.createBy,
+			jdbcType=VARCHAR}
 			,#{smsServer.createTime,
 			jdbcType=TIMESTAMP}
 			)
@@ -170,7 +230,8 @@
 	</insert>
 
 
-	<insert id="bulkInsertSmsServer_oracle" parameterType="java.util.List">
+	<insert id="bulkInsertSmsServer_oracle"
+		parameterType="java.util.List">
 		INSERT ALL
 		<foreach collection="list" item="smsServer" index="index">
 			insert into
@@ -186,6 +247,11 @@
 			,FREQUENCE_
 			,RETRYTIMES_
 			,KEY_
+			,ACCESSKEYID_
+			,ACCESSKEYSECRET_
+			,SIGNNAME_
+			,TEMPLATECODE_
+			,PROVIDER_
 			,TYPE_
 			,LOCKED_
 			,CREATEBY_
@@ -203,13 +269,20 @@
 			jdbcType=VARCHAR}
 			,#{smsServer.requestBody,
 			jdbcType=VARCHAR}
-			,#{smsServer.responseBody, jdbcType=VARCHAR}
+			,#{smsServer.responseBody,
+			jdbcType=VARCHAR}
 			,#{smsServer.responseResult, jdbcType=VARCHAR}
 			,#{smsServer.frequence, jdbcType=INTEGER}
 			,#{smsServer.retryTimes,
 			jdbcType=INTEGER}
 			,#{smsServer.key,
 			jdbcType=VARCHAR}
+			,#{smsServer.accessKeyId, jdbcType=VARCHAR}
+			,#{smsServer.accessKeySecret, jdbcType=VARCHAR}
+			,#{smsServer.signName, jdbcType=VARCHAR}
+			,#{smsServer.templateCode,
+			jdbcType=VARCHAR}
+			,#{smsServer.provider, jdbcType=VARCHAR}
 			,#{smsServer.type, jdbcType=VARCHAR}
 			,#{smsServer.locked,
 			jdbcType=INTEGER}
@@ -222,7 +295,8 @@
 	</insert>
 
 
-	<update id="updateSmsServer" parameterType="com.glaf.sms.domain.SmsServer">
+	<update id="updateSmsServer"
+		parameterType="com.glaf.sms.domain.SmsServer">
 		update SMS_SERVER
 		set
 		<trim prefix="" suffix="" suffixOverrides=",">
@@ -256,6 +330,21 @@
 			<if test="key != null">
 				KEY_ = #{key, jdbcType=VARCHAR},
 			</if>
+			<if test="accessKeyId != null">
+				ACCESSKEYID_ = #{accessKeyId, jdbcType=VARCHAR},
+			</if>
+			<if test="accessKeySecret != null">
+				ACCESSKEYSECRET_ = #{accessKeySecret, jdbcType=VARCHAR},
+			</if>
+			<if test="signName != null">
+				SIGNNAME_ = #{signName, jdbcType=VARCHAR},
+			</if>
+			<if test="templateCode != null">
+				TEMPLATECODE_ = #{templateCode, jdbcType=VARCHAR},
+			</if>
+			<if test="provider != null">
+				PROVIDER_ = #{provider, jdbcType=VARCHAR},
+			</if>
 			<if test="type != null">
 				TYPE_ = #{type, jdbcType=VARCHAR},
 			</if>
@@ -276,12 +365,14 @@
 	</delete>
 
 
-	<select id="getSmsServerById" parameterType="string" resultMap="smsServerResultMap">
+	<select id="getSmsServerById" parameterType="string"
+		resultMap="smsServerResultMap">
 		select * from SMS_SERVER where ID_ = #{id}
 	</select>
 
 
-	<select id="getSmsServers" parameterType="com.glaf.sms.query.SmsServerQuery"
+	<select id="getSmsServers"
+		parameterType="com.glaf.sms.query.SmsServerQuery"
 		resultMap="smsServerResultMap">
 		select distinct E.*
 		<include refid="selectSmsServersSql" />
@@ -296,8 +387,8 @@
 	</select>
 
 
-	<select id="getSmsServerCount" parameterType="com.glaf.sms.query.SmsServerQuery"
-		resultType="int">
+	<select id="getSmsServerCount"
+		parameterType="com.glaf.sms.query.SmsServerQuery" resultType="int">
 		select count(*)
 		<include refid="selectSmsServersSql" />
 	</select>

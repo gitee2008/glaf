@@ -54,6 +54,11 @@ public class SmsServerDomainFactory {
 		columnMap.put("frequence", "FREQUENCE_");
 		columnMap.put("retryTimes", "RETRYTIMES_");
 		columnMap.put("key", "KEY_");
+		columnMap.put("accessKeyId", "ACCESSKEYID_");
+		columnMap.put("accessKeySecret", "ACCESSKEYSECRET_");
+		columnMap.put("signName", "SIGNNAME_");
+		columnMap.put("templateCode", "TEMPLATECODE_");
+		columnMap.put("provider", "PROVIDER_");
 		columnMap.put("type", "TYPE_");
 		columnMap.put("locked", "LOCKED_");
 		columnMap.put("createBy", "CREATEBY_");
@@ -70,6 +75,11 @@ public class SmsServerDomainFactory {
 		javaTypeMap.put("frequence", "Integer");
 		javaTypeMap.put("retryTimes", "Integer");
 		javaTypeMap.put("key", "String");
+		javaTypeMap.put("accessKeyId", "String");
+		javaTypeMap.put("accessKeySecret", "String");
+		javaTypeMap.put("signName", "String");
+		javaTypeMap.put("templateCode", "String");
+		javaTypeMap.put("provider", "String");
 		javaTypeMap.put("type", "String");
 		javaTypeMap.put("locked", "Integer");
 		javaTypeMap.put("createBy", "String");
@@ -141,13 +151,13 @@ public class SmsServerDomainFactory {
 		responseBody.setJavaType("String");
 		responseBody.setLength(4000);
 		tableDefinition.addColumn(responseBody);
-		
+
 		ColumnDefinition responseResult = new ColumnDefinition();
-        responseResult.setName("responseResult");
-        responseResult.setColumnName("RESPONSERESULT_");
-        responseResult.setJavaType("String");
-        responseResult.setLength(200);
-        tableDefinition.addColumn(responseResult);
+		responseResult.setName("responseResult");
+		responseResult.setColumnName("RESPONSERESULT_");
+		responseResult.setJavaType("String");
+		responseResult.setLength(200);
+		tableDefinition.addColumn(responseResult);
 
 		ColumnDefinition frequence = new ColumnDefinition();
 		frequence.setName("frequence");
@@ -167,6 +177,41 @@ public class SmsServerDomainFactory {
 		key.setJavaType("String");
 		key.setLength(500);
 		tableDefinition.addColumn(key);
+
+		ColumnDefinition accessKeyId = new ColumnDefinition();
+		accessKeyId.setName("accessKeyId");
+		accessKeyId.setColumnName("ACCESSKEYID_");
+		accessKeyId.setJavaType("String");
+		accessKeyId.setLength(500);
+		tableDefinition.addColumn(accessKeyId);
+
+		ColumnDefinition accessKeySecret = new ColumnDefinition();
+		accessKeySecret.setName("accessKeySecret");
+		accessKeySecret.setColumnName("ACCESSKEYSECRET_");
+		accessKeySecret.setJavaType("String");
+		accessKeySecret.setLength(500);
+		tableDefinition.addColumn(accessKeySecret);
+
+		ColumnDefinition signName = new ColumnDefinition();
+		signName.setName("signName");
+		signName.setColumnName("SIGNNAME_");
+		signName.setJavaType("String");
+		signName.setLength(500);
+		tableDefinition.addColumn(signName);
+
+		ColumnDefinition templateCode = new ColumnDefinition();
+		templateCode.setName("templateCode");
+		templateCode.setColumnName("TEMPLATECODE_");
+		templateCode.setJavaType("String");
+		templateCode.setLength(500);
+		tableDefinition.addColumn(templateCode);
+
+		ColumnDefinition provider = new ColumnDefinition();
+		provider.setName("provider");
+		provider.setColumnName("PROVIDER_");
+		provider.setJavaType("String");
+		provider.setLength(50);
+		tableDefinition.addColumn(provider);
 
 		ColumnDefinition type = new ColumnDefinition();
 		type.setName("type");
