@@ -52,7 +52,7 @@ public class HikariCPConnectionProvider implements ConnectionProvider {
 
 	private volatile Integer isolation;
 
-	private volatile boolean autocommit;
+	private volatile boolean isAutoCommit;
 
 	public HikariCPConnectionProvider() {
 		log.info("----------------------------HikariCPConnectionProvider-----------------");
@@ -87,8 +87,8 @@ public class HikariCPConnectionProvider implements ConnectionProvider {
 		log.info("HikariCP using driver: " + jdbcDriverClass + " at URL: " + jdbcUrl);
 		log.info("Connection properties: " + PropertiesHelper.maskOut(connectionProps, "password"));
 
-		autocommit = PropertiesHelper.getBoolean(DBConfiguration.JDBC_AUTOCOMMIT, properties);
-		log.info("autocommit mode: " + autocommit);
+		isAutoCommit = PropertiesHelper.getBoolean(DBConfiguration.JDBC_AUTOCOMMIT, properties);
+		log.info("autocommit mode: " + isAutoCommit);
 
 		if (jdbcDriverClass == null) {
 			log.warn("No JDBC Driver class was specified by property " + DBConfiguration.JDBC_DRIVER);
@@ -112,7 +112,7 @@ public class HikariCPConnectionProvider implements ConnectionProvider {
 			Integer connectionTimeout = PropertiesHelper.getInteger("hikari.connectionTimeout", properties);
 
 			if (maximumPoolSize == null) {
-				maximumPoolSize = 50;
+				maximumPoolSize = 100;
 			}
 
 			String dbUser = properties.getProperty(DBConfiguration.JDBC_USER);
@@ -133,6 +133,8 @@ public class HikariCPConnectionProvider implements ConnectionProvider {
 			config.setPassword(dbPassword);
 			config.setMaximumPoolSize(maximumPoolSize);
 			config.setDataSourceProperties(properties);
+			config.setAutoCommit(isAutoCommit);
+
 			if (StringUtils.isNotEmpty(validationQuery)) {
 				config.setConnectionTestQuery(validationQuery);
 			}
@@ -185,8 +187,8 @@ public class HikariCPConnectionProvider implements ConnectionProvider {
 					if (isolation != null) {
 						connection.setTransactionIsolation(isolation.intValue());
 					}
-					if (connection.getAutoCommit() != autocommit) {
-						connection.setAutoCommit(autocommit);
+					if (connection.getAutoCommit() != isAutoCommit) {
+						connection.setAutoCommit(isAutoCommit);
 					}
 					return connection;
 				} else {

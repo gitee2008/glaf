@@ -26,7 +26,6 @@ import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -50,19 +49,11 @@ public class DBConnectionFactory {
 
 	public static boolean checkConnection() {
 		Connection connection = null;
-		BasicDataSource bds = null;
 		DataSource ds = null;
 		try {
 			Properties props = DBConfiguration.getDefaultDataSourceProperties();
 			if (props != null) {
-				bds = new BasicDataSource();
-				bds.setInitialSize(1);
-				bds.setMaxActive(2);
-				bds.setDriverClassName(props.getProperty("jdbc.driver"));
-				bds.setUrl(props.getProperty("jdbc.url"));
-				bds.setUsername(props.getProperty("jdbc.user"));
-				bds.setPassword(props.getProperty("jdbc.password"));
-				connection = bds.getConnection();
+				connection = getConnection(props);
 			} else {
 				ds = ContextFactory.getBean("dataSource");
 				connection = ds.getConnection();
@@ -79,7 +70,6 @@ public class DBConnectionFactory {
 	}
 
 	public static boolean checkConnection(java.util.Properties props) {
-		BasicDataSource bds = null;
 		Connection connection = null;
 		try {
 			if (StringUtils.isNotEmpty(props.getProperty(DBConfiguration.JDBC_DATASOURCE))) {
@@ -87,14 +77,10 @@ public class DBConnectionFactory {
 				DataSource ds = (DataSource) ctx.lookup(props.getProperty(DBConfiguration.JDBC_DATASOURCE));
 				connection = ds.getConnection();
 			} else {
-				bds = new BasicDataSource();
-				bds.setInitialSize(1);
-				bds.setMaxActive(2);
-				bds.setDriverClassName(props.getProperty("jdbc.driver"));
-				bds.setUrl(props.getProperty("jdbc.url"));
-				bds.setUsername(props.getProperty("jdbc.user"));
-				bds.setPassword(props.getProperty("jdbc.password"));
-				connection = bds.getConnection();
+				ConnectionProvider provider = ConnectionProviderFactory.createProvider(props);
+				if (provider != null) {
+					connection = provider.getConnection();
+				}
 			}
 			if (connection != null) {
 				return true;
@@ -112,7 +98,6 @@ public class DBConnectionFactory {
 			throw new RuntimeException("systemName is required.");
 		}
 		logger.debug("systemName:" + systemName);
-		BasicDataSource bds = null;
 		Connection connection = null;
 		try {
 			Properties props = DBConfiguration.getDataSourcePropertiesByName(systemName);
@@ -123,14 +108,10 @@ public class DBConnectionFactory {
 					DataSource ds = (DataSource) ctx.lookup(props.getProperty(DBConfiguration.JDBC_DATASOURCE));
 					connection = ds.getConnection();
 				} else {
-					bds = new BasicDataSource();
-					bds.setInitialSize(1);
-					bds.setMaxActive(2);
-					bds.setDriverClassName(props.getProperty("jdbc.driver"));
-					bds.setUrl(props.getProperty("jdbc.url"));
-					bds.setUsername(props.getProperty("jdbc.user"));
-					bds.setPassword(props.getProperty("jdbc.password"));
-					connection = bds.getConnection();
+					ConnectionProvider provider = ConnectionProviderFactory.createProvider(systemName);
+					if (provider != null) {
+						connection = provider.getConnection();
+					}
 				}
 			} else {
 				// DataSource ds = ContextFactory.getBean("dataSource");

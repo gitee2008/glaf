@@ -80,6 +80,17 @@ public final class ConnectionProviderFactory {
 		return false;
 	}
 
+	private static boolean hikariConfigDefined(Properties properties) {
+		Iterator<?> iter = properties.keySet().iterator();
+		while (iter.hasNext()) {
+			String property = (String) iter.next();
+			if (property.startsWith("hikari")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	protected static void closeAndCreate(Properties properties) {
 		String jdbcUrl = properties.getProperty(DBConfiguration.JDBC_URL);
 		String user = properties.getProperty(DBConfiguration.JDBC_USER);
@@ -117,6 +128,18 @@ public final class ConnectionProviderFactory {
 		return true;
 	}
 
+	private static boolean hikariProviderPresent() {
+		try {
+			ClassUtils.classForName("com.glaf.core.jdbc.connection.HikariCPConnectionProvider");
+		} catch (Exception e) {
+			log.warn(
+					"hikari properties is specificed, but could not find com.glaf.core.jdbc.connection.HikariCPConnectionProvider from the classpath, "
+							+ "these properties are going to be ignored.");
+			return false;
+		}
+		return true;
+	}
+
 	public static ConnectionProvider createProvider(Properties properties) {
 		if (properties == null || properties.isEmpty()) {
 			return null;
@@ -146,13 +169,24 @@ public final class ConnectionProviderFactory {
 			provider = initializeConnectionProviderFromConfig("com.glaf.core.jdbc.connection.C3P0ConnectionProvider");
 		} else if (druidConfigDefined(properties) && druidProviderPresent()) {
 			provider = initializeConnectionProviderFromConfig("com.glaf.core.jdbc.connection.DruidConnectionProvider");
+		} else if (hikariConfigDefined(properties) && hikariProviderPresent()) {
+			provider = initializeConnectionProviderFromConfig(
+					"com.glaf.core.jdbc.connection.HikariCPConnectionProvider");
+		} else {
+			Properties props = DBConfiguration.getDefaultDataSourceProperties();
+			if (props != null) {
+				providerClass = props.getProperty(DBConfiguration.JDBC_PROVIDER);
+				if (StringUtils.isNotEmpty(providerClass)) {
+					provider = initializeConnectionProviderFromConfig(providerClass);
+				}
+			}
 		}
 
 		if (provider == null) {
 			provider = initializeConnectionProviderFromConfig("com.glaf.core.jdbc.connection.DruidConnectionProvider");
 			if (StringUtils.equals(properties.getProperty(DBConfiguration.JDBC_DRIVER), "org.sqlite.JDBC")) {
 				provider = initializeConnectionProviderFromConfig(
-						"com.glaf.core.jdbc.connection.C3P0ConnectionProvider");
+						"com.glaf.core.jdbc.connection.HikariCPConnectionProvider");
 			}
 		}
 

@@ -48,7 +48,7 @@ public class C3P0ConnectionProvider implements ConnectionProvider {
 
 	private volatile DataSource ds;
 	private volatile Integer isolation;
-	private volatile boolean autocommit;
+	private volatile boolean isAutoCommit;
 
 	public C3P0ConnectionProvider() {
 		log.info("----------------------------C3P0ConnectionProvider-----------------");
@@ -111,6 +111,9 @@ public class C3P0ConnectionProvider implements ConnectionProvider {
 				c3props.put(ConnectionConstants.PROP_INITIALSIZE, String.valueOf(minPoolSize).trim());
 			}
 
+			isAutoCommit = PropertiesHelper.getBoolean(DBConfiguration.JDBC_AUTOCOMMIT, allProps);
+			log.info("autocommit mode: " + isAutoCommit);
+
 			DataSource unpooled = DataSources.unpooledDataSource(jdbcUrl, connectionProps);
 
 			ds = DataSources.pooledDataSource(unpooled, allProps);
@@ -151,8 +154,8 @@ public class C3P0ConnectionProvider implements ConnectionProvider {
 					if (isolation != null) {
 						connection.setTransactionIsolation(isolation.intValue());
 					}
-					if (connection.getAutoCommit() != autocommit) {
-						connection.setAutoCommit(autocommit);
+					if (connection.getAutoCommit() != isAutoCommit) {
+						connection.setAutoCommit(isAutoCommit);
 					}
 					return connection;
 				} else {

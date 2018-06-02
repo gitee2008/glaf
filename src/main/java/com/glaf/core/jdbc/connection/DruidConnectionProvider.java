@@ -35,6 +35,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.glaf.core.config.BaseConfiguration;
 import com.glaf.core.config.Configuration;
+import com.glaf.core.config.DBConfiguration;
 import com.glaf.core.util.PropertiesHelper;
 import com.glaf.core.util.ReflectUtils;
 
@@ -55,7 +56,7 @@ public class DruidConnectionProvider implements ConnectionProvider {
 
 	private volatile Integer isolation;
 
-	private volatile boolean autocommit;
+	private volatile boolean isAutoCommit;
 
 	public void close() {
 		try {
@@ -89,8 +90,8 @@ public class DruidConnectionProvider implements ConnectionProvider {
 
 		log.info("Druid using driver: " + jdbcDriverClass + " at URL: " + jdbcUrl);
 
-		autocommit = PropertiesHelper.getBoolean("jdbc.autocommit", properties);
-		log.info("autocommit mode: " + autocommit);
+		isAutoCommit = PropertiesHelper.getBoolean(DBConfiguration.JDBC_AUTOCOMMIT, properties);
+		log.info("autocommit mode: " + isAutoCommit);
 
 		if (jdbcDriverClass == null) {
 			log.warn("No JDBC Driver class was specified by property jdbc.driver");
@@ -120,7 +121,7 @@ public class DruidConnectionProvider implements ConnectionProvider {
 			String dbPassword = properties.getProperty("jdbc.password");
 
 			if (maxPoolSize == null) {
-				maxPoolSize = 50;
+				maxPoolSize = 100;
 			}
 
 			if (timeBetweenEvictionRuns == null) {
@@ -204,8 +205,8 @@ public class DruidConnectionProvider implements ConnectionProvider {
 					if (isolation != null) {
 						connection.setTransactionIsolation(isolation.intValue());
 					}
-					if (connection.getAutoCommit() != autocommit) {
-						connection.setAutoCommit(autocommit);
+					if (connection.getAutoCommit() != isAutoCommit) {
+						connection.setAutoCommit(isAutoCommit);
 					}
 					log.debug("druid connection: " + connection.toString());
 					return connection;
