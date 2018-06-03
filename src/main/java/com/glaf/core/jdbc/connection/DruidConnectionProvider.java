@@ -111,6 +111,8 @@ public class DruidConnectionProvider implements ConnectionProvider {
 
 		try {
 
+			Integer initialSize = PropertiesHelper.getInteger(ConnectionConstants.PROP_INITIALSIZE, properties);
+			Integer minIdle = PropertiesHelper.getInteger(ConnectionConstants.PROP_MINIDLE, properties);
 			Integer maxPoolSize = PropertiesHelper.getInteger(ConnectionConstants.PROP_MAXACTIVE, properties);
 			Integer maxStatements = PropertiesHelper.getInteger(ConnectionConstants.PROP_MAXSTATEMENTS, properties);
 			Integer timeBetweenEvictionRuns = PropertiesHelper
@@ -149,8 +151,8 @@ public class DruidConnectionProvider implements ConnectionProvider {
 			ds.setUsername(dbUser);
 			ds.setPassword(dbPassword);
 
-			ds.setInitialSize(1);
-			ds.setMinIdle(3);
+			ds.setInitialSize(initialSize == null ? 5 : initialSize);
+			ds.setMinIdle(minIdle == null ? 5 : minIdle);
 			ds.setMaxActive(maxPoolSize);
 			ds.setMaxWait(maxWait * 1000L);
 
