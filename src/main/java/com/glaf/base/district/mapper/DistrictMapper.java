@@ -30,7 +30,7 @@ import com.glaf.base.district.query.*;
 @Component
 public interface DistrictMapper {
 
-	void deleteDistricts(DistrictQuery query);
+	 
 
 	void deleteDistrictById(Long id);
 

@@ -4,9 +4,11 @@
 
 <mapper namespace="com.glaf.base.district.mapper.DistrictMapper">
 
-	<resultMap id="districtResultMap" type="com.glaf.base.district.domain.District">
+	<resultMap id="districtResultMap"
+		type="com.glaf.base.district.domain.District">
 		<id property="id" column="ID_" jdbcType="BIGINT" />
-		<result property="parentId" column="PARENTID_" jdbcType="BIGINT" />
+		<result property="parentId" column="PARENTID_"
+			jdbcType="BIGINT" />
 		<result property="name" column="NAME_" jdbcType="VARCHAR" />
 		<result property="code" column="CODE_" jdbcType="VARCHAR" />
 		<result property="treeId" column="TREEID_" jdbcType="VARCHAR" />
@@ -16,9 +18,11 @@
 		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
 	</resultMap>
 
-	<resultMap id="districtTreeResultMap" type="com.glaf.core.base.BaseTree">
+	<resultMap id="districtTreeResultMap"
+		type="com.glaf.core.base.BaseTree">
 		<id property="id" column="ID_" jdbcType="BIGINT" />
-		<result property="parentId" column="PARENTID_" jdbcType="BIGINT" />
+		<result property="parentId" column="PARENTID_"
+			jdbcType="BIGINT" />
 		<result property="name" column="NAME_" jdbcType="VARCHAR" />
 		<result property="code" column="CODE_" jdbcType="VARCHAR" />
 		<result property="treeId" column="TREEID_" jdbcType="VARCHAR" />
@@ -28,7 +32,8 @@
 	</resultMap>
 
 
-	<insert id="insertDistrict" parameterType="com.glaf.base.district.domain.District">
+	<insert id="insertDistrict"
+		parameterType="com.glaf.base.district.domain.District">
 		insert into SYS_DISTRICT
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			ID_
@@ -89,7 +94,8 @@
 	</insert>
 
 
-	<update id="updateDistrict" parameterType="com.glaf.base.district.domain.District">
+	<update id="updateDistrict"
+		parameterType="com.glaf.base.district.domain.District">
 		update
 		SYS_DISTRICT
 		set
@@ -126,28 +132,20 @@
 	</delete>
 
 
-	<delete id="deleteDistricts" parameterType="com.glaf.base.district.query.DistrictQuery">
-		delete from SYS_DISTRICT
-		where ( ID_ IN
-		<foreach item="x_rowId" index="index" collection="rowIds"
-			open="(" separator="," close=")">
-			#{x_rowId}
-		</foreach>
-		)
-	</delete>
-
-
-	<select id="getDistrictById" parameterType="long" resultMap="districtResultMap">
+	<select id="getDistrictById" parameterType="long"
+		resultMap="districtResultMap">
 		select * from SYS_DISTRICT where ID_ = #{id}
 	</select>
 
 
-	<select id="getDistrictByCode" parameterType="string" resultMap="districtResultMap">
+	<select id="getDistrictByCode" parameterType="string"
+		resultMap="districtResultMap">
 		select * from SYS_DISTRICT where CODE_ = #{code}
 	</select>
 
 
-	<select id="getDistricts" parameterType="com.glaf.base.district.query.DistrictQuery"
+	<select id="getDistricts"
+		parameterType="com.glaf.base.district.query.DistrictQuery"
 		resultMap="districtResultMap">
 		select E.*
 		<include refid="selectDistrictsSql" />
@@ -162,14 +160,16 @@
 	</select>
 
 
-	<select id="getDistrictCount" parameterType="com.glaf.base.district.query.DistrictQuery"
+	<select id="getDistrictCount"
+		parameterType="com.glaf.base.district.query.DistrictQuery"
 		resultType="int">
 		select count(*)
 		<include refid="selectDistrictsSql" />
 	</select>
 
 
-	<select id="getDistrictTreeModels" parameterType="com.glaf.core.query.TreeModelQuery"
+	<select id="getDistrictTreeModels"
+		parameterType="com.glaf.core.query.TreeModelQuery"
 		resultMap="districtTreeResultMap">
 		select E.*
 		<include refid="selectDistrictTreesSql" />
@@ -184,8 +184,8 @@
 	</select>
 
 
-	<select id="getDistrictTreeModelCount" parameterType="com.glaf.core.query.TreeModelQuery"
-		resultType="int">
+	<select id="getDistrictTreeModelCount"
+		parameterType="com.glaf.core.query.TreeModelQuery" resultType="int">
 		select count(*)
 		<include refid="selectDistrictTreesSql" />
 	</select>
@@ -205,9 +205,17 @@
 
 			<if test="parentIds != null and parentIds.size !=0">
 				and E.PARENTID_ IN
-				<foreach item="x_parentId" index="index" collection="parentIds"
-					open="(" separator="," close=")">
+				<foreach item="x_parentId" index="index"
+					collection="parentIds" open="(" separator="," close=")">
 					#{x_parentId}
+				</foreach>
+			</if>
+
+			<if test="nodeIds != null and nodeIds.size !=0">
+				and E.ID_ IN
+				<foreach item="x_nodeId" index="index" collection="nodeIds"
+					open="(" separator="," close=")">
+					#{x_nodeId}
 				</foreach>
 			</if>
 
@@ -264,9 +272,17 @@
 
 			<if test="parentIds != null and parentIds.size !=0">
 				and E.PARENTID_ IN
-				<foreach item="x_parentId" index="index" collection="parentIds"
-					open="(" separator="," close=")">
+				<foreach item="x_parentId" index="index"
+					collection="parentIds" open="(" separator="," close=")">
 					#{x_parentId}
+				</foreach>
+			</if>
+
+			<if test="nodeIds != null and nodeIds.size !=0">
+				and E.ID_ IN
+				<foreach item="x_nodeId" index="index" collection="nodeIds"
+					open="(" separator="," close=")">
+					#{x_nodeId}
 				</foreach>
 			</if>
 

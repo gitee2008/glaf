@@ -39,10 +39,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import com.glaf.base.district.domain.District;
+import com.glaf.base.district.query.DistrictQuery;
 import com.glaf.base.district.service.DistrictService;
-
+import com.glaf.base.modules.sys.model.TreePermission;
+import com.glaf.base.modules.sys.query.TreePermissionQuery;
+import com.glaf.base.modules.sys.service.TreePermissionService;
 import com.glaf.core.base.BaseTree;
 import com.glaf.core.base.TreeModel;
+import com.glaf.core.security.LoginContext;
 import com.glaf.core.tree.helper.TreeHelper;
 import com.glaf.core.util.RequestUtils;
 
@@ -53,6 +57,8 @@ public class DistrictController {
 
 	protected DistrictService districtService;
 
+	protected TreePermissionService treePermissionService;
+
 	public DistrictController() {
 
 	}
@@ -60,6 +66,7 @@ public class DistrictController {
 	@RequestMapping("/json")
 	@ResponseBody
 	public byte[] json(HttpServletRequest request) throws IOException {
+		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		String name = request.getParameter("name");
 		long parentId = RequestUtils.getLong(request, "parentId");
 		JSONArray result = new JSONArray();
@@ -70,7 +77,28 @@ public class DistrictController {
 				parentId = district.getId();
 			}
 		}
-		list = districtService.getDistrictList(parentId);
+		if (loginContext.isSystemAdministrator()) {
+			list = districtService.getDistrictList(parentId);
+		} else {
+			List<Long> nodeIds = new ArrayList<Long>();
+			nodeIds.add(0L);
+
+			TreePermissionQuery query2 = new TreePermissionQuery();
+			query2.userId(loginContext.getActorId());
+			query2.type("district");
+
+			List<TreePermission> perms = treePermissionService.list(query2);
+			if (perms != null && !perms.isEmpty()) {
+				for (TreePermission p : perms) {
+					nodeIds.add(p.getNodeId());
+				}
+			}
+
+			DistrictQuery query = new DistrictQuery();
+			query.setNodeIds(nodeIds);
+			query.parentId(parentId);
+			list = districtService.list(query);
+		}
 		if (list != null && !list.isEmpty()) {
 			for (District district : list) {
 				JSONObject rowJSON = district.toJsonObject();
@@ -98,6 +126,11 @@ public class DistrictController {
 	@javax.annotation.Resource
 	public void setDistrictService(DistrictService districtService) {
 		this.districtService = districtService;
+	}
+
+	@javax.annotation.Resource
+	public void setTreePermissionService(TreePermissionService treePermissionService) {
+		this.treePermissionService = treePermissionService;
 	}
 
 	@ResponseBody

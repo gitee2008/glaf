@@ -24,6 +24,7 @@ import com.glaf.core.query.DataQuery;
 
 public class DistrictQuery extends DataQuery {
 	private static final long serialVersionUID = 1L;
+	protected List<Long> nodeIds;
 	protected List<String> treeIds;
 	protected String nameLike;
 	protected String useType;
@@ -44,6 +45,10 @@ public class DistrictQuery extends DataQuery {
 			}
 		}
 		return nameLike;
+	}
+
+	public List<Long> getNodeIds() {
+		return nodeIds;
 	}
 
 	public String getOrderBy() {
@@ -102,6 +107,10 @@ public class DistrictQuery extends DataQuery {
 
 	public void setNameLike(String nameLike) {
 		this.nameLike = nameLike;
+	}
+
+	public void setNodeIds(List<Long> nodeIds) {
+		this.nodeIds = nodeIds;
 	}
 
 	public void setSortGreaterThanOrEqual(Integer sortGreaterThanOrEqual) {
