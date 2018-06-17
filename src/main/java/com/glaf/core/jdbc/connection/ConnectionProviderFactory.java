@@ -184,10 +184,11 @@ public final class ConnectionProviderFactory {
 
 		if (provider == null) {
 			provider = initializeConnectionProviderFromConfig("com.glaf.core.jdbc.connection.DruidConnectionProvider");
-			if (StringUtils.equals(properties.getProperty(DBConfiguration.JDBC_DRIVER), "org.sqlite.JDBC")) {
-				provider = initializeConnectionProviderFromConfig(
-						"com.glaf.core.jdbc.connection.HikariCPConnectionProvider");
-			}
+		}
+
+		if (StringUtils.equals(properties.getProperty(DBConfiguration.JDBC_DRIVER), "org.sqlite.JDBC")) {
+			provider = initializeConnectionProviderFromConfig(
+					"com.glaf.core.jdbc.connection.HikariCPConnectionProvider");
 		}
 
 		if (connectionProviderInjectionData != null && connectionProviderInjectionData.size() != 0) {
