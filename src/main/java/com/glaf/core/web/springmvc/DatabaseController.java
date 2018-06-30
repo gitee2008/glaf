@@ -185,7 +185,7 @@ public class DatabaseController {
 						db.setVerify("Y");
 						db.setInitFlag("Y");
 						databaseService.update(db);
-						
+
 						if (!DBUtils.tableExists(db.getName(), "SYS_DBID")) {
 							TableDefinition tableDefinition = DbidDomainFactory.getTableDefinition("SYS_DBID");
 							DBUtils.createTable(db.getName(), tableDefinition);
@@ -739,11 +739,12 @@ public class DatabaseController {
 				DBConfiguration.addDataSourceProperties(name, dbType, host, port, databaseName, user, password);
 				database.setVerify("Y");
 				databaseService.update(database);
-				
+
 				if (!DBUtils.tableExists(database.getName(), "SYS_DBID")) {
 					TableDefinition tableDefinition = DbidDomainFactory.getTableDefinition("SYS_DBID");
 					DBUtils.createTable(database.getName(), tableDefinition);
 				}
+
 				return ResponseUtils.responseJsonResult(true, "数据库配置正确。");
 			}
 
@@ -790,6 +791,7 @@ public class DatabaseController {
 							TableDefinition tableDefinition = DbidDomainFactory.getTableDefinition("SYS_DBID");
 							DBUtils.createTable(database.getName(), tableDefinition);
 						}
+						
 						return ResponseUtils.responseJsonResult(true, "数据库配置正确。");
 					}
 				}

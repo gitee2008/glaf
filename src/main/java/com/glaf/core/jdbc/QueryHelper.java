@@ -320,6 +320,8 @@ public class QueryHelper {
 								buffer.append("'").append(DateUtils.getDateTime((Date) value)).append("', ");
 							}
 						} else {
+							String str = StringTools.replaceIgnoreCase(value.toString(), "'", "''");
+							str = StringTools.replaceIgnoreCase(str, newline, "\n");
 							buffer.append("'").append(value).append("', ");
 						}
 					} else {

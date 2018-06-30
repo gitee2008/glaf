@@ -1698,8 +1698,8 @@ public class DBUtils {
 		if ("hbase".equalsIgnoreCase(dbType)) {
 			if (idColumn != null) {
 				buffer.append(newline);
-				buffer.append("  CONSTRAINT pk PRIMARY KEY (").append(idColumn.getColumnName().toUpperCase())
-						.append(") ");
+				buffer.append("  CONSTRAINT PK_").append(idColumn.getColumnName().toUpperCase())
+						.append(" PRIMARY KEY (").append(idColumn.getColumnName().toUpperCase()).append(") ");
 			}
 		} else {
 			if (tableDefinition.getIdColumns() != null && !tableDefinition.getIdColumns().isEmpty()) {
@@ -2155,9 +2155,6 @@ public class DBUtils {
 			isLegal = false;
 		}
 		if (sql.indexOf("sys_server") != -1) {
-			isLegal = false;
-		}
-		if (sql.indexOf("sys_property") != -1) {
 			isLegal = false;
 		}
 		if (sql.indexOf("sys_identity_token") != -1) {

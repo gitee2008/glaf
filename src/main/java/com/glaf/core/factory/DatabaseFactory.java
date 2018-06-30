@@ -41,6 +41,7 @@ import com.glaf.core.domain.Database;
 import com.glaf.core.domain.TableDefinition;
 import com.glaf.core.domain.util.SysKeyDomainFactory;
 import com.glaf.core.entity.hibernate.HibernateBeanFactory;
+import com.glaf.core.entity.jpa.EntitySchemaUpdate;
 import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.util.DBUtils;
 import com.glaf.core.util.JdbcUtils;
@@ -223,6 +224,8 @@ public class DatabaseFactory {
 			}
 			if (!DBUtils.tableExists("SYS_DATABASE")) {
 				HibernateBeanFactory.reload();
+				EntitySchemaUpdate bean = new EntitySchemaUpdate();
+				bean.updateDDL();
 			}
 		} catch (Exception ex) {
 			logger.error("init tables error", ex);

@@ -60,14 +60,16 @@ public class MongoDBConfig {
 	public List<MongoCredential> buildCredentials() {
 		List<MongoCredential> mongoCredentials = new ArrayList<MongoCredential>();
 		for (MongoDBCredential item : this.credentials) {
-			if (item.getPassword() != null) {
-				MongoCredential credential = MongoCredential.createCredential(item.getUsername(),
-						item.getDatabaseName(), item.getPassword().toCharArray());
-				mongoCredentials.add(credential);
-			} else {
-				MongoCredential credential = MongoCredential.createCredential(item.getUsername(),
-						item.getDatabaseName(), null);
-				mongoCredentials.add(credential);
+			if (item != null && item.getUsername() != null && item.getDatabaseName() != null) {
+				if (item.getPassword() != null) {
+					MongoCredential credential = MongoCredential.createCredential(item.getUsername(),
+							item.getDatabaseName(), item.getPassword().toCharArray());
+					mongoCredentials.add(credential);
+				} else {
+					MongoCredential credential = MongoCredential.createCredential(item.getUsername(),
+							item.getDatabaseName(), null);
+					mongoCredentials.add(credential);
+				}
 			}
 		}
 		return mongoCredentials;

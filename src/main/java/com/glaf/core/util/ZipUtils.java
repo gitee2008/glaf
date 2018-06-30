@@ -284,6 +284,56 @@ public class ZipUtils {
 		}
 	}
 
+	public static byte[] genZipBytes(Map<String, byte[]> dataMap) {
+		byte[] bytes = null;
+		byte[] data = null;
+		ByteArrayInputStream bais = null;
+		ByteArrayOutputStream baos = null;
+		BufferedOutputStream bos = null;
+		JarOutputStream jos = null;
+		try {
+			baos = new ByteArrayOutputStream();
+			bos = new BufferedOutputStream(baos);
+			jos = new JarOutputStream(bos);
+			if (dataMap != null) {
+				Set<Entry<String, byte[]>> entrySet = dataMap.entrySet();
+				for (Entry<String, byte[]> entry : entrySet) {
+					String name = entry.getKey();
+					data = entry.getValue();
+					if (name != null && data != null) {
+						bais = new ByteArrayInputStream(data);
+						BufferedInputStream bis = new BufferedInputStream(bais);
+						JarEntry jarEntry = new JarEntry(name);
+						jos.putNextEntry(jarEntry);
+
+						while ((len = bis.read(buf)) >= 0) {
+							jos.write(buf, 0, len);
+						}
+
+						bis.close();
+						jos.closeEntry();
+					}
+				}
+			}
+			jos.flush();
+			com.glaf.core.util.IOUtils.closeStream(jos);
+			bos.flush();
+			com.glaf.core.util.IOUtils.closeStream(bos);
+			bytes = baos.toByteArray();
+			com.glaf.core.util.IOUtils.closeStream(bais);
+			com.glaf.core.util.IOUtils.closeStream(baos);
+			return bytes;
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		} finally {
+			data = null;
+			com.glaf.core.util.IOUtils.closeStream(jos);
+			com.glaf.core.util.IOUtils.closeStream(bos);
+			com.glaf.core.util.IOUtils.closeStream(bais);
+			com.glaf.core.util.IOUtils.closeStream(baos);
+		}
+	}
+
 	public static byte[] getBytes(byte[] bytes, String name) {
 		InputStream inputStream = null;
 		try {
@@ -384,6 +434,7 @@ public class ZipUtils {
 		}
 	}
 
+	
 	public static Map<String, byte[]> getZipBytesMap(ZipInputStream zipInputStream) {
 		Map<String, byte[]> zipMap = new java.util.HashMap<String, byte[]>();
 		java.util.zip.ZipEntry zipEntry = null;

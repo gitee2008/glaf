@@ -56,12 +56,16 @@ import com.glaf.core.config.Configuration;
 import com.glaf.core.config.Environment;
 import com.glaf.core.config.ViewProperties;
 import com.glaf.core.domain.ColumnDefinition;
+import com.glaf.core.domain.Database;
 import com.glaf.core.domain.SystemParam;
 import com.glaf.core.domain.TableDefinition;
 import com.glaf.core.entity.hibernate.HibernateBeanFactory;
+import com.glaf.core.entity.jpa.EntitySchemaUpdate;
 import com.glaf.core.factory.TableFactory;
 import com.glaf.core.jdbc.DBConnectionFactory;
+import com.glaf.core.jdbc.QueryHelper;
 import com.glaf.core.query.TablePageQuery;
+import com.glaf.core.service.IDatabaseService;
 import com.glaf.core.service.ISystemParamService;
 import com.glaf.core.service.ITableDataService;
 import com.glaf.core.service.ITablePageService;
@@ -81,9 +85,13 @@ import com.glaf.core.util.StringTools;
 public class SystemTableController {
 	protected static final Log logger = LogFactory.getLog(SystemTableController.class);
 
+	protected final static String newline = System.getProperty("line.separator");
+
 	protected static Configuration conf = BaseConfiguration.create();
 
 	protected static AtomicBoolean running = new AtomicBoolean(false);
+
+	protected IDatabaseService databaseService;
 
 	protected ITableDataService tableDataService;
 
@@ -201,7 +209,7 @@ public class SystemTableController {
 				long time = System.currentTimeMillis() - startTs;
 				logger.debug("查询完成,记录总数:" + tablePage.getTotal() + " 用时(毫秒):" + time);
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				// ex.printStackTrace();
 				logger.error(ex);
 			} finally {
 				Environment.setCurrentSystemName(currentName);
@@ -337,6 +345,83 @@ public class SystemTableController {
 	}
 
 	@ResponseBody
+	@RequestMapping("/exportAllInsertScripts")
+	public void exportAllInsertScripts(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String dbType = request.getParameter("dbType");
+		if (StringUtils.isNotEmpty(dbType)) {
+			Map<String, Object> params = RequestUtils.getParameterMap(request);
+			Database database = null;
+			java.sql.Connection conn = null;
+			java.sql.PreparedStatement psmt = null;
+			java.sql.ResultSet rs = null;
+			QueryHelper helper = new QueryHelper();
+			StringBuilder buffer = new StringBuilder();
+			try {
+				if (StringUtils.isNotEmpty(request.getParameter("databaseId"))) {
+					database = databaseService.getDatabaseById(RequestUtils.getLong(request, "databaseId"));
+				}
+				if (database != null) {
+					conn = DBConnectionFactory.getConnection(database.getName());
+				} else {
+					conn = DBConnectionFactory.getConnection();
+				}
+				List<String> tableList = DBUtils.getTables(conn);
+				for (String tableName : tableList) {
+					if (tableName.toLowerCase().startsWith("act_")) {
+						continue;
+					}
+					if (tableName.toLowerCase().startsWith("jbpm_")) {
+						continue;
+					}
+					if (tableName.toLowerCase().startsWith("sys_identity_token")) {
+						continue;
+					}
+					if (tableName.toLowerCase().startsWith("sys_database")) {
+						continue;
+					}
+					if (tableName.toLowerCase().startsWith("sys_server")) {
+						continue;
+					}
+					if (tableName.toLowerCase().startsWith("sys_key")) {
+						continue;
+					}
+					if (tableName.toLowerCase().startsWith("sys_lob")) {
+						continue;
+					}
+					if (tableName.toLowerCase().endsWith("_log")) {
+						continue;
+					}
+					if (tableName.toLowerCase().endsWith("_history")) {
+						continue;
+					}
+
+					psmt = conn.prepareStatement(" select count(*) from " + tableName);
+					rs = psmt.executeQuery();
+					if (rs.next() && rs.getInt(1) > 0) {
+						buffer.append(newline);
+						buffer.append(
+								helper.getInsertScript(conn, tableName, dbType, " select * from " + tableName, params));
+						buffer.append(newline);
+						buffer.append(newline);
+					}
+					JdbcUtils.close(rs);
+					JdbcUtils.close(psmt);
+				}
+				JdbcUtils.close(conn);
+				ResponseUtils.download(request, response, buffer.toString().getBytes("UTF-8"),
+						"insert_all_" + dbType + "_" + DateUtils.getNowYearMonthDayHHmm() + ".sql");
+			} catch (Exception ex) {
+				// ex.printStackTrace();
+				logger.error(ex);
+			} finally {
+				JdbcUtils.close(rs);
+				JdbcUtils.close(psmt);
+				JdbcUtils.close(conn);
+			}
+		}
+	}
+
+	@ResponseBody
 	@RequestMapping("/exportData")
 	public void exportData(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		StringBuilder sb = new StringBuilder();
@@ -426,9 +511,59 @@ public class SystemTableController {
 
 		try {
 			ResponseUtils.download(request, response, sb.toString().getBytes(),
-					"insert_" + DateUtils.getDate(new Date()) + "." + dbType + ".sql");
+					"insert_" + DateUtils.getNowYearMonthDayHHmm() + "." + dbType + ".sql");
 		} catch (ServletException ex) {
 
+		}
+	}
+
+	@ResponseBody
+	@RequestMapping("/exportInsertScripts")
+	public void exportInsertScripts(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String tables = request.getParameter("tables");
+		String dbType = request.getParameter("dbType");
+		if (StringUtils.isNotEmpty(dbType) && StringUtils.isNotEmpty(tables)) {
+			Map<String, Object> params = RequestUtils.getParameterMap(request);
+			List<String> tableList = StringTools.split(tables);
+			Database database = null;
+			java.sql.Connection conn = null;
+			java.sql.PreparedStatement psmt = null;
+			java.sql.ResultSet rs = null;
+			QueryHelper helper = new QueryHelper();
+			StringBuilder buffer = new StringBuilder();
+			try {
+				if (StringUtils.isNotEmpty(request.getParameter("databaseId"))) {
+					database = databaseService.getDatabaseById(RequestUtils.getLong(request, "databaseId"));
+				}
+				if (database != null) {
+					conn = DBConnectionFactory.getConnection(database.getName());
+				} else {
+					conn = DBConnectionFactory.getConnection();
+				}
+				for (String tableName : tableList) {
+					psmt = conn.prepareStatement(" select count(*) from " + tableName);
+					rs = psmt.executeQuery();
+					if (rs.next() && rs.getInt(1) > 0) {
+						buffer.append(newline);
+						buffer.append(
+								helper.getInsertScript(conn, tableName, dbType, " select * from " + tableName, params));
+						buffer.append(newline);
+						buffer.append(newline);
+					}
+					JdbcUtils.close(rs);
+					JdbcUtils.close(psmt);
+				}
+				JdbcUtils.close(conn);
+				ResponseUtils.download(request, response, buffer.toString().getBytes("UTF-8"),
+						"insert_" + dbType + "_" + DateUtils.getNowYearMonthDayHHmm() + ".sql");
+			} catch (Exception ex) {
+				// ex.printStackTrace();
+				logger.error(ex);
+			} finally {
+				JdbcUtils.close(rs);
+				JdbcUtils.close(psmt);
+				JdbcUtils.close(conn);
+			}
 		}
 	}
 
@@ -539,7 +674,7 @@ public class SystemTableController {
 		sb.insert(0, buffer.toString());
 		try {
 			ResponseUtils.download(request, response, sb.toString().getBytes(),
-					"create_insert_sys_" + DateUtils.getDate(new Date()) + "." + dbType + ".sql");
+					"create_insert_sys_" + DateUtils.getNowYearMonthDayHHmm() + "." + dbType + ".sql");
 		} catch (ServletException ex) {
 
 		}
@@ -581,7 +716,7 @@ public class SystemTableController {
 
 		try {
 			ResponseUtils.download(request, response, sb.toString().getBytes(),
-					"createTable_" + DateUtils.getDate(new Date()) + "." + dbType + ".sql");
+					"createTable_" + DateUtils.getNowYearMonthDayHHmm() + "." + dbType + ".sql");
 		} catch (ServletException ex) {
 			ex.printStackTrace();
 		}
@@ -609,13 +744,19 @@ public class SystemTableController {
 				if (!DBUtils.isAllowedTable(tableName)) {
 					continue;
 				}
+				if (tableName.toLowerCase().startsWith("act_")) {
+					continue;
+				}
+				if (tableName.toLowerCase().startsWith("jbpm_")) {
+					continue;
+				}
+				if (tableName.toLowerCase().startsWith("sys_identity_token")) {
+					continue;
+				}
 				if (tableName.toLowerCase().startsWith("sys_data_log")) {
 					continue;
 				}
 				if (tableName.toLowerCase().startsWith("sys_database")) {
-					continue;
-				}
-				if (tableName.toLowerCase().startsWith("sys_dbid")) {
 					continue;
 				}
 				if (tableName.toLowerCase().startsWith("sys_lob")) {
@@ -625,6 +766,9 @@ public class SystemTableController {
 					continue;
 				}
 				if (tableName.toLowerCase().startsWith("sys_key")) {
+					continue;
+				}
+				if (tableName.toLowerCase().startsWith("sys_property")) {
 					continue;
 				}
 				if (tableName.toLowerCase().startsWith("sys_server")) {
@@ -655,7 +799,6 @@ public class SystemTableController {
 				rowsJSON.add(json);
 			}
 		} catch (Exception ex) {
-
 			throw new RuntimeException(ex);
 		} finally {
 			JdbcUtils.close(connection);
@@ -712,7 +855,6 @@ public class SystemTableController {
 				}
 			}
 		} catch (Exception ex) {
-
 			logger.error(ex);
 		}
 
@@ -838,10 +980,14 @@ public class SystemTableController {
 				}
 			}
 		} catch (Exception ex) {
-
 			logger.error(ex);
 		}
 		return ResponseUtils.responseJsonResult(false);
+	}
+
+	@javax.annotation.Resource
+	public void setDatabaseService(IDatabaseService databaseService) {
+		this.databaseService = databaseService;
 	}
 
 	@javax.annotation.Resource
@@ -883,9 +1029,22 @@ public class SystemTableController {
 			HibernateBeanFactory.getSessionFactory().close();
 			return ResponseUtils.responseJsonResult(true);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex);
 		} finally {
 			Environment.setCurrentSystemName(currentName);
+		}
+
+		try {
+			if (StringUtils.isNotEmpty(systemName)) {
+				EntitySchemaUpdate bean = new EntitySchemaUpdate();
+				bean.updateDDL(systemName);
+			} else {
+				EntitySchemaUpdate bean = new EntitySchemaUpdate();
+				bean.updateDDL();
+			}
+			return ResponseUtils.responseJsonResult(true);
+		} catch (Exception ex) {
+			logger.error(ex);
 		}
 
 		return ResponseUtils.responseJsonResult(false);

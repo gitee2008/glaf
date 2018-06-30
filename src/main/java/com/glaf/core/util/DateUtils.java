@@ -66,35 +66,35 @@ public class DateUtils {
 	public static final String FULL_DATE_FORMAT = "yyyyMMddHHmmss";
 
 	/**
-	 * 判断某个时间time2是否在另一个时间time1之后
+	 * 判断某个时间是否在另一个时间之后
 	 * 
-	 * @param time1
-	 * @param time2
+	 * @param beforeTime
+	 * @param afterTime
 	 * @return
 	 */
-	public static boolean afterTime(Date time1, Date time2) {
+	public static boolean afterTime(Date beforeTime, Date afterTime) {
 		Calendar calendar1 = Calendar.getInstance();
-		calendar1.setTime(time1);
+		calendar1.setTime(beforeTime);
 
 		Calendar calendar2 = Calendar.getInstance();
-		calendar2.setTime(time2);
+		calendar2.setTime(afterTime);
 
 		return calendar1.after(calendar2);
 	}
 
 	/**
-	 * 判断某个时间time2是否在另一个时间time1之前
+	 * 判断某个时间是否在另一个时间之前
 	 * 
-	 * @param time1
-	 * @param time2
+	 * @param beforeTime
+	 * @param afterTime
 	 * @return
 	 */
-	public static boolean beforeTime(Date time1, Date time2) {
+	public static boolean beforeTime(Date beforeTime, Date afterTime) {
 		Calendar calendar1 = Calendar.getInstance();
-		calendar1.setTime(time1);
+		calendar1.setTime(beforeTime);
 
 		Calendar calendar2 = Calendar.getInstance();
-		calendar2.setTime(time2);
+		calendar2.setTime(afterTime);
 
 		return calendar1.before(calendar2);
 	}
@@ -479,6 +479,8 @@ public class DateUtils {
 	}
 
 	public static void main(String[] args) {
+		System.out.println(DateUtils.beforeTime(DateUtils.toDate("2017-09-01"), new Date()));
+		System.out.println("2018年05月09日".length());
 		System.out.println(DateUtils.getDate(new Date()));
 		System.out.println(DateUtils.getDateTime(new Date()));
 		System.out.println(DateUtils.getYearMonthDay(new Date()));

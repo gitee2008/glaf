@@ -5,6 +5,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,12 +18,14 @@ import com.glaf.core.config.DBConfiguration;
 import com.glaf.core.config.Environment;
 import com.glaf.core.config.ViewProperties;
 import com.glaf.core.entity.hibernate.HibernateBeanFactory;
+import com.glaf.core.entity.jpa.EntitySchemaUpdate;
 import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.ResponseUtils;
 
 @Controller("/sys/schema")
 @RequestMapping("/sys/schema")
 public class SystemSchemaController {
+	protected final static Log logger = LogFactory.getLog(SystemSchemaController.class);
 
 	@RequestMapping
 	public ModelAndView list(HttpServletRequest request, ModelMap modelMap) {
@@ -53,7 +57,14 @@ public class SystemSchemaController {
 			HibernateBeanFactory.reload();
 			return ResponseUtils.responseJsonResult(true);
 		} catch (Exception ex) {
-
+			logger.error(ex);
+		}
+		try {
+			EntitySchemaUpdate bean = new EntitySchemaUpdate();
+			bean.updateDDL(systemName);
+			return ResponseUtils.responseJsonResult(true);
+		} catch (Exception ex) {
+			logger.error(ex);
 		}
 		return ResponseUtils.responseJsonResult(false);
 	}
@@ -68,11 +79,13 @@ public class SystemSchemaController {
 				for (ConnectionDefinition conn : rows) {
 					Environment.setCurrentSystemName(conn.getName());
 					HibernateBeanFactory.reload();
+					EntitySchemaUpdate bean = new EntitySchemaUpdate();
+					bean.updateDDL(conn.getName());
 				}
 			}
 			return ResponseUtils.responseJsonResult(true);
 		} catch (Exception ex) {
-
+			logger.error(ex);
 		}
 		return ResponseUtils.responseJsonResult(false);
 	}

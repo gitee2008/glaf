@@ -274,7 +274,7 @@
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
-			<version>2.10.4</version>
+			<version>2.10.5</version>
 		</dependency>
 		<!-- java字节码工具用于动态代理 -->
 		<dependency>
@@ -470,7 +470,7 @@
 		<dependency>
 			<groupId>commons-net</groupId>
 			<artifactId>commons-net</artifactId>
-			<version>3.5</version>
+			<version>3.6</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-pool</groupId>
@@ -496,7 +496,7 @@
 		<dependency>
 			<groupId>com.ecwid.consul</groupId>
             <artifactId>consul-api</artifactId>
-            <version>1.2.4</version>
+            <version>1.4.0</version>
 		</dependency>
 		<dependency>
 			<groupId>concurrent</groupId>
@@ -923,13 +923,13 @@
 		<dependency>
 			<groupId>org.xerial.snappy</groupId>
 			<artifactId>snappy-java</artifactId>
-			<version>1.1.2.6</version>
+			<version>1.1.7.2</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.sshd</groupId>
 			<artifactId>sshd-core</artifactId>
-			<version>1.4.0</version>
+			<version>2.0.0</version>
 		</dependency>
 		<!-- 面向流的拉式解析XML,xml大文件读写 -->
 		<dependency>
