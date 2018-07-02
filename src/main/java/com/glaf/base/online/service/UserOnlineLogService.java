@@ -71,7 +71,7 @@ public interface UserOnlineLogService {
 	 */
 	@Transactional
 	void login(UserOnlineLog model);
-
+	
 	/**
 	 * 退出系统
 	 * 
@@ -79,5 +79,8 @@ public interface UserOnlineLogService {
 	 */
 	@Transactional
 	void logout(String actorId);
+
+	@Transactional
+	void saveAll(List<UserOnlineLog> rows);
 
 }

@@ -43,8 +43,7 @@ import com.glaf.base.online.service.*;
 @Controller("/user/onlinelog")
 @RequestMapping("/user/onlinelog")
 public class UserOnlineLogController {
-	protected static final Log logger = LogFactory
-			.getLog(UserOnlineLogController.class);
+	protected static final Log logger = LogFactory.getLog(UserOnlineLogController.class);
 
 	protected UserOnlineLogService userOnlineLogService;
 
@@ -56,8 +55,7 @@ public class UserOnlineLogController {
 
 	@RequestMapping("/json")
 	@ResponseBody
-	public byte[] json(HttpServletRequest request, ModelMap modelMap)
-			throws IOException {
+	public byte[] json(HttpServletRequest request, ModelMap modelMap) throws IOException {
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
 		logger.debug(params);
 		UserOnlineLogQuery query = new UserOnlineLogQuery();
@@ -65,12 +63,10 @@ public class UserOnlineLogController {
 		query.deleteFlag(0);
 		query.setSearchWord(request.getParameter("searchWord"));
 		if (RequestUtils.getDate(request, "loginDateGreaterThanOrEqual") != null) {
-			query.setLoginDateGreaterThanOrEqual(RequestUtils.getDate(request,
-					"loginDateGreaterThanOrEqual"));
+			query.setLoginDateGreaterThanOrEqual(RequestUtils.getDate(request, "loginDateGreaterThanOrEqual"));
 		}
 		if (RequestUtils.getDate(request, "loginDateLessThanOrEqual") != null) {
-			query.setLoginDateLessThanOrEqual(RequestUtils.getDate(request,
-					"loginDateLessThanOrEqual"));
+			query.setLoginDateLessThanOrEqual(RequestUtils.getDate(request, "loginDateLessThanOrEqual"));
 		}
 
 		int start = 0;
@@ -93,8 +89,7 @@ public class UserOnlineLogController {
 		}
 
 		JSONObject result = new JSONObject();
-		int total = userOnlineLogService
-				.getUserOnlineLogCountByQueryCriteria(query);
+		int total = userOnlineLogService.getUserOnlineLogCountByQueryCriteria(query);
 		if (total > 0) {
 			result.put("total", total);
 			result.put("totalCount", total);
@@ -111,8 +106,7 @@ public class UserOnlineLogController {
 				}
 			}
 
-			List<UserOnlineLog> list = userOnlineLogService
-					.getUserOnlineLogsByQueryCriteria(start, limit, query);
+			List<UserOnlineLog> list = userOnlineLogService.getUserOnlineLogsByQueryCriteria(start, limit, query);
 
 			if (list != null && !list.isEmpty()) {
 				JSONArray rowsJSON = new JSONArray();
@@ -149,14 +143,12 @@ public class UserOnlineLogController {
 	}
 
 	@javax.annotation.Resource
-	public void setSystemPropertyService(
-			ISystemPropertyService systemPropertyService) {
+	public void setSystemPropertyService(ISystemPropertyService systemPropertyService) {
 		this.systemPropertyService = systemPropertyService;
 	}
 
 	@javax.annotation.Resource
-	public void setUserOnlineLogService(
-			UserOnlineLogService userOnlineLogService) {
+	public void setUserOnlineLogService(UserOnlineLogService userOnlineLogService) {
 		this.userOnlineLogService = userOnlineLogService;
 	}
 

@@ -2,15 +2,19 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.glaf.base.online.mapper.UserOnlineLogMapper">
+<mapper
+	namespace="com.glaf.base.online.mapper.UserOnlineLogMapper">
 
-	<resultMap id="userOnlineLogResultMap" type="com.glaf.base.online.domain.UserOnlineLog">
+	<resultMap id="userOnlineLogResultMap"
+		type="com.glaf.base.online.domain.UserOnlineLog">
 		<id property="id" column="ID_" jdbcType="BIGINT" />
 		<result property="actorId" column="ACTORID_" jdbcType="VARCHAR" />
 		<result property="name" column="NAME_" jdbcType="VARCHAR" />
-		<result property="loginDate" column="LOGINDATE_" jdbcType="TIMESTAMP" />
+		<result property="loginDate" column="LOGINDATE_"
+			jdbcType="TIMESTAMP" />
 		<result property="loginIP" column="LOGINIP_" jdbcType="VARCHAR" />
-		<result property="logoutDate" column="LOGOUTDATE_" jdbcType="TIMESTAMP" />
+		<result property="logoutDate" column="LOGOUTDATE_"
+			jdbcType="TIMESTAMP" />
 		<result property="year" column="YEAR_" jdbcType="INTEGER" />
 		<result property="month" column="MONTH_" jdbcType="INTEGER" />
 		<result property="quarter" column="QUARTER_" jdbcType="INTEGER" />
@@ -18,7 +22,8 @@
 	</resultMap>
 
 
-	<insert id="insertUserOnlineLog" parameterType="com.glaf.base.online.domain.UserOnlineLog">
+	<insert id="insertUserOnlineLog"
+		parameterType="com.glaf.base.online.domain.UserOnlineLog">
 		insert into USER_ONLINE_LOG
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			ID_
@@ -79,11 +84,13 @@
 	</insert>
 
 
-	<update id="updateUserOnlineLogLogoutDate" parameterType="com.glaf.base.online.domain.UserOnlineLog">
+	<update id="updateUserOnlineLogLogoutDate"
+		parameterType="com.glaf.base.online.domain.UserOnlineLog">
 
 		update
 		USER_ONLINE_LOG
-		set LOGOUTDATE_ = #{logoutDate, jdbcType=TIMESTAMP}
+		set LOGOUTDATE_ = #{logoutDate,
+		jdbcType=TIMESTAMP}
 		where
 		ID_ = #{id, jdbcType=BIGINT}
 
@@ -105,7 +112,8 @@
 	</delete>
 
 
-	<delete id="deleteUserOnlineLogs" parameterType="com.glaf.base.online.query.UserOnlineLogQuery">
+	<delete id="deleteUserOnlineLogs"
+		parameterType="com.glaf.base.online.query.UserOnlineLogQuery">
 		delete from USER_ONLINE_LOG
 		where (
 		ID_ IN
@@ -130,7 +138,8 @@
 	</select>
 
 
-	<select id="getUserOnlineLogs" parameterType="com.glaf.base.online.query.UserOnlineLogQuery"
+	<select id="getUserOnlineLogs"
+		parameterType="com.glaf.base.online.query.UserOnlineLogQuery"
 		resultMap="userOnlineLogResultMap">
 		select distinct E.*
 		<include refid="selectUserOnlineLogsSql" />
@@ -145,7 +154,8 @@
 	</select>
 
 
-	<select id="getUserOnlineLogCount" parameterType="com.glaf.base.online.query.UserOnlineLogQuery"
+	<select id="getUserOnlineLogCount"
+		parameterType="com.glaf.base.online.query.UserOnlineLogQuery"
 		resultType="int">
 		select count(*)
 		<include refid="selectUserOnlineLogsSql" />
@@ -165,8 +175,8 @@
 
 			<if test="actorIds != null and actorIds.size !=0">
 				and E.ACTORID_ IN
-				<foreach item="x_actorId" index="index" collection="actorIds"
-					open="(" separator="," close=")">
+				<foreach item="x_actorId" index="index"
+					collection="actorIds" open="(" separator="," close=")">
 					#{x_actorId}
 				</foreach>
 			</if>

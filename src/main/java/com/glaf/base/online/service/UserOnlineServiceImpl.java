@@ -37,6 +37,7 @@ import com.glaf.base.online.mapper.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.glaf.base.online.domain.*;
+import com.glaf.base.online.factory.OnlineLogCollectFactory;
 import com.glaf.base.online.query.*;
 import com.glaf.base.online.util.UserOnlineJsonFactory;
 
@@ -187,7 +188,7 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 			log.setName(model.getName());
 			log.setLoginDate(new Date());
 			log.setLoginIP(model.getLoginIP());
-			userOnlineLogService.login(log);
+			OnlineLogCollectFactory.getInstance().collectData(model.getActorId(), log);
 		} else {
 			if (model.getLoginDate() == null) {
 				model.setLoginDate(new Date());
@@ -199,10 +200,10 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 
 			UserOnlineLog log = new UserOnlineLog();
 			log.setActorId(model.getActorId());
+			log.setName(model.getName());
 			log.setLoginIP(model.getLoginIP());
 			log.setLoginDate(new Date());
-			log.setName(model.getName());
-			userOnlineLogService.login(log);
+			OnlineLogCollectFactory.getInstance().collectData(model.getActorId(), log);
 		}
 	}
 
@@ -257,10 +258,10 @@ public class UserOnlineServiceImpl implements UserOnlineService {
 
 			UserOnlineLog log = new UserOnlineLog();
 			log.setActorId(userOnline.getActorId());
+			log.setName(userOnline.getName());
 			log.setLoginIP(userOnline.getLoginIP());
 			log.setLoginDate(new Date());
-			log.setName(userOnline.getName());
-			userOnlineLogService.login(log);
+			OnlineLogCollectFactory.getInstance().collectData(userOnline.getActorId(), log);
 		} else {
 			userOnlineMapper.updateUserOnline(userOnline);
 		}

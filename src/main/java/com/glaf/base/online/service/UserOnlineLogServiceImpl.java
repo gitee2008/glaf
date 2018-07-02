@@ -135,6 +135,40 @@ public class UserOnlineLogServiceImpl implements UserOnlineLogService {
 		}
 	}
 
+	@Transactional
+	public void saveAll(List<UserOnlineLog> rows) {
+		for (UserOnlineLog model : rows) {
+			model.setId(idGenerator.nextId());
+
+			if (model.getLoginDate() == null) {
+				model.setLoginDate(new Date());
+			}
+
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(new Date());
+			int year = calendar.get(Calendar.YEAR);
+			int month = calendar.get(Calendar.MONTH) + 1;
+
+			model.setYear(year);
+			model.setMonth(month);
+			model.setDay(DateUtils.getNowYearMonthDay());
+
+			if (month <= 3) {
+				model.setQuarter(1);
+			} else if (month > 3 && month <= 6) {
+				model.setQuarter(2);
+			}
+			if (month > 6 && month <= 9) {
+				model.setQuarter(3);
+			}
+			if (month > 9) {
+				model.setQuarter(4);
+			}
+
+			userOnlineLogMapper.insertUserOnlineLog(model);
+		}
+	}
+
 	@javax.annotation.Resource
 	public void setEntityDAO(EntityDAO entityDAO) {
 		this.entityDAO = entityDAO;
