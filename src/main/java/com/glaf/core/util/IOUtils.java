@@ -49,8 +49,8 @@ public class IOUtils {
 	public static final int BUFFER_SIZE = 1024 * 8;
 
 	/**
-	 * Close the Closeable objects and <b>ignore</b> any {@link IOException} or
-	 * null pointers. Must only be used for cleanup in exception handlers.
+	 * Close the Closeable objects and <b>ignore</b> any {@link IOException} or null
+	 * pointers. Must only be used for cleanup in exception handlers.
 	 *
 	 * @param log
 	 *            the log to record problems to at debug level. Can be null.
@@ -97,7 +97,27 @@ public class IOUtils {
 		cleanup(null, stream);
 	}
 
+	public static void closeQuietly(java.io.InputStream stream) {
+		if (stream != null) {
+			try {
+				stream.close();
+				stream = null;
+			} catch (IOException ex) {
+			}
+		}
+	}
+
 	public static void closeStream(java.io.InputStream stream) {
+		if (stream != null) {
+			try {
+				stream.close();
+				stream = null;
+			} catch (IOException ex) {
+			}
+		}
+	}
+
+	public static void closeQuietly(java.io.OutputStream stream) {
 		if (stream != null) {
 			try {
 				stream.close();
@@ -142,8 +162,8 @@ public class IOUtils {
 	 * @param conf
 	 *            the Configuration object
 	 * @param close
-	 *            whether or not close the InputStream and OutputStream at the
-	 *            end. The streams are closed in the finally clause.
+	 *            whether or not close the InputStream and OutputStream at the end.
+	 *            The streams are closed in the finally clause.
 	 */
 	public static void copyBytes(InputStream in, OutputStream out, Configuration conf, boolean close)
 			throws IOException {
@@ -183,8 +203,8 @@ public class IOUtils {
 	 * @param buffSize
 	 *            the size of the buffer
 	 * @param close
-	 *            whether or not close the InputStream and OutputStream at the
-	 *            end. The streams are closed in the finally clause.
+	 *            whether or not close the InputStream and OutputStream at the end.
+	 *            The streams are closed in the finally clause.
 	 */
 	public static void copyBytes(InputStream in, OutputStream out, int buffSize, boolean close) throws IOException {
 		try {
@@ -350,9 +370,9 @@ public class IOUtils {
 	}
 
 	/**
-	 * Utility wrapper for reading from {@link InputStream}. It catches any
-	 * errors thrown by the underlying stream (either IO or
-	 * decompression-related), and re-throws as an IOException.
+	 * Utility wrapper for reading from {@link InputStream}. It catches any errors
+	 * thrown by the underlying stream (either IO or decompression-related), and
+	 * re-throws as an IOException.
 	 * 
 	 * @param is
 	 *            - InputStream to be read from
@@ -470,8 +490,7 @@ public class IOUtils {
 	}
 
 	/**
-	 * Write a ByteBuffer to a FileChannel at a given offset, handling short
-	 * writes.
+	 * Write a ByteBuffer to a FileChannel at a given offset, handling short writes.
 	 * 
 	 * @param fc
 	 *            The FileChannel to write to
