@@ -30,12 +30,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+ 
 import com.glaf.core.domain.*;
 import com.glaf.core.security.LoginContext;
 import com.glaf.core.util.DBUtils;
 import com.glaf.core.util.FileUtils;
 import com.glaf.core.util.IOUtils;
 import com.glaf.core.util.JdbcUtils;
+import com.glaf.core.util.LowerLinkedMap;
 import com.glaf.core.util.ParamUtils;
 
 public class BulkInsertBean {
@@ -106,6 +108,7 @@ public class BulkInsertBean {
 		int index = 1;
 		String columnName = null;
 		String javaType = null;
+		LowerLinkedMap dataMap = null;
 		PreparedStatement psmt = null;
 		ByteArrayInputStream bais = null;
 		BufferedInputStream bis = null;
@@ -114,7 +117,10 @@ public class BulkInsertBean {
 			String dbType = DBConnectionFactory.getDatabaseType(conn);
 			psmt = conn.prepareStatement(insertBuffer.toString());
 			for (int k = 0, l = dataList.size(); k < l; k++) {
-				Map<String, Object> dataMap = dataList.get(k);
+				//Map<String, Object> dataMap = dataList.get(k);
+				Map<String, Object> rowMap = dataList.get(k);
+				dataMap = new LowerLinkedMap();
+				dataMap.putAll(rowMap);
 				// logger.debug("dataMap:" + dataMap);
 				for (ColumnDefinition column : columns) {
 					columnName = column.getColumnName().toLowerCase();
@@ -260,6 +266,7 @@ public class BulkInsertBean {
 		int index = 1;
 		String columnName = null;
 		String javaType = null;
+		LowerLinkedMap dataMap = null;
 		PreparedStatement psmt = null;
 		ByteArrayInputStream bais = null;
 		BufferedInputStream bis = null;
@@ -269,7 +276,10 @@ public class BulkInsertBean {
 			psmt = conn.prepareStatement(insertBuffer.toString());
 			for (int k = 0, l = dataList.size(); k < l; k++) {
 				index = 1;
-				Map<String, Object> dataMap = dataList.get(k);
+				//Map<String, Object> dataMap = dataList.get(k);
+				Map<String, Object> rowMap = dataList.get(k);
+				dataMap = new LowerLinkedMap();
+				dataMap.putAll(rowMap);
 				// logger.debug("dataMap:" + dataMap);
 				for (ColumnDefinition column : columns) {
 					columnName = column.getColumnName().toLowerCase();
