@@ -5,7 +5,7 @@
 <mapper namespace="com.glaf.base.modules.sys.mapper.SysUserMapper">
 
 	<resultMap id="sysUserResultMap" type="com.glaf.base.modules.sys.model.SysUser">
-		<id property="userId" column="USERID" jdbcType="BIGINT" />
+		<id property="userId" column="USERID" jdbcType="VARCHAR" />
 		<result property="name" column="USERNAME" jdbcType="VARCHAR" />
 		<result property="locked" column="LOCKED" jdbcType="INTEGER" />
 		<result property="sex" column="SEX" jdbcType="INTEGER" />
@@ -43,7 +43,7 @@
 
 
 	<resultMap id="sysUserTokenResultMap" type="com.glaf.base.modules.sys.model.SysUser">
-		<id property="userId" column="USERID" jdbcType="BIGINT" />
+		<id property="userId" column="USERID" jdbcType="VARCHAR" />
 		<result property="name" column="USERNAME" jdbcType="VARCHAR" />
 		<result property="locked" column="LOCKED" jdbcType="INTEGER" />
 		<result property="sex" column="SEX" jdbcType="INTEGER" />
@@ -82,7 +82,7 @@
 
 
 	<resultMap id="sysUserLoginSecretResultMap" type="com.glaf.base.modules.sys.model.SysUser">
-		<id property="userId" column="USERID" jdbcType="BIGINT" />
+		<id property="userId" column="USERID" jdbcType="VARCHAR" />
 		<result property="name" column="USERNAME" jdbcType="VARCHAR" />
 		<result property="locked" column="LOCKED" jdbcType="INTEGER" />
 		<result property="sex" column="SEX" jdbcType="INTEGER" />
@@ -119,7 +119,7 @@
 
 
 	<resultMap id="userPasswordResultMap" type="com.glaf.base.modules.sys.model.UserPassword">
-		<id property="userId" column="USERID" jdbcType="BIGINT" />
+		<id property="userId" column="USERID" jdbcType="VARCHAR" />
 		<result property="password" column="PASSWORD_HASH" jdbcType="VARCHAR" />
 	</resultMap>
 
@@ -493,8 +493,7 @@
 		set
 		LOGINRETRY = 0,
 		LOCKLOGINTIME = null,
-		PASSWORD_HASH = #{passwordHash,
-		jdbcType=VARCHAR}
+		PASSWORD_HASH = #{passwordHash,jdbcType=VARCHAR}
 		where USERID = #{userId,jdbcType=VARCHAR}
 
 	</update>
@@ -669,8 +668,7 @@
 
 	<select id="getPasswordHashByAccount" parameterType="String"
 		resultType="String">
-		select PASSWORD_HASH from SYS_USER where UserID =
-		#{userId}
+		select PASSWORD_HASH from SYS_USER where USERID = #{userId}
 	</select>
 
 

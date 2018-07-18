@@ -24,8 +24,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import javax.annotation.Resource;
 
@@ -75,7 +73,8 @@ import com.glaf.base.modules.sys.util.SysUserJsonFactory;
 public class SysUserServiceImpl implements SysUserService {
 	protected final static Log logger = LogFactory.getLog(SysUserServiceImpl.class);
 
-	protected static ConcurrentMap<String, String> passwordMap = new ConcurrentHashMap<String, String>();
+	// protected static ConcurrentMap<String, String> passwordMap = new
+	// ConcurrentHashMap<String, String>();
 
 	protected IdGenerator idGenerator;
 
@@ -111,7 +110,7 @@ public class SysUserServiceImpl implements SysUserService {
 			SysUser bean = new SysUser();
 			bean.setUserId(account);
 			bean.setPasswordHash(pwd_hash);
-			passwordMap.put(account, pwd_hash);
+			// passwordMap.put(account, pwd_hash);
 			sysUserMapper.updateUserPassword(bean);
 		}
 	}
@@ -142,14 +141,6 @@ public class SysUserServiceImpl implements SysUserService {
 	public boolean checkPassword(String account, String password) {
 		boolean result = false;
 		String pwd_hash = DigestUtils.sha512Hex(account + ":" + password);
-		/**
-		 * if (passwordMap.isEmpty()) { List<UserPassword> list =
-		 * sysUserMapper.getAllUserPasswords(); if (list != null && !list.isEmpty()) {
-		 * for (UserPassword up : list) { passwordMap.put(up.getUserId(),
-		 * up.getPassword()); } } } if (!passwordMap.isEmpty()) { String pwd =
-		 * passwordMap.get(account); if (StringUtils.isNotEmpty(pwd) &&
-		 * StringUtils.equals(pwd_hash, pwd)) { return true; } }
-		 **/
 		String pwd = sysUserMapper.getPasswordHashByAccount(account);
 		if (StringUtils.isNotEmpty(password) && StringUtils.equals(pwd_hash, pwd)) {
 			result = true;
@@ -165,6 +156,9 @@ public class SysUserServiceImpl implements SysUserService {
 	public boolean create(SysUser bean) {
 		bean.setCreateTime(new Date());
 		bean.setToken(UUID32.getUUID());
+		if (StringUtils.isEmpty(bean.getPasswordHash())) {
+			bean.setPasswordHash("888888");
+		}
 		String pwd_hash = DigestUtils.sha512Hex(bean.getUserId() + ":" + bean.getPasswordHash());
 		bean.setPasswordHash(pwd_hash);
 		this.save(bean);

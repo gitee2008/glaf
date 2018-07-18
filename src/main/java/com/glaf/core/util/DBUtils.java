@@ -53,9 +53,23 @@ public class DBUtils {
 
 	public final static String newline = System.getProperty("line.separator");
 
-	public static final String POSTGRESQL = "postgresql";
+	public static final String DB2 = "db2";
+
+	public static final String H2 = "h2";
+
+	public static final String HBASE = "hbase";
+
+	public static final String MYSQL = "mysql";
 
 	public static final String ORACLE = "oracle";
+
+	public static final String SQLITE = "sqlite";
+
+	public static final String SQLSERVER = "sqlserver";
+
+	public static final String POSTGRESQL = "postgresql";
+
+	public static final String VOLTDB = "voltdb";
 
 	public static void alterTable(Connection connection, TableDefinition tableDefinition) {
 		List<String> cloumns = new java.util.ArrayList<String>();
@@ -125,7 +139,7 @@ public class DBUtils {
 					}
 					String javaType = column.getJavaType();
 					String sql = " alter table " + tableName + " add " + column.getColumnName();
-					if ("db2".equalsIgnoreCase(dbType)) {
+					if (DB2.equalsIgnoreCase(dbType)) {
 						if ("String".equals(javaType)) {
 							if (column.getLength() > 0) {
 								sql += " varchar(" + column.getLength() + ")";
@@ -149,7 +163,7 @@ public class DBUtils {
 						} else if ("Boolean".equals(javaType)) {
 							sql += " smallint ";
 						}
-					} else if ("oracle".equalsIgnoreCase(dbType)) {
+					} else if (ORACLE.equalsIgnoreCase(dbType)) {
 						if ("String".equals(javaType)) {
 							if (column.getLength() > 0) {
 								sql += " NVARCHAR2(" + column.getLength() + ")";
@@ -173,7 +187,7 @@ public class DBUtils {
 						} else if ("Boolean".equals(javaType)) {
 							sql += " NUMBER(1,0) ";
 						}
-					} else if ("mysql".equalsIgnoreCase(dbType)) {
+					} else if (MYSQL.equalsIgnoreCase(dbType)) {
 						if ("String".equals(javaType)) {
 							if (column.getLength() > 0) {
 								sql += " varchar(" + column.getLength() + ")";
@@ -197,7 +211,7 @@ public class DBUtils {
 						} else if ("Boolean".equals(javaType)) {
 							sql += " tinyint ";
 						}
-					} else if ("postgresql".equalsIgnoreCase(dbType)) {
+					} else if (POSTGRESQL.equalsIgnoreCase(dbType)) {
 						if ("String".equals(javaType)) {
 							if (column.getLength() > 0) {
 								sql += " varchar(" + column.getLength() + ")";
@@ -221,7 +235,7 @@ public class DBUtils {
 						} else if ("Boolean".equals(javaType)) {
 							sql += " boolean ";
 						}
-					} else if ("sqlserver".equalsIgnoreCase(dbType)) {
+					} else if (SQLSERVER.equalsIgnoreCase(dbType)) {
 						if ("String".equals(javaType)) {
 							if (column.getLength() > 0) {
 								sql += " nvarchar(" + column.getLength() + ")";
@@ -245,7 +259,7 @@ public class DBUtils {
 						} else if ("Boolean".equals(javaType)) {
 							sql += " tinyint ";
 						}
-					} else if ("h2".equalsIgnoreCase(dbType)) {
+					} else if (H2.equalsIgnoreCase(dbType)) {
 						if ("String".equals(javaType)) {
 							if (column.getLength() > 0) {
 								sql += " varchar(" + column.getLength() + ")";
@@ -269,7 +283,7 @@ public class DBUtils {
 						} else if ("Boolean".equals(javaType)) {
 							sql += " boolean ";
 						}
-					} else if ("sqlite".equalsIgnoreCase(dbType)) {
+					} else if (SQLITE.equalsIgnoreCase(dbType)) {
 						if ("String".equals(javaType)) {
 							if (column.getLength() > 0) {
 								sql += " TEXT(" + column.getLength() + ")";
@@ -291,7 +305,7 @@ public class DBUtils {
 						} else if ("byte[]".equals(javaType)) {
 							sql += " BLOB ";
 						}
-					} else if ("hbase".equalsIgnoreCase(dbType)) {
+					} else if (HBASE.equalsIgnoreCase(dbType)) {
 						if ("String".equals(javaType)) {
 							if (column.getLength() > 0) {
 								sql += " VARCHAR(" + column.getLength() + ")";
@@ -314,6 +328,28 @@ public class DBUtils {
 							sql += " VARBINARY ";
 						} else if ("Boolean".equals(javaType)) {
 							sql += " BOOLEAN ";
+						}
+					} else if (VOLTDB.equalsIgnoreCase(dbType)) {
+						if ("String".equals(javaType)) {
+							if (column.getLength() > 0) {
+								sql += " VARCHAR(" + column.getLength() + ")";
+							} else {
+								sql += " VARCHAR(250)";
+							}
+						} else if ("Integer".equals(javaType)) {
+							sql += " INTEGER  ";
+						} else if ("Long".equals(javaType)) {
+							sql += " BIGINT ";
+						} else if ("Double".equals(javaType)) {
+							sql += " FLOAT ";
+						} else if ("Date".equals(javaType)) {
+							sql += " TIMESTAMP ";
+						} else if ("Clob".equals(javaType)) {
+							sql += " VARCHAR(4000) ";
+						} else if ("Blob".equals(javaType)) {
+							sql += " VARBINARY(102400000) ";
+						} else if ("byte[]".equals(javaType)) {
+							sql += " VARBINARY(255) ";
 						}
 					} else {
 						if ("String".equals(javaType)) {
@@ -640,8 +676,8 @@ public class DBUtils {
 			/**
 			 * 只能在开发模式下才能删除表，正式环境只能删除临时表。
 			 */
-			if (System.getProperty("devMode") != null || StringUtils.equalsIgnoreCase(dbType, "sqlite")
-					|| StringUtils.equalsIgnoreCase(dbType, "h2") || StringUtils.startsWithIgnoreCase(tableName, "temp")
+			if (System.getProperty("devMode") != null || StringUtils.equalsIgnoreCase(dbType, SQLITE)
+					|| StringUtils.equalsIgnoreCase(dbType, H2) || StringUtils.startsWithIgnoreCase(tableName, "temp")
 					|| StringUtils.startsWithIgnoreCase(tableName, "tmp")) {
 				if (tableExists(connection, tableName)) {
 					statement = connection.createStatement();
@@ -674,8 +710,8 @@ public class DBUtils {
 			/**
 			 * 只能在开发模式下才能删除表，正式环境只能删除临时表。
 			 */
-			if (System.getProperty("devMode") != null || StringUtils.equalsIgnoreCase(dbType, "sqlite")
-					|| StringUtils.equalsIgnoreCase(dbType, "h2") || StringUtils.startsWithIgnoreCase(tableName, "temp")
+			if (System.getProperty("devMode") != null || StringUtils.equalsIgnoreCase(dbType, SQLITE)
+					|| StringUtils.equalsIgnoreCase(dbType, H2) || StringUtils.startsWithIgnoreCase(tableName, "temp")
 					|| StringUtils.startsWithIgnoreCase(tableName, "tmp")) {
 				if (tableExists(connection, tableName)) {
 					connection.setAutoCommit(false);
@@ -993,7 +1029,7 @@ public class DBUtils {
 		StringBuilder buffer = new StringBuilder();
 		buffer.append(" alter table ").append(tableName);
 		buffer.append(" add ").append(field.getColumnName());
-		if ("h2".equalsIgnoreCase(dbType)) {
+		if (H2.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(field.getJavaType())) {
 				buffer.append(" integer ");
 			} else if ("Long".equals(field.getJavaType())) {
@@ -1018,7 +1054,7 @@ public class DBUtils {
 					buffer.append(" (250) ");
 				}
 			}
-		} else if ("db2".equalsIgnoreCase(dbType)) {
+		} else if (DB2.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(field.getJavaType())) {
 				buffer.append(" integer ");
 			} else if ("Long".equals(field.getJavaType())) {
@@ -1043,7 +1079,7 @@ public class DBUtils {
 					buffer.append(" (250) ");
 				}
 			}
-		} else if ("oracle".equalsIgnoreCase(dbType)) {
+		} else if (ORACLE.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(field.getJavaType())) {
 				buffer.append(" INTEGER ");
 			} else if ("Long".equals(field.getJavaType())) {
@@ -1068,7 +1104,7 @@ public class DBUtils {
 					buffer.append(" (250) ");
 				}
 			}
-		} else if ("mysql".equalsIgnoreCase(dbType)) {
+		} else if (MYSQL.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(field.getJavaType())) {
 				buffer.append(" integer ");
 			} else if ("Long".equals(field.getJavaType())) {
@@ -1093,7 +1129,7 @@ public class DBUtils {
 					buffer.append("(250) ");
 				}
 			}
-		} else if ("sqlserver".equalsIgnoreCase(dbType)) {
+		} else if (SQLSERVER.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(field.getJavaType())) {
 				buffer.append(" integer ");
 			} else if ("Long".equals(field.getJavaType())) {
@@ -1143,7 +1179,7 @@ public class DBUtils {
 					buffer.append(" (250) ");
 				}
 			}
-		} else if ("sqlite".equalsIgnoreCase(dbType)) {
+		} else if (SQLITE.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(field.getJavaType())) {
 				buffer.append(" INTEGER ");
 			} else if ("Long".equals(field.getJavaType())) {
@@ -1166,13 +1202,36 @@ public class DBUtils {
 					buffer.append(" (250) ");
 				}
 			}
-		} else if ("hbase".equalsIgnoreCase(dbType)) {
+		} else if (HBASE.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(field.getJavaType())) {
 				buffer.append(" INTEGER ");
 			} else if ("Long".equals(field.getJavaType())) {
 				buffer.append(" BIGINT ");
 			} else if ("Double".equals(field.getJavaType())) {
 				buffer.append(" DOUBLE ");
+			} else if ("Date".equals(field.getJavaType())) {
+				buffer.append(" TIMESTAMP ");
+			} else if ("Clob".equals(field.getJavaType())) {
+				buffer.append(" VARCHAR ");
+			} else if ("Blob".equals(field.getJavaType())) {
+				buffer.append(" VARBINARY ");
+			} else if ("byte[]".equals(field.getJavaType())) {
+				buffer.append(" VARBINARY ");
+			} else if ("String".equals(field.getJavaType())) {
+				buffer.append(" VARCHAR ");
+				if (field.getLength() > 0) {
+					buffer.append(" (").append(field.getLength()).append(") ");
+				} else {
+					buffer.append(" (250) ");
+				}
+			}
+		} else if (VOLTDB.equalsIgnoreCase(dbType)) {
+			if ("Integer".equals(field.getJavaType())) {
+				buffer.append(" INTEGER ");
+			} else if ("Long".equals(field.getJavaType())) {
+				buffer.append(" BIGINT ");
+			} else if ("Double".equals(field.getJavaType())) {
+				buffer.append(" FLOAT ");
 			} else if ("Date".equals(field.getJavaType())) {
 				buffer.append(" TIMESTAMP ");
 			} else if ("Clob".equals(field.getJavaType())) {
@@ -1243,15 +1302,15 @@ public class DBUtils {
 			List<String> primaryKeys = getPrimaryKeys(conn, tableName);
 			String dbType = DBConnectionFactory.getDatabaseType(conn);
 			DatabaseMetaData metaData = conn.getMetaData();
-			if ("h2".equals(dbType)) {
+			if (H2.equals(dbType)) {
 				tableName = tableName.toUpperCase();
-			} else if ("oracle".equals(dbType)) {
+			} else if (ORACLE.equals(dbType)) {
 				tableName = tableName.toUpperCase();
-			} else if ("db2".equals(dbType)) {
+			} else if (DB2.equals(dbType)) {
 				tableName = tableName.toUpperCase();
-			} else if ("mysql".equals(dbType)) {
+			} else if (MYSQL.equals(dbType)) {
 				tableName = tableName.toLowerCase();
-			} else if ("postgresql".equals(dbType)) {
+			} else if (POSTGRESQL.equals(dbType)) {
 				tableName = tableName.toLowerCase();
 			}
 			rs = metaData.getColumns(null, null, tableName, null);
@@ -1325,15 +1384,15 @@ public class DBUtils {
 			String dbType = DBConnectionFactory.getDatabaseType(conn);
 
 			DatabaseMetaData metaData = conn.getMetaData();
-			if ("h2".equals(dbType)) {
+			if (H2.equals(dbType)) {
 				tableName = tableName.toUpperCase();
-			} else if ("oracle".equals(dbType)) {
+			} else if (ORACLE.equals(dbType)) {
 				tableName = tableName.toUpperCase();
-			} else if ("db2".equals(dbType)) {
+			} else if (DB2.equals(dbType)) {
 				tableName = tableName.toUpperCase();
-			} else if ("mysql".equals(dbType)) {
+			} else if (MYSQL.equals(dbType)) {
 				tableName = tableName.toLowerCase();
-			} else if ("postgresql".equals(dbType)) {
+			} else if (POSTGRESQL.equals(dbType)) {
 				tableName = tableName.toLowerCase();
 			}
 			rs = metaData.getColumns(null, null, tableName, null);
@@ -1415,7 +1474,7 @@ public class DBUtils {
 		StringBuilder buffer = new StringBuilder(500);
 		buffer.append(newline);
 		buffer.append("    ").append(column.getColumnName().toUpperCase());
-		if ("db2".equalsIgnoreCase(dbType)) {
+		if (DB2.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(column.getJavaType())) {
 				buffer.append(" integer ");
 			} else if ("Long".equals(column.getJavaType())) {
@@ -1440,7 +1499,7 @@ public class DBUtils {
 					buffer.append(" (250) ");
 				}
 			}
-		} else if ("oracle".equalsIgnoreCase(dbType)) {
+		} else if (ORACLE.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(column.getJavaType())) {
 				buffer.append(" INTEGER ");
 			} else if ("Long".equals(column.getJavaType())) {
@@ -1465,7 +1524,7 @@ public class DBUtils {
 					buffer.append(" (250) ");
 				}
 			}
-		} else if ("mysql".equalsIgnoreCase(dbType)) {
+		} else if (MYSQL.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(column.getJavaType())) {
 				buffer.append(" integer ");
 			} else if ("Long".equals(column.getJavaType())) {
@@ -1490,7 +1549,7 @@ public class DBUtils {
 					buffer.append(" (250) ");
 				}
 			}
-		} else if ("sqlserver".equalsIgnoreCase(dbType)) {
+		} else if (SQLSERVER.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(column.getJavaType())) {
 				buffer.append(" integer ");
 			} else if ("Long".equals(column.getJavaType())) {
@@ -1517,7 +1576,7 @@ public class DBUtils {
 					buffer.append(" (250) ");
 				}
 			}
-		} else if ("postgresql".equalsIgnoreCase(dbType)) {
+		} else if (POSTGRESQL.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(column.getJavaType())) {
 				buffer.append(" integer ");
 			} else if ("Long".equals(column.getJavaType())) {
@@ -1542,7 +1601,7 @@ public class DBUtils {
 					buffer.append(" (250) ");
 				}
 			}
-		} else if ("h2".equalsIgnoreCase(dbType)) {
+		} else if (H2.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(column.getJavaType())) {
 				buffer.append(" integer ");
 			} else if ("Long".equals(column.getJavaType())) {
@@ -1567,7 +1626,7 @@ public class DBUtils {
 					buffer.append(" (50) ");
 				}
 			}
-		} else if ("sqlite".equalsIgnoreCase(dbType)) {
+		} else if (SQLITE.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(column.getJavaType())) {
 				buffer.append(" INTEGER ");
 			} else if ("Boolean".equals(column.getJavaType())) {
@@ -1587,7 +1646,7 @@ public class DBUtils {
 			} else if ("String".equals(column.getJavaType())) {
 				buffer.append(" TEXT ");
 			}
-		} else if ("hbase".equalsIgnoreCase(dbType)) {
+		} else if (HBASE.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(column.getJavaType())) {
 				buffer.append(" INTEGER ");
 			} else if ("Boolean".equals(column.getJavaType())) {
@@ -1596,6 +1655,24 @@ public class DBUtils {
 				buffer.append(" BIGINT ");
 			} else if ("Double".equals(column.getJavaType())) {
 				buffer.append(" DOUBLE ");
+			} else if ("Date".equals(column.getJavaType())) {
+				buffer.append(" TIMESTAMP ");
+			} else if ("Clob".equals(column.getJavaType())) {
+				buffer.append(" VARCHAR ");
+			} else if ("Blob".equals(column.getJavaType())) {
+				buffer.append(" VARBINARY ");
+			} else if ("byte[]".equals(column.getJavaType())) {
+				buffer.append(" VARBINARY ");
+			} else if ("String".equals(column.getJavaType())) {
+				buffer.append(" VARCHAR ");
+			}
+		} else if (VOLTDB.equalsIgnoreCase(dbType)) {
+			if ("Integer".equals(column.getJavaType())) {
+				buffer.append(" INTEGER ");
+			} else if ("Long".equals(column.getJavaType())) {
+				buffer.append(" BIGINT ");
+			} else if ("Double".equals(column.getJavaType())) {
+				buffer.append(" FLOAT ");
 			} else if ("Date".equals(column.getJavaType())) {
 				buffer.append(" TIMESTAMP ");
 			} else if ("Clob".equals(column.getJavaType())) {
@@ -1695,7 +1772,7 @@ public class DBUtils {
 			cols.add(column.getColumnName().trim().toLowerCase());
 		}
 
-		if ("hbase".equalsIgnoreCase(dbType)) {
+		if (HBASE.equalsIgnoreCase(dbType)) {
 			if (idColumn != null) {
 				buffer.append(newline);
 				buffer.append("  CONSTRAINT PK_").append(idColumn.getColumnName().toUpperCase())
@@ -1721,9 +1798,9 @@ public class DBUtils {
 		}
 
 		buffer.append(newline);
-		if ("mysql".equalsIgnoreCase(dbType)) {
+		if (MYSQL.equalsIgnoreCase(dbType)) {
 			buffer.append(") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_bin;");
-		} else if ("oracle".equalsIgnoreCase(dbType)) {
+		} else if (ORACLE.equalsIgnoreCase(dbType)) {
 			buffer.append(")");
 		} else {
 			buffer.append(");");
@@ -1739,13 +1816,13 @@ public class DBUtils {
 			String dbType = DBConnectionFactory.getDatabaseType(connection);
 			DatabaseMetaData metaData = connection.getMetaData();
 
-			if ("h2".equals(dbType)) {
+			if (H2.equals(dbType)) {
 				tableName = tableName.toUpperCase();
-			} else if ("oracle".equals(dbType)) {
+			} else if (ORACLE.equals(dbType)) {
 				tableName = tableName.toUpperCase();
-			} else if ("db2".equals(dbType)) {
+			} else if (DB2.equals(dbType)) {
 				tableName = tableName.toUpperCase();
-			} else if ("mysql".equals(dbType)) {
+			} else if (MYSQL.equals(dbType)) {
 				tableName = tableName.toLowerCase();
 			} else if (POSTGRESQL.equals(dbType)) {
 				tableName = tableName.toLowerCase();
@@ -1774,13 +1851,13 @@ public class DBUtils {
 			String dbType = DBConnectionFactory.getDatabaseType(connection);
 			DatabaseMetaData metaData = connection.getMetaData();
 
-			if ("h2".equals(dbType)) {
+			if (H2.equals(dbType)) {
 				tableName = tableName.toUpperCase();
-			} else if ("oracle".equals(dbType)) {
+			} else if (ORACLE.equals(dbType)) {
 				tableName = tableName.toUpperCase();
-			} else if ("db2".equals(dbType)) {
+			} else if (DB2.equals(dbType)) {
 				tableName = tableName.toUpperCase();
-			} else if ("mysql".equals(dbType)) {
+			} else if (MYSQL.equals(dbType)) {
 				tableName = tableName.toLowerCase();
 			} else if (POSTGRESQL.equals(dbType)) {
 				tableName = tableName.toLowerCase();
@@ -1811,13 +1888,13 @@ public class DBUtils {
 			String dbType = DBConnectionFactory.getDatabaseType(connection);
 			DatabaseMetaData metaData = connection.getMetaData();
 
-			if ("h2".equals(dbType)) {
+			if (H2.equals(dbType)) {
 				tableName = tableName.toUpperCase();
-			} else if ("oracle".equals(dbType)) {
+			} else if (ORACLE.equals(dbType)) {
 				tableName = tableName.toUpperCase();
-			} else if ("db2".equals(dbType)) {
+			} else if (DB2.equals(dbType)) {
 				tableName = tableName.toUpperCase();
-			} else if ("mysql".equals(dbType)) {
+			} else if (MYSQL.equals(dbType)) {
 				tableName = tableName.toLowerCase();
 			} else if (POSTGRESQL.equals(dbType)) {
 				tableName = tableName.toLowerCase();
@@ -1842,7 +1919,7 @@ public class DBUtils {
 
 		buffer.append(newline);
 		buffer.append("    ").append(idField.getColumnName().toUpperCase());
-		if ("db2".equalsIgnoreCase(dbType)) {
+		if (DB2.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(idField.getJavaType())) {
 				buffer.append(" integer ");
 			} else if ("Long".equals(idField.getJavaType())) {
@@ -1859,7 +1936,7 @@ public class DBUtils {
 					buffer.append(" (50) ");
 				}
 			}
-		} else if ("oracle".equalsIgnoreCase(dbType)) {
+		} else if (ORACLE.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(idField.getJavaType())) {
 				buffer.append(" INTEGER ");
 			} else if ("Long".equals(idField.getJavaType())) {
@@ -1876,7 +1953,7 @@ public class DBUtils {
 					buffer.append(" (50) ");
 				}
 			}
-		} else if ("mysql".equalsIgnoreCase(dbType)) {
+		} else if (MYSQL.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(idField.getJavaType())) {
 				buffer.append(" integer ");
 			} else if ("Long".equals(idField.getJavaType())) {
@@ -1893,7 +1970,7 @@ public class DBUtils {
 					buffer.append(" (50) ");
 				}
 			}
-		} else if ("sqlserver".equalsIgnoreCase(dbType)) {
+		} else if (SQLSERVER.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(idField.getJavaType())) {
 				buffer.append(" integer ");
 			} else if ("Long".equals(idField.getJavaType())) {
@@ -1910,7 +1987,7 @@ public class DBUtils {
 					buffer.append(" (50) ");
 				}
 			}
-		} else if ("postgresql".equalsIgnoreCase(dbType)) {
+		} else if (POSTGRESQL.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(idField.getJavaType())) {
 				buffer.append(" integer ");
 			} else if ("Long".equals(idField.getJavaType())) {
@@ -1927,7 +2004,7 @@ public class DBUtils {
 					buffer.append(" (50) ");
 				}
 			}
-		} else if ("h2".equalsIgnoreCase(dbType)) {
+		} else if (H2.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(idField.getJavaType())) {
 				buffer.append(" integer ");
 			} else if ("Long".equals(idField.getJavaType())) {
@@ -1944,7 +2021,7 @@ public class DBUtils {
 					buffer.append(" (50) ");
 				}
 			}
-		} else if ("sqlite".equalsIgnoreCase(dbType)) {
+		} else if (SQLITE.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(idField.getJavaType())) {
 				buffer.append(" INTEGER ");
 			} else if ("Long".equals(idField.getJavaType())) {
@@ -1956,7 +2033,7 @@ public class DBUtils {
 			} else if ("String".equals(idField.getJavaType())) {
 				buffer.append(" TEXT ");
 			}
-		} else if ("hbase".equalsIgnoreCase(dbType)) {
+		} else if (HBASE.equalsIgnoreCase(dbType)) {
 			if ("Integer".equals(idField.getJavaType())) {
 				buffer.append(" INTEGER ");
 			} else if ("Long".equals(idField.getJavaType())) {
@@ -2113,13 +2190,13 @@ public class DBUtils {
 			String dbType = DBConnectionFactory.getDatabaseType(connection);
 			DatabaseMetaData metaData = connection.getMetaData();
 
-			if ("h2".equals(dbType)) {
+			if (H2.equals(dbType)) {
 				tableName = tableName.toUpperCase();
-			} else if ("oracle".equals(dbType)) {
+			} else if (ORACLE.equals(dbType)) {
 				tableName = tableName.toUpperCase();
-			} else if ("db2".equals(dbType)) {
+			} else if (DB2.equals(dbType)) {
 				tableName = tableName.toUpperCase();
-			} else if ("mysql".equals(dbType)) {
+			} else if (MYSQL.equals(dbType)) {
 				tableName = tableName.toLowerCase();
 			} else if (POSTGRESQL.equals(dbType)) {
 				tableName = tableName.toLowerCase();
@@ -2355,7 +2432,7 @@ public class DBUtils {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(DBUtils.isAllowedSql(" select * from  userinfo"));
+		System.out.println(DBUtils.isAllowedSql(" select * from  sys_user"));
 		List<ColumnDefinition> columns = new java.util.ArrayList<ColumnDefinition>();
 		ColumnDefinition c1 = new ColumnDefinition();
 		c1.setColumnName("choosepublishflag");
@@ -2394,15 +2471,15 @@ public class DBUtils {
 			try {
 				String sql = "";
 				String dbType = DBConnectionFactory.getDatabaseType(connection);
-				if ("mysql".equalsIgnoreCase(dbType)) {
+				if (MYSQL.equalsIgnoreCase(dbType)) {
 					sql = " rename table " + sourceTable + " to " + targetTable;
-				} else if ("db2".equalsIgnoreCase(dbType)) {
+				} else if (DB2.equalsIgnoreCase(dbType)) {
 					sql = " rename table " + sourceTable + " to " + targetTable;
-				} else if ("oracle".equalsIgnoreCase(dbType)) {
+				} else if (ORACLE.equalsIgnoreCase(dbType)) {
 					sql = " alter table " + sourceTable + " rename to " + targetTable;
-				} else if ("postgresql".equalsIgnoreCase(dbType)) {
+				} else if (POSTGRESQL.equalsIgnoreCase(dbType)) {
 					sql = " alter table " + sourceTable + " rename to " + targetTable;
-				} else if ("sqlserver".equalsIgnoreCase(dbType)) {
+				} else if (SQLSERVER.equalsIgnoreCase(dbType)) {
 					sql = " EXEC sp_rename '" + sourceTable + "', '" + targetTable + "'";
 				}
 				if (StringUtils.isNotEmpty(sql)) {

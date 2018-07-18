@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.flowable.entity.IdentityMgmt">
+
+	<resultMap id="userResultMap" type="com.glaf.core.identity.impl.UserImpl">
+		<id property="actorId" column="USERID" jdbcType="VARCHAR" />
+		<result property="name" column="USERNAME" jdbcType="VARCHAR" />
+		<result property="organizationId" column="ORGANIZATIONID"
+			jdbcType="BIGINT" />
+		<result property="mail" column="EMAIL" jdbcType="VARCHAR" />
+		<result property="mobile" column="MOBILE" jdbcType="VARCHAR" />
+		<result property="adminFlag" column="ISSYSTEM" jdbcType="VARCHAR" />
+		<result property="accountType" column="ACCOUNTTYPE" jdbcType="INTEGER" />
+		<result property="tenantId" column="TENANTID" jdbcType="VARCHAR" />
+		<result property="userType" column="USERTYPE" jdbcType="INTEGER" />
+		<result property="token" column="TOKEN" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="getAgents" resultType="com.glaf.core.identity.impl.AgentImpl"
+		parameterType="string">
+
+		select ASSIGNFROM_ as assignFrom, ASSIGNTO_ as assignTo,
+		OBJECTID_ as objectId, OBJECTVALUE_ as objectValue,
+		PROCESSNAME_ as
+		processName, TASKNAME_ as taskName,
+		AGENTTYPE_ as agentType, STARTDATE_
+		as startDate,
+		ENDDATE_ as endDate
+		from sys_agent
+		where ASSIGNTO_ =
+		#{assignTo}
+
+	</select>
+
+	<select id="getMembershipUsers" resultMap="userResultMap"
+		parameterType="com.glaf.base.modules.sys.query.MembershipQuery">
+
+		SELECT x.*
+		FROM SYS_USER x
+
+		<if test="roleId != null">
+			INNER JOIN SYS_USER_ROLE r
+			ON x.USERID = r.USERID
+		</if>
+
+		WHERE 1=1
+		and x.DELETEFLAG = 0
+
+		<if test="roleId != null">
+			AND r.ROLEID = #{roleId}
+		</if>
+
+		<if test="nodeId != null">
+			AND ( x.ORGANIZATIONID = #{nodeId} )
+		</if>
+
+		<if test="nodeIds != null and nodeIds.size !=0">
+			AND x.ORGANIZATIONID IN
+			<foreach item="x_nodeId" index="index" collection="nodeIds"
+				open="(" separator="," close=")">
+				#{x_nodeId}
+			</foreach>
+		</if>
+
+		<if test="tenantId != null">
+			AND ( x.TENANTID = #{tenantId} )
+		</if>
+
+	</select>
+
+
+</mapper>

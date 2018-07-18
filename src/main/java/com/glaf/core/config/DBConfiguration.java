@@ -42,6 +42,7 @@ import com.glaf.core.dialect.OracleDialect;
 import com.glaf.core.dialect.PostgreSQLDialect;
 import com.glaf.core.dialect.SQLServer2008Dialect;
 import com.glaf.core.dialect.SQLiteDialect;
+import com.glaf.core.dialect.VoltdbDialect;
 import com.glaf.core.domain.util.ConnectionDefinitionJsonFactory;
 import com.glaf.core.el.ExpressionTools;
 import com.glaf.core.jdbc.DBConnectionFactory;
@@ -139,7 +140,7 @@ public class DBConfiguration {
 					dataSourceProperties.put(name, conn);
 				}
 			} catch (Exception ex) {
-				
+
 			}
 		}
 	}
@@ -235,7 +236,7 @@ public class DBConfiguration {
 					dataSourceProperties.put(name, conn);
 				}
 			} catch (Exception ex) {
-				
+
 			}
 		}
 	}
@@ -392,6 +393,8 @@ public class DBConfiguration {
 					dialects.put(key, new PostgreSQLDialect());
 				} else if (StringUtils.equals(dbType, "db2")) {
 					dialects.put(key, new DB2Dialect());
+				} else if (StringUtils.equals(dbType, "voltdb")) {
+					dialects.put(key, new VoltdbDialect());
 				}
 			}
 		}
@@ -419,6 +422,8 @@ public class DBConfiguration {
 			dbType = "sqlite";
 		} else if (StringUtils.contains(url, "jdbc:phoenix:")) {
 			dbType = "hbase";
+		} else if (StringUtils.contains(url, "jdbc:voltdb:")) {
+			dbType = "voltdb";
 		}
 		return dbType;
 	}
@@ -488,6 +493,7 @@ public class DBConfiguration {
 		dialectMappings.setProperty("sqlserver", "com.glaf.core.dialect.SQLServer2008Dialect");
 		dialectMappings.setProperty("sqlite", "com.glaf.core.dialect.SQLiteDialect");
 		dialectMappings.setProperty("db2", "com.glaf.core.dialect.DB2Dialect");
+		dialectMappings.setProperty("voltdb", "com.glaf.core.dialect.VoltdbDialect");
 		return dialectMappings;
 	}
 
@@ -500,6 +506,7 @@ public class DBConfiguration {
 		dialects.put("oracle", new OracleDialect());
 		dialects.put("postgresql", new PostgreSQLDialect());
 		dialects.put("db2", new DB2Dialect());
+		dialects.put("voltdb", new VoltdbDialect());
 		return dialects;
 	}
 
@@ -591,7 +598,7 @@ public class DBConfiguration {
 					}
 				}
 			} catch (Exception ex) {
-				
+
 				logger.error(ex);
 			} finally {
 				loading.set(false);
@@ -655,7 +662,7 @@ public class DBConfiguration {
 											}
 										}
 									} catch (Exception ex) {
-										
+
 										logger.error(ex);
 									}
 								}
@@ -664,7 +671,7 @@ public class DBConfiguration {
 					}
 				}
 			} catch (Exception ex) {
-				
+
 				logger.error(ex);
 			} finally {
 				loading.set(false);
@@ -788,7 +795,7 @@ public class DBConfiguration {
 						props.setProperty(JDBC_TYPE, dbType);
 					}
 				} catch (Exception ex) {
-					
+
 					logger.error(ex);
 				}
 			}

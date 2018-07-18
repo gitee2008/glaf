@@ -21,6 +21,8 @@ package com.glaf.core.base;
 public class BaseItem implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
+	protected String text;
+
 	protected String name;
 
 	protected String value;
@@ -50,6 +52,10 @@ public class BaseItem implements java.io.Serializable {
 		return name;
 	}
 
+	public String getText() {
+		return text;
+	}
+
 	public String getValue() {
 		return value;
 	}
@@ -64,6 +70,10 @@ public class BaseItem implements java.io.Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public void setValue(String value) {

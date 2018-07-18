@@ -198,13 +198,10 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/consul-api.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/gson.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-bpmn-converter.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-bpmn-layout.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-bpmn-model.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-cmmn-api.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-cmmn-model.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-common-rest.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-crystalball.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-diagram-rest.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-dmn-api.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-dmn-engine-configurator.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-dmn-engine.jar"/>
@@ -216,7 +213,6 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-engine-common-api.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-engine-common.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-engine.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-explorer.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-form-api.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-form-engine-configurator.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-form-engine.jar"/>
@@ -225,7 +221,6 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-form-rest.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-form-spring-configurator.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-form-spring.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-groovy-script-static-engine.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-http.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-identitylink-service-api.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-identitylink-service.jar"/>
@@ -236,10 +231,8 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-job-service-api.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-job-service.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-json-converter.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-modeler.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-process-validation.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-rest.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-simple-workflow.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-spring-common.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-spring.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-task-service-api.jar"/>
@@ -250,5 +243,7 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/pinyin4j.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/aliyun-java-sdk-core.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/aliyun-java-sdk-dysmsapi.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-idm-engine-configurator.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-idm-spring-configurator.jar"/>
 	<classpathentry kind="output" path="webapps/glaf/WEB-INF/classes"/>
 </classpath>

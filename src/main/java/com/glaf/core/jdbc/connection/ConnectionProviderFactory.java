@@ -189,6 +189,8 @@ public final class ConnectionProviderFactory {
 		if (StringUtils.equals(properties.getProperty(DBConfiguration.JDBC_DRIVER), "org.sqlite.JDBC")) {
 			provider = initializeConnectionProviderFromConfig(
 					"com.glaf.core.jdbc.connection.HikariCPConnectionProvider");
+		} else if (StringUtils.equals(properties.getProperty(DBConfiguration.JDBC_DRIVER), "org.voltdb.jdbc.Driver")) {
+			provider = initializeConnectionProviderFromConfig("com.glaf.core.jdbc.connection.DruidConnectionProvider");
 		}
 
 		if (connectionProviderInjectionData != null && connectionProviderInjectionData.size() != 0) {
