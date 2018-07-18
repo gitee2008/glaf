@@ -1043,6 +1043,11 @@
 			<artifactId>okhttp</artifactId>
 			<version>3.11.0</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.flowable</groupId>
+		    <artifactId>flowable-engine</artifactId>
+		    <version>6.3.1</version>
+		</dependency>
 		<!-- <dependency>
 			<groupId>com.highcharts.export</groupId>
 			<artifactId>highcharts-export-convert</artifactId>
