@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glaf.remote.mapper.RemotePermissionMapper">
+
+	<resultMap id="remotePermissionResultMap"
+		type="com.glaf.remote.domain.RemotePermission">
+		<id property="id" column="ID_" jdbcType="BIGINT" />
+		<result property="remoteIP" column="REMOTEIP_"
+			jdbcType="VARCHAR" />
+		<result property="type" column="TYPE_" jdbcType="VARCHAR" />
+		<result property="createBy" column="CREATEBY_"
+			jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertRemotePermission"
+		parameterType="com.glaf.remote.domain.RemotePermission">
+		insert into SYS_REMOTE_PERMISSION
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="remoteIP != null">
+				,REMOTEIP_
+			</if>
+			<if test="type != null">
+				,TYPE_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=BIGINT}
+
+			<if test="remoteIP != null">
+				,#{remoteIP, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				,#{type, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<delete id="deleteRemotePermissionById" parameterType="long">
+		delete
+		from SYS_REMOTE_PERMISSION
+		where ID_ = #{id}
+	</delete>
+
+
+	<delete id="deleteRemotePermissions" parameterType="string">
+		delete from
+		SYS_REMOTE_PERMISSION
+		where TYPE_ = #{type}
+	</delete>
+
+
+	<select id="getRemotePermissionById" parameterType="long"
+		resultMap="remotePermissionResultMap">
+		select * from SYS_REMOTE_PERMISSION where ID_ = #{id}
+	</select>
+
+
+	<select id="getRemotePermissions"
+		parameterType="com.glaf.remote.query.RemotePermissionQuery"
+		resultMap="remotePermissionResultMap">
+		select E.*
+		<include refid="selectRemotePermissionsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.CREATETIME_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getRemotePermissionCount"
+		parameterType="com.glaf.remote.query.RemotePermissionQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectRemotePermissionsSql" />
+	</select>
+
+
+	<sql id="selectRemotePermissionsSql">
+
+		from SYS_REMOTE_PERMISSION E
+
+		<where>
+			1 = 1
+
+			<if test="remoteIP != null and remoteIP != '' ">
+				and E.REMOTEIP_ = #{remoteIP}
+			</if>
+
+			<if test="remoteIPLike != null and remoteIPLike != '' ">
+				and E.REMOTEIP_ like #{remoteIPLike}
+			</if>
+
+			<if test="type != null and type != '' ">
+				and E.TYPE_ = #{type}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

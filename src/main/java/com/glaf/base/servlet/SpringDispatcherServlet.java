@@ -115,7 +115,7 @@ public class SpringDispatcherServlet extends DispatcherServlet {
 				/**
 				 * 取不到用户会话信息，跳转到登录页
 				 */
-				if (!StringUtils.startsWith(uri, request.getContextPath() + "/login")) {
+				if (!(StringUtils.contains(uri, "/login") || StringUtils.contains(uri, "/static/"))) {
 					logger.debug("->uri:" + uri);
 					response.sendRedirect(request.getContextPath() + "/login");
 					return;
