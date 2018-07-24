@@ -144,13 +144,5 @@ public class InitBaseDataServlet extends HttpServlet {
 			ex.printStackTrace();
 			logger.error("更新用户数据错误！");
 		}
-
-		try {
-			logger.info("------------update food pinyin---------------");
-			PinyinUtils.processFoodComposition();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			logger.error("更新食物成分数据错误！");
-		}
 	}
 }
