@@ -19,7 +19,7 @@
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.format_sql">true</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
-				<prop key="hibernate.auto_quote_keyword">true</prop>
+				<prop key="hibernate.auto_quote_keyword">false</prop>
 				<prop key="hibernate.jdbc.lob.non_contextual_creation">true</prop>
 				<!--<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL95Dialect</prop> -->
 			</props>

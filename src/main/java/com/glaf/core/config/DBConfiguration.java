@@ -662,7 +662,6 @@ public class DBConfiguration {
 											}
 										}
 									} catch (Exception ex) {
-
 										logger.error(ex);
 									}
 								}
@@ -671,7 +670,6 @@ public class DBConfiguration {
 					}
 				}
 			} catch (Exception ex) {
-
 				logger.error(ex);
 			} finally {
 				loading.set(false);
@@ -795,7 +793,6 @@ public class DBConfiguration {
 						props.setProperty(JDBC_TYPE, dbType);
 					}
 				} catch (Exception ex) {
-
 					logger.error(ex);
 				}
 			}

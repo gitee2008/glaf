@@ -41,7 +41,7 @@ public class GenaralDBToSQLite {
 
 	public void export(String systemName, List<String> tables, String sqliteDB) {
 		List<ColumnDefinition> columns = null;
-		TableToSQLite tableSqlDB = new TableToSQLite();
+		TableToSQLite tableToSQLite = new TableToSQLite();
 		// List<String> tables = new ArrayList<String>();
 		// tables.add("SYS_KEY");
 		Map<String, String> tableErrMap = new HashMap<String, String>();
@@ -54,6 +54,12 @@ public class GenaralDBToSQLite {
 				List<String> errorTables = new ArrayList<String>();
 				for (String tableName : tables) {
 					if (StringUtils.equalsIgnoreCase(tableName, "sys_scheduler_execution")) {
+						continue;
+					}
+					if (StringUtils.startsWithIgnoreCase(tableName, "data_file")) {
+						continue;
+					}
+					if (StringUtils.endsWithIgnoreCase(tableName, "_history")) {
 						continue;
 					}
 					if (StringUtils.endsWithIgnoreCase(tableName, "_log")) {
@@ -72,11 +78,12 @@ public class GenaralDBToSQLite {
 									break;
 								}
 							}
-							tableSqlDB.execute(systemName, targetDataSource, tableName, batchSize);
+							tableToSQLite.execute(systemName, targetDataSource, tableName, batchSize);
 						}
 					} catch (Exception ex) {
 						errorTables.add(tableName);
 						tableErrMap.put(tableName, ex.getMessage());
+						ex.printStackTrace();
 						logger.error(ex);
 					}
 				}
@@ -92,6 +99,9 @@ public class GenaralDBToSQLite {
 					logger.info("Data Export OK!");
 					logger.info("数据导出成功！");
 				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				logger.error(ex);
 			} finally {
 				running.set(false);
 				if (targetDataSource != null) {

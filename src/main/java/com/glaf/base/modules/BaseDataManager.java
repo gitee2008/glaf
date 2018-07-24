@@ -49,7 +49,7 @@ import com.glaf.core.config.Environment;
 import com.glaf.core.config.SystemProperties;
 import com.glaf.core.context.ContextFactory;
 import com.glaf.core.domain.ColumnDefinition;
-import com.glaf.core.entity.hibernate.HibernateBeanFactory;
+import com.glaf.core.entity.jpa.EntitySchemaUpdate;
 import com.glaf.core.service.EntityService;
 import com.glaf.core.tree.helper.TreeUpdateBean;
 import com.glaf.core.util.DBUtils;
@@ -646,28 +646,27 @@ public class BaseDataManager {
 	}
 
 	/**
-	 * 初始化内存中基础数据
+	 * 初始化基础数据
 	 * 
 	 */
 	protected void initBaseData() {
 		logger.debug("----------------initBaseData---------------------");
-
 		try {
 			boolean updateSchema = true;
-			List<ColumnDefinition> columns = DBUtils.getColumnDefinitions("SYS_TREE");
+			List<ColumnDefinition> columns = DBUtils.getColumnDefinitions("SYS_USER");
 			if (columns != null && !columns.isEmpty()) {
 				for (ColumnDefinition column : columns) {
-					if (StringUtils.equalsIgnoreCase(column.getColumnName(), "LEVEL")) {
+					if (StringUtils.equalsIgnoreCase(column.getColumnName(), "LOCKED")) {
 						updateSchema = false;
 						break;
 					}
 				}
 			}
-
 			if (updateSchema) {
-				HibernateBeanFactory.reload();
+				logger.debug("-----------------------SchemaUpdate-------------------");
+				EntitySchemaUpdate bean = new EntitySchemaUpdate();
+				bean.updateDDL();
 			}
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

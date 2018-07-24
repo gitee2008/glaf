@@ -25,12 +25,10 @@ import java.io.StringReader;
 import java.sql.*;
 import java.util.*;
 
- 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
- 
 import com.glaf.core.domain.*;
 import com.glaf.core.security.LoginContext;
 import com.glaf.core.util.DBUtils;
@@ -117,7 +115,7 @@ public class BulkInsertBean {
 			String dbType = DBConnectionFactory.getDatabaseType(conn);
 			psmt = conn.prepareStatement(insertBuffer.toString());
 			for (int k = 0, l = dataList.size(); k < l; k++) {
-				//Map<String, Object> dataMap = dataList.get(k);
+				// Map<String, Object> dataMap = dataList.get(k);
 				Map<String, Object> rowMap = dataList.get(k);
 				dataMap = new LowerLinkedMap();
 				dataMap.putAll(rowMap);
@@ -148,7 +146,12 @@ public class BulkInsertBean {
 						}
 						break;
 					case "Date":
-						psmt.setTimestamp(index++, ParamUtils.getTimestamp(dataMap, columnName));
+						Timestamp t = ParamUtils.getTimestamp(dataMap, columnName);
+						if (t != null) {
+							psmt.setTimestamp(index++, t);
+						} else {
+							psmt.setNull(index++, java.sql.Types.TIMESTAMP);
+						}
 						break;
 					case "String":
 						psmt.setString(index++, ParamUtils.getString(dataMap, columnName));
@@ -276,7 +279,7 @@ public class BulkInsertBean {
 			psmt = conn.prepareStatement(insertBuffer.toString());
 			for (int k = 0, l = dataList.size(); k < l; k++) {
 				index = 1;
-				//Map<String, Object> dataMap = dataList.get(k);
+				// Map<String, Object> dataMap = dataList.get(k);
 				Map<String, Object> rowMap = dataList.get(k);
 				dataMap = new LowerLinkedMap();
 				dataMap.putAll(rowMap);
@@ -307,7 +310,12 @@ public class BulkInsertBean {
 						}
 						break;
 					case "Date":
-						psmt.setTimestamp(index++, ParamUtils.getTimestamp(dataMap, columnName));
+						Timestamp t = ParamUtils.getTimestamp(dataMap, columnName);
+						if (t != null) {
+							psmt.setTimestamp(index++, t);
+						} else {
+							psmt.setNull(index++, java.sql.Types.TIMESTAMP);
+						}
 						break;
 					case "String":
 						psmt.setString(index++, ParamUtils.getString(dataMap, columnName));

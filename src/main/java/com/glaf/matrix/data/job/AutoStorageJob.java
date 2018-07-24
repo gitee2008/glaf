@@ -150,6 +150,7 @@ public class AutoStorageJob extends BaseJob {
 				}
 			}
 		}
+		lastExecuteTime.set(System.currentTimeMillis());
 	}
 
 }

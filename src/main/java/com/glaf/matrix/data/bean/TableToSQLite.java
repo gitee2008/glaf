@@ -32,8 +32,8 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.glaf.core.config.BaseConfiguration;
 import com.glaf.core.config.Configuration;
@@ -48,7 +48,7 @@ import com.glaf.core.util.LowerLinkedMap;
 public class TableToSQLite {
 	protected static Configuration conf = BaseConfiguration.create();
 
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	protected static final Log logger = LogFactory.getLog(TableToSQLite.class);
 
 	public TableToSQLite() {
 
@@ -140,7 +140,7 @@ public class TableToSQLite {
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			logger.error("execute sql error", ex);
+			logger.error("execute export error", ex);
 			throw new RuntimeException(ex);
 		} finally {
 			JdbcUtils.close(sourceRS);

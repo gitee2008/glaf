@@ -19,6 +19,7 @@
 package com.glaf.core.context;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -36,11 +37,14 @@ import com.glaf.core.config.BaseConfiguration;
 import com.glaf.core.config.Configuration;
 import com.glaf.core.config.SystemConfig;
 import com.glaf.core.config.SystemProperties;
+import com.glaf.core.domain.ColumnDefinition;
+import com.glaf.core.entity.jpa.EntitySchemaUpdate;
 import com.glaf.core.factory.DatabaseFactory;
 import com.glaf.core.factory.SysLogFactory;
 import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.startup.BootstrapManager;
 import com.glaf.core.util.Constants;
+import com.glaf.core.util.DBUtils;
 import com.glaf.core.util.FileUtils;
 import com.glaf.core.util.QuartzUtils;
 import com.glaf.core.util.StringTools;
@@ -84,6 +88,25 @@ public class StartupListener extends ContextLoaderListener implements ServletCon
 	}
 
 	public void beforeContextInitialized(ServletContext context) {
+		try {
+			boolean updateSchema = true;
+			List<ColumnDefinition> columns = DBUtils.getColumnDefinitions("SYS_PROPERTY");
+			if (columns != null && !columns.isEmpty()) {
+				for (ColumnDefinition column : columns) {
+					if (StringUtils.equalsIgnoreCase(column.getColumnName(), "LOCKED_")) {
+						updateSchema = false;
+						break;
+					}
+				}
+			}
+			if (updateSchema) {
+				logger.debug("-----------------------SchemaUpdate-------------------");
+				EntitySchemaUpdate bean = new EntitySchemaUpdate();
+				bean.updateDDL();
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		try {
 			BootstrapManager.getInstance().startup(context);
 		} catch (Exception ex) {

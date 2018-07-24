@@ -354,6 +354,7 @@ public class TableMgrController {
 	}
 
 	// http://127.0.0.1:8080/glaf/sys/tableMgr/exportSysTables?systemName=db_401
+	// /sys/tableMgr/exportSysTables?systemName=db_602
 	@RequestMapping("/exportSysTables")
 	@ResponseBody
 	public void exportSysTables(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -363,18 +364,23 @@ public class TableMgrController {
 			GenaralDBToSQLite dbToSqliteDB = new GenaralDBToSQLite();
 			List<String> tables = DBUtils.getTables(systemName);
 			List<String> sysTables = new ArrayList<String>();
-			sysTables.add("health_dietary_item");
+			sysTables.add("health_dishes");
+			sysTables.add("health_dishes_item");
 			sysTables.add("health_dietary_template");
+			sysTables.add("health_dietary_item");
 			sysTables.add("health_food_adi");
 			sysTables.add("health_food_composition");
+			sysTables.add("health_food_favorite");
 			sysTables.add("health_food_dri");
 			sysTables.add("health_food_dri_percent");
 			sysTables.add("health_grade_info");
-			sysTables.add("health_person_info");
 			sysTables.add("health_grade_privilege");
 			sysTables.add("health_growth_standard");
+			sysTables.add("health_person");
 			sysTables.add("health_person_linkman");
+			sysTables.add("health_person_info");
 			sysTables.add("health_repast_person");
+
 			for (String tbl : tables) {
 				if (StringUtils.startsWithIgnoreCase(tbl, "sys_")) {
 					sysTables.add(tbl);

@@ -41,8 +41,11 @@ public class InitBaseDataServlet extends HttpServlet {
 
 	private BaseDataManager bdm = BaseDataManager.getInstance();// 基础信息管理
 
+	@Override
 	public void init() {
+		logger.info("---------------------InitBaseDataServlet----------------------");
 		if (!DBConnectionFactory.checkConnection()) {
+			logger.error("数据库连接错误，请检查配置！！！");
 			return;
 		}
 		long startTime = System.currentTimeMillis();
@@ -140,6 +143,14 @@ public class InitBaseDataServlet extends HttpServlet {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			logger.error("更新用户数据错误！");
+		}
+
+		try {
+			logger.info("------------update food pinyin---------------");
+			PinyinUtils.processFoodComposition();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			logger.error("更新食物成分数据错误！");
 		}
 	}
 }

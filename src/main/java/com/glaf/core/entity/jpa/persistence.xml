@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence persistence_2_0.xsd" version="2.0">  
      <persistence-unit name="glaf" transaction-type="RESOURCE_LOCAL">  
-         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>          
+         <provider>#{provider}</provider>          
          <properties>  
              <property name="javax.persistence.jdbc.driver" value="#{jdbc.driver}"/>  
              <property name="javax.persistence.jdbc.url" value="#{jdbc.url}"/>  
@@ -10,8 +10,13 @@
              <property name="hibernate.hbm2ddl.auto" value="update"/>
              <property name="hibernate.show_sql" value="true"/>
              <property name="hibernate.format_sql" value="true"/>
-             <property name="hibernate.auto_quote_keyword" value="true"/>
+             <property name="hibernate.auto_quote_keyword" value="false"/>
              <property name="hibernate.jdbc.lob.non_contextual_creation" value="true"/>
+             <property name="eclipselink.weaving" value="false" />
+             <property name="eclipselink.show_sql" value="true" />
+             <property name="eclipseink.logging.level" value="INFO" />
+             <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/> 
+             <property name="eclipselink.ddl-generation.output-mode" value="database" />
          </properties>  
      </persistence-unit>  
  </persistence>

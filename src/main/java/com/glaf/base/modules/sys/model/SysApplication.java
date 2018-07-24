@@ -110,7 +110,7 @@ public class SysApplication implements Serializable, JSONable, TreeModel {
 	/**
 	 * 系统标识
 	 */
-	@Column(name = "SYSFLAG_", length = 1)
+	@Column(name = "SYSFLAG_", length = 10)
 	protected String sysFlag;
 
 	/**

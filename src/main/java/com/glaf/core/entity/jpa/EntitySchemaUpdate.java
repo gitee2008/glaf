@@ -24,11 +24,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.glaf.core.config.DBConfiguration;
 import com.glaf.core.config.SystemProperties;
+import com.glaf.core.entity.hibernate.HibernateBeanFactory;
 import com.glaf.core.util.FileUtils;
 import com.glaf.core.util.Resources;
 import com.glaf.core.util.StringTools;
@@ -40,11 +42,21 @@ public class EntitySchemaUpdate {
 	public void updateDDL() {
 		Properties props = DBConfiguration.getDefaultDataSourceProperties();
 		if (props != null) {
-			this.updateDDL(props);
+			boolean success = false;
+			try {
+				success = this.updateDDL(props);
+				success = true;
+			} catch (Exception ex) {
+				success = false;
+			}
+			if (!success) {
+				HibernateBeanFactory.reload();
+			}
 		}
 	}
 
-	public void updateDDL(java.util.Properties props) {
+	public boolean updateDDL(java.util.Properties props) {
+		boolean success = false;
 		EntityManagerFactory factory = null;
 		EntityManager em = null;
 		java.io.InputStream input = null;
@@ -52,6 +64,13 @@ public class EntitySchemaUpdate {
 			input = Resources.getResourceAsStream("com/glaf/core/entity/jpa/persistence.xml");
 			if (input != null) {
 				String content = new String(FileUtils.getBytes(input));
+
+				String provider = "org.hibernate.jpa.HibernatePersistenceProvider";
+				if (StringUtils.equals("eclipselink", System.getProperty("jpa.provider"))) {
+					provider = "org.eclipse.persistence.jpa.PersistenceProvider";
+				}
+
+				content = StringTools.replace(content, "#{provider}", provider);
 
 				String url = props.getProperty("jdbc.url");
 				url = StringTools.replace(url, "&", "&amp;");
@@ -64,16 +83,18 @@ public class EntitySchemaUpdate {
 				FileUtils.mkdirs(path);
 				String filename = path + "/persistence.xml";
 				logger.info("persistence filename:" + filename);
+				//logger.info("\n\n" + content);
 				FileUtils.save(filename, content.getBytes());
 				factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 				em = factory.createEntityManager();
 				em.getTransaction().begin();
 				em.getTransaction().commit();
+				success = true;
 			} else {
 				logger.info("template persistence.xml not found.");
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			throw new RuntimeException(ex);
 		} finally {
 			if (em != null) {
 				em.close();
@@ -82,6 +103,7 @@ public class EntitySchemaUpdate {
 				factory.close();
 			}
 		}
+		return success;
 	}
 
 	public void updateDDL(String systemName) {

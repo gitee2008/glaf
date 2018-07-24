@@ -1463,7 +1463,6 @@ public class DBUtils {
 			conn = DBConnectionFactory.getConnection(systemName);
 			return getColumnDefinitions(conn, tableName);
 		} catch (Exception ex) {
-
 			throw new RuntimeException(ex);
 		} finally {
 			JdbcUtils.close(conn);
