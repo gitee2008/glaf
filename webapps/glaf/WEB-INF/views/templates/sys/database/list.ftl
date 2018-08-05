@@ -21,10 +21,9 @@
 				idField: 'id',
 				columns:[[
 					    {title:'编号', field:'id', width:60, sortable:false},
-					    {title:'主题', field:'title', width:180, sortable:false},
-					    {title:'标段', field:'section', width:90, sortable:false},
+					    {title:'主题', field:'title', width:150, sortable:false},
 					    {title:'别名', field:'mapping', width:90, sortable:false},
-					    {title:'主机', field:'host', width:120, sortable:false},
+					    {title:'主机', field:'host', width:240, sortable:false},
 					    {title:'端口', field:'port', width:60, sortable:false},
 					    {title:'库名', field:'dbname', width:120, sortable:false},
 					    {title:'数据库类型', field:'type', width:90, sortable:false},

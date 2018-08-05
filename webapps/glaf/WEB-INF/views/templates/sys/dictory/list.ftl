@@ -73,10 +73,10 @@
 				singleSelect:true,
 				idField:'id',
 				columns:[[
-	                {title:'序号',field:'startIndex',width:80,sortable:true},
-					{title:'名称',field:'name', width:150},
-					{title:'代码',field:'code', width:150},
-					{title:'属性值',field:'value', width:120},
+	                {title:'序号',field:'startIndex',width:80, sortable:false},
+					{title:'名称',field:'name', width:150, sortable:true},
+					{title:'代码',field:'code', width:150, sortable:true},
+					{title:'属性值',field:'value', width:120, sortable:true},
 					{title:'描述',field:'desc', width:180},
 					{title:'是否有效',field:'locked', width:90, formatter:formatterStatus}
 				]],
@@ -221,8 +221,8 @@
 		    var rowIds = ids.join(',');
 			jQuery.ajax({
 				   type: "POST",
-				   url: '${contextPath}/sys/dictory/delete?rowIds='+rowIds,
-				   dataType:  'json',
+				   url: '${contextPath}/sys/dictory/delete?id='+rowIds,
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },

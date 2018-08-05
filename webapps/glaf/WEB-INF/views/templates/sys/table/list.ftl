@@ -86,26 +86,21 @@
 		}
 	}
 
-
-	function exportData(){
-		var dbType = jQuery('#dbType').val();
-		var list = document.exportForm.selectedTables; 
-		var itemId = "";
-        var len02 = list.length;
-	    for (var i=0;i<len02;i++) {
-           itemId = itemId+list.options[i].value+",";
-	    }
-        //alert(itemId);
-	    document.getElementById("exportTables").value = itemId;
-		document.exportForm.action="${contextPath}/sys/table/exportData?dbType="+dbType;
-		document.exportForm.submit(); 
-	}
-
 	function exportSysTables(){
         var dbType = jQuery('#dbType').val();
 		if(confirm("确定导出'"+dbType+"'数据库的初始化脚本吗？")){
-		  document.iForm.action="${contextPath}/sys/table/exportSysTables?dbType="+dbType;
-		  document.iForm.submit();
+		    document.iForm.action="${contextPath}/sys/table/exportSysTables?dbType="+dbType;
+		    document.iForm.submit();
+		}
+	}
+
+
+	function exportAllInsertScripts(){
+		var dbType = jQuery('#dbType').val();
+		if(confirm("确定导出'"+dbType+"'数据库的初始化脚本吗？")){
+		    document.iForm.method="post";
+		    document.iForm.action="${contextPath}/sys/table/exportAllInsertScripts?dbType="+dbType;
+		    document.iForm.submit(); 
 		}
 	}
 
@@ -117,16 +112,15 @@
 			ids.push(rows[i].tablename);
 		}
 		if(ids.length > 0 ){
-		    var x_ids = ids.join(',');
+		    var tables = ids.join(',');
 			var dbType = jQuery('#dbType').val();
-			jQuery("#tables").val(x_ids);
-			var list = document.exportForm.selectedTables;     
-			for(var i=0; i<rows.length; i++){
-				//alert(rows[i].tablename);
-                list.options[i].value = rows[i].tablename+"";
-				list.options[i].text = rows[i].tablename+"";
+			//jQuery("#tables").val(tables);
+			if(confirm("确定导出'"+dbType+"'数据库的初始化脚本吗？")){
+				document.getElementById("tables").value=tables;
+				document.iForm.method="post";
+				document.iForm.action="${contextPath}/sys/table/exportInsertScripts?dbType="+dbType;
+				document.iForm.submit();
 			}
-			jQuery('#exp_dlg').dialog('open').dialog('setTitle','导出插入语句');
 		} else {
 			alert("请选择至少一条记录。");
 		}
@@ -223,40 +217,8 @@
 
 	 function onRowClick(rowIndex, row){
 	    var link = '${contextPath}/sys/table/resultList?q=1&tableName_enc='+row.tableName_enc;
-	    //art.dialog.open(link, { height: 425, width: 880, title: row.tablename+"列表信息", lock: true, scrollbars:"no" }, false);
-	}
-	 
-
-	function moveUp() {
-	    var list = document.exportForm.selectedTables;
-		if (list.length > 0) {
-			var selectedIndex = list.selectedIndex;
-			if( selectedIndex > 0 ) {
-				var tmpValue = list.options[selectedIndex - 1].value;
-				var tmpText = list.options[selectedIndex - 1].text;
-				list.options[selectedIndex - 1].value = list.options[selectedIndex].value;
-				list.options[selectedIndex - 1].text = list.options[selectedIndex].text;
-				list.options[selectedIndex].value = tmpValue;
-				list.options[selectedIndex].text = tmpText;
-				list.options[selectedIndex - 1].selected = true;
-			}
-		}
-	 }
-
-	function moveDown() {
-		var list = document.exportForm.selectedTables;     
-		if ( list.length > 0) {
-			var selectedIndex = list.selectedIndex;
-			if(selectedIndex < (list.length - 1) ) {
-				var tmpValue = list.options[selectedIndex].value;
-				var tmpText = list.options[selectedIndex].text;
-				list.options[selectedIndex].value = list.options[selectedIndex  + 1].value;
-				list.options[selectedIndex].text = list.options[selectedIndex  + 1].text;
-				list.options[selectedIndex + 1].value = tmpValue;
-				list.options[selectedIndex + 1].text = tmpText;
-				list.selectedIndex = selectedIndex + 1;
-			}
-		}
+	    var tableName_enc = row.tableName_enc;
+		window.open('${contextPath}/sys/table/resultList?q=1&tableName_enc='+tableName_enc);
 	}
 
 </script>
@@ -289,6 +251,9 @@
 			  onclick="javascript:exportSysTables();">生成基础表数据脚本</a>
 
 		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_export'"
+			  onclick="javascript:exportAllInsertScripts();">生成全部表数据脚本</a>
+
+		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_export'"
 			  onclick="javascript:genMappings();">生成Mapping文件</a> 
 
 		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon_export'"
@@ -297,8 +262,8 @@
 		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-package'"
 			  onclick="javascript:updateHibernateDDL();">更新本数据库结构</a> 
 
-		   <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-list'"
-			  onclick="javascript:showData();">查看数据</a> 
+		   <!-- <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-list'"
+			  onclick="javascript:showData();">查看数据</a> --> 
 	   </div> 
 	  </div> 
 	  <div data-options="region:'center',border:true">
@@ -308,43 +273,6 @@
 	<form id="iForm" name="iForm" method="post" action="">
 		<input type="hidden" id="tables" name="tables">
 	</form>
-
-	<div id="exp_dlg" class="easyui-dialog" style="width:450px;height:400px;padding:10px 20px" closed="true" >
-		<form id="exportForm" name="exportForm" method="post">
-			 <input type="hidden" id="exportTables" name="exportTables" >
-			 <table class="easyui-form" width="95%" align="center" border="0" cellspacing="0" cellpadding="5">
-			  <tr>
-				<td>
-				   <select id="selectedTables" name="selectedTables" style="width: 250px;" size="22">
-					  <option value=""></option>
-					  <option value=""></option>
-					  <option value=""></option>
-					  <option value=""></option>
-					  <option value=""></option>
-					  <option value=""></option>
-					  <option value=""></option>
-					  <option value=""></option>
-					  <option value=""></option>
-					  <option value=""></option>
-				   </select>
-				</td>
-				<td  align="center" valign="top" height="30">&nbsp;
-					<a href="#" class="easyui-linkbutton" iconCls="icon-up" 
-					   onclick="javascript:moveUp();">向上</a>
-					<br/><br/>
-					<a href="#" class="easyui-linkbutton" iconCls="icon-down" 
-					   onclick="javascript:moveDown();">向下</a>
-					<br/><br/>
-					<a href="#" class="easyui-linkbutton" iconCls="icon-ok" 
-					   onclick="javascript:exportData();">确定</a>
-					<br/><br/>
-					<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" 
-					   onclick="javascript:jQuery('#exp_dlg').dialog('close');">取消</a>
-				</td>
-			  </tr>
-			</table>
-		</form>
-	</div>
 
 </body>
 </html>

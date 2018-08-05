@@ -189,6 +189,8 @@ public class DataFileServiceImpl implements IDataFileService {
 		if (StringUtils.isNotEmpty(tenantId)) {
 			query.tenantId(tenantId);
 			query.setTableSuffix(String.valueOf(IdentityFactory.getTenantHash(tenantId)));
+		} else {
+			query.setTableSuffix("");
 		}
 
 		if (StringUtils.equals(DBUtils.POSTGRESQL, DBConnectionFactory.getDatabaseType())) {

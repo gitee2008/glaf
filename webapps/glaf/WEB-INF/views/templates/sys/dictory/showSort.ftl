@@ -61,7 +61,7 @@
         <div id="example">
 
             <div id="pages">
-                <div id="pages-title"><span>机构列表</span></div>
+                <div id="pages-title"><span>字典列表</span></div>
                 <div id="sortable">
 				<#list  trees as tree>
 				  <#if  tree.locked == 0>

@@ -301,7 +301,7 @@
 	
 
  
-    function sortProject(){
+    function sortItems(){
 	  var nodeId = jQuery("#nodeId").val();
 	  var link = "${contextPath}/sys/tree/showSort?parentId="+nodeId;
 	  var width=680;
@@ -347,7 +347,7 @@
 			<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-edit'"
 			   onclick="javascript:editSelected();">修改</a> 
 			<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-sort'"
-			   onclick="javascript:sortProject();">同级排序</a>
+			   onclick="javascript:sortItems();">同级排序</a>
 			<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-reload'"
 			   onclick="javascript:reloadGrid();">全部</a> 
 		</div> 

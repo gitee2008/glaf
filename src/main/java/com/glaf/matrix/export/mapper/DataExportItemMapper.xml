@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.glaf.matrix.export.mapper.DataExportItemMapper">
+
+	<resultMap id="dataExportItemResultMap"
+		type="com.glaf.matrix.export.domain.DataExportItem">
+		<id property="id" column="ID_" jdbcType="VARCHAR" />
+		<result property="expId" column="EXPID_" jdbcType="VARCHAR" />
+		<result property="deploymentId" column="DEPLOYMENTID_"
+			jdbcType="VARCHAR" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="title" column="TITLE_" jdbcType="VARCHAR" />
+		<result property="sql" column="SQL_" jdbcType="VARCHAR" />
+		<result property="recursionSql" column="RECURSIONSQL_"
+			jdbcType="VARCHAR" />
+		<result property="recursionColumns" column="RECURSIONCOLUMNS_"
+			jdbcType="VARCHAR" />
+		<result property="primaryKey" column="PRIMARYKEY_"
+			jdbcType="VARCHAR" />
+		<result property="expression" column="EXPRESSION_"
+			jdbcType="VARCHAR" />
+		<result property="createTableFlag" column="CREATETABLEFLAG_"
+			jdbcType="VARCHAR" />
+		<result property="deleteFetch" column="DELETEFETCH_"
+			jdbcType="VARCHAR" />
+		<result property="sortNo" column="SORTNO_" jdbcType="INTEGER" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_"
+			jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertDataExportItem"
+		parameterType="com.glaf.matrix.export.domain.DataExportItem">
+		insert into SYS_DATA_EXPORT_ITEM
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="expId != null">
+				,EXPID_
+			</if>
+			<if test="deploymentId != null">
+				,DEPLOYMENTID_
+			</if>
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="title != null">
+				,TITLE_
+			</if>
+			<if test="sql != null">
+				,SQL_
+			</if>
+			<if test="recursionSql != null">
+				,RECURSIONSQL_
+			</if>
+			<if test="recursionColumns != null">
+				,RECURSIONCOLUMNS_
+			</if>
+			<if test="primaryKey != null">
+				,PRIMARYKEY_
+			</if>
+			<if test="expression != null">
+				,EXPRESSION_
+			</if>
+			<if test="createTableFlag != null">
+				,CREATETABLEFLAG_
+			</if>
+			<if test="deleteFetch != null">
+				,DELETEFETCH_
+			</if>
+			<if test="sortNo != null">
+				,SORTNO_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR}
+
+			<if test="expId != null">
+				,#{expId, jdbcType=VARCHAR}
+			</if>
+			<if test="deploymentId != null">
+				,#{deploymentId, jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="title != null">
+				,#{title, jdbcType=VARCHAR}
+			</if>
+			<if test="sql != null">
+				,#{sql, jdbcType=VARCHAR}
+			</if>
+			<if test="recursionSql != null">
+				,#{recursionSql, jdbcType=VARCHAR}
+			</if>
+			<if test="recursionColumns != null">
+				,#{recursionColumns, jdbcType=VARCHAR}
+			</if>
+			<if test="primaryKey != null">
+				,#{primaryKey, jdbcType=VARCHAR}
+			</if>
+			<if test="expression != null">
+				,#{expression, jdbcType=VARCHAR}
+			</if>
+			<if test="createTableFlag != null">
+				,#{createTableFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="deleteFetch != null">
+				,#{deleteFetch, jdbcType=VARCHAR}
+			</if>
+			<if test="sortNo != null">
+				,#{sortNo, jdbcType=INTEGER}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateDataExportItem"
+		parameterType="com.glaf.matrix.export.domain.DataExportItem">
+		update SYS_DATA_EXPORT_ITEM
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="name != null">
+				NAME_ = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				TITLE_ = #{title, jdbcType=VARCHAR},
+			</if>
+			<if test="sql != null">
+				SQL_ = #{sql, jdbcType=VARCHAR},
+			</if>
+			<if test="recursionSql != null">
+				RECURSIONSQL_ = #{recursionSql, jdbcType=VARCHAR},
+			</if>
+			<if test="recursionColumns != null">
+				RECURSIONCOLUMNS_ = #{recursionColumns,
+				jdbcType=VARCHAR},
+			</if>
+			<if test="primaryKey != null">
+				PRIMARYKEY_ = #{primaryKey, jdbcType=VARCHAR},
+			</if>
+			<if test="expression != null">
+				EXPRESSION_ = #{expression, jdbcType=VARCHAR},
+			</if>
+			<if test="createTableFlag != null">
+				CREATETABLEFLAG_ = #{createTableFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="deleteFetch != null">
+				DELETEFETCH_ = #{deleteFetch, jdbcType=VARCHAR},
+			</if>
+			<if test="sortNo != null">
+				SORTNO_ = #{sortNo, jdbcType=INTEGER},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteDataExportItemById" parameterType="string">
+		delete from
+		SYS_DATA_EXPORT_ITEM
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getDataExportItemById" parameterType="string"
+		resultMap="dataExportItemResultMap">
+		select * from SYS_DATA_EXPORT_ITEM where ID_ = #{id}
+	</select>
+
+
+	<select id="getDataExportItems"
+		parameterType="com.glaf.matrix.export.query.DataExportItemQuery"
+		resultMap="dataExportItemResultMap">
+		select E.*
+		<include refid="selectDataExportItemsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.SORTNO_ asc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getDataExportItemCount"
+		parameterType="com.glaf.matrix.export.query.DataExportItemQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectDataExportItemsSql" />
+	</select>
+
+
+	<sql id="selectDataExportItemsSql">
+
+		from SYS_DATA_EXPORT_ITEM E
+
+		<where>
+			1 = 1
+
+			<if test="expId != null">
+				and E.EXPID_ = #{expId}
+			</if>
+
+			<if test="expIds != null and expIds.size() &gt; 0">
+				and E.EXPID_ IN
+				<foreach item="x_expId" index="index" collection="expIds"
+					open="(" separator="," close=")">
+					#{x_expId}
+				</foreach>
+			</if>
+
+			<if test="deploymentId != null and deploymentId != '' ">
+				and E.DEPLOYMENTID_ = #{deploymentId}
+			</if>
+
+			<if test="deploymentIds != null and deploymentIds.size() &gt; 0">
+				and E.DEPLOYMENTID_ IN
+				<foreach item="x_deploymentId" index="index"
+					collection="deploymentIds" open="(" separator="," close=")">
+					#{x_deploymentId}
+				</foreach>
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

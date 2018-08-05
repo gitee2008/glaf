@@ -13,8 +13,7 @@
 		<result property="resType" column="TYPE_" jdbcType="VARCHAR" />
 		<result property="resContentType" column="CONTENTTYPE_"
 			jdbcType="VARCHAR" />
-		<result property="resContent" column="CONTENT_" jdbcType="VARBINARY"
-			typeHandler="org.apache.ibatis.type.BlobTypeHandler" />
+		<result property="resContent" column="CONTENT_" jdbcType="VARBINARY"/>
 		<result property="tenantId" column="TENANTID_" jdbcType="VARCHAR" />
 		<result property="createBy" column="CREATEBY_" jdbcType="VARCHAR" />
 		<result property="createTime" column="CREATETIME_" jdbcType="TIMESTAMP" />

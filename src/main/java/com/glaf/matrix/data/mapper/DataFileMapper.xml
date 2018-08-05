@@ -49,8 +49,7 @@
 		<result property="size" column="SIZE_" jdbcType="BIGINT" />
 		<result property="lastModified" column="LASTMODIFIED_"
 			jdbcType="BIGINT" />
-		<result property="data" column="DATA_" jdbcType="VARBINARY"
-			typeHandler="org.apache.ibatis.type.BlobTypeHandler" />
+		<result property="data" column="DATA_" jdbcType="VARBINARY"/>
 	</resultMap>
 
 

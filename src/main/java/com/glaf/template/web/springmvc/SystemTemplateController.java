@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -41,6 +42,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+
 import com.glaf.core.base.ColumnModel;
 import com.glaf.core.base.TableModel;
 import com.glaf.core.base.TreeModel;
@@ -52,6 +54,7 @@ import com.glaf.core.util.FileUtils;
 import com.glaf.core.util.Paging;
 import com.glaf.core.util.ParamUtils;
 import com.glaf.core.util.RequestUtils;
+import com.glaf.core.util.ResponseUtils;
 import com.glaf.core.util.Tools;
 
 import com.glaf.template.Template;
@@ -75,6 +78,21 @@ public class SystemTemplateController {
 			templateService.deleteTemplate(templateId);
 		}
 		return this.list(request, modelMap);
+	}
+
+	@RequestMapping("/download")
+	public void download(HttpServletRequest request, HttpServletResponse response) {
+		RequestUtils.setRequestParameterToAttribute(request);
+		String templateId = request.getParameter("templateId");
+		if (StringUtils.isNotEmpty(templateId)) {
+			Template template = templateService.getTemplate(templateId);
+			if (template != null) {
+				try {
+					ResponseUtils.download(request, response, template.getData(), template.getDataFile());
+				} catch (Exception e) {
+				}
+			}
+		}
 	}
 
 	@RequestMapping("/edit")

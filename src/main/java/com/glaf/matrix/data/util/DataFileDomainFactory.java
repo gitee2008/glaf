@@ -62,6 +62,10 @@ public class DataFileDomainFactory {
 			}
 
 			conn.setAutoCommit(false);
+
+			tableDefinition = getTableDefinition(TABLENAME);
+			DBUtils.alterTable(conn, tableDefinition);
+
 			for (int i = 0; i < com.glaf.core.util.Constants.TABLE_PARTITION; i++) {
 				tableDefinition = getTableDefinition(TABLENAME + i);
 				DBUtils.alterTable(conn, tableDefinition);
@@ -116,6 +120,13 @@ public class DataFileDomainFactory {
 
 			String dbType = DBConnectionFactory.getDatabaseType(conn);
 			conn.setAutoCommit(false);
+
+			tableDefinition = getTableDefinition(TABLENAME);
+			sqlStatement = DBUtils.getCreateTableScript(dbType, tableDefinition);
+			statement = conn.createStatement();
+			statement.executeUpdate(sqlStatement);
+			JdbcUtils.close(statement);
+
 			for (int i = 0; i < com.glaf.core.util.Constants.TABLE_PARTITION; i++) {
 				tableDefinition = getTableDefinition(TABLENAME + i);
 				sqlStatement = DBUtils.getCreateTableScript(dbType, tableDefinition);
