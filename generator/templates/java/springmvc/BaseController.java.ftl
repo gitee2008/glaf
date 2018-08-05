@@ -326,12 +326,9 @@ public class ${entityName}BaseController {
 		query.deleteFlag(0);
 		query.setActorId(loginContext.getActorId());
 		query.setLoginContext(loginContext);
-		/**
-		 * 此处业务逻辑需自行调整
-		*/
-		if(!loginContext.isSystemAdministrator()){
-		  String actorId = loginContext.getActorId();
-		  query.createBy(actorId);
+		
+        if (!loginContext.isSystemAdministrator()) {
+			query.tenantId(loginContext.getTenantId());
 		}
 
 		int start = 0;
