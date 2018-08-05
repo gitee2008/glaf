@@ -238,6 +238,7 @@ public class BulkInsertBean {
 			psmt.executeUpdate();
 			psmt.close();
 		} catch (SQLException ex) {
+			ex.printStackTrace();
 			throw new RuntimeException(ex);
 		} finally {
 			IOUtils.closeStream(is);

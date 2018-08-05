@@ -65,7 +65,6 @@ public class EntityServiceFactory {
 		try {
 			getEntityService().delete(statementId, parameterObject);
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -88,7 +87,6 @@ public class EntityServiceFactory {
 		try {
 			getEntityService().deleteAll(statementId, rows);
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -110,7 +108,6 @@ public class EntityServiceFactory {
 		try {
 			getEntityService().deleteById(statementId, row);
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -131,7 +128,6 @@ public class EntityServiceFactory {
 		try {
 			getEntityService().executeBatch(sqlExecutors);
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -155,7 +151,6 @@ public class EntityServiceFactory {
 		try {
 			return getEntityService().getById(statementId, parameterObject);
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -179,7 +174,6 @@ public class EntityServiceFactory {
 		try {
 			return getEntityService().getCount(statementId, parameterObject);
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -211,7 +205,6 @@ public class EntityServiceFactory {
 		try {
 			return getEntityService().getList(pageNo, pageSize, sqlExecutor);
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -235,7 +228,6 @@ public class EntityServiceFactory {
 		try {
 			return getEntityService().getList(statementId, parameterObject);
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -260,7 +252,6 @@ public class EntityServiceFactory {
 		try {
 			return getEntityService().nextId(name);
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -290,7 +281,6 @@ public class EntityServiceFactory {
 					"getMaxId", params);
 			return oldValue;
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -317,7 +307,6 @@ public class EntityServiceFactory {
 			return getEntityService().getPage(pageNo, pageSize, countExecutor,
 					queryExecutor);
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -357,7 +346,6 @@ public class EntityServiceFactory {
 			return 1;
 
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -380,7 +368,6 @@ public class EntityServiceFactory {
 		try {
 			getEntityService().insert(statementId, parameterObject);
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -403,7 +390,6 @@ public class EntityServiceFactory {
 		try {
 			getEntityService().insertAll(statementId, rows);
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -428,7 +414,6 @@ public class EntityServiceFactory {
 			return getEntityService().getSingleObject(statementId,
 					parameterObject);
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -451,7 +436,6 @@ public class EntityServiceFactory {
 		try {
 			getEntityService().update(statementId, parameterObject);
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
@@ -474,7 +458,6 @@ public class EntityServiceFactory {
 		try {
 			getEntityService().updateAll(statementId, rows);
 		} catch (Exception ex) {
-			
 			logger.error(ex);
 			throw new RuntimeException(ex);
 		} finally {
