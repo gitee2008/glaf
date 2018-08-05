@@ -354,7 +354,6 @@ public class SqlToCombinationTableBean {
 											if (dataMap == null) {
 												dataMap = new LowerLinkedMap();
 												dataMap.put("ex_id_", idValue);
-												dataMap.put("ex_syncid_", syncId);
 												dataMap.put("ex_complex_key_", keyBuffer.toString());
 												if (recursionKeyExists) {
 													for (String recursionKey : recursionKeys) {
@@ -374,6 +373,7 @@ public class SqlToCombinationTableBean {
 											// }
 											// }
 											dataMap.putAll(dataMap2);
+											dataMap.put("ex_syncid_", syncId);
 											dataListMap.put(idValue, dataMap);
 										}
 									}
@@ -425,10 +425,10 @@ public class SqlToCombinationTableBean {
 										if (dataMap == null) {
 											dataMap = new LowerLinkedMap();
 											dataMap.put("ex_id_", idValue);
-											dataMap.put("ex_syncid_", syncId);
 											dataMap.put("ex_complex_key_", keyBuffer.toString());
 										}
 										dataMap.putAll(rowMap);
+										dataMap.put("ex_syncid_", syncId);
 										dataListMap.put(idValue, dataMap);
 									}
 								}

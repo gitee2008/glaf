@@ -26,6 +26,7 @@ import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -138,7 +139,12 @@ public class BatchInsertBean {
 						}
 						break;
 					case "Date":
-						psmt.setTimestamp(index++, ParamUtils.getTimestamp(dataMap, columnName));
+						Timestamp t = ParamUtils.getTimestamp(dataMap, columnName);
+						if (t != null) {
+							psmt.setTimestamp(index++, t);
+						} else {
+							psmt.setNull(index++, java.sql.Types.TIMESTAMP);
+						}
 						break;
 					case "String":
 						psmt.setString(index++, ParamUtils.getString(dataMap, columnName));
