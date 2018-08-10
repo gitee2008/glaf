@@ -24,6 +24,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import com.glaf.base.modules.BaseDataManager;
+import com.glaf.base.modules.sys.util.PinyinUtils;
 import com.glaf.core.config.SystemConfig;
 import com.glaf.core.job.BaseJob;
 import com.glaf.core.util.DateUtils;
@@ -41,6 +42,39 @@ public class BaseDataRefreshJob extends BaseJob {
 		}
 		if (SystemConfig.getBoolean("refreshBaseData")) {
 			manager.refreshBaseData();
+
+			try {
+				logger.info("------------update tree pinyin-------------------");
+				PinyinUtils.processSysTree();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				logger.error("更新树结构错误！");
+			}
+
+			try {
+				logger.info("------------update organization pinyin---------------");
+				PinyinUtils.processSysOrganization();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				logger.error("更新机构数据错误！");
+			}
+
+			try {
+				logger.info("------------update tenant pinyin-------------------");
+				PinyinUtils.processSysTenant();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				logger.error("更新租户错误！");
+			}
+
+			try {
+				logger.info("------------update user pinyin---------------");
+				PinyinUtils.processSysUser();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				logger.error("更新用户数据错误！");
+			}
+
 		}
 		lastExecuteTime.set(System.currentTimeMillis());
 	}

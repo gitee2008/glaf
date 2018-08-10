@@ -63,6 +63,7 @@ public class GuavaCache implements com.glaf.core.cache.Cache {
 	public void clear(String region) {
 		getCache(region).invalidateAll();
 		getCache(region).cleanUp();
+		cacheConcurrentMap.remove(region);
 	}
 
 	public Object get(String key) {
