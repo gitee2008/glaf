@@ -1,5 +1,5 @@
 /**
- * EasyUI for jQuery 1.5.5.4
+ * EasyUI for jQuery 1.5.5.6
  * 
  * Copyright (c) 2009-2018 www.jeasyui.com. All rights reserved.
  *
@@ -283,12 +283,12 @@ if(_39.disabled){
 _3a.blur();
 _3a.validatebox("disable");
 tb.addClass("textbox-disabled");
-ss.attr("disabled","disabled");
+ss._propAttr("disabled",true);
 $(_38.label).addClass("textbox-label-disabled");
 }else{
 _3a.validatebox("enable");
 tb.removeClass("textbox-disabled");
-ss.removeAttr("disabled");
+ss._propAttr("disabled",false);
 $(_38.label).removeClass("textbox-label-disabled");
 }
 };
