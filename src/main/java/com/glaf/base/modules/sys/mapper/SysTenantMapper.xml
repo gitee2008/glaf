@@ -9,6 +9,8 @@
 		type="com.glaf.base.modules.sys.model.SysTenant">
 		<id property="id" column="ID_" jdbcType="BIGINT" />
 		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="namePinyin" column="NAMEPINYIN_"
+			jdbcType="VARCHAR" />
 		<result property="code" column="CODE_" jdbcType="VARCHAR" />
 		<result property="tenantId" column="TENANTID_"
 			jdbcType="VARCHAR" />
@@ -60,6 +62,9 @@
 			ID_
 			<if test="name != null">
 				,NAME_
+			</if>
+			<if test="namePinyin != null">
+				,NAMEPINYIN_
 			</if>
 			<if test="code != null">
 				,CODE_
@@ -150,6 +155,9 @@
 			<if test="name != null">
 				,#{name, jdbcType=VARCHAR}
 			</if>
+			<if test="namePinyin != null">
+				,#{namePinyin, jdbcType=VARCHAR}
+			</if>
 			<if test="code != null">
 				,#{code, jdbcType=VARCHAR}
 			</if>
@@ -239,6 +247,7 @@
 		insert into SYS_TENANT (
 		ID_
 		,NAME_
+		,NAMEPINYIN_
 		,CODE_
 		,TENANTID_
 		,TENANTTYPE_
@@ -274,35 +283,44 @@
 			#{sysTenant.id, jdbcType=BIGINT}
 			,#{sysTenant.name,
 			jdbcType=VARCHAR}
+			,#{sysTenant.namePinyin,
+			jdbcType=VARCHAR}
 			,#{sysTenant.code, jdbcType=VARCHAR}
-			,#{sysTenant.tenantId, jdbcType=VARCHAR}
+			,#{sysTenant.tenantId,
+			jdbcType=VARCHAR}
 			,#{sysTenant.tenantType,
 			jdbcType=INTEGER}
 			,#{sysTenant.databaseId, jdbcType=BIGINT}
-			,#{sysTenant.level, jdbcType=INTEGER}
+			,#{sysTenant.level,
+			jdbcType=INTEGER}
 			,#{sysTenant.province,
 			jdbcType=VARCHAR}
 			,#{sysTenant.provinceId,
 			jdbcType=BIGINT}
-			,#{sysTenant.city, jdbcType=VARCHAR}
+			,#{sysTenant.city,
+			jdbcType=VARCHAR}
 			,#{sysTenant.cityId,
 			jdbcType=BIGINT}
 			,#{sysTenant.area,
 			jdbcType=VARCHAR}
-			,#{sysTenant.areaId, jdbcType=BIGINT}
+			,#{sysTenant.areaId,
+			jdbcType=BIGINT}
 			,#{sysTenant.town,
 			jdbcType=VARCHAR}
 			,#{sysTenant.townId,
 			jdbcType=BIGINT}
-			,#{sysTenant.principal, jdbcType=VARCHAR}
+			,#{sysTenant.principal,
+			jdbcType=VARCHAR}
 			,#{sysTenant.telephone,
 			jdbcType=VARCHAR}
 			,#{sysTenant.address, jdbcType=VARCHAR}
-			,#{sysTenant.property, jdbcType=VARCHAR}
+			,#{sysTenant.property,
+			jdbcType=VARCHAR}
 			,#{sysTenant.verify,
 			jdbcType=VARCHAR}
 			,#{sysTenant.ticketFlag, jdbcType=VARCHAR}
-			,#{sysTenant.type, jdbcType=VARCHAR}
+			,#{sysTenant.type,
+			jdbcType=VARCHAR}
 			,#{sysTenant.limit,jdbcType=INTEGER}
 			,#{sysTenant.locked,jdbcType=INTEGER}
 			,#{sysTenant.disableDataConstraint, jdbcType=VARCHAR}
@@ -327,6 +345,7 @@
 			SYS_TENANT (
 			ID_
 			,NAME_
+			,NAMEPINYIN_
 			,CODE_
 			,TENANTID_
 			,TENANTTYPE_
@@ -359,6 +378,8 @@
 			#{sysTenant.id,
 			jdbcType=BIGINT}
 			,#{sysTenant.name,
+			jdbcType=VARCHAR}
+			,#{sysTenant.namePinyin,
 			jdbcType=VARCHAR}
 			,#{sysTenant.code,
 			jdbcType=VARCHAR}
@@ -420,6 +441,9 @@
 		<trim prefix="" suffix="" suffixOverrides=",">
 			<if test="name != null">
 				NAME_ = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="namePinyin != null">
+				NAMEPINYIN_ = #{namePinyin, jdbcType=VARCHAR},
 			</if>
 			<if test="code != null">
 				CODE_ = #{code, jdbcType=VARCHAR},
@@ -554,6 +578,11 @@
 
 			<if test="nameLike != null and nameLike != '' ">
 				and E.NAME_ like #{nameLike}
+			</if>
+
+			<if test="namePinyinLike != null and namePinyinLike != '' ">
+				and ( E.NAME_ like #{namePinyinLike} or E.NAMEPINYIN_
+				like #{namePinyinLike} )
 			</if>
 
 			<if test="code != null and code != '' ">

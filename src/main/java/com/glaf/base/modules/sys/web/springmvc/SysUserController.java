@@ -144,6 +144,11 @@ public class SysUserController {
 		if (organizationId > 0) {
 			query.organizationId(organizationId);
 		}
+		
+		String namePinyinLike = request.getParameter("namePinyinLike");
+		if (StringUtils.isNotEmpty(namePinyinLike)) {
+			query.setNamePinyinLike(namePinyinLike);
+		}
 
 		int start = 0;
 		int limit = 10;
@@ -217,6 +222,12 @@ public class SysUserController {
 		if (serverEntity != null) {
 			request.setAttribute("serverEntity", serverEntity);
 		}
+		
+		List<String> charList = new ArrayList<String>();
+		for (int i = 65; i < 91; i++) {
+			charList.add("" + (char) i);
+		}
+		request.setAttribute("charList", charList);
 
 		String x_view = ViewProperties.getString("user.list");
 		if (StringUtils.isNotEmpty(x_view)) {

@@ -65,6 +65,7 @@ import com.glaf.base.modules.sys.query.SysUserQuery;
 import com.glaf.base.modules.sys.query.UserRoleQuery;
 import com.glaf.base.modules.sys.service.MembershipService;
 import com.glaf.base.modules.sys.service.SysUserService;
+import com.glaf.base.modules.sys.util.PinyinUtils;
 import com.glaf.base.modules.sys.util.SysRoleJsonFactory;
 import com.glaf.base.modules.sys.util.SysUserJsonFactory;
 
@@ -828,6 +829,7 @@ public class SysUserServiceImpl implements SysUserService {
 			sysUser.setToken(UUID32.getUUID() + UUID32.getUUID() + UUID32.getUUID() + UUID32.getUUID());
 			sysUser.setTokenTime(new Date(System.currentTimeMillis()));
 			sysUser.setSyncFlag(0);
+			sysUser.setNamePinyin(PinyinUtils.converterToFirstSpell(sysUser.getName(), true));
 			sysUserMapper.insertSysUser(sysUser);
 		} else {
 
@@ -845,6 +847,7 @@ public class SysUserServiceImpl implements SysUserService {
 				CacheFactory.remove(Constants.CACHE_USER_ROLE_REGION, cacheKey);
 			}
 
+			sysUser.setNamePinyin(PinyinUtils.converterToFirstSpell(sysUser.getName(), true));
 			sysUser.setUpdateDate(new Date(System.currentTimeMillis()));
 			sysUser.setSyncFlag(0);
 			sysUser.setSyncTime(null);
@@ -1038,6 +1041,7 @@ public class SysUserServiceImpl implements SysUserService {
 		user.setUpdateDate(new Date());
 		user.setSyncFlag(0);
 		user.setSyncTime(null);
+		user.setNamePinyin(PinyinUtils.converterToFirstSpell(user.getName(), true));
 		sysUserMapper.updateSysUser(user);
 
 		TableModel table = new TableModel();

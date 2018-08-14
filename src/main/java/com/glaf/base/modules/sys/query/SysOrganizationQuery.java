@@ -44,6 +44,7 @@ public class SysOrganizationQuery extends DataQuery {
 	protected Integer levelLessThanOrEqual;
 	protected String name;
 	protected String nameLike;
+	protected String namePinyinLike;
 	protected List<String> names;
 	protected String type;
 	protected String no;
@@ -289,6 +290,15 @@ public class SysOrganizationQuery extends DataQuery {
 		return nameLike;
 	}
 
+	public String getNamePinyinLike() {
+		if (namePinyinLike != null && namePinyinLike.trim().length() > 0) {
+			if (!namePinyinLike.endsWith("%")) {
+				namePinyinLike = namePinyinLike + "%";
+			}
+		}
+		return namePinyinLike;
+	}
+
 	public List<String> getNames() {
 		return names;
 	}
@@ -478,6 +488,14 @@ public class SysOrganizationQuery extends DataQuery {
 		return this;
 	}
 
+	public SysOrganizationQuery namePinyinLike(String namePinyinLike) {
+		if (namePinyinLike == null) {
+			throw new RuntimeException("namePinyinLike is null");
+		}
+		this.namePinyinLike = namePinyinLike;
+		return this;
+	}
+
 	public SysOrganizationQuery names(List<String> names) {
 		if (names == null) {
 			throw new RuntimeException("names is empty ");
@@ -584,6 +602,10 @@ public class SysOrganizationQuery extends DataQuery {
 
 	public void setNameLike(String nameLike) {
 		this.nameLike = nameLike;
+	}
+
+	public void setNamePinyinLike(String namePinyinLike) {
+		this.namePinyinLike = namePinyinLike;
 	}
 
 	public void setNames(List<String> names) {

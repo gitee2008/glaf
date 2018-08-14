@@ -25,6 +25,7 @@ public class SysTenantQuery extends DataQuery {
 	private static final long serialVersionUID = 1L;
 	protected String name;
 	protected String nameLike;
+	protected String namePinyinLike;
 	protected String code;
 	protected String codeLike;
 	protected List<String> tenantIds;
@@ -259,6 +260,15 @@ public class SysTenantQuery extends DataQuery {
 		return nameLike;
 	}
 
+	public String getNamePinyinLike() {
+		if (namePinyinLike != null && namePinyinLike.trim().length() > 0) {
+			if (!namePinyinLike.endsWith("%")) {
+				namePinyinLike = namePinyinLike + "%";
+			}
+		}
+		return namePinyinLike;
+	}
+
 	public String getOrderBy() {
 		if (sortColumn != null) {
 			String a_x = " asc ";
@@ -432,6 +442,14 @@ public class SysTenantQuery extends DataQuery {
 		return this;
 	}
 
+	public SysTenantQuery namePinyinLike(String namePinyinLike) {
+		if (namePinyinLike == null) {
+			throw new RuntimeException("namePinyinLike is null");
+		}
+		this.namePinyinLike = namePinyinLike;
+		return this;
+	}
+
 	public SysTenantQuery property(String property) {
 		if (property == null) {
 			throw new RuntimeException("property is null");
@@ -526,6 +544,10 @@ public class SysTenantQuery extends DataQuery {
 
 	public void setNameLike(String nameLike) {
 		this.nameLike = nameLike;
+	}
+
+	public void setNamePinyinLike(String namePinyinLike) {
+		this.namePinyinLike = namePinyinLike;
 	}
 
 	public void setProperty(String property) {

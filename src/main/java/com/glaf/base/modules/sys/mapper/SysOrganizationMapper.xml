@@ -8,6 +8,8 @@
 		type="com.glaf.base.modules.sys.model.SysOrganization">
 		<id property="id" column="ID" jdbcType="BIGINT" />
 		<result property="name" column="NAME" jdbcType="VARCHAR" />
+		<result property="namePinyin" column="NAMEPINYIN"
+			jdbcType="VARCHAR" />
 		<result property="description" column="ORG_DESC" jdbcType="VARCHAR" />
 		<result property="sort" column="SORTNO" jdbcType="INTEGER" />
 		<result property="no" column="ORG_NO" jdbcType="VARCHAR" />
@@ -43,6 +45,9 @@
 			ID
 			<if test="name != null">
 				,NAME
+			</if>
+			<if test="namePinyin != null">
+				,NAMEPINYIN
 			</if>
 			<if test="description != null">
 				,ORG_DESC
@@ -126,6 +131,9 @@
 
 			<if test="name != null">
 				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="namePinyin != null">
+				,#{namePinyin, jdbcType=VARCHAR}
 			</if>
 			<if test="description != null">
 				,#{description, jdbcType=VARCHAR}
@@ -212,6 +220,9 @@
 		<trim prefix="" suffix="" suffixOverrides=",">
 			<if test="name != null">
 				NAME = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="namePinyin != null">
+				NAMEPINYIN = #{namePinyin, jdbcType=VARCHAR},
 			</if>
 			<if test="description != null">
 				ORG_DESC = #{description, jdbcType=VARCHAR},
@@ -371,6 +382,11 @@
 				and E.NAME like #{nameLike}
 			</if>
 
+			<if test="namePinyinLike != null and namePinyinLike != '' ">
+				and ( E.NAME like #{namePinyinLike} or E.NAMEPINYIN
+				like #{namePinyinLike} )
+			</if>
+			
 			<if test="descriptionLike != null and descriptionLike != '' ">
 				and E.ORG_DESC like #{descriptionLike}
 			</if>

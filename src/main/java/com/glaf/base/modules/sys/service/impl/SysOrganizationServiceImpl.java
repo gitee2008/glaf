@@ -40,6 +40,7 @@ import com.glaf.base.modules.sys.mapper.SysOrganizationMapper;
 import com.glaf.base.modules.sys.model.SysOrganization;
 import com.glaf.base.modules.sys.query.SysOrganizationQuery;
 import com.glaf.base.modules.sys.service.SysOrganizationService;
+import com.glaf.base.modules.sys.util.PinyinUtils;
 import com.glaf.base.modules.sys.util.SysOrganizationJsonFactory;
 import com.glaf.core.cache.CacheFactory;
 import com.glaf.core.config.SystemConfig;
@@ -83,6 +84,7 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 			bean.setTreeId(bean.getId() + "|");
 		}
 		bean.setCreateTime(new Date());
+		bean.setNamePinyin(PinyinUtils.converterToFirstSpell(bean.getName(), true));
 		sysOrganizationMapper.insertSysOrganization(bean);
 		return true;
 	}
@@ -544,6 +546,7 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
 			CacheFactory.clear(Constants.CACHE_ORGANIZATION_REGION);
 		}
 		bean.setUpdateDate(new Date());
+		bean.setNamePinyin(PinyinUtils.converterToFirstSpell(bean.getName(), true));
 		sysOrganizationMapper.updateSysOrganization(bean);
 		return true;
 	}

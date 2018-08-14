@@ -51,6 +51,12 @@ public class SysApplication implements Serializable, JSONable, TreeModel {
 	protected String name;
 
 	/**
+	 * 名称拼音
+	 */
+	@Column(name = "NAMEPINYIN", length = 250)
+	protected String namePinyin;
+
+	/**
 	 * 编码
 	 */
 	@Column(name = "CODE", length = 50)
@@ -288,6 +294,10 @@ public class SysApplication implements Serializable, JSONable, TreeModel {
 		return name;
 	}
 
+	public String getNamePinyin() {
+		return namePinyin;
+	}
+
 	public TreeModel getParent() {
 		return parent;
 	}
@@ -423,6 +433,10 @@ public class SysApplication implements Serializable, JSONable, TreeModel {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void setNamePinyin(String namePinyin) {
+		this.namePinyin = namePinyin;
 	}
 
 	public void setParent(SysApplication parent) {

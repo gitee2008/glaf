@@ -214,7 +214,7 @@
 	   onclick="javascript:doKickOut();">注销</a> 
 	</#if>
 	<input id="searchWord2" name="searchWord2" type="text" 
-	       class="x-searchtext" size="20" maxlength="200"/>
+	       class="x-searchtext" style="width:125px;" size="20" maxlength="200"/>
     
 	<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-search'"
 	   onclick="javascript:searchData();">查找</a>

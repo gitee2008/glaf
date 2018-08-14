@@ -49,6 +49,9 @@ public class SysTenantJsonFactory {
 		if (jsonObject.containsKey("name")) {
 			model.setName(jsonObject.getString("name"));
 		}
+		if (jsonObject.containsKey("namePinyin")) {
+			model.setNamePinyin(jsonObject.getString("namePinyin"));
+		}
 		if (jsonObject.containsKey("code")) {
 			model.setCode(jsonObject.getString("code"));
 		}
@@ -153,6 +156,9 @@ public class SysTenantJsonFactory {
 		if (model.getName() != null) {
 			jsonObject.put("name", model.getName());
 		}
+		if (model.getNamePinyin() != null) {
+			jsonObject.put("namePinyin", model.getNamePinyin());
+		}
 		if (model.getCode() != null) {
 			jsonObject.put("code", model.getCode());
 		}
@@ -233,6 +239,9 @@ public class SysTenantJsonFactory {
 		jsonObject.put("_oid_", model.getId());
 		if (model.getName() != null) {
 			jsonObject.put("name", model.getName());
+		}
+		if (model.getNamePinyin() != null) {
+			jsonObject.put("namePinyin", model.getNamePinyin());
 		}
 		if (model.getCode() != null) {
 			jsonObject.put("code", model.getCode());

@@ -252,7 +252,7 @@
 		<dependency>
 			<groupId>com.aliyun</groupId>
 			<artifactId>aliyun-java-sdk-core</artifactId>
-			<version>4.0.1</version>
+			<version>4.0.6</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aliyun</groupId>
@@ -279,18 +279,18 @@
 		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
-			<version>3.1</version>
+			<version>3.2.7</version>
 		</dependency>
 		<dependency>
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
-			<version>3.22.0-GA</version>
+			<version>3.23.1-GA</version>
 		</dependency>
 		<!-- 用于springmvc注解 -->
 		<dependency>
 			<groupId>com.fasterxml</groupId>
 			<artifactId>classmate</artifactId>
-			<version>1.1.0</version>
+			<version>1.4.0</version>
 		</dependency>
 		<!-- apache工具包 -->
 		<dependency>
@@ -533,9 +533,15 @@
 		<dependency>
 			<groupId>org.apache.zookeeper</groupId>
 			<artifactId>zookeeper</artifactId>
-			<version>3.4.10</version>
+			<version>3.4.13</version>
 		</dependency>
 		<!-- 结束zookeeper客户端工具 -->
+		<!-- kafka -->
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-clients</artifactId>
+			<version>2.0.0</version>
+		</dependency>
 		<!-- 并发工具 -->
 		<dependency>
 			<groupId>com.lmax</groupId>
@@ -664,7 +670,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.3.2.Final</version>
+            <version>5.3.4.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.common</groupId>
@@ -706,7 +712,7 @@
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongo-java-driver</artifactId>
-			<version>3.6.3</version>
+			<version>3.8.0</version>
 		</dependency>
 		<!-- html解析器 -->
 		<dependency>
@@ -724,12 +730,12 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpasyncclient</artifactId>
-			<version>4.1.2</version>
+			<version>4.1.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpasyncclient-cache</artifactId>
-			<version>4.1.2</version>
+			<version>4.1.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
@@ -804,7 +810,11 @@
 			<artifactId>jedis</artifactId>
 			<version>2.9.0</version>
 		</dependency>
-
+        <dependency>
+			<groupId>io.lettuce</groupId>
+			<artifactId>lettuce-core</artifactId>
+			<version>5.0.5.RELEASE</version>
+		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-util</artifactId>
@@ -832,7 +842,7 @@
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
-			<version>1.10.3</version>
+			<version>1.11.3</version>
 		</dependency>
 		<!-- jsp标签库 -->
 		<dependency>

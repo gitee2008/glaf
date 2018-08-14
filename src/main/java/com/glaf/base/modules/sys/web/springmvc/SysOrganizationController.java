@@ -108,6 +108,11 @@ public class SysOrganizationController {
 		SysOrganizationQuery query = new SysOrganizationQuery();
 		Tools.populate(query, params);
 		query.setDeleteFlag(0);
+		
+		String namePinyinLike = request.getParameter("namePinyinLike");
+		if (StringUtils.isNotEmpty(namePinyinLike)) {
+			query.setNamePinyinLike(namePinyinLike);
+		}
 
 		int start = 0;
 		int limit = 10;
@@ -175,6 +180,12 @@ public class SysOrganizationController {
 	public ModelAndView list(HttpServletRequest request, ModelMap modelMap) {
 		RequestUtils.setRequestParameterToAttribute(request);
 
+		List<String> charList = new ArrayList<String>();
+		for (int i = 65; i < 91; i++) {
+			charList.add("" + (char) i);
+		}
+		request.setAttribute("charList", charList);
+		
 		String x_view = ViewProperties.getString("organization.list");
 		if (StringUtils.isNotEmpty(x_view)) {
 			return new ModelAndView(x_view, modelMap);

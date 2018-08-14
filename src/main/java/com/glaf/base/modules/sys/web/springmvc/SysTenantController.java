@@ -110,6 +110,11 @@ public class SysTenantController {
 		query.setActorId(loginContext.getActorId());
 		query.setLoginContext(loginContext);
 
+		String namePinyinLike = request.getParameter("namePinyinLike");
+		if (StringUtils.isNotEmpty(namePinyinLike)) {
+			query.setNamePinyinLike(namePinyinLike);
+		}
+
 		int start = 0;
 		int limit = 100;
 		String orderName = null;
@@ -188,6 +193,12 @@ public class SysTenantController {
 			List<District> areas = districtService.getDistrictList(cityId);
 			request.setAttribute("areas", areas);
 		}
+
+		List<String> charList = new ArrayList<String>();
+		for (int i = 65; i < 91; i++) {
+			charList.add("" + (char) i);
+		}
+		request.setAttribute("charList", charList);
 
 		String view = request.getParameter("view");
 		if (StringUtils.isNotEmpty(view)) {

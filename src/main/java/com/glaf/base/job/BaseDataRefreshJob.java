@@ -52,6 +52,14 @@ public class BaseDataRefreshJob extends BaseJob {
 			}
 
 			try {
+				logger.info("------------update application pinyin---------------");
+				PinyinUtils.processSysApplication();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				logger.error("更新应用模块数据错误！");
+			}
+
+			try {
 				logger.info("------------update organization pinyin---------------");
 				PinyinUtils.processSysOrganization();
 			} catch (Exception ex) {

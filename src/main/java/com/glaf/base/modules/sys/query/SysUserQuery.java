@@ -46,6 +46,7 @@ public class SysUserQuery extends DataQuery {
 	protected String mobileLike;
 	protected String name;
 	protected String nameLike;
+	protected String namePinyinLike;
 	protected List<String> names;
 	protected String roleCode;
 	protected List<String> roleCodes;
@@ -263,6 +264,15 @@ public class SysUserQuery extends DataQuery {
 			}
 		}
 		return nameLike;
+	}
+
+	public String getNamePinyinLike() {
+		if (namePinyinLike != null && namePinyinLike.trim().length() > 0) {
+			if (!namePinyinLike.endsWith("%")) {
+				namePinyinLike = namePinyinLike + "%";
+			}
+		}
+		return namePinyinLike;
 	}
 
 	public List<String> getNames() {
@@ -550,6 +560,14 @@ public class SysUserQuery extends DataQuery {
 		return this;
 	}
 
+	public SysUserQuery namePinyinLike(String namePinyinLike) {
+		if (namePinyinLike == null) {
+			throw new RuntimeException("namePinyinLike is null");
+		}
+		this.namePinyinLike = namePinyinLike;
+		return this;
+	}
+
 	public SysUserQuery names(List<String> names) {
 		if (names == null) {
 			throw new RuntimeException("names is empty ");
@@ -680,6 +698,10 @@ public class SysUserQuery extends DataQuery {
 
 	public void setNameLike(String nameLike) {
 		this.nameLike = nameLike;
+	}
+
+	public void setNamePinyinLike(String namePinyinLike) {
+		this.namePinyinLike = namePinyinLike;
 	}
 
 	public void setNames(List<String> names) {

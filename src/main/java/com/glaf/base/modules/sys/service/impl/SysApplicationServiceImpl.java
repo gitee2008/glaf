@@ -47,6 +47,7 @@ import com.glaf.base.modules.sys.query.SysApplicationQuery;
 import com.glaf.base.modules.sys.service.SysApplicationService;
 import com.glaf.base.modules.sys.service.SysRoleService;
 import com.glaf.base.modules.sys.service.SysUserService;
+import com.glaf.base.modules.sys.util.PinyinUtils;
 import com.glaf.base.modules.sys.util.SysApplicationJsonFactory;
 import com.glaf.core.cache.CacheFactory;
 import com.glaf.core.config.SystemConfig;
@@ -119,6 +120,7 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 		}
 		app.setSort(0);// 设置排序号为刚插入的id值
 		app.setCreateDate(new Date());
+		app.setNamePinyin(PinyinUtils.converterToFirstSpell(app.getName(), true));
 		sysApplicationMapper.insertSysApplication(app);
 		ret = true;
 		return ret;
@@ -312,7 +314,7 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 		String treeIdLike = null;
 		SysApplication parent = findById(parentId);
 		logger.debug("parentId:" + parentId);
-		//logger.debug("parent:" + parent);
+		// logger.debug("parent:" + parent);
 		if (parent != null && parent.getTreeId() != null) {
 			treeIdLike = parent.getTreeId() + "%";
 		}
@@ -583,6 +585,7 @@ public class SysApplicationServiceImpl implements SysApplicationService {
 		if (StringUtils.isEmpty(bean.getCode())) {
 			bean.setCode("app_" + bean.getId());
 		}
+		bean.setNamePinyin(PinyinUtils.converterToFirstSpell(bean.getName(), true));
 		this.sysApplicationMapper.updateSysApplication(bean);
 		return true;
 	}

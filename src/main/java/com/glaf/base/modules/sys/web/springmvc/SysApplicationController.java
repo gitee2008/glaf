@@ -248,6 +248,11 @@ public class SysApplicationController {
 		SysApplicationQuery query = new SysApplicationQuery();
 		Tools.populate(query, params);
 		query.setDeleteFlag(0);
+		
+		String namePinyinLike = request.getParameter("namePinyinLike");
+		if (StringUtils.isNotEmpty(namePinyinLike)) {
+			query.setNamePinyinLike(namePinyinLike);
+		}
 
 		int start = 0;
 		int limit = 20;
@@ -314,6 +319,12 @@ public class SysApplicationController {
 	public ModelAndView list(HttpServletRequest request, ModelMap modelMap) {
 		RequestUtils.setRequestParameterToAttribute(request);
 
+		List<String> charList = new ArrayList<String>();
+		for (int i = 65; i < 91; i++) {
+			charList.add("" + (char) i);
+		}
+		request.setAttribute("charList", charList);
+		
 		String view = request.getParameter("view");
 		if (StringUtils.isNotEmpty(view)) {
 			return new ModelAndView(view, modelMap);

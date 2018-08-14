@@ -7,6 +7,8 @@
 	<resultMap id="sysUserResultMap" type="com.glaf.base.modules.sys.model.SysUser">
 		<id property="userId" column="USERID" jdbcType="VARCHAR" />
 		<result property="name" column="USERNAME" jdbcType="VARCHAR" />
+		<result property="namePinyin" column="NAMEPINYIN"
+			jdbcType="VARCHAR" />
 		<result property="locked" column="LOCKED" jdbcType="INTEGER" />
 		<result property="sex" column="SEX" jdbcType="INTEGER" />
 		<result property="createTime" column="CREATETIME" jdbcType="TIMESTAMP" />
@@ -45,6 +47,8 @@
 	<resultMap id="sysUserTokenResultMap" type="com.glaf.base.modules.sys.model.SysUser">
 		<id property="userId" column="USERID" jdbcType="VARCHAR" />
 		<result property="name" column="USERNAME" jdbcType="VARCHAR" />
+		<result property="namePinyin" column="NAMEPINYIN"
+			jdbcType="VARCHAR" />
 		<result property="locked" column="LOCKED" jdbcType="INTEGER" />
 		<result property="sex" column="SEX" jdbcType="INTEGER" />
 		<result property="createTime" column="CREATETIME" jdbcType="TIMESTAMP" />
@@ -84,6 +88,8 @@
 	<resultMap id="sysUserLoginSecretResultMap" type="com.glaf.base.modules.sys.model.SysUser">
 		<id property="userId" column="USERID" jdbcType="VARCHAR" />
 		<result property="name" column="USERNAME" jdbcType="VARCHAR" />
+		<result property="namePinyin" column="NAMEPINYIN"
+			jdbcType="VARCHAR" />
 		<result property="locked" column="LOCKED" jdbcType="INTEGER" />
 		<result property="sex" column="SEX" jdbcType="INTEGER" />
 		<result property="createTime" column="CREATETIME" jdbcType="TIMESTAMP" />
@@ -133,6 +139,9 @@
 			</if>
 			<if test="name != null">
 				,USERNAME
+			</if>
+			<if test="namePinyin != null">
+				,NAMEPINYIN
 			</if>
 			<if test="locked != null">
 				,LOCKED
@@ -228,6 +237,9 @@
 			</if>
 			<if test="name != null">
 				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="namePinyin != null">
+				,#{namePinyin, jdbcType=VARCHAR}
 			</if>
 			<if test="locked != null">
 				,#{locked, jdbcType=VARCHAR}
@@ -335,6 +347,9 @@
 		<trim prefix="" suffix="" suffixOverrides=",">
 			<if test="name != null">
 				USERNAME = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="namePinyin != null">
+				NAMEPINYIN = #{namePinyin, jdbcType=VARCHAR},
 			</if>
 			<if test="sex != null">
 				SEX = #{sex, jdbcType=INTEGER},
@@ -908,6 +923,11 @@
 
 			<if test="nameLike != null and nameLike != '' ">
 				and E.USERNAME like #{nameLike}
+			</if>
+			
+			<if test="namePinyinLike != null and namePinyinLike != '' ">
+				and ( E.USERNAME like #{namePinyinLike} or E.NAMEPINYIN
+				like #{namePinyinLike} )
 			</if>
 
 			<if test="createTimeGreaterThanOrEqual != null">

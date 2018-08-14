@@ -22,18 +22,18 @@
 				singleSelect: true,
 				idField: 'id',
 				columns:[[
-				        {title:'序号', field:'startIndex', width:60, sortable:false},
-						{title:'编号', field:'id', width:90},
+				        {title:'序号', field:'startIndex', width:50, sortable:false},
+						{title:'编号', field:'id', width:60},
 						{title:'名称', field:'name', width:180},
-						{title:'代码', field:'code', width:100},
-						{title:'等级', field:'level', width:100, formatter:formatterLevel},
-						{title:'性质', field:'property', width:100, formatter:formatterProperty},
-						{title:'负责人', field:'principal', width:90},
-						{title:'电话', field:'telephone', width:90},
-						{title:'创建人', field:'createBy', width:90},
+						{title:'代码', field:'code', width:60},
+						{title:'等级', field:'level', width:90, formatter:formatterLevel},
+						{title:'性质', field:'property', width:90, formatter:formatterProperty},
+						{title:'负责人', field:'principal', width:80},
+						{title:'电话', field:'telephone', width:98},
+						{title:'创建人', field:'createBy', width:80},
 						{title:'创建日期', field:'createTime', width:90},
 						{title:'是否有效', field:'locked', width:90, formatter:formatterStatus},
-						{title:'功能键', field:'functionKey', width:160, formatter:formatterKeys}
+						{title:'功能键', field:'functionKey', width:180, formatter:formatterKeys}
 				]],
 				rownumbers: false,
 				pagination: true,
@@ -385,20 +385,6 @@
 	    jQuery('#mydatagrid').datagrid('clearSelections');
 	}
 
-	function loadGridData(url){
-	    jQuery.ajax({
-			type: "POST",
-			url:  url,
-			dataType:  'json',
-			error: function(data){
-				alert('服务器处理错误！');
-			},
-			success: function(data){
-				jQuery('#mydatagrid').datagrid('loadData', data);
-			}
-		});
-	}
-
 	function searchData(){
         var params = jQuery("#searchForm").formSerialize();
         jQuery.ajax({
@@ -420,12 +406,32 @@
 	function searchData(){
         document.iForm.submit();
 	}	 
+
+	function loadGridData(url){
+	    jQuery.ajax({
+			type: "POST",
+			url:  url,
+			dataType: 'json',
+			error: function(data){
+				alert('服务器处理错误！');
+			},
+			success: function(data){
+				jQuery('#mydatagrid').datagrid('loadData', data);
+			}
+		});
+	}
+
+	function searchXY(namePinyinLike){
+        var link = "${contextPath}/sys/tenant/json?namePinyinLike="+namePinyinLike;
+		loadGridData(link);
+	}
+
 </script>
 </head>
 <body style="margin:1px;">  
 <div style="margin:0;"></div>  
 <div class="easyui-layout" data-options="fit:true">  
-   <div data-options="region:'north', split:false, border:true" style="height:42px" class="toolbar-backgroud"> 
+   <div data-options="region:'north', split:false, border:true" style="height:72px" class="toolbar-backgroud"> 
     <div style="margin:4px;"> 
 	<form id="iForm" name="iForm" method="post" action="">
     <table>
@@ -517,12 +523,18 @@
             </script>
 		</td>
 		<td>
-		</td>
-		<td>
 		    <button type="button" id="searchButton" class="btn btnGrayMini" style="width:60px" 
 	                onclick="javascript:searchData();">查找</button>
 		</td>
       </tr>
+	  <tr>
+		<td colspan="8">
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<#list charList as item>
+			&nbsp;<span class="x_char_name" onclick="javascript:searchXY('${item}');">${item}</span>&nbsp;
+			</#list>
+		</td>
+	  </tr>
     </table>
 	</form>
    </div> 

@@ -155,6 +155,7 @@ public class Pdm2XmlMapping {
 						}
 						field.setDisplayType(4);
 						field.setEditable(true);
+						field.setSearchable(true);
 						tableDefinition.addField(field);
 					}
 				}

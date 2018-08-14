@@ -18,7 +18,6 @@
 
 package com.glaf.base.modules.sys.query;
 
-import java.util.*;
 import com.glaf.core.query.DataQuery;
 
 public class SysApplicationQuery extends DataQuery {
@@ -28,7 +27,7 @@ public class SysApplicationQuery extends DataQuery {
 	protected String descLike;
 	protected String name;
 	protected String nameLike;
-	protected List<String> names;
+	protected String namePinyinLike;
 	protected Integer showMenu;
 	protected Integer sortGreaterThan;
 	protected Integer sortGreaterThanOrEqual;
@@ -95,8 +94,13 @@ public class SysApplicationQuery extends DataQuery {
 		return nameLike;
 	}
 
-	public List<String> getNames() {
-		return names;
+	public String getNamePinyinLike() {
+		if (namePinyinLike != null && namePinyinLike.trim().length() > 0) {
+			if (!namePinyinLike.endsWith("%")) {
+				namePinyinLike = namePinyinLike + "%";
+			}
+		}
+		return namePinyinLike;
 	}
 
 	public String getOrderBy() {
@@ -214,11 +218,11 @@ public class SysApplicationQuery extends DataQuery {
 		return this;
 	}
 
-	public SysApplicationQuery names(List<String> names) {
-		if (names == null) {
-			throw new RuntimeException("names is empty ");
+	public SysApplicationQuery namePinyinLike(String namePinyinLike) {
+		if (namePinyinLike == null) {
+			throw new RuntimeException("namePinyinLike is null");
 		}
-		this.names = names;
+		this.namePinyinLike = namePinyinLike;
 		return this;
 	}
 
@@ -242,8 +246,8 @@ public class SysApplicationQuery extends DataQuery {
 		this.nameLike = nameLike;
 	}
 
-	public void setNames(List<String> names) {
-		this.names = names;
+	public void setNamePinyinLike(String namePinyinLike) {
+		this.namePinyinLike = namePinyinLike;
 	}
 
 	public void setShowMenu(Integer showMenu) {

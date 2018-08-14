@@ -53,7 +53,9 @@ public class SysUserJsonFactory {
 		if (jsonObject.containsKey("name")) {
 			model.setName(jsonObject.getString("name"));
 		}
-
+		if (jsonObject.containsKey("namePinyin")) {
+			model.setNamePinyin(jsonObject.getString("namePinyin"));
+		}
 		if (jsonObject.containsKey("evection")) {
 			model.setEvection(jsonObject.getIntValue("evection"));
 		}
@@ -188,6 +190,9 @@ public class SysUserJsonFactory {
 		jsonObject.put("userId_enc", RequestUtils.encodeString(user.getUserId()));
 
 		jsonObject.put("name", user.getName());
+		if (user.getNamePinyin() != null) {
+			jsonObject.put("namePinyin", user.getNamePinyin());
+		}
 		jsonObject.put("locked", user.getLocked());
 
 		jsonObject.put("accountType", user.getAccountType());
@@ -299,6 +304,9 @@ public class SysUserJsonFactory {
 		jsonObject.put("userId_enc", RequestUtils.encodeString(user.getUserId()));
 
 		jsonObject.put("name", user.getName());
+		if (user.getNamePinyin() != null) {
+			jsonObject.put("namePinyin", user.getNamePinyin());
+		}
 		jsonObject.put("locked", user.getLocked());
 
 		jsonObject.put("accountType", user.getAccountType());

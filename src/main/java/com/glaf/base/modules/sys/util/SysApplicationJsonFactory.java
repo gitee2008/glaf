@@ -52,6 +52,9 @@ public class SysApplicationJsonFactory {
 		if (jsonObject.containsKey("name")) {
 			model.setName(jsonObject.getString("name"));
 		}
+		if (jsonObject.containsKey("namePinyin")) {
+			model.setNamePinyin(jsonObject.getString("namePinyin"));
+		}
 		if (jsonObject.containsKey("code")) {
 			model.setCode(jsonObject.getString("code"));
 		}
@@ -136,6 +139,9 @@ public class SysApplicationJsonFactory {
 		if (model.getName() != null) {
 			jsonObject.put("name", model.getName());
 		}
+		if (model.getNamePinyin() != null) {
+			jsonObject.put("namePinyin", model.getNamePinyin());
+		}
 		if (model.getCode() != null) {
 			jsonObject.put("code", model.getCode());
 		}
@@ -201,6 +207,9 @@ public class SysApplicationJsonFactory {
 		jsonObject.put("parentId", model.getParentId());
 		if (model.getName() != null) {
 			jsonObject.put("name", model.getName());
+		}
+		if (model.getNamePinyin() != null) {
+			jsonObject.put("namePinyin", model.getNamePinyin());
 		}
 		if (model.getCode() != null) {
 			jsonObject.put("code", model.getCode());

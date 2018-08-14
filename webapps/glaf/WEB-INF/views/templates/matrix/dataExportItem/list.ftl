@@ -194,9 +194,9 @@
 </script>
 </head>
 <body style="margin:1px;">  
-<div style="margin:0;"></div>  
-<div data-options="region:'north', split:false, border:true" style="height:42px" class="toolbar-backgroud"> 
-    <div style="margin:4px;"> 
+<div class="easyui-layout" data-options="fit:true">  
+   <div data-options="region:'north', split:false, border:true" style="height:42px;" class="toolbar-backgroud"> 
+    <div style="margin-top:4px;"> 
 		<img src="${request.contextPath}/static/images/window.png">
 		&nbsp;<span class="x_content_title">导出项列表</span>
 		<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-add'" 

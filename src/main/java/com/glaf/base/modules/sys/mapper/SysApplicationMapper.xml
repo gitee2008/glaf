@@ -2,12 +2,15 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.glaf.base.modules.sys.mapper.SysApplicationMapper">
+<mapper
+	namespace="com.glaf.base.modules.sys.mapper.SysApplicationMapper">
 
 	<resultMap id="sysApplicationResultMap"
 		type="com.glaf.base.modules.sys.model.SysApplication">
 		<id property="id" column="ID" jdbcType="BIGINT" />
 		<result property="name" column="NAME" jdbcType="VARCHAR" />
+		<result property="namePinyin" column="NAMEPINYIN"
+			jdbcType="VARCHAR" />
 		<result property="desc" column="APPDESC" jdbcType="VARCHAR" />
 		<result property="url" column="URL" jdbcType="VARCHAR" />
 		<result property="code" column="CODE" jdbcType="VARCHAR" />
@@ -18,34 +21,49 @@
 		<result property="level" column="LEVEL" jdbcType="INTEGER" />
 		<result property="treeId" column="TREEID" jdbcType="VARCHAR" />
 		<result property="sort" column="SORTNO" jdbcType="INTEGER" />
-		<result property="showMenu" column="SHOWMENU" jdbcType="INTEGER" />
-		<result property="showType" column="SHOWTYPE" jdbcType="VARCHAR" />
+		<result property="showMenu" column="SHOWMENU"
+			jdbcType="INTEGER" />
+		<result property="showType" column="SHOWTYPE"
+			jdbcType="VARCHAR" />
 		<result property="sysFlag" column="SYSFLAG_" jdbcType="VARCHAR" />
 		<result property="parentId" column="PARENTID" jdbcType="BIGINT" />
 		<result property="locked" column="LOCKED" jdbcType="INTEGER" />
-		<result property="imagePath" column="IMAGEPATH" jdbcType="VARCHAR" />
-		<result property="linkType" column="LINKTYPE" jdbcType="VARCHAR" />
-		<result property="createDate" column="CREATEDATE" jdbcType="TIMESTAMP" />
-		<result property="createBy" column="CREATEBY" jdbcType="VARCHAR" />
-		<result property="updateBy" column="UPDATEBY" jdbcType="VARCHAR" />
-		<result property="updateDate" column="UPDATEDATE" jdbcType="TIMESTAMP" />
-		<result property="deleteFlag" column="DELETEFLAG" jdbcType="INTEGER" />
-		<result property="deleteTime" column="DELETETIME" jdbcType="TIMESTAMP" />
+		<result property="imagePath" column="IMAGEPATH"
+			jdbcType="VARCHAR" />
+		<result property="linkType" column="LINKTYPE"
+			jdbcType="VARCHAR" />
+		<result property="createDate" column="CREATEDATE"
+			jdbcType="TIMESTAMP" />
+		<result property="createBy" column="CREATEBY"
+			jdbcType="VARCHAR" />
+		<result property="updateBy" column="UPDATEBY"
+			jdbcType="VARCHAR" />
+		<result property="updateDate" column="UPDATEDATE"
+			jdbcType="TIMESTAMP" />
+		<result property="deleteFlag" column="DELETEFLAG"
+			jdbcType="INTEGER" />
+		<result property="deleteTime" column="DELETETIME"
+			jdbcType="TIMESTAMP" />
 	</resultMap>
 
 
-	<resultMap id="realmInfoResultMap" type="com.glaf.base.modules.sys.model.RealmInfo">
+	<resultMap id="realmInfoResultMap"
+		type="com.glaf.base.modules.sys.model.RealmInfo">
 		<result property="item" column="CODE" jdbcType="VARCHAR" />
 		<result property="url" column="URL" jdbcType="VARCHAR" />
 	</resultMap>
 
 
-	<insert id="insertSysApplication" parameterType="com.glaf.base.modules.sys.model.SysApplication">
+	<insert id="insertSysApplication"
+		parameterType="com.glaf.base.modules.sys.model.SysApplication">
 		insert into SYS_APPLICATION
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			ID
 			<if test="name != null">
 				,NAME
+			</if>
+			<if test="namePinyin != null">
+				,NAMEPINYIN
 			</if>
 			<if test="code != null">
 				,CODE
@@ -121,6 +139,9 @@
 			<if test="name != null">
 				,#{name, jdbcType=VARCHAR}
 			</if>
+			<if test="namePinyin != null">
+				,#{namePinyin, jdbcType=VARCHAR}
+			</if>
 			<if test="code != null">
 				,#{code, jdbcType=VARCHAR}
 			</if>
@@ -191,12 +212,16 @@
 	</insert>
 
 
-	<update id="updateSysApplication" parameterType="com.glaf.base.modules.sys.model.SysApplication">
+	<update id="updateSysApplication"
+		parameterType="com.glaf.base.modules.sys.model.SysApplication">
 		update SYS_APPLICATION
 		set
 		<trim prefix="" suffix="" suffixOverrides=",">
 			<if test="name != null">
 				NAME = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="namePinyin != null">
+				NAMEPINYIN = #{namePinyin, jdbcType=VARCHAR},
 			</if>
 			<if test="code != null">
 				CODE = #{code, jdbcType=VARCHAR},
@@ -269,7 +294,8 @@
 	</delete>
 
 
-	<delete id="deleteSysApplications" parameterType="com.glaf.base.modules.sys.query.SysApplicationQuery">
+	<delete id="deleteSysApplications"
+		parameterType="com.glaf.base.modules.sys.query.SysApplicationQuery">
 		delete from SYS_APPLICATION
 		where (
 		ID IN
@@ -344,11 +370,13 @@
 	</select>
 
 
-	<select id="getRealmInfos" parameterType="map" resultMap="realmInfoResultMap">
+	<select id="getRealmInfos" parameterType="map"
+		resultMap="realmInfoResultMap">
 
 		select
 		E.URL, r.CODE from SYS_APPLICATION E
-		inner join SYS_APP_ACCESS A
+		inner join
+		SYS_APP_ACCESS A
 		on
 		E.ID
 		=
@@ -359,14 +387,16 @@
 		not null
 		and E.URL != ''
 		and E.LOCKED = 0
-		and E.DELETEFLAG = 0
+		and E.DELETEFLAG
+		= 0
 		order by
 		E.URL asc
 
 	</select>
 
 
-	<select id="getSysApplications" parameterType="com.glaf.base.modules.sys.query.SysApplicationQuery"
+	<select id="getSysApplications"
+		parameterType="com.glaf.base.modules.sys.query.SysApplicationQuery"
 		resultMap="sysApplicationResultMap">
 		select E.*
 		<include refid="selectSysApplicationsSql" />
@@ -382,7 +412,8 @@
 	</select>
 
 
-	<select id="getSysApplicationCount" parameterType="com.glaf.base.modules.sys.query.SysApplicationQuery"
+	<select id="getSysApplicationCount"
+		parameterType="com.glaf.base.modules.sys.query.SysApplicationQuery"
 		resultType="int">
 		select count(*)
 		<include refid="selectSysApplicationsSql" />
@@ -402,8 +433,8 @@
 
 			<if test="parentIds != null and parentIds.size != 0">
 				and E.PARENTID IN
-				<foreach item="x_parentId" index="index" collection="parentIds"
-					open="(" separator="," close=")">
+				<foreach item="x_parentId" index="index"
+					collection="parentIds" open="(" separator="," close=")">
 					#{x_parentId}
 				</foreach>
 			</if>
@@ -414,6 +445,12 @@
 
 			<if test="nameLike != null and nameLike != '' ">
 				and E.NAME like #{nameLike}
+			</if>
+
+			<if test="namePinyinLike != null and namePinyinLike != '' ">
+				and ( E.NAME like #{namePinyinLike} or E.NAMEPINYIN
+				like
+				#{namePinyinLike} )
 			</if>
 
 			<if test="code != null and code != '' ">

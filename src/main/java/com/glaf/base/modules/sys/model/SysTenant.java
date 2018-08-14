@@ -52,6 +52,12 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 	protected String name;
 
 	/**
+	 * 名称拼音
+	 */
+	@Column(name = "NAMEPINYIN_", length = 200)
+	protected String namePinyin;
+
+	/**
 	 * 代码
 	 */
 	@Column(name = "CODE_", length = 50)
@@ -310,6 +316,10 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 		return this.name;
 	}
 
+	public String getNamePinyin() {
+		return namePinyin;
+	}
+
 	public String getPrincipal() {
 		return this.principal;
 	}
@@ -451,6 +461,10 @@ public class SysTenant implements Serializable, JSONable, Tenant {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void setNamePinyin(String namePinyin) {
+		this.namePinyin = namePinyin;
 	}
 
 	public void setPrincipal(String principal) {

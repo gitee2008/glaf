@@ -55,6 +55,12 @@ public class SysUser implements Serializable, User, JSONable {
 	protected String name;
 
 	/**
+	 * 名称拼音
+	 */
+	@Column(name = "NAMEPINYIN", length = 50)
+	protected String namePinyin;
+
+	/**
 	 * 账号类型
 	 */
 	@Column(name = "ACCOUNTTYPE")
@@ -402,6 +408,10 @@ public class SysUser implements Serializable, User, JSONable {
 		return name;
 	}
 
+	public String getNamePinyin() {
+		return namePinyin;
+	}
+
 	public Collection<Object> getObjectIds() {
 		return objectIds;
 	}
@@ -669,6 +679,10 @@ public class SysUser implements Serializable, User, JSONable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void setNamePinyin(String namePinyin) {
+		this.namePinyin = namePinyin;
 	}
 
 	public void setObjectIds(Collection<Object> objectIds) {

@@ -51,6 +51,9 @@ public class SysOrganizationJsonFactory {
 		if (jsonObject.containsKey("name")) {
 			model.setName(jsonObject.getString("name"));
 		}
+		if (jsonObject.containsKey("namePinyin")) {
+			model.setNamePinyin(jsonObject.getString("namePinyin"));
+		}
 		if (jsonObject.containsKey("description")) {
 			model.setDescription(jsonObject.getString("description"));
 		}
@@ -138,6 +141,9 @@ public class SysOrganizationJsonFactory {
 		if (model.getName() != null) {
 			jsonObject.put("name", model.getName());
 		}
+		if (model.getNamePinyin() != null) {
+			jsonObject.put("namePinyin", model.getNamePinyin());
+		}
 		if (model.getDescription() != null) {
 			jsonObject.put("description", model.getDescription());
 		}
@@ -213,6 +219,9 @@ public class SysOrganizationJsonFactory {
 
 		if (model.getName() != null) {
 			jsonObject.put("name", model.getName());
+		}
+		if (model.getNamePinyin() != null) {
+			jsonObject.put("namePinyin", model.getNamePinyin());
 		}
 		if (model.getDescription() != null) {
 			jsonObject.put("description", model.getDescription());

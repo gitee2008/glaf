@@ -124,6 +124,12 @@ public class SysOrganization implements Serializable, JSONable, TreeModel {
 	protected String name;
 
 	/**
+	 * 名称拼音
+	 */
+	@Column(name = "NAMEPINYIN", length = 200)
+	protected String namePinyin;
+
+	/**
 	 * 地址
 	 */
 	@Column(name = "ADDRESS", length = 250)
@@ -314,6 +320,10 @@ public class SysOrganization implements Serializable, JSONable, TreeModel {
 		return name;
 	}
 
+	public String getNamePinyin() {
+		return namePinyin;
+	}
+
 	public String getNo() {
 		return no;
 	}
@@ -460,6 +470,10 @@ public class SysOrganization implements Serializable, JSONable, TreeModel {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void setNamePinyin(String namePinyin) {
+		this.namePinyin = namePinyin;
 	}
 
 	public void setNo(String no) {

@@ -6,16 +6,40 @@
 	background: url('../images/add.png') no-repeat;
 }
 
+.icon-adjust {
+	background: url('../images/adjust.gif') no-repeat;
+}
+
 .icon-analyzer {
 	background: url('../images/analyzer.png') no-repeat;
+}
+
+.icon_arrow_switch {
+	background: url('../images/arrow_switch.png') no-repeat;
 }
 
 .icon-copy {
 	background: url('../images/copy.png') no-repeat;
 }
 
+.icon-class {
+	background: url('../images/class.gif') no-repeat;
+}
+
 .icon-menu {
 	background: url('../images/m.gif') no-repeat;
+}
+
+.icon_zip {
+	background: url('../images/zip.gif') no-repeat;
+}
+
+.icon_upload {
+	background: url('../images/upload.gif') no-repeat;
+}
+
+.icon-calendar {
+	background: url('../images/calendar.png') no-repeat;
 }
 
 .icon-user-message {
@@ -164,6 +188,11 @@
 	background: url('../images/sort.png') no-repeat;
 }
 
+.icon-sort-asc {
+	background: url('../images/sort_az_ascending.png') no-repeat;
+}
+
+
 .icon-print {
 	background: url('../images/print.png') no-repeat;
 }
@@ -298,6 +327,10 @@
 
 .icon_export_xls {
 	background: url('../images/page_excel.png') no-repeat;
+}
+
+.icon_export_html {
+	background: url('../images/html.gif') no-repeat;
 }
 
 .icon_cubes {

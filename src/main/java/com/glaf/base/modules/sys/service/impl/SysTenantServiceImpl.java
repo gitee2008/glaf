@@ -40,6 +40,7 @@ import com.glaf.base.modules.sys.query.SysTenantQuery;
 import com.glaf.base.modules.sys.service.SysOrganizationService;
 import com.glaf.base.modules.sys.service.SysTenantService;
 import com.glaf.base.modules.sys.service.SysUserService;
+import com.glaf.base.modules.sys.util.PinyinUtils;
 import com.glaf.base.modules.sys.util.SysTenantJsonFactory;
 import com.glaf.core.cache.CacheFactory;
 import com.glaf.core.config.SystemConfig;
@@ -214,6 +215,7 @@ public class SysTenantServiceImpl implements SysTenantService {
 			sysTenant.setCreateTime(new Date());
 			sysTenant.setPrincipal(user.getName());
 			sysTenant.setTelephone(user.getMobile());
+			sysTenant.setNamePinyin(PinyinUtils.converterToFirstSpell(sysTenant.getName(), true));
 			sysTenantMapper.insertSysTenant(sysTenant);
 		} else {
 			if (SystemConfig.getBoolean("use_query_cache")) {
@@ -225,6 +227,7 @@ public class SysTenantServiceImpl implements SysTenantService {
 				CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
 			}
 
+			sysTenant.setNamePinyin(PinyinUtils.converterToFirstSpell(sysTenant.getName(), true));
 			sysTenantMapper.updateSysTenant(sysTenant);
 		}
 
@@ -264,6 +267,7 @@ public class SysTenantServiceImpl implements SysTenantService {
 			sysTenant.setId(idGenerator.nextId("SYS_TENANT"));
 			sysTenant.setTenantId(UUID32.getUUID());
 			sysTenant.setCreateTime(new Date());
+			sysTenant.setNamePinyin(PinyinUtils.converterToFirstSpell(sysTenant.getName(), true));
 			sysTenantMapper.insertSysTenant(sysTenant);
 		} else {
 			if (SystemConfig.getBoolean("use_query_cache")) {
@@ -275,6 +279,7 @@ public class SysTenantServiceImpl implements SysTenantService {
 				CacheFactory.remove(Constants.CACHE_TENANT_REGION, cacheKey);
 			}
 
+			sysTenant.setNamePinyin(PinyinUtils.converterToFirstSpell(sysTenant.getName(), true));
 			sysTenantMapper.updateSysTenant(sysTenant);
 		}
 		SysOrganization organization = sysOrganizationService.getTopOrganizationByTenantId(sysTenant.getTenantId());
@@ -298,7 +303,6 @@ public class SysTenantServiceImpl implements SysTenantService {
 		if (sysUserService.findByAccount(userId) == null) {
 			SysUser bean = new SysUser();
 			bean.setActorId(userId);
-			bean.setPasswordHash(userId);
 			bean.setName("管理员");
 			bean.setAccountType(10000);
 			bean.setUserType(8);

@@ -177,13 +177,13 @@
 		<img src="${contextPath}/static/images/window.png">
 		&nbsp;<span class="x_content_title">用户在线日志</span>
 		&nbsp;用户&nbsp; <input id="searchWord2" name="searchWord2" type="text" 
-			   class="x-searchtext" size="20" maxlength="200"/>
+			   class="x-searchtext" style="width:125px;" size="20" maxlength="200"/>
 		&nbsp;登录时间&nbsp; 
 		<input id="startDate" name="startDate" type="text" 
-			   class="x-searchtext easyui-datebox" size="15" maxlength="200" 
+			   class="x-searchtext easyui-datebox" style="width:118px;" size="18" maxlength="200" 
 			   data-options=" onSelect:onSelect1"/>
 		~ <input id="endDate" name="endDate" type="text" 
-			   class="x-searchtext easyui-datebox" size="15" maxlength="200"
+			   class="x-searchtext easyui-datebox" style="width:118px;" size="18" maxlength="200"
 			   data-options=" onSelect:onSelect2"/>
 		<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-search'"
 		   onclick="javascript:searchData();">查找</a>

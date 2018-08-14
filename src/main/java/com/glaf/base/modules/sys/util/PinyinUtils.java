@@ -89,6 +89,63 @@ public class PinyinUtils {
 		return pinyinName;
 	}
 
+	public static void processSysApplication() {
+		Connection conn = null;
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		try {
+			conn = DBConnectionFactory.getConnection();
+			conn.setAutoCommit(false);
+			TableDefinition tableDefinition = new TableDefinition();
+			tableDefinition.setTableName("SYS_APPLICATION");
+
+			ColumnDefinition idColumn = new ColumnDefinition();
+			idColumn.setColumnName("ID");
+			idColumn.setJavaType("Long");
+			tableDefinition.setIdColumn(idColumn);
+
+			ColumnDefinition short_hypyColumn = new ColumnDefinition();
+			short_hypyColumn.setColumnName("NAMEPINYIN");
+			short_hypyColumn.setJavaType("String");
+			short_hypyColumn.setLength(200);
+			tableDefinition.addColumn(short_hypyColumn);
+
+			DBUtils.alterTable(conn, tableDefinition);
+			conn.commit();
+
+			Map<Long, String> dataMap = new HashMap<Long, String>();
+			String sql = " select id, name from SYS_APPLICATION ";
+			psmt = conn.prepareStatement(sql);
+			rs = psmt.executeQuery();
+			while (rs.next()) {
+				dataMap.put(rs.getLong(1), rs.getString(2));
+			}
+			JdbcUtils.close(rs);
+			JdbcUtils.close(psmt);
+
+			conn.setAutoCommit(false);
+
+			psmt = conn.prepareStatement(" update SYS_APPLICATION set NAMEPINYIN = ? where ID = ? ");
+			Set<Entry<Long, String>> entrySet = dataMap.entrySet();
+			for (Entry<Long, String> entry : entrySet) {
+				Long key = entry.getKey();
+				String value = entry.getValue();
+				psmt.setString(1, converterToFirstSpell(value, true));
+				psmt.setLong(2, key);
+				psmt.executeUpdate();
+			}
+			conn.commit();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			logger.error(ex);
+		} finally {
+			JdbcUtils.close(rs);
+			JdbcUtils.close(psmt);
+			JdbcUtils.close(conn);
+		}
+	}
+
 	public static void processSysOrganization() {
 		Connection conn = null;
 		PreparedStatement psmt = null;
@@ -105,7 +162,7 @@ public class PinyinUtils {
 			tableDefinition.setIdColumn(idColumn);
 
 			ColumnDefinition short_hypyColumn = new ColumnDefinition();
-			short_hypyColumn.setColumnName("SHORT_PINYIN");
+			short_hypyColumn.setColumnName("NAMEPINYIN");
 			short_hypyColumn.setJavaType("String");
 			short_hypyColumn.setLength(200);
 			tableDefinition.addColumn(short_hypyColumn);
@@ -125,7 +182,7 @@ public class PinyinUtils {
 
 			conn.setAutoCommit(false);
 
-			psmt = conn.prepareStatement(" update SYS_ORGANIZATION set SHORT_PINYIN = ? where ID = ? ");
+			psmt = conn.prepareStatement(" update SYS_ORGANIZATION set NAMEPINYIN = ? where ID = ? ");
 			Set<Entry<Long, String>> entrySet = dataMap.entrySet();
 			for (Entry<Long, String> entry : entrySet) {
 				Long key = entry.getKey();
@@ -162,7 +219,7 @@ public class PinyinUtils {
 			tableDefinition.setIdColumn(idColumn);
 
 			ColumnDefinition short_hypyColumn = new ColumnDefinition();
-			short_hypyColumn.setColumnName("SHORT_PINYIN_");
+			short_hypyColumn.setColumnName("NAMEPINYIN_");
 			short_hypyColumn.setJavaType("String");
 			short_hypyColumn.setLength(200);
 			tableDefinition.addColumn(short_hypyColumn);
@@ -182,7 +239,7 @@ public class PinyinUtils {
 
 			logger.debug("size:" + dataMap.size());
 			conn.setAutoCommit(false);
-			psmt = conn.prepareStatement(" update SYS_TENANT set SHORT_PINYIN_ = ? where ID_ = ? ");
+			psmt = conn.prepareStatement(" update SYS_TENANT set NAMEPINYIN_ = ? where ID_ = ? ");
 			Set<Entry<Long, String>> entrySet = dataMap.entrySet();
 			for (Entry<Long, String> entry : entrySet) {
 				Long key = entry.getKey();
@@ -219,7 +276,7 @@ public class PinyinUtils {
 			tableDefinition.setIdColumn(idColumn);
 
 			ColumnDefinition short_hypyColumn = new ColumnDefinition();
-			short_hypyColumn.setColumnName("SHORT_PINYIN");
+			short_hypyColumn.setColumnName("NAMEPINYIN");
 			short_hypyColumn.setJavaType("String");
 			short_hypyColumn.setLength(200);
 			tableDefinition.addColumn(short_hypyColumn);
@@ -239,7 +296,7 @@ public class PinyinUtils {
 
 			logger.debug("size:" + dataMap.size());
 			conn.setAutoCommit(false);
-			psmt = conn.prepareStatement(" update sys_tree set SHORT_PINYIN = ? where ID = ? ");
+			psmt = conn.prepareStatement(" update sys_tree set NAMEPINYIN = ? where ID = ? ");
 			Set<Entry<Long, String>> entrySet = dataMap.entrySet();
 			for (Entry<Long, String> entry : entrySet) {
 				Long key = entry.getKey();
@@ -276,9 +333,9 @@ public class PinyinUtils {
 			tableDefinition.setIdColumn(idColumn);
 
 			ColumnDefinition short_hypyColumn = new ColumnDefinition();
-			short_hypyColumn.setColumnName("SHORT_PINYIN");
+			short_hypyColumn.setColumnName("NAMEPINYIN");
 			short_hypyColumn.setJavaType("String");
-			short_hypyColumn.setLength(200);
+			short_hypyColumn.setLength(50);
 			tableDefinition.addColumn(short_hypyColumn);
 
 			DBUtils.alterTable(conn, tableDefinition);
@@ -296,7 +353,7 @@ public class PinyinUtils {
 
 			conn.setAutoCommit(false);
 
-			psmt = conn.prepareStatement(" update SYS_USER set SHORT_PINYIN = ? where USERID = ? ");
+			psmt = conn.prepareStatement(" update SYS_USER set NAMEPINYIN = ? where USERID = ? ");
 			Set<Entry<String, String>> entrySet = dataMap.entrySet();
 			for (Entry<String, String> entry : entrySet) {
 				String key = entry.getKey();

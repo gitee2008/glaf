@@ -520,6 +520,26 @@
 		}
 	}
 
+	
+	function loadGridData(url){
+	    jQuery.ajax({
+			type: "POST",
+			url:  url,
+			dataType: 'json',
+			error: function(data){
+				alert('服务器处理错误！');
+			},
+			success: function(data){
+				jQuery('#mydatagrid').datagrid('loadData', data);
+			}
+		});
+	}
+
+	function searchXY(namePinyinLike){
+        var link = "${contextPath}/sys/organization/json?namePinyinLike="+namePinyinLike;
+		loadGridData(link);
+	}
+
 </script>
 </head>
 <body>  
@@ -539,24 +559,40 @@
 	
     <div data-options="region:'center'">  
         <div class="easyui-layout" data-options="fit:true">  
-           <div data-options="region:'center', split:false, border:true, fit:true" class="toolbar-backgroud">
+           <div data-options="region:'center', split:false, border:true, fit:true" style="height:68px" class="toolbar-backgroud">
              <div style="margin:4px;"> 
-				<img src="${contextPath}/static/images/window.png">
-				&nbsp;<span class="x_content_title">机构列表</span>
-				<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-add'" 
-				   onclick="javascript:addNew();">新增</a>  
-				<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-edit'"
-				   onclick="javascript:editSelected();">修改</a>  
-				<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-remove'"
-				   onclick="javascript:deleteSelected();">删除</a>  
-				<!-- <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-user'"
-				   onclick="javascript:organizationUsers();">机构用户</a> 
-				<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-actor'"
-				   onclick="javascript:organizationRoles();">机构角色</a> -->
-				<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-sort'"
-				   onclick="javascript:sortOrg();">同级排序</a>
-				<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-reload'"
-				   onclick="javascript:reloadGrid();">全部</a> 
+			 	 <table width="100%" align="left">
+					<tbody>
+					  <tr>
+						<td align="left">
+							<img src="${contextPath}/static/images/window.png">
+							&nbsp;<span class="x_content_title">机构列表</span>
+							<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-add'" 
+							   onclick="javascript:addNew();">新增</a>  
+							<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-edit'"
+							   onclick="javascript:editSelected();">修改</a>  
+							<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-remove'"
+							   onclick="javascript:deleteSelected();">删除</a>  
+							<!-- <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-user'"
+							   onclick="javascript:organizationUsers();">机构用户</a> 
+							<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-actor'"
+							   onclick="javascript:organizationRoles();">机构角色</a> -->
+							<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-sort'"
+							   onclick="javascript:sortOrg();">同级排序</a>
+							<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-reload'"
+							   onclick="javascript:reloadGrid();">全部</a> 
+						</td>
+					  </tr>
+					  <tr>
+						<td>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<#list charList as item>
+							&nbsp;<span class="x_char_name" onclick="javascript:searchXY('${item}');">${item}</span>&nbsp;
+							</#list>
+						</td>
+					</tr>
+				   </tbody>
+				  </table>
              </div>  
 
 			 <table id="mydatagrid" class="easyui-datagrid" 

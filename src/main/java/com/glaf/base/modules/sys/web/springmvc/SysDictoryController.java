@@ -111,6 +111,27 @@ public class SysDictoryController {
 		return ResponseUtils.responseResult(false);
 	}
 
+	/**
+	 * 删除
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/delete")
+	@ResponseBody
+	public byte[] delete(HttpServletRequest request) {
+		try {
+			long id = RequestUtils.getLong(request, "id");
+			if (id > 0) {
+				dictoryService.delete(id);
+				return ResponseUtils.responseResult(true);
+			}
+		} catch (Exception ex) {
+			logger.error(ex);
+		}
+		return ResponseUtils.responseResult(false);
+	}
+
 	@RequestMapping("/exportJson")
 	@ResponseBody
 	public void exportJson(HttpServletRequest request, HttpServletResponse response) {
@@ -347,6 +368,15 @@ public class SysDictoryController {
 		return result.toString().getBytes("UTF-8");
 	}
 
+	@RequestMapping("/jsonArray")
+	@ResponseBody
+	public byte[] jsonArray(HttpServletRequest request) throws IOException {
+		String nodeCode = request.getParameter("nodeCode");
+		List<Dictory> dicts = dictoryService.getDictoryList(nodeCode);
+		JSONArray array = DictoryJsonFactory.listToArray(dicts);
+		return array.toString().getBytes("UTF-8");
+	}
+
 	@RequestMapping
 	public ModelAndView list(HttpServletRequest request, ModelMap modelMap) {
 		RequestUtils.setRequestParameterToAttribute(request);
@@ -491,6 +521,14 @@ public class SysDictoryController {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			logger.error("更新树结构错误！");
+		}
+
+		try {
+			logger.info("------------update application pinyin---------------");
+			PinyinUtils.processSysApplication();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			logger.error("更新应用模块数据错误！");
 		}
 
 		try {

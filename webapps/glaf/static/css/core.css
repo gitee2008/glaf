@@ -1,5 +1,5 @@
 body, table, td, th {
-	font-size: 12px;
+	font-size: 14px;
 	font-weight: normal;
 	font-family: "Î¢ÈíÑÅºÚ";
 	color: #656565
@@ -49,7 +49,7 @@ a:hover {
 	padding: 2px 2px;
 	line-height: 24px;
 	height: 24px;
-	font-size: 13px;
+	font-size: 15px;
 }
 
 .x-small-text {
@@ -69,7 +69,7 @@ a:hover {
 	padding: 2px 2px;
 	line-height: 24px;
 	height: 24px;
-	font-size: 13px;
+	font-size: 15px;
 }
 
 .x-textarea {
@@ -77,7 +77,7 @@ a:hover {
 	border: 1px solid #d3d3d3;
 	color: #666;
 	padding: 2px 2px;
-	font-size: 13px;
+	font-size: 15px;
 }
 
 .list {
@@ -85,7 +85,7 @@ a:hover {
 	border: 1px solid #d3d3d3;
 	color: #666;
 	padding: 2px 2px;
-	font-size: 13px;
+	font-size: 14px;
 }
 
 .select {
@@ -93,7 +93,7 @@ a:hover {
 	border: 1px solid #d3d3d3;
 	color: #666;
 	padding: 2px 2px;
-	font-size: 13px;
+	font-size: 14px;
 }
 
 .x_content_title {
@@ -109,7 +109,7 @@ a:hover {
 	background-color: inherit;
 	font-family: "Î¢ÈíÑÅºÚ";
 	color: #484848;
-	font-size: 13px;
+	font-size: 15px;
 	font-weight: bold;
 	text-align: center;
 }
@@ -118,7 +118,7 @@ a:hover {
 	background-color: inherit;
 	font-family: "Î¢ÈíÑÅºÚ";
 	color: #3366cc;
-	font-size: 13px;
+	font-size: 15px;
 	font-weight: bold;
 	text-align: center;
 }
@@ -127,7 +127,16 @@ a:hover {
 	background-color: inherit;
 	font-family: "Î¢ÈíÑÅºÚ";
 	color: rgb(90, 170, 75);
-	font-size: 13px;
+	font-size: 15px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.x_char_name {
+    cursor: pointer; 
+	font-family: "Consolas";
+	color: #3366cc;
+	font-size: 20px;
 	font-weight: bold;
 	text-align: center;
 }
@@ -136,7 +145,7 @@ a:hover {
 	background-color: inherit;
 	font-family: "Î¢ÈíÑÅºÚ";
 	color: #0066ff;
-	font-size: 13px;
+	font-size: 15px;
 	font-weight: bold;
 	text-align: center;
 }
@@ -145,7 +154,7 @@ a:hover {
 	background-color: inherit;
 	font-family: "Î¢ÈíÑÅºÚ";
 	color: #ff3333;
-	font-size: 13px;
+	font-size: 15px;
 	font-weight: bold;
 	text-align: center;
 }
@@ -153,7 +162,7 @@ a:hover {
 .toolbar-backgroud {
   margin-top: 2px; 
   font-size:13px;
-  background-color: #eaf2ff;
+  background-color: #eef8fe;
 }
 
 .x-searchtext {
@@ -161,8 +170,8 @@ a:hover {
 	border: 1px solid #d3d3d3;
 	color: #666;
 	padding: 2px 2px;
-	line-height: 18px;
-	height: 18px;
+	line-height: 20px;
+	height: 20px;
 	font-size: 13px;
 }
 
@@ -186,7 +195,7 @@ a:hover {
 }
 
 .required {
-	font-size: 12px;
+	font-size: 14px;
 	text-decoration: none;
 	font-weight: bold;
 }
@@ -264,7 +273,7 @@ img {
 	overflow: visible;
 	display: inline-block;
 	cursor: pointer;
-	background-color: #3399ff;
+	background-color: #339933;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 }
@@ -279,14 +288,14 @@ img {
 	overflow: visible;
 	display: inline-block;
 	cursor: pointer;
-	background-color: #3399ff;
+	background-color: #339933;
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 }
 
 .btnGray:hover {
 	box-shadow: 0px 1px 1px #ccc;
-	background-color: #2222ff;
+	background-color: #006633;
 	-moz-box-shadow: 0 1px 1px #ccc;
 	-webkit-box-shadow: 0 1px 1px #ccc;
 }
@@ -301,7 +310,7 @@ img {
 	overflow: visible;
 	display: inline-block;
 	cursor: pointer;
-	background-color: #3399ff;
+	background-color: #006633;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 }
