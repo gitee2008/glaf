@@ -23,7 +23,11 @@ public class ${entityName} implements Serializable, JSONable {
         private static final long serialVersionUID = 1L;
 
         @Id
+		<#if ( idField.type== 'String')>
+		@Column(name = "${idField.columnName}", length = ${idField.length?c}, nullable = false)
+        <#else>
         @Column(name = "${idField.columnName}", nullable = false)
+		</#if>
         protected ${idField.type} ${idField.name};
 
 <#if pojo_fields?exists>
