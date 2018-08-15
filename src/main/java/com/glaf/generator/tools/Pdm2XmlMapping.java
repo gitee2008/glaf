@@ -113,7 +113,8 @@ public class Pdm2XmlMapping {
 					if (colName != null && dataType != null) {
 						idMap.put(id, colName);
 
-						String name = StringTools.lower(colName);
+						String name = colName.toLowerCase();
+						name = StringTools.camelCaseName(name);
 						// name = StringTools.replace(name, "_", "");
 						ColumnDefinition field = new ColumnDefinition();
 						field.setColumnName(colName.toUpperCase());
@@ -174,7 +175,8 @@ public class Pdm2XmlMapping {
 											&& e.element("Key.Columns").element("Column") != null) {
 										String id = e.element("Key.Columns").element("Column").attributeValue("Ref");
 										String colName = idMap.get(id);
-										String name = StringTools.lower(colName);
+										String name = colName.toLowerCase();
+										name = StringTools.camelCaseName(name);
 										// name = StringTools.replace(name, "_",
 										// "");
 										ColumnDefinition idField = tableDefinition.getFields().get(name);
