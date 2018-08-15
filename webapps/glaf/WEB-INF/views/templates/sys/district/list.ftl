@@ -319,7 +319,7 @@
 <body>
 <input type="hidden" id="nodeId" name="nodeId" value="${nodeId}" >
 <div class="easyui-layout" data-options="fit:true">  
-    <div data-options="region:'west',split:true" style="width:250px;">
+    <div data-options="region:'west',split:true" style="width:225px;">
 	  <div class="easyui-layout" data-options="fit:true">  
            
 			 <div data-options="region:'center',border:false">

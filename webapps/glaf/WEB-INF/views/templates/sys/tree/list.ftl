@@ -65,7 +65,7 @@
 				idField: 'id',
 				columns:[[
 				        {title:'序号', field:'startIndex', width:60, sortable:false},
-					    {title:'编号', field:'id', width:60, sortable:false},
+					    {title:'编号', field:'id', width:80, sortable:false},
 					    {title:'名称', field:'name', width:150, sortable:false},
 					    {title:'代码', field:'code', width:120, sortable:false},
 						{title:'属性值', field:'value', width:120, sortable:false},
@@ -327,7 +327,7 @@
 <body>
 <input type="hidden" id="nodeId" name="nodeId" value="${nodeId}" >
 <div class="easyui-layout" data-options="fit:true">  
-    <div data-options="region:'west',split:true" style="width:250px;">
+    <div data-options="region:'west',split:true" style="width:195px;">
 	  <div class="easyui-layout" data-options="fit:true">  
            
 			 <div data-options="region:'center',border:false">
