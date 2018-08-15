@@ -53,6 +53,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.glaf.core.base.ColumnModel;
 import com.glaf.core.base.TableModel;
 import com.glaf.core.config.SystemConfig;
+import com.glaf.core.config.SystemProperties;
 import com.glaf.core.config.ViewProperties;
 import com.glaf.core.domain.DictoryDefinition;
 import com.glaf.core.factory.DataServiceFactory;
@@ -189,6 +190,92 @@ public class SysDictoryController {
 				}
 			}
 		}
+	}
+
+	@ResponseBody
+	@RequestMapping("/genJS")
+	public byte[] genJS(HttpServletRequest request) {
+		LoginContext loginContext = RequestUtils.getLoginContext(request);
+		if (loginContext.isSystemAdministrator()) {
+			try {
+				SysTreeQuery query = new SysTreeQuery();
+				query.setLocked(0);
+				List<SysTree> trees = sysTreeService.getDictorySysTrees(query);
+				if (trees != null && trees.size() > 0) {
+					StringBuilder buff = new StringBuilder();
+					for (SysTree tree : trees) {
+						if (StringUtils.isNotEmpty(tree.getCode())) {
+							List<Dictory> list = dictoryService.getAvailableDictoryList(tree.getId());
+							if (list != null && !list.isEmpty()) {
+								JSONArray array = new JSONArray();
+								if (list != null && !list.isEmpty()) {
+									for (Dictory model : list) {
+										JSONObject jsonObject = model.toJsonObject();
+										jsonObject.remove("createBy");
+										jsonObject.remove("createTime");
+										jsonObject.remove("updateBy");
+										jsonObject.remove("updateTime");
+										array.add(jsonObject);
+									}
+								}
+								buff.append(" var  ").append(tree.getCode()).append(" = ").append(array.toJSONString())
+										.append("; ");
+								buff.append(FileUtils.newline);
+							}
+						}
+					}
+					String filename = SystemProperties.getAppPath() + "/static/generate/js/dictory.js";
+					FileUtils.save(filename, buff.toString().getBytes("UTF-8"));
+					return ResponseUtils.responseJsonResult(true);
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				logger.error(ex);
+			}
+		}
+		return ResponseUtils.responseJsonResult(false);
+	}
+
+	@ResponseBody
+	@RequestMapping("/genJSON")
+	public byte[] genJSON(HttpServletRequest request) {
+		LoginContext loginContext = RequestUtils.getLoginContext(request);
+		if (loginContext.isSystemAdministrator()) {
+			try {
+				SysTreeQuery query = new SysTreeQuery();
+				query.setLocked(0);
+				List<SysTree> trees = sysTreeService.getDictorySysTrees(query);
+				if (trees != null && trees.size() > 0) {
+					JSONObject result = new JSONObject();
+					for (SysTree tree : trees) {
+						if (StringUtils.isNotEmpty(tree.getCode())) {
+							List<Dictory> list = dictoryService.getAvailableDictoryList(tree.getId());
+							if (list != null && !list.isEmpty()) {
+								JSONArray array = new JSONArray();
+								if (list != null && !list.isEmpty()) {
+									for (Dictory model : list) {
+										JSONObject jsonObject = model.toJsonObject();
+										jsonObject.remove("createBy");
+										jsonObject.remove("createTime");
+										jsonObject.remove("updateBy");
+										jsonObject.remove("updateTime");
+										array.add(jsonObject);
+									}
+								}
+								result.put(tree.getCode(), array);
+							}
+						}
+					}
+					String filename = SystemProperties.getAppPath() + "/static/generate/json/dictory.json";
+					FileUtils.save(filename, result.toJSONString().getBytes("UTF-8"));
+					return ResponseUtils.responseJsonResult(true);
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				logger.error(ex);
+			}
+		}
+		return ResponseUtils.responseJsonResult(false);
 	}
 
 	protected void importData(LoginContext loginContext, byte[] bytes) throws IOException {

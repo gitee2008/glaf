@@ -291,7 +291,57 @@
 	    jQuery('#mydatagrid').datagrid('reload');	
 	    jQuery('#dlg').dialog('close');
 	}
-		 
+
+	function genJS(){
+		if(confirm("原来的JS将会被替换，确定重新生成吗？")){
+		    var link = "${contextPath}/sys/dictory/genJS";
+	        var params = jQuery("#iForm").formSerialize();
+		    jQuery.ajax({
+				   type: "POST",
+				   url: link,
+				   dataType: 'json',
+				   error: function(data){
+					   alert('服务器处理错误！');
+				   },
+				   success: function(data){
+					   if(data != null && data.message != null){
+						   alert(data.message);
+					   } else {
+						   alert('操作成功完成！');
+					   }
+					   if(data.statusCode == 200){
+					     
+					   }
+				   }
+			 });
+		}
+	}
+
+	function genJSON(){
+		if(confirm("原来的JSON将会被替换，确定重新生成吗？")){
+		    var link = "${contextPath}/sys/dictory/genJSON";
+	        var params = jQuery("#iForm").formSerialize();
+		    jQuery.ajax({
+				   type: "POST",
+				   url: link,
+				   dataType: 'json',
+				   error: function(data){
+					   alert('服务器处理错误！');
+				   },
+				   success: function(data){
+					   if(data != null && data.message != null){
+						   alert(data.message);
+					   } else {
+						   alert('操作成功完成！');
+					   }
+					   if(data.statusCode == 200){
+					     
+					   }
+				   }
+			 });
+		}
+	}
+	
 </script>
 </head>
 <body style="margin:1px;">  
@@ -320,6 +370,10 @@
 				   onclick="javascript:deleteSelections();">删除</a> 
 				<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-sort'"
 				   onclick="javascript:sortDict();">同级排序</a>
+				<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-class'"
+				   onclick="javascript:genJS();">生成JS</a>
+				<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-class'"
+				   onclick="javascript:genJSON();">生成JSON</a>
 				<!-- <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-search'"
 				   onclick="javascript:searchWin();">查找</a> -->
 		   </div> 
