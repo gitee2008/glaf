@@ -22,7 +22,6 @@ import java.io.*;
 
 import com.glaf.core.domain.TableDefinition;
 import com.glaf.generator.xml.XmlReader;
- 
 
 public class GenAll {
 
@@ -44,8 +43,7 @@ public class GenAll {
 							config = DEFAULT_CONFIG;
 						}
 						String entityName = def.getEntityName();
-						gen.codeGen(def, new File(outputDir, entityName),
-								config);
+						gen.codeGen(def, new File(outputDir, entityName), config);
 					}
 				}
 			}

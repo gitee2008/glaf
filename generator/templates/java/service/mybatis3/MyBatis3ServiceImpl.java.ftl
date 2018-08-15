@@ -150,9 +150,9 @@ public class ${entityName}ServiceImpl implements ${entityName}Service {
 	        ${modelName}.set${idField.firstUpperName}(idGenerator.nextId("${tableName}"));
 	<#else>
            if (StringUtils.isEmpty(${modelName}.get${idField.firstUpperName}())) {
-	        ${modelName}.set${idField.firstUpperName}(idGenerator.getNextId("${tableName}"));
+	        ${modelName}.set${idField.firstUpperName}(UUID32.getUUID());
 	</#if>
-		//${modelName}.setCreateDate(new Date());
+		//${modelName}.setCreateTime(new Date());
 		//${modelName}.setDeleteFlag(0);
 		${modelName}Mapper.insert${entityName}(${modelName});
 	       } else {

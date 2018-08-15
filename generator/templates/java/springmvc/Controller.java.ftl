@@ -91,6 +91,7 @@ public class ${entityName}Controller {
     </#list>
 </#if>
 		    //${modelName}.setCreateBy(actorId);
+			//${modelName}.setUpdateBy(actorId);
 		    this.${modelName}Service.save(${modelName});
 
 		    return ResponseUtils.responseJsonResult(true);

@@ -501,6 +501,10 @@ public class JavaCodeGen {
 					String path = outputDir.getAbsolutePath() + "/" + def.getSavePath();
 					String filename = path + "/" + saveName;
 					FileUtils.mkdirs(path);
+					if (StringUtils.endsWith(saveName, ".ftl")) {
+						content = StringTools.replaceIgnoreCase(content, "# include", "#include");
+						content = StringTools.replaceIgnoreCase(content, "# if", "#if");
+					}
 					if (def.getEncoding() != null) {
 						logger.debug(def.getEncoding());
 						FileUtils.save(filename, content.getBytes(def.getEncoding()));

@@ -69,8 +69,8 @@ public class ${entityName}BaseController {
     </#list>
 </#if>
 		
-		${modelName}.setCreateBy(actorId);
-         
+		//${modelName}.setCreateBy(actorId);
+        //${modelName}.setUpdateBy(actorId);
 		${modelName}Service.save(${modelName});   
 
 		return this.list(request, modelMap);
