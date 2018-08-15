@@ -103,10 +103,20 @@
 			<#if field.nullable == false> required="true" data-options="required:true" </#if>
 				  value="#F{${modelName}.${field.name}}"/>
 			<#else>
-            <input id="${field.name}" name="${field.name}" type="text" 
-			       class="easyui-validatebox  x-text"  
-			<#if field.nullable == false> required="true" data-options="required:true" </#if>
-				   value="#F{${modelName}.${field.name}}"/>
+			 <#if field.dataCode?exists>
+			   <input class="easyui-combobox" id="${field.name}" name="${field.name}" style="width:185px;" 
+			          value="#F{${modelName}.${field.name}}"
+                      data-options="
+                        url: '#F{contextPath}/dictory/jsonArray?nodeCode=${field.dataCode}',
+                        method: 'get',
+                        valueField: 'value',
+                        textField: 'value'">
+			 <#else>
+              <input id="${field.name}" name="${field.name}" type="text" 
+			         class="easyui-validatebox x-text"  
+			  <#if field.nullable == false> required="true" data-options="required:true" </#if>
+				     value="#F{${modelName}.${field.name}}"/>
+			 </#if>
 			</#if>
 		</td>
 	</tr>

@@ -92,6 +92,8 @@ public class ${entityName}Controller {
 </#if>
 		    //${modelName}.setCreateBy(actorId);
 			//${modelName}.setUpdateBy(actorId);
+			//${modelName}.setTenantId(loginContext.getTenantId());
+
 		    this.${modelName}Service.save(${modelName});
 
 		    return ResponseUtils.responseJsonResult(true);
@@ -119,7 +121,7 @@ public class ${entityName}Controller {
 				if (StringUtils.isNotEmpty(x)) {
 					${entityName} ${modelName} = ${modelName}Service.get${entityName}(${idField.type}.valueOf(x));
 					if (${modelName} != null && (StringUtils.equals(${modelName}.getCreateBy(), loginContext.getActorId()) || loginContext.isSystemAdministrator())) {
-						//${modelName}.setDeleteFlag(1);
+						${modelName}.setDeleteFlag(1);
 						${modelName}Service.save(${modelName});
 					}
 				}
@@ -129,7 +131,7 @@ public class ${entityName}Controller {
 			${entityName} ${modelName} = ${modelName}Service
 					.get${entityName}(${idField.type}.valueOf(${idField.name}));
 			if (${modelName} != null && ( StringUtils.equals(${modelName}.getCreateBy(), loginContext.getActorId()) || loginContext.isSystemAdministrator())) {
-				//${modelName}.setDeleteFlag(1);
+				${modelName}.setDeleteFlag(1);
 				${modelName}Service.save(${modelName});
 				return ResponseUtils.responseResult(true);
 			}
@@ -230,7 +232,7 @@ public class ${entityName}Controller {
 			result.put("limit", limit);
 			result.put("pageSize", limit);
 
-                        if (StringUtils.isNotEmpty(orderName)) {
+            if (StringUtils.isNotEmpty(orderName)) {
 				query.setSortOrder(orderName);
 				if (StringUtils.equals(order, "desc")) {
 					query.setSortOrder(" desc ");
@@ -238,8 +240,7 @@ public class ${entityName}Controller {
 			}
 
 			Map<String, User> userMap = IdentityFactory.getUserMap();
-			List<${entityName}> list = ${modelName}Service.get${entityName}sByQueryCriteria(start, limit,
-					query);
+			List<${entityName}> list = ${modelName}Service.get${entityName}sByQueryCriteria(start, limit, query);
 
 			if (list != null && !list.isEmpty()) {
 				JSONArray rowsJSON = new JSONArray();
@@ -251,7 +252,7 @@ public class ${entityName}Controller {
 					rowJSON.put("id", ${modelName}.getId());
 					rowJSON.put("rowId", ${modelName}.getId());
 					rowJSON.put("${modelName}Id", ${modelName}.getId());
-                                        rowJSON.put("startIndex", ++start);
+                    rowJSON.put("startIndex", ++start);
  					rowsJSON.add(rowJSON);
 				}
 

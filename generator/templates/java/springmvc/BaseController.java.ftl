@@ -44,14 +44,16 @@ public class ${entityName}BaseController {
 
 	@RequestMapping("/save")
 	public ModelAndView save(HttpServletRequest request, ModelMap modelMap) {
-		User user = RequestUtils.getUser(request);
-		String actorId =  user.getActorId();
+		LoginContext loginContext = RequestUtils.getLoginContext(request);
+		String actorId = loginContext.getActorId();
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
-                params.remove("status");
+        params.remove("status");
 		params.remove("wfStatus");
 
 		${entityName} ${modelName} = new ${entityName}();
-		Tools.populate(${modelName}, params);
+
+		try{
+		    Tools.populate(${modelName}, params);
 
  <#if pojo_fields?exists>
     <#list  pojo_fields as field>	
@@ -68,11 +70,14 @@ public class ${entityName}BaseController {
       </#if>
     </#list>
 </#if>
-		
-		//${modelName}.setCreateBy(actorId);
-        //${modelName}.setUpdateBy(actorId);
-		${modelName}Service.save(${modelName});   
-
+		    //${modelName}.setTenantId(loginContext.getTenantId());
+		    //${modelName}.setCreateBy(actorId);
+            //${modelName}.setUpdateBy(actorId);
+		    ${modelName}Service.save(${modelName});   
+        } catch (Exception ex) {
+			ex.printStackTrace();
+			logger.error(ex);
+		}
 		return this.list(request, modelMap);
 	}
 
@@ -98,7 +103,9 @@ public class ${entityName}BaseController {
 		    </#if>
 		    </#list>
 		</#if>
-		    ${modelName}.setCreateBy(actorId);
+			//${modelName}.setTenantId(loginContext.getTenantId());
+		    //${modelName}.setCreateBy(actorId);
+            //${modelName}.setUpdateBy(actorId);
 		    this.${modelName}Service.save(${modelName});
 		} catch (Exception ex) {
 		    ex.printStackTrace();
@@ -110,8 +117,8 @@ public class ${entityName}BaseController {
         @ResponseBody
 	@RequestMapping("/save${entityName}")
 	public byte[] save${entityName}(HttpServletRequest request) { 
-	        User user = RequestUtils.getUser(request);
-		String actorId =  user.getActorId();
+	        LoginContext loginContext = RequestUtils.getLoginContext(request);
+		    String actorId = loginContext.getActorId();
 	        Map<String, Object> params = RequestUtils.getParameterMap(request);
 		${entityName} ${modelName} = new ${entityName}();
 		try {
@@ -131,7 +138,9 @@ public class ${entityName}BaseController {
       </#if>
     </#list>
 </#if>
-		    ${modelName}.setCreateBy(actorId);
+            //${modelName}.setTenantId(loginContext.getTenantId());
+		    //${modelName}.setCreateBy(actorId);
+            //${modelName}.setUpdateBy(actorId);
 		    this.${modelName}Service.save(${modelName});
 
 		    return ResponseUtils.responseJsonResult(true);
