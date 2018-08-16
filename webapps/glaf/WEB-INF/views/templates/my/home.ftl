@@ -26,7 +26,15 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
-
+  <style>
+      .main-sidebar,.sidebar{
+          height: 100%;
+      }
+      .sidebar-menu{
+          height: calc(100% - 65px);
+          overflow-y: auto !important;
+      }
+  </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini fixed">
 <div class="wrapper">
