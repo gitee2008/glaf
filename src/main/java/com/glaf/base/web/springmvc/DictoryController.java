@@ -46,6 +46,7 @@ import com.glaf.base.modules.sys.model.SysTree;
 import com.glaf.base.modules.sys.query.DictoryQuery;
 import com.glaf.base.modules.sys.service.DictoryService;
 import com.glaf.base.modules.sys.service.SysTreeService;
+import com.glaf.base.modules.sys.util.DictoryJsonFactory;
 import com.glaf.base.utils.ParamUtil;
 import com.glaf.core.config.ViewProperties;
 import com.glaf.core.domain.DictoryDefinition;
@@ -153,6 +154,15 @@ public class DictoryController {
 			result.put("rows", rowsJSON);
 		}
 		return result.toString().getBytes("UTF-8");
+	}
+	
+	@RequestMapping("/jsonArray")
+	@ResponseBody
+	public byte[] jsonArray(HttpServletRequest request) throws IOException {
+		String nodeCode = request.getParameter("nodeCode");
+		List<Dictory> dicts = dictoryService.getDictoryList(nodeCode);
+		JSONArray array = DictoryJsonFactory.listToArray(dicts);
+		return array.toString().getBytes("UTF-8");
 	}
 
 	@RequestMapping
