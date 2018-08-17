@@ -75,7 +75,7 @@
     <tbody>
   <#if pojo_fields?exists>
     <#list  pojo_fields as field>	
-	<#if field.editable>
+	<#if field.editableField == "1">
 	<tr>
 		<td width="20%" align="left">${field.title}</td>
 		<td align="left">

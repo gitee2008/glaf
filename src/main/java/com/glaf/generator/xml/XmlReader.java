@@ -30,7 +30,6 @@ import com.glaf.core.util.Tools;
 
 public class XmlReader {
 
-	 
 	protected void read(Element elem, ColumnDefinition field) {
 		List<?> attrs = elem.attributes();
 		if (attrs != null && !attrs.isEmpty()) {
@@ -80,6 +79,10 @@ public class XmlReader {
 		}
 		if (StringUtils.equals(elem.attributeValue("editable"), "true")) {
 			field.setEditable(true);
+			field.setEditableField("1");
+		} else {
+			field.setEditable(false);
+			field.setEditableField("0");
 		}
 		if (StringUtils.equals(elem.attributeValue("searchable"), "true")) {
 			field.setSearchable(true);
@@ -123,7 +126,7 @@ public class XmlReader {
 				} else {
 					tableDefinition.setUpdateAllowed(true);
 				}
- 
+
 				tableDefinition.setModuleName(element.attributeValue("moduleName"));
 
 				String primaryKey = element.attributeValue("primaryKey");
