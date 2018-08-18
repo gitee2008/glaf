@@ -123,7 +123,7 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
-	<servlet>
+	<!-- <servlet>
 		<servlet-name>jsp</servlet-name>
 		<servlet-class>com.glaf.base.servlet.SpringDispatcherServlet</servlet-class>
 		<load-on-startup>2</load-on-startup>
@@ -132,7 +132,7 @@
 	<servlet-mapping>
 		<servlet-name>jsp</servlet-name>
 		<url-pattern>/mx/*</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping> -->
 
 	<servlet>
 		<servlet-name>resteasy</servlet-name>
