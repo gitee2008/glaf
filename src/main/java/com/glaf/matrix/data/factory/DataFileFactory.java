@@ -435,7 +435,44 @@ public class DataFileFactory {
 				if (fileId != null) {
 					dataFile.setId(fileId);
 				}
+				dataFile.setData(null);// 附件不写主控库
 				getDataFileService().insertDataFile(tenantId, dataFile);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			logger.error(ex);
+			throw new RuntimeException(ex);
+		} finally {
+			Environment.setCurrentSystemName(currentSystemName);
+		}
+	}
+
+	public void saveDataFile(String tenantId, DataFile dataFile, byte[] data) {
+		DataFile file = getDataFileService().getDataFileById(tenantId, dataFile.getId());
+		if (file != null) {
+			updateDataFile(tenantId, dataFile, data);
+		} else {
+			insertDataFile(tenantId, dataFile, data);
+		}
+	}
+
+	public void updateDataFile(String tenantId, DataFile dataFile, byte[] data) {
+		String currentSystemName = Environment.getCurrentSystemName();
+		try {
+			if (dataFile != null) {
+				String fileId = dataFile.getId();
+				dataFile.setData(data);
+				if (SystemConfig.getBoolean("fs_storage_mongodb")) {
+					MongoFileStorageFactory.getInstance().saveDataFile("fs", fileId, dataFile);
+					dataFile.setData(null);// 附件库写入字节流后就不写主控库了
+				} else {
+					if (systemName != null && !StringUtils.equals(Environment.DEFAULT_SYSTEM_NAME, systemName)) {
+						logger.debug("file save system: " + systemName);
+						Environment.setCurrentSystemName(systemName);
+						getDataFileService().updateDataFileInfo(tenantId, dataFile);
+						dataFile.setData(null);// 附件库写入字节流后就不写主控库了
+					}
+				}
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();

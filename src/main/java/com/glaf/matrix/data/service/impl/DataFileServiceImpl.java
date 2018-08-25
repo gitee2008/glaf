@@ -38,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+
 import com.glaf.core.base.DataFile;
 import com.glaf.core.cache.CacheFactory;
 import com.glaf.core.config.BaseConfiguration;
@@ -48,7 +49,6 @@ import com.glaf.core.id.IdGenerator;
 import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.security.IdentityFactory;
 import com.glaf.core.util.DBUtils;
-import com.glaf.core.util.DateUtils;
 import com.glaf.core.util.UUID32;
 
 import com.glaf.matrix.data.mapper.DataFileMapper;
@@ -111,9 +111,6 @@ public class DataFileServiceImpl implements IDataFileService {
 		DataFile dataFile = dataFileMapper.getDataFileById(query);
 		if (dataFile != null) {
 			dataFileMapper.deleteDataFileById(query);
-
-			query.setTableSuffix(String.valueOf(DateUtils.getYearMonthDay(dataFile.getCreateDate())));
-			dataFileMapper.deleteDataFileById(query);
 		}
 	}
 
@@ -125,18 +122,7 @@ public class DataFileServiceImpl implements IDataFileService {
 			query.tenantId(tenantId);
 			query.setTableSuffix(String.valueOf(IdentityFactory.getTenantHash(tenantId)));
 		}
-
-		List<DataFile> list = dataFileMapper.getDataFiles(query);
-
 		dataFileMapper.deleteDataFilesByBusinessKey(query);
-
-		if (list != null && !list.isEmpty()) {
-			for (DataFile dataFile : list) {
-				query.setTableSuffix(String.valueOf(DateUtils.getYearMonthDay(dataFile.getCreateDate())));
-				dataFileMapper.deleteDataFileById(query);
-			}
-		}
-
 	}
 
 	@Transactional
@@ -154,9 +140,6 @@ public class DataFileServiceImpl implements IDataFileService {
 				query.setTableSuffix(String.valueOf(IdentityFactory.getTenantHash(tenantId)));
 			}
 			dataFileMapper.deleteDataFilesByFileId(query);
-
-			query.setTableSuffix(String.valueOf(DateUtils.getYearMonthDay(dataFile.getCreateDate())));
-			dataFileMapper.deleteDataFileById(query);
 		}
 	}
 
@@ -661,9 +644,6 @@ public class DataFileServiceImpl implements IDataFileService {
 			dataFile.setTableSuffix(String.valueOf(IdentityFactory.getTenantHash(tenantId)));
 		}
 		dataFileMapper.updateDataFile(dataFile);
-
-		dataFile.setTableSuffix(String.valueOf(DateUtils.getYearMonthDay(dataFile.getCreateDate())));
-		dataFileMapper.updateDataFile(dataFile);
 	}
 
 	@Transactional
@@ -681,16 +661,8 @@ public class DataFileServiceImpl implements IDataFileService {
 		}
 
 		if (StringUtils.equals(DBUtils.POSTGRESQL, DBConnectionFactory.getDatabaseType())) {
-			dataFile.setPath(null);
-			entityDAO.update("updateDataFileFileInfo_postgres", dataFile);
-
-			dataFile.setTableSuffix(String.valueOf(DateUtils.getYearMonthDay(dataFile.getCreateDate())));
 			entityDAO.update("updateDataFileFileInfo_postgres", dataFile);
 		} else {
-			dataFile.setPath(null);
-			entityDAO.update("updateDataFileFileInfo", dataFile);
-
-			dataFile.setTableSuffix(String.valueOf(DateUtils.getYearMonthDay(dataFile.getCreateDate())));
 			entityDAO.update("updateDataFileFileInfo", dataFile);
 		}
 	}
