@@ -458,13 +458,7 @@ public class DataFileServiceImpl implements IDataFileService {
 
 		if (StringUtils.equals(DBUtils.POSTGRESQL, DBConnectionFactory.getDatabaseType())) {
 			dataFileMapper.insertDataFile_postgres(dataFile);
-
-			dataFile.setTableSuffix(String.valueOf(DateUtils.getYearMonthDay(dataFile.getCreateDate())));
-			dataFileMapper.insertDataFile_postgres(dataFile);
 		} else {
-			dataFileMapper.insertDataFile(dataFile);
-
-			dataFile.setTableSuffix(String.valueOf(DateUtils.getYearMonthDay(dataFile.getCreateDate())));
 			dataFileMapper.insertDataFile(dataFile);
 		}
 

@@ -19,7 +19,6 @@
 package com.glaf.core.security;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -52,7 +51,6 @@ import com.glaf.core.service.EntityService;
 import com.glaf.core.service.IDatabaseService;
 import com.glaf.core.service.ITablePageService;
 import com.glaf.core.util.Constants;
-import com.glaf.core.util.ParamUtils;
 import com.glaf.core.util.StringTools;
 import com.glaf.core.util.hash.JenkinsHash;
 
@@ -161,33 +159,7 @@ public class IdentityFactory {
 		return entityService;
 	}
 
-	public static List<String> getGradeIds(String userId, String tenantId) {
-		StringBuilder buffer = new StringBuilder();
-		buffer.append("cache_gradeids_").append(tenantId).append("_").append(userId);
-
-		String cacheKey = buffer.toString();
-		String text = CacheFactory.getString("cache_gradeids", cacheKey);
-		if (text != null) {
-			return StringTools.split(text);
-		}
-
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("userId", userId);
-		params.put("tenantId", tenantId);
-		List<String> gradeIds = new ArrayList<String>();
-		List<Map<String, Object>> datalist = getTablePageService().getListData(
-				" select E.GRADEID_ as \"gradeId\" from HEALTH_GRADE_PRIVILEGE E where ( E.USERID_ = #{userId} ) and ( E.TENANTID_ = #{tenantId} ) ",
-				params);
-		buffer.delete(0, buffer.length());
-		if (datalist != null && !datalist.isEmpty()) {
-			for (Map<String, Object> dataMap : datalist) {
-				gradeIds.add(ParamUtils.getString(dataMap, "gradeId"));
-				buffer.append(ParamUtils.getString(dataMap, "gradeId")).append(",");
-			}
-		}
-		CacheFactory.put("cache_gradeids", cacheKey, buffer.toString());
-		return gradeIds;
-	}
+	 
 
 	/**
 	 * 获取全部组Map
@@ -301,9 +273,6 @@ public class IdentityFactory {
 						}
 					}
 				}
-
-				List<String> gradeIds = getGradeIds(userId, user.getTenantId());
-				loginContext.setGradeIds(gradeIds);
 			}
 
 			/**

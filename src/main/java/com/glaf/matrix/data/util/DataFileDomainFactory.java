@@ -222,6 +222,48 @@ public class DataFileDomainFactory {
 			JdbcUtils.close(conn);
 		}
 	}
+	
+	public static void createTenantTables(long databaseId) {
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+
+		String sqlStatement = null;
+		TableDefinition tableDefinition = null;
+
+		Connection conn = null;
+		Statement statement = null;
+		Database database = null;
+		try {
+			if (databaseId > 0) {
+				IDatabaseService databaseService = ContextFactory.getBean("databaseService");
+				database = databaseService.getDatabaseById(databaseId);
+			}
+
+			if (database != null) {
+				conn = DBConnectionFactory.getConnection(database.getName());
+			} else {
+				conn = DBConnectionFactory.getConnection();
+			}
+
+			String dbType = DBConnectionFactory.getDatabaseType(conn);
+			conn.setAutoCommit(false);
+
+			for (int i = 0; i < 255; i++) {
+				tableDefinition = getTableDefinition(TABLENAME + i);
+				sqlStatement = DBUtils.getCreateTableScript(dbType, tableDefinition);
+				statement = conn.createStatement();
+				statement.executeUpdate(sqlStatement);
+				JdbcUtils.close(statement);
+			}
+			conn.commit();
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		} finally {
+			JdbcUtils.close(statement);
+			JdbcUtils.close(conn);
+		}
+	}
 
 	public static TableDefinition getTableDefinition() {
 		return getTableDefinition(TABLENAME);
