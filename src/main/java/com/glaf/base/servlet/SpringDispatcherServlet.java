@@ -112,6 +112,13 @@ public class SpringDispatcherServlet extends DispatcherServlet {
 				Authentication.setAuthenticatedUser(user);
 				com.glaf.core.security.Authentication.setAuthenticatedActorId(user.getActorId());
 			} else {
+				if (StringUtils.contains(uri, "/website/")) {
+					request.setCharacterEncoding("UTF-8");
+					response.setCharacterEncoding("UTF-8");
+					super.doService(request, response);
+					return;
+				}
+
 				/**
 				 * 取不到用户会话信息，跳转到登录页
 				 */
