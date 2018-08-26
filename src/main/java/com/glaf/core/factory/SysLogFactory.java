@@ -184,7 +184,7 @@ public class SysLogFactory {
 				logDB.setUseType("LOG");
 				logDB.setRunType("INST");
 				logDB.setTitle("日志库");
-				logDB.setDbname(logDB.getDbname() + "_LOG");
+				logDB.setDbname(logDB.getDbname() + "_log");
 				logDB.setKey(master.getKey());
 				logDB.setUser(master.getUser());
 				logDB.setPassword(master.getPassword());
