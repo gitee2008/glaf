@@ -6,7 +6,18 @@
 <# include "/inc/init_easyui_layer3_import.ftl"/>
 <script type="text/javascript">
 
-   jQuery(function(){
+
+    function getLink(){
+	    var link_ = "#F{contextPath}/${tableDefinition.moduleName}/${modelName}/json?q=1";
+		var namePinyinLike = jQuery("#namePinyinLike").val();
+		if(namePinyinLike != "" && namePinyinLike != "undefined" ){
+		    link_ = link_ + "&namePinyinLike="+namePinyinLike;
+		}
+		return link_;
+    }
+
+
+    jQuery(function(){
 		jQuery('#mydatagrid').datagrid({
 				width:1000,
 				height:480,
@@ -15,7 +26,7 @@
 				nowrap: false,
 				striped: true,
 				collapsible: true,
-				url: '#F{contextPath}/${tableDefinition.moduleName}/${modelName}/json',
+				url: getLink(),
 				remoteSort: false,
 				singleSelect: true,
 				idField: '${idField.name}',
@@ -24,7 +35,7 @@
 					<#if pojo_fields?exists>
 					<#list  pojo_fields as field>
 					 <#if field.displayType == 4>
-					{title:'${field.title?if_exists}',field:'${field.name}', width:120},
+					{title:'${field.title?if_exists}',field:'${field.name}', width:120, sortable:true<#if field.type?exists && (field.type== 'Integer' || field.type== 'Long' || field.type== 'Double' ) >, align:'right'</#if>},
 					 </#if>
 					</#list>
 					</#if>	 
@@ -38,12 +49,28 @@
 				onDblClickRow: onMyRowClick 
 			});
 
-			var p = jQuery('#mydatagrid').datagrid('getPager');
-			jQuery(p).pagination({
-				onBeforeRefresh:function(){
-					//alert('before refresh');
-				}
-		    });
+			var pgx = $("#mydatagrid").datagrid("getPager");
+			if(pgx){
+			   $(pgx).pagination({
+				   onBeforeRefresh:function(){
+					   //alert('before refresh');
+				   },
+				   onRefresh:function(pageNumber,pageSize){
+					   //alert(pageNumber);
+					   //alert(pageSize);
+					   loadGridData(getLink()+"&page="+pageNumber+"&rows="+pageSize);
+					},
+				   onChangePageSize:function(){
+					   //alert('pagesize changed');
+					   loadGridData(getLink());
+					},
+				   onSelectPage:function(pageNumber, pageSize){
+					   //alert(pageNumber);
+					   //alert(pageSize);
+					   loadGridData(getLink()+"&page="+pageNumber+"&rows="+pageSize);
+					}
+			   });
+			}
 	});
 
 
@@ -105,7 +132,7 @@
 			jQuery.ajax({
 				   type: "POST",
 				   url: '#F{contextPath}/${tableDefinition.moduleName}/${modelName}/delete?id='+id,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },
@@ -209,7 +236,7 @@
 			jQuery.ajax({
 				   type: "POST",
 				   url: '#F{contextPath}/${tableDefinition.moduleName}/${modelName}/delete?${idField.name}s='+str,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },
@@ -257,8 +284,8 @@
 	function loadGridData(url){
 	    jQuery.ajax({
 			type: "POST",
-			url:  url,
-			dataType:  'json',
+			url: url,
+			dataType: 'json',
 			error: function(data){
 				alert('服务器处理错误！');
 			},
@@ -273,7 +300,7 @@
         jQuery.ajax({
                     type: "POST",
                     url: '#F{contextPath}/${tableDefinition.moduleName}/${modelName}/json',
-                    dataType:  'json',
+                    dataType: 'json',
                     data: params,
                     error: function(data){
                               alert('服务器处理错误！');
@@ -291,18 +318,27 @@
 <body style="margin:1px;">  
 <div style="margin:0;"></div>  
 <div class="easyui-layout" data-options="fit:true">  
-   <div data-options="region:'north',split:true,border:true" style="height:40px"> 
-    <div class="toolbar-backgroud"  > 
-	<img src="#F{contextPath}/static/images/window.png">
-	&nbsp;<span class="x_content_title">${tableDefinition.title}列表</span>
-    <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-add'" 
-	   onclick="javascript:addNew();">新增</a>  
-    <a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-edit'"
-	   onclick="javascript:editSelected();">修改</a>  
-	<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-remove'"
-	   onclick="javascript:deleteSelections();">删除</a> 
-	<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-search'"
-	   onclick="javascript:searchWin();">查找</a>
+   <div data-options="region:'north',split:false, border:true" style="height:48px" class="toolbar-backgroud"> 
+    <div style="margin:4px;"> 
+	  <table width="100%" align="left">
+		<tbody>
+		 <tr>
+		    <td width="55%" align="left">
+				<img src="#F{contextPath}/static/images/window.png">
+				&nbsp;<span class="x_content_title">${tableDefinition.title}列表</span>
+				<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-add'" 
+				   onclick="javascript:addNew();">新增</a>  
+				<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-edit'"
+				   onclick="javascript:editSelected();">修改</a>  
+				<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-remove'"
+				   onclick="javascript:deleteSelections();">删除</a> 
+				<a href="#" class="easyui-linkbutton" data-options="plain:true, iconCls:'icon-search'"
+				   onclick="javascript:searchWin();">查找</a>
+			</td>
+			<td width="45%" align="left">&nbsp;</td>
+		</tr>
+	   </tbody>
+	  </table>
    </div> 
   </div> 
   <div data-options="region:'center',border:true">

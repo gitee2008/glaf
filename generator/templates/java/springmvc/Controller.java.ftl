@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.*;
  
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -58,58 +59,10 @@ public class ${entityName}Controller {
 	public ${entityName}Controller() {
 
 	}
-
-        @javax.annotation.Resource(name = "${packageName}.service.${modelName}Service")
-	public void set${entityName}Service(${entityName}Service ${modelName}Service) {
-		this.${modelName}Service = ${modelName}Service;
-	}
-
  
-
-        @ResponseBody
-	@RequestMapping("/save${entityName}")
-	public byte[] save${entityName}(HttpServletRequest request) { 
-	        LoginContext loginContext = RequestUtils.getLoginContext(request);
-		    String actorId =  loginContext.getActorId();
-	        Map<String, Object> params = RequestUtils.getParameterMap(request);
-		${entityName} ${modelName} = new ${entityName}();
-		try {
-		    Tools.populate(${modelName}, params);
- <#if pojo_fields?exists>
-    <#list  pojo_fields as field>	
-      <#if field.type?exists && ( field.type== 'Integer')>
-                    ${modelName}.set${field.firstUpperName}(RequestUtils.getInt(request, "${field.name}"));
-      <#elseif field.type?exists && ( field.type== 'Long')>
-                    ${modelName}.set${field.firstUpperName}(RequestUtils.getLong(request, "${field.name}"));
-      <#elseif field.type?exists && ( field.type== 'Double')>
-                    ${modelName}.set${field.firstUpperName}(RequestUtils.getDouble(request, "${field.name}"));
-      <#elseif field.type?exists && ( field.type== 'Date')>
-                    ${modelName}.set${field.firstUpperName}(RequestUtils.getDate(request, "${field.name}"));
-      <#elseif field.type?exists && ( field.type== 'String')>
-                    ${modelName}.set${field.firstUpperName}(request.getParameter("${field.name}"));
-      </#if>
-    </#list>
-</#if>
-		    //${modelName}.setCreateBy(actorId);
-			//${modelName}.setUpdateBy(actorId);
-			//${modelName}.setTenantId(loginContext.getTenantId());
-
-		    this.${modelName}Service.save(${modelName});
-
-		    return ResponseUtils.responseJsonResult(true);
-		} catch (Exception ex) {
-		    ex.printStackTrace();
-		    logger.error(ex);
-		}
-		return ResponseUtils.responseJsonResult(false);
-	}
-
-
- 
-
     @ResponseBody
     @RequestMapping("/delete")
-	public byte[] delete(HttpServletRequest request, ModelMap modelMap) {
+	public byte[] delete(HttpServletRequest request, HttpServletResponse response) {
 		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
 		${idField.type} ${idField.name} = RequestUtils.get${idField.type}(request, "${idField.name}");
@@ -121,7 +74,7 @@ public class ${entityName}Controller {
 				if (StringUtils.isNotEmpty(x)) {
 					${entityName} ${modelName} = ${modelName}Service.get${entityName}(${idField.type}.valueOf(x));
 					if (${modelName} != null && (StringUtils.equals(${modelName}.getCreateBy(), loginContext.getActorId()) || loginContext.isSystemAdministrator())) {
-						${modelName}.setDeleteFlag(1);
+						//${modelName}.setDeleteFlag(1);
 						${modelName}Service.save(${modelName});
 					}
 				}
@@ -131,7 +84,7 @@ public class ${entityName}Controller {
 			${entityName} ${modelName} = ${modelName}Service
 					.get${entityName}(${idField.type}.valueOf(${idField.name}));
 			if (${modelName} != null && ( StringUtils.equals(${modelName}.getCreateBy(), loginContext.getActorId()) || loginContext.isSystemAdministrator())) {
-				${modelName}.setDeleteFlag(1);
+				//${modelName}.setDeleteFlag(1);
 				${modelName}Service.save(${modelName});
 				return ResponseUtils.responseResult(true);
 			}
@@ -140,7 +93,7 @@ public class ${entityName}Controller {
 	}
 
     
-        @RequestMapping("/edit")
+    @RequestMapping("/edit")
 	public ModelAndView edit(HttpServletRequest request, ModelMap modelMap) {
 		LoginContext loginContext = RequestUtils.getLoginContext(request);
 		String actorId =  loginContext.getActorId();
@@ -172,7 +125,8 @@ public class ${entityName}Controller {
 		return new ModelAndView("/${tableDefinition.moduleName}/${modelName}/edit", modelMap);
 	}
 
-        @RequestMapping("/query")
+
+    @RequestMapping("/query")
 	public ModelAndView query(HttpServletRequest request, ModelMap modelMap) {
 		RequestUtils.setRequestParameterToAttribute(request);
 		String view = request.getParameter("view");
@@ -186,9 +140,10 @@ public class ${entityName}Controller {
 		return new ModelAndView("/${tableDefinition.moduleName}/${modelName}/query", modelMap);
 	}
 
+
 	@RequestMapping("/json")
 	@ResponseBody
-	public byte[] json(HttpServletRequest request, ModelMap modelMap) throws IOException {
+	public byte[] json(HttpServletRequest request, HttpServletResponse response) throws IOException {
 	        LoginContext loginContext = RequestUtils.getLoginContext(request);
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
 		${entityName}Query query = new ${entityName}Query();
@@ -250,7 +205,6 @@ public class ${entityName}Controller {
 				for (${entityName} ${modelName} : list) {
 					JSONObject rowJSON = ${modelName}.toJsonObject();
 					rowJSON.put("id", ${modelName}.getId());
-					rowJSON.put("rowId", ${modelName}.getId());
 					rowJSON.put("${modelName}Id", ${modelName}.getId());
                     rowJSON.put("startIndex", ++start);
  					rowsJSON.add(rowJSON);
@@ -266,7 +220,7 @@ public class ${entityName}Controller {
 	}
 
 
-        @RequestMapping 
+    @RequestMapping 
 	public ModelAndView list(HttpServletRequest request, ModelMap modelMap) {
 		RequestUtils.setRequestParameterToAttribute(request);
 
@@ -277,6 +231,79 @@ public class ${entityName}Controller {
  
 
 		return new ModelAndView("/${tableDefinition.moduleName}/${modelName}/list", modelMap);
+	}
+
+
+    @javax.annotation.Resource(name = "${packageName}.service.${modelName}Service")
+	public void set${entityName}Service(${entityName}Service ${modelName}Service) {
+		this.${modelName}Service = ${modelName}Service;
+	}
+
+
+    @ResponseBody
+	@RequestMapping("/save")
+	public byte[] save(HttpServletRequest request, HttpServletResponse response) { 
+	    LoginContext loginContext = RequestUtils.getLoginContext(request);
+		String actorId =  loginContext.getActorId();
+	    Map<String, Object> params = RequestUtils.getParameterMap(request);
+		String json = request.getParameter("json");
+		${entityName} ${modelName} = null;
+		try {
+            if(StringUtils.isNotEmpty(json)){
+                JSONObject jsonObject = JSON.parseObject(json);
+				${modelName} = ${entityName}JsonFactory.jsonToObject(jsonObject);
+				//${modelName}.setCreateBy(actorId);
+				//${modelName}.setUpdateBy(actorId);
+				//${modelName}.setTenantId(loginContext.getTenantId());
+
+				this.${modelName}Service.save(${modelName});
+
+				return ResponseUtils.responseJsonResult(true);
+			}
+		} catch (Exception ex) {
+		    ex.printStackTrace();
+		    logger.error(ex);
+		}
+		return ResponseUtils.responseJsonResult(false);
+	}
+
+
+
+    @ResponseBody
+	@RequestMapping("/save${entityName}")
+	public byte[] save${entityName}(HttpServletRequest request, HttpServletResponse response) { 
+	    LoginContext loginContext = RequestUtils.getLoginContext(request);
+		String actorId =  loginContext.getActorId();
+	    Map<String, Object> params = RequestUtils.getParameterMap(request);
+		${entityName} ${modelName} = new ${entityName}();
+		try {
+		    Tools.populate(${modelName}, params);
+ <#if pojo_fields?exists>
+    <#list  pojo_fields as field>	
+      <#if field.type?exists && ( field.type== 'Integer')>
+                    ${modelName}.set${field.firstUpperName}(RequestUtils.getInt(request, "${field.name}"));
+      <#elseif field.type?exists && ( field.type== 'Long')>
+                    ${modelName}.set${field.firstUpperName}(RequestUtils.getLong(request, "${field.name}"));
+      <#elseif field.type?exists && ( field.type== 'Double')>
+                    ${modelName}.set${field.firstUpperName}(RequestUtils.getDouble(request, "${field.name}"));
+      <#elseif field.type?exists && ( field.type== 'Date')>
+                    ${modelName}.set${field.firstUpperName}(RequestUtils.getDate(request, "${field.name}"));
+      <#elseif field.type?exists && ( field.type== 'String')>
+                    ${modelName}.set${field.firstUpperName}(request.getParameter("${field.name}"));
+      </#if>
+    </#list>
+</#if>
+		    //${modelName}.setCreateBy(actorId);
+			//${modelName}.setUpdateBy(actorId);
+			//${modelName}.setTenantId(loginContext.getTenantId());
+		    this.${modelName}Service.save(${modelName});
+
+		    return ResponseUtils.responseJsonResult(true);
+		} catch (Exception ex) {
+		    ex.printStackTrace();
+		    logger.error(ex);
+		}
+		return ResponseUtils.responseJsonResult(false);
 	}
 
 }

@@ -4,15 +4,19 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>${tableDefinition.title}</title>
 <# include "/inc/init_easyui_import.ftl"/>
+<script type="text/javascript" src="#F{contextPath}/static/scripts/framework.js"></script>
 <script type="text/javascript">
 
 	function saveData(){
+		//var jsonObject = fromToJson(document.getElementById("iForm"));
+		var jsonObject = jQuery('#iForm').serializeObject();
+        document.getElementById("json").value=JSON.stringify(jsonObject);
 		var params = jQuery("#iForm").formSerialize();
 		jQuery.ajax({
 				   type: "POST",
-				   url: '#F{contextPath}/${tableDefinition.moduleName}/${modelName}/save${entityName}',
+				   url: '#F{contextPath}/${tableDefinition.moduleName}/${modelName}/save',
 				   data: params,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },
@@ -30,14 +34,16 @@
 	}
 
 	function saveAsData(){
-		document.getElementById("id").value="";
+		//var jsonObject = fromToJson(document.getElementById("iForm"));
+		var jsonObject = jQuery('#iForm').serializeObject();
+        document.getElementById("json").value=JSON.stringify(jsonObject);
 		document.getElementById("${idField.name}").value="";
 		var params = jQuery("#iForm").formSerialize();
 		jQuery.ajax({
 				   type: "POST",
-				   url: '#F{contextPath}/${tableDefinition.moduleName}/${modelName}/save${entityName}',
+				   url: '#F{contextPath}/${tableDefinition.moduleName}/${modelName}/save',
 				   data: params,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },
@@ -70,6 +76,7 @@
 
   <div data-options="region:'center',border:false,cache:true">
   <form id="iForm" name="iForm" method="post">
+  <input type="hidden" id="json" name="json">
   <input type="hidden" id="${idField.name}" name="${idField.name}" value="#F{${modelName}.${idField.name}}"/>
   <table class="easyui-form" style="width:600px;" align="center">
     <tbody>
@@ -81,7 +88,7 @@
 		<td align="left">
 		<#if field.type?exists && field.type== 'Date'>
 			<input id="${field.name}" name="${field.name}" type="text" 
-			       class="easyui-datebox x-text"
+			       class="easyui-datebox x-text" style="text-align: center"
 			<#if field.nullable == false> required="true" data-options="required:true" </#if>
 			       <# if ${modelName}.${field.name}?exists>
 				   value="#F{${modelName}.${field.name} ? string('yyyy-MM-dd')}"
@@ -89,17 +96,17 @@
 				   />
             <#elseif field.type?exists && field.type== 'Integer'>
 			<input id="${field.name}" name="${field.name}" type="text" 
-			       class="easyui-numberbox x-text" 
+			       class="easyui-numberbox x-text" style="text-align: right" 
 				   increment="10"  <#if field.nullable == false> required="true" data-options="required:true" </#if>
 				   value="#F{${modelName}.${field.name}}"/>
 			<#elseif field.type?exists && field.type== 'Long'>
 			<input id="${field.name}" name="${field.name}" type="text"
-			       class="easyui-numberbox x-text"
+			       class="easyui-numberbox x-text" style="text-align: right"
 				   increment="100"  <#if field.nullable == false> required="true" data-options="required:true" </#if>
 				   value="#F{${modelName}.${field.name}}"/>
 			<#elseif field.type?exists && field.type== 'Double'>
 			<input id="${field.name}" name="${field.name}" type="text"
-			       class="easyui-numberbox  x-text"  precision="2" 
+			       class="easyui-numberbox  x-text"  precision="2" style="text-align: right"
 			<#if field.nullable == false> required="true" data-options="required:true" </#if>
 				  value="#F{${modelName}.${field.name}}"/>
 			<#else>
