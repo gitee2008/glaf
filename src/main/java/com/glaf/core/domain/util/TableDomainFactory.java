@@ -120,11 +120,18 @@ public class TableDomainFactory {
 		TableDefinition tableDefinition = new TableDefinition();
 		tableDefinition.setTableName(tableName);
 
+		ColumnDefinition uuid = new ColumnDefinition();
+		uuid.setName("uuid");
+		uuid.setColumnName("UUID_");
+		uuid.setJavaType("String");
+		uuid.setLength(50);
+		tableDefinition.setIdColumn(uuid);
+
 		ColumnDefinition idColumn = new ColumnDefinition();
 		idColumn.setName("id");
 		idColumn.setColumnName("ID_");
 		idColumn.setJavaType("Long");
-		tableDefinition.setIdColumn(idColumn);
+		tableDefinition.addColumn(idColumn);
 
 		ColumnDefinition parentId = new ColumnDefinition();
 		parentId.setName("parentId");
@@ -143,13 +150,6 @@ public class TableDomainFactory {
 		nodeId.setColumnName("NODEID_");// 关联到另外的树表的节点编号，即另外一个树表的ID_
 		nodeId.setJavaType("Long");
 		tableDefinition.addColumn(nodeId);
-
-		ColumnDefinition uuid = new ColumnDefinition();
-		uuid.setName("uuid");
-		uuid.setColumnName("UUID_");
-		uuid.setJavaType("String");
-		uuid.setLength(50);
-		tableDefinition.addColumn(uuid);
 
 		ColumnDefinition name = new ColumnDefinition();
 		name.setName("name");
