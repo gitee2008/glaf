@@ -101,7 +101,6 @@ public class TableDataSaveController {
 					list.add("sortno_");
 					list.add("locked_");
 					list.add("organizationid_");
-					list.add("gradeid_");
 					list.add("tenantid_");
 					list.add("createby_");
 					list.add("createtime_");
@@ -186,7 +185,6 @@ public class TableDataSaveController {
 					list.add("sortno_");
 					list.add("locked_");
 					list.add("organizationid_");
-					list.add("gradeid_");
 					list.add("tenantid_");
 					list.add("createby_");
 					list.add("createtime_");

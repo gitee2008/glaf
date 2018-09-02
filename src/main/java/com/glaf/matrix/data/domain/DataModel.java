@@ -59,8 +59,6 @@ public class DataModel implements Serializable {
 
 	protected long organizationId;
 
-	protected String gradeId;
-
 	protected int sortNo;
 
 	protected int businessStatus;
@@ -129,10 +127,6 @@ public class DataModel implements Serializable {
 
 	public String getDiscriminator() {
 		return discriminator;
-	}
-
-	public String getGradeId() {
-		return gradeId;
 	}
 
 	public String getIcon() {
@@ -241,10 +235,6 @@ public class DataModel implements Serializable {
 
 	public void setDiscriminator(String discriminator) {
 		this.discriminator = discriminator;
-	}
-
-	public void setGradeId(String gradeId) {
-		this.gradeId = gradeId;
 	}
 
 	public void setIcon(String icon) {

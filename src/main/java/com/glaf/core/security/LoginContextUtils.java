@@ -52,12 +52,6 @@ public class LoginContextUtils {
 			}
 		}
 
-		if (loginContext.getGradeIds() != null) {
-			for (String x : loginContext.getGradeIds()) {
-				m.addGradeId(x);
-			}
-		}
-
 		if (loginContext.getManagedTenantIds() != null) {
 			for (String x : loginContext.getManagedTenantIds()) {
 				m.addManagedTenantId(x);
@@ -121,15 +115,6 @@ public class LoginContextUtils {
 			while (iterator.hasNext()) {
 				String role = (String) iterator.next();
 				loginContext.addRole(role);
-			}
-		}
-
-		if (jsonObject.containsKey("gradeIds")) {
-			JSONArray jsonArray = jsonObject.getJSONArray("gradeIds");
-			Iterator<Object> iterator = jsonArray.iterator();
-			while (iterator.hasNext()) {
-				String gradeId = (String) iterator.next();
-				loginContext.addGradeId(gradeId);
 			}
 		}
 
@@ -223,15 +208,6 @@ public class LoginContextUtils {
 				jsonArray.add(role);
 			}
 			jsonObject.put("roles", jsonArray);
-		}
-
-		Collection<String> gradeIds = loginContext.getGradeIds();
-		if (gradeIds != null && !gradeIds.isEmpty()) {
-			JSONArray jsonArray = new JSONArray();
-			for (String gradeId : gradeIds) {
-				jsonArray.add(gradeId);
-			}
-			jsonObject.put("gradeIds", jsonArray);
 		}
 
 		Collection<String> managedTenantIds = loginContext.getManagedTenantIds();

@@ -54,7 +54,6 @@ import com.glaf.core.util.DateUtils;
 import com.glaf.core.util.JdbcUtils;
 import com.glaf.core.util.LowerLinkedMap;
 import com.glaf.core.util.ParamUtils;
-import com.glaf.core.util.QueryUtils;
 import com.glaf.core.util.RequestUtils;
 import com.glaf.core.util.UUID32;
 
@@ -477,7 +476,6 @@ public class TableDataBean {
 		dataModel.setTitle(ParamUtils.getString(dataMap, "title_"));
 		dataModel.setType(ParamUtils.getString(dataMap, "type_"));
 		dataModel.setTreeId(ParamUtils.getString(dataMap, "treeid_"));
-		dataModel.setGradeId(ParamUtils.getString(dataMap, "gradeid_"));
 		dataModel.setOrganizationId(ParamUtils.getLong(dataMap, "organizationid_"));
 		dataModel.setTenantId(ParamUtils.getString(dataMap, "tenantid_"));
 		dataModel.setIcon(ParamUtils.getString(dataMap, "icon_"));
@@ -533,7 +531,6 @@ public class TableDataBean {
 				dataMap.remove("uuid_");
 				dataMap.remove("createby_");
 				dataMap.remove("createtime_");
-				dataMap.remove("gradeid_");
 				dataMap.remove("organizationid_");
 				dataList.add(dataMap);
 				BatchUpdateBean updateBean = new BatchUpdateBean();
@@ -670,7 +667,6 @@ public class TableDataBean {
 					list.add("sortno_");
 					list.add("locked_");
 					list.add("organizationid_");
-					list.add("gradeid_");
 					list.add("createby_");
 					list.add("createtime_");
 					list.add("business_status_");
@@ -758,22 +754,12 @@ public class TableDataBean {
 									subOrganizationIds = new HashSet<Long>();
 								}
 								subOrganizationIds.add(loginContext.getOrganizationId());
-								// sqlBuffer.append(QueryUtils.getLongParameterSQLCondition(subOrganizationIds,
-								// "E","ORGANIZATIONID_"));
+								
 							} else {
 								if (loginContext.getOrganizationId() > 0) {
-									// sqlBuffer.append(" and E.ORGANIZATIONID_
-									// =
-									// ").append(loginContext.getOrganizationId());
+								
 								}
 
-								if (loginContext.getGradeIds() != null && !loginContext.getGradeIds().isEmpty()) {
-									sqlBuffer.append(
-											QueryUtils.getSQLCondition(loginContext.getGradeIds(), "E", "GRADEID_"));
-								} else {
-									sqlBuffer.append(" and E.CREATEBY_ = '").append(loginContext.getActorId())
-											.append("' ");
-								}
 							}
 						}
 					}
@@ -785,9 +771,6 @@ public class TableDataBean {
 						sqlBuffer.append(" and E.TOPID_ = ").append(topId);
 					}
 
-					// SqlCriteriaQuery query = new SqlCriteriaQuery();
-					// query.businessKey(sysTable.getTableName());
-					// query.moduleId(tableId);
 					List<SqlCriteria> sqlCriterias = getSqlCriteriaService().getSqlCriterias(sysTable.getTableName(),
 							tableId);
 					if (sqlCriterias != null && !sqlCriterias.isEmpty()) {

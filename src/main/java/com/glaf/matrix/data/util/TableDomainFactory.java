@@ -66,7 +66,6 @@ public class TableDomainFactory {
 		columnMap.put("sort", "SORTNO_");
 		columnMap.put("locked", "LOCKED_");
 		columnMap.put("organizationId", "ORGANIZATIONID_");
-		columnMap.put("gradeId", "GRADEID_");
 		columnMap.put("tenantId", "TENANTID_");
 		columnMap.put("aggregationKey", "AGGREGATIONKEY_");
 		columnMap.put("businessStatus", "BUSINESS_STATUS_");
@@ -100,7 +99,6 @@ public class TableDomainFactory {
 		javaTypeMap.put("sort", "Integer");
 		javaTypeMap.put("locked", "Integer");
 		javaTypeMap.put("organizationId", "Long");
-		javaTypeMap.put("gradeId", "String");
 		javaTypeMap.put("tenantId", "String");
 		javaTypeMap.put("aggregationKey", "String");
 		javaTypeMap.put("businessStatus", "Integer");
@@ -319,13 +317,6 @@ public class TableDomainFactory {
 		organizationId.setColumnName("ORGANIZATIONID_");// 机构编号
 		organizationId.setJavaType("Long");
 		tableDefinition.addColumn(organizationId);
-
-		ColumnDefinition gradeId = new ColumnDefinition();
-		gradeId.setName("gradeId");
-		gradeId.setColumnName("GRADEID_");// 业务等级编号
-		gradeId.setJavaType("String");
-		gradeId.setLength(50);
-		tableDefinition.addColumn(gradeId);
 
 		ColumnDefinition sort = new ColumnDefinition();
 		sort.setName("sort");
