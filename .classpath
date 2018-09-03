@@ -230,5 +230,11 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/aliyun-java-sdk-dysmsapi.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-idm-engine-configurator.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-idm-spring-configurator.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/byte-buddy.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jai-imageio-core.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jcommander.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/pagehelper.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/zxing-core.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/zxing-java.jar"/>
 	<classpathentry kind="output" path="webapps/glaf/WEB-INF/classes"/>
 </classpath>
