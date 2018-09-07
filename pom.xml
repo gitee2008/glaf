@@ -215,14 +215,19 @@
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk15on</artifactId>
-			<version>1.58</version>
+			<version>1.60</version>
 			<type>jar</type>
 		</dependency>
-
+        <dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcpkix-jdk15on</artifactId>
+			<version>1.60</version>
+			<type>jar</type>
+		</dependency>
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcmail-jdk15on</artifactId>
-			<version>1.58</version>
+			<version>1.60</version>
 			<type>jar</type>
 		</dependency>
 
@@ -708,6 +713,11 @@
 			<artifactId>mybatis-spring</artifactId>
 			<version>${mybatis-spring.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper</artifactId>
+			<version>5.1.6</version>
+		</dependency>
 		<!-- jdbc驱动 -->
 		<dependency>
 			<groupId>org.mongodb</groupId>
@@ -1001,7 +1011,7 @@
 		<dependency>
 			<groupId>net.oschina.j2cache</groupId>
 			<artifactId>j2cache-core</artifactId>
-			<version>2.5.3-release</version>
+			<version>2.5.5-release</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jxls</groupId>
