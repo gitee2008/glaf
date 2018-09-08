@@ -107,9 +107,7 @@ public class ImgQrTool {
 	 *
 	 */
 	public static void createSimpleQr(String content, int width, int height, String destImagePath) {
-
 		FileOutputStream output = null;
-
 		try {
 			String format = "jpg";// 图像类型
 			Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>();
@@ -121,10 +119,12 @@ public class ImgQrTool {
 		} catch (Exception e) {
 			log.error("生成二维码出错！ImgQrTool：createSimpleQr()", e);
 		} finally {
-			try {
-				output.close();
-			} catch (IOException e) {
-				log.error("生成二维码出错！ImgQrTool：createSimpleQr()", e);
+			if (output != null) {
+				try {
+					output.close();
+				} catch (IOException e) {
+					log.error("生成二维码出错！ImgQrTool：createSimpleQr()", e);
+				}
 			}
 		}
 	}
