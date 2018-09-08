@@ -99,6 +99,11 @@ public final class ContextFactory {
 						filename = "/" + filename;// For linux
 					}
 					ctx = new FileSystemXmlApplicationContext(filename);
+				} else {
+					String filename = SystemProperties.getConfigRootPath() + Constants.SPRING_APPLICATION_CONTEXT;
+					logger.info("load default spring config:" + filename);
+					filename = "file:////" + filename;
+					ctx = new FileSystemXmlApplicationContext(filename);
 				}
 			} catch (Exception ex) {
 				logger.error(ex);
