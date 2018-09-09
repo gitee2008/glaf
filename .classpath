@@ -118,13 +118,6 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/poi.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/quartz-all.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/rabbitmq-client.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/resteasy-cache-core.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/resteasy-jackson2-provider.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/resteasy-jaxrs.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/resteasy-multipart-provider.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/resteasy-netty.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/resteasy-netty4.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/resteasy-spring.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/scannotation.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/shiro-all.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/slf4j-api.jar"/>
