@@ -18,11 +18,14 @@
 
 package com.glaf.core.config;
 
+import java.io.File;
 import java.io.IOException;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -30,6 +33,7 @@ import com.glaf.core.util.Constants;
 import com.glaf.core.util.StringTools;
 
 public class SystemProperties {
+	protected static final Log logger = LogFactory.getLog(SystemProperties.class);
 
 	private static final Configuration conf = BaseConfiguration.create();
 
@@ -72,9 +76,6 @@ public class SystemProperties {
 	public static String getConfigRootPath() {
 		if (ROOT_CONF_PATH == null) {
 			reload();
-		}
-		if (ROOT_CONF_PATH == null) {
-			ROOT_CONF_PATH = System.getProperty("config.path");
 		}
 		return ROOT_CONF_PATH;
 	}
@@ -185,14 +186,22 @@ public class SystemProperties {
 
 	public static void reload() {
 		if (!loading.get()) {
+			Resource resource = null;
 			try {
 				loading.set(true);
-				Resource resource = new ClassPathResource(Constants.SYSTEM_CONFIG);
-				ROOT_CONF_PATH = resource.getFile().getParentFile().getParentFile().getAbsolutePath();
-				ROOT_APP_PATH = resource.getFile().getParentFile().getParentFile().getParentFile().getAbsolutePath();
-				System.out.println("load system config:" + resource.getFile().getAbsolutePath());
+				String path = System.getProperty("config.path");
+				if (StringUtils.isEmpty(path)) {
+					resource = new ClassPathResource(Constants.SYSTEM_CONFIG);
+					ROOT_CONF_PATH = resource.getFile().getParentFile().getParentFile().getAbsolutePath();
+					ROOT_APP_PATH = resource.getFile().getParentFile().getParentFile().getParentFile()
+							.getAbsolutePath();
+				} else {
+					File dir = new File(path);
+					ROOT_CONF_PATH = dir.getAbsolutePath();
+					ROOT_APP_PATH = dir.getAbsolutePath();
+				}
+				System.out.println("config path:" + path);
 			} catch (IOException ex) {
-				
 				throw new RuntimeException(ex);
 			} finally {
 				loading.set(false);
