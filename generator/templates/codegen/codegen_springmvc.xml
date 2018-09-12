@@ -141,6 +141,18 @@
 		<template>/templates/easyui-ftl/edit.jsp.ftl</template>
 		<encoding>UTF-8</encoding>
 	</definition>
+	<definition name="layui_list_ftl">
+		<savePath>/layui</savePath>
+		<saveName>list.ftl</saveName>
+		<template>/templates/layui-ftl/list_layui.ftl</template>
+		<encoding>UTF-8</encoding>
+	</definition>
+	<definition name="layui_edit_ftl">
+		<savePath>/layui</savePath>
+		<saveName>edit.ftl</saveName>
+		<template>/templates/layui-ftl/edit_layui.ftl</template>
+		<encoding>UTF-8</encoding>
+	</definition>
 	<definition name="kendoui_list">
 		<savePath>/kendoui</savePath>
 		<saveName>list.jsp</saveName>

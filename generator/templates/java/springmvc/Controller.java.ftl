@@ -144,7 +144,9 @@ public class ${entityName}Controller {
 	@RequestMapping("/json")
 	@ResponseBody
 	public byte[] json(HttpServletRequest request, HttpServletResponse response) throws IOException {
-	        LoginContext loginContext = RequestUtils.getLoginContext(request);
+	    request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
+	    LoginContext loginContext = RequestUtils.getLoginContext(request);
 		Map<String, Object> params = RequestUtils.getParameterMap(request);
 		${entityName}Query query = new ${entityName}Query();
 		Tools.populate(query, params);
@@ -179,6 +181,7 @@ public class ${entityName}Controller {
 		JSONObject result = new JSONObject();
 		int total = ${modelName}Service.get${entityName}CountByQueryCriteria(query);
 		if (total > 0) {
+		    result.put("code", 0);
 			result.put("total", total);
 			result.put("totalCount", total);
 			result.put("totalRecords", total);
@@ -200,8 +203,6 @@ public class ${entityName}Controller {
 			if (list != null && !list.isEmpty()) {
 				JSONArray rowsJSON = new JSONArray();
 				 
-				result.put("rows", rowsJSON);
-				 
 				for (${entityName} ${modelName} : list) {
 					JSONObject rowJSON = ${modelName}.toJsonObject();
 					rowJSON.put("id", ${modelName}.getId());
@@ -210,11 +211,14 @@ public class ${entityName}Controller {
  					rowsJSON.add(rowJSON);
 				}
 
+				result.put("rows", rowsJSON);
+
 			}
 		} else {
 			JSONArray rowsJSON = new JSONArray();
 			result.put("rows", rowsJSON);
 			result.put("total", total);
+			result.put("code", 0);
 		}
 		return result.toJSONString().getBytes("UTF-8");
 	}
