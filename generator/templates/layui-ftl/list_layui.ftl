@@ -52,6 +52,7 @@
  
 
     //监听行单击事件（单击事件为：rowDouble）
+	/**
     table.on('row(mydatagrid)', function(obj){
       var data = obj.data;
     
@@ -62,6 +63,7 @@
      //标注选中样式
       obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
     });
+	*/
 
     //头工具栏事件
     table.on('toolbar(mydatagrid)', function(obj){
@@ -143,7 +145,7 @@
 </script>
 </head>
 <body style="margin:1px;">  
-<div class="layui-container">  
+<div class="layui-container" style="width:100%;">  
    <div style="height:48px" class="toolbar-backgroud"> 
     <div style="margin:4px;"> 
 	  <table width="100%" align="left">
