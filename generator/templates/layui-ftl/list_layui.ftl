@@ -34,7 +34,7 @@
 		  "data": res.rows //解析数据列表
 		 };
 	    },
-		totalRow: true,
+		totalRow: false,
 		cols: [[
 		    {type:'checkbox', fixed: 'left'},
 		    {field:'startIndex', title:'序号', width:68, sort:true},
@@ -47,7 +47,9 @@
 			</#if>
 			{fixed:'right', title:'功能键', toolbar: '#tool_function', width:120}
 		]],
-		page: true
+		page: true,
+		limit: 10,
+		limits: [10,15,20,25,50,100]
 	});
  
 
