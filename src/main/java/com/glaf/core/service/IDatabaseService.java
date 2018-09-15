@@ -56,7 +56,7 @@ public interface IDatabaseService {
 	 * @return
 	 */
 	@Transactional
-	void deleteById(Long id);
+	void deleteById(long databaseId);
 
 	/**
 	 * 根据主键删除多条记录
@@ -99,7 +99,7 @@ public interface IDatabaseService {
 	 * 
 	 * @return
 	 */
-	Database getDatabaseById(Long id);
+	Database getDatabaseById(long databaseId);
 
 	/**
 	 * 根据mapping获取一条数据库信息

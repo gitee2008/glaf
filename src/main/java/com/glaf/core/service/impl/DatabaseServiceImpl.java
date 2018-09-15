@@ -107,8 +107,8 @@ public class DatabaseServiceImpl implements IDatabaseService {
 	}
 
 	@Transactional
-	public void deleteById(Long databaseId) {
-		if (databaseId != null) {
+	public void deleteById(long databaseId) {
+		if (databaseId != 0) {
 			Database database = this.getDatabase(databaseId);
 			if (database.getRemoveFlag() == null || StringUtils.equalsIgnoreCase(database.getRemoveFlag(), "Y")) {
 				String cacheKey = "sys_db_" + databaseId;
@@ -141,8 +141,8 @@ public class DatabaseServiceImpl implements IDatabaseService {
 		return databaseAccessMapper.getAllDatabaseAccesses();
 	}
 
-	public Database getDatabase(Long databaseId) {
-		if (databaseId == null || databaseId == 0) {
+	public Database getDatabase(long databaseId) {
+		if (databaseId == 0) {
 			return null;
 		}
 		Database database = databaseMapper.getDatabaseById(databaseId);
@@ -214,8 +214,8 @@ public class DatabaseServiceImpl implements IDatabaseService {
 		return null;
 	}
 
-	public Database getDatabaseById(Long databaseId) {
-		if (databaseId == null || databaseId == 0) {
+	public Database getDatabaseById(long databaseId) {
+		if (databaseId == 0) {
 			return null;
 		}
 		Database database = databaseMapper.getDatabaseById(databaseId);
