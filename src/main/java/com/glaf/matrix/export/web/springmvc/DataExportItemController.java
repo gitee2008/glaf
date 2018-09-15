@@ -237,8 +237,7 @@ public class DataExportItemController {
 			dataExportItem.setRecursionColumns(request.getParameter("recursionColumns"));
 			dataExportItem.setPrimaryKey(request.getParameter("primaryKey"));
 			dataExportItem.setExpression(request.getParameter("expression"));
-			dataExportItem.setCreateTableFlag(request.getParameter("createTableFlag"));
-			dataExportItem.setDeleteFetch(request.getParameter("deleteFetch"));
+			dataExportItem.setResultFlag(request.getParameter("resultFlag"));
 			dataExportItem.setSortNo(RequestUtils.getInt(request, "sortNo"));
 			dataExportItem.setLocked(RequestUtils.getInt(request, "locked"));
 			dataExportItem.setCreateBy(actorId);

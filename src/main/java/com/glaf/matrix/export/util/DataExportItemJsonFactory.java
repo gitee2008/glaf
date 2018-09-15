@@ -64,11 +64,8 @@ public class DataExportItemJsonFactory {
 		if (jsonObject.containsKey("expression")) {
 			model.setExpression(jsonObject.getString("expression"));
 		}
-		if (jsonObject.containsKey("createTableFlag")) {
-			model.setCreateTableFlag(jsonObject.getString("createTableFlag"));
-		}
-		if (jsonObject.containsKey("deleteFetch")) {
-			model.setDeleteFetch(jsonObject.getString("deleteFetch"));
+		if (jsonObject.containsKey("resultFlag")) {
+			model.setResultFlag(jsonObject.getString("resultFlag"));
 		}
 		if (jsonObject.containsKey("sortNo")) {
 			model.setSortNo(jsonObject.getInteger("sortNo"));
@@ -119,11 +116,8 @@ public class DataExportItemJsonFactory {
 		if (model.getExpression() != null) {
 			jsonObject.put("expression", model.getExpression());
 		}
-		if (model.getCreateTableFlag() != null) {
-			jsonObject.put("createTableFlag", model.getCreateTableFlag());
-		}
-		if (model.getDeleteFetch() != null) {
-			jsonObject.put("deleteFetch", model.getDeleteFetch());
+		if (model.getResultFlag() != null) {
+			jsonObject.put("resultFlag", model.getResultFlag());
 		}
 		if (model.getCreateBy() != null) {
 			jsonObject.put("createBy", model.getCreateBy());
@@ -169,11 +163,8 @@ public class DataExportItemJsonFactory {
 		if (model.getExpression() != null) {
 			jsonObject.put("expression", model.getExpression());
 		}
-		if (model.getCreateTableFlag() != null) {
-			jsonObject.put("createTableFlag", model.getCreateTableFlag());
-		}
-		if (model.getDeleteFetch() != null) {
-			jsonObject.put("deleteFetch", model.getDeleteFetch());
+		if (model.getResultFlag() != null) {
+			jsonObject.put("resultFlag", model.getResultFlag());
 		}
 		if (model.getCreateBy() != null) {
 			jsonObject.put("createBy", model.getCreateBy());

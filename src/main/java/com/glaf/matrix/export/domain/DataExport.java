@@ -45,7 +45,7 @@ public class DataExport implements Serializable, JSONable {
 	protected String id;
 
 	/**
-	 * 节点编号
+	 * 节点编号，树形结构sys_tree的ID
 	 */
 	@Column(name = "NODEID_")
 	protected long nodeId;

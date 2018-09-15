@@ -22,9 +22,7 @@
 			jdbcType="VARCHAR" />
 		<result property="expression" column="EXPRESSION_"
 			jdbcType="VARCHAR" />
-		<result property="createTableFlag" column="CREATETABLEFLAG_"
-			jdbcType="VARCHAR" />
-		<result property="deleteFetch" column="DELETEFETCH_"
+		<result property="resultFlag" column="RESULTFLAG_"
 			jdbcType="VARCHAR" />
 		<result property="sortNo" column="SORTNO_" jdbcType="INTEGER" />
 		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
@@ -67,11 +65,8 @@
 			<if test="expression != null">
 				,EXPRESSION_
 			</if>
-			<if test="createTableFlag != null">
-				,CREATETABLEFLAG_
-			</if>
-			<if test="deleteFetch != null">
-				,DELETEFETCH_
+			<if test="resultFlag != null">
+				,RESULTFLAG_
 			</if>
 			<if test="sortNo != null">
 				,SORTNO_
@@ -117,11 +112,8 @@
 			<if test="expression != null">
 				,#{expression, jdbcType=VARCHAR}
 			</if>
-			<if test="createTableFlag != null">
-				,#{createTableFlag, jdbcType=VARCHAR}
-			</if>
-			<if test="deleteFetch != null">
-				,#{deleteFetch, jdbcType=VARCHAR}
+			<if test="resultFlag != null">
+				,#{resultFlag, jdbcType=VARCHAR}
 			</if>
 			<if test="sortNo != null">
 				,#{sortNo, jdbcType=INTEGER}
@@ -166,11 +158,8 @@
 			<if test="expression != null">
 				EXPRESSION_ = #{expression, jdbcType=VARCHAR},
 			</if>
-			<if test="createTableFlag != null">
-				CREATETABLEFLAG_ = #{createTableFlag, jdbcType=VARCHAR},
-			</if>
-			<if test="deleteFetch != null">
-				DELETEFETCH_ = #{deleteFetch, jdbcType=VARCHAR},
+			<if test="resultFlag != null">
+				RESULTFLAG_ = #{resultFlag, jdbcType=VARCHAR},
 			</if>
 			<if test="sortNo != null">
 				SORTNO_ = #{sortNo, jdbcType=INTEGER},

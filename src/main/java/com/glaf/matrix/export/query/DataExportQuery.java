@@ -31,7 +31,6 @@ public class DataExportQuery extends DataQuery {
 	protected String syncFlag;
 	protected String type;
 	protected String templateId;
-	protected String uniqueFlag;
 	protected String active;
 	protected Date createTimeGreaterThanOrEqual;
 	protected Date createTimeLessThanOrEqual;
@@ -48,14 +47,6 @@ public class DataExportQuery extends DataQuery {
 			throw new RuntimeException("active is null");
 		}
 		this.active = active;
-		return this;
-	}
-
-	public DataExportQuery templateId(String templateId) {
-		if (templateId == null) {
-			throw new RuntimeException("templateId is null");
-		}
-		this.templateId = templateId;
 		return this;
 	}
 
@@ -93,10 +84,6 @@ public class DataExportQuery extends DataQuery {
 
 	public String getActive() {
 		return active;
-	}
-
-	public String getTemplateId() {
-		return templateId;
 	}
 
 	public Date getCreateTimeGreaterThanOrEqual() {
@@ -186,6 +173,10 @@ public class DataExportQuery extends DataQuery {
 		return syncFlag;
 	}
 
+	public String getTemplateId() {
+		return templateId;
+	}
+
 	public String getTitleLike() {
 		if (titleLike != null && titleLike.trim().length() > 0) {
 			if (!titleLike.startsWith("%")) {
@@ -200,10 +191,6 @@ public class DataExportQuery extends DataQuery {
 
 	public String getType() {
 		return type;
-	}
-
-	public String getUniqueFlag() {
-		return uniqueFlag;
 	}
 
 	public String getUpdateBy() {
@@ -257,10 +244,6 @@ public class DataExportQuery extends DataQuery {
 		this.active = active;
 	}
 
-	public void setTemplateId(String templateId) {
-		this.templateId = templateId;
-	}
-
 	public void setCreateTimeGreaterThanOrEqual(Date createTimeGreaterThanOrEqual) {
 		this.createTimeGreaterThanOrEqual = createTimeGreaterThanOrEqual;
 	}
@@ -289,16 +272,16 @@ public class DataExportQuery extends DataQuery {
 		this.syncFlag = syncFlag;
 	}
 
+	public void setTemplateId(String templateId) {
+		this.templateId = templateId;
+	}
+
 	public void setTitleLike(String titleLike) {
 		this.titleLike = titleLike;
 	}
 
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	public void setUniqueFlag(String uniqueFlag) {
-		this.uniqueFlag = uniqueFlag;
 	}
 
 	public void setUpdateBy(String updateBy) {
@@ -321,6 +304,14 @@ public class DataExportQuery extends DataQuery {
 		return this;
 	}
 
+	public DataExportQuery templateId(String templateId) {
+		if (templateId == null) {
+			throw new RuntimeException("templateId is null");
+		}
+		this.templateId = templateId;
+		return this;
+	}
+
 	public DataExportQuery titleLike(String titleLike) {
 		if (titleLike == null) {
 			throw new RuntimeException("title is null");
@@ -334,14 +325,6 @@ public class DataExportQuery extends DataQuery {
 			throw new RuntimeException("type is null");
 		}
 		this.type = type;
-		return this;
-	}
-
-	public DataExportQuery uniqueFlag(String uniqueFlag) {
-		if (uniqueFlag == null) {
-			throw new RuntimeException("uniqueFlag is null");
-		}
-		this.uniqueFlag = uniqueFlag;
 		return this;
 	}
 

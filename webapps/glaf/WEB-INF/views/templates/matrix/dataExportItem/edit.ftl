@@ -105,12 +105,12 @@
 		</td>
 	</tr>
 	<tr>
-		<td width="90" align="left">合成主键列</td>
+		<td width="90" align="left">主键列</td>
 		<td align="left">
             <input id="primaryKey" name="primaryKey" type="text" 
 			       class="easyui-validatebox x-text" style="width:525px;"  
 				   value="${dataExportItem.primaryKey}"/>
-			<br>（提示：合成到目标表的主键,可以是某个列别名,也可以是用半角逗号隔开的多个列。）
+			<br>
 		</td>
 	</tr>
 	<tr>
@@ -145,6 +145,19 @@
 	      </div>
 		</td>
 	</tr>
+
+    <tr>
+		<td width="15%" align="left">结果类型</td>
+		<td align="left">
+		    <select id="resultFlag" name="resultFlag">
+			    <option value="M">多条记录</option>
+			    <option value="S">单一记录</option>
+             </select>
+             <script type="text/javascript">
+                 document.getElementById("resultFlag").value="${dataExportItem.resultFlag}";
+             </script>
+		</td>
+    </tr>
 
     <tr>
 		<td width="15%" align="left">执行顺序</td>

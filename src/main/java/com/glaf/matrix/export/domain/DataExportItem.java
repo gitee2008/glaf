@@ -101,16 +101,10 @@ public class DataExportItem implements Serializable, JSONable {
 	protected String expression;
 
 	/**
-	 * 是否需要建表
+	 * 结果类型:S-单一记录,M-多条记录
 	 */
-	@Column(name = "CREATETABLEFLAG_", length = 1)
-	protected String createTableFlag;
-
-	/**
-	 * 每次抓取前删除
-	 */
-	@Column(name = "DELETEFETCH_", length = 1)
-	protected String deleteFetch;
+	@Column(name = "RESULTFLAG_", length = 1)
+	protected String resultFlag;
 
 	/**
 	 * 顺序号
@@ -165,10 +159,6 @@ public class DataExportItem implements Serializable, JSONable {
 		return this.createBy;
 	}
 
-	public String getCreateTableFlag() {
-		return createTableFlag;
-	}
-
 	public Date getCreateTime() {
 		return this.createTime;
 	}
@@ -182,10 +172,6 @@ public class DataExportItem implements Serializable, JSONable {
 
 	public Collection<Map<String, Object>> getDataList() {
 		return dataList;
-	}
-
-	public String getDeleteFetch() {
-		return deleteFetch;
 	}
 
 	public String getDeploymentId() {
@@ -230,6 +216,10 @@ public class DataExportItem implements Serializable, JSONable {
 		return recursionSql;
 	}
 
+	public String getResultFlag() {
+		return resultFlag;
+	}
+
 	public int getSortNo() {
 		return sortNo;
 	}
@@ -258,20 +248,12 @@ public class DataExportItem implements Serializable, JSONable {
 		this.createBy = createBy;
 	}
 
-	public void setCreateTableFlag(String createTableFlag) {
-		this.createTableFlag = createTableFlag;
-	}
-
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
 
 	public void setDataList(Collection<Map<String, Object>> dataList) {
 		this.dataList = dataList;
-	}
-
-	public void setDeleteFetch(String deleteFetch) {
-		this.deleteFetch = deleteFetch;
 	}
 
 	public void setDeploymentId(String deploymentId) {
@@ -308,6 +290,10 @@ public class DataExportItem implements Serializable, JSONable {
 
 	public void setRecursionSql(String recursionSql) {
 		this.recursionSql = recursionSql;
+	}
+
+	public void setResultFlag(String resultFlag) {
+		this.resultFlag = resultFlag;
 	}
 
 	public void setSortNo(int sortNo) {
