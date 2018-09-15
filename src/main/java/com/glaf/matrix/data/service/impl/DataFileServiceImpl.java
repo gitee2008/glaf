@@ -362,7 +362,7 @@ public class DataFileServiceImpl implements IDataFileService {
 			Iterator<DataFile> iterator = list.iterator();
 			while (iterator.hasNext()) {
 				DataFile model = iterator.next();
-				if (model.getLastModified() > model.getLastModified()) {
+				if (model.getLastModified() > dataFile.getLastModified()) {
 					dataFile = model;
 				}
 			}
@@ -406,7 +406,7 @@ public class DataFileServiceImpl implements IDataFileService {
 			Iterator<DataFile> iterator = list.iterator();
 			while (iterator.hasNext()) {
 				DataFile model = iterator.next();
-				if (model.getLastModified() > model.getLastModified()) {
+				if (model.getLastModified() > dataFile.getLastModified()) {
 					dataFile = model;
 				}
 			}
@@ -437,6 +437,10 @@ public class DataFileServiceImpl implements IDataFileService {
 				filePath = filePath.substring(1, filePath.length());
 				dataFile.setPath(filePath);
 			}
+		}
+		
+		if (dataFile.getLastModified() == 0) {
+			dataFile.setLastModified(System.currentTimeMillis());
 		}
 
 		if (StringUtils.equals(DBUtils.POSTGRESQL, DBConnectionFactory.getDatabaseType())) {
