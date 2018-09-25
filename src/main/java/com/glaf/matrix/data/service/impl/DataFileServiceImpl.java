@@ -36,14 +36,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-
 import com.glaf.core.base.DataFile;
-import com.glaf.core.cache.CacheFactory;
 import com.glaf.core.config.BaseConfiguration;
 import com.glaf.core.config.Configuration;
-import com.glaf.core.config.SystemConfig;
 import com.glaf.core.dao.EntityDAO;
 import com.glaf.core.id.IdGenerator;
 import com.glaf.core.jdbc.DBConnectionFactory;
@@ -54,7 +49,6 @@ import com.glaf.core.util.UUID32;
 import com.glaf.matrix.data.mapper.DataFileMapper;
 import com.glaf.matrix.data.query.DataFileQuery;
 import com.glaf.matrix.data.service.IDataFileService;
-import com.glaf.matrix.data.util.DataFileJsonFactory;
 
 @Service("dataFileService")
 @Transactional(readOnly = true)
@@ -97,11 +91,6 @@ public class DataFileServiceImpl implements IDataFileService {
 
 	@Transactional
 	public void deleteById(String tenantId, String id) {
-		if (SystemConfig.getBoolean("use_query_cache")) {
-			String cacheKey = "datafile_" + id;
-			CacheFactory.remove("datafile", cacheKey);
-		}
-
 		DataFileQuery query = new DataFileQuery();
 		query.id(id);
 		if (StringUtils.isNotEmpty(tenantId)) {
@@ -127,10 +116,6 @@ public class DataFileServiceImpl implements IDataFileService {
 
 	@Transactional
 	public void deleteDataFileByFileId(String tenantId, String fileId) {
-		if (SystemConfig.getBoolean("use_query_cache")) {
-			String cacheKey = "datafile_" + fileId;
-			CacheFactory.remove("datafile", cacheKey);
-		}
 		DataFile dataFile = this.getDataFileByFileId(tenantId, fileId);
 		if (dataFile != null) {
 			DataFileQuery query = new DataFileQuery();
@@ -188,17 +173,6 @@ public class DataFileServiceImpl implements IDataFileService {
 	}
 
 	public DataFile getDataFileByFileId(String tenantId, String fileId) {
-		String cacheKey = "datafile_" + fileId;
-		if (SystemConfig.getBoolean("use_query_cache")) {
-			String text = CacheFactory.getString("datafile", cacheKey);
-			if (StringUtils.isNotEmpty(text)) {
-				try {
-					JSONObject jsonObject = JSON.parseObject(text);
-					DataFileJsonFactory.jsonToObject(jsonObject);
-				} catch (Exception ex) {
-				}
-			}
-		}
 		DataFile dataFile = null;
 		DataFileQuery query = new DataFileQuery();
 		query.fileId(fileId);
@@ -209,11 +183,6 @@ public class DataFileServiceImpl implements IDataFileService {
 		List<DataFile> list = dataFileMapper.getDataFilesByFileId(query);
 		if (list != null && !list.isEmpty()) {
 			dataFile = list.get(0);
-			if (dataFile != null) {
-				if (SystemConfig.getBoolean("use_query_cache")) {
-					CacheFactory.put("datafile", cacheKey, dataFile.toJsonObject().toJSONString());
-				}
-			}
 		}
 		return dataFile;
 	}
@@ -240,17 +209,6 @@ public class DataFileServiceImpl implements IDataFileService {
 	}
 
 	public DataFile getDataFileById(String tenantId, String id) {
-		String cacheKey = "datafile_" + id;
-		if (SystemConfig.getBoolean("use_query_cache")) {
-			String text = CacheFactory.getString("datafile", cacheKey);
-			if (StringUtils.isNotEmpty(text)) {
-				try {
-					JSONObject jsonObject = JSON.parseObject(text);
-					DataFileJsonFactory.jsonToObject(jsonObject);
-				} catch (Exception ex) {
-				}
-			}
-		}
 		DataFileQuery query = new DataFileQuery();
 		query.id(id);
 		if (StringUtils.isNotEmpty(tenantId)) {
@@ -258,11 +216,6 @@ public class DataFileServiceImpl implements IDataFileService {
 			query.setTableSuffix(String.valueOf(IdentityFactory.getTenantHash(tenantId)));
 		}
 		DataFile dataFile = dataFileMapper.getDataFileById(query);
-		if (dataFile != null) {
-			if (SystemConfig.getBoolean("use_query_cache")) {
-				CacheFactory.put("datafile", cacheKey, dataFile.toJsonObject().toJSONString());
-			}
-		}
 		return dataFile;
 	}
 
@@ -438,7 +391,7 @@ public class DataFileServiceImpl implements IDataFileService {
 				dataFile.setPath(filePath);
 			}
 		}
-		
+
 		if (dataFile.getLastModified() == 0) {
 			dataFile.setLastModified(System.currentTimeMillis());
 		}

@@ -7,7 +7,6 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/antlr-runtime.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/antlr.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/aopalliance.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/asm-all.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/asm-commons.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/asm-tree.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/aspectjrt.jar"/>
@@ -229,5 +228,8 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/pagehelper.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/zxing-core.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/zxing-java.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/asm-analysis.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/asm-util.jar"/>
+	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/asm.jar"/>
 	<classpathentry kind="output" path="webapps/glaf/WEB-INF/classes"/>
 </classpath>
