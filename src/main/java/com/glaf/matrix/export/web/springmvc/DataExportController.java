@@ -368,8 +368,6 @@ public class DataExportController {
 			dataExport.setActive(request.getParameter("active"));
 			dataExport.setAllowRoles(request.getParameter("allowRoles"));
 			dataExport.setTemplateId(request.getParameter("templateId"));
-			dataExport.setExternalColumnsFlag(request.getParameter("externalColumnsFlag"));
-			dataExport.setInterval(RequestUtils.getInt(request, "interval"));
 			dataExport.setSortNo(RequestUtils.getInt(request, "sortNo"));
 			dataExport.setCreateBy(actorId);
 			dataExport.setUpdateBy(actorId);

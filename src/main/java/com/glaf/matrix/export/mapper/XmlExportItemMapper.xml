@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.glaf.matrix.export.mapper.XmlExportItemMapper">
+
+	<resultMap id="xmlExportItemResultMap"
+		type="com.glaf.matrix.export.domain.XmlExportItem">
+		<id property="id" column="ID_" jdbcType="VARCHAR" />
+		<result property="expId" column="EXPID_" jdbcType="VARCHAR" />
+		<result property="name" column="NAME_" jdbcType="VARCHAR" />
+		<result property="title" column="TITLE_" jdbcType="VARCHAR" />
+		<result property="expression" column="EXPRESSION_"
+			jdbcType="VARCHAR" />
+		<result property="defaultValue" column="DEFAULTVALUE_"
+			jdbcType="VARCHAR" />
+		<result property="dataType" column="DATATYPE_"
+			jdbcType="VARCHAR" />
+		<result property="required" column="REQUIRED_"
+			jdbcType="VARCHAR" />
+		<result property="tagFlag" column="TAGFLAG_" jdbcType="VARCHAR" />
+		<result property="sortNo" column="SORTNO_" jdbcType="INTEGER" />
+		<result property="locked" column="LOCKED_" jdbcType="INTEGER" />
+		<result property="createBy" column="CREATEBY_"
+			jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATETIME_"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<insert id="insertXmlExportItem"
+		parameterType="com.glaf.matrix.export.domain.XmlExportItem">
+		insert into SYS_XML_EXPORT_ITEM
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID_
+			<if test="expId != null">
+				,EXPID_
+			</if>
+			<if test="name != null">
+				,NAME_
+			</if>
+			<if test="title != null">
+				,TITLE_
+			</if>
+			<if test="expression != null">
+				,EXPRESSION_
+			</if>
+			<if test="defaultValue != null">
+				,DEFAULTVALUE_
+			</if>
+			<if test="dataType != null">
+				,DATATYPE_
+			</if>
+			<if test="required != null">
+				,REQUIRED_
+			</if>
+			<if test="tagFlag != null">
+				,TAGFLAG_
+			</if>
+			<if test="sortNo != null">
+				,SORTNO_
+			</if>
+			<if test="locked != null">
+				,LOCKED_
+			</if>
+			<if test="createBy != null">
+				,CREATEBY_
+			</if>
+			<if test="createTime != null">
+				,CREATETIME_
+			</if>
+		</trim>
+
+		<trim prefix=" values (" suffix=")" suffixOverrides=",">
+			#{id, jdbcType=VARCHAR}
+
+			<if test="expId != null">
+				,#{expId, jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				,#{name, jdbcType=VARCHAR}
+			</if>
+			<if test="title != null">
+				,#{title, jdbcType=VARCHAR}
+			</if>
+			<if test="expression != null">
+				,#{expression, jdbcType=VARCHAR}
+			</if>
+			<if test="defaultValue != null">
+				,#{defaultValue, jdbcType=VARCHAR}
+			</if>
+			<if test="dataType != null">
+				,#{dataType, jdbcType=VARCHAR}
+			</if>
+			<if test="required != null">
+				,#{required, jdbcType=VARCHAR}
+			</if>
+			<if test="tagFlag != null">
+				,#{tagFlag, jdbcType=VARCHAR}
+			</if>
+			<if test="sortNo != null">
+				,#{sortNo, jdbcType=INTEGER}
+			</if>
+			<if test="locked != null">
+				,#{locked, jdbcType=INTEGER}
+			</if>
+			<if test="createBy != null">
+				,#{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,#{createTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateXmlExportItem"
+		parameterType="com.glaf.matrix.export.domain.XmlExportItem">
+		update SYS_XML_EXPORT_ITEM
+		set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="name != null">
+				NAME_ = #{name, jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				TITLE_ = #{title, jdbcType=VARCHAR},
+			</if>
+			<if test="expression != null">
+				EXPRESSION_ = #{expression, jdbcType=VARCHAR},
+			</if>
+			<if test="defaultValue != null">
+				DEFAULTVALUE_ = #{defaultValue, jdbcType=VARCHAR},
+			</if>
+			<if test="dataType != null">
+				DATATYPE_ = #{dataType, jdbcType=VARCHAR},
+			</if>
+			<if test="required != null">
+				REQUIRED_ = #{required, jdbcType=VARCHAR},
+			</if>
+			<if test="tagFlag != null">
+				TAGFLAG_ = #{tagFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="sortNo != null">
+				SORTNO_ = #{sortNo, jdbcType=INTEGER},
+			</if>
+			<if test="locked != null">
+				LOCKED_ = #{locked, jdbcType=INTEGER},
+			</if>
+		</trim>
+		where
+		ID_ = #{id, jdbcType=BIGINT}
+
+	</update>
+
+
+	<delete id="deleteXmlExportItemById" parameterType="string">
+		delete from
+		SYS_XML_EXPORT_ITEM
+		where ID_ = #{id}
+	</delete>
+
+
+	<select id="getXmlExportItemById" parameterType="string"
+		resultMap="xmlExportItemResultMap">
+		select * from SYS_XML_EXPORT_ITEM where ID_ = #{id}
+	</select>
+
+
+	<select id="getXmlExportItemsByExpId" parameterType="string"
+		resultMap="xmlExportItemResultMap">
+		select * from SYS_XML_EXPORT_ITEM
+		where EXPID_ = #{expId}
+		and
+		LOCKED_ = 0
+		order by SORTNO_ asc
+	</select>
+
+
+	<select id="getXmlExportItems"
+		parameterType="com.glaf.matrix.export.query.XmlExportItemQuery"
+		resultMap="xmlExportItemResultMap">
+		select E.*
+		<include refid="selectXmlExportItemsSql" />
+		<choose>
+			<when test="orderBy != null">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by E.SORTNO_ asc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getXmlExportItemCount"
+		parameterType="com.glaf.matrix.export.query.XmlExportItemQuery"
+		resultType="int">
+		select count(*)
+		<include refid="selectXmlExportItemsSql" />
+	</select>
+
+
+	<sql id="selectXmlExportItemsSql">
+
+		from SYS_XML_EXPORT_ITEM E
+
+		<where>
+			1 = 1
+
+			<if test="expId != null">
+				and E.EXPID_ = #{expId}
+			</if>
+
+			<if test="expIds != null and expIds.size() &gt; 0">
+				and E.EXPID_ IN
+				<foreach item="x_expId" index="index" collection="expIds"
+					open="(" separator="," close=")">
+					#{x_expId}
+				</foreach>
+			</if>
+
+			<if test="locked != null">
+				and E.LOCKED_ = #{locked}
+			</if>
+
+			<if test="createBy != null and createBy != '' ">
+				and E.CREATEBY_ = #{createBy}
+			</if>
+
+			<if test="createTimeGreaterThanOrEqual != null">
+				and E.CREATETIME_ &gt;= #{createTimeGreaterThanOrEqual}
+			</if>
+
+			<if test="createTimeLessThanOrEqual != null">
+				and E.CREATETIME_ &lt;= #{createTimeLessThanOrEqual}
+			</if>
+
+		</where>
+	</sql>
+
+</mapper>

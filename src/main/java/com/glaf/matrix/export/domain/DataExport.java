@@ -36,7 +36,7 @@ import com.glaf.matrix.export.util.*;
  */
 
 @Entity
-@Table(name = "SYS_DATA_EXPORT")
+@Table(name = "SYS_DATA_EXPORT", uniqueConstraints = { @UniqueConstraint(columnNames = { "NODEID_" }) })
 public class DataExport implements Serializable, JSONable {
 	private static final long serialVersionUID = 1L;
 
@@ -91,18 +91,6 @@ public class DataExport implements Serializable, JSONable {
 	 */
 	@Column(name = "TEMPLATEID_", length = 50)
 	protected String templateId;
-
-	/**
-	 * 外部列定义
-	 */
-	@Column(name = "EXTERNALCOLUMNSFLAG_", length = 50)
-	protected String externalColumnsFlag;
-
-	/**
-	 * 时间间隔
-	 */
-	@Column(name = "INTERVAL_")
-	protected int interval;
 
 	/**
 	 * 顺序号
@@ -200,16 +188,8 @@ public class DataExport implements Serializable, JSONable {
 		return this.deploymentId;
 	}
 
-	public String getExternalColumnsFlag() {
-		return externalColumnsFlag;
-	}
-
 	public String getId() {
 		return this.id;
-	}
-
-	public int getInterval() {
-		return this.interval;
 	}
 
 	public List<DataExportItem> getItems() {
@@ -291,16 +271,8 @@ public class DataExport implements Serializable, JSONable {
 		this.deploymentId = deploymentId;
 	}
 
-	public void setExternalColumnsFlag(String externalColumnsFlag) {
-		this.externalColumnsFlag = externalColumnsFlag;
-	}
-
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public void setInterval(int interval) {
-		this.interval = interval;
 	}
 
 	public void setItems(List<DataExportItem> items) {

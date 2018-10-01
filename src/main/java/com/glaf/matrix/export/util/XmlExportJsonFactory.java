@@ -18,74 +18,87 @@
 
 package com.glaf.matrix.export.util;
 
+import java.util.List;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.glaf.core.util.DateUtils;
-import com.glaf.matrix.export.domain.DataExport;
+import com.glaf.matrix.export.domain.XmlExport;
+import com.glaf.matrix.export.domain.XmlExportItem;
 
 /**
  * 
  * JSON工厂类
  *
  */
-public class DataExportJsonFactory {
+public class XmlExportJsonFactory {
 
-	public static DataExport jsonToObject(JSONObject jsonObject) {
-		DataExport model = new DataExport();
+	public static XmlExport jsonToObject(JSONObject jsonObject) {
+		XmlExport model = new XmlExport();
 		if (jsonObject.containsKey("id")) {
 			model.setId(jsonObject.getString("id"));
 		}
 		if (jsonObject.containsKey("nodeId")) {
 			model.setNodeId(jsonObject.getLong("nodeId"));
 		}
-		if (jsonObject.containsKey("deploymentId")) {
-			model.setDeploymentId(jsonObject.getString("deploymentId"));
+		if (jsonObject.containsKey("nodeParentId")) {
+			model.setNodeParentId(jsonObject.getLong("nodeParentId"));
+		}
+		if (jsonObject.containsKey("name")) {
+			model.setName(jsonObject.getString("name"));
 		}
 		if (jsonObject.containsKey("title")) {
 			model.setTitle(jsonObject.getString("title"));
 		}
- 
-		if (jsonObject.containsKey("syncFlag")) {
-			model.setSyncFlag(jsonObject.getString("syncFlag"));
+		if (jsonObject.containsKey("sql")) {
+			model.setSql(jsonObject.getString("sql"));
 		}
-		if (jsonObject.containsKey("srcDatabaseId")) {
-			model.setSrcDatabaseId(jsonObject.getLong("srcDatabaseId"));
+		if (jsonObject.containsKey("resultFlag")) {
+			model.setResultFlag(jsonObject.getString("resultFlag"));
 		}
- 
+		if (jsonObject.containsKey("leafFlag")) {
+			model.setLeafFlag(jsonObject.getString("leafFlag"));
+		}
+		if (jsonObject.containsKey("treeFlag")) {
+			model.setTreeFlag(jsonObject.getString("treeFlag"));
+		}
 		if (jsonObject.containsKey("type")) {
 			model.setType(jsonObject.getString("type"));
 		}
 		if (jsonObject.containsKey("active")) {
 			model.setActive(jsonObject.getString("active"));
 		}
-		if (jsonObject.containsKey("allowRoles")) {
-			model.setAllowRoles(jsonObject.getString("allowRoles"));
+		if (jsonObject.containsKey("xmlTag")) {
+			model.setXmlTag(jsonObject.getString("xmlTag"));
 		}
 		if (jsonObject.containsKey("templateId")) {
 			model.setTemplateId(jsonObject.getString("templateId"));
 		}
+		if (jsonObject.containsKey("externalAttrsFlag")) {
+			model.setExternalAttrsFlag(jsonObject.getString("externalAttrsFlag"));
+		}
+		if (jsonObject.containsKey("allowRoles")) {
+			model.setAllowRoles(jsonObject.getString("allowRoles"));
+		}
+		if (jsonObject.containsKey("interval")) {
+			model.setInterval(jsonObject.getInteger("interval"));
+		}
 		if (jsonObject.containsKey("sortNo")) {
 			model.setSortNo(jsonObject.getInteger("sortNo"));
 		}
-		if (jsonObject.containsKey("createBy")) {
-			model.setCreateBy(jsonObject.getString("createBy"));
-		}
-		if (jsonObject.containsKey("createTime")) {
-			model.setCreateTime(jsonObject.getDate("createTime"));
-		}
-		if (jsonObject.containsKey("updateBy")) {
-			model.setUpdateBy(jsonObject.getString("updateBy"));
-		}
-		if (jsonObject.containsKey("updateTime")) {
-			model.setUpdateTime(jsonObject.getDate("updateTime"));
+
+		if (jsonObject.containsKey("items")) {
+			JSONArray array = jsonObject.getJSONArray("items");
+			List<XmlExportItem> items = XmlExportItemJsonFactory.arrayToList(array);
+			model.setItems(items);
 		}
 
 		return model;
 	}
 
-	public static JSONObject toJsonObject(DataExport model) {
+	public static JSONObject toJsonObject(XmlExport model) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("id", model.getId());
 		jsonObject.put("_id_", model.getId());
@@ -93,32 +106,46 @@ public class DataExportJsonFactory {
 		jsonObject.put("nodeId", model.getNodeId());
 		jsonObject.put("sortNo", model.getSortNo());
 
-		if (model.getDeploymentId() != null) {
-			jsonObject.put("deploymentId", model.getDeploymentId());
+		if (model.getNodeParentId() != 0) {
+			jsonObject.put("nodeParentId", model.getNodeParentId());
+		}
+		if (model.getName() != null) {
+			jsonObject.put("name", model.getName());
 		}
 		if (model.getTitle() != null) {
 			jsonObject.put("title", model.getTitle());
 		}
-		 
-		if (model.getSyncFlag() != null) {
-			jsonObject.put("syncFlag", model.getSyncFlag());
+		if (model.getSql() != null) {
+			jsonObject.put("sql", model.getSql());
 		}
-		if (model.getSrcDatabaseId() != 0) {
-			jsonObject.put("srcDatabaseId", model.getSrcDatabaseId());
+		if (model.getResultFlag() != null) {
+			jsonObject.put("resultFlag", model.getResultFlag());
 		}
-		 
+		if (model.getLeafFlag() != null) {
+			jsonObject.put("leafFlag", model.getLeafFlag());
+		}
+		if (model.getTreeFlag() != null) {
+			jsonObject.put("treeFlag", model.getTreeFlag());
+		}
 		if (model.getType() != null) {
 			jsonObject.put("type", model.getType());
 		}
 		if (model.getActive() != null) {
 			jsonObject.put("active", model.getActive());
 		}
-		if (model.getAllowRoles() != null) {
-			jsonObject.put("allowRoles", model.getAllowRoles());
+		if (model.getXmlTag() != null) {
+			jsonObject.put("xmlTag", model.getXmlTag());
 		}
 		if (model.getTemplateId() != null) {
 			jsonObject.put("templateId", model.getTemplateId());
 		}
+		if (model.getExternalAttrsFlag() != null) {
+			jsonObject.put("externalAttrsFlag", model.getExternalAttrsFlag());
+		}
+		if (model.getAllowRoles() != null) {
+			jsonObject.put("allowRoles", model.getAllowRoles());
+		}
+		jsonObject.put("interval", model.getInterval());
 		if (model.getCreateBy() != null) {
 			jsonObject.put("createBy", model.getCreateBy());
 		}
@@ -135,10 +162,16 @@ public class DataExportJsonFactory {
 			jsonObject.put("updateTime_date", DateUtils.getDate(model.getUpdateTime()));
 			jsonObject.put("updateTime_datetime", DateUtils.getDateTime(model.getUpdateTime()));
 		}
+
+		if (model.getItems() != null && !model.getItems().isEmpty()) {
+			JSONArray array = XmlExportItemJsonFactory.listToArray(model.getItems());
+			jsonObject.put("items", array);
+		}
+
 		return jsonObject;
 	}
 
-	public static ObjectNode toObjectNode(DataExport model) {
+	public static ObjectNode toObjectNode(XmlExport model) {
 		ObjectNode jsonObject = new ObjectMapper().createObjectNode();
 		jsonObject.put("id", model.getId());
 		jsonObject.put("_id_", model.getId());
@@ -146,18 +179,29 @@ public class DataExportJsonFactory {
 		jsonObject.put("nodeId", model.getNodeId());
 		jsonObject.put("sortNo", model.getSortNo());
 
-		if (model.getDeploymentId() != null) {
-			jsonObject.put("deploymentId", model.getDeploymentId());
+		if (model.getNodeParentId() != 0) {
+			jsonObject.put("nodeParentId", model.getNodeParentId());
+		}
+		if (model.getName() != null) {
+			jsonObject.put("name", model.getName());
+		}
+		if (model.getMapping() != null) {
+			jsonObject.put("mapping", model.getMapping());
 		}
 		if (model.getTitle() != null) {
 			jsonObject.put("title", model.getTitle());
 		}
-		 
-		if (model.getSyncFlag() != null) {
-			jsonObject.put("syncFlag", model.getSyncFlag());
+		if (model.getSql() != null) {
+			jsonObject.put("sql", model.getSql());
 		}
-		if (model.getSrcDatabaseId() != 0) {
-			jsonObject.put("srcDatabaseId", model.getSrcDatabaseId());
+		if (model.getResultFlag() != null) {
+			jsonObject.put("resultFlag", model.getResultFlag());
+		}
+		if (model.getLeafFlag() != null) {
+			jsonObject.put("leafFlag", model.getLeafFlag());
+		}
+		if (model.getTreeFlag() != null) {
+			jsonObject.put("treeFlag", model.getTreeFlag());
 		}
 		if (model.getType() != null) {
 			jsonObject.put("type", model.getType());
@@ -165,12 +209,19 @@ public class DataExportJsonFactory {
 		if (model.getActive() != null) {
 			jsonObject.put("active", model.getActive());
 		}
-		if (model.getAllowRoles() != null) {
-			jsonObject.put("allowRoles", model.getAllowRoles());
+		if (model.getXmlTag() != null) {
+			jsonObject.put("xmlTag", model.getXmlTag());
 		}
 		if (model.getTemplateId() != null) {
 			jsonObject.put("templateId", model.getTemplateId());
 		}
+		if (model.getExternalAttrsFlag() != null) {
+			jsonObject.put("externalAttrsFlag", model.getExternalAttrsFlag());
+		}
+		if (model.getAllowRoles() != null) {
+			jsonObject.put("allowRoles", model.getAllowRoles());
+		}
+		jsonObject.put("interval", model.getInterval());
 		if (model.getCreateBy() != null) {
 			jsonObject.put("createBy", model.getCreateBy());
 		}
@@ -190,10 +241,10 @@ public class DataExportJsonFactory {
 		return jsonObject;
 	}
 
-	public static JSONArray listToArray(java.util.List<DataExport> list) {
+	public static JSONArray listToArray(java.util.List<XmlExport> list) {
 		JSONArray array = new JSONArray();
 		if (list != null && !list.isEmpty()) {
-			for (DataExport model : list) {
+			for (XmlExport model : list) {
 				JSONObject jsonObject = model.toJsonObject();
 				array.add(jsonObject);
 			}
@@ -201,17 +252,17 @@ public class DataExportJsonFactory {
 		return array;
 	}
 
-	public static java.util.List<DataExport> arrayToList(JSONArray array) {
-		java.util.List<DataExport> list = new java.util.ArrayList<DataExport>();
+	public static java.util.List<XmlExport> arrayToList(JSONArray array) {
+		java.util.List<XmlExport> list = new java.util.ArrayList<XmlExport>();
 		for (int i = 0, len = array.size(); i < len; i++) {
 			JSONObject jsonObject = array.getJSONObject(i);
-			DataExport model = jsonToObject(jsonObject);
+			XmlExport model = jsonToObject(jsonObject);
 			list.add(model);
 		}
 		return list;
 	}
 
-	private DataExportJsonFactory() {
+	private XmlExportJsonFactory() {
 
 	}
 
