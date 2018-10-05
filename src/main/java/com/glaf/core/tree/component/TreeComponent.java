@@ -25,15 +25,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.glaf.core.base.TreeModel;
 
 public class TreeComponent extends TreeBase implements Serializable, Component {
 
 	// ~ Static fields/initializers
 	// =============================================
-	protected static TreeComponent[] _menuComponent = new TreeComponent[0];
+	protected static TreeComponent[] _treeComponent = new TreeComponent[0];
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,46 +40,40 @@ public class TreeComponent extends TreeBase implements Serializable, Component {
 
 	protected Map<String, Object> dataMap;
 	private boolean last;
-	protected List<TreeComponent> components = Collections
-			.synchronizedList(new java.util.concurrent.CopyOnWriteArrayList<TreeComponent>());
-	protected TreeComponent parentTree;
+	protected List<TreeComponent> components = Collections.synchronizedList(new java.util.ArrayList<TreeComponent>());
+	protected TreeComponent parent;
 	protected TreeModel treeModel;
 	protected Object treeObject;
 	protected String parentId;
 
-	public void addTreeComponent(TreeComponent component) {
+	public void addChild(TreeComponent component) {
 		if (component != null && component.getId() != null && !components.contains(component)) {
 			components.add(component);
 			component.setParent(this);
+			component.setParentId(this.getId());
 		}
 	}
 
 	/**
 	 * This method compares all attributes, except for parent and children
 	 * 
-	 * @param o
-	 *            the object to compare to
+	 * @param o the object to compare to
 	 */
-	public boolean equals(Object o) {
-		if (!(o instanceof TreeComponent)) {
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
 			return false;
-		}
-		TreeComponent m = (TreeComponent) o;
-		// Compare using StringUtils to avoid NullPointerExceptions
-		return StringUtils.equals(m.getAction(), this.action) && StringUtils.equals(m.getAlign(), this.align)
-				&& StringUtils.equals(m.getAltImage(), this.altImage)
-				&& StringUtils.equals(m.getDescription(), this.description)
-				&& StringUtils.equals(m.getForward(), this.forward) && StringUtils.equals(m.getHeight(), this.height)
-				&& StringUtils.equals(m.getImage(), this.image) && StringUtils.equals(m.getLocation(), this.location)
-				&& StringUtils.equals(m.getId(), this.id) && StringUtils.equals(m.getOnclick(), this.onclick)
-				&& StringUtils.equals(m.getOndblclick(), this.ondblclick)
-				&& StringUtils.equals(m.getOnmouseout(), this.onmouseout)
-				&& StringUtils.equals(m.getOnmouseover(), this.onmouseover)
-				&& StringUtils.equals(m.getOnContextTree(), this.onContextTree)
-				&& StringUtils.equals(m.getPage(), this.page) && StringUtils.equals(m.getRoles(), this.roles)
-				&& StringUtils.equals(m.getTarget(), this.target) && StringUtils.equals(m.getTitle(), this.title)
-				&& StringUtils.equals(m.getToolTip(), this.toolTip) && StringUtils.equals(m.getWidth(), this.width)
-				&& StringUtils.equals(m.getModule(), this.module);
+		if (getClass() != obj.getClass())
+			return false;
+		TreeComponent other = (TreeComponent) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 
 	public List<TreeComponent> getComponents() {
@@ -99,7 +91,7 @@ public class TreeComponent extends TreeBase implements Serializable, Component {
 	}
 
 	public TreeComponent getParent() {
-		return parentTree;
+		return parent;
 	}
 
 	public String getParentId() {
@@ -107,31 +99,32 @@ public class TreeComponent extends TreeBase implements Serializable, Component {
 	}
 
 	public TreeComponent[] getTreeComponents() {
-		return (TreeComponent[]) components.toArray(_menuComponent);
+		return (TreeComponent[]) components.toArray(_treeComponent);
 	}
 
 	/**
-	 * Get the organizationh of the menu
+	 * Get the depth of the menu
 	 * 
-	 * @return Organizationh of menu
+	 * @return Depth of menu
 	 */
-	public int getTreeOrganizationh() {
-		return getTreeOrganizationh(this, 0);
+	public int getTreeDepth() {
+		return getTreeDepth(this, 0);
 	}
 
-	private int getTreeOrganizationh(TreeComponent menu, int currentOrganizationh) {
-		int organizationh = currentOrganizationh + 1;
+	private int getTreeDepth(TreeComponent component, int currentDepth) {
+		int depth = currentDepth + 1;
 
-		TreeComponent[] subTrees = menu.getTreeComponents();
+		TreeComponent[] subTrees = component.getTreeComponents();
 		if (subTrees != null) {
 			for (int a = 0; a < subTrees.length; a++) {
-				int organizationhx = getTreeOrganizationh(subTrees[a], currentOrganizationh + 1);
-				if (organizationh < organizationhx)
-					organizationh = organizationhx;
+				int depthx = getTreeDepth(subTrees[a], currentDepth + 1);
+				if (depth < depthx) {
+					depth = depthx;
+				}
 			}
 		}
 
-		return organizationh;
+		return depth;
 	}
 
 	public TreeModel getTreeModel() {
@@ -176,8 +169,7 @@ public class TreeComponent extends TreeBase implements Serializable, Component {
 	/**
 	 * Sets the last.
 	 * 
-	 * @param last
-	 *            The last to set
+	 * @param last The last to set
 	 */
 	public void setLast(boolean last) {
 		this.last = last;
@@ -187,10 +179,10 @@ public class TreeComponent extends TreeBase implements Serializable, Component {
 		if (parentTree != null) {
 			// look up the parent and make sure that it has this menu as a child
 			if (!parentTree.getComponents().contains(this)) {
-				parentTree.addTreeComponent(this);
+				parentTree.addChild(this);
 			}
 		}
-		this.parentTree = parentTree;
+		this.parent = parentTree;
 	}
 
 	public void setParentId(String parentId) {

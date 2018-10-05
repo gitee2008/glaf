@@ -203,6 +203,111 @@ public class JacksonTreeHelper {
 		return repository;
 	}
 
+	public TreeRepository buildTree(List<TreeComponent> treeModels) {
+		Map<String, TreeComponent> treeMap = new java.util.HashMap<String, TreeComponent>();
+		Map<String, TreeComponent> lockedMap = new java.util.HashMap<String, TreeComponent>();
+
+		for (int i = 0, len = treeModels.size(); i < len; i++) {
+			TreeComponent treeModel = (TreeComponent) treeModels.get(i);
+			if (treeModel != null && StringUtils.equals(treeModel.getId(), treeModel.getParentId())) {
+				treeModel.setParentId("-1");
+			}
+			if (treeModel != null && treeModel.getId() != null) {
+				treeMap.put(String.valueOf(treeModel.getId()), treeModel);
+			}
+			if (treeModel != null && treeModel.getLocked() != 0) {
+				/**
+				 * 记录已经禁用的节点
+				 */
+				lockedMap.put(String.valueOf(treeModel.getId()), treeModel);
+			}
+		}
+
+		for (int i = 0, len = treeModels.size(); i < len / 2; i++) {
+			for (int j = 0, len2 = treeModels.size(); j < len2; j++) {
+				TreeComponent tree = treeModels.get(j);
+				/**
+				 * 找到某个节点的父节点，如果被禁用，那么当前节点也设置为禁用
+				 */
+				if (lockedMap.get(String.valueOf(tree.getParentId())) != null) {
+					tree.setLocked(1);
+				}
+				TreeComponent parent = treeMap.get(String.valueOf(tree.getParentId()));
+				tree.setParent(parent);
+			}
+		}
+
+		TreeRepository repository = new TreeRepository();
+		for (int i = 0, len = treeModels.size(); i < len; i++) {
+			TreeComponent treeModel = treeModels.get(i);
+			if (treeModel == null) {
+				continue;
+			}
+			if (treeModel.getLocked() != 0) {
+				continue;
+			}
+			if (treeModel.getParent() != null && treeModel.getParent().getLocked() != 0) {
+				continue;
+			}
+			TreeComponent component = new TreeComponent();
+			component.setId(String.valueOf(treeModel.getId()));
+			component.setCode(String.valueOf(treeModel.getId()));
+			component.setTitle(treeModel.getTitle());
+			component.setChecked(treeModel.isChecked());
+			component.setTreeObject(treeModel);
+			component.setImage(treeModel.getImage());
+			component.setId(String.valueOf(treeModel.getId()));
+			component.setCode(treeModel.getCode());
+			// component.setTreeModel(treeModel);
+			component.setDescription(treeModel.getDescription());
+			component.setLocation(treeModel.getUrl());
+			component.setUrl(treeModel.getUrl());
+			component.setTreeId(treeModel.getTreeId());
+			component.setCls(treeModel.getCls());
+			component.setDataMap(treeModel.getDataMap());
+			repository.addTree(component);
+		}
+
+		for (int i = 0, len = treeModels.size(); i < len; i++) {
+			TreeComponent treeModel = treeModels.get(i);
+			if (treeModel == null) {
+				continue;
+			}
+			if (treeModel.getLocked() != 0) {
+				continue;
+			}
+			if (treeModel.getParent() != null && treeModel.getParent().getLocked() != 0) {
+				continue;
+			}
+
+			TreeComponent component = repository.getTree(String.valueOf(treeModel.getId()));
+			String parentId = String.valueOf(treeModel.getParentId());
+			if (treeMap.get(parentId) != null) {
+				TreeComponent parentTree = repository.getTree(String.valueOf(parentId));
+				if (parentTree == null) {
+					TreeComponent parent = treeMap.get(parentId);
+					parentTree = new TreeComponent();
+					parentTree.setId(String.valueOf(parent.getId()));
+					parentTree.setCode(String.valueOf(parent.getId()));
+					parentTree.setTitle(parent.getTitle());
+					parentTree.setChecked(parent.isChecked());
+					parentTree.setTreeObject(parent);
+					parentTree.setImage(parent.getImage());
+					// parentTree.setTreeModel(parent);
+					parentTree.setDescription(parent.getDescription());
+					parentTree.setLocation(parent.getUrl());
+					parentTree.setUrl(parent.getUrl());
+					parentTree.setTreeId(parent.getTreeId());
+					parentTree.setCls(parent.getCls());
+					parentTree.setDataMap(parent.getDataMap());
+					// repository.addTree(parentTree);
+				}
+				component.setParent(parentTree);
+			}
+		}
+		return repository;
+	}
+
 	public void buildTree(ObjectNode row, TreeComponent treeComponent, Collection<String> checkedNodes,
 			Map<String, TreeModel> nodeMap) {
 		if (treeComponent.getComponents() != null && treeComponent.getComponents().size() > 0) {

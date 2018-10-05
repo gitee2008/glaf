@@ -106,11 +106,14 @@ public abstract class TreeBase implements Component, java.lang.Comparable<TreeBa
 	/** Holds value of property width. */
 	protected String width;
 
-	protected int locked;
-
 	protected int level;
 
 	protected int sortNo;
+
+	protected int locked;
+
+	// ~ Methods
+	// ================================================================
 
 	public int compareTo(TreeBase o) {
 		if (o == null) {
@@ -131,8 +134,22 @@ public abstract class TreeBase implements Component, java.lang.Comparable<TreeBa
 		return ret;
 	}
 
-	// ~ Methods
-	// ================================================================
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TreeBase other = (TreeBase) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 
 	/**
 	 * Returns the value for action.
@@ -339,6 +356,14 @@ public abstract class TreeBase implements Component, java.lang.Comparable<TreeBa
 	 */
 	public String getWidth() {
 		return width;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
 	}
 
 	public boolean isChecked() {

@@ -34,7 +34,7 @@ public class TreeRepository implements Serializable {
 
 	private static Log log = LogFactory.getLog(TreeRepository.class);
 
-	protected Map<String, TreeComponent> treeMaps = new LinkedHashMap<String, TreeComponent>();
+	protected Map<String, TreeComponent> treesMap = new LinkedHashMap<String, TreeComponent>();
 
 	/**
 	 * Adds a new component.
@@ -43,19 +43,20 @@ public class TreeRepository implements Serializable {
 	 *            The tree component to add.
 	 */
 	public void addTree(TreeComponent component) {
-		if (treeMaps.containsKey(component.getId())) {
-			//if (log.isDebugEnabled()) {
-			//	log.warn("Tree '" + component.getTitle() + "[" + component.getId() + "]' already exists in repository");
-			//}
+		if (treesMap.containsKey(component.getId())) {
+			if (log.isDebugEnabled()) {
+				log.warn("Tree '" + (component.getTitle() != null ? component.getTitle() : "") + "[" + component.getId()
+						+ "]' already exists in repository");
+			}
 			List<TreeComponent> children = (getTree(component.getId())).getComponents();
 			if (children != null && component.getComponents() != null) {
 				for (Iterator<TreeComponent> it = children.iterator(); it.hasNext();) {
 					TreeComponent child = (TreeComponent) it.next();
-					component.addTreeComponent(child);
+					component.addChild(child);
 				}
 			}
 		}
-		treeMaps.put(component.getId(), component);
+		treesMap.put(component.getId(), component);
 	}
 
 	/**
@@ -63,12 +64,12 @@ public class TreeRepository implements Serializable {
 	 */
 	public List<TreeComponent> getTopTrees() {
 		List<TreeComponent> topTrees = new java.util.ArrayList<TreeComponent>();
-		if (treeMaps == null) {
+		if (treesMap == null) {
 			log.warn("No trees found in repository!");
 			return topTrees;
 		}
 
-		for (Iterator<?> it = treeMaps.keySet().iterator(); it.hasNext();) {
+		for (Iterator<?> it = treesMap.keySet().iterator(); it.hasNext();) {
 			String id = (String) it.next();
 			TreeComponent component = getTree(id);
 			if (component.getParent() == null) {
@@ -94,20 +95,19 @@ public class TreeRepository implements Serializable {
 	}
 
 	public TreeComponent getTree(String id) {
-		return (TreeComponent) treeMaps.get(id);
+		return (TreeComponent) treesMap.get(id);
 	}
 
 	public Set<String> getTreeIds() {
-		return treeMaps.keySet();
+		return treesMap.keySet();
 	}
 
 	/**
-	 * Allows easy removal of all menus, suggested use for users wanting to
-	 * reload menus without having to perform a complete reload of the
-	 * TreeRepository
+	 * Allows easy removal of all menus, suggested use for users wanting to reload
+	 * menus without having to perform a complete reload of the TreeRepository
 	 */
 	public void removeAllTrees() {
-		treeMaps.clear();
+		treesMap.clear();
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class TreeRepository implements Serializable {
 	 * @param id
 	 */
 	public void removeTree(String id) {
-		treeMaps.remove(id);
+		treesMap.remove(id);
 	}
 
 }

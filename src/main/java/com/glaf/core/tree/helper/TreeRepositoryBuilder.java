@@ -278,6 +278,65 @@ public class TreeRepositoryBuilder {
 		return this.buildTree(treeComponents);
 	}
 
+	public TreeRepository buildMyTree(List<TreeComponent> treeModels) {
+		// Collections.sort(treeModels);
+		List<TreeComponent> components = new java.util.ArrayList<TreeComponent>();
+		Map<String, TreeComponent> treesMap = new java.util.HashMap<String, TreeComponent>();
+
+		for (int i = 0, len = treeModels.size(); i < len; i++) {
+			TreeComponent treeModel = (TreeComponent) treeModels.get(i);
+			if (treeModel != null) {
+				if (StringUtils.equals(treeModel.getId(), treeModel.getParentId())) {
+					// 2018-09-19增加逻辑，如果父节点编号与当前节点编号一样，设置父节点为空，即为顶层节点。
+					treeModel.setParentId(null);
+					// treeModel.setParent(null);
+				}
+				treesMap.put(treeModel.getId().trim(), treeModel);
+				components.add(treeModel);
+			}
+		}
+
+		for (int k = 0, k_len = components.size() / 2; k < k_len; k++) {
+			for (int i = 0, len = components.size(); i < len; i++) {
+				TreeComponent treeModel = components.get(i);
+				if (StringUtils.isNotEmpty(treeModel.getParentId())) {
+					TreeComponent parent = treesMap.get(treeModel.getParentId().trim());
+					if (parent != null) {
+						parent.addChild(treeModel);
+						treeModel.setParent(parent);
+					}
+				}
+			}
+		}
+
+		TreeRepository repository = new TreeRepository();
+
+		for (int i = 0, len = components.size(); i < len; i++) {
+			TreeComponent treeModel = components.get(i);
+			repository.addTree(treeModel);
+		}
+
+		for (int i = 0, len = components.size(); i < len; i++) {
+			TreeComponent component = components.get(i);
+			if (StringUtils.isNotEmpty(component.getParentId())) {
+				String parentId = component.getParentId();
+				if (treesMap.get(parentId.trim()) != null) {
+					TreeComponent parentTree = repository.getTree(parentId);
+					if (parentTree == null) {
+						parentTree = treesMap.get(parentId.trim());
+						TreeComponent child = repository.getTree(component.getId().trim());
+						child.setParent(parentTree);
+						child.setParentId(parentId);
+						parentTree.addChild(child);
+						repository.addTree(parentTree);
+					}
+				}
+			}
+		}
+
+		return repository;
+	}
+
 	public TreeRepository buildTree(List<TreeComponent> treeModels) {
 		Map<String, TreeComponent> treeMap = new LinkedHashMap<String, TreeComponent>();
 		Map<String, TreeComponent> lockedMap = new LinkedHashMap<String, TreeComponent>();
