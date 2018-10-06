@@ -34,7 +34,6 @@ import org.flowable.engine.impl.context.Context;
 import org.flowable.idm.api.User;
 import org.flowable.task.service.delegate.DelegateTask;
 
-import com.glaf.core.dao.MyBatisEntityDAO;
 import com.glaf.core.util.StringTools;
 
 public class RoleUsersMultiInstanceTaskListener implements TaskListener {
@@ -91,7 +90,7 @@ public class RoleUsersMultiInstanceTaskListener implements TaskListener {
 
 		}
 		if (StringUtils.isEmpty(statement)) {
-			statement = "getMembershipUsers";
+			statement = "getMyRoleUsers";
 		}
 
 		Collection<String> assigneeList = new java.util.HashSet<String>();
@@ -102,8 +101,7 @@ public class RoleUsersMultiInstanceTaskListener implements TaskListener {
 			CommandContext commandContext = Context.getCommandContext();
 			DbSqlSession dbSqlSession = commandContext.getSession(DbSqlSession.class);
 			SqlSession sqlSession = dbSqlSession.getSqlSession();
-			MyBatisEntityDAO entityDAO = new MyBatisEntityDAO(sqlSession);
-			List<?> list = entityDAO.getList(statement, paramMap);
+			List<?> list = sqlSession.selectList(statement, paramMap);
 			if (list != null && !list.isEmpty()) {
 				for (Object object : list) {
 					if (object instanceof User) {

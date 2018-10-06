@@ -35,7 +35,6 @@ import org.flowable.idm.api.Group;
 import org.flowable.idm.api.User;
 import org.flowable.task.service.delegate.DelegateTask;
 
-import com.glaf.core.dao.MyBatisEntityDAO;
 
 public class PrepareTaskAssigneeListener implements TaskListener {
 	private static final long serialVersionUID = 1L;
@@ -75,8 +74,7 @@ public class PrepareTaskAssigneeListener implements TaskListener {
 		if (StringUtils.isNotEmpty(statement)) {
 			DbSqlSession dbSqlSession = commandContext.getSession(DbSqlSession.class);
 			SqlSession sqlSession = dbSqlSession.getSqlSession();
-			MyBatisEntityDAO entityDAO = new MyBatisEntityDAO(sqlSession);
-			List<?> list = entityDAO.getList(statement, paramMap);
+			List<?> list = sqlSession.selectList(statement, paramMap);
 			if (list != null && !list.isEmpty()) {
 				Collection<String> users = new java.util.HashSet<String>();
 				Collection<String> groups = new java.util.HashSet<String>();

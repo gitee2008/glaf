@@ -35,7 +35,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.session.SqlSession;
 
-import com.glaf.core.dao.MyBatisEntityDAO;
 import com.glaf.core.util.StringTools;
 
 public class RoleUsersMultiInstanceListener implements ExecutionListener {
@@ -83,7 +82,7 @@ public class RoleUsersMultiInstanceListener implements ExecutionListener {
 				logger.debug("message:" + message.getValue(execution));
 			}
 			if (StringUtils.isEmpty(statement)) {
-				statement = "getMembershipUsers";
+				statement = "getMyRoleUsers";
 			}
 
 			Collection<String> assigneeList = new java.util.HashSet<String>();
@@ -93,8 +92,7 @@ public class RoleUsersMultiInstanceListener implements ExecutionListener {
 				// logger.debug("sessions:"+commandContext.getSessions());
 				DbSqlSession dbSqlSession = commandContext.getSession(DbSqlSession.class);
 				SqlSession sqlSession = dbSqlSession.getSqlSession();
-				MyBatisEntityDAO entityDAO = new MyBatisEntityDAO(sqlSession);
-				List<?> list = entityDAO.getList(statement, paramMap);
+				List<?> list = sqlSession.selectList(statement, paramMap);
 				if (list != null && !list.isEmpty()) {
 					for (Object object : list) {
 						if (object instanceof User) {

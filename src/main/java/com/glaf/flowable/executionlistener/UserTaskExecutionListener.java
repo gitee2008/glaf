@@ -33,8 +33,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.session.SqlSession;
-
-import com.glaf.core.dao.MyBatisEntityDAO;
 import com.glaf.core.util.StringTools;
 
 public class UserTaskExecutionListener implements ExecutionListener {
@@ -63,7 +61,7 @@ public class UserTaskExecutionListener implements ExecutionListener {
 			Map<String, Object> paramMap = new java.util.HashMap<String, Object>();
 			paramMap.putAll(execution.getVariables());
 
-			String statement = "getMembershipUsers";
+			String statement = "getMyRoleUsers";
 
 			String output = (String) outputVar.getValue(execution);
 
@@ -80,8 +78,7 @@ public class UserTaskExecutionListener implements ExecutionListener {
 			if (StringUtils.isNotEmpty(statement)) {
 				DbSqlSession dbSqlSession = commandContext.getSession(DbSqlSession.class);
 				SqlSession sqlSession = dbSqlSession.getSqlSession();
-				MyBatisEntityDAO entityDAO = new MyBatisEntityDAO(sqlSession);
-				List<?> list = entityDAO.getList(statement, paramMap);
+				List<?> list = sqlSession.selectList(statement, paramMap);
 				if (list != null && !list.isEmpty()) {
 					Collection<String> users = new java.util.HashSet<String>();
 

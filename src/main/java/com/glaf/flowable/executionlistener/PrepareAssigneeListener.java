@@ -35,7 +35,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.session.SqlSession;
 
-import com.glaf.core.dao.MyBatisEntityDAO;
 
 public class PrepareAssigneeListener implements ExecutionListener {
 
@@ -80,8 +79,7 @@ public class PrepareAssigneeListener implements ExecutionListener {
 				paramMap.putAll(execution.getVariables());
 				DbSqlSession dbSqlSession = commandContext.getSession(DbSqlSession.class);
 				SqlSession sqlSession = dbSqlSession.getSqlSession();
-				MyBatisEntityDAO entityDAO = new MyBatisEntityDAO(sqlSession);
-				List<?> list = entityDAO.getList(statement, paramMap);
+				List<?> list = sqlSession.selectList(statement, paramMap);
 				if (list != null && !list.isEmpty()) {
 					Collection<String> users = new java.util.HashSet<String>();
 					Collection<String> groups = new java.util.HashSet<String>();

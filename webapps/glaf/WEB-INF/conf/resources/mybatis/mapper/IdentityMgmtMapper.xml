@@ -479,6 +479,44 @@
 	</select>
 
 
+	<select id="getMyRoleUsers" resultMap="sysUserResultMap"
+		parameterType="java.util.Map">
+
+		SELECT DISTINCT x.*
+		FROM SYS_USER x
+
+		<if test="roleId != null">
+			INNER JOIN SYS_USER_ROLE userrole
+			ON x.USERID =
+			userrole.USERID
+		</if>
+
+		WHERE 1=1
+		and x.DELETEFLAG = 0
+
+		<if test="roleId != null">
+			AND userrole.ROLEID = #{roleId}
+		</if>
+
+		<if test="nodeId != null">
+			AND ( x.ORGANIZATIONID = #{nodeId} )
+		</if>
+
+		<if test="nodeIds != null and nodeIds.size !=0">
+			AND x.ORGANIZATIONID IN
+			<foreach item="x_nodeId" index="index" collection="nodeIds"
+				open="(" separator="," close=")">
+				#{x_nodeId}
+			</foreach>
+		</if>
+
+		<if test="tenantId != null">
+			AND ( x.TENANTID = #{tenantId} )
+		</if>
+
+	</select>
+
+
 	<select id="searchUsers" resultMap="sysUserResultMap"
 		parameterType="string">
 
@@ -573,8 +611,7 @@
 
 		SELECT t.*
 		FROM SYS_TENANT t
-		WHERE t.TENANTID_ =
-		#{tenantId}
+		WHERE t.TENANTID_ = #{tenantId}
 
 	</select>
 
