@@ -21,6 +21,8 @@ package com.glaf.flowable.service.impl;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
@@ -112,10 +114,8 @@ public class FlowableProcessServiceImpl implements FlowableProcessService {
 	/**
 	 * 分配任务给指定人
 	 * 
-	 * @param taskId
-	 *            任务编号
-	 * @param actorId
-	 *            用户编号
+	 * @param taskId  任务编号
+	 * @param actorId 用户编号
 	 */
 	public void claimTask(String taskId, String actorId) {
 		taskService.claim(taskId, actorId);
@@ -134,6 +134,19 @@ public class FlowableProcessServiceImpl implements FlowableProcessService {
 			variables = new java.util.HashMap<String, Object>();
 		}
 
+		Map<String, Object> vars = runtimeService.getVariables(ctx.getProcessInstanceId());
+
+		if (vars != null && !vars.isEmpty()) {
+			Set<Entry<String, Object>> entrySet = vars.entrySet();
+			for (Entry<String, Object> entry : entrySet) {
+				String key = entry.getKey();
+				Object value = entry.getValue();
+				if (variables.get(key) == null) {
+					variables.put(key, value);
+				}
+			}
+		}
+
 		if (ctx.getOutcome() != null) {
 			variables.put(Constants.OUTCOME, ctx.getOutcome());
 		}
@@ -146,6 +159,9 @@ public class FlowableProcessServiceImpl implements FlowableProcessService {
 		}
 
 		variables.put(Constants.BUSINESS_KEY, UUID32.getUUID());
+
+		// System.out.println("###############vars=" + vars);
+		// System.out.println("###############variables=" + variables);
 
 		TaskQuery query = taskService.createTaskQuery();
 		Task task = null;
@@ -194,8 +210,7 @@ public class FlowableProcessServiceImpl implements FlowableProcessService {
 	/**
 	 * 完成任务
 	 * 
-	 * @param taskId
-	 *            任务编号
+	 * @param taskId 任务编号
 	 */
 	public void completeTask(String taskId) {
 		taskService.complete(taskId);
@@ -204,10 +219,8 @@ public class FlowableProcessServiceImpl implements FlowableProcessService {
 	/**
 	 * 完成任务
 	 * 
-	 * @param taskId
-	 *            任务编号
-	 * @param variables
-	 *            变量集
+	 * @param taskId    任务编号
+	 * @param variables 变量集
 	 */
 	public void completeTask(String taskId, Map<String, Object> variables) {
 		variables.remove(Constants.BUSINESS_KEY);
@@ -217,13 +230,10 @@ public class FlowableProcessServiceImpl implements FlowableProcessService {
 	/**
 	 * 完成任务
 	 * 
-	 * @param actorId
-	 *            用户编号
-	 * @param taskId
-	 *            任务编号
+	 * @param actorId   用户编号
+	 * @param taskId    任务编号
 	 * 
-	 * @param variables
-	 *            变量集
+	 * @param variables 变量集
 	 */
 	public void completeTask(String actorId, String taskId, Map<String, Object> variables) {
 		if (StringUtils.isNotEmpty(taskId) && StringUtils.isNotEmpty(actorId)) {
@@ -237,9 +247,7 @@ public class FlowableProcessServiceImpl implements FlowableProcessService {
 				variables.remove(Constants.BUSINESS_KEY);
 				try {
 					identityService.setAuthenticatedUserId(actorId);
-
 					taskService.complete(taskId, variables);
-
 				} finally {
 					identityService.setAuthenticatedUserId(null);
 				}
@@ -250,8 +258,7 @@ public class FlowableProcessServiceImpl implements FlowableProcessService {
 	/**
 	 * 删除流程实例
 	 * 
-	 * @param processInstanceId
-	 *            流程实例编号
+	 * @param processInstanceId 流程实例编号
 	 */
 	public void deleteProcessInstance(String processInstanceId, String deleteReason) {
 		runtimeService.deleteProcessInstance(processInstanceId, deleteReason);
@@ -260,8 +267,7 @@ public class FlowableProcessServiceImpl implements FlowableProcessService {
 	/**
 	 * 删除任务实例
 	 * 
-	 * @param taskId
-	 *            任务实例编号
+	 * @param taskId 任务实例编号
 	 */
 	public void deleteTask(String taskId) {
 		taskService.deleteTask(taskId);
@@ -270,8 +276,7 @@ public class FlowableProcessServiceImpl implements FlowableProcessService {
 	/**
 	 * 删除任务实例
 	 * 
-	 * @param taskIds
-	 *            任务实例编号集合
+	 * @param taskIds 任务实例编号集合
 	 */
 	public void deleteTasks(List<String> taskIds) {
 		taskService.deleteTasks(taskIds);
@@ -340,8 +345,7 @@ public class FlowableProcessServiceImpl implements FlowableProcessService {
 	/**
 	 * 启动流程
 	 * 
-	 * @param ctx
-	 *            流程上下文
+	 * @param ctx 流程上下文
 	 * 
 	 * @return
 	 */
@@ -378,10 +382,8 @@ public class FlowableProcessServiceImpl implements FlowableProcessService {
 	/**
 	 * 启动流程
 	 * 
-	 * @param actorId
-	 *            参与者
-	 * @param processDefinitionKey
-	 *            流程定义名
+	 * @param actorId              参与者
+	 * @param processDefinitionKey 流程定义名
 	 * @return
 	 */
 	public ProcessInstance startProcessInstanceByKey(String actorId, String processDefinitionKey) {
@@ -400,12 +402,9 @@ public class FlowableProcessServiceImpl implements FlowableProcessService {
 
 	/**
 	 * 
-	 * @param actorId
-	 *            参与者
-	 * @param processDefinitionKey
-	 *            流程定义名
-	 * @param variables
-	 *            变量集
+	 * @param actorId              参与者
+	 * @param processDefinitionKey 流程定义名
+	 * @param variables            变量集
 	 * @return
 	 */
 	public ProcessInstance startProcessInstanceByKey(String actorId, String processDefinitionKey,
@@ -427,12 +426,9 @@ public class FlowableProcessServiceImpl implements FlowableProcessService {
 
 	/**
 	 * 
-	 * @param actorId
-	 *            参与者
-	 * @param processDefinitionKey
-	 *            流程定义名
-	 * @param businessKey
-	 *            业务主键
+	 * @param actorId              参与者
+	 * @param processDefinitionKey 流程定义名
+	 * @param businessKey          业务主键
 	 * @return
 	 */
 	public ProcessInstance startProcessInstanceByKey(String actorId, String processDefinitionKey, String businessKey) {
@@ -453,14 +449,10 @@ public class FlowableProcessServiceImpl implements FlowableProcessService {
 
 	/**
 	 * 
-	 * @param actorId
-	 *            参与者
-	 * @param processDefinitionKey
-	 *            流程定义名
-	 * @param businessKey
-	 *            业务主键
-	 * @param variables
-	 *            变量集
+	 * @param actorId              参与者
+	 * @param processDefinitionKey 流程定义名
+	 * @param businessKey          业务主键
+	 * @param variables            变量集
 	 * @return
 	 */
 	public ProcessInstance startProcessInstanceByKey(String actorId, String processDefinitionKey, String businessKey,

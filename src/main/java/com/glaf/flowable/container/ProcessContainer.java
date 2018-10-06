@@ -116,6 +116,7 @@ public class ProcessContainer {
 			}
 		} catch (Exception ex) {
 			isCompleteOK = false;
+			ex.printStackTrace();
 			logger.debug(ex);
 			throw new RuntimeException(ex);
 		} finally {
