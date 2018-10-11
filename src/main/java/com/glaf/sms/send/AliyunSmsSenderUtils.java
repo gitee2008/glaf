@@ -34,6 +34,7 @@ import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsRequest;
 import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsResponse;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
+import com.aliyuncs.endpoint.DefaultEndpointResolver;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
@@ -63,7 +64,8 @@ public class AliyunSmsSenderUtils {
 
 		// 初始化acsClient,暂不支持region化
 		IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
-		DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", PRODUCT, DOMAIN);
+		// DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", PRODUCT, DOMAIN);
+		DefaultEndpointResolver.predefinedEndpointResolver.putEndpointEntry("cn-hangzhou", PRODUCT, DOMAIN);
 		IAcsClient acsClient = new DefaultAcsClient(profile);
 
 		// 组装请求对象
@@ -141,7 +143,8 @@ public class AliyunSmsSenderUtils {
 
 		// 初始化acsClient,暂不支持region化
 		IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
-		DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", PRODUCT, DOMAIN);
+		//DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", PRODUCT, DOMAIN);
+		DefaultEndpointResolver.predefinedEndpointResolver.putEndpointEntry("cn-hangzhou", PRODUCT, DOMAIN);
 		IAcsClient acsClient = new DefaultAcsClient(profile);
 
 		// 组装请求对象-具体描述见控制台-文档部分内容
