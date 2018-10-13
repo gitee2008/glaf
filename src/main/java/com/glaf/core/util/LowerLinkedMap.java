@@ -56,7 +56,10 @@ public class LowerLinkedMap extends LinkedHashMap<String, Object> {
 	}
 
 	protected String convertKey(String key) {
-		return key.toLowerCase(locale);
+		if (key != null) {
+			return key.toLowerCase(locale);
+		}
+		return "";
 	}
 
 	public Object get(Object key) {
