@@ -505,7 +505,7 @@
 		<dependency>
 			<groupId>com.ecwid.consul</groupId>
             <artifactId>consul-api</artifactId>
-            <version>1.4.0</version>
+            <version>1.4.1</version>
 		</dependency>
 		<dependency>
 			<groupId>concurrent</groupId>
@@ -543,7 +543,7 @@
 		<dependency>
 			<groupId>org.apache.zookeeper</groupId>
 			<artifactId>zookeeper</artifactId>
-			<version>3.4.13</version>
+			<version>3.4.12</version>
 		</dependency>
 		<!-- 结束zookeeper客户端工具 -->
 		<!-- kafka -->
@@ -668,7 +668,7 @@
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
-			<version>4.1.0</version>
+			<version>4.2.1</version>
 		</dependency>
 		<!-- 数据库持久层工具 -->
 		<!-- hibernate -->
@@ -680,7 +680,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.3.5.Final</version>
+            <version>5.3.6.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.common</groupId>
