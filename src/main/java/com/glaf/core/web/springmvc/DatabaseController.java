@@ -130,6 +130,16 @@ public class DatabaseController {
 
 		return new ModelAndView("/sys/database/chooseDatabases", modelMap);
 	}
+	
+	@RequestMapping("/delete")
+	public byte[] deleteById(HttpServletRequest request) throws IOException {
+		long databaseId = RequestUtils.getLong(request, "id");
+		if (databaseId > 0) {
+			databaseService.deleteById(databaseId);
+			return ResponseUtils.responseJsonResult(true);
+		}
+		return ResponseUtils.responseJsonResult(false);
+	}
 
 	@RequestMapping("/edit")
 	public ModelAndView edit(HttpServletRequest request, ModelMap modelMap) {

@@ -161,8 +161,8 @@
 		if(confirm("删除数据库配置将同时删除历史统计结果，删除后数据不能恢复，确定删除吗？")){
 			jQuery.ajax({
 				   type: "POST",
-				   url: '${contextPath}/rs/sys/database/delete?id='+id,
-				   dataType:  'json',
+				   url: '${contextPath}/sys/database/delete?id='+id,
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },
@@ -215,7 +215,7 @@
 			jQuery.ajax({
 				   type: "POST",
 				   url: '${contextPath}/sys/database/delete?ids='+str,
-				   dataType:  'json',
+				   dataType: 'json',
 				   error: function(data){
 					   alert('服务器处理错误！');
 				   },
