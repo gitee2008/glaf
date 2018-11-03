@@ -25,7 +25,7 @@
         <maven.build.timestamp.format>yyyy-MM-dd hh.mm.ss</maven.build.timestamp.format>
 		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.version>5.1.0.RELEASE</spring.version>
+		<spring.version>5.1.2.RELEASE</spring.version>
 		<spring.batch.version>3.0.8.RELEASE</spring.batch.version>
 		<poi.version>3.17</poi.version>
 		<jxls.version>1.0.6</jxls.version>
@@ -671,7 +671,7 @@
 		<dependency>
 			<groupId>com.github.pagehelper</groupId>
 			<artifactId>pagehelper</artifactId>
-			<version>5.1.6</version>
+			<version>5.1.7</version>
 		</dependency>
 		<!-- jdbc驱动 -->
 		<dependency>
@@ -773,7 +773,7 @@
         <dependency>
 			<groupId>io.lettuce</groupId>
 			<artifactId>lettuce-core</artifactId>
-			<version>5.0.5.RELEASE</version>
+			<version>5.1.2.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
@@ -867,7 +867,7 @@
 		<dependency>
 			<groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.30.Final</version>
+            <version>4.1.31.Final</version>
 		</dependency>
 		<!-- 任务调度框架 -->
 		<dependency>
