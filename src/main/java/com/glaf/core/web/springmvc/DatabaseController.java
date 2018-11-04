@@ -130,13 +130,17 @@ public class DatabaseController {
 
 		return new ModelAndView("/sys/database/chooseDatabases", modelMap);
 	}
-	
+
 	@RequestMapping("/delete")
 	public byte[] deleteById(HttpServletRequest request) throws IOException {
 		long databaseId = RequestUtils.getLong(request, "id");
 		if (databaseId > 0) {
-			databaseService.deleteById(databaseId);
-			return ResponseUtils.responseJsonResult(true);
+			try {
+				databaseService.deleteById(databaseId);
+				return ResponseUtils.responseJsonResult(true);
+			} catch (Exception ex) {
+				logger.error(ex);
+			}
 		}
 		return ResponseUtils.responseJsonResult(false);
 	}
@@ -174,7 +178,6 @@ public class DatabaseController {
 		if (running.get()) {
 			return ResponseUtils.responseJsonResult(false, "不能执行初始化，已经有任务在执行中，请等待其他任务完成再执行。");
 		}
-
 		try {
 			running.set(true);
 			Database db = null;
@@ -207,7 +210,6 @@ public class DatabaseController {
 			}
 
 		} catch (Exception ex) {
-
 			logger.error(ex);
 		} finally {
 			running.set(false);
@@ -363,16 +365,6 @@ public class DatabaseController {
 			request.setAttribute("users", users);
 		}
 
-		String x_query = request.getParameter("x_query");
-		if (StringUtils.equals(x_query, "true")) {
-			Map<String, Object> paramMap = RequestUtils.getParameterMap(request);
-			String x_complex_query = JsonUtils.encode(paramMap);
-			x_complex_query = RequestUtils.encodeString(x_complex_query);
-			request.setAttribute("x_complex_query", x_complex_query);
-		} else {
-			request.setAttribute("x_complex_query", "");
-		}
-
 		String x_view = ViewProperties.getString("database.permission");
 		if (StringUtils.isNotEmpty(x_view)) {
 			return new ModelAndView(x_view, modelMap);
@@ -505,7 +497,6 @@ public class DatabaseController {
 			this.databaseService.save(database);
 			return ResponseUtils.responseJsonResult(true);
 		} catch (Exception ex) {
-
 			logger.error(ex);
 		}
 		return ResponseUtils.responseJsonResult(false);
@@ -589,7 +580,6 @@ public class DatabaseController {
 				tableDataService.updateAllTableData(rows);
 				return ResponseUtils.responseResult(true);
 			} catch (Exception ex) {
-
 				logger.error(ex);
 			}
 		}
@@ -759,7 +749,6 @@ public class DatabaseController {
 			}
 
 		} catch (Exception ex) {
-
 			logger.error(ex);
 		}
 		return ResponseUtils.responseJsonResult(false, "服务器配置错误。");
@@ -796,18 +785,17 @@ public class DatabaseController {
 						logger.debug("->systemName:" + name);
 						database.setVerify("Y");
 						databaseService.verify(database);
-						
+
 						if (!DBUtils.tableExists(database.getName(), "SYS_DBID")) {
 							TableDefinition tableDefinition = DbidDomainFactory.getTableDefinition("SYS_DBID");
 							DBUtils.createTable(database.getName(), tableDefinition);
 						}
-						
+
 						return ResponseUtils.responseJsonResult(true, "数据库配置正确。");
 					}
 				}
 			}
 		} catch (Exception ex) {
-
 			logger.error(ex);
 		}
 		return ResponseUtils.responseJsonResult(false, "服务器配置错误。");
