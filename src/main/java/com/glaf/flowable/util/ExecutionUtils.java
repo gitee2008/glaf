@@ -96,18 +96,21 @@ public class ExecutionUtils {
 			logger.debug(sqlx);
 			logger.debug(values);
 
-			Connection con = null;
+			Connection conn = null;
+			PreparedStatement psmt = null;
 			try {
 				DbSqlSession dbSqlSession = commandContext.getSession(DbSqlSession.class);
 				SqlSession sqlSession = dbSqlSession.getSqlSession();
-				con = sqlSession.getConnection();
-				PreparedStatement psmt = con.prepareStatement(sqlx);
+				conn = sqlSession.getConnection();
+				psmt = conn.prepareStatement(sqlx);
 				JdbcUtils.fillStatement(psmt, values);
 				psmt.executeUpdate();
 				psmt.close();
 				psmt = null;
 			} catch (SQLException ex) {
 				throw new RuntimeException(ex);
+			} finally {
+				JdbcUtils.close(psmt);
 			}
 		}
 	}
