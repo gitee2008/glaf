@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.glaf.flowable.container;
+package com.glaf.flowable.factory;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -44,13 +44,13 @@ import com.glaf.flowable.service.FlowableProcessService;
 import com.glaf.flowable.service.FlowableTaskQueryService;
 import com.glaf.flowable.util.ThreadHolder;
 
-public class ProcessContainer {
+public class ProcessFactory {
 
 	private static class ProcessContainerHolder {
-		public static ProcessContainer instance = new ProcessContainer();
+		public static ProcessFactory instance = new ProcessFactory();
 	}
 
-	protected static final Log logger = LogFactory.getLog(ProcessContainer.class);
+	protected static final Log logger = LogFactory.getLog(ProcessFactory.class);
 
 	private static ConcurrentMap<String, Object> cache = new ConcurrentHashMap<String, Object>();
 
@@ -76,11 +76,11 @@ public class ProcessContainer {
 		return flowableTaskQueryService;
 	}
 
-	public static ProcessContainer getContainer() {
+	public static ProcessFactory getContainer() {
 		return ProcessContainerHolder.instance;
 	}
 
-	private ProcessContainer() {
+	private ProcessFactory() {
 		flowableProcessService = ContextFactory.getBean(FlowableProcessService.class);
 		flowableTaskQueryService = ContextFactory.getBean(FlowableTaskQueryService.class);
 		flowableProcessQueryService = ContextFactory.getBean(FlowableProcessQueryService.class);
