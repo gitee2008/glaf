@@ -33,7 +33,7 @@
 		<mybatis-spring.version>1.3.2</mybatis-spring.version>
 		<jdk.version>1.8</jdk.version>
 		<staxon.version>1.3</staxon.version>
-		<jackson.version>2.9.7</jackson.version>
+		<jackson.version>2.9.8</jackson.version>
 		<codehaus.jackson.version>1.9.13</codehaus.jackson.version>
 		<curator.version>2.12.0</curator.version>
 		<asm.version>6.2.1</asm.version>
