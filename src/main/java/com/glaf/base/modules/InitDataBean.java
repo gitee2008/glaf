@@ -65,6 +65,9 @@ public class InitDataBean {
 		} finally {
 			IOUtils.closeStream(inputStream);
 		}
+
+		InitUserPasswordBean bean = new InitUserPasswordBean();
+		bean.initPassword();
 	}
 
 	public void load(InputStream inputStream) {
