@@ -107,7 +107,7 @@ public class SysUserServiceImpl implements SysUserService {
 	 */
 	public void changePassword(String account, String password) {
 		if (!StringUtils.equals(password, "88888888") && password.length() < 64) {
-			String pwd_hash = DigestUtils.sha512Hex(account + ":" + password);
+			String pwd_hash = DigestUtils.md5Hex(DigestUtils.sha512Hex(password));
 			SysUser bean = new SysUser();
 			bean.setUserId(account);
 			bean.setPasswordHash(pwd_hash);
@@ -141,7 +141,7 @@ public class SysUserServiceImpl implements SysUserService {
 	 */
 	public boolean checkPassword(String account, String password) {
 		boolean result = false;
-		String pwd_hash = DigestUtils.sha512Hex(account + ":" + password);
+		String pwd_hash = DigestUtils.md5Hex(DigestUtils.sha512Hex(password));
 		String pwd = sysUserMapper.getPasswordHashByAccount(account);
 		if (StringUtils.isNotEmpty(password) && StringUtils.equals(pwd_hash, pwd)) {
 			result = true;
@@ -160,7 +160,7 @@ public class SysUserServiceImpl implements SysUserService {
 		if (StringUtils.isEmpty(bean.getPasswordHash())) {
 			bean.setPasswordHash("888888");
 		}
-		String pwd_hash = DigestUtils.sha512Hex(bean.getUserId() + ":" + bean.getPasswordHash());
+		String pwd_hash = DigestUtils.md5Hex(DigestUtils.sha512Hex(bean.getPasswordHash()));
 		bean.setPasswordHash(pwd_hash);
 		this.save(bean);
 		return true;
@@ -456,10 +456,8 @@ public class SysUserServiceImpl implements SysUserService {
 	/**
 	 * 获取全部员工数据集 分页列表
 	 * 
-	 * @param pageNo
-	 *            int
-	 * @param pageSize
-	 *            int
+	 * @param pageNo   int
+	 * @param pageSize int
 	 * @param query
 	 * @return
 	 */
@@ -729,8 +727,7 @@ public class SysUserServiceImpl implements SysUserService {
 	/**
 	 * 登录失败
 	 * 
-	 * @param actorId
-	 *            登录用户编号
+	 * @param actorId 登录用户编号
 	 * @return
 	 */
 	@Transactional
@@ -749,7 +746,7 @@ public class SysUserServiceImpl implements SysUserService {
 	public boolean register(SysUser bean) {
 		bean.setCreateTime(new Date());
 		bean.setToken(UUID32.getUUID());
-		String pwd_hash = DigestUtils.sha512Hex(bean.getUserId() + ":" + bean.getPasswordHash());
+		String pwd_hash = DigestUtils.md5Hex(DigestUtils.sha512Hex(bean.getPasswordHash()));
 		bean.setPasswordHash(pwd_hash);
 		this.save(bean);
 		this.createRoleUser("TenantAdmin", bean.getUserId());
@@ -759,8 +756,7 @@ public class SysUserServiceImpl implements SysUserService {
 	/**
 	 * 重置登录信息
 	 * 
-	 * @param actorId
-	 *            登录用户编号
+	 * @param actorId 登录用户编号
 	 * @return
 	 */
 	@Transactional
@@ -778,10 +774,8 @@ public class SysUserServiceImpl implements SysUserService {
 	/**
 	 * 重置用户状态
 	 * 
-	 * @param userIds
-	 *            用户编号集合
-	 * @param locked
-	 *            状态
+	 * @param userIds 用户编号集合
+	 * @param locked  状态
 	 */
 	@Transactional
 	public void resetStatus(List<String> userIds, int locked) {
