@@ -43,7 +43,7 @@ public class InitUserPasswordBean {
 			rs = psmt.executeQuery();
 			while (rs.next()) {
 				String userId = rs.getString(1);
-				String pwd_hash = DigestUtils.md5Hex(userId.toLowerCase() + DigestUtils.sha512Hex("888888"));
+				String pwd_hash = DigestUtils.sha512Hex(userId.toLowerCase() + DigestUtils.sha512Hex("888888"));
 				psmt2.setString(1, pwd_hash);
 				psmt2.setString(2, userId);
 				psmt2.addBatch();
