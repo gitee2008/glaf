@@ -72,8 +72,6 @@ public class DataExportBean {
 			parameter.putAll(params);
 		}
 
-		Map<String, Map<String, Object>> dataListMap = new HashMap<String, Map<String, Object>>();
-
 		List<DataExportItem> items = dataExport.getItems();
 		SysParams.putInternalParams(parameter);
 
@@ -104,7 +102,8 @@ public class DataExportBean {
 					String sql = item.getSql();
 					sql = QueryUtils.replaceSQLVars(sql, parameter);
 
-					final List<String> recursionKeys = StringTools.splitLowerCase(item.getRecursionColumns(), ",");
+					Map<String, Map<String, Object>> dataListMap = new HashMap<String, Map<String, Object>>();
+					List<String> recursionKeys = StringTools.splitLowerCase(item.getRecursionColumns(), ",");
 					boolean recursionKeyExists = false;
 					if (recursionKeys != null && !recursionKeys.isEmpty()) {
 						recursionKeyExists = true;
@@ -270,10 +269,10 @@ public class DataExportBean {
 					if (!dataListMap.isEmpty()) {
 						totalSize = dataListMap.size();
 						if (totalSize > SysParams.MAX_SIZE) {
-							logger.warn("totalSize:" + totalSize);
+							logger.warn(item.getTitle() + " total size:" + totalSize);
 							throw new RuntimeException("data list too large, please split small condition.");
 						} else {
-							logger.debug("totalSize:" + totalSize);
+							logger.debug(item.getTitle() + " rows size:" + totalSize);
 						}
 					}
 					item.setDataList(dataListMap.values());
