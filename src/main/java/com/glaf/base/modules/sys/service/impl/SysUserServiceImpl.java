@@ -107,7 +107,7 @@ public class SysUserServiceImpl implements SysUserService {
 	 */
 	public void changePassword(String account, String password) {
 		if (!StringUtils.equals(password, "88888888") && password.length() < 64) {
-			String pwd_hash = DigestUtils.md5Hex(DigestUtils.sha512Hex(password));
+			String pwd_hash = DigestUtils.md5Hex(account.toLowerCase() + DigestUtils.sha512Hex(password));
 			SysUser bean = new SysUser();
 			bean.setUserId(account);
 			bean.setPasswordHash(pwd_hash);
@@ -141,7 +141,7 @@ public class SysUserServiceImpl implements SysUserService {
 	 */
 	public boolean checkPassword(String account, String password) {
 		boolean result = false;
-		String pwd_hash = DigestUtils.md5Hex(DigestUtils.sha512Hex(password));
+		String pwd_hash = DigestUtils.md5Hex(account.toLowerCase() + DigestUtils.sha512Hex(password));
 		String pwd = sysUserMapper.getPasswordHashByAccount(account);
 		if (StringUtils.isNotEmpty(password) && StringUtils.equals(pwd_hash, pwd)) {
 			result = true;
@@ -160,7 +160,8 @@ public class SysUserServiceImpl implements SysUserService {
 		if (StringUtils.isEmpty(bean.getPasswordHash())) {
 			bean.setPasswordHash("888888");
 		}
-		String pwd_hash = DigestUtils.md5Hex(DigestUtils.sha512Hex(bean.getPasswordHash()));
+		String pwd_hash = DigestUtils
+				.md5Hex(bean.getActorId().toLowerCase() + DigestUtils.sha512Hex(bean.getPasswordHash()));
 		bean.setPasswordHash(pwd_hash);
 		this.save(bean);
 		return true;
@@ -746,7 +747,8 @@ public class SysUserServiceImpl implements SysUserService {
 	public boolean register(SysUser bean) {
 		bean.setCreateTime(new Date());
 		bean.setToken(UUID32.getUUID());
-		String pwd_hash = DigestUtils.md5Hex(DigestUtils.sha512Hex(bean.getPasswordHash()));
+		String pwd_hash = DigestUtils
+				.md5Hex(bean.getActorId().toLowerCase() + DigestUtils.sha512Hex(bean.getPasswordHash()));
 		bean.setPasswordHash(pwd_hash);
 		this.save(bean);
 		this.createRoleUser("TenantAdmin", bean.getUserId());

@@ -38,13 +38,14 @@ public class InitUserPasswordBean {
 			conn = DBConnectionFactory.getConnection();
 			conn.setAutoCommit(false);
 			String sql = " select USERID from SYS_USER where PASSWORD_HASH is null and LOCKED = 0 ";
-			String pwd_hash = DigestUtils.md5Hex(DigestUtils.sha512Hex("888888"));
 			psmt = conn.prepareStatement(sql);
 			psmt2 = conn.prepareStatement(" update SYS_USER set PASSWORD_HASH = ? where USERID = ? ");
 			rs = psmt.executeQuery();
 			while (rs.next()) {
+				String userId = rs.getString(1);
+				String pwd_hash = DigestUtils.md5Hex(userId.toLowerCase() + DigestUtils.sha512Hex("888888"));
 				psmt2.setString(1, pwd_hash);
-				psmt2.setString(2, rs.getString(1));
+				psmt2.setString(2, userId);
 				psmt2.addBatch();
 			}
 			psmt2.executeBatch();
