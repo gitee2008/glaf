@@ -30,7 +30,7 @@ public class ExcelXlsxUtils {
 
 	public static String getValue(XSSFCell cell, int precision) {
 		String strValue = null;
-		if (cell.getCellTypeEnum() == CellType.NUMERIC) {
+		if (cell.getCellType() == CellType.NUMERIC) {
 			double value = cell.getNumericCellValue();
 			if (precision > 0) {
 				value = Math.round(value * Math.pow(10, precision)) / Math.pow(10, precision);
@@ -40,9 +40,9 @@ public class ExcelXlsxUtils {
 				strValue = strValue.substring(0, strValue.length() - 2);
 			}
 			return strValue;
-		} else if (cell.getCellTypeEnum() == CellType.STRING) {
+		} else if (cell.getCellType() == CellType.STRING) {
 			strValue = cell.getStringCellValue();
-		} else if (cell.getCellTypeEnum() == CellType.FORMULA) {
+		} else if (cell.getCellType() == CellType.FORMULA) {
 		}
 		if (strValue != null) {
 			return strValue;
@@ -52,13 +52,13 @@ public class ExcelXlsxUtils {
 
 	public static String getString(HSSFCell cell, int precision) {
 		String strValue = null;
-		if (cell.getCellTypeEnum() == CellType.NUMERIC) {
+		if (cell.getCellType() == CellType.NUMERIC) {
 			double value = cell.getNumericCellValue();
 			DecimalFormat nf = new DecimalFormat("###");
 			return nf.format(value);
-		} else if (cell.getCellTypeEnum() == CellType.STRING) {
+		} else if (cell.getCellType() == CellType.STRING) {
 			strValue = cell.getStringCellValue();
-		} else if (cell.getCellTypeEnum() == CellType.FORMULA) {
+		} else if (cell.getCellType() == CellType.FORMULA) {
 
 		}
 		if (strValue != null) {
@@ -69,7 +69,7 @@ public class ExcelXlsxUtils {
 
 	public static String getStringOrDateValue(XSSFCell cell, int precision) {
 		String strValue = null;
-		if (cell.getCellTypeEnum() == CellType.NUMERIC) {
+		if (cell.getCellType() == CellType.NUMERIC) {
 			short format = cell.getCellStyle().getDataFormat();
 			SimpleDateFormat sdf = null;
 			if (format == 14 || format == 31 || format == 57 || format == 58 || (176 <= format && format <= 178)
@@ -101,9 +101,9 @@ public class ExcelXlsxUtils {
 			}
 			// logger.debug(result);
 			return result;
-		} else if (cell.getCellTypeEnum() == CellType.STRING) {
+		} else if (cell.getCellType() == CellType.STRING) {
 			strValue = cell.getStringCellValue();
-		} else if (cell.getCellTypeEnum() == CellType.FORMULA) {
+		} else if (cell.getCellType() == CellType.FORMULA) {
 
 		}
 		if (strValue != null) {

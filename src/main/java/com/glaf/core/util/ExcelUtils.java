@@ -31,7 +31,7 @@ public class ExcelUtils {
 
 	public static String getCellValue(CellValue cell, int precision) {
 		String cellValue = null;
-		if (cell.getCellTypeEnum() == CellType.NUMERIC) {
+		if (cell.getCellType() == CellType.NUMERIC) {
 			double value = cell.getNumberValue();
 			if (precision > 0) {
 				value = Math.round(value * Math.pow(10, precision)) / Math.pow(10, precision);
@@ -40,7 +40,7 @@ public class ExcelUtils {
 			if (cellValue != null && cellValue.trim().endsWith(".0")) {
 				cellValue = cellValue.substring(0, cellValue.length() - 2);
 			}
-		} else if (cell.getCellTypeEnum() == CellType.FORMULA) {
+		} else if (cell.getCellType() == CellType.FORMULA) {
 
 		} else {
 			cellValue = cell.getStringValue();
@@ -50,13 +50,13 @@ public class ExcelUtils {
 
 	public static String getString(HSSFCell cell, int precision) {
 		String strValue = null;
-		if (cell.getCellTypeEnum() == CellType.NUMERIC) {
+		if (cell.getCellType() == CellType.NUMERIC) {
 			double value = cell.getNumericCellValue();
 			DecimalFormat nf = new DecimalFormat("###");
 			return nf.format(value);
-		} else if (cell.getCellTypeEnum() == CellType.STRING) {
+		} else if (cell.getCellType() == CellType.STRING) {
 			strValue = cell.getStringCellValue();
-		} else if (cell.getCellTypeEnum() == CellType.FORMULA) {
+		} else if (cell.getCellType() == CellType.FORMULA) {
 
 		}
 		if (strValue != null) {
@@ -67,7 +67,7 @@ public class ExcelUtils {
 
 	public static String getStringOrDateValue(HSSFCell cell, int precision) {
 		String strValue = null;
-		if (cell.getCellTypeEnum() == CellType.NUMERIC) {
+		if (cell.getCellType() == CellType.NUMERIC) {
 			short format = cell.getCellStyle().getDataFormat();
 			SimpleDateFormat sdf = null;
 			if (format == 14 || format == 31 || format == 57 || format == 58 || (176 <= format && format <= 178)
@@ -99,9 +99,9 @@ public class ExcelUtils {
 			}
 			// logger.debug(result);
 			return result;
-		} else if (cell.getCellTypeEnum() == CellType.STRING) {
+		} else if (cell.getCellType() == CellType.STRING) {
 			strValue = cell.getStringCellValue();
-		} else if (cell.getCellTypeEnum() == CellType.FORMULA) {
+		} else if (cell.getCellType() == CellType.FORMULA) {
 
 		}
 		if (strValue != null) {
@@ -112,7 +112,7 @@ public class ExcelUtils {
 
 	public static String getValue(FormulaEvaluator evaluator, HSSFCell cell, int precision) {
 		String strValue = null;
-		if (cell.getCellTypeEnum() == CellType.NUMERIC) {
+		if (cell.getCellType() == CellType.NUMERIC) {
 			double value = cell.getNumericCellValue();
 			if (precision > 0) {
 				value = Math.round(value * Math.pow(10, precision)) / Math.pow(10, precision);
@@ -122,9 +122,9 @@ public class ExcelUtils {
 				strValue = strValue.substring(0, strValue.length() - 2);
 			}
 			return strValue;
-		} else if (cell.getCellTypeEnum() == CellType.STRING) {
+		} else if (cell.getCellType() == CellType.STRING) {
 			strValue = cell.getStringCellValue();
-		} else if (cell.getCellTypeEnum() == CellType.FORMULA) {
+		} else if (cell.getCellType() == CellType.FORMULA) {
 			CellValue cellValue = evaluator.evaluate(cell);
 			strValue = getCellValue(cellValue, precision);
 		}
@@ -136,7 +136,7 @@ public class ExcelUtils {
 
 	public static String getValue(HSSFCell cell, int precision) {
 		String strValue = null;
-		if (cell.getCellTypeEnum() == CellType.NUMERIC) {
+		if (cell.getCellType() == CellType.NUMERIC) {
 			double value = cell.getNumericCellValue();
 			if (precision > 0) {
 				value = Math.round(value * Math.pow(10, precision)) / Math.pow(10, precision);
@@ -146,9 +146,9 @@ public class ExcelUtils {
 				strValue = strValue.substring(0, strValue.length() - 2);
 			}
 			return strValue;
-		} else if (cell.getCellTypeEnum() == CellType.STRING) {
+		} else if (cell.getCellType() == CellType.STRING) {
 			strValue = cell.getStringCellValue();
-		} else if (cell.getCellTypeEnum() == CellType.FORMULA) {
+		} else if (cell.getCellType() == CellType.FORMULA) {
 
 		}
 		if (strValue != null) {

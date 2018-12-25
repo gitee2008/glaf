@@ -33,7 +33,6 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -74,10 +73,6 @@ public class TableExcelExportBean {
 		cellStyle.setBorderLeft(BorderStyle.THIN);
 		cellStyle.setBorderRight(BorderStyle.THIN);
 		cellStyle.setBorderTop(BorderStyle.THIN);
-		cellStyle.setTopBorderColor(new XSSFColor(java.awt.Color.BLACK));
-		cellStyle.setBottomBorderColor(new XSSFColor(java.awt.Color.BLACK));
-		cellStyle.setLeftBorderColor(new XSSFColor(java.awt.Color.BLACK));
-		cellStyle.setRightBorderColor(new XSSFColor(java.awt.Color.BLACK));
 
 		XSSFFont font2 = workbook.createFont();
 		font2.setFontName("宋体");
@@ -92,10 +87,6 @@ public class TableExcelExportBean {
 		headerStyle.setBorderBottom(BorderStyle.THIN);
 		headerStyle.setBorderLeft(BorderStyle.THIN);
 		headerStyle.setBorderRight(BorderStyle.THIN);
-		headerStyle.setTopBorderColor(new XSSFColor(java.awt.Color.BLACK));
-		headerStyle.setBottomBorderColor(new XSSFColor(java.awt.Color.BLACK));
-		headerStyle.setLeftBorderColor(new XSSFColor(java.awt.Color.BLACK));
-		headerStyle.setRightBorderColor(new XSSFColor(java.awt.Color.BLACK));
 
 		XSSFFont font3 = workbook.createFont();
 		font3.setFontName("宋体");
@@ -108,10 +99,6 @@ public class TableExcelExportBean {
 		txtStyle.setBorderBottom(BorderStyle.THIN);
 		txtStyle.setBorderLeft(BorderStyle.THIN);
 		txtStyle.setBorderRight(BorderStyle.THIN);
-		txtStyle.setTopBorderColor(new XSSFColor(java.awt.Color.BLACK));
-		txtStyle.setBottomBorderColor(new XSSFColor(java.awt.Color.BLACK));
-		txtStyle.setLeftBorderColor(new XSSFColor(java.awt.Color.BLACK));
-		txtStyle.setRightBorderColor(new XSSFColor(java.awt.Color.BLACK));
 
 		XSSFFont font4 = workbook.createFont();
 		font4.setFontName("宋体");
@@ -124,10 +111,6 @@ public class TableExcelExportBean {
 		numStyle.setBorderBottom(BorderStyle.THIN);
 		numStyle.setBorderLeft(BorderStyle.THIN);
 		numStyle.setBorderRight(BorderStyle.THIN);
-		numStyle.setTopBorderColor(new XSSFColor(java.awt.Color.BLACK));
-		numStyle.setBottomBorderColor(new XSSFColor(java.awt.Color.BLACK));
-		numStyle.setLeftBorderColor(new XSSFColor(java.awt.Color.BLACK));
-		numStyle.setRightBorderColor(new XSSFColor(java.awt.Color.BLACK));
 
 		String tableId = request.getParameter("tableId");
 		JSONArray array = result.getJSONArray("rows");
