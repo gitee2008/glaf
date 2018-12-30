@@ -236,7 +236,7 @@ public class TableDataServiceImpl implements ITableDataService {
 					if (ExpressionConstants.ID_EXPRESSION.equals(expr)) {
 						if (cell.getValue() == null) {
 							if (StringUtils.equals(cell.getJavaType(), "Integer")) {
-								cell.setValue(idGenerator.nextId().intValue());
+								cell.setValue(idGenerator.nextId());
 							} else if (StringUtils.equals(cell.getJavaType(), "Long")) {
 								cell.setValue(idGenerator.nextId());
 							} else if (StringUtils.equals(cell.getValueExpression(),
@@ -253,7 +253,7 @@ public class TableDataServiceImpl implements ITableDataService {
 							String name = expr.substring(ExpressionConstants.ID_PREFIX_EXPRESSION.length(),
 									expr.length() - 1);
 							if (StringUtils.equals(cell.getJavaType(), "Integer")) {
-								cell.setValue(idGenerator.nextId(name).intValue());
+								cell.setValue(idGenerator.nextId(name));
 							} else if (StringUtils.equals(cell.getJavaType(), "Long")) {
 								cell.setValue(idGenerator.nextId(name));
 							} else {
@@ -279,7 +279,7 @@ public class TableDataServiceImpl implements ITableDataService {
 				pkColumn.setValue(myPK.getValue());
 			} else {
 				if (StringUtils.equals(pkColumn.getJavaType(), "Integer")) {
-					pkColumn.setValue(idGenerator.nextId().intValue());
+					pkColumn.setValue(idGenerator.nextId());
 				} else if (StringUtils.equals(pkColumn.getJavaType(), "Long")) {
 					pkColumn.setValue(idGenerator.nextId());
 				} else if (StringUtils.equals(pkColumn.getValueExpression(), ExpressionConstants.UUID_EXPRESSION)) {
@@ -589,7 +589,7 @@ public class TableDataServiceImpl implements ITableDataService {
 							if (ExpressionConstants.ID_EXPRESSION.equals(expr)) {
 								if (cell.getValue() == null) {
 									if (StringUtils.equals(cell.getJavaType(), "Integer")) {
-										cell.setValue(idGenerator.nextId().intValue());
+										cell.setValue(idGenerator.nextId());
 									} else if (StringUtils.equals(cell.getJavaType(), "Long")) {
 										cell.setValue(idGenerator.nextId());
 									} else if (StringUtils.equals(cell.getValueExpression(),
@@ -606,7 +606,7 @@ public class TableDataServiceImpl implements ITableDataService {
 									String name = expr.substring(ExpressionConstants.ID_PREFIX_EXPRESSION.length(),
 											expr.length() - 1);
 									if (StringUtils.equals(cell.getJavaType(), "Integer")) {
-										cell.setValue(idGenerator.nextId(name).intValue());
+										cell.setValue(idGenerator.nextId(name));
 									} else if (StringUtils.equals(cell.getJavaType(), "Long")) {
 										cell.setValue(idGenerator.nextId(name));
 									} else {
@@ -632,7 +632,7 @@ public class TableDataServiceImpl implements ITableDataService {
 						pkColumn.setValue(myPK.getValue());
 					} else {
 						if (StringUtils.equals(pkColumn.getJavaType(), "Integer")) {
-							pkColumn.setValue(idGenerator.nextId().intValue());
+							pkColumn.setValue(idGenerator.nextId());
 						} else if (StringUtils.equals(pkColumn.getJavaType(), "Long")) {
 							pkColumn.setValue(idGenerator.nextId());
 						} else if (StringUtils.equals(pkColumn.getValueExpression(),
@@ -875,7 +875,7 @@ public class TableDataServiceImpl implements ITableDataService {
 				ColumnModel idCol = new ColumnModel();
 				idCol.setJavaType(idColumn.getJavaType());
 				if (StringUtils.equalsIgnoreCase("Integer", idColumn.getJavaType())) {
-					idCol.setValue(idGenerator.nextId().intValue());
+					idCol.setValue(idGenerator.nextId());
 				} else if (StringUtils.equalsIgnoreCase("Long", idColumn.getJavaType())) {
 					idCol.setValue(idGenerator.nextId());
 				} else if (StringUtils.equalsIgnoreCase(ExpressionConstants.UUID_EXPRESSION,

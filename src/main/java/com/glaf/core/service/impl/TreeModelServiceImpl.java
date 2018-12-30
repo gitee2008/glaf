@@ -370,7 +370,7 @@ public class TreeModelServiceImpl implements ITreeModelService {
 		}
 
 		if (mxTreeModel.getId() == 0) {
-			mxTreeModel.setId(idGenerator.nextId().intValue());
+			mxTreeModel.setId(idGenerator.nextId());
 		}
 
 		if (StringUtils.isEmpty(mxTreeModel.getCode())) {

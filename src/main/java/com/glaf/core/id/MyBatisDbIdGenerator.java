@@ -148,7 +148,7 @@ public class MyBatisDbIdGenerator implements IdGenerator {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
-	public synchronized Long nextId() {
+	public synchronized long nextId() {
 		if (lastId < nextId) {
 			this.getNewBlock();
 		}
@@ -156,7 +156,7 @@ public class MyBatisDbIdGenerator implements IdGenerator {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
-	public synchronized Long nextId(String name) {
+	public synchronized long nextId(String name) {
 		AtomicLong lastId2 = lastIdMap.get(name);
 		AtomicLong nextId2 = nextIdMap.get(name);
 		if (lastId2 == null) {
@@ -175,7 +175,7 @@ public class MyBatisDbIdGenerator implements IdGenerator {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
-	public synchronized Long nextId(String tablename, String idColumn) {
+	public synchronized long nextId(String tablename, String idColumn) {
 		long maxId = entityDAO.getMaxId(tablename, idColumn);
 		return maxId + 1;
 	}
