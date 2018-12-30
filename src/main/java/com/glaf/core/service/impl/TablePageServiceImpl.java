@@ -18,8 +18,10 @@
 
 package com.glaf.core.service.impl;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +46,7 @@ import com.glaf.core.service.ITablePageService;
 import com.glaf.core.util.DBUtils;
 import com.glaf.core.util.Paging;
 import com.glaf.core.util.QueryUtils;
+import com.glaf.core.util.StringTools;
 
 @Service("tablePageService")
 @Transactional(readOnly = true)
@@ -66,6 +69,42 @@ public class TablePageServiceImpl implements ITablePageService {
 		}
 
 		Map<String, Object> queryMap = new HashMap<String, Object>();
+
+		if (params != null && !params.isEmpty()) {
+			queryMap.putAll(params);
+			Set<Entry<String, Object>> entrySet = params.entrySet();
+			for (Entry<String, Object> entry : entrySet) {
+				String key = entry.getKey();
+				Object value = entry.getValue();
+				if (value != null) {
+					if (value instanceof Collection) {
+						Collection<?> collection = (Collection<?>) value;
+						boolean isCollection = false;
+						if (StringUtils.contains(sql, "$[" + key + "]")) {
+							isCollection = true;
+						}
+						if (isCollection) {
+							int index = 1;
+							StringBuilder buff = new StringBuilder();
+							buff.append(" ( ");
+							Iterator<?> iterator = collection.iterator();
+							while (iterator.hasNext()) {
+								Object val = iterator.next();
+								String nkey = "my_param_" + index;
+								buff.append("#{").append(nkey).append("}");
+								queryMap.put(nkey, val);
+								if (iterator.hasNext()) {
+									buff.append(", ");
+								}
+								index++;
+							}
+							buff.append(" ) ");
+							sql = StringTools.replace(sql, "$[" + key + "]", buff.toString());
+						}
+					}
+				}
+			}
+		}
 
 		if (StringUtils.containsAny(sql, "(")) {
 			SqlExecutor sqlExecutor = QueryUtils.replaceMyBatisInSQLParas(sql, params);
@@ -91,6 +130,42 @@ public class TablePageServiceImpl implements ITablePageService {
 		}
 
 		Map<String, Object> queryMap = new HashMap<String, Object>();
+
+		if (params != null && !params.isEmpty()) {
+			queryMap.putAll(params);
+			Set<Entry<String, Object>> entrySet = params.entrySet();
+			for (Entry<String, Object> entry : entrySet) {
+				String key = entry.getKey();
+				Object value = entry.getValue();
+				if (value != null) {
+					if (value instanceof Collection) {
+						Collection<?> collection = (Collection<?>) value;
+						boolean isCollection = false;
+						if (StringUtils.contains(sql, "$[" + key + "]")) {
+							isCollection = true;
+						}
+						if (isCollection) {
+							int index = 1;
+							StringBuilder buff = new StringBuilder();
+							buff.append(" ( ");
+							Iterator<?> iterator = collection.iterator();
+							while (iterator.hasNext()) {
+								Object val = iterator.next();
+								String nkey = "my_param_" + index;
+								buff.append("#{").append(nkey).append("}");
+								queryMap.put(nkey, val);
+								if (iterator.hasNext()) {
+									buff.append(", ");
+								}
+								index++;
+							}
+							buff.append(" ) ");
+							sql = StringTools.replace(sql, "$[" + key + "]", buff.toString());
+						}
+					}
+				}
+			}
+		}
 
 		if (StringUtils.containsAny(sql, "(")) {
 			SqlExecutor sqlExecutor = QueryUtils.replaceMyBatisInSQLParas(sql, params);
@@ -118,6 +193,42 @@ public class TablePageServiceImpl implements ITablePageService {
 		}
 
 		Map<String, Object> queryMap = new HashMap<String, Object>();
+
+		if (params != null && !params.isEmpty()) {
+			queryMap.putAll(params);
+			Set<Entry<String, Object>> entrySet = params.entrySet();
+			for (Entry<String, Object> entry : entrySet) {
+				String key = entry.getKey();
+				Object value = entry.getValue();
+				if (value != null) {
+					if (value instanceof Collection) {
+						Collection<?> collection = (Collection<?>) value;
+						boolean isCollection = false;
+						if (StringUtils.contains(sql, "$[" + key + "]")) {
+							isCollection = true;
+						}
+						if (isCollection) {
+							int index = 1;
+							StringBuilder buff = new StringBuilder();
+							buff.append(" ( ");
+							Iterator<?> iterator = collection.iterator();
+							while (iterator.hasNext()) {
+								Object val = iterator.next();
+								String nkey = "my_param_" + index;
+								buff.append("#{").append(nkey).append("}");
+								queryMap.put(nkey, val);
+								if (iterator.hasNext()) {
+									buff.append(", ");
+								}
+								index++;
+							}
+							buff.append(" ) ");
+							sql = StringTools.replace(sql, "$[" + key + "]", buff.toString());
+						}
+					}
+				}
+			}
+		}
 
 		if (StringUtils.containsAny(sql, "(")) {
 			SqlExecutor sqlExecutor = QueryUtils.replaceMyBatisInSQLParas(sql, params);
@@ -147,6 +258,42 @@ public class TablePageServiceImpl implements ITablePageService {
 		}
 
 		Map<String, Object> queryMap = new HashMap<String, Object>();
+
+		if (params != null && !params.isEmpty()) {
+			queryMap.putAll(params);
+			Set<Entry<String, Object>> entrySet = params.entrySet();
+			for (Entry<String, Object> entry : entrySet) {
+				String key = entry.getKey();
+				Object value = entry.getValue();
+				if (value != null) {
+					if (value instanceof Collection) {
+						Collection<?> collection = (Collection<?>) value;
+						boolean isCollection = false;
+						if (StringUtils.contains(sql, "$[" + key + "]")) {
+							isCollection = true;
+						}
+						if (isCollection) {
+							int index = 1;
+							StringBuilder buff = new StringBuilder();
+							buff.append(" ( ");
+							Iterator<?> iterator = collection.iterator();
+							while (iterator.hasNext()) {
+								Object val = iterator.next();
+								String nkey = "my_param_" + index;
+								buff.append("#{").append(nkey).append("}");
+								queryMap.put(nkey, val);
+								if (iterator.hasNext()) {
+									buff.append(", ");
+								}
+								index++;
+							}
+							buff.append(" ) ");
+							sql = StringTools.replace(sql, "$[" + key + "]", buff.toString());
+						}
+					}
+				}
+			}
+		}
 
 		if (StringUtils.containsAny(sql, "(")) {
 			SqlExecutor sqlExecutor = QueryUtils.replaceMyBatisInSQLParas(sql, params);
