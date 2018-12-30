@@ -72,7 +72,7 @@ public class MergeXlsProcessor implements XlsProcessor {
 		if (row != null) {
 			Cell cell = row.getCell(colIndex);
 			if (cell != null) {
-				CellType type = cell.getCellTypeEnum();
+				CellType type = cell.getCellType();
 				if (type == CellType.NUMERIC) {
 					return String.valueOf(cell.getNumericCellValue());
 				} else if (type == CellType.FORMULA) {
