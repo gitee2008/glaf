@@ -18,7 +18,6 @@
 
 package com.glaf.core.query;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -31,8 +30,6 @@ public abstract class AbstractQuery<T> implements java.io.Serializable {
 
 	protected Map<String, String> columns = new java.util.HashMap<String, String>();
 
-	protected List<QueryCondition> conditions = new java.util.ArrayList<QueryCondition>();
-
 	protected Map<String, Object> parameters = new java.util.HashMap<String, Object>();
 
 	public AbstractQuery() {
@@ -43,35 +40,6 @@ public abstract class AbstractQuery<T> implements java.io.Serializable {
 		if (columns == null) {
 			columns = new java.util.HashMap<String, String>();
 		}
-	}
-
-	public void addCondition(QueryCondition condition) {
-		if (condition.getName() == null) {
-			throw new RuntimeException("name is null");
-		}
-		this.addCondition(condition.getName(), condition.getAlias(), condition.getFilter(), condition.getValue());
-	}
-
-	public void addCondition(String name, String alias, String filter, Object value) {
-		if (name == null) {
-			throw new RuntimeException("name is null");
-		}
-		if (value == null) {
-			throw new RuntimeException("value is null");
-		}
-
-		String column = this.getColumn(name);
-		if (column == null) {
-			column = name;
-		}
-
-		conditions.add(new QueryCondition(name, alias, column, filter, value));
-	}
-
-	@SuppressWarnings("unchecked")
-	public T equals(String name, String alias, Object value) {
-		addCondition(name, alias, SearchFilter.EQUALS, value);
-		return (T) this;
 	}
 
 	public String getColumn(String property) {
@@ -88,30 +56,11 @@ public abstract class AbstractQuery<T> implements java.io.Serializable {
 		return columns;
 	}
 
-	public List<QueryCondition> getConditions() {
-		if (conditions == null) {
-			conditions = new java.util.ArrayList<QueryCondition>();
-		}
-		return conditions;
-	}
-
 	public Map<String, Object> getParameters() {
 		if (parameters == null) {
 			parameters = new java.util.HashMap<String, Object>();
 		}
 		return parameters;
-	}
-
-	@SuppressWarnings("unchecked")
-	public T greaterThan(String name, String alias, Object value) {
-		addCondition(name, alias, SearchFilter.GREATER_THAN, value);
-		return (T) this;
-	}
-
-	@SuppressWarnings("unchecked")
-	public T greaterThanOrEqual(String name, String alias, Object value) {
-		addCondition(name, alias, SearchFilter.GREATER_THAN_OR_EQUAL, value);
-		return (T) this;
 	}
 
 	public void initQueryColumns() {
@@ -147,42 +96,12 @@ public abstract class AbstractQuery<T> implements java.io.Serializable {
 							filter = SearchFilter.LESS_THAN;
 						}
 						if (filter != null) {
-							this.addCondition(k, "E", filter, v);
+
 						}
 					}
 				}
 			}
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public T lessThan(String name, String alias, Object value) {
-		addCondition(name, alias, SearchFilter.LESS_THAN, value);
-		return (T) this;
-	}
-
-	@SuppressWarnings("unchecked")
-	public T lessThanOrEqual(String name, String alias, Object value) {
-		addCondition(name, alias, SearchFilter.LESS_THAN_OR_EQUAL, value);
-		return (T) this;
-	}
-
-	@SuppressWarnings("unchecked")
-	public T like(String name, String alias, String value) {
-		addCondition(name, alias, SearchFilter.LIKE, value);
-		return (T) this;
-	}
-
-	@SuppressWarnings("unchecked")
-	public T notEquals(String name, String alias, Object value) {
-		addCondition(name, alias, SearchFilter.NOT_EQUALS, value);
-		return (T) this;
-	}
-
-	@SuppressWarnings("unchecked")
-	public T notLike(String name, String alias, String value) {
-		addCondition(name, alias, SearchFilter.NOT_LIKE, value);
-		return (T) this;
 	}
 
 }

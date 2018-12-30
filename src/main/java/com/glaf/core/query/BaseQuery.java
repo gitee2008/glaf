@@ -37,7 +37,7 @@ public class BaseQuery extends AbstractQuery<Object> {
 	protected List<String> actorIds = new ArrayList<String>();
 	protected List<String> businessKeys = new ArrayList<String>();
 	protected String createBy;
-	protected QueryCondition currentQueryCondition;
+
 	protected boolean isFilterPermission = true;
 	protected boolean isInitialized = false;
 	protected boolean isOwner = false;
@@ -183,10 +183,6 @@ public class BaseQuery extends AbstractQuery<Object> {
 		return createBy;
 	}
 
-	public QueryCondition getCurrentQueryCondition() {
-		return currentQueryCondition;
-	}
-
 	public DataRequest getDataRequest() {
 		return dataRequest;
 	}
@@ -300,10 +296,6 @@ public class BaseQuery extends AbstractQuery<Object> {
 
 	public void setCreateBy(String createBy) {
 		this.createBy = createBy;
-	}
-
-	public void setCurrentQueryCondition(QueryCondition currentQueryCondition) {
-		this.currentQueryCondition = currentQueryCondition;
 	}
 
 	public void setDataRequest(DataRequest dataRequest) {

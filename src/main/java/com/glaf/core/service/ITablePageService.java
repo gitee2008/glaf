@@ -18,7 +18,6 @@
 
 package com.glaf.core.service;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.glaf.core.base.TablePage;
 import com.glaf.core.query.TablePageQuery;
-import com.glaf.core.query.QueryCondition;
+
 import com.glaf.core.util.Paging;
 
 @Transactional(readOnly = true)
@@ -40,26 +39,11 @@ public interface ITablePageService {
 
 	int getQueryCount(String querySql, Map<String, Object> params);
 
-	List<Object> getQueryList(String querySql, int begin, int pageSize, List<QueryCondition> conditions);
-
-	int getTableCount(String querySql, List<QueryCondition> conditions);
-
-	int getTableCount(String tableName, String idColumn, List<QueryCondition> conditions);
-
 	int getTableCount(TablePageQuery query);
 
 	List<Map<String, Object>> getTableData(String tableName, int firstResult, int maxResults);
 
 	List<Map<String, Object>> getTableData(TablePageQuery query);
-
-	List<Object> getTableList(String tableName, String idColumn, int firstResult, int maxResults,
-			List<QueryCondition> conditions);
-
-	List<Object> getTableList(String tableName, String idColumn, Map<String, String> selectColumns, int firstResult,
-			int maxResults, List<QueryCondition> conditions);
-
-	List<Object> getTableList(String tableName, String idColumn, Map<String, String> selectColumns, int firstResult,
-			int maxResults, List<QueryCondition> conditions, LinkedHashMap<String, Boolean> orderByColumns);
 
 	TablePage getTablePage(TablePageQuery tablePageQuery, int firstResult, int maxResults);
 

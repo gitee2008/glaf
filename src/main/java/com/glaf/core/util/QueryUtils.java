@@ -23,7 +23,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +32,6 @@ import org.apache.commons.logging.LogFactory;
 
 import com.glaf.core.config.SystemConfig;
 import com.glaf.core.entity.SqlExecutor;
-import com.glaf.core.query.QueryCondition;
 
 public class QueryUtils {
 	protected static final Log logger = LogFactory.getLog(QueryUtils.class);
@@ -102,59 +100,6 @@ public class QueryUtils {
 		}
 		conditionBuffer.append(" ) ");
 		return conditionBuffer.toString();
-	}
-
-	public static SqlExecutor getMyBatisAndConditionSql(Collection<QueryCondition> conditions) {
-		SqlExecutor executor = new SqlExecutor();
-		Map<String, Object> params = new LinkedHashMap<String, Object>();
-		StringBuilder buffer = new StringBuilder(1000);
-		if (conditions != null && !conditions.isEmpty()) {
-			int index = 0;
-			Iterator<QueryCondition> iter = conditions.iterator();
-			while (iter.hasNext()) {
-				index++;
-				QueryCondition c = iter.next();
-				buffer.append(FileUtils.newline);
-				String column = c.getColumn();
-				String filter = c.getFilter();
-				String alias = c.getAlias();
-				params.put("param_" + index, c.getValue());
-				String operator = " = ";
-				if (StringUtils.isNotEmpty(filter)) {
-					if (SearchFilter.GREATER_THAN.equals(filter)) {
-						operator = SearchFilter.GREATER_THAN;
-					} else if (SearchFilter.GREATER_THAN_OR_EQUAL.equals(filter)) {
-						operator = SearchFilter.GREATER_THAN_OR_EQUAL;
-					} else if (SearchFilter.LESS_THAN.equals(filter)) {
-						operator = SearchFilter.LESS_THAN;
-					} else if (SearchFilter.LESS_THAN_OR_EQUAL.equals(filter)) {
-						operator = SearchFilter.LESS_THAN_OR_EQUAL;
-					} else if (SearchFilter.LIKE.equals(filter)) {
-						operator = SearchFilter.LIKE;
-					} else if (SearchFilter.NOT_LIKE.equals(filter)) {
-						operator = SearchFilter.NOT_LIKE;
-					} else if (SearchFilter.EQUALS.equals(filter)) {
-						operator = SearchFilter.EQUALS;
-					} else if (SearchFilter.NOT_EQUALS.equals(filter)) {
-						operator = SearchFilter.NOT_EQUALS;
-					} else {
-						operator = SearchFilter.EQUALS;
-					}
-				}
-				if (StringUtils.isNotEmpty(alias)) {
-					buffer.append(" and ").append(alias).append(".").append(column).append(" ").append(operator)
-							.append(" #{").append("param_" + index).append("} ");
-				} else {
-					buffer.append(" and ").append(column).append(" ").append(operator).append(" #{")
-							.append("param_" + index).append("} ");
-				}
-			}
-		}
-
-		executor.setSql(buffer.toString());
-		executor.setParameter(params);
-
-		return executor;
 	}
 
 	public static String getNumSQLCondition(Collection<Object> rowKeys, String alias, String columnName) {
