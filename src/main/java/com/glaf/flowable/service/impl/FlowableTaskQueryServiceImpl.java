@@ -100,8 +100,8 @@ public class FlowableTaskQueryServiceImpl implements FlowableTaskQueryService {
 					ti.setActivityName(t.getTaskDefinitionKey());
 					ti.setId(t.getId());
 					ti.setTaskDefinitionKey(t.getTaskDefinitionKey());
-					ti.setCreateTime(t.getStartTime());
-					ti.setStartTime(t.getStartTime());
+					ti.setCreateTime(t.getCreateTime());
+					ti.setStartTime(t.getClaimTime());
 					ti.setEndTime(t.getEndTime());
 					ti.setExecutionId(t.getExecutionId());
 					ti.setTaskDescription(t.getDescription());
