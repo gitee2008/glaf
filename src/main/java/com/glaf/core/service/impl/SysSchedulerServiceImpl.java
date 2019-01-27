@@ -18,21 +18,7 @@
 
 package com.glaf.core.service.impl;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.ibatis.session.RowBounds;
-import org.apache.ibatis.session.SqlSession;
-import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.glaf.core.base.Parameter;
-import com.glaf.core.dao.EntityDAO;
 import com.glaf.core.domain.Scheduler;
 import com.glaf.core.domain.SchedulerParam;
 import com.glaf.core.id.IdGenerator;
@@ -42,28 +28,30 @@ import com.glaf.core.query.SchedulerQuery;
 import com.glaf.core.service.ISysSchedulerService;
 import com.glaf.core.util.DateUtils;
 import com.glaf.core.util.UUID32;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.ibatis.session.RowBounds;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 @Service("sysSchedulerService")
 @Transactional(readOnly = true)
 public class SysSchedulerServiceImpl implements ISysSchedulerService {
-	protected final static Log logger = LogFactory
-			.getLog(SysSchedulerServiceImpl.class);
+	protected final static Log logger = LogFactory.getLog(SysSchedulerServiceImpl.class);
 
-	protected EntityDAO entityDAO;
+	private IdGenerator idGenerator;
 
-	protected IdGenerator idGenerator;
+	private SqlSessionTemplate sqlSessionTemplate;
 
-	protected SqlSession sqlSession;
+	private SchedulerMapper schedulerMapper;
 
-	protected SqlSessionTemplate sqlSessionTemplate;
-
-	protected SchedulerMapper schedulerMapper;
-
-	protected SchedulerParamMapper schedulerParamMapper;
-
-	public SysSchedulerServiceImpl() {
-
-	}
+	private SchedulerParamMapper schedulerParamMapper;
 
 	public int count(SchedulerQuery query) {
 		return schedulerMapper.getSchedulerCount(query);
@@ -99,8 +87,7 @@ public class SysSchedulerServiceImpl implements ISysSchedulerService {
 			scheduler = this.getSchedulerByTaskId(id);
 		}
 		if (scheduler != null) {
-			List<SchedulerParam> params = schedulerParamMapper
-					.getSchedulerParamsByTaskId(scheduler.getTaskId());
+			List<SchedulerParam> params = schedulerParamMapper.getSchedulerParamsByTaskId(scheduler.getTaskId());
 			if (params != null && !params.isEmpty()) {
 				for (SchedulerParam param : params) {
 					scheduler.getJobDataMap().put(param.getKeyName(), param);
@@ -113,8 +100,7 @@ public class SysSchedulerServiceImpl implements ISysSchedulerService {
 	public Scheduler getSchedulerByTaskId(String taskId) {
 		Scheduler scheduler = schedulerMapper.getSchedulerByTaskId(taskId);
 		if (scheduler != null) {
-			List<SchedulerParam> params = schedulerParamMapper
-					.getSchedulerParamsByTaskId(scheduler.getTaskId());
+			List<SchedulerParam> params = schedulerParamMapper.getSchedulerParamsByTaskId(scheduler.getTaskId());
 			if (params != null && !params.isEmpty()) {
 				for (SchedulerParam param : params) {
 					scheduler.getJobDataMap().put(param.getKeyName(), param);
@@ -126,7 +112,7 @@ public class SysSchedulerServiceImpl implements ISysSchedulerService {
 
 	/**
 	 * 根据查询参数获取记录总数
-	 * 
+	 *
 	 * @return
 	 */
 	public int getSchedulerCountByQueryCriteria(SchedulerQuery query) {
@@ -141,15 +127,12 @@ public class SysSchedulerServiceImpl implements ISysSchedulerService {
 
 	/**
 	 * 根据查询参数获取一页的数据
-	 * 
+	 *
 	 * @return
 	 */
-	public List<Scheduler> getSchedulersByQueryCriteria(int start,
-			int pageSize, SchedulerQuery query) {
+	public List<Scheduler> getSchedulersByQueryCriteria(int start, int pageSize, SchedulerQuery query) {
 		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<Scheduler> rows = sqlSessionTemplate.selectList("getSchedulers",
-				query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getSchedulers", query, rowBounds);
 	}
 
 	public List<Scheduler> getUserSchedulers(String createBy) {
@@ -159,8 +142,7 @@ public class SysSchedulerServiceImpl implements ISysSchedulerService {
 	}
 
 	public List<Scheduler> list(SchedulerQuery query) {
-		List<Scheduler> list = schedulerMapper.getSchedulers(query);
-		return list;
+		return schedulerMapper.getSchedulers(query);
 	}
 
 	@Transactional
@@ -195,7 +177,7 @@ public class SysSchedulerServiceImpl implements ISysSchedulerService {
 		}
 		schedulerParamMapper.deleteSchedulerParamsByTaskId(model.getTaskId());
 		Collection<Parameter> params = model.getJobDataMap().values();
-		if (params != null && !params.isEmpty()) {
+		if (!params.isEmpty()) {
 			for (Parameter param : params) {
 				if (param instanceof SchedulerParam) {
 					SchedulerParam p = (SchedulerParam) param;
@@ -210,11 +192,6 @@ public class SysSchedulerServiceImpl implements ISysSchedulerService {
 	}
 
 	@javax.annotation.Resource
-	public void setEntityDAO(EntityDAO entityDAO) {
-		this.entityDAO = entityDAO;
-	}
-
-	@javax.annotation.Resource
 	public void setIdGenerator(IdGenerator idGenerator) {
 		this.idGenerator = idGenerator;
 	}
@@ -225,14 +202,8 @@ public class SysSchedulerServiceImpl implements ISysSchedulerService {
 	}
 
 	@javax.annotation.Resource
-	public void setSchedulerParamMapper(
-			SchedulerParamMapper schedulerParamMapper) {
+	public void setSchedulerParamMapper(SchedulerParamMapper schedulerParamMapper) {
 		this.schedulerParamMapper = schedulerParamMapper;
-	}
-
-	@javax.annotation.Resource
-	public void setSqlSession(SqlSession sqlSession) {
-		this.sqlSession = sqlSession;
 	}
 
 	@javax.annotation.Resource

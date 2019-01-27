@@ -27,7 +27,6 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,10 +36,8 @@ import com.glaf.base.modules.sys.model.TenantConfig;
 import com.glaf.base.modules.sys.query.TenantConfigQuery;
 import com.glaf.base.modules.sys.service.TenantConfigService;
 import com.glaf.base.modules.sys.util.TenantConfigJsonFactory;
-
 import com.glaf.core.cache.CacheFactory;
 import com.glaf.core.config.SystemConfig;
-import com.glaf.core.dao.EntityDAO;
 import com.glaf.core.id.IdGenerator;
 import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.util.DBUtils;
@@ -50,15 +47,11 @@ import com.glaf.core.util.DBUtils;
 public class TenantConfigServiceImpl implements TenantConfigService {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	protected EntityDAO entityDAO;
+	private IdGenerator idGenerator;
 
-	protected IdGenerator idGenerator;
+	private SqlSessionTemplate sqlSessionTemplate;
 
-	protected JdbcTemplate jdbcTemplate;
-
-	protected SqlSessionTemplate sqlSessionTemplate;
-
-	protected TenantConfigMapper tenantConfigMapper;
+	private TenantConfigMapper tenantConfigMapper;
 
 	public TenantConfigServiceImpl() {
 
@@ -131,7 +124,7 @@ public class TenantConfigServiceImpl implements TenantConfigService {
 					if (cfg != null) {
 						return cfg;
 					}
-				} catch (Exception ex) {
+				} catch (Exception ignored) {
 				}
 			}
 		}
@@ -154,7 +147,7 @@ public class TenantConfigServiceImpl implements TenantConfigService {
 					if (cfg != null) {
 						return cfg;
 					}
-				} catch (Exception ex) {
+				} catch (Exception ignored) {
 				}
 			}
 		}
@@ -182,13 +175,11 @@ public class TenantConfigServiceImpl implements TenantConfigService {
 	 */
 	public List<TenantConfig> getTenantConfigsByQueryCriteria(int start, int pageSize, TenantConfigQuery query) {
 		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<TenantConfig> rows = sqlSessionTemplate.selectList("getTenantConfigs", query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getTenantConfigs", query, rowBounds);
 	}
 
 	public List<TenantConfig> list(TenantConfigQuery query) {
-		List<TenantConfig> list = tenantConfigMapper.getTenantConfigs(query);
-		return list;
+		return tenantConfigMapper.getTenantConfigs(query);
 	}
 
 	@Transactional
@@ -209,18 +200,8 @@ public class TenantConfigServiceImpl implements TenantConfigService {
 	}
 
 	@javax.annotation.Resource
-	public void setEntityDAO(EntityDAO entityDAO) {
-		this.entityDAO = entityDAO;
-	}
-
-	@javax.annotation.Resource
 	public void setIdGenerator(IdGenerator idGenerator) {
 		this.idGenerator = idGenerator;
-	}
-
-	@javax.annotation.Resource
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	@javax.annotation.Resource

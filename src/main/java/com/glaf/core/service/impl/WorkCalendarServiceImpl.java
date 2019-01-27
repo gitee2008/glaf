@@ -18,11 +18,11 @@
 
 package com.glaf.core.service.impl;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
+import com.glaf.core.domain.WorkCalendar;
+import com.glaf.core.id.IdGenerator;
+import com.glaf.core.mapper.WorkCalendarMapper;
+import com.glaf.core.query.WorkCalendarQuery;
+import com.glaf.core.service.WorkCalendarService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.session.RowBounds;
@@ -30,29 +30,23 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.glaf.core.mapper.WorkCalendarMapper;
-import com.glaf.core.domain.WorkCalendar;
-import com.glaf.core.query.WorkCalendarQuery;
-import com.glaf.core.service.WorkCalendarService;
-import com.glaf.core.id.IdGenerator;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 @Service("workCalendarService")
 @Transactional(readOnly = true)
 public class WorkCalendarServiceImpl implements WorkCalendarService {
-	protected final static Log logger = LogFactory
-			.getLog(WorkCalendarServiceImpl.class);
+	private final static Log logger = LogFactory.getLog(WorkCalendarServiceImpl.class);
 
-	protected IdGenerator idGenerator;
+	private IdGenerator idGenerator;
 
-	protected SqlSessionTemplate sqlSessionTemplate;
+	private SqlSessionTemplate sqlSessionTemplate;
 
-	protected WorkCalendarMapper workCalendarMapper;
+	private WorkCalendarMapper workCalendarMapper;
 
-	private static List<Integer> workDateList = new java.util.ArrayList<Integer>();
-
-	public WorkCalendarServiceImpl() {
-
-	}
+	private static final List<Integer> workDateList = new java.util.ArrayList<Integer>();
 
 	public boolean checkWorkDate(Date date) {
 		Calendar cal = Calendar.getInstance();
@@ -62,10 +56,7 @@ public class WorkCalendarServiceImpl implements WorkCalendarService {
 		int day = cal.get(Calendar.DAY_OF_MONTH);
 		logger.info("year:" + year + ", month:" + month + ", day:" + day);
 		WorkCalendar bean = find(year, month + 1, day);
-		if (bean != null) {
-			return false;
-		}
-		return true;
+		return bean == null;
 	}
 
 	public int count(WorkCalendarQuery query) {
@@ -133,31 +124,27 @@ public class WorkCalendarServiceImpl implements WorkCalendarService {
 		return this.getWorkCalendar(id);
 	}
 
-	public WorkCalendar getWorkCalendar(Long id) {
+	private WorkCalendar getWorkCalendar(Long id) {
 		if (id == null) {
 			return null;
 		}
-		WorkCalendar workCalendar = workCalendarMapper.getWorkCalendarById(id);
-		return workCalendar;
+		return workCalendarMapper.getWorkCalendarById(id);
 	}
 
 	public int getWorkCalendarCountByQueryCriteria(WorkCalendarQuery query) {
 		return workCalendarMapper.getWorkCalendarCount(query);
 	}
 
-	public List<WorkCalendar> getWorkCalendarsByQueryCriteria(int start,
-			int pageSize, WorkCalendarQuery query) {
+	public List<WorkCalendar> getWorkCalendarsByQueryCriteria(int start, int pageSize, WorkCalendarQuery query) {
 		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<WorkCalendar> rows = sqlSessionTemplate.selectList(
-				"getWorkCalendars", query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getWorkCalendars", query, rowBounds);
 	}
 
 	public Date getWorkDate(Date startDate, int interval) {
 		if (startDate == null) {
 			return null;
 		}
-		Date endDate = new Date();
+		Date endDate;
 
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(startDate);
@@ -179,8 +166,7 @@ public class WorkCalendarServiceImpl implements WorkCalendarService {
 		return endDate;
 	}
 
-	public Date getWorkDate(Date startDate, int interval,
-			List<Date> noneWorkDays) {
+	public Date getWorkDate(Date startDate, int interval, List<Date> noneWorkDays) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(startDate);
 
@@ -199,7 +185,7 @@ public class WorkCalendarServiceImpl implements WorkCalendarService {
 		if (startDate == null) {
 			return null;
 		}
-		Date endDate = new Date();
+		Date endDate;
 
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(startDate);
@@ -215,8 +201,7 @@ public class WorkCalendarServiceImpl implements WorkCalendarService {
 			while (iter.hasNext()) {
 				cal.set(Calendar.YEAR, year);
 				cal.set(Calendar.MONTH, month);
-				cal.set(Calendar.DAY_OF_MONTH,
-						((Integer) iter.next()).intValue());
+				cal.set(Calendar.DAY_OF_MONTH, iter.next().intValue());
 				noneWorkDays.add(cal.getTime());
 			}
 		}
@@ -226,8 +211,7 @@ public class WorkCalendarServiceImpl implements WorkCalendarService {
 			while (iter.hasNext()) {
 				cal.set(Calendar.YEAR, year);
 				cal.set(Calendar.MONTH, month + 1);
-				cal.set(Calendar.DAY_OF_MONTH,
-						((Integer) iter.next()).intValue());
+				cal.set(Calendar.DAY_OF_MONTH, iter.next().intValue());
 				noneWorkDays.add(cal.getTime());
 			}
 		}
@@ -252,7 +236,7 @@ public class WorkCalendarServiceImpl implements WorkCalendarService {
 		return days;
 	}
 
-	public void initWorkDate() {
+	private void initWorkDate() {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
 		int year = cal.get(Calendar.YEAR);
@@ -264,9 +248,8 @@ public class WorkCalendarServiceImpl implements WorkCalendarService {
 		workDateList.addAll(getWorkDateList(year + 1, 1));
 	}
 
-	public List<WorkCalendar> list(WorkCalendarQuery query) {
-		List<WorkCalendar> list = workCalendarMapper.getWorkCalendars(query);
-		return list;
+	private List<WorkCalendar> list(WorkCalendarQuery query) {
+		return workCalendarMapper.getWorkCalendars(query);
 	}
 
 	@Transactional

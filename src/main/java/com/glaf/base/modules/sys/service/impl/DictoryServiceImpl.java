@@ -49,21 +49,21 @@ import com.glaf.core.util.PageResult;
 @Service("dictoryService")
 @Transactional(readOnly = true)
 public class DictoryServiceImpl implements DictoryService {
-	protected final static Log logger = LogFactory.getLog(DictoryServiceImpl.class);
+	private final static Log logger = LogFactory.getLog(DictoryServiceImpl.class);
 
-	protected IdGenerator idGenerator;
+	private IdGenerator idGenerator;
 
-	protected DictoryMapper dictoryMapper;
+	private DictoryMapper dictoryMapper;
 
-	protected SqlSessionTemplate sqlSessionTemplate;
+	private SqlSessionTemplate sqlSessionTemplate;
 
-	protected SysTreeService sysTreeService;
+	private SysTreeService sysTreeService;
 
 	public DictoryServiceImpl() {
 
 	}
 
-	public int count(DictoryQuery query) {
+	private int count(DictoryQuery query) {
 		return dictoryMapper.getDictoryCount(query);
 	}
 
@@ -108,7 +108,7 @@ public class DictoryServiceImpl implements DictoryService {
 	}
 
 	@Transactional
-	public void deleteById(Long id) {
+	private void deleteById(Long id) {
 		if (id != null) {
 			dictoryMapper.deleteDictoryById(id);
 			if (SystemConfig.getBoolean("use_query_cache")) {
@@ -141,8 +141,7 @@ public class DictoryServiceImpl implements DictoryService {
 	public List<SysTree> getAllCategories() {
 		SysTreeQuery query = new SysTreeQuery();
 		query.locked(0);
-		List<SysTree> trees = sysTreeService.getDictorySysTrees(query);
-		return trees;
+		return sysTreeService.getDictorySysTrees(query);
 	}
 
 	public List<Dictory> getAvailableDictoryList(long nodeId) {
@@ -153,7 +152,7 @@ public class DictoryServiceImpl implements DictoryService {
 				try {
 					JSONArray array = JSON.parseArray(text);
 					return DictoryJsonFactory.arrayToList(array);
-				} catch (Exception ex) {
+				} catch (Exception ignored) {
 				}
 			}
 		}
@@ -186,7 +185,7 @@ public class DictoryServiceImpl implements DictoryService {
 		return dictoryMapper.getDictories(query);
 	}
 
-	public Dictory getDictory(Long id) {
+	private Dictory getDictory(Long id) {
 		if (id == null) {
 			return null;
 		}
@@ -197,7 +196,7 @@ public class DictoryServiceImpl implements DictoryService {
 				try {
 					JSONObject json = JSON.parseObject(text);
 					return DictoryJsonFactory.jsonToObject(json);
-				} catch (Exception ex) {
+				} catch (Exception ignored) {
 				}
 			}
 		}
@@ -291,28 +290,20 @@ public class DictoryServiceImpl implements DictoryService {
 
 	public List<Dictory> getDictorysByQueryCriteria(int start, int pageSize, DictoryQuery query) {
 		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<Dictory> rows = sqlSessionTemplate.selectList("getDictories", query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getDictories", query, rowBounds);
 	}
 
-	public List<Dictory> list(DictoryQuery query) {
-		List<Dictory> list = dictoryMapper.getDictories(query);
-		return list;
+	private List<Dictory> list(DictoryQuery query) {
+		return dictoryMapper.getDictories(query);
 	}
 
 	@Transactional
-	public void save(Dictory dictory) {
+	private void save(Dictory dictory) {
 		if (dictory.getId() == 0) {
 			dictory.setId(idGenerator.nextId());
 			dictory.setCreateDate(new Date());
 			dictory.setSort(1);
 			dictoryMapper.insertDictory(dictory);
-
-			long nodeId = dictory.getNodeId();
-			SysTree tree = sysTreeService.findById(nodeId);
-			if (tree != null && tree.getCode() != null) {
-
-			}
 		} else {
 			dictory.setUpdateDate(new Date());
 			dictoryMapper.updateDictory(dictory);

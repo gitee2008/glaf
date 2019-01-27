@@ -18,42 +18,32 @@
 
 package com.glaf.core.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.mybatis.spring.SqlSessionTemplate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.glaf.core.dao.EntityDAO;
 import com.glaf.core.domain.SchedulerLog;
-import com.glaf.core.id.IdGenerator;
 import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.mapper.SchedulerLogMapper;
 import com.glaf.core.query.SchedulerLogQuery;
 import com.glaf.core.service.ISchedulerLogService;
 import com.glaf.core.util.DBUtils;
 import com.glaf.core.util.UUID32;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 @Service("schedulerLogService")
 @Transactional(readOnly = true)
 public class SchedulerLogServiceImpl implements ISchedulerLogService {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	protected EntityDAO entityDAO;
+	private SqlSessionTemplate sqlSessionTemplate;
 
-	protected IdGenerator idGenerator;
-
-	protected JdbcTemplate jdbcTemplate;
-
-	protected SqlSessionTemplate sqlSessionTemplate;
-
-	protected SchedulerLogMapper schedulerLogMapper;
+	private SchedulerLogMapper schedulerLogMapper;
 
 	public SchedulerLogServiceImpl() {
 
@@ -101,13 +91,12 @@ public class SchedulerLogServiceImpl implements ISchedulerLogService {
 		if (id == null) {
 			return null;
 		}
-		SchedulerLog schedulerLog = schedulerLogMapper.getSchedulerLogById(id);
-		return schedulerLog;
+		return schedulerLogMapper.getSchedulerLogById(id);
 	}
 
 	/**
 	 * 根据查询参数获取记录总数
-	 * 
+	 *
 	 * @return
 	 */
 	public int getSchedulerLogCountByQueryCriteria(SchedulerLogQuery query) {
@@ -116,18 +105,16 @@ public class SchedulerLogServiceImpl implements ISchedulerLogService {
 
 	/**
 	 * 根据查询参数获取一页的数据
-	 * 
+	 *
 	 * @return
 	 */
 	public List<SchedulerLog> getSchedulerLogsByQueryCriteria(int start, int pageSize, SchedulerLogQuery query) {
 		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<SchedulerLog> rows = sqlSessionTemplate.selectList("getSchedulerLogs", query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getSchedulerLogs", query, rowBounds);
 	}
 
 	public List<SchedulerLog> list(SchedulerLogQuery query) {
-		List<SchedulerLog> list = schedulerLogMapper.getSchedulerLogs(query);
-		return list;
+		return schedulerLogMapper.getSchedulerLogs(query);
 	}
 
 	@Transactional
@@ -144,21 +131,6 @@ public class SchedulerLogServiceImpl implements ISchedulerLogService {
 				schedulerLogMapper.updateSchedulerLog(schedulerLog);
 			}
 		}
-	}
-
-	@javax.annotation.Resource
-	public void setEntityDAO(EntityDAO entityDAO) {
-		this.entityDAO = entityDAO;
-	}
-
-	@javax.annotation.Resource
-	public void setIdGenerator(IdGenerator idGenerator) {
-		this.idGenerator = idGenerator;
-	}
-
-	@javax.annotation.Resource
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	@javax.annotation.Resource

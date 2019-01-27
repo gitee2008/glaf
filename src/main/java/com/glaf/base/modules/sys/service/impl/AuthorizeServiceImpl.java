@@ -36,15 +36,14 @@ import com.glaf.core.config.Configuration;
 public class AuthorizeServiceImpl implements AuthorizeService {
 	private static final Log logger = LogFactory.getLog(AuthorizeServiceImpl.class);
 
-	protected static Configuration conf = BaseConfiguration.create();
+	private static final Configuration conf = BaseConfiguration.create();
 
-	protected SysUserService sysUserService;
+	private SysUserService sysUserService;
 
 	/**
 	 * 用户登陆
 	 * 
-	 * @param userIdOrMobile
-	 *            用户账号或手机号码
+	 * @param userIdOrMobile 用户账号或手机号码
 	 * @param password
 	 * @return
 	 */
@@ -95,8 +94,7 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 	/**
 	 * 用户登陆
 	 * 
-	 * @param userIdOrMobile
-	 *            用户账号或手机号码
+	 * @param userIdOrMobile 用户账号或手机号码
 	 * @param password
 	 * @return
 	 */
@@ -130,8 +128,6 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 				if (!success) {// 密码不匹配
 					sysUserService.loginFailure(user.getUserId());
 					user = null;
-				} else if (user.getAccountType() != 1) {
-
 				}
 			}
 		}

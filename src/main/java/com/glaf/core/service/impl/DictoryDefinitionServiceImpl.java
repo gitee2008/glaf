@@ -18,9 +18,17 @@
 
 package com.glaf.core.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.glaf.core.cache.CacheFactory;
+import com.glaf.core.config.SystemConfig;
+import com.glaf.core.domain.DictoryDefinition;
+import com.glaf.core.domain.util.DictoryDefinitionJsonFactory;
+import com.glaf.core.id.IdGenerator;
+import com.glaf.core.mapper.DictoryDefinitionMapper;
+import com.glaf.core.query.DictoryDefinitionQuery;
+import com.glaf.core.service.DictoryDefinitionService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -29,32 +37,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-
-import com.glaf.core.cache.CacheFactory;
-import com.glaf.core.config.SystemConfig;
-import com.glaf.core.dao.EntityDAO;
-import com.glaf.core.domain.DictoryDefinition;
-import com.glaf.core.domain.util.DictoryDefinitionJsonFactory;
-import com.glaf.core.id.IdGenerator;
-import com.glaf.core.mapper.DictoryDefinitionMapper;
-import com.glaf.core.query.DictoryDefinitionQuery;
-import com.glaf.core.service.DictoryDefinitionService;
+import java.util.Date;
+import java.util.List;
 
 @Service("dictoryDefinitionService")
 @Transactional(readOnly = true)
 public class DictoryDefinitionServiceImpl implements DictoryDefinitionService {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	protected EntityDAO entityDAO;
+	private IdGenerator idGenerator;
 
-	protected IdGenerator idGenerator;
+	private SqlSessionTemplate sqlSessionTemplate;
 
-	protected SqlSessionTemplate sqlSessionTemplate;
-
-	protected DictoryDefinitionMapper dictoryDefinitionMapper;
+	private DictoryDefinitionMapper dictoryDefinitionMapper;
 
 	public DictoryDefinitionServiceImpl() {
 
@@ -82,7 +77,7 @@ public class DictoryDefinitionServiceImpl implements DictoryDefinitionService {
 				try {
 					JSONObject json = JSON.parseObject(text);
 					return DictoryDefinitionJsonFactory.jsonToObject(json);
-				} catch (Exception ex) {
+				} catch (Exception ignored) {
 
 				}
 			}
@@ -108,7 +103,7 @@ public class DictoryDefinitionServiceImpl implements DictoryDefinitionService {
 				try {
 					JSONArray array = JSON.parseArray(text);
 					return DictoryDefinitionJsonFactory.arrayToList(array);
-				} catch (Exception ex) {
+				} catch (Exception ignored) {
 
 				}
 			}
@@ -131,13 +126,11 @@ public class DictoryDefinitionServiceImpl implements DictoryDefinitionService {
 	public List<DictoryDefinition> getDictoryDefinitionsByQueryCriteria(int start, int pageSize,
 			DictoryDefinitionQuery query) {
 		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<DictoryDefinition> rows = sqlSessionTemplate.selectList("getDictoryDefinitions", query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getDictoryDefinitions", query, rowBounds);
 	}
 
 	public List<DictoryDefinition> list(DictoryDefinitionQuery query) {
-		List<DictoryDefinition> list = dictoryDefinitionMapper.getDictoryDefinitions(query);
-		return list;
+		return dictoryDefinitionMapper.getDictoryDefinitions(query);
 	}
 
 	@Transactional
@@ -185,11 +178,6 @@ public class DictoryDefinitionServiceImpl implements DictoryDefinitionService {
 	@javax.annotation.Resource
 	public void setDictoryDefinitionMapper(DictoryDefinitionMapper dictoryDefinitionMapper) {
 		this.dictoryDefinitionMapper = dictoryDefinitionMapper;
-	}
-
-	@javax.annotation.Resource
-	public void setEntityDAO(EntityDAO entityDAO) {
-		this.entityDAO = entityDAO;
 	}
 
 	@javax.annotation.Resource

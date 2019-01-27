@@ -18,22 +18,6 @@
 
 package com.glaf.core.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.ibatis.session.SqlSession;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.alibaba.fastjson.JSONObject;
 import com.glaf.core.base.ColumnModel;
 import com.glaf.core.base.TableModel;
@@ -51,38 +35,33 @@ import com.glaf.core.mapper.TableDataMapper;
 import com.glaf.core.mapper.TablePageMapper;
 import com.glaf.core.query.TablePageQuery;
 import com.glaf.core.service.ITableDataService;
-import com.glaf.core.util.DateUtils;
-import com.glaf.core.util.ExpressionConstants;
-import com.glaf.core.util.Paging;
-import com.glaf.core.util.ParamUtils;
-import com.glaf.core.util.QueryUtils;
-import com.glaf.core.util.StringTools;
-import com.glaf.core.util.UUID32;
+import com.glaf.core.util.*;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 @Service("tableDataService")
 @Transactional
 public class TableDataServiceImpl implements ITableDataService {
-	protected final static Log logger = LogFactory.getLog(TableDataServiceImpl.class);
+	private final static Log logger = LogFactory.getLog(TableDataServiceImpl.class);
 
-	protected EntityDAO entityDAO;
+	private EntityDAO entityDAO;
 
-	protected IdMapper idMapper;
+	private IdMapper idMapper;
 
-	protected IdGenerator idGenerator;
+	private IdGenerator idGenerator;
 
-	protected SqlSession sqlSession;
+	private TableDataMapper tableDataMapper;
 
-	protected TableDataMapper tableDataMapper;
-
-	protected TablePageMapper tablePageMapper;
-
-	public TableDataServiceImpl() {
-
-	}
+	private TablePageMapper tablePageMapper;
 
 	/**
 	 * 删除数据
-	 * 
+	 *
 	 * @param model
 	 */
 	@Transactional
@@ -98,7 +77,7 @@ public class TableDataServiceImpl implements ITableDataService {
 
 	/**
 	 * 删除数据
-	 * 
+	 *
 	 * @param rows
 	 */
 	@Transactional
@@ -116,7 +95,7 @@ public class TableDataServiceImpl implements ITableDataService {
 
 	/**
 	 * 获取一页数据
-	 * 
+	 *
 	 * @param pageNo
 	 * @param pageSize
 	 * @param model
@@ -155,7 +134,7 @@ public class TableDataServiceImpl implements ITableDataService {
 		return tableDataMapper.getTableKeyMap(model);
 	}
 
-	public List<Map<String, Object>> getTablePrimaryKeyMap(String tableName, String columnName) {
+	private List<Map<String, Object>> getTablePrimaryKeyMap(String tableName, String columnName) {
 		TableModel tableModel = new TableModel();
 		ColumnModel idColumn = new ColumnModel();
 		idColumn.setColumnName(columnName);
@@ -317,7 +296,7 @@ public class TableDataServiceImpl implements ITableDataService {
 				log.setContent(tableData.toJsonObject().toJSONString());
 				try {
 					SysLogFactory.getInstance().addLog(log);
-				} catch (Throwable ex) {
+				} catch (Throwable ignored) {
 				}
 			}
 		}
@@ -394,7 +373,7 @@ public class TableDataServiceImpl implements ITableDataService {
 				log.setContent(table.toJsonObject().toJSONString());
 				try {
 					SysLogFactory.getInstance().addLog(log);
-				} catch (Throwable ex) {
+				} catch (Throwable ignored) {
 				}
 			}
 		}
@@ -485,8 +464,6 @@ public class TableDataServiceImpl implements ITableDataService {
 							} else {
 								buffer.append(val.toString());
 							}
-						} else {
-							buffer.append("");
 						}
 						if (it.hasNext()) {
 							buffer.append("_");
@@ -726,6 +703,7 @@ public class TableDataServiceImpl implements ITableDataService {
 			Map<String, Object> dataMap = iterator.next();
 			Object id = dataMap.get(idColumnName);
 			if (id == null) {
+				assert idColumnName != null;
 				id = dataMap.get(idColumnName.toUpperCase());
 			}
 			if (id != null) {
@@ -749,8 +727,8 @@ public class TableDataServiceImpl implements ITableDataService {
 
 	/**
 	 * 保存JSON数据到指定的表
-	 * 
-	 * @param tableName
+	 *
+	 * @param tableDefinition
 	 * @param jsonObject
 	 */
 	@Transactional
@@ -788,7 +766,7 @@ public class TableDataServiceImpl implements ITableDataService {
 					ColumnModel cm = new ColumnModel();
 					cm.setJavaType(javaType);
 					cm.setColumnName(col.getColumnName());
-					Object value = null;
+					Object value;
 
 					if (jsonObject.containsKey(columnName)) {
 						value = jsonObject.get(columnName);
@@ -932,11 +910,6 @@ public class TableDataServiceImpl implements ITableDataService {
 	@javax.annotation.Resource
 	public void setIdMapper(IdMapper idMapper) {
 		this.idMapper = idMapper;
-	}
-
-	@javax.annotation.Resource
-	public void setSqlSession(SqlSession sqlSession) {
-		this.sqlSession = sqlSession;
 	}
 
 	@javax.annotation.Resource

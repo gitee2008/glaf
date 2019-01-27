@@ -18,44 +18,34 @@
 
 package com.glaf.core.service.impl;
 
-import java.util.*;
-
+import com.glaf.core.domain.SysKey;
+import com.glaf.core.id.IdGenerator;
+import com.glaf.core.jdbc.DBConnectionFactory;
+import com.glaf.core.mapper.SysKeyMapper;
+import com.glaf.core.query.SysKeyQuery;
+import com.glaf.core.service.SysKeyService;
+import com.glaf.core.util.DBUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.glaf.core.id.*;
-import com.glaf.core.jdbc.DBConnectionFactory;
-import com.glaf.core.dao.*;
-import com.glaf.core.mapper.*;
-import com.glaf.core.domain.*;
-import com.glaf.core.query.*;
-import com.glaf.core.service.SysKeyService;
-import com.glaf.core.util.DBUtils;
+import java.util.Date;
+import java.util.List;
 
 @Service("sysKeyService")
 @Transactional(readOnly = true)
 public class SysKeyServiceImpl implements SysKeyService {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	protected EntityDAO entityDAO;
+	private IdGenerator idGenerator;
 
-	protected IdGenerator idGenerator;
+	private SqlSessionTemplate sqlSessionTemplate;
 
-	protected JdbcTemplate jdbcTemplate;
-
-	protected SqlSessionTemplate sqlSessionTemplate;
-
-	protected SysKeyMapper sysKeyMapper;
-
-	public SysKeyServiceImpl() {
-
-	}
+	private SysKeyMapper sysKeyMapper;
 
 	public int count(SysKeyQuery query) {
 		return sysKeyMapper.getSysKeyCount(query);
@@ -82,16 +72,14 @@ public class SysKeyServiceImpl implements SysKeyService {
 			return null;
 		}
 		if (StringUtils.equals(DBUtils.POSTGRESQL, DBConnectionFactory.getDatabaseType())) {
-			SysKey sysKey = sysKeyMapper.getSysKeyById_postgres(id);
-			return sysKey;
+			return sysKeyMapper.getSysKeyById_postgres(id);
 		}
-		SysKey sysKey = sysKeyMapper.getSysKeyById(id);
-		return sysKey;
+		return sysKeyMapper.getSysKeyById(id);
 	}
 
 	/**
 	 * 根据查询参数获取记录总数
-	 * 
+	 *
 	 * @return
 	 */
 	public int getSysKeyCountByQueryCriteria(SysKeyQuery query) {
@@ -100,18 +88,16 @@ public class SysKeyServiceImpl implements SysKeyService {
 
 	/**
 	 * 根据查询参数获取一页的数据
-	 * 
+	 *
 	 * @return
 	 */
 	public List<SysKey> getSysKeysByQueryCriteria(int start, int pageSize, SysKeyQuery query) {
 		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<SysKey> rows = sqlSessionTemplate.selectList("getSysKeys", query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getSysKeys", query, rowBounds);
 	}
 
 	public List<SysKey> list(SysKeyQuery query) {
-		List<SysKey> list = sysKeyMapper.getSysKeys(query);
-		return list;
+		return sysKeyMapper.getSysKeys(query);
 	}
 
 	@Transactional
@@ -140,18 +126,8 @@ public class SysKeyServiceImpl implements SysKeyService {
 	}
 
 	@javax.annotation.Resource
-	public void setEntityDAO(EntityDAO entityDAO) {
-		this.entityDAO = entityDAO;
-	}
-
-	@javax.annotation.Resource
 	public void setIdGenerator(IdGenerator idGenerator) {
 		this.idGenerator = idGenerator;
-	}
-
-	@javax.annotation.Resource
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	@javax.annotation.Resource

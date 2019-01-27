@@ -43,7 +43,6 @@ import com.glaf.base.modules.sys.service.GroupService;
 import com.glaf.base.modules.sys.util.GroupJsonFactory;
 import com.glaf.core.cache.CacheFactory;
 import com.glaf.core.config.SystemConfig;
-import com.glaf.core.dao.EntityDAO;
 import com.glaf.core.id.IdGenerator;
 import com.glaf.core.util.Constants;
 import com.glaf.core.util.JsonUtils;
@@ -55,23 +54,21 @@ import com.glaf.core.util.UUID32;
 public class GroupServiceImpl implements GroupService {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	protected EntityDAO entityDAO;
+	private IdGenerator idGenerator;
 
-	protected IdGenerator idGenerator;
+	private GroupMapper groupMapper;
 
-	protected GroupMapper groupMapper;
+	private GroupUserMapper groupUserMapper;
 
-	protected GroupUserMapper groupUserMapper;
+	private GroupLeaderMapper groupLeaderMapper;
 
-	protected GroupLeaderMapper groupLeaderMapper;
-
-	protected SqlSessionTemplate sqlSessionTemplate;
+	private SqlSessionTemplate sqlSessionTemplate;
 
 	public GroupServiceImpl() {
 
 	}
 
-	public int count(GroupQuery query) {
+	private int count(GroupQuery query) {
 		return groupMapper.getGroupCount(query);
 	}
 
@@ -184,8 +181,7 @@ public class GroupServiceImpl implements GroupService {
 
 	public List<Group> getGroupsByQueryCriteria(int start, int pageSize, GroupQuery query) {
 		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<Group> rows = sqlSessionTemplate.selectList("getGroups", query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getGroups", query, rowBounds);
 	}
 
 	/**
@@ -250,7 +246,7 @@ public class GroupServiceImpl implements GroupService {
 	/**
 	 * 通过群组ID取用户
 	 * 
-	 * @param groupId
+	 * @param query
 	 * @return
 	 */
 	public List<Group> getGroupUsersByGroupId(GroupQuery query) {
@@ -288,7 +284,7 @@ public class GroupServiceImpl implements GroupService {
 				try {
 					JSONArray jsonArray = JSON.parseArray(text);
 					return JsonUtils.arrayToList(jsonArray);
-				} catch (Exception ex) {
+				} catch (Exception ignored) {
 				}
 			}
 		}
@@ -323,8 +319,7 @@ public class GroupServiceImpl implements GroupService {
 	}
 
 	public List<Group> list(GroupQuery query) {
-		List<Group> list = groupMapper.getGroups(query);
-		return list;
+		return groupMapper.getGroups(query);
 	}
 
 	@Transactional
@@ -446,11 +441,6 @@ public class GroupServiceImpl implements GroupService {
 				}
 			}
 		}
-	}
-
-	@javax.annotation.Resource
-	public void setEntityDAO(EntityDAO entityDAO) {
-		this.entityDAO = entityDAO;
 	}
 
 	@javax.annotation.Resource

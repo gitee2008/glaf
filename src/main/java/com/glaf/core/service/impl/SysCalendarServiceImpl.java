@@ -18,8 +18,11 @@
 
 package com.glaf.core.service.impl;
 
-import java.util.List;
-
+import com.glaf.core.domain.SysCalendar;
+import com.glaf.core.id.IdGenerator;
+import com.glaf.core.mapper.SysCalendarMapper;
+import com.glaf.core.query.SysCalendarQuery;
+import com.glaf.core.service.ISysCalendarService;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
@@ -27,25 +30,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.glaf.core.dao.EntityDAO;
-import com.glaf.core.domain.SysCalendar;
-import com.glaf.core.id.IdGenerator;
-import com.glaf.core.mapper.SysCalendarMapper;
-import com.glaf.core.query.SysCalendarQuery;
-import com.glaf.core.service.ISysCalendarService;
+import java.util.List;
 
 @Service("sysCalendarService")
 @Transactional(readOnly = true)
 public class SysCalendarServiceImpl implements ISysCalendarService {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	protected EntityDAO entityDAO;
+	private IdGenerator idGenerator;
 
-	protected IdGenerator idGenerator;
+	private SqlSessionTemplate sqlSessionTemplate;
 
-	protected SqlSessionTemplate sqlSessionTemplate;
-
-	protected SysCalendarMapper sysCalendarMapper;
+	private SysCalendarMapper sysCalendarMapper;
 
 	public SysCalendarServiceImpl() {
 
@@ -59,12 +55,10 @@ public class SysCalendarServiceImpl implements ISysCalendarService {
 		if (id == null) {
 			return null;
 		}
-		SysCalendar sysCalendar = sysCalendarMapper.getSysCalendarById(id);
-		return sysCalendar;
+		return sysCalendarMapper.getSysCalendarById(id);
 	}
 
-	public SysCalendar getSysCalendar(String productionLine, int year,
-			int month, int day) {
+	public SysCalendar getSysCalendar(String productionLine, int year, int month, int day) {
 		SysCalendarQuery query = new SysCalendarQuery();
 		query.setYear(year);
 		query.setMonth(month);
@@ -81,17 +75,13 @@ public class SysCalendarServiceImpl implements ISysCalendarService {
 		return sysCalendarMapper.getSysCalendarCount(query);
 	}
 
-	public List<SysCalendar> getSysCalendarsByQueryCriteria(int start,
-			int pageSize, SysCalendarQuery query) {
+	public List<SysCalendar> getSysCalendarsByQueryCriteria(int start, int pageSize, SysCalendarQuery query) {
 		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<SysCalendar> rows = sqlSessionTemplate.selectList(
-				"getSysCalendars", query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getSysCalendars", query, rowBounds);
 	}
 
 	public List<SysCalendar> list(SysCalendarQuery query) {
-		List<SysCalendar> list = sysCalendarMapper.getSysCalendars(query);
-		return list;
+		return sysCalendarMapper.getSysCalendars(query);
 	}
 
 	@Transactional
@@ -102,11 +92,6 @@ public class SysCalendarServiceImpl implements ISysCalendarService {
 		} else {
 			sysCalendarMapper.updateSysCalendar(sysCalendar);
 		}
-	}
-
-	@javax.annotation.Resource
-	public void setEntityDAO(EntityDAO entityDAO) {
-		this.entityDAO = entityDAO;
 	}
 
 	@javax.annotation.Resource

@@ -39,20 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-
-import com.glaf.core.base.TableModel;
-import com.glaf.core.id.IdGenerator;
-import com.glaf.core.security.Authentication;
-import com.glaf.core.cache.CacheFactory;
-import com.glaf.core.config.SystemConfig;
-import com.glaf.core.service.ITableDataService;
-import com.glaf.core.util.Constants;
-import com.glaf.core.util.PageResult;
-import com.glaf.core.util.UUID32;
-
 import com.glaf.base.modules.sys.SysConstants;
-import com.glaf.base.modules.sys.mapper.SysAccessMapper;
-import com.glaf.base.modules.sys.mapper.SysApplicationMapper;
 import com.glaf.base.modules.sys.mapper.SysRoleMapper;
 import com.glaf.base.modules.sys.mapper.SysUserMapper;
 import com.glaf.base.modules.sys.mapper.SysUserRoleMapper;
@@ -68,32 +55,34 @@ import com.glaf.base.modules.sys.service.SysUserService;
 import com.glaf.base.modules.sys.util.PinyinUtils;
 import com.glaf.base.modules.sys.util.SysRoleJsonFactory;
 import com.glaf.base.modules.sys.util.SysUserJsonFactory;
+import com.glaf.core.base.TableModel;
+import com.glaf.core.cache.CacheFactory;
+import com.glaf.core.config.SystemConfig;
+import com.glaf.core.id.IdGenerator;
+import com.glaf.core.security.Authentication;
+import com.glaf.core.service.ITableDataService;
+import com.glaf.core.util.Constants;
+import com.glaf.core.util.PageResult;
+import com.glaf.core.util.UUID32;
 
 @Service("sysUserService")
 @Transactional(readOnly = true)
 public class SysUserServiceImpl implements SysUserService {
-	protected final static Log logger = LogFactory.getLog(SysUserServiceImpl.class);
+	private final static Log logger = LogFactory.getLog(SysUserServiceImpl.class);
 
-	// protected static ConcurrentMap<String, String> passwordMap = new
-	// ConcurrentHashMap<String, String>();
+	private IdGenerator idGenerator;
 
-	protected IdGenerator idGenerator;
+	private MembershipService membershipService;
 
-	protected MembershipService membershipService;
+	private SqlSessionTemplate sqlSessionTemplate;
 
-	protected SqlSessionTemplate sqlSessionTemplate;
+	private SysRoleMapper sysRoleMapper;
 
-	protected SysAccessMapper sysAccessMapper;
+	private SysUserMapper sysUserMapper;
 
-	protected SysApplicationMapper sysApplicationMapper;
+	private SysUserRoleMapper sysUserRoleMapper;
 
-	protected SysRoleMapper sysRoleMapper;
-
-	protected SysUserMapper sysUserMapper;
-
-	protected SysUserRoleMapper sysUserRoleMapper;
-
-	protected ITableDataService tableDataService;
+	private ITableDataService tableDataService;
 
 	public SysUserServiceImpl() {
 
@@ -149,7 +138,7 @@ public class SysUserServiceImpl implements SysUserService {
 		return result;
 	}
 
-	public int count(SysUserQuery query) {
+	private int count(SysUserQuery query) {
 		return sysUserMapper.getSysUserCount(query);
 	}
 
@@ -366,8 +355,7 @@ public class SysUserServiceImpl implements SysUserService {
 	}
 
 	public SysUser findByMail(String mail) {
-		SysUser user = sysUserMapper.getSysUserByMail(mail);
-		return user;
+		return sysUserMapper.getSysUserByMail(mail);
 	}
 
 	public SysUser findByMobile(String mobile) {
@@ -395,8 +383,7 @@ public class SysUserServiceImpl implements SysUserService {
 
 	public List<SysUser> getAllUsers(SysUserQuery query) {
 		RowBounds rowBounds = new RowBounds(0, 50000);
-		List<SysUser> rows = sqlSessionTemplate.selectList("getSysUsers", query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getSysUsers", query, rowBounds);
 	}
 
 	public List<UserRole> getRoleUserViews(UserRoleQuery query) {
@@ -407,13 +394,11 @@ public class SysUserServiceImpl implements SysUserService {
 		SysUserQuery query = new SysUserQuery();
 		query.setUserId(supplierNo);
 		query.setDeleteFlag(0);
-		List<SysUser> users = this.list(query);
-		return users;
+		return this.list(query);
 	}
 
 	public SysUser getSysUserByAppId(String appId) {
-		SysUser user = sysUserMapper.getSysUserByAppId(appId);
-		return user;
+		return sysUserMapper.getSysUserByAppId(appId);
 	}
 
 	public int getSysUserCountByQueryCriteria(SysUserQuery query) {
@@ -581,8 +566,7 @@ public class SysUserServiceImpl implements SysUserService {
 
 	public List<SysUser> getSysUsersByQueryCriteria(int start, int pageSize, SysUserQuery query) {
 		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<SysUser> rows = sqlSessionTemplate.selectList("getSysUsers", query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getSysUsers", query, rowBounds);
 	}
 
 	/**
@@ -601,7 +585,7 @@ public class SysUserServiceImpl implements SysUserService {
 	/**
 	 * 获取某个角色代码的用户
 	 * 
-	 * @param roleCode
+	 * @param roleId
 	 * @return
 	 */
 	public List<SysUser> getSysUsersByRoleId(String roleId) {
@@ -614,17 +598,13 @@ public class SysUserServiceImpl implements SysUserService {
 
 	public List<SysUser> getSysUsersExByQueryCriteria(int start, int pageSize, SysUserQuery query) {
 		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<SysUser> rows = sqlSessionTemplate.selectList("getSysUsersEx", query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getSysUsersEx", query, rowBounds);
 	}
 
 	public List<SysUser> getSysUserWithOrganizationList() {
 		SysUserQuery query = new SysUserQuery();
 		query.setDeleteFlag(0);
-		List<SysUser> users = this.list(query);
-		if (users != null && !users.isEmpty()) {
-		}
-		return users;
+		return this.list(query);
 	}
 
 	/**
@@ -720,9 +700,8 @@ public class SysUserServiceImpl implements SysUserService {
 		return flag;
 	}
 
-	public List<SysUser> list(SysUserQuery query) {
-		List<SysUser> list = sysUserMapper.getSysUsers(query);
-		return list;
+	private List<SysUser> list(SysUserQuery query) {
+		return sysUserMapper.getSysUsers(query);
 	}
 
 	/**
@@ -819,7 +798,7 @@ public class SysUserServiceImpl implements SysUserService {
 	}
 
 	@Transactional
-	public void save(SysUser sysUser) {
+	private void save(SysUser sysUser) {
 		if (this.findByAccount(sysUser.getUserId()) == null) {
 			sysUser.setCreateTime(new Date());
 			sysUser.setToken(UUID32.getUUID() + UUID32.getUUID() + UUID32.getUUID() + UUID32.getUUID());
@@ -987,16 +966,6 @@ public class SysUserServiceImpl implements SysUserService {
 	}
 
 	@Resource
-	public void setSysAccessMapper(SysAccessMapper sysAccessMapper) {
-		this.sysAccessMapper = sysAccessMapper;
-	}
-
-	@Resource
-	public void setSysApplicationMapper(SysApplicationMapper sysApplicationMapper) {
-		this.sysApplicationMapper = sysApplicationMapper;
-	}
-
-	@Resource
 	public void setSysRoleMapper(SysRoleMapper sysRoleMapper) {
 		this.sysRoleMapper = sysRoleMapper;
 	}
@@ -1081,7 +1050,7 @@ public class SysUserServiceImpl implements SysUserService {
 	/**
 	 * 更新用户登录信息
 	 * 
-	 * @param model
+	 * @param user
 	 */
 	@Transactional
 	public void updateUserLoginInfo(SysUser user) {
@@ -1106,7 +1075,7 @@ public class SysUserServiceImpl implements SysUserService {
 	/**
 	 * 更新登录密锁
 	 * 
-	 * @param model
+	 * @param sysUser
 	 */
 	@Transactional
 	public void updateUserLoginSecret(SysUser sysUser) {

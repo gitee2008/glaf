@@ -80,7 +80,7 @@ public class MyBatisDbIdGenerator implements IdGenerator {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
-	protected synchronized void getNewBlock() {
+	public synchronized void getNewBlock() {
 		IdBlock idBlock = entityDAO.nextDbidBlock();
 		this.nextId = idBlock.getNextId();
 		this.lastId = idBlock.getLastId();
@@ -92,7 +92,7 @@ public class MyBatisDbIdGenerator implements IdGenerator {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
-	protected synchronized void getNewBlock(String name) {
+	public synchronized void getNewBlock(String name) {
 		IdBlock idBlock = entityDAO.nextDbidBlock(name);
 		Long nextId2 = idBlock.getNextId();
 		Long lastId2 = idBlock.getLastId();

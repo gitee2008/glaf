@@ -18,48 +18,43 @@
 
 package com.glaf.base.modules.sys.service.impl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.glaf.core.id.*;
+import com.glaf.base.modules.sys.mapper.TenantGrantMapper;
+import com.glaf.base.modules.sys.model.TenantGrant;
+import com.glaf.base.modules.sys.query.TenantGrantQuery;
+import com.glaf.base.modules.sys.service.TenantGrantService;
 import com.glaf.core.base.ColumnModel;
 import com.glaf.core.base.TableModel;
-import com.glaf.core.dao.*;
+import com.glaf.core.id.IdGenerator;
 import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.service.ITableDataService;
-import com.glaf.core.util.*;
-
-import com.glaf.base.modules.sys.mapper.*;
-import com.glaf.base.modules.sys.model.*;
-import com.glaf.base.modules.sys.query.*;
-import com.glaf.base.modules.sys.service.TenantGrantService;
+import com.glaf.core.util.DBUtils;
 
 @Service("tenantGrantService")
 @Transactional(readOnly = true)
 public class TenantGrantServiceImpl implements TenantGrantService {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	protected EntityDAO entityDAO;
+	private IdGenerator idGenerator;
 
-	protected IdGenerator idGenerator;
+	private SqlSessionTemplate sqlSessionTemplate;
 
-	protected JdbcTemplate jdbcTemplate;
+	private TenantGrantMapper tenantGrantMapper;
 
-	protected SqlSessionTemplate sqlSessionTemplate;
-
-	protected TenantGrantMapper tenantGrantMapper;
-
-	protected ITableDataService tableDataService;
+	private ITableDataService tableDataService;
 
 	public TenantGrantServiceImpl() {
 
@@ -123,8 +118,7 @@ public class TenantGrantServiceImpl implements TenantGrantService {
 		if (id == null) {
 			return null;
 		}
-		TenantGrant tenantGrant = tenantGrantMapper.getTenantGrantById(id);
-		return tenantGrant;
+		return tenantGrantMapper.getTenantGrantById(id);
 	}
 
 	/**
@@ -143,13 +137,11 @@ public class TenantGrantServiceImpl implements TenantGrantService {
 	 */
 	public List<TenantGrant> getTenantGrantsByQueryCriteria(int start, int pageSize, TenantGrantQuery query) {
 		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<TenantGrant> rows = sqlSessionTemplate.selectList("getTenantGrants", query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getTenantGrants", query, rowBounds);
 	}
 
 	public List<TenantGrant> list(TenantGrantQuery query) {
-		List<TenantGrant> list = tenantGrantMapper.getTenantGrants(query);
-		return list;
+		return tenantGrantMapper.getTenantGrants(query);
 	}
 
 	@Transactional
@@ -198,18 +190,8 @@ public class TenantGrantServiceImpl implements TenantGrantService {
 	}
 
 	@javax.annotation.Resource
-	public void setEntityDAO(EntityDAO entityDAO) {
-		this.entityDAO = entityDAO;
-	}
-
-	@javax.annotation.Resource
 	public void setIdGenerator(IdGenerator idGenerator) {
 		this.idGenerator = idGenerator;
-	}
-
-	@javax.annotation.Resource
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	@javax.annotation.Resource

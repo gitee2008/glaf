@@ -17,9 +17,14 @@
  */
 package com.glaf.core.service.impl;
 
-import java.util.List;
-import java.util.Map;
-
+import com.glaf.core.domain.InputDefinition;
+import com.glaf.core.domain.SystemParam;
+import com.glaf.core.mapper.InputDefinitionMapper;
+import com.glaf.core.mapper.SystemParamMapper;
+import com.glaf.core.query.InputDefinitionQuery;
+import com.glaf.core.query.SystemParamQuery;
+import com.glaf.core.service.ISystemParamService;
+import com.glaf.core.util.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,36 +33,19 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.glaf.core.dao.EntityDAO;
-import com.glaf.core.domain.InputDefinition;
-import com.glaf.core.domain.SystemParam;
-import com.glaf.core.id.IdGenerator;
-import com.glaf.core.mapper.InputDefinitionMapper;
-import com.glaf.core.mapper.SystemParamMapper;
-import com.glaf.core.query.InputDefinitionQuery;
-import com.glaf.core.query.SystemParamQuery;
-import com.glaf.core.service.ISystemParamService;
-import com.glaf.core.util.DateUtils;
+import java.util.List;
+import java.util.Map;
 
 @Service("systemParamService")
 @Transactional(readOnly = true)
 public class SystemParamServiceImpl implements ISystemParamService {
-	protected static final Log logger = LogFactory
-			.getLog(SystemParamServiceImpl.class);
+	protected static final Log logger = LogFactory.getLog(SystemParamServiceImpl.class);
 
-	protected EntityDAO entityDAO;
+	private SqlSession sqlSession;
 
-	protected IdGenerator idGenerator;
+	private SystemParamMapper systemParamMapper;
 
-	protected SqlSession sqlSession;
-
-	protected SystemParamMapper systemParamMapper;
-
-	protected InputDefinitionMapper inputDefinitionMapper;
-
-	public SystemParamServiceImpl() {
-
-	}
+	private InputDefinitionMapper inputDefinitionMapper;
 
 	public int count(SystemParamQuery query) {
 		return systemParamMapper.getSystemParamCountByQueryCriteria(query);
@@ -67,8 +55,7 @@ public class SystemParamServiceImpl implements ISystemParamService {
 	public void createSystemParams(String serviceKey, String businessKey) {
 		InputDefinitionQuery query = new InputDefinitionQuery();
 		query.serviceKey(serviceKey);
-		List<InputDefinition> list = inputDefinitionMapper
-				.getInputDefinitionsByServiceKey(serviceKey);
+		List<InputDefinition> list = inputDefinitionMapper.getInputDefinitionsByServiceKey(serviceKey);
 		if (list != null && !list.isEmpty()) {
 			for (InputDefinition def : list) {
 				SystemParam m = new SystemParam();
@@ -97,8 +84,7 @@ public class SystemParamServiceImpl implements ISystemParamService {
 						/**
 						 * 如果是文本输入框或数字输入框，用定义的值作为初始化值
 						 */
-						if ("text".equals(def.getInputType())
-								|| "numberbox".equals(def.getInputType())) {
+						if ("text".equals(def.getInputType()) || "numberbox".equals(def.getInputType())) {
 							if (def.getInitValue().length() < 2000) {
 								m.setStringVal(def.getInitValue());
 								m.setTextVal(def.getInitValue());
@@ -133,13 +119,12 @@ public class SystemParamServiceImpl implements ISystemParamService {
 	}
 
 	public SystemParam getSystemParam(String id) {
-		SystemParam systemParam = systemParamMapper.getSystemParamById(id);
-		return systemParam;
+		return systemParamMapper.getSystemParamById(id);
 	}
 
 	/**
 	 * 根据查询参数获取记录总数
-	 * 
+	 *
 	 * @return
 	 */
 	public int getSystemParamCount(Map<String, Object> parameter) {
@@ -148,7 +133,7 @@ public class SystemParamServiceImpl implements ISystemParamService {
 
 	/**
 	 * 根据查询参数获取记录总数
-	 * 
+	 *
 	 * @return
 	 */
 	public int getSystemParamCountByQueryCriteria(SystemParamQuery query) {
@@ -158,32 +143,26 @@ public class SystemParamServiceImpl implements ISystemParamService {
 	public List<InputDefinition> getInputDefinitions(String serviceKey) {
 		InputDefinitionQuery query = new InputDefinitionQuery();
 		query.serviceKey(serviceKey);
-		List<InputDefinition> list = inputDefinitionMapper
-				.getInputDefinitionsByServiceKey(serviceKey);
-		return list;
+		return inputDefinitionMapper.getInputDefinitionsByServiceKey(serviceKey);
 	}
 
-	public List<InputDefinition> getInputDefinitions(String serviceKey,
-			String typeCd) {
+	public List<InputDefinition> getInputDefinitions(String serviceKey, String typeCd) {
 		InputDefinitionQuery query = new InputDefinitionQuery();
 		query.serviceKey(serviceKey);
 		query.typeCd(typeCd);
-		List<InputDefinition> list = inputDefinitionMapper
-				.getInputDefinitionsByServiceKey(serviceKey);
-		return list;
+		return inputDefinitionMapper.getInputDefinitionsByServiceKey(serviceKey);
 	}
 
 	/**
 	 * 根据查询参数获取记录列表
-	 * 
+	 *
 	 * @return
 	 */
 	public List<SystemParam> getSystemParams(Map<String, Object> parameter) {
 		return systemParamMapper.getSystemParams(parameter);
 	}
 
-	public List<SystemParam> getSystemParams(String serviceKey,
-			String businessKey) {
+	public List<SystemParam> getSystemParams(String serviceKey, String businessKey) {
 		SystemParamQuery query = new SystemParamQuery();
 		query.serviceKey(serviceKey);
 		query.setBusinessKey(businessKey);
@@ -192,14 +171,13 @@ public class SystemParamServiceImpl implements ISystemParamService {
 
 	/**
 	 * 获取系统参数
-	 * 
+	 *
 	 * @param serviceKey
 	 * @param businessKey
 	 * @param keyName
 	 * @return
 	 */
-	public SystemParam getSystemParam(String serviceKey, String businessKey,
-			String keyName) {
+	public SystemParam getSystemParam(String serviceKey, String businessKey, String keyName) {
 		SystemParamQuery query = new SystemParamQuery();
 		query.serviceKey(serviceKey);
 		query.setBusinessKey(businessKey);
@@ -213,21 +191,16 @@ public class SystemParamServiceImpl implements ISystemParamService {
 
 	/**
 	 * 根据查询参数获取一页的数据
-	 * 
+	 *
 	 * @return
 	 */
-	public List<SystemParam> getSystemParamsByQueryCriteria(int start,
-			int pageSize, SystemParamQuery query) {
+	public List<SystemParam> getSystemParamsByQueryCriteria(int start, int pageSize, SystemParamQuery query) {
 		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<SystemParam> rows = sqlSession.selectList(
-				"getSystemParamsByQueryCriteria", query, rowBounds);
-		return rows;
+		return sqlSession.selectList("getSystemParamsByQueryCriteria", query, rowBounds);
 	}
 
 	public List<SystemParam> list(SystemParamQuery query) {
-		List<SystemParam> list = systemParamMapper
-				.getSystemParamsByQueryCriteria(query);
-		return list;
+		return systemParamMapper.getSystemParamsByQueryCriteria(query);
 	}
 
 	@Transactional
@@ -276,8 +249,7 @@ public class SystemParamServiceImpl implements ISystemParamService {
 	}
 
 	@Transactional
-	public void saveAll(String serviceKey, String businessKey,
-			List<SystemParam> rows) {
+	public void saveAll(String serviceKey, String businessKey, List<SystemParam> rows) {
 		if (rows != null && !rows.isEmpty()) {
 			for (SystemParam param : rows) {
 				param.setServiceKey(serviceKey);
@@ -288,23 +260,12 @@ public class SystemParamServiceImpl implements ISystemParamService {
 	}
 
 	@javax.annotation.Resource
-	public void setEntityDAO(EntityDAO entityDAO) {
-		this.entityDAO = entityDAO;
-	}
-
-	@javax.annotation.Resource
-	public void setIdGenerator(IdGenerator idGenerator) {
-		this.idGenerator = idGenerator;
-	}
-
-	@javax.annotation.Resource
 	public void setSqlSession(SqlSession sqlSession) {
 		this.sqlSession = sqlSession;
 	}
 
 	@javax.annotation.Resource
-	public void setInputDefinitionMapper(
-			InputDefinitionMapper inputDefinitionMapper) {
+	public void setInputDefinitionMapper(InputDefinitionMapper inputDefinitionMapper) {
 		this.inputDefinitionMapper = inputDefinitionMapper;
 	}
 
@@ -315,7 +276,7 @@ public class SystemParamServiceImpl implements ISystemParamService {
 
 	/**
 	 * 修改多条参数定义
-	 * 
+	 *
 	 * @param serviceKey
 	 * @param rows
 	 */
@@ -327,8 +288,7 @@ public class SystemParamServiceImpl implements ISystemParamService {
 		}
 		InputDefinitionQuery query = new InputDefinitionQuery();
 		query.serviceKey(serviceKey);
-		List<InputDefinition> list = inputDefinitionMapper
-				.getInputDefinitionsByServiceKey(serviceKey);
+		List<InputDefinition> list = inputDefinitionMapper.getInputDefinitionsByServiceKey(serviceKey);
 		if (list != null && !list.isEmpty()) {
 			for (InputDefinition def : list) {
 				if (rowMap.get(def.getKeyName()) != null) {

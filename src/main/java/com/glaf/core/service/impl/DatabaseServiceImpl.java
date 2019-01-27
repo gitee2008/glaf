@@ -18,13 +18,21 @@
 
 package com.glaf.core.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.glaf.core.cache.CacheFactory;
+import com.glaf.core.domain.Database;
+import com.glaf.core.domain.DatabaseAccess;
+import com.glaf.core.domain.SysKey;
+import com.glaf.core.domain.util.DatabaseAccessJsonFactory;
+import com.glaf.core.id.IdGenerator;
+import com.glaf.core.mapper.DatabaseAccessMapper;
+import com.glaf.core.mapper.DatabaseMapper;
+import com.glaf.core.query.DatabaseQuery;
+import com.glaf.core.security.SecurityUtils;
+import com.glaf.core.service.IDatabaseService;
+import com.glaf.core.service.SysKeyService;
+import com.glaf.core.util.UUID32;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
@@ -34,40 +42,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-
-import com.glaf.core.cache.CacheFactory;
-import com.glaf.core.dao.EntityDAO;
-import com.glaf.core.id.IdGenerator;
-import com.glaf.core.security.SecurityUtils;
-import com.glaf.core.domain.Database;
-import com.glaf.core.domain.DatabaseAccess;
-import com.glaf.core.domain.SysKey;
-import com.glaf.core.mapper.DatabaseAccessMapper;
-import com.glaf.core.mapper.DatabaseMapper;
-import com.glaf.core.query.DatabaseQuery;
-import com.glaf.core.service.IDatabaseService;
-import com.glaf.core.service.SysKeyService;
-import com.glaf.core.util.UUID32;
-import com.glaf.core.domain.util.DatabaseAccessJsonFactory;
+import java.util.*;
 
 @Service("databaseService")
 @Transactional(readOnly = true)
 public class DatabaseServiceImpl implements IDatabaseService {
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	protected EntityDAO entityDAO;
+	private IdGenerator idGenerator;
 
-	protected IdGenerator idGenerator;
+	private SqlSessionTemplate sqlSessionTemplate;
 
-	protected SqlSessionTemplate sqlSessionTemplate;
+	private DatabaseMapper databaseMapper;
 
-	protected DatabaseMapper databaseMapper;
+	private DatabaseAccessMapper databaseAccessMapper;
 
-	protected DatabaseAccessMapper databaseAccessMapper;
-
-	protected SysKeyService sysKeyService;
+	private SysKeyService sysKeyService;
 
 	public DatabaseServiceImpl() {
 
@@ -141,17 +131,16 @@ public class DatabaseServiceImpl implements IDatabaseService {
 		return databaseAccessMapper.getAllDatabaseAccesses();
 	}
 
-	public Database getDatabase(long databaseId) {
+	private Database getDatabase(long databaseId) {
 		if (databaseId == 0) {
 			return null;
 		}
-		Database database = databaseMapper.getDatabaseById(databaseId);
-		return database;
+		return databaseMapper.getDatabaseById(databaseId);
 	}
 
 	/**
 	 * 获取某个数据库访问权限
-	 * 
+	 *
 	 * @return
 	 */
 	public List<DatabaseAccess> getDatabaseAccesses(long databaseId) {
@@ -161,7 +150,7 @@ public class DatabaseServiceImpl implements IDatabaseService {
 			try {
 				JSONArray array = JSON.parseArray(text);
 				return DatabaseAccessJsonFactory.arrayToList(array);
-			} catch (Exception ex) {
+			} catch (Exception ignored) {
 			}
 		}
 		List<DatabaseAccess> accesses = databaseAccessMapper.getDatabaseAccessesByDatabaseId(databaseId);
@@ -174,7 +163,7 @@ public class DatabaseServiceImpl implements IDatabaseService {
 
 	/**
 	 * 获取某个数据库访问用户
-	 * 
+	 *
 	 * @return
 	 */
 	public List<String> getDatabaseAccessors(long databaseId) {
@@ -192,7 +181,7 @@ public class DatabaseServiceImpl implements IDatabaseService {
 
 	/**
 	 * 根据编码获取一条记录
-	 * 
+	 *
 	 * @return
 	 */
 	public Database getDatabaseByCode(String code) {
@@ -232,7 +221,7 @@ public class DatabaseServiceImpl implements IDatabaseService {
 
 	/**
 	 * 根据mapping获取一条记录
-	 * 
+	 *
 	 * @return
 	 */
 	public Database getDatabaseByMapping(String mapping) {
@@ -257,7 +246,7 @@ public class DatabaseServiceImpl implements IDatabaseService {
 
 	/**
 	 * 根据name获取一条记录
-	 * 
+	 *
 	 * @return
 	 */
 	public Database getDatabaseByName(String name) {
@@ -281,7 +270,7 @@ public class DatabaseServiceImpl implements IDatabaseService {
 
 	/**
 	 * 根据查询参数获取记录总数
-	 * 
+	 *
 	 * @return
 	 */
 	public int getDatabaseCountByQueryCriteria(DatabaseQuery query) {
@@ -315,7 +304,7 @@ public class DatabaseServiceImpl implements IDatabaseService {
 
 	/**
 	 * 根据查询参数获取记录列表
-	 * 
+	 *
 	 * @return
 	 */
 	public List<Database> getDatabases(String actorId) {
@@ -340,9 +329,7 @@ public class DatabaseServiceImpl implements IDatabaseService {
 
 		List<Database> list2 = databaseMapper.getDatabasesByActorId(actorId);
 		if (list2 != null && !list2.isEmpty()) {
-			for (Database database : list2) {
-				databases.add(database);
-			}
+			databases.addAll(list2);
 		}
 
 		return databases;
@@ -350,18 +337,17 @@ public class DatabaseServiceImpl implements IDatabaseService {
 
 	/**
 	 * 根据查询参数获取一页的数据
-	 * 
+	 *
 	 * @return
 	 */
 	public List<Database> getDatabasesByQueryCriteria(int start, int pageSize, DatabaseQuery query) {
 		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<Database> rows = sqlSessionTemplate.selectList("getDatabases", query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getDatabases", query, rowBounds);
 	}
 
 	/**
 	 * 保存一条数据库信息
-	 * 
+	 *
 	 * @return
 	 */
 	@Transactional
@@ -573,7 +559,7 @@ public class DatabaseServiceImpl implements IDatabaseService {
 
 	/**
 	 * 保存数据库访问者
-	 * 
+	 *
 	 * @return
 	 */
 	@Transactional
@@ -596,7 +582,7 @@ public class DatabaseServiceImpl implements IDatabaseService {
 
 	/**
 	 * 保存数据库访问者
-	 * 
+	 *
 	 * @return
 	 */
 	@Transactional
@@ -625,11 +611,6 @@ public class DatabaseServiceImpl implements IDatabaseService {
 	@javax.annotation.Resource
 	public void setDatabaseMapper(DatabaseMapper databaseMapper) {
 		this.databaseMapper = databaseMapper;
-	}
-
-	@javax.annotation.Resource
-	public void setEntityDAO(EntityDAO entityDAO) {
-		this.entityDAO = entityDAO;
 	}
 
 	@javax.annotation.Resource

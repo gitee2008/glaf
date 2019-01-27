@@ -18,24 +18,23 @@
 
 package com.glaf.core.service.impl;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.glaf.core.dao.EntityDAO;
 import com.glaf.core.entity.SqlExecutor;
 import com.glaf.core.id.IdGenerator;
 import com.glaf.core.service.EntityService;
 import com.glaf.core.util.Paging;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service("entityService")
 @Transactional
 public class MyBatisEntityService implements EntityService {
 
-	protected EntityDAO entityDAO;
+	private EntityDAO entityDAO;
 
-	protected IdGenerator idGenerator;
+	private IdGenerator idGenerator;
 
 	public MyBatisEntityService() {
 
@@ -82,9 +81,9 @@ public class MyBatisEntityService implements EntityService {
 
 	/**
 	 * 查询
-	 * 
-	 * @param queryId
-	 * @param params
+	 *
+	 * @param statementId
+	 * @param parameter
 	 * @return
 	 */
 	@Transactional(readOnly = true)
@@ -99,8 +98,7 @@ public class MyBatisEntityService implements EntityService {
 		// int maxId = entityDAO.getTableUserMaxId(tablename, idColumn,
 		// createBy);
 		// String newId = idLike + StringTools.getDigit7Id(maxId);
-		String newId = idGenerator.getNextId(tablename, idColumn, createBy);
-		return newId;
+		return idGenerator.getNextId(tablename, idColumn, createBy);
 	}
 
 	@Transactional(readOnly = true)
@@ -137,11 +135,9 @@ public class MyBatisEntityService implements EntityService {
 
 	/**
 	 * 获取某个表用户记录编号
-	 * 
-	 * @param tablename
-	 *            表名称
-	 * @param idColumn
-	 *            表主键列名
+	 *
+	 * @param tablename 表名称
+	 * @param idColumn  表主键列名
 	 * @return
 	 */
 	@Transactional

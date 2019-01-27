@@ -18,11 +18,17 @@
 
 package com.glaf.core.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.glaf.core.cache.CacheFactory;
+import com.glaf.core.domain.ServerEntity;
+import com.glaf.core.domain.util.ServerEntityJsonFactory;
+import com.glaf.core.id.IdGenerator;
+import com.glaf.core.mapper.ServerEntityMapper;
+import com.glaf.core.query.ServerEntityQuery;
+import com.glaf.core.security.SecurityUtils;
+import com.glaf.core.service.IServerEntityService;
+import com.glaf.core.util.UUID32;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -31,31 +37,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.glaf.core.cache.CacheFactory;
-import com.glaf.core.dao.EntityDAO;
-import com.glaf.core.id.IdGenerator;
-import com.glaf.core.security.SecurityUtils;
-import com.glaf.core.domain.ServerEntity;
-import com.glaf.core.mapper.ServerEntityMapper;
-import com.glaf.core.query.ServerEntityQuery;
-import com.glaf.core.service.IServerEntityService;
-import com.glaf.core.util.UUID32;
-import com.glaf.core.domain.util.ServerEntityJsonFactory;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 @Service("serverEntityService")
 @Transactional(readOnly = true)
 public class ServerEntityServiceImpl implements IServerEntityService {
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	protected EntityDAO entityDAO;
+	private IdGenerator idGenerator;
 
-	protected IdGenerator idGenerator;
+	private SqlSessionTemplate sqlSessionTemplate;
 
-	protected SqlSessionTemplate sqlSessionTemplate;
-
-	protected ServerEntityMapper serverEntityMapper;
+	private ServerEntityMapper serverEntityMapper;
 
 	public ServerEntityServiceImpl() {
 
@@ -105,7 +101,7 @@ public class ServerEntityServiceImpl implements IServerEntityService {
 
 	/**
 	 * 根据查询参数获取记录列表
-	 * 
+	 *
 	 * @return
 	 */
 	public List<ServerEntity> getServerEntities(String actorId) {
@@ -126,26 +122,24 @@ public class ServerEntityServiceImpl implements IServerEntityService {
 
 	/**
 	 * 根据查询参数获取一页的数据
-	 * 
+	 *
 	 * @return
 	 */
 	public List<ServerEntity> getServerEntitiesByQueryCriteria(int start, int pageSize, ServerEntityQuery query) {
 		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<ServerEntity> rows = sqlSessionTemplate.selectList("getServerEntities", query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getServerEntities", query, rowBounds);
 	}
 
-	public ServerEntity getServerEntity(Long serverEntityId) {
+	private ServerEntity getServerEntity(Long serverEntityId) {
 		if (serverEntityId == null || serverEntityId == 0) {
 			return null;
 		}
-		ServerEntity serverEntity = serverEntityMapper.getServerEntityById(serverEntityId);
-		return serverEntity;
+		return serverEntityMapper.getServerEntityById(serverEntityId);
 	}
 
 	/**
 	 * 根据编码获取一条记录
-	 * 
+	 *
 	 * @return
 	 */
 	public ServerEntity getServerEntityByCode(String code) {
@@ -158,7 +152,7 @@ public class ServerEntityServiceImpl implements IServerEntityService {
 			try {
 				JSONObject json = JSON.parseObject(text);
 				return ServerEntityJsonFactory.jsonToObject(json);
-			} catch (Exception ex) {
+			} catch (Exception ignored) {
 			}
 		}
 		ServerEntityQuery query = new ServerEntityQuery();
@@ -186,7 +180,7 @@ public class ServerEntityServiceImpl implements IServerEntityService {
 			try {
 				JSONObject json = JSON.parseObject(text);
 				return ServerEntityJsonFactory.jsonToObject(json);
-			} catch (Exception ex) {
+			} catch (Exception ignored) {
 			}
 		}
 		ServerEntity serverEntity = serverEntityMapper.getServerEntityById(serverEntityId);
@@ -198,7 +192,7 @@ public class ServerEntityServiceImpl implements IServerEntityService {
 
 	/**
 	 * 根据mapping获取一条记录
-	 * 
+	 *
 	 * @return
 	 */
 	public ServerEntity getServerEntityByMapping(String mapping) {
@@ -211,7 +205,7 @@ public class ServerEntityServiceImpl implements IServerEntityService {
 			try {
 				JSONObject json = JSON.parseObject(text);
 				return ServerEntityJsonFactory.jsonToObject(json);
-			} catch (Exception ex) {
+			} catch (Exception ignored) {
 			}
 		}
 		ServerEntityQuery query = new ServerEntityQuery();
@@ -231,7 +225,7 @@ public class ServerEntityServiceImpl implements IServerEntityService {
 
 	/**
 	 * 根据name获取一条记录
-	 * 
+	 *
 	 * @return
 	 */
 	public ServerEntity getServerEntityByName(String name) {
@@ -244,7 +238,7 @@ public class ServerEntityServiceImpl implements IServerEntityService {
 			try {
 				JSONObject json = JSON.parseObject(text);
 				return ServerEntityJsonFactory.jsonToObject(json);
-			} catch (Exception ex) {
+			} catch (Exception ignored) {
 			}
 		}
 		ServerEntityQuery query = new ServerEntityQuery();
@@ -264,7 +258,7 @@ public class ServerEntityServiceImpl implements IServerEntityService {
 
 	/**
 	 * 根据查询参数获取记录总数
-	 * 
+	 *
 	 * @return
 	 */
 	public int getServerEntityCountByQueryCriteria(ServerEntityQuery query) {
@@ -272,13 +266,7 @@ public class ServerEntityServiceImpl implements IServerEntityService {
 	}
 
 	public List<ServerEntity> list(ServerEntityQuery query) {
-		List<ServerEntity> list = serverEntityMapper.getServerEntities(query);
-		for (ServerEntity serverEntity : list) {
-			if (StringUtils.equals(serverEntity.getActive(), "1")) {
-
-			}
-		}
-		return list;
+		return serverEntityMapper.getServerEntities(query);
 	}
 
 	@Transactional
@@ -372,11 +360,6 @@ public class ServerEntityServiceImpl implements IServerEntityService {
 
 		}
 
-	}
-
-	@javax.annotation.Resource
-	public void setEntityDAO(EntityDAO entityDAO) {
-		this.entityDAO = entityDAO;
 	}
 
 	@javax.annotation.Resource

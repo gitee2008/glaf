@@ -18,15 +18,15 @@
 
 package com.glaf.core.service.impl;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
+import com.glaf.core.base.TablePage;
+import com.glaf.core.entity.SqlExecutor;
+import com.glaf.core.mapper.TablePageMapper;
+import com.glaf.core.query.TablePageQuery;
+import com.glaf.core.service.ITablePageService;
+import com.glaf.core.util.DBUtils;
+import com.glaf.core.util.Paging;
+import com.glaf.core.util.QueryUtils;
+import com.glaf.core.util.StringTools;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,27 +35,17 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.glaf.core.base.TablePage;
-import com.glaf.core.entity.SqlExecutor;
-import com.glaf.core.id.IdGenerator;
-import com.glaf.core.mapper.TablePageMapper;
-import com.glaf.core.query.TablePageQuery;
-import com.glaf.core.service.ITablePageService;
-import com.glaf.core.util.DBUtils;
-import com.glaf.core.util.Paging;
-import com.glaf.core.util.QueryUtils;
-import com.glaf.core.util.StringTools;
+import java.util.*;
+import java.util.Map.Entry;
 
 @Service("tablePageService")
 @Transactional(readOnly = true)
 public class TablePageServiceImpl implements ITablePageService {
 	protected final static Log logger = LogFactory.getLog(TablePageServiceImpl.class);
 
-	protected IdGenerator idGenerator;
+	private SqlSession sqlSession;
 
-	protected SqlSession sqlSession;
-
-	protected TablePageMapper tablePageMapper;
+	private TablePageMapper tablePageMapper;
 
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> getListData(String sql, Map<String, Object> params) {
@@ -111,7 +101,7 @@ public class TablePageServiceImpl implements ITablePageService {
 			}
 			queryMap.put("queryString", sqlExecutor.getSql());
 		} else {
-			queryMap.putAll(params);
+			queryMap.putAll(Objects.requireNonNull(params));
 			queryMap.put("queryString", sql);
 		}
 
@@ -172,13 +162,12 @@ public class TablePageServiceImpl implements ITablePageService {
 			}
 			queryMap.put("queryString", sqlExecutor.getSql());
 		} else {
-			queryMap.putAll(params);
+			queryMap.putAll(Objects.requireNonNull(params));
 			queryMap.put("queryString", sql);
 		}
 
 		RowBounds rowBounds = new RowBounds(begin, limit);
-		List<Map<String, Object>> dataList = sqlSession.selectList("getSqlQueryList", queryMap, rowBounds);
-		return dataList;
+		return sqlSession.selectList("getSqlQueryList", queryMap, rowBounds);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -235,7 +224,7 @@ public class TablePageServiceImpl implements ITablePageService {
 			}
 			queryMap.put("queryString", sqlExecutor.getSql());
 		} else {
-			queryMap.putAll(params);
+			queryMap.putAll(Objects.requireNonNull(params));
 			queryMap.put("queryString", sql);
 		}
 
@@ -300,12 +289,11 @@ public class TablePageServiceImpl implements ITablePageService {
 			}
 			queryMap.put("queryString", sqlExecutor.getSql());
 		} else {
-			queryMap.putAll(params);
+			queryMap.putAll(Objects.requireNonNull(params));
 			queryMap.put("queryString", sql);
 		}
 
-		int total = tablePageMapper.getSqlQueryCount(queryMap);
-		return total;
+		return tablePageMapper.getSqlQueryCount(queryMap);
 	}
 
 	public int getTableCount(TablePageQuery query) {
@@ -324,8 +312,7 @@ public class TablePageServiceImpl implements ITablePageService {
 			pageSize = Paging.DEFAULT_PAGE_SIZE;
 		}
 		RowBounds rowBounds = new RowBounds(begin, pageSize);
-		List<Map<String, Object>> rows = sqlSession.selectList("getTableData", query, rowBounds);
-		return rows;
+		return sqlSession.selectList("getTableData", query, rowBounds);
 	}
 
 	@Transactional(readOnly = true)
@@ -339,8 +326,7 @@ public class TablePageServiceImpl implements ITablePageService {
 			pageSize = Paging.DEFAULT_PAGE_SIZE;
 		}
 		RowBounds rowBounds = new RowBounds(begin, pageSize);
-		List<Map<String, Object>> list = sqlSession.selectList("getTableData", query, rowBounds);
-		return list;
+		return sqlSession.selectList("getTableData", query, rowBounds);
 	}
 
 	public TablePage getTablePage(TablePageQuery query, int firstResult, int maxResults) {
@@ -356,7 +342,7 @@ public class TablePageServiceImpl implements ITablePageService {
 			pageSize = Paging.DEFAULT_PAGE_SIZE;
 		}
 
-		Integer count = (Integer) sqlSession.selectOne("getTableCount", query);
+		Integer count = sqlSession.selectOne("getTableCount", query);
 		if (count > 0) {
 			tablePage.setTotal(count);
 			RowBounds rowBounds = new RowBounds(begin, pageSize);
@@ -380,23 +366,17 @@ public class TablePageServiceImpl implements ITablePageService {
 			pageSize = Paging.DEFAULT_PAGE_SIZE;
 		}
 
-		Integer count = (Integer) sqlSession.selectOne("getTableCount",
-				Collections.singletonMap("tableName", tableName));
+		Integer count = sqlSession.selectOne("getTableCount", Collections.singletonMap("tableName", tableName));
 		if (count > 0) {
 			paging.setTotal(count);
 			RowBounds rowBounds = new RowBounds(begin, pageSize);
-			List<Object> tableData = (List<Object>) sqlSession.selectList("getTableData", query, rowBounds);
+			List<Object> tableData = sqlSession.selectList("getTableData", query, rowBounds);
 			paging.setRows(tableData);
 			int currentPage = begin / pageSize + 1;
 			paging.setCurrentPage(currentPage);
 		}
 
 		return paging;
-	}
-
-	@javax.annotation.Resource
-	public void setIdGenerator(IdGenerator idGenerator) {
-		this.idGenerator = idGenerator;
 	}
 
 	@javax.annotation.Resource

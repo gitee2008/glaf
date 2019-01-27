@@ -18,14 +18,6 @@
 
 package com.glaf.core.service.impl;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.alibaba.fastjson.JSON;
 import com.glaf.core.base.BaseTree;
 import com.glaf.core.base.TreeModel;
@@ -38,18 +30,21 @@ import com.glaf.core.domain.util.TreeModelJsonFactory;
 import com.glaf.core.id.IdGenerator;
 import com.glaf.core.query.TreeModelQuery;
 import com.glaf.core.service.ITreeModelService;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 @Service("treeModelService")
 @Transactional(readOnly = true)
 public class TreeModelServiceImpl implements ITreeModelService {
 
-	protected EntityDAO entityDAO;
+	private EntityDAO entityDAO;
 
-	protected IdGenerator idGenerator;
-
-	public TreeModelServiceImpl() {
-
-	}
+	private IdGenerator idGenerator;
 
 	protected List<TreeModel> cloneProperties(List<TreeModel> rows) {
 		List<TreeModel> list = new java.util.ArrayList<TreeModel>();
@@ -65,38 +60,38 @@ public class TreeModelServiceImpl implements ITreeModelService {
 
 	/**
 	 * 复制树对象
-	 * 
-	 * @param 源对象
-	 * @param 目标对象
+	 *
+	 * @param model  源对象
+	 * @param target 目标对象
 	 */
-	protected void cloneTreeModel(TreeModel model, TreeModel m) {
-		m.setId(model.getId());
-		m.setParentId(model.getParentId());
+	private void cloneTreeModel(TreeModel model, TreeModel target) {
+		target.setId(model.getId());
+		target.setParentId(model.getParentId());
 		if (model.getParent() != null) {
-			m.setParent(model.getParent());
+			target.setParent(model.getParent());
 		}
 
-		m.setChildren(model.getChildren());
-		m.setCode(model.getCode());
+		target.setChildren(model.getChildren());
+		target.setCode(model.getCode());
 
-		m.setDescription(model.getDescription());
+		target.setDescription(model.getDescription());
 
-		m.setIcon(model.getIcon());
-		m.setIconCls(model.getIcon());
-		m.setLevel(model.getLevel());
-		m.setLocked(model.getLocked());
-		m.setName(model.getName());
+		target.setIcon(model.getIcon());
+		target.setIconCls(model.getIcon());
+		target.setLevel(model.getLevel());
+		target.setLocked(model.getLocked());
+		target.setName(model.getName());
 
-		m.setSortNo(model.getSortNo());
-		m.setTreeId(model.getTreeId());
+		target.setSortNo(model.getSortNo());
+		target.setTreeId(model.getTreeId());
 
-		m.setUrl(model.getUrl());
+		target.setUrl(model.getUrl());
 
 	}
 
 	/**
 	 * 获取某个节点的所有祖先节点
-	 * 
+	 *
 	 * @param treeId
 	 * @return
 	 */
@@ -116,7 +111,7 @@ public class TreeModelServiceImpl implements ITreeModelService {
 
 	/**
 	 * 获取某个节点的所有子孙节点
-	 * 
+	 *
 	 * @param treeId
 	 * @return
 	 */
@@ -188,7 +183,7 @@ public class TreeModelServiceImpl implements ITreeModelService {
 
 	/**
 	 * 根据编码获取树节点
-	 * 
+	 *
 	 * @param treeId
 	 * @return
 	 */
@@ -200,7 +195,7 @@ public class TreeModelServiceImpl implements ITreeModelService {
 				try {
 					com.alibaba.fastjson.JSONObject json = JSON.parseObject(text);
 					return TreeModelJsonFactory.jsonToObject(json);
-				} catch (Exception ex) {
+				} catch (Exception ignored) {
 				}
 			}
 		}
@@ -224,8 +219,8 @@ public class TreeModelServiceImpl implements ITreeModelService {
 
 	/**
 	 * 根据编码获取树节点
-	 * 
-	 * @param treeId
+	 *
+	 * @param code
 	 * @return
 	 */
 	public TreeModel getTreeModelByCode(String code) {
@@ -264,8 +259,7 @@ public class TreeModelServiceImpl implements ITreeModelService {
 
 	public List<TreeModel> getTreeModels() {
 		TreeModelQuery query = new TreeModelQuery();
-		List<TreeModel> departments = getTreeModels(query);
-		return departments;
+		return getTreeModels(query);
 	}
 
 	public List<TreeModel> getTreeModels(TreeModelQuery query) {
@@ -298,17 +292,6 @@ public class TreeModelServiceImpl implements ITreeModelService {
 			return model;
 		}
 		return null;
-	}
-
-	public TreeModel getTreeModelWithAncestor(long nodeId) {
-		TreeModel treeModel = this.getTreeModel(nodeId);
-		if (treeModel != null && treeModel.getParentId() != 0) {
-			TreeModel parent = this.getTreeModelWithAncestor(treeModel.getParentId());
-			if (parent != null) {
-				treeModel.setParent(parent);
-			}
-		}
-		return treeModel;
 	}
 
 	private void loadAncestorTreeNodes(TreeModel treeModel, List<TreeModel> treeModels) {
@@ -358,8 +341,6 @@ public class TreeModelServiceImpl implements ITreeModelService {
 		}
 		if (parentId != 0) {
 			parent = this.getTreeModel(parentId);
-			if (parent != null) {
-			}
 		} else {
 			if (mxTreeModel.getParent() != null) {
 				parent = this.getTreeModelByCode(mxTreeModel.getParent().getCode());
@@ -381,9 +362,9 @@ public class TreeModelServiceImpl implements ITreeModelService {
 			mxTreeModel.setTreeId(parentTreeId + mxTreeModel.getId() + "|");
 		} else {
 			if (parent == null) {
-				mxTreeModel.setTreeId(String.valueOf(mxTreeModel.getId()) + "|");
+				mxTreeModel.setTreeId(mxTreeModel.getId() + "|");
 			} else {
-				if (parent != null && parent.getTreeId() != null) {
+				if (parent.getTreeId() != null) {
 					mxTreeModel.setTreeId(parent.getTreeId() + mxTreeModel.getId() + "|");
 				}
 			}
@@ -431,16 +412,6 @@ public class TreeModelServiceImpl implements ITreeModelService {
 	@javax.annotation.Resource
 	public void setIdGenerator(IdGenerator idGenerator) {
 		this.idGenerator = idGenerator;
-	}
-
-	protected void updateTreeId(TreeModel parent) {
-		if (parent != null && parent.getChildren() != null && !parent.getChildren().isEmpty()) {
-			for (TreeModel t : parent.getChildren()) {
-				t.setTreeId(parent.getTreeId() + t.getId() + "|");
-				this.save(t);
-				this.updateTreeId(t);
-			}
-		}
 	}
 
 }

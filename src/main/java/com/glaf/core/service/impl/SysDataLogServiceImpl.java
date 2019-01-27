@@ -18,8 +18,11 @@
 
 package com.glaf.core.service.impl;
 
-import java.util.List;
-
+import com.glaf.core.domain.SysDataLog;
+import com.glaf.core.id.IdGenerator;
+import com.glaf.core.mapper.SysDataLogMapper;
+import com.glaf.core.query.SysDataLogQuery;
+import com.glaf.core.service.SysDataLogService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.session.RowBounds;
@@ -27,48 +30,39 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.glaf.core.id.IdGenerator;
-import com.glaf.core.domain.SysDataLog;
-import com.glaf.core.mapper.SysDataLogMapper;
-import com.glaf.core.query.SysDataLogQuery;
-import com.glaf.core.service.SysDataLogService;
+import java.util.List;
 
 @Service("sysDataLogService")
 @Transactional(readOnly = true)
 public class SysDataLogServiceImpl implements SysDataLogService {
-	protected final static Log logger = LogFactory.getLog(SysDataLogServiceImpl.class);
+	private final static Log logger = LogFactory.getLog(SysDataLogServiceImpl.class);
 
-	protected IdGenerator idGenerator;
+	private IdGenerator idGenerator;
 
-	protected SqlSessionTemplate sqlSessionTemplate;
+	private SqlSessionTemplate sqlSessionTemplate;
 
-	protected SysDataLogMapper sysLogMapper;
-
-	public SysDataLogServiceImpl() {
-
-	}
+	private SysDataLogMapper sysLogMapper;
 
 	public int count(SysDataLogQuery query) {
 		return sysLogMapper.getSysDataLogCount(query);
 	}
-	
+
 	/**
 	 * 获取某个模块最新的指定条数的日志列表
-	 * 
+	 *
 	 * @param moduleId
 	 * @param offset
 	 * @param limit
 	 * @return
 	 */
 	public List<SysDataLog> getLatestLogs(String moduleId, int offset, int limit) {
-		logger.debug("moduleId:"+moduleId);
+		logger.debug("moduleId:" + moduleId);
 		SysDataLogQuery query = new SysDataLogQuery();
 		query.setSuffix("_" + moduleId);
-		//query.setModuleId(moduleId);
+		// query.setModuleId(moduleId);
 		query.setOrderBy(" E.CREATETIME_ desc ");
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		List<SysDataLog> rows = sqlSessionTemplate.selectList("getSysDataLogs", query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getSysDataLogs", query, rowBounds);
 	}
 
 	public int getSysDataLogCountByQueryCriteria(SysDataLogQuery query) {
@@ -77,26 +71,25 @@ public class SysDataLogServiceImpl implements SysDataLogService {
 
 	public List<SysDataLog> getSysDataLogsByQueryCriteria(int start, int pageSize, SysDataLogQuery query) {
 		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<SysDataLog> rows = sqlSessionTemplate.selectList("getSysDataLogs", query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getSysDataLogs", query, rowBounds);
 	}
 
 	/**
 	 * 获取某个模块日志总数
+	 *
 	 * @param moduleId
 	 * @return
 	 */
-	public int getTotal(String moduleId){
-		logger.debug("moduleId:"+moduleId);
+	public int getTotal(String moduleId) {
+		logger.debug("moduleId:" + moduleId);
 		SysDataLogQuery query = new SysDataLogQuery();
 		query.setSuffix("_" + moduleId);
-		//query.setModuleId(moduleId);
+		// query.setModuleId(moduleId);
 		return this.getSysDataLogCountByQueryCriteria(query);
 	}
 
 	public List<SysDataLog> list(SysDataLogQuery query) {
-		List<SysDataLog> list = sysLogMapper.getSysDataLogs(query);
-		return list;
+		return sysLogMapper.getSysDataLogs(query);
 	}
 
 	@Transactional

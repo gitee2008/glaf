@@ -27,7 +27,6 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +43,6 @@ import com.glaf.base.modules.sys.util.PinyinUtils;
 import com.glaf.base.modules.sys.util.SysTenantJsonFactory;
 import com.glaf.core.cache.CacheFactory;
 import com.glaf.core.config.SystemConfig;
-import com.glaf.core.dao.EntityDAO;
 import com.glaf.core.id.IdGenerator;
 import com.glaf.core.security.Authentication;
 import com.glaf.core.util.Constants;
@@ -55,19 +53,15 @@ import com.glaf.core.util.UUID32;
 public class SysTenantServiceImpl implements SysTenantService {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	protected EntityDAO entityDAO;
+	private IdGenerator idGenerator;
 
-	protected IdGenerator idGenerator;
+	private SqlSessionTemplate sqlSessionTemplate;
 
-	protected JdbcTemplate jdbcTemplate;
+	private SysTenantMapper sysTenantMapper;
 
-	protected SqlSessionTemplate sqlSessionTemplate;
+	private SysOrganizationService sysOrganizationService;
 
-	protected SysTenantMapper sysTenantMapper;
-
-	protected SysOrganizationService sysOrganizationService;
-
-	protected SysUserService sysUserService;
+	private SysUserService sysUserService;
 
 	public SysTenantServiceImpl() {
 
@@ -115,7 +109,7 @@ public class SysTenantServiceImpl implements SysTenantService {
 					if (model != null) {
 						return model;
 					}
-				} catch (Exception ex) {
+				} catch (Exception ignored) {
 				}
 			}
 		}
@@ -143,7 +137,7 @@ public class SysTenantServiceImpl implements SysTenantService {
 					if (model != null) {
 						return model;
 					}
-				} catch (Exception ex) {
+				} catch (Exception ignored) {
 				}
 			}
 		}
@@ -169,7 +163,7 @@ public class SysTenantServiceImpl implements SysTenantService {
 					if (model != null) {
 						return model;
 					}
-				} catch (Exception ex) {
+				} catch (Exception ignored) {
 				}
 			}
 		}
@@ -198,13 +192,11 @@ public class SysTenantServiceImpl implements SysTenantService {
 	 */
 	public List<SysTenant> getSysTenantsByQueryCriteria(int start, int pageSize, SysTenantQuery query) {
 		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<SysTenant> rows = sqlSessionTemplate.selectList("getSysTenants", query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getSysTenants", query, rowBounds);
 	}
 
 	public List<SysTenant> list(SysTenantQuery query) {
-		List<SysTenant> list = sysTenantMapper.getSysTenants(query);
-		return list;
+		return sysTenantMapper.getSysTenants(query);
 	}
 
 	@Transactional
@@ -295,11 +287,11 @@ public class SysTenantServiceImpl implements SysTenantService {
 				organization.setTelphone(sysTenant.getTelephone());
 				organization.setCreateBy("system");
 				sysOrganizationService.create(organization);
-			} catch (java.lang.Throwable ex) {
+			} catch (java.lang.Throwable ignored) {
 
 			}
 		}
-		String userId = String.valueOf(sysTenant.getId() + "000");
+		String userId = sysTenant.getId() + "000";
 		if (sysUserService.findByAccount(userId) == null) {
 			SysUser bean = new SysUser();
 			bean.setActorId(userId);
@@ -309,6 +301,7 @@ public class SysTenantServiceImpl implements SysTenantService {
 			bean.setEvection(0);
 			bean.setCreateBy("system");
 			bean.setCreateDate(new Date());
+			assert organization != null;
 			bean.setOrganizationId(organization.getId());
 			bean.setTenantId(sysTenant.getTenantId());
 			sysUserService.create(bean);
@@ -319,18 +312,8 @@ public class SysTenantServiceImpl implements SysTenantService {
 	}
 
 	@javax.annotation.Resource
-	public void setEntityDAO(EntityDAO entityDAO) {
-		this.entityDAO = entityDAO;
-	}
-
-	@javax.annotation.Resource
 	public void setIdGenerator(IdGenerator idGenerator) {
 		this.idGenerator = idGenerator;
-	}
-
-	@javax.annotation.Resource
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	@javax.annotation.Resource

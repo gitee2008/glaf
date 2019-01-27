@@ -39,7 +39,6 @@ import com.glaf.base.modules.sys.model.SysRole;
 import com.glaf.base.modules.sys.query.SysRoleQuery;
 import com.glaf.base.modules.sys.service.SysRoleService;
 import com.glaf.base.modules.sys.util.SysRoleJsonFactory;
-
 import com.glaf.core.cache.CacheFactory;
 import com.glaf.core.config.SystemConfig;
 import com.glaf.core.id.IdGenerator;
@@ -52,17 +51,17 @@ import com.glaf.core.util.UUID32;
 public class SysRoleServiceImpl implements SysRoleService {
 	protected final static Log logger = LogFactory.getLog(SysRoleServiceImpl.class);
 
-	protected IdGenerator idGenerator;
+	private IdGenerator idGenerator;
 
-	protected SqlSessionTemplate sqlSessionTemplate;
+	private SqlSessionTemplate sqlSessionTemplate;
 
-	protected SysRoleMapper sysRoleMapper;
+	private SysRoleMapper sysRoleMapper;
 
 	public SysRoleServiceImpl() {
 
 	}
 
-	public int count(SysRoleQuery query) {
+	private int count(SysRoleQuery query) {
 		return sysRoleMapper.getSysRoleCount(query);
 	}
 
@@ -126,7 +125,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 	}
 
 	@Transactional
-	public void deleteById(String id) {
+	private void deleteById(String id) {
 		if (id != null) {
 			if (SystemConfig.getBoolean("use_query_cache")) {
 				CacheFactory.clear(Constants.CACHE_ROLE_REGION);
@@ -251,8 +250,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		query.setDeleteFlag(0);
 		query.setOrderBy(" E.SORTNO asc ");
 
-		List<SysRole> list = this.list(query);
-		return list;
+		return this.list(query);
 	}
 
 	public PageResult getSysRoleList(int pageNo, int pageSize) {
@@ -303,13 +301,11 @@ public class SysRoleServiceImpl implements SysRoleService {
 
 	public List<SysRole> getSysRolesByQueryCriteria(int start, int pageSize, SysRoleQuery query) {
 		RowBounds rowBounds = new RowBounds(start, pageSize);
-		List<SysRole> rows = sqlSessionTemplate.selectList("getSysRoles", query, rowBounds);
-		return rows;
+		return sqlSessionTemplate.selectList("getSysRoles", query, rowBounds);
 	}
 
-	public List<SysRole> list(SysRoleQuery query) {
-		List<SysRole> list = sysRoleMapper.getSysRoles(query);
-		return list;
+	private List<SysRole> list(SysRoleQuery query) {
+		return sysRoleMapper.getSysRoles(query);
 	}
 
 	@Transactional
@@ -347,10 +343,8 @@ public class SysRoleServiceImpl implements SysRoleService {
 	/**
 	 * 排序
 	 * 
-	 * @param bean
-	 *            SysRole
-	 * @param operate
-	 *            int 操作
+	 * @param bean    SysRole
+	 * @param operate int 操作
 	 */
 	@Transactional
 	public void sort(SysRole bean, int operate) {
@@ -374,7 +368,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		query.setOrderBy(" E.SORTNO desc ");
 		List<SysRole> list = this.list(query);
 		if (list != null && list.size() > 0) {// 有记录
-			SysRole temp = (SysRole) list.get(0);
+			SysRole temp = list.get(0);
 			int i = bean.getSort();
 			bean.setSort(temp.getSort());
 			this.update(bean);// 更新bean
@@ -395,7 +389,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 
 		List<SysRole> list = this.list(query);
 		if (list != null && list.size() > 0) {// 有记录
-			SysRole temp = (SysRole) list.get(0);
+			SysRole temp = list.get(0);
 			int i = bean.getSort();
 			bean.setSort(temp.getSort());
 			this.update(bean);// 更新bean

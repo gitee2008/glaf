@@ -18,25 +18,11 @@
 
 package com.glaf.core.service.impl;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.ibatis.session.SqlSession;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.glaf.core.cache.CacheFactory;
 import com.glaf.core.config.SystemConfig;
-import com.glaf.core.dao.EntityDAO;
 import com.glaf.core.domain.SystemProperty;
 import com.glaf.core.domain.util.SystemPropertyJsonFactory;
 import com.glaf.core.id.IdGenerator;
@@ -44,23 +30,22 @@ import com.glaf.core.mapper.SystemPropertyMapper;
 import com.glaf.core.query.SystemPropertyQuery;
 import com.glaf.core.service.ISystemPropertyService;
 import com.glaf.core.util.Constants;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 @Service("systemPropertyService")
 @Transactional(readOnly = true)
 public class SystemPropertyServiceImpl implements ISystemPropertyService {
 	protected final static Log logger = LogFactory.getLog(SystemPropertyServiceImpl.class);
 
-	protected EntityDAO entityDAO;
+	private IdGenerator idGenerator;
 
-	protected IdGenerator idGenerator;
-
-	protected SqlSession sqlSession;
-
-	protected SystemPropertyMapper systemPropertyMapper;
-
-	public SystemPropertyServiceImpl() {
-
-	}
+	private SystemPropertyMapper systemPropertyMapper;
 
 	public int count(SystemPropertyQuery query) {
 		return systemPropertyMapper.getSystemPropertyCount(query);
@@ -197,7 +182,7 @@ public class SystemPropertyServiceImpl implements ISystemPropertyService {
 		return property;
 	}
 
-	public List<SystemProperty> list(SystemPropertyQuery query) {
+	private List<SystemProperty> list(SystemPropertyQuery query) {
 		List<SystemProperty> list = systemPropertyMapper.getSystemProperties(query);
 		List<SystemProperty> rows = new ArrayList<SystemProperty>();
 		if (list != null && !list.isEmpty()) {
@@ -282,18 +267,8 @@ public class SystemPropertyServiceImpl implements ISystemPropertyService {
 	}
 
 	@javax.annotation.Resource
-	public void setEntityDAO(EntityDAO entityDAO) {
-		this.entityDAO = entityDAO;
-	}
-
-	@javax.annotation.Resource
 	public void setIdGenerator(IdGenerator idGenerator) {
 		this.idGenerator = idGenerator;
-	}
-
-	@javax.annotation.Resource
-	public void setSqlSession(SqlSession sqlSession) {
-		this.sqlSession = sqlSession;
 	}
 
 	@javax.annotation.Resource
