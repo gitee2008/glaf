@@ -1,7 +1,7 @@
 /**
- * EasyUI for jQuery 1.5.5.6
+ * EasyUI for jQuery 1.7.3
  * 
- * Copyright (c) 2009-2018 www.jeasyui.com. All rights reserved.
+ * Copyright (c) 2009-2019 www.jeasyui.com. All rights reserved.
  *
  * Licensed under the freeware license: http://www.jeasyui.com/license_freeware.php
  * To use it on other terms please contact us: info@jeasyui.com
@@ -315,7 +315,7 @@ var _62=$.data(_60,"datagrid");
 var dc=_62.dc;
 var ht=dc.header2.find("table");
 var fr=ht.find("tr.datagrid-filter-row").hide();
-var ww=ht.width();
+var ww=dc.body2.children("table.datagrid-btable:first").width();
 if(_61==undefined){
 var _63=dc.body2.children("div.datagrid-group");
 }else{
