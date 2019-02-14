@@ -18,14 +18,13 @@
 
 package com.glaf.matrix.data.mongo.object;
 
+import java.util.Properties;
+import org.apache.commons.lang3.StringUtils;
+
 import com.mongodb.DB;
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.client.MongoDatabase;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Properties;
 
 public class MongoDBDriver {
 	private Properties properties;
@@ -50,17 +49,12 @@ public class MongoDBDriver {
 		return mongoClient.getDatabase(dbName);
 	}
 
-	/**
-	 * 
-	 * @param dbName
-	 * @return
-	 */
 	@SuppressWarnings("deprecation")
 	public DB getDB(String dbName) {
 		return mongoClient.getDB(dbName);
 	}
 
-	public Mongo getMongo() {
+	public MongoClient getMongo() {
 		return mongoClient;
 	}
 
