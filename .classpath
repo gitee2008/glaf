@@ -18,7 +18,6 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/bcprov.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/bsf.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/bsh.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/c3p0.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/cache-api.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/cglib.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/classmate.jar"/>

@@ -58,17 +58,6 @@ public final class ConnectionProviderFactory {
 		SPECIAL_PROPERTIES.add(DBConfiguration.JDBC_USER);
 	}
 
-	private static boolean c3p0ConfigDefined(Properties properties) {
-		Iterator<?> iter = properties.keySet().iterator();
-		while (iter.hasNext()) {
-			String property = (String) iter.next();
-			if (property.startsWith("c3p0")) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	private static boolean druidConfigDefined(Properties properties) {
 		Iterator<?> iter = properties.keySet().iterator();
 		while (iter.hasNext()) {
@@ -102,18 +91,6 @@ public final class ConnectionProviderFactory {
 		}
 		provider = createProvider(properties, null);
 		providerCache.put(cacheKey, provider);
-	}
-
-	private static boolean c3p0ProviderPresent() {
-		try {
-			ClassUtils.classForName("com.glaf.core.jdbc.connection.C3P0ConnectionProvider");
-		} catch (Exception e) {
-			log.warn(
-					"c3p0 properties is specificed, but could not find com.glaf.core.jdbc.connection.C3P0ConnectionProvider from the classpath, "
-							+ "these properties are going to be ignored.");
-			return false;
-		}
-		return true;
 	}
 
 	private static boolean druidProviderPresent() {
@@ -165,8 +142,6 @@ public final class ConnectionProviderFactory {
 		String providerClass = properties.getProperty(DBConfiguration.JDBC_PROVIDER);
 		if (providerClass != null) {
 			provider = initializeConnectionProviderFromConfig(providerClass);
-		} else if (c3p0ConfigDefined(properties) && c3p0ProviderPresent()) {
-			provider = initializeConnectionProviderFromConfig("com.glaf.core.jdbc.connection.C3P0ConnectionProvider");
 		} else if (druidConfigDefined(properties) && druidProviderPresent()) {
 			provider = initializeConnectionProviderFromConfig("com.glaf.core.jdbc.connection.DruidConnectionProvider");
 		} else if (hikariConfigDefined(properties) && hikariProviderPresent()) {
