@@ -1011,7 +1011,7 @@
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
-			<version>6.8.0</version>
+			<version>6.9.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
@@ -1039,7 +1039,7 @@
 		    <version>6.4.2</version>
 		</dependency>
 		<dependency>
-			<groupId>io.github.willena</groupId>
+			<groupId>org.xerial</groupId>
 		    <artifactId>sqlite-jdbc</artifactId>
 		    <version>3.28.0</version>
 		</dependency>
