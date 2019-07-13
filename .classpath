@@ -97,8 +97,6 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jsch.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jsoup.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/kryo.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/log4j-api.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/log4j-core.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/log4j.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/logback-core.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/mail.jar"/>
@@ -182,7 +180,6 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-dmn-engine-configurator.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-dmn-engine.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-dmn-model.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-dmn-rest.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-dmn-spring-configurator.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-dmn-spring.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/flowable-dmn-xml-converter.jar"/>
