@@ -202,25 +202,7 @@
 			<artifactId>base64</artifactId>
 			<version>2.3.8</version>
 		</dependency>
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcprov-jdk15on</artifactId>
-			<version>1.61</version>
-			<type>jar</type>
-		</dependency>
-        <dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcpkix-jdk15on</artifactId>
-			<version>1.61</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcmail-jdk15on</artifactId>
-			<version>1.61</version>
-			<type>jar</type>
-		</dependency>
-
+		
 		<!--JAVA脚本语句执行工具 -->
 		<dependency>
 			<groupId>bsf</groupId>
@@ -461,19 +443,16 @@
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk15on</artifactId>
 			<version>1.62</version>
-			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcpkix-jdk15on</artifactId>
 			<version>1.62</version>
-			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcmail-jdk15on</artifactId>
 			<version>1.62</version>
-			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>com.ecwid.consul</groupId>
@@ -796,7 +775,7 @@
         <dependency>
 			<groupId>io.lettuce</groupId>
 			<artifactId>lettuce-core</artifactId>
-			<version>5.1.6.RELEASE</version>
+			<version>5.1.7.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
