@@ -25,7 +25,7 @@
         <maven.build.timestamp.format>yyyy-MM-dd hh.mm.ss</maven.build.timestamp.format>
 		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.version>5.1.8.RELEASE</spring.version>
+		<spring.version>5.2.0.RELEASE</spring.version>
 		<spring.batch.version>3.0.8.RELEASE</spring.batch.version>
 		<poi.version>4.1.0</poi.version>
 		<jxls.version>1.0.6</jxls.version>
@@ -219,12 +219,12 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
-			<version>1.1.19</version>
+			<version>1.1.20</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aliyun</groupId>
 			<artifactId>aliyun-java-sdk-core</artifactId>
-			<version>4.4.2</version>
+			<version>4.4.6</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aliyun</groupId>
@@ -234,7 +234,7 @@
 		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
-			<version>3.3.1</version>
+			<version>3.4.1</version>
 		</dependency>
 		<!-- 缓存 -->
 		<dependency>
@@ -526,7 +526,7 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>1.2.58</version>
+			<version>1.2.61</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -598,7 +598,7 @@
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
-			<version>2.3.28</version>
+			<version>2.3.29</version>
 		</dependency>
 		<!-- Java 快速对象序列化工具 -->
 		<dependency>
@@ -869,7 +869,7 @@
 		<dependency>
 			<groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.38.Final</version>
+            <version>4.1.42.Final</version>
 		</dependency>
 		<!-- 任务调度框架 -->
 		<dependency>
@@ -881,7 +881,7 @@
 		<dependency>
 			<groupId>com.rabbitmq</groupId>
 			<artifactId>amqp-client</artifactId>
-			<version>5.7.2</version>
+			<version>5.7.3</version>
 		</dependency>
 		<!-- 数据库注解工具 -->
 		<dependency>
