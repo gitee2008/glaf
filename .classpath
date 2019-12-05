@@ -32,7 +32,6 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/commons-httpclient.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/commons-io.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/commons-jexl-1.1.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/commons-jexl.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/commons-jexl3.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/commons-lang2.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/commons-lang3.jar"/>
@@ -143,7 +142,6 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/staxon.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/xml-apis-ext.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/xml-apis.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/zookeeper.jar"/>
 	<classpathentry kind="lib" path="lib/jsp-api.jar"/>
 	<classpathentry kind="lib" path="lib/junit.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>

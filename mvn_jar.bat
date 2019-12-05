@@ -1,1 +1,1 @@
-mvn clean package
+start mvn clean package

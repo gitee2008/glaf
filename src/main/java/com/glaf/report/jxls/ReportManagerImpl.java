@@ -32,7 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.glaf.core.el.Jexl2ExpressionEvaluator;
+import com.glaf.core.el.Jexl3ExpressionEvaluator;
 import com.glaf.core.util.DBUtils;
 import com.glaf.core.util.JdbcUtils;
 import com.glaf.core.util.QueryUtils;
@@ -71,7 +71,7 @@ public class ReportManagerImpl implements ReportManager {
 				String temp = expression.substring(begin, i);
 				String value = null;
 				try {
-					value = (String) Jexl2ExpressionEvaluator.evaluate(temp, params);
+					value = (String) Jexl3ExpressionEvaluator.evaluate(temp, params);
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}

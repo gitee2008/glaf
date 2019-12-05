@@ -763,16 +763,7 @@ public class DBConfiguration {
 							}
 						}
 					}
-				} else if (StringUtils.isNotEmpty(sysEnv.get("ZK_ADDRESS"))
-						&& StringUtils.isNotEmpty(sysEnv.get("SYS_CODE"))) {
-					ZooKeeperDBConfig zkConfig = new ZooKeeperDBConfig();
-					ConnectionDefinition connectionDefinition = zkConfig.getMaster(sysEnv.get("ZK_ADDRESS"),
-							sysEnv.get("SYS_CODE"));
-					if (connectionDefinition != null) {
-						dataSourceProperties.put(Environment.DEFAULT_SYSTEM_NAME, connectionDefinition);
-						dbTypes.put(Environment.DEFAULT_SYSTEM_NAME, connectionDefinition.getType());
-					}
-				}
+				} 
 			} else {
 				loadDefaultJdbcProperties();
 			}
