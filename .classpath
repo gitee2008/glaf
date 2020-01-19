@@ -148,8 +148,6 @@
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/xmlbeans.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jansi.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jopt-simple.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jxls-core.jar"/>
-	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jxls-jexcel.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jxls-poi.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jxls-reader.jar"/>
 	<classpathentry kind="lib" path="webapps/glaf/WEB-INF/lib/jxls.jar"/>

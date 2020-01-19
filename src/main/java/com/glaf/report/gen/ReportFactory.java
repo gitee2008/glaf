@@ -44,15 +44,12 @@ import com.glaf.core.el.Mvel2ExpressionEvaluator;
 import com.glaf.core.jdbc.DBConnectionFactory;
 import com.glaf.core.security.Authentication;
 import com.glaf.core.service.ITablePageService;
-import com.glaf.core.util.ClassUtils;
 import com.glaf.core.util.DateUtils;
 import com.glaf.core.util.FileUtils;
 import com.glaf.core.util.JdbcUtils;
 import com.glaf.core.util.JsonUtils;
 import com.glaf.core.util.QueryUtils;
-import com.glaf.core.util.ReflectUtils;
 import com.glaf.core.util.StringTools;
-
 import com.glaf.matrix.data.domain.SqlDefinition;
 import com.glaf.matrix.data.service.SqlDefinitionService;
 import com.glaf.report.bean.ReportContainer;
@@ -61,14 +58,9 @@ import com.glaf.report.data.ReportDefinition;
 import com.glaf.report.data.ReportRowSet;
 import com.glaf.report.domain.Report;
 import com.glaf.report.domain.ReportFile;
-import com.glaf.report.jxls.MyBatisJsonReportManagerImpl;
-import com.glaf.report.jxls.MyBatisReportManagerImpl;
-import com.glaf.report.jxls.ReportManagerImpl;
 import com.glaf.report.query.ReportQuery;
 import com.glaf.report.service.IReportFileService;
 import com.glaf.report.service.IReportService;
-
-import net.sf.jxls.report.ReportManager;
 
 public class ReportFactory {
 	protected static final Log logger = LogFactory.getLog(ReportFactory.class);
@@ -211,11 +203,7 @@ public class ReportFactory {
 		ReportGen reportGen = null;
 		if ("jasper".equals(report.getType())) {
 			reportGen = new JasperReportGen();
-		} else if ("jxls".equals(report.getType())) {
-			reportGen = new JxlsReportGen();
-		} else if ("jxls2".equals(report.getType())) {
-			reportGen = new Jxls2ReportGen();
-		} else if ("ftl".equals(report.getType())) {
+		}   else if ("ftl".equals(report.getType())) {
 			reportGen = new FreemarkerReportGen();
 		}
 		if (reportGen != null) {
@@ -370,47 +358,15 @@ public class ReportFactory {
 						for (ReportDataSet rds : dataSetList) {
 							List<ReportRowSet> rowSetList = rds.getRowSetList();
 							if (rowSetList != null && !rowSetList.isEmpty()) {
-								for (ReportRowSet rs : rowSetList) {
-									String rptMgr = rs.getRptMgr();
-									String rptMgrMapping = rs.getRptMgrMapping();
-									ReportManager rm = null;
-									if ("sql".equals(rptMgr)) {
-										rm = new ReportManagerImpl(connection, params);
-									} else {
-										String rptMgrClassName = rs.getRptMgrClassName();
-										if (StringUtils.isNotEmpty(rptMgrClassName)) {
-											rm = (ReportManager) ClassUtils.instantiateObject(rptMgrClassName);
-											try {
-												ReflectUtils.setFieldValue(rm, "connection", connection);
-											} catch (Exception ex) {
-											}
-											try {
-												ReflectUtils.setFieldValue(rm, "properties", rs.getProperties());
-											} catch (Exception ex) {
-											}
-										}
-									}
-									if (rm != null) {
-										params.put(rptMgrMapping, rm);
-									}
-								}
+
 							}
 						}
 					}
-				} else {
-					ReportManager rm = new ReportManagerImpl(connection, params);
-					params.put("rm", rm);
 				}
 
 				params.put("con", connection);
 				params.put("conn", connection);
 				params.put("connection", connection);
-
-				ReportManager mybatis = new MyBatisReportManagerImpl(connection, params);
-				params.put("mybatis", mybatis);
-
-				ReportManager mybatisx = new MyBatisJsonReportManagerImpl(connection, params);
-				params.put("mybatisx", mybatisx);
 
 				rptBytes = reportGen.createReport(report, connection, params);
 			} catch (Exception ex) {

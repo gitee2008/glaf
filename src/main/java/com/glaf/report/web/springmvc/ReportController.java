@@ -80,8 +80,6 @@ import com.glaf.report.data.ReportDefinition;
 import com.glaf.report.data.ReportPreprocessor;
 import com.glaf.report.domain.Report;
 import com.glaf.report.gen.ReportFactory;
-import com.glaf.report.jxls.Jxls2ReportContainer;
-import com.glaf.report.jxls.JxlsReportContainer;
 import com.glaf.report.query.ReportQuery;
 import com.glaf.report.service.IReportService;
 
@@ -440,12 +438,13 @@ public class ReportController {
 	public void exportXls2(HttpServletRequest request, HttpServletResponse response) {
 		String reportId = request.getParameter("reportId");
 		if (StringUtils.isNotEmpty(reportId)) {
-			LoginContext loginContext = RequestUtils.getLoginContext(request);
-			ReportDefinition rdf = ReportContainer.getContainer().getReportDefinition(reportId);
+			// LoginContext loginContext = RequestUtils.getLoginContext(request);
+			// ReportDefinition rdf =
+			// ReportContainer.getContainer().getReportDefinition(reportId);
 			Map<String, Object> params = RequestUtils.getParameterMap(request);
 			params.put("contextPath", request.getContextPath());
 			params.put("serviceUrl", RequestUtils.getServiceUrl(request));
-			byte[] data = null;
+			// byte[] data = null;
 
 			String contentDisposition = "attachment;filename=\"export" + DateUtils.getNowYearMonthDayHHmmss()
 					+ ".xls\"";
@@ -460,19 +459,9 @@ public class ReportController {
 
 			java.io.OutputStream outputStream = null;
 			try {
-				if (StringUtils.equalsIgnoreCase(rdf.getTemplateType(), "jxls2")) {
-					data = Jxls2ReportContainer.getContainer().execute(reportId, loginContext.getActorId(), params);
-				} else {
-					data = JxlsReportContainer.getContainer().execute(reportId, loginContext.getActorId(), params);
-				}
-				if (data != null) {
-					outputStream = response.getOutputStream();
-					outputStream.write(data);
-					outputStream.flush();
-					com.glaf.core.util.IOUtils.closeStream(outputStream);
-				}
-			} catch (IOException ex) {
-				ex.printStackTrace();
+
+			} catch (Exception ex) {
+				// ex.printStackTrace();
 			} finally {
 				com.glaf.core.util.IOUtils.closeStream(outputStream);
 			}
