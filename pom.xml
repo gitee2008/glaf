@@ -25,8 +25,8 @@
         <maven.build.timestamp.format>yyyy-MM-dd hh.mm.ss</maven.build.timestamp.format>
 		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.version>5.2.3.RELEASE</spring.version>
-		<spring.batch.version>4.2.1.RELEASE</spring.batch.version>
+		<spring.version>5.2.5.RELEASE</spring.version>
+		<spring.batch.version>4.2.2.RELEASE</spring.batch.version>
 		<poi.version>4.1.2</poi.version>
 		<mybatis.version>3.4.6</mybatis.version>
 		<mybatis-spring.version>1.3.2</mybatis-spring.version>
@@ -217,17 +217,17 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
-			<version>1.1.20</version>
+			<version>1.1.22</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aliyun</groupId>
 			<artifactId>aliyun-java-sdk-core</artifactId>
-			<version>4.4.9</version>
+			<version>4.5.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aliyun</groupId>
 			<artifactId>aliyun-java-sdk-dysmsapi</artifactId>
-			<version>1.1.0</version>
+			<version>2.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.zaxxer</groupId>
@@ -463,7 +463,7 @@
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
 			<artifactId>kafka-clients</artifactId>
-			<version>2.3.1</version>
+			<version>2.4.1</version>
 		</dependency>
 		<!-- 并发工具 -->
 		<dependency>
@@ -487,7 +487,7 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>1.2.62</version>
+			<version>1.2.68</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -635,7 +635,7 @@
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongo-java-driver</artifactId>
-			<version>3.12.1</version>
+			<version>3.12.2</version>
 		</dependency>
 		<!-- html解析器 -->
 		<dependency>
@@ -678,17 +678,17 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.5.10</version>
+			<version>4.5.12</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient-cache</artifactId>
-			<version>4.5.10</version>
+			<version>4.5.12</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpmime</artifactId>
-			<version>4.5.10</version>
+			<version>4.5.12</version>
 		</dependency>
 		<!-- 结束http client工具包 -->
 		<dependency>
@@ -736,7 +736,7 @@
         <dependency>
 			<groupId>io.lettuce</groupId>
 			<artifactId>lettuce-core</artifactId>
-			<version>5.2.1.RELEASE</version>
+			<version>5.2.2.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
@@ -830,7 +830,7 @@
 		<dependency>
 			<groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.45.Final</version>
+            <version>4.1.48.Final</version>
 		</dependency>
 		<!-- 任务调度框架 -->
 		<dependency>
@@ -843,6 +843,11 @@
 			<groupId>com.rabbitmq</groupId>
 			<artifactId>amqp-client</artifactId>
 			<version>5.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.rabbitmq</groupId>
+			<artifactId>http-client</artifactId>
+			<version>3.6.1.RELEASE</version>
 		</dependency>
 		<!-- 数据库注解工具 -->
 		<dependency>
@@ -867,11 +872,50 @@
 			<artifactId>snappy-java</artifactId>
 			<version>1.1.7.3</version>
 		</dependency>
-
+        <dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>3.9.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.10.8</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.10.8</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.10.8</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.sshd</groupId>
 			<artifactId>sshd-core</artifactId>
-			<version>2.2.0</version>
+			<version>2.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.sshd</groupId>
+			<artifactId>sshd-common</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.sshd</groupId>
+			<artifactId>sshd-netty</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.sshd</groupId>
+			<artifactId>sshd-scp</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.sshd</groupId>
+			<artifactId>sshd-sftp</artifactId>
+			<version>2.4.0</version>
 		</dependency>
 		<!-- 面向流的拉式解析XML,xml大文件读写 -->
 		<dependency>
@@ -929,12 +973,12 @@
 		<dependency>
 			<groupId>org.jxls</groupId>
 			<artifactId>jxls</artifactId>
-			<version>2.7.2</version>
+			<version>2.8.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jxls</groupId>
 			<artifactId>jxls-poi</artifactId>
-			<version>1.3.2</version>
+			<version>2.8.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jxls</groupId>
