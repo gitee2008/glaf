@@ -119,7 +119,7 @@ public class FlowableDeployQueryServiceImpl implements
 			}
 
 			if (paramMap.get("orderByDeploymenTime") != null) {
-				query.orderByDeploymenTime();
+				query.orderByDeploymentTime();
 			}
 
 			if (paramMap.get("orderById") != null) {
@@ -131,7 +131,7 @@ public class FlowableDeployQueryServiceImpl implements
 			}
 
 			if (paramMap.get("orderByTime") != null) {
-				query.orderByDeploymenTime();
+				query.orderByDeploymentTime();
 			}
 
 			if (paramMap.get("orderAsc") != null) {
